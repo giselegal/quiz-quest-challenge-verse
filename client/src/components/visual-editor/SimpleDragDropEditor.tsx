@@ -5367,7 +5367,7 @@ const SimpleDragDropEditor: React.FC = () => {
             {/* Lista de Páginas */}
             <div className="space-y-1">
               {currentFunnel.pages.map((page, index) => (
-                <div key={page.id} className="relative">
+                <div key={page?.id || `page-${index}`} className="relative">
                   <Button
                     variant={index === currentPageIndex ? "default" : "outline"}
                     size="sm"
@@ -5383,14 +5383,14 @@ const SimpleDragDropEditor: React.FC = () => {
                       </Badge>
                       <div className="flex-1 text-left">
                         <div className="font-medium text-xs truncate">
-                          {page.title}
+                          {page?.title || 'Página sem título'}
                         </div>
                         <div className="text-xs text-muted-foreground truncate">
-                          {page.type} • {page.components.length} itens
+                          {page?.type || 'quiz'} • {page?.components?.length || 0} itens
                         </div>
                       </div>
                       <div className="text-xs text-muted-foreground">
-                        {page.progress}%
+                        {page?.progress || 0}%
                       </div>
                     </div>
                   </Button>
