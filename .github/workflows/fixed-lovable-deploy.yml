@@ -25,6 +25,17 @@ jobs:
       - name: Build project
         run: npm run build
 
+      - name: Fix asset paths for subdirectory
+        run: |
+          # Corrigir paths dos assets no index.html para o subdiretório
+          sed -i 's|"/assets/|"/quiz-de-estilo/assets/|g' dist/index.html
+          sed -i 's|href="/assets/|href="/quiz-de-estilo/assets/|g' dist/index.html
+          sed -i 's|src="/assets/|src="/quiz-de-estilo/assets/|g' dist/index.html
+          
+          # Verificar se as alterações foram aplicadas
+          echo "Verificando paths corrigidos:"
+          grep -n "quiz-de-estilo/assets" dist/index.html || echo "Nenhum path corrigido encontrado"
+
       - name: Setup Service Worker for subdirectory
         run: |
           # Criar arquivo de service worker corrigido

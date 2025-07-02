@@ -105,13 +105,6 @@ export default defineConfig(({ mode }) => ({
     cssCodeSplit: true,
     chunkSizeWarningLimit: 1000,
   },
-          return `assets/[name]-[hash][extname]`;
-        },
-      },
-    },
-    cssCodeSplit: true,
-    chunkSizeWarningLimit: 1000,
-  },
 
   optimizeDeps: {
     include: ["react", "react-dom", "react-router-dom"],
