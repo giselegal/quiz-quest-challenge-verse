@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,22 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from "@/components/ui/select";
+import { 
+  Sheet, 
+  SheetContent, 
+  SheetDescription, 
+  SheetHeader, 
+  SheetTitle, 
+  SheetTrigger 
+} from "@/components/ui/sheet";
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 import { useVersionManager } from "@/hooks/useVersionManager";
@@ -17,7 +33,6 @@ import {
   generateRealQuestionTemplates,
   generateStrategicQuestionTemplates,
 } from "@/data/realQuizTemplates";
-// import { useFunnelManager } from "@/hooks/useFunnelManager";
 import {
   Save,
   Trash2,
@@ -52,6 +67,7 @@ import {
   BarChart3,
   Target,
   Link,
+  TrendingUp,
 } from "lucide-react";
 
 // Interfaces
@@ -812,10 +828,22 @@ interface SimplePage {
   components: SimpleComponent[];
 }
 
+// Interface para variantes de A/B testing
+interface QuizVariant {
+  id: string;
+  name: string;
+  description: string;
+  pages: SimplePage[];
+  trafficPercent: number;
+  isActive: boolean;
+  createdAt?: string;
+}
+
 interface QuizFunnel {
   id: string;
   name: string;
   pages: SimplePage[];
+  variants?: QuizVariant[];
   updatedAt?: string;
   createdAt?: string;
 }
@@ -3139,6 +3167,20 @@ const SimpleDragDropEditor: React.FC = () => {
     [questionId: string]: string[];
   }>({});
 
+  // Estados para A/B Testing
+  const [isAbTestMode, setIsAbTestMode] = useState(false);
+  const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
+
+  // Páginas atuais baseadas na variante selecionada
+  const currentPages = useMemo(() => {
+    if (isAbTestMode && selectedVariant) {
+      const variant = currentFunnel.variants?.find(v => v.id === selectedVariant);
+      return variant?.pages || currentFunnel.pages;
+    }
+    return currentFunnel.pages;
+  }, [currentFunnel, isAbTestMode, selectedVariant]);
+
   // Função para salvar alterações
   const saveChanges = async () => {
     console.log("💾 Salvando alterações do funil...");
@@ -3370,6 +3412,67 @@ const SimpleDragDropEditor: React.FC = () => {
     } finally {
       setIsDeletingFunnel(false);
     }
+  };
+
+  // Funções para A/B Testing
+  const toggleAbTestMode = () => {
+    setIsAbTestMode(!isAbTestMode);
+    if (!isAbTestMode && currentFunnel.variants && currentFunnel.variants.length > 0) {
+      setSelectedVariant(currentFunnel.variants[0].id);
+    } else {
+      setSelectedVariant(null);
+    }
+    setCurrentPageIndex(0);
+  };
+
+  const createNewVariant = () => {
+    const variantName = prompt("Nome da nova variante:");
+    if (!variantName) return;
+
+    const newVariant: QuizVariant = {
+      id: `variant-${Date.now()}`,
+      name: variantName,
+      description: `Variante ${variantName}`,
+      pages: [...currentFunnel.pages], // Copia das páginas principais
+      trafficPercent: 50,
+      isActive: true,
+      createdAt: new Date().toISOString(),
+    };
+
+    setCurrentFunnel(prev => ({
+      ...prev,
+      variants: [...(prev.variants || []), newVariant]
+    }));
+
+    setSelectedVariant(newVariant.id);
+    setIsAbTestMode(true);
+    setCurrentPageIndex(0);
+
+    toast({
+      title: "✅ Variante criada!",
+      description: `A variante "${variantName}" foi criada com sucesso.`,
+      variant: "default",
+    });
+  };
+
+  const deleteVariant = (variantId: string) => {
+    if (!confirm("Tem certeza que deseja excluir esta variante?")) return;
+
+    setCurrentFunnel(prev => ({
+      ...prev,
+      variants: prev.variants?.filter(v => v.id !== variantId) || []
+    }));
+
+    if (selectedVariant === variantId) {
+      setSelectedVariant(null);
+      setIsAbTestMode(false);
+    }
+
+    toast({
+      title: "✅ Variante excluída!",
+      description: "A variante foi removida com sucesso.",
+      variant: "default",
+    });
   };
 
   // Auto-salvar sempre que currentFunnel ou quizConfig mudarem
