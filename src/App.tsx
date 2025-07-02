@@ -30,6 +30,9 @@ const QuizDescubraSeuEstilo = lazy(
   () => import("./pages/quiz-descubra-seu-estilo")
 );
 const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
+const SimpleDragDropEditor = lazy(
+  () => import("./components/visual-editor/SimpleDragDropEditor")
+);
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App = () => {
@@ -77,6 +80,11 @@ const App = () => {
                 <Route
                   path="/descubra-seu-estilo"
                   element={<QuizDescubraSeuEstilo />}
+                />
+                {/* Editor Visual */}
+                <Route
+                  path="/editor-visual"
+                  element={<SimpleDragDropEditor />}
                 />
                 {/* Admin - protegido com AdminAuthProvider */}
                 <Route
