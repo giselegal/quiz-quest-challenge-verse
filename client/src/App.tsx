@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Router, Route, Switch } from "wouter";
 import { AuthProvider } from "./context/AuthContext";
 import { AdminAuthProvider } from "./context/AdminAuthContext";
 import { QuizProvider } from "./context/QuizContext";
@@ -65,46 +65,45 @@ const App = () => {
             />
 
             <Suspense fallback={<LoadingFallback />}>
-              <Routes>
+              <Switch>
                 {/* Página inicial com teste A/B */}
-                <Route path="/" element={<LandingPage />} />
+                <Route path="/" component={LandingPage} />
                 {/* Rota do quiz específica */}
-                <Route path="/quiz" element={<QuizPage />} />
+                <Route path="/quiz" component={QuizPage} />
                 {/* Rotas do teste A/B */}
-                <Route path="/resultado" element={<ResultPage />} />
+                <Route path="/resultado" component={ResultPage} />
                 <Route
                   path="/quiz-descubra-seu-estilo"
-                  element={<QuizDescubraSeuEstilo />}
+                  component={QuizDescubraSeuEstilo}
                 />
                 {/* Manter rota antiga para compatibilidade */}
                 <Route
                   path="/descubra-seu-estilo"
-                  element={<QuizDescubraSeuEstilo />}
+                  component={QuizDescubraSeuEstilo}
                 />
                 {/* Editor Visual */}
                 <Route
                   path="/editor-visual"
-                  element={<SimpleDragDropEditor />}
+                  component={SimpleDragDropEditor}
                 />
                 {/* Simple Editor - usando o mesmo editor robusto */}
                 <Route
                   path="/simple-editor"
-                  element={<SimpleDragDropEditor />}
+                  component={SimpleDragDropEditor}
                 />
                 {/* Admin - protegido com AdminAuthProvider */}
-                <Route
-                  path="/admin/*"
-                  element={
+                <Route path="/admin/:rest*">
+                  {() => (
                     <AdminAuthProvider>
                       <AdminRoute>
                         <DashboardPage />
                       </AdminRoute>
                     </AdminAuthProvider>
-                  }
-                />
+                  )}
+                </Route>
                 {/* 404 */}
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
+                <Route component={NotFoundPage} />
+              </Switch>
             </Suspense>
           </Router>
           <Toaster />

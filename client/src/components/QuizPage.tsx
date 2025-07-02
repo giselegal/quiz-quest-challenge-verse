@@ -15,14 +15,14 @@ import { trackQuizStart, trackQuizAnswer, trackQuizComplete, trackResultView } f
 import { preloadImages } from '@/utils/imageManager';
 import LoadingManager from './quiz/LoadingManager';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'wouter';
 import { MainTransition } from './quiz/MainTransition';
 import { EnchantedBackground, MorphingProgress } from './effects/EnchantedEffects';
 import '../styles/enchanted-effects.css';
 
 const QuizPage: React.FC = () => {
   const { user, login } = useAuth();
-  const navigate = useNavigate();
+  const [location, setLocation] = useLocation();
   
   // Modificado: Sempre exibir o QuizIntro primeiro, independente do histórico
   const [showIntro, setShowIntro] = useState(true);
@@ -256,7 +256,7 @@ const QuizPage: React.FC = () => {
       
       // Navegação para a página de resultados ocorre ao clicar no botão "Vamos ao resultado?"
       // Sem timers para avanço automático
-      navigate('/resultado');
+      setLocation('/resultado');
       
     } catch (error) {
       console.error('Erro ao navegar para a página de resultados:', error);
@@ -266,9 +266,9 @@ const QuizPage: React.FC = () => {
         variant: "destructive",
       });
       // Em caso de erro, tenta navegar diretamente
-      navigate('/resultado');
+      setLocation('/resultado');
     }
-  }, [strategicAnswers, submitQuizIfComplete, navigate]);
+  }, [strategicAnswers, submitQuizIfComplete, setLocation]);
 
   const handleNextClickInternal = useCallback(() => {
     if (!showingStrategicQuestions) {

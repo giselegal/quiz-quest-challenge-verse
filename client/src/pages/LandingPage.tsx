@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "wouter";
 import { LANDING_PAGE_AB_TEST, getABTestRedirectUrl } from "../utils/abtest";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
@@ -7,7 +7,7 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
  * Página de entrada que redireciona baseado no teste A/B
  */
 const LandingPage: React.FC = () => {
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
 
   useEffect(() => {
     // Redireciona para uma das variantes do teste A/B
@@ -17,9 +17,9 @@ const LandingPage: React.FC = () => {
 
     // Pequeno delay para mostrar o loading
     setTimeout(() => {
-      navigate(redirectUrl, { replace: true });
+      setLocation(redirectUrl);
     }, 500);
-  }, [navigate]);
+  }, [setLocation]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">

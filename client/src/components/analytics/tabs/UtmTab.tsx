@@ -4,8 +4,6 @@ import { PieChart, Pie, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Leg
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ChartConfig, ChartContainer } from '@/components/ui/chart';
 import { GridLayout } from '@/components/shared/GridLayout';
-import { supabase } from '@/integrations/supabase/client';
-
 type UtmData = {
   source: string;
   medium: string;
@@ -32,18 +30,22 @@ export const UtmTab: React.FC<UtmTabProps> = ({
       try {
         setLoading(true);
         
-        // Fetch data from the Supabase utm_analytics table
-        const { data, error } = await supabase
-          .from('utm_analytics')
-          .select('*');
-          
-        if (error) {
-          console.error('Error fetching UTM data:', error);
+        // Fetch data from the server API
+        const response = await fetch('/api/utm-analytics');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        
+        if (!result.success) {
+          console.error('Error fetching UTM data:', result.error);
           return;
         }
         
         // Process the data to format it for our charts
-        const processedData = processUtmData(data || []);
+        const processedData = processUtmData(result.data || []);
         setUtmData(processedData);
       } catch (err) {
         console.error('Error processing UTM data:', err);

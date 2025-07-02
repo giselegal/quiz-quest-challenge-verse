@@ -1,6 +1,5 @@
 
 import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 
 export interface UtmParameters {
   source?: string;
@@ -30,30 +29,43 @@ export const useUtmParameters = () => {
     const capturedParams = captureUtmParameters();
     setUtmParams(capturedParams);
     
-    // Se tiver parâmetros UTM, salve no Supabase para análises
+    // Se tiver parâmetros UTM, salve no servidor para análises
     if (Object.keys(capturedParams).length > 0) {
-      saveUtmToSupabase(capturedParams);
+      saveUtmToServer(capturedParams);
     }
   }, []);
   
   /**
-   * Salva os parâmetros UTM no Supabase para análise
+   * Salva os parâmetros UTM no servidor para análise
    */
-  const saveUtmToSupabase = async (params: UtmParameters) => {
+  const saveUtmToServer = async (params: UtmParameters) => {
     try {
-      const { error } = await supabase.from('utm_analytics').insert({
-        utm_source: params.source,
-        utm_medium: params.medium,
-        utm_campaign: params.campaign
+      const response = await fetch('/api/utm-analytics', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          utmSource: params.source,
+          utmMedium: params.medium,
+          utmCampaign: params.campaign,
+          utmContent: params.content,
+          utmTerm: params.term,
+        }),
       });
       
-      if (error) {
-        console.error('Error saving UTM parameters to Supabase:', error);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      if (result.success) {
+        console.log('UTM parameters saved successfully');
       } else {
-        console.log('UTM parameters saved to Supabase successfully');
+        console.error('Error saving UTM parameters:', result.error);
       }
     } catch (error) {
-      console.error('Error in saveUtmToSupabase:', error);
+      console.error('Error in saveUtmToServer:', error);
     }
   };
   

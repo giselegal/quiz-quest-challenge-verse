@@ -2,7 +2,7 @@
 // Sistema de Webhook Hotmart
 // ID: agQzTLUehWUfhPzjhdwntVQz0JNT5E0216ae0d-00a9-48ae-85d1-f0d14bd8e0df
 
-import { supabase } from "@/integrations/supabase/client";
+// Database operations are now handled by server-side API
 import { trackSaleConversion } from "./analytics";
 
 // Interfaces para dados do webhook Hotmart
