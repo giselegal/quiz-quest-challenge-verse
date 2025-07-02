@@ -5695,68 +5695,129 @@ const SimpleDragDropEditor: React.FC = () => {
                       showProgress: false,
                       components: [
                         {
-                          id: "intro-title",
-                          type: "title" as const,
-                          data: { 
-                            text: "Descubra Seu Estilo Pessoal",
-                            fontSize: "2.5rem",
-                            fontWeight: "bold",
-                            color: "#432818"
+                          id: "header-logo",
+                          type: "logo" as const,
+                          data: {
+                            src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
+                            alt: "Gisele Galvão - Consultoria de Estilo",
+                            width: 200,
+                            height: 80
                           },
-                          style: { 
+                          style: {
                             textAlign: "center" as const,
-                            marginBottom: "1.5rem",
-                            fontFamily: "Inter, sans-serif"
+                            marginBottom: "2rem",
+                            display: "block",
+                            margin: "0 auto 2rem"
                           }
                         },
                         {
-                          id: "intro-subtitle",
-                          type: "subtitle" as const,
+                          id: "progress-bar",
+                          type: "progress" as const,
+                          data: {
+                            progressValue: 0,
+                            showPercentage: false,
+                            color: "#D4AF37",
+                            backgroundColor: "#f0f0f0",
+                            height: "8px"
+                          },
+                          style: {
+                            maxWidth: "600px",
+                            margin: "0 auto 3rem",
+                            borderRadius: "4px"
+                          }
+                        },
+                        {
+                          id: "intro-title",
+                          type: "title" as const,
                           data: { 
-                            text: "Responda algumas perguntas rápidas e descubra qual estilo combina mais com você",
-                            fontSize: "1.2rem",
-                            color: "#8F7A6A"
+                            text: "Teste de Estilo Pessoal",
+                            fontSize: "2.8rem",
+                            fontWeight: "400",
+                            color: "#2c2c2c",
+                            fontFamily: "Georgia, serif"
                           },
                           style: { 
                             textAlign: "center" as const,
-                            marginBottom: "2rem",
-                            lineHeight: "1.6"
+                            marginBottom: "3rem",
+                            letterSpacing: "-0.02em"
+                          }
+                        },
+                        {
+                          id: "hero-image",
+                          type: "image" as const,
+                          data: {
+                            src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.jpg",
+                            alt: "Grupo de mulheres estilosas",
+                            width: 600,
+                            height: 300
+                          },
+                          style: {
+                            borderRadius: "16px",
+                            border: "3px dashed #D4AF37",
+                            padding: "1rem",
+                            backgroundColor: "#fafafa",
+                            margin: "0 auto 3rem",
+                            display: "block",
+                            maxWidth: "600px"
+                          }
+                        },
+                        {
+                          id: "name-label",
+                          type: "text" as const,
+                          data: {
+                            text: "NOME*",
+                            fontSize: "0.9rem",
+                            fontWeight: "600",
+                            color: "#666",
+                            letterSpacing: "0.05em"
+                          },
+                          style: {
+                            textAlign: "left" as const,
+                            marginBottom: "0.5rem",
+                            maxWidth: "400px",
+                            margin: "0 auto 0.5rem"
                           }
                         },
                         {
                           id: "intro-input",
                           type: "input" as const,
                           data: {
-                            placeholder: "Digite seu nome",
-                            label: "Como você gostaria de ser chamada?",
-                            required: true
+                            placeholder: "Digite seu nome aqui...",
+                            required: true,
+                            type: "text"
                           },
                           style: {
                             maxWidth: "400px",
-                            margin: "0 auto 1.5rem auto",
-                            padding: "0.75rem",
+                            margin: "0 auto 2rem auto",
+                            padding: "1rem",
                             borderRadius: "8px",
-                            border: "2px solid #e2e8f0"
+                            border: "1px solid #ddd",
+                            backgroundColor: "#f8f8f8",
+                            fontSize: "1rem",
+                            color: "#333"
                           }
                         },
                         {
                           id: "intro-button",
                           type: "button" as const,
                           data: {
-                            text: "Iniciar Quiz",
+                            text: "Continuar",
                             variant: "primary"
                           },
                           style: {
-                            backgroundColor: "#B89B7A",
+                            backgroundColor: "#D4AF37",
                             color: "white",
-                            padding: "0.75rem 2rem",
+                            padding: "1rem 3rem",
                             borderRadius: "8px",
                             fontSize: "1.1rem",
-                            fontWeight: "600",
+                            fontWeight: "500",
                             display: "block",
                             margin: "0 auto",
                             border: "none",
-                            cursor: "pointer"
+                            cursor: "pointer",
+                            minWidth: "200px",
+                            textTransform: "uppercase",
+                            letterSpacing: "0.05em"
                           }
                         }
                       ]
@@ -5815,57 +5876,78 @@ const SimpleDragDropEditor: React.FC = () => {
                             multiSelect: true,
                             maxSelections: 3,
                             hasImages: true,
+                            layoutType: "grid-2x3",
+                            showBorders: true,
+                            borderStyle: "dashed",
+                            borderColor: "#B89B7A",
+                            borderWidth: "2px",
+                            borderRadius: "12px",
+                            imageAspectRatio: "3:4",
+                            textPosition: "bottom",
+                            hoverEffect: "scale",
+                            selectionStyle: "highlight",
                             options: [
                               {
                                 id: "1a",
-                                text: "Conforto, leveza e praticidade no vestir.",
+                                text: "A) Amo roupas confortáveis e práticas para o dia a dia.",
                                 image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
                                 value: "natural",
-                                category: "Natural"
+                                category: "Natural",
+                                points: { natural: 3, classico: 0, contemporaneo: 1, elegante: 0, romantico: 0, criativo: 0 }
                               },
                               {
                                 id: "1b", 
-                                text: "Discrição, caimento clássico e sobriedade.",
+                                text: "B) Prefiro peças discretas, clássicas e atemporais.",
                                 image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
                                 value: "classico",
-                                category: "Clássico"
+                                category: "Clássico",
+                                points: { natural: 0, classico: 3, contemporaneo: 1, elegante: 2, romantico: 0, criativo: 0 }
                               },
                               {
                                 id: "1c",
-                                text: "Praticidade com um toque de estilo atual.",
+                                text: "C) Gosto de roupas casuais, mas com um toque de estilo.",
                                 image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
                                 value: "contemporaneo",
-                                category: "Contemporâneo"
+                                category: "Contemporâneo",
+                                points: { natural: 1, classico: 1, contemporaneo: 3, elegante: 1, romantico: 0, criativo: 1 }
                               },
                               {
                                 id: "1d",
-                                text: "Elegância refinada, moderna e sem exageros.",
+                                text: "D) Escolho peças elegantes, com cortes impecáveis e sofisticados.",
                                 image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
                                 value: "elegante",
-                                category: "Elegante"
+                                category: "Elegante",
+                                points: { natural: 0, classico: 2, contemporaneo: 1, elegante: 3, romantico: 1, criativo: 0 }
                               },
                               {
                                 id: "1e",
-                                text: "Delicadeza em tecidos suaves e fluidos.",
+                                text: "E) Adoro roupas leves e delicadas, com cores suaves.",
                                 image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/1_gqaadq.webp",
                                 value: "romantico",
-                                category: "Romântico"
+                                category: "Romântico",
+                                points: { natural: 1, classico: 0, contemporaneo: 0, elegante: 1, romantico: 3, criativo: 1 }
                               },
                               {
                                 id: "1f",
-                                text: "Ousadia, originalidade e expressão pessoal.",
+                                text: "F) Roupas que valorizem meu corpo são as minhas favoritas.",
                                 image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_igc9ur.webp",
                                 value: "criativo",
-                                category: "Criativo"
+                                category: "Criativo",
+                                points: { natural: 0, classico: 0, contemporaneo: 1, elegante: 2, romantico: 1, criativo: 3 }
                               }
                             ]
                           },
                           style: {
                             display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-                            gap: "1rem",
-                            maxWidth: "800px",
-                            margin: "0 auto"
+                            gridTemplateColumns: "repeat(2, 1fr)",
+                            gridTemplateRows: "repeat(3, 1fr)",
+                            gap: "1.5rem",
+                            maxWidth: "700px",
+                            margin: "0 auto",
+                            padding: "2rem",
+                            backgroundColor: "#fafafa",
+                            borderRadius: "16px",
+                            border: "3px dashed #B89B7A"
                           }
                         },
                         {
@@ -5931,31 +6013,147 @@ const SimpleDragDropEditor: React.FC = () => {
                   onClick={() => {
                     const strategicPage = {
                       id: "strategic-questions",
-                      title: "QuizTransition",
-                      type: "transition" as const,
+                      title: "11. Como você gosta de realizar suas compras?",
+                      type: "question" as const,
                       progress: 85,
                       showHeader: true,
                       showProgress: true,
                       components: [
                         {
-                          id: "strategic-title",
-                          type: "title" as const,
-                          data: { text: "ETAPA REAL: QuizTransition", color: "#059669" },
-                          style: { textAlign: "center" as const, backgroundColor: "#ecfdf5", padding: "1rem", borderRadius: "8px" }
+                          id: "header-logo-strategic",
+                          type: "logo" as const,
+                          data: {
+                            src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
+                            alt: "Gisele Galvão - Consultoria de Estilo",
+                            width: 200,
+                            height: 80
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            marginBottom: "1rem",
+                            display: "block",
+                            margin: "0 auto 1rem"
+                          }
                         },
                         {
-                          id: "strategic-route",
-                          type: "text" as const,
-                          data: { text: "Rota: /quiz (6 questões estratégicas)", color: "#6b7280" },
-                          style: { textAlign: "center" as const }
+                          id: "strategic-progress",
+                          type: "progress" as const,
+                          data: {
+                            progressValue: 85,
+                            showPercentage: false,
+                            color: "#D4AF37",
+                            backgroundColor: "#f0f0f0",
+                            height: "8px"
+                          },
+                          style: {
+                            maxWidth: "600px",
+                            margin: "0 auto 2rem",
+                            borderRadius: "4px"
+                          }
+                        },
+                        {
+                          id: "strategic-title",
+                          type: "title" as const,
+                          data: {
+                            text: "11. Como você gosta de realizar suas compras?",
+                            fontSize: "1.8rem",
+                            fontWeight: "400",
+                            color: "#2c2c2c",
+                            fontFamily: "Georgia, serif"
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            marginBottom: "2rem"
+                          }
+                        },
+                        {
+                          id: "strategic-options",
+                          type: "options" as const,
+                          data: {
+                            multiSelect: false,
+                            hasImages: false,
+                            layoutType: "vertical-list",
+                            showBorders: true,
+                            borderStyle: "dashed",
+                            borderColor: "#D4AF37",
+                            borderWidth: "2px",
+                            borderRadius: "8px",
+                            selectionStyle: "highlight",
+                            options: [
+                              {
+                                id: "s1a",
+                                text: "A) Compro quando preciso, não gosto de perder tempo e adoro facilidades.",
+                                value: "pratico",
+                                category: "Comprador Prático",
+                                icon: "🛒"
+                              },
+                              {
+                                id: "s1b",
+                                text: "B) Faço compras planejadas, priorizo qualidade e espero até encontrar a peça perfeita.",
+                                value: "planejado",
+                                category: "Comprador Planejado",
+                                icon: "📝"
+                              },
+                              {
+                                id: "s1c",
+                                text: "C) Compro peças para atualizar meu guarda-roupa. Às vezes, compro pela internet pela praticidade.",
+                                value: "atualizador",
+                                category: "Comprador Atualizador",
+                                icon: "💻"
+                              },
+                              {
+                                id: "s1d",
+                                text: "D) Compro pensando no status que a peça pode me proporcionar. Gosto de qualidade e atualidade.",
+                                value: "status",
+                                category: "Comprador Status",
+                                icon: "✨"
+                              },
+                              {
+                                id: "s1e",
+                                text: "E) Adoro ir às compras, compro por prazer e presto atenção nos detalhes, principalmente nos delicados.",
+                                value: "prazer",
+                                category: "Comprador Prazer",
+                                icon: "💕"
+                              },
+                              {
+                                id: "s1f",
+                                text: "F) Adoro comprar peças que valorizem meu corpo, independente da moda. Gosto de efeito único.",
+                                value: "corpo",
+                                category: "Comprador Corpo",
+                                icon: "💃"
+                              },
+                              {
+                                id: "s1g",
+                                text: "G) Gosto de lugares alternativos, como brechós e feiras de artesanato, pois adoro o incomum.",
+                                value: "alternativo",
+                                category: "Comprador Alternativo",
+                                icon: "🎨"
+                              },
+                              {
+                                id: "s1h",
+                                text: "H) Compro apenas o que me chama atenção, independente da moda. Gosto de efeito único.",
+                                value: "unico",
+                                category: "Comprador Único",
+                                icon: "🌟"
+                              }
+                            ]
+                          },
+                          style: {
+                            maxWidth: "700px",
+                            margin: "0 auto",
+                            padding: "2rem",
+                            backgroundColor: "#fafafa",
+                            borderRadius: "16px",
+                            border: "3px dashed #D4AF37"
+                          }
                         }
                       ]
                     };
                     setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, strategicPage] }));
-                    toast({ title: "✅ QuizTransition adicionado!", description: "Etapa real das questões estratégicas" });
+                    toast({ title: "✅ Questão Estratégica Configurada!", description: "Questão realista com todas as opções como CaktoQuiz" });
                   }}
                 >
-                  🎯 QuizTransition (estratégicas)
+                  🎯 Questão Estratégica (Realista)
                 </Button>
 
                 <Button
@@ -5999,31 +6197,169 @@ const SimpleDragDropEditor: React.FC = () => {
                   onClick={() => {
                     const resultPage = {
                       id: "result-page",
-                      title: "ResultPage",
+                      title: "Seu Estilo Principal: Clássico",
                       type: "result" as const,
                       progress: 100,
-                      showHeader: true,
+                      showHeader: false,
                       showProgress: false,
                       components: [
                         {
-                          id: "result-title",
-                          type: "title" as const,
-                          data: { text: "ETAPA REAL: ResultPage", color: "#059669" },
-                          style: { textAlign: "center" as const, backgroundColor: "#ecfdf5", padding: "1rem", borderRadius: "8px" }
+                          id: "result-logo",
+                          type: "logo" as const,
+                          data: {
+                            src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
+                            alt: "Gisele Galvão - Consultoria de Estilo",
+                            width: 200,
+                            height: 80
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            marginBottom: "2rem",
+                            display: "block",
+                            margin: "0 auto 2rem"
+                          }
                         },
                         {
-                          id: "result-route",
+                          id: "congratulations",
+                          type: "title" as const,
+                          data: {
+                            text: "Parabéns! Descobrimos seu estilo pessoal",
+                            fontSize: "1.8rem",
+                            fontWeight: "400",
+                            color: "#2c2c2c",
+                            fontFamily: "Georgia, serif"
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            marginBottom: "2rem"
+                          }
+                        },
+                        {
+                          id: "primary-style-card",
                           type: "text" as const,
-                          data: { text: "Rota: /resultado", color: "#6b7280" },
-                          style: { textAlign: "center" as const }
+                          data: {
+                            text: "Seu estilo principal:",
+                            fontSize: "1.1rem",
+                            fontWeight: "600",
+                            color: "#666"
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            marginBottom: "1rem"
+                          }
+                        },
+                        {
+                          id: "style-title",
+                          type: "title" as const,
+                          data: {
+                            text: "CLÁSSICO ELEGANTE",
+                            fontSize: "2.5rem",
+                            fontWeight: "700",
+                            color: "#D4AF37",
+                            letterSpacing: "0.1em"
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            marginBottom: "1rem",
+                            textTransform: "uppercase"
+                          }
+                        },
+                        {
+                          id: "style-percentage",
+                          type: "text" as const,
+                          data: {
+                            text: "85% de compatibilidade",
+                            fontSize: "1.2rem",
+                            fontWeight: "500",
+                            color: "#059669"
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            marginBottom: "3rem"
+                          }
+                        },
+                        {
+                          id: "style-description",
+                          type: "text" as const,
+                          data: {
+                            text: "Você possui uma elegância natural e atemporal. Prefere peças bem estruturadas, cortes clássicos e cores neutras sofisticadas. Seu guarda-roupa é investimento em qualidade, versatilidade e durabilidade.",
+                            fontSize: "1.1rem",
+                            color: "#555",
+                            lineHeight: "1.6"
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            maxWidth: "600px",
+                            margin: "0 auto 3rem",
+                            padding: "2rem",
+                            backgroundColor: "#f8f9fa",
+                            borderRadius: "12px",
+                            border: "1px solid #e9ecef"
+                          }
+                        },
+                        {
+                          id: "secondary-styles-title",
+                          type: "title" as const,
+                          data: {
+                            text: "Seus estilos secundários:",
+                            fontSize: "1.5rem",
+                            fontWeight: "600",
+                            color: "#2c2c2c"
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            marginBottom: "2rem"
+                          }
+                        },
+                        {
+                          id: "secondary-styles",
+                          type: "text" as const,
+                          data: {
+                            text: "• Elegante (65%) - Sofisticação e refinamento\n• Natural (45%) - Conforto e praticidade\n• Contemporâneo (35%) - Tendências modernas",
+                            fontSize: "1rem",
+                            color: "#666",
+                            lineHeight: "1.8"
+                          },
+                          style: {
+                            textAlign: "left" as const,
+                            maxWidth: "500px",
+                            margin: "0 auto 3rem",
+                            padding: "1.5rem",
+                            backgroundColor: "#fafafa",
+                            borderRadius: "8px",
+                            border: "1px solid #e5e7eb"
+                          }
+                        },
+                        {
+                          id: "cta-button",
+                          type: "button" as const,
+                          data: {
+                            text: "QUERO MEU GUIA COMPLETO",
+                            variant: "primary"
+                          },
+                          style: {
+                            backgroundColor: "#D4AF37",
+                            color: "white",
+                            padding: "1.2rem 3rem",
+                            borderRadius: "8px",
+                            fontSize: "1.1rem",
+                            fontWeight: "600",
+                            display: "block",
+                            margin: "0 auto",
+                            border: "none",
+                            cursor: "pointer",
+                            textTransform: "uppercase",
+                            letterSpacing: "0.05em",
+                            minWidth: "300px"
+                          }
                         }
                       ]
                     };
                     setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, resultPage] }));
-                    toast({ title: "✅ ResultPage adicionado!", description: "Etapa real da rota /resultado" });
+                    toast({ title: "✅ Página de Resultado Configurada!", description: "Layout completo com resultado personalizado" });
                   }}
                 >
-                  🎉 ResultPage (/resultado)
+                  🎉 Página de Resultado (Completa)
                 </Button>
 
                 <Button
