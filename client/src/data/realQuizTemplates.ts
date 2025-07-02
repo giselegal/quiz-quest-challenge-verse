@@ -21,18 +21,26 @@ export const QUIZ_TEMPLATES = {
       {
         id: "intro-title",
         type: "heading",
-        content: {
+        data: {
           text: "Descubra Seu Estilo Pessoal",
           level: 1,
           color: "#432818"
+        },
+        style: {
+          textAlign: "center",
+          marginBottom: "1rem"
         }
       },
       {
         id: "intro-subtitle", 
         type: "paragraph",
-        content: {
+        data: {
           text: "Responda algumas perguntas rápidas e descubra qual estilo combina mais com você",
           color: "#8F7A6A"
+        },
+        style: {
+          textAlign: "center",
+          fontSize: "1.1rem"
         }
       }
     ]
@@ -745,6 +753,12 @@ export const generateStrategicQuestionTemplates = () => {
             textAlign: "center",
             color: "#432818",
             lineHeight: "1.6"
+          },
+          style: {
+            backgroundColor: "#f8f9fa",
+            padding: "2rem",
+            borderRadius: "12px",
+            textAlign: "center"
           }
         }
       ]
@@ -772,6 +786,12 @@ export const generateStrategicQuestionTemplates = () => {
               { id: "s1d", text: "Me sinto segura, mas sei que posso evoluir", category: "confident" }
             ],
             isStrategic: true
+          },
+          style: {
+            backgroundColor: "#ffffff",
+            padding: "1.5rem",
+            borderRadius: "8px",
+            border: "1px solid #e5e7eb"
           }
         }
       ]
