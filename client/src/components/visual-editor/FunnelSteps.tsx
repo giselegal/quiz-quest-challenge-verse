@@ -7,6 +7,8 @@ interface FunnelStepsProps {
 }
 
 export const FunnelSteps: React.FC<FunnelStepsProps> = ({ setCurrentFunnel }) => {
+  const generateUniqueId = (base: string) => `${base}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
   return (
     <div className="space-y-1">
       {/* Página Inicial */}
@@ -16,15 +18,15 @@ export const FunnelSteps: React.FC<FunnelStepsProps> = ({ setCurrentFunnel }) =>
         className="w-full justify-start h-8 text-xs"
         onClick={() => {
           const introPage = {
-            id: "intro-page",
-            title: "Página Inicial",
+            id: generateUniqueId('intro-page'),
+            title: "Página Inicial", 
             type: "intro" as const,
             progress: 0,
             showHeader: true,
             showProgress: true,
             components: [
               {
-                id: "intro-title",
+                id: generateUniqueId("intro-title"),
                 type: "title" as const,
                 data: {
                   text: "Teste de Estilo Pessoal",
@@ -37,7 +39,7 @@ export const FunnelSteps: React.FC<FunnelStepsProps> = ({ setCurrentFunnel }) =>
                 }
               },
               {
-                id: "intro-input",
+                id: generateUniqueId("intro-input"),
                 type: "input" as const,
                 data: {
                   label: "NOME *",
@@ -51,7 +53,7 @@ export const FunnelSteps: React.FC<FunnelStepsProps> = ({ setCurrentFunnel }) =>
                 }
               },
               {
-                id: "intro-button",
+                id: generateUniqueId("intro-button"),
                 type: "button" as const,
                 data: {
                   text: "Continuar",
@@ -79,7 +81,7 @@ export const FunnelSteps: React.FC<FunnelStepsProps> = ({ setCurrentFunnel }) =>
         className="w-full justify-start h-8 text-xs"
         onClick={() => {
           const questionPage = {
-            id: "quiz-question",
+            id: generateUniqueId('quiz-question'),
             title: "Questão do Quiz",
             type: "question" as const,
             progress: 50,
@@ -87,7 +89,7 @@ export const FunnelSteps: React.FC<FunnelStepsProps> = ({ setCurrentFunnel }) =>
             showProgress: true,
             components: [
               {
-                id: "question-title",
+                id: generateUniqueId("question-title"),
                 type: "title" as const,
                 data: {
                   text: "QUAL O SEU TIPO DE ROUPA FAVORITA?",
@@ -100,7 +102,7 @@ export const FunnelSteps: React.FC<FunnelStepsProps> = ({ setCurrentFunnel }) =>
                 }
               },
               {
-                id: "question-subtitle",
+                id: generateUniqueId("question-subtitle"),
                 type: "subtitle" as const,
                 data: {
                   text: "Escolha até 3 opções que mais combinam com você",
@@ -128,7 +130,7 @@ export const FunnelSteps: React.FC<FunnelStepsProps> = ({ setCurrentFunnel }) =>
         className="w-full justify-start h-8 text-xs"
         onClick={() => {
           const loadingPage = {
-            id: "loading-page",
+            id: generateUniqueId('loading-page'),
             title: "Carregamento",
             type: "loading" as const,
             progress: 95,
@@ -136,7 +138,7 @@ export const FunnelSteps: React.FC<FunnelStepsProps> = ({ setCurrentFunnel }) =>
             showProgress: true,
             components: [
               {
-                id: "loading-title",
+                id: generateUniqueId("loading-title"),
                 type: "title" as const,
                 data: {
                   text: "Descobrindo seu estilo...",
@@ -149,7 +151,7 @@ export const FunnelSteps: React.FC<FunnelStepsProps> = ({ setCurrentFunnel }) =>
                 }
               },
               {
-                id: "loading-text",
+                id: generateUniqueId("loading-text"),
                 type: "text" as const,
                 data: {
                   text: "Analisando suas respostas",
@@ -176,7 +178,7 @@ export const FunnelSteps: React.FC<FunnelStepsProps> = ({ setCurrentFunnel }) =>
         className="w-full justify-start h-8 text-xs"
         onClick={() => {
           const resultPage = {
-            id: "result-page",
+            id: generateUniqueId('result-page'),
             title: "Resultado",
             type: "result" as const,
             progress: 100,
@@ -184,7 +186,7 @@ export const FunnelSteps: React.FC<FunnelStepsProps> = ({ setCurrentFunnel }) =>
             showProgress: false,
             components: [
               {
-                id: "result-title",
+                id: generateUniqueId("result-title"),
                 type: "title" as const,
                 data: {
                   text: "Seu Estilo é: Clássico!",
@@ -197,7 +199,7 @@ export const FunnelSteps: React.FC<FunnelStepsProps> = ({ setCurrentFunnel }) =>
                 }
               },
               {
-                id: "result-description",
+                id: generateUniqueId("result-description"),
                 type: "text" as const,
                 data: {
                   text: "Você tem um estilo clássico e elegante.",
@@ -225,7 +227,7 @@ export const FunnelSteps: React.FC<FunnelStepsProps> = ({ setCurrentFunnel }) =>
         className="w-full justify-start h-8 text-xs"
         onClick={() => {
           const offerPage = {
-            id: "offer-page",
+            id: `offer-page-${Date.now()}`,
             title: "Oferta",
             type: "offer" as const,
             progress: 100,
@@ -233,7 +235,7 @@ export const FunnelSteps: React.FC<FunnelStepsProps> = ({ setCurrentFunnel }) =>
             showProgress: false,
             components: [
               {
-                id: "offer-title",
+                id: generateUniqueId("offer-title"),
                 type: "title" as const,
                 data: {
                   text: "Transforme Seu Estilo!",
@@ -246,7 +248,7 @@ export const FunnelSteps: React.FC<FunnelStepsProps> = ({ setCurrentFunnel }) =>
                 }
               },
               {
-                id: "offer-button",
+                id: generateUniqueId("offer-button"),
                 type: "button" as const,
                 data: {
                   text: "QUERO TRANSFORMAR MEU ESTILO AGORA!",
