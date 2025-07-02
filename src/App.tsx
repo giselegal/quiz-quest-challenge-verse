@@ -86,6 +86,11 @@ const App = () => {
                   path="/editor-visual"
                   element={<SimpleDragDropEditor />}
                 />
+                {/* Simple Editor - usando o mesmo editor robusto */}
+                <Route
+                  path="/simple-editor"
+                  element={<SimpleDragDropEditor />}
+                />
                 {/* Admin - protegido com AdminAuthProvider */}
                 <Route
                   path="/admin/*"
