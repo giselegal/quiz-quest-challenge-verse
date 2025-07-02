@@ -3957,7 +3957,7 @@ const SimpleDragDropEditor: React.FC = () => {
           onDragOver={(e) => handleDragOver(e, index)}
           onDrop={(e) => handleDrop(e, index)}
         >
-          {dragOverIndex === index ? "Solte aqui" : "Arraste componentes aqui"}
+          {dragOverIndex === index ? "Solte aqui" : ""}
         </div>
 
         {/* Component Wrapper */}
@@ -6369,7 +6369,7 @@ const SimpleDragDropEditor: React.FC = () => {
                     >
                       <div className="text-center text-gray-400">
                         <Plus className="h-8 w-8 mx-auto mb-2" />
-                        <p>Arraste componentes aqui ou clique para começar</p>
+                        <p>Canvas vazio</p>
                       </div>
                     </div>
                   )}
