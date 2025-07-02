@@ -187,9 +187,17 @@ jobs:
       - name: Deploy to Hostinger
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: ftp.giselegalvao.com.br
-          username: u116045488.giselegalvao
+          server: 'ftp.giselegalvao.com.br'
+          username: 'u116045488.giselegalvao'
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./dist/
-          server-dir: /u116045488/domains/giselegalvao.com.br/public_html/quiz-de-estilo/
+          local-dir: './dist/'
+          server-dir: '/u116045488/domains/giselegalvao.com.br/public_html/quiz-de-estilo/'
           dangerous-clean-slate: true
+          exclude: |
+            .git*
+            .git*/**
+            .github*
+            .github*/**
+            node_modules*
+            node_modules*/**
+            **/*.md
