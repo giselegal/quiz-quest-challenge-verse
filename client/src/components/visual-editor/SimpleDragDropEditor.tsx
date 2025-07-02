@@ -3217,7 +3217,7 @@ const SimpleDragDropEditor: React.FC = () => {
       await saveFunnel(updatedFunnel);
 
       // Salvar versão no histórico
-      await saveVersion(updatedFunnel, "Salvamento manual");
+      saveVersion("Salvamento manual", updatedFunnel as Record<string, unknown>);
 
       // Atualizar o estado local
       setCurrentFunnel(updatedFunnel);
@@ -3543,7 +3543,7 @@ const SimpleDragDropEditor: React.FC = () => {
   // Inicializar auto-save do versionamento
   useEffect(() => {
     if (currentFunnel.id) {
-      startAutoSave(() => currentFunnel);
+      startAutoSave();
       console.log(
         "🔄 Auto-save do versionamento iniciado para:",
         currentFunnel.id
@@ -5517,7 +5517,7 @@ const SimpleDragDropEditor: React.FC = () => {
             {/* Lista de Páginas */}
             <div className="space-y-1">
               {currentFunnel.pages.map((page, index) => (
-                <div key={page?.id || `page-${index}`} className="relative">
+                <div key={`${page?.id || `page-${index}`}-${Date.now()}-${Math.random()}`} className="relative">
                   <Button
                     variant={index === currentPageIndex ? "default" : "outline"}
                     size="sm"
