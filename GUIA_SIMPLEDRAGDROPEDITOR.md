@@ -9,11 +9,13 @@ O **SimpleDragDropEditor** é um editor visual avançado com interface drag & dr
 ## 🚀 **ACESSO E NAVEGAÇÃO**
 
 ### **🔗 URL de Acesso:**
+
 ```
 https://seu-dominio.com/editor-visual
 ```
 
 ### **🎯 Rota no Sistema:**
+
 - **Rota**: `/editor-visual`
 - **Componente**: `SimpleDragDropEditor.tsx`
 - **Localização**: `src/components/visual-editor/`
@@ -24,18 +26,21 @@ https://seu-dominio.com/editor-visual
 ## ⚡ **CARACTERÍSTICAS PRINCIPAIS**
 
 ### **🎨 INTERFACE:**
+
 - ✅ **Drag & Drop** - Interface intuitiva de arrastar e soltar
 - ✅ **Preview Responsivo** - Visualização Desktop/Tablet/Mobile
 - ✅ **Editor Visual** - Edição em tempo real
 - ✅ **Sidebar de Componentes** - Biblioteca de elementos
 
 ### **🔧 FUNCIONALIDADES:**
+
 - ✅ **Sistema de Versionamento** - Salvamento e carregamento de versões
 - ✅ **Templates Predefinidos** - Templates de quiz prontos
 - ✅ **Export/Import** - Salvamento de configurações
 - ✅ **Personalização Avançada** - Edição de estilos e conteúdos
 
 ### **📱 RESPONSIVIDADE:**
+
 - ✅ **Desktop Preview** - Visualização para desktop
 - ✅ **Tablet Preview** - Visualização para tablets
 - ✅ **Mobile Preview** - Visualização para dispositivos móveis
@@ -45,6 +50,7 @@ https://seu-dominio.com/editor-visual
 ## 🛠️ **COMPONENTES DISPONÍVEIS**
 
 ### **📝 ELEMENTOS DE TEXTO:**
+
 ```
 🔤 Títulos (H1, H2, H3, H4, H5, H6)
 📄 Parágrafos
@@ -54,6 +60,7 @@ https://seu-dominio.com/editor-visual
 ```
 
 ### **🎨 ELEMENTOS VISUAIS:**
+
 ```
 🖼️ Imagens
 🎥 Vídeos
@@ -63,6 +70,7 @@ https://seu-dominio.com/editor-visual
 ```
 
 ### **🔘 ELEMENTOS INTERATIVOS:**
+
 ```
 🔘 Botões (primários, secundários, ghost)
 📋 Formulários (inputs, textareas, selects)
@@ -72,6 +80,7 @@ https://seu-dominio.com/editor-visual
 ```
 
 ### **📊 ELEMENTOS DE LAYOUT:**
+
 ```
 📐 Grid Systems
 📱 Flex Containers
@@ -85,22 +94,26 @@ https://seu-dominio.com/editor-visual
 ## 🎯 **MODO DE USO**
 
 ### **1. 🚀 INICIANDO:**
+
 1. Acesse `/editor-visual`
 2. Aguarde o carregamento da interface
 3. Escolha um template ou comece do zero
 
 ### **2. ✏️ EDITANDO:**
+
 1. **Arrastar Componentes**: Da sidebar para a área de trabalho
 2. **Selecionar Elemento**: Clique no elemento para editá-lo
 3. **Configurar Propriedades**: Use o painel de propriedades à direita
 4. **Preview Responsivo**: Alterne entre os dispositivos
 
 ### **3. 💾 SALVANDO:**
+
 1. **Salvar Versão**: Use o botão "Save Version" no topo
 2. **Nomear Versão**: Dê um nome descritivo
 3. **Carregar Versão**: Selecione de versões salvas anteriormente
 
 ### **4. 📤 EXPORTANDO:**
+
 1. **Export HTML**: Obtenha o código HTML gerado
 2. **Export JSON**: Salve a configuração em JSON
 3. **Export CSS**: Baixe os estilos customizados
@@ -110,6 +123,7 @@ https://seu-dominio.com/editor-visual
 ## 🔧 **DEPENDÊNCIAS E INTEGRAÇÃO**
 
 ### **📚 HOOKS NECESSÁRIOS:**
+
 ```typescript
 // Hook de versionamento
 import { useVersionManager } from "@/hooks/useVersionManager";
@@ -119,6 +133,7 @@ import { useToast } from "@/hooks/use-toast";
 ```
 
 ### **🎨 COMPONENTES UI:**
+
 ```typescript
 // Componentes de interface
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -133,9 +148,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 ```
 
 ### **📊 TEMPLATES:**
+
 ```typescript
 // Templates de quiz
-import { QUIZ_TEMPLATES, generateRealQuestionTemplates } from "@/data/realQuizTemplates";
+import {
+  QUIZ_TEMPLATES,
+  generateRealQuestionTemplates,
+} from "@/data/realQuizTemplates";
 ```
 
 ---
@@ -143,24 +162,28 @@ import { QUIZ_TEMPLATES, generateRealQuestionTemplates } from "@/data/realQuizTe
 ## 🎯 **CASOS DE USO**
 
 ### **1. 🧩 EDIÇÃO DE QUIZ:**
+
 - Personalizar perguntas e opções
 - Ajustar layout e cores
 - Configurar animações
 - Preview responsivo
 
 ### **2. 🏆 EDIÇÃO DE RESULTADOS:**
+
 - Customizar páginas de resultado
 - Ajustar call-to-actions
 - Personalizar seções de vendas
 - Otimizar conversão
 
 ### **3. 🎨 CRIAÇÃO DE LANDING PAGES:**
+
 - Criar páginas de captura
 - Personalizar formulários
 - Ajustar hero sections
 - Otimizar para mobile
 
 ### **4. 📊 TEMPLATES PERSONALIZADOS:**
+
 - Criar templates reutilizáveis
 - Salvar configurações
 - Compartilhar entre projetos
@@ -171,31 +194,29 @@ import { QUIZ_TEMPLATES, generateRealQuestionTemplates } from "@/data/realQuizTe
 ## 🔧 **CONFIGURAÇÃO TÉCNICA**
 
 ### **🎯 ESTRUTURA DO COMPONENTE:**
+
 ```typescript
 // Componente principal
 const SimpleDragDropEditor = () => {
   // Estados do editor
   const [selectedElement, setSelectedElement] = useState(null);
-  const [previewMode, setPreviewMode] = useState('desktop');
+  const [previewMode, setPreviewMode] = useState("desktop");
   const [elements, setElements] = useState([]);
-  
+
   // Hook de versionamento
   const { saveVersion, loadVersion, versions } = useVersionManager();
-  
+
   // Hook de notificações
   const { toast } = useToast();
-  
+
   // Lógica do editor...
-  
-  return (
-    <div className="editor-container">
-      {/* Interface do editor */}
-    </div>
-  );
+
+  return <div className="editor-container">{/* Interface do editor */}</div>;
 };
 ```
 
 ### **🎨 CUSTOMIZAÇÃO:**
+
 ```css
 /* Estilos personalizáveis */
 .editor-container {
@@ -225,12 +246,14 @@ const SimpleDragDropEditor = () => {
 ## 📊 **PERFORMANCE E OTIMIZAÇÃO**
 
 ### **⚡ OTIMIZAÇÕES IMPLEMENTADAS:**
+
 - ✅ **Lazy Loading** - Carregamento sob demanda
 - ✅ **Code Splitting** - Separação do bundle
 - ✅ **Memoization** - Cache de componentes
 - ✅ **Debounced Updates** - Atualizações otimizadas
 
 ### **📈 MÉTRICAS:**
+
 - **Bundle Size**: ~200KB (comprimido)
 - **Initial Load**: <2s
 - **Runtime Performance**: 60fps
@@ -243,11 +266,13 @@ const SimpleDragDropEditor = () => {
 ### **❗ PROBLEMAS COMUNS:**
 
 1. **Editor não carrega:**
+
    - Verificar se todas as dependências estão instaladas
    - Confirmar se a rota `/editor-visual` está configurada
    - Checar console para erros JavaScript
 
 2. **Drag & Drop não funciona:**
+
    - Verificar se os eventos de mouse/touch estão habilitados
    - Confirmar compatibilidade do navegador
    - Limpar cache do navegador
@@ -258,6 +283,7 @@ const SimpleDragDropEditor = () => {
    - Testar em diferentes dispositivos
 
 ### **🔧 COMANDOS DE DEBUG:**
+
 ```bash
 # Verificar se o editor está funcionando
 curl http://localhost:3000/editor-visual
@@ -274,6 +300,7 @@ npm list --depth=0
 ## 🚀 **ROADMAP E MELHORIAS**
 
 ### **🎯 PRÓXIMAS FUNCIONALIDADES:**
+
 - 🔄 **Undo/Redo** - Sistema de desfazer/refazer
 - 🎨 **Themes** - Sistema de temas predefinidos
 - 📱 **Mobile Editor** - Editor otimizado para mobile
@@ -281,6 +308,7 @@ npm list --depth=0
 - 🔗 **API Integration** - Integração com APIs externas
 
 ### **🛠️ MELHORIAS TÉCNICAS:**
+
 - ⚡ **WebGL Canvas** - Renderização acelerada
 - 🔧 **Plugin System** - Sistema de plugins
 - 📊 **Analytics Integration** - Métricas de uso
