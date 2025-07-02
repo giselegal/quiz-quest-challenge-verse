@@ -3482,7 +3482,7 @@ const SimpleDragDropEditor: React.FC = () => {
       ...currentPage,
       id: `page-${Date.now()}`,
       title: `${currentPage.title} (Cópia)`,
-      components: currentPage.components.map((comp) => ({
+      components: currentPage?.components?.map((comp) => ({
         ...comp,
         id: `${comp.type}-${Date.now()}-${Math.random()
           .toString(36)
@@ -5620,10 +5620,10 @@ const SimpleDragDropEditor: React.FC = () => {
           {/* Header do Canvas */}
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <Badge variant="outline">{currentPage.type}</Badge>
-              <span className="font-medium text-sm">{currentPage.title}</span>
+              <Badge variant="outline">{currentPage?.type || 'quiz'}</Badge>
+              <span className="font-medium text-sm">{currentPage?.title || 'Página sem título'}</span>
               <Badge variant="secondary" className="text-xs">
-                Página {currentPageIndex + 1} de {currentFunnel.pages.length}
+                Página {currentPageIndex + 1} de {currentFunnel?.pages?.length || 0}
               </Badge>
             </div>
 
@@ -5662,7 +5662,7 @@ const SimpleDragDropEditor: React.FC = () => {
               className={`quiz-preview quiz-dynamic-theme ${getDeviceClass()}`}
             >
               {/* Header do Quiz - Layout Idêntico ao Real */}
-              {currentPage.showHeader && (
+              {currentPage?.showHeader && (
                 <div className="quiz-header bg-white border-b border-gray-100 p-4 sticky top-0 z-10">
                   <div className="flex items-center justify-between max-w-5xl mx-auto">
                     <div className="flex items-center gap-3">
@@ -5689,7 +5689,7 @@ const SimpleDragDropEditor: React.FC = () => {
               )}
 
               {/* Barra de Progresso - Layout Idêntico ao Real */}
-              {currentPage.showProgress && (
+              {currentPage?.showProgress && (
                 <div className="quiz-progress bg-[#FAF9F7] p-4 border-b border-gray-100">
                   <div className="max-w-5xl mx-auto">
                     <div className="flex items-center justify-between mb-2">
@@ -6802,7 +6802,7 @@ const SimpleDragDropEditor: React.FC = () => {
 
                 <div className="flex items-center space-x-2">
                   <Switch
-                    checked={currentPage.showHeader}
+                    checked={currentPage?.showHeader || false}
                     onCheckedChange={(checked) =>
                       updateCurrentPage({ showHeader: checked })
                     }
@@ -6812,7 +6812,7 @@ const SimpleDragDropEditor: React.FC = () => {
 
                 <div className="flex items-center space-x-2">
                   <Switch
-                    checked={currentPage.showProgress}
+                    checked={currentPage?.showProgress || false}
                     onCheckedChange={(checked) =>
                       updateCurrentPage({ showProgress: checked })
                     }

@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Save, Palette, Type, Eye, Settings, ArrowLeft } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { safeLocalStorage } from "@/utils/safeLocalStorage";
-import { Link } from "react-router-dom";
+import { Link } from "wouter";
 
 interface EditorConfig {
   cores: {
