@@ -88,12 +88,6 @@ The build process:
 
 ```
 Changelog:
-- July 02, 2025. SimpleDragDropEditor Cleanup and Key Issues Fix:
-  * ⚠️ IDENTIFIED ISSUE: React keys duplicated in FunnelSteps causing warnings
-  * ⚠️ IDENTIFIED ISSUE: TypeScript errors in saveVersion and startAutoSave calls
-  * 🔧 IN PROGRESS: Fixing unique ID generation for page templates
-  * 🔧 IN PROGRESS: Correcting TypeScript function signatures
-  * 🎯 GOAL: Restore fully functional editor without warnings
 - July 02, 2025. Quiz Sell Genius - Complete Integration SimpleDragDropEditor → Live Quiz Routes:
   * ✅ IMPLEMENTED ALL 18 REAL QUIZ STEPS from document:
     - 10 questões normais (Q1-Q10): Roupa favorita, Personalidade, Visual, Detalhes, Estampas, Casaco, Calça, Sapatos, Acessórios, Tecidos
