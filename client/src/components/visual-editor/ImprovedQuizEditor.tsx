@@ -84,6 +84,21 @@ interface QuizFunnel {
     colors?: Record<string, string>;
     fonts?: Record<string, string>;
   };
+  variants?: QuizVariant[];
+}
+
+interface QuizVariant {
+  id: string;
+  name: string;
+  description: string;
+  trafficPercent: number;
+  isActive: boolean;
+  pages: QuizPage[];
+  settings?: {
+    theme?: string;
+    colors?: Record<string, string>;
+    fonts?: Record<string, string>;
+  };
 }
 
 // Categorias de componentes melhor organizadas
@@ -204,6 +219,56 @@ export default function ImprovedQuizEditor() {
           }
         ]
       }
+    ],
+    variants: [
+      {
+        id: "variant-a",
+        name: "Variante A (Original)",
+        description: "Versão padrão do funil",
+        trafficPercent: 50,
+        isActive: true,
+        pages: [
+          {
+            id: "intro-a",
+            title: "Introdução - Variante A",
+            type: "intro",
+            progress: 0,
+            showHeader: true,
+            showProgress: false,
+            components: [
+              {
+                id: "intro-title-a",
+                type: "heading",
+                content: { text: "Descubra Seu Estilo Pessoal", level: 1 }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: "variant-b",
+        name: "Variante B (Teste)",
+        description: "Versão alternativa para teste A/B",
+        trafficPercent: 50,
+        isActive: true,
+        pages: [
+          {
+            id: "intro-b",
+            title: "Introdução - Variante B",
+            type: "intro",
+            progress: 0,
+            showHeader: true,
+            showProgress: false,
+            components: [
+              {
+                id: "intro-title-b",
+                type: "heading",
+                content: { text: "Qual é o Seu Estilo Único?", level: 1 }
+              }
+            ]
+          }
+        ]
+      }
     ]
   });
 
@@ -212,8 +277,20 @@ export default function ImprovedQuizEditor() {
   const [deviceView, setDeviceView] = useState<"desktop" | "tablet" | "mobile">("desktop");
   const [activeTab, setActiveTab] = useState("pages");
   const [isPreviewMode, setIsPreviewMode] = useState(false);
+  const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
+  const [isAbTestMode, setIsAbTestMode] = useState(false);
 
-  const currentPage = currentFunnel.pages[currentPageIndex];
+  // Determinar as páginas atuais baseado no modo A/B test
+  const getCurrentPages = () => {
+    if (isAbTestMode && selectedVariant) {
+      const variant = currentFunnel.variants?.find(v => v.id === selectedVariant);
+      return variant?.pages || currentFunnel.pages;
+    }
+    return currentFunnel.pages;
+  };
+
+  const currentPages = getCurrentPages();
+  const currentPage = currentPages[currentPageIndex];
 
   // Funções de manipulação
   const addNewPage = useCallback((type: QuizPage["type"]) => {
@@ -298,14 +375,34 @@ export default function ImprovedQuizEditor() {
       data: {}
     };
 
-    setCurrentFunnel(prev => ({
-      ...prev,
-      pages: prev.pages.map((page, index) => 
-        index === currentPageIndex 
-          ? { ...page, components: [...page.components, newComponent] }
-          : page
-      )
-    }));
+    if (isAbTestMode && selectedVariant) {
+      // Adicionar componente à variante selecionada
+      setCurrentFunnel(prev => ({
+        ...prev,
+        variants: prev.variants?.map(variant => 
+          variant.id === selectedVariant
+            ? {
+                ...variant,
+                pages: variant.pages.map((page, index) => 
+                  index === currentPageIndex 
+                    ? { ...page, components: [...page.components, newComponent] }
+                    : page
+                )
+              }
+            : variant
+        )
+      }));
+    } else {
+      // Adicionar componente ao funil principal
+      setCurrentFunnel(prev => ({
+        ...prev,
+        pages: prev.pages.map((page, index) => 
+          index === currentPageIndex 
+            ? { ...page, components: [...page.components, newComponent] }
+            : page
+        )
+      }));
+    }
 
     setSelectedComponent(newComponent.id);
 
@@ -313,7 +410,58 @@ export default function ImprovedQuizEditor() {
       title: "Componente adicionado",
       description: `${componentType} adicionado à página.`,
     });
-  }, [currentPageIndex, toast]);
+  }, [currentPageIndex, isAbTestMode, selectedVariant, toast]);
+
+  // Funções para gerenciar variantes A/B
+  const createNewVariant = useCallback(() => {
+    const newVariant: QuizVariant = {
+      id: `variant-${Date.now()}`,
+      name: `Variante ${String.fromCharCode(65 + (currentFunnel.variants?.length || 0))}`,
+      description: "Nova variante para teste A/B",
+      trafficPercent: 50,
+      isActive: true,
+      pages: [...currentFunnel.pages] // Clonar páginas do funil principal
+    };
+
+    setCurrentFunnel(prev => ({
+      ...prev,
+      variants: [...(prev.variants || []), newVariant]
+    }));
+
+    setSelectedVariant(newVariant.id);
+
+    toast({
+      title: "Variante criada",
+      description: `Nova variante ${newVariant.name} criada com sucesso.`,
+    });
+  }, [currentFunnel.pages, currentFunnel.variants, toast]);
+
+  const deleteVariant = useCallback((variantId: string) => {
+    setCurrentFunnel(prev => ({
+      ...prev,
+      variants: prev.variants?.filter(v => v.id !== variantId)
+    }));
+
+    if (selectedVariant === variantId) {
+      setSelectedVariant(null);
+      setIsAbTestMode(false);
+    }
+
+    toast({
+      title: "Variante excluída",
+      description: "Variante removida com sucesso.",
+    });
+  }, [selectedVariant, toast]);
+
+  const toggleAbTestMode = useCallback(() => {
+    setIsAbTestMode(!isAbTestMode);
+    if (!isAbTestMode && currentFunnel.variants && currentFunnel.variants.length > 0) {
+      setSelectedVariant(currentFunnel.variants[0].id);
+    } else {
+      setSelectedVariant(null);
+    }
+    setCurrentPageIndex(0); // Resetar para primeira página
+  }, [isAbTestMode, currentFunnel.variants]);
 
   // Função para obter conteúdo padrão por tipo de componente
   function getDefaultContent(type: string) {
@@ -395,6 +543,47 @@ export default function ImprovedQuizEditor() {
           </div>
           
           <div className="flex items-center gap-2">
+            {/* A/B Test Controls */}
+            <div className="flex items-center gap-2 border rounded-lg p-2">
+              <Button
+                variant={isAbTestMode ? "default" : "outline"}
+                size="sm"
+                onClick={toggleAbTestMode}
+                className="h-8"
+              >
+                <TrendingUp className="h-4 w-4 mr-1" />
+                Teste A/B
+              </Button>
+              
+              {isAbTestMode && (
+                <>
+                  <Select value={selectedVariant || ""} onValueChange={setSelectedVariant}>
+                    <SelectTrigger className="w-40 h-8">
+                      <SelectValue placeholder="Selecionar variante" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {currentFunnel.variants?.map((variant) => (
+                        <SelectItem key={variant.id} value={variant.id}>
+                          {variant.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={createNewVariant}
+                    className="h-8 w-8 p-0"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </>
+              )}
+            </div>
+
+            <Separator orientation="vertical" className="h-6" />
+
             {/* Controles de visualização */}
             <div className="flex gap-1 border rounded-lg p-1">
               <Button
@@ -466,16 +655,24 @@ export default function ImprovedQuizEditor() {
         {!isPreviewMode && (
           <div className="w-80 border-r bg-white overflow-auto">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full">
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="pages">Páginas</TabsTrigger>
                 <TabsTrigger value="components">Componentes</TabsTrigger>
-                <TabsTrigger value="settings">Propriedades</TabsTrigger>
+                <TabsTrigger value="abtest">A/B Test</TabsTrigger>
+                <TabsTrigger value="settings">Config</TabsTrigger>
               </TabsList>
 
               {/* Aba de Páginas */}
               <TabsContent value="pages" className="p-4 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-semibold">Estrutura do Funil</h3>
+                  <div>
+                    <h3 className="font-semibold">Estrutura do Funil</h3>
+                    {isAbTestMode && selectedVariant && (
+                      <p className="text-xs text-muted-foreground">
+                        Editando: {currentFunnel.variants?.find(v => v.id === selectedVariant)?.name}
+                      </p>
+                    )}
+                  </div>
                   <Select onValueChange={(type) => addNewPage(type as QuizPage["type"])}>
                     <SelectTrigger className="w-32">
                       <Plus className="h-4 w-4" />
@@ -492,7 +689,7 @@ export default function ImprovedQuizEditor() {
 
                 <ScrollArea className="h-[calc(100vh-200px)]">
                   <div className="space-y-2">
-                    {currentFunnel.pages.map((page, index) => (
+                    {currentPages.map((page, index) => (
                       <Card 
                         key={page.id} 
                         className={`cursor-pointer transition-colors ${
@@ -539,6 +736,102 @@ export default function ImprovedQuizEditor() {
                         </CardHeader>
                       </Card>
                     ))}
+                  </div>
+                </ScrollArea>
+              </TabsContent>
+
+              {/* Aba de A/B Test */}
+              <TabsContent value="abtest" className="p-4 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold">Testes A/B</h3>
+                  <Button variant="outline" size="sm" onClick={createNewVariant}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Nova Variante
+                  </Button>
+                </div>
+
+                <ScrollArea className="h-[calc(100vh-200px)]">
+                  <div className="space-y-3">
+                    {currentFunnel.variants?.map((variant) => (
+                      <Card 
+                        key={variant.id} 
+                        className={`cursor-pointer transition-colors ${
+                          selectedVariant === variant.id ? "ring-2 ring-blue-500" : ""
+                        }`}
+                        onClick={() => {
+                          setSelectedVariant(variant.id);
+                          setIsAbTestMode(true);
+                          setCurrentPageIndex(0);
+                        }}
+                      >
+                        <CardHeader className="p-3">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <Badge 
+                                variant={variant.isActive ? "default" : "secondary"}
+                                className="text-xs"
+                              >
+                                {variant.isActive ? "Ativo" : "Inativo"}
+                              </Badge>
+                              <span className="font-medium text-sm">{variant.name}</span>
+                            </div>
+                            <div className="flex gap-1">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  // Toggle active status
+                                  setCurrentFunnel(prev => ({
+                                    ...prev,
+                                    variants: prev.variants?.map(v => 
+                                      v.id === variant.id 
+                                        ? { ...v, isActive: !v.isActive }
+                                        : v
+                                    )
+                                  }));
+                                }}
+                                className="h-6 w-6 p-0"
+                                title={variant.isActive ? "Desativar" : "Ativar"}
+                              >
+                                <Eye className="h-3 w-3" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  deleteVariant(variant.id);
+                                }}
+                                className="h-6 w-6 p-0"
+                                title="Excluir variante"
+                              >
+                                <Trash2 className="h-3 w-3" />
+                              </Button>
+                            </div>
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            {variant.description}
+                          </div>
+                          <div className="flex items-center justify-between mt-2">
+                            <span className="text-xs text-muted-foreground">
+                              {variant.pages.length} página(s)
+                            </span>
+                            <span className="text-xs font-medium">
+                              {variant.trafficPercent}% do tráfego
+                            </span>
+                          </div>
+                        </CardHeader>
+                      </Card>
+                    ))}
+                    
+                    {(!currentFunnel.variants || currentFunnel.variants.length === 0) && (
+                      <div className="text-center py-8 text-gray-500">
+                        <TrendingUp className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                        <p className="text-sm font-medium mb-2">Nenhuma variante criada</p>
+                        <p className="text-xs">Crie variantes para testar diferentes versões do seu funil</p>
+                      </div>
+                    )}
                   </div>
                 </ScrollArea>
               </TabsContent>
@@ -625,14 +918,14 @@ export default function ImprovedQuizEditor() {
                   </Button>
                   
                   <Badge variant="outline" className="px-3 py-1">
-                    Página {currentPageIndex + 1} de {currentFunnel.pages.length}
+                    Página {currentPageIndex + 1} de {currentPages.length}
                   </Badge>
                   
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setCurrentPageIndex(Math.min(currentFunnel.pages.length - 1, currentPageIndex + 1))}
-                    disabled={currentPageIndex === currentFunnel.pages.length - 1}
+                    onClick={() => setCurrentPageIndex(Math.min(currentPages.length - 1, currentPageIndex + 1))}
+                    disabled={currentPageIndex === currentPages.length - 1}
                   >
                     Próxima
                     <ArrowRight className="h-4 w-4 ml-2" />
@@ -642,6 +935,12 @@ export default function ImprovedQuizEditor() {
                 <div className="flex items-center gap-2">
                   <Badge variant="secondary">{currentPage?.type}</Badge>
                   <span className="font-medium">{currentPage?.title}</span>
+                  {isAbTestMode && selectedVariant && (
+                    <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                      <TrendingUp className="h-3 w-3 mr-1" />
+                      {currentFunnel.variants?.find(v => v.id === selectedVariant)?.name}
+                    </Badge>
+                  )}
                 </div>
               </div>
             )}
