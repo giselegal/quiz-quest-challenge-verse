@@ -3164,9 +3164,12 @@ const SimpleDragDropEditor: React.FC = () => {
   const compareVersions = () => [];
 
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
+  const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
+  const [deviceView, setDeviceView] = useState<"mobile" | "tablet" | "desktop">("desktop");
+  
   const currentPage = currentFunnel?.pages?.[currentPageIndex] || null;
 
-  // Early return se currentPage for null para evitar erros de runtime
+  // Loading state se currentPage for null
   if (!currentPage) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -3177,13 +3180,6 @@ const SimpleDragDropEditor: React.FC = () => {
       </div>
     );
   }
-
-  const [selectedComponent, setSelectedComponent] = useState<string | null>(
-    null
-  );
-  const [deviceView, setDeviceView] = useState<"mobile" | "tablet" | "desktop">(
-    "desktop"
-  );
   const [draggedType, setDraggedType] = useState<ComponentType | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [selectedOptions, setSelectedOptions] = useState<{
@@ -5561,42 +5557,368 @@ const SimpleDragDropEditor: React.FC = () => {
             {/* Templates Prontos */}
             <div className="mt-4">
               <h3 className="text-xs font-semibold mb-2">
-                📋 TEMPLATES PRONTOS
+                ⚡ ETAPAS REAIS DAS ROTAS
               </h3>
 
-              {/* Botão para carregar funil completo */}
+              {/* Botão para carregar etapas reais funcionais */}
               <Button
                 variant="default"
                 size="sm"
                 className="w-full justify-start h-10 text-xs mb-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold"
                 onClick={() => {
-                  // Carrega funil completo com todas as 18 etapas
-                  const realQuestions = generateRealQuestionTemplates();
-                  const strategicQuestions = generateStrategicQuestionTemplates();
-                  
-                  const completeFunnel = [
-                    REAL_QUIZ_TEMPLATES.intro,
-                    ...realQuestions, // 10 questões normais
-                    ...strategicQuestions, // 7 questões estratégicas + transições
-                    REAL_QUIZ_TEMPLATES.loading,
-                    REAL_QUIZ_TEMPLATES.result,
-                    REAL_QUIZ_TEMPLATES.offer
+                  // Etapas reais mapeadas diretamente das rotas funcionais
+                  const liveSteps = [
+                    {
+                      id: "quiz-intro",
+                      title: "Descubra Seu Estilo Pessoal",
+                      component: "QuizIntro",
+                      route: "/quiz",
+                      progress: 0
+                    },
+                    {
+                      id: "quiz-questions-1-10",
+                      title: "10 Questões Normais do Quiz",
+                      component: "QuizContent",
+                      route: "/quiz",
+                      progress: 60
+                    },
+                    {
+                      id: "main-transition",
+                      title: "Transição Principal",
+                      component: "MainTransition",
+                      route: "/quiz",
+                      progress: 65
+                    },
+                    {
+                      id: "strategic-questions",
+                      title: "6 Questões Estratégicas",
+                      component: "QuizTransition",
+                      route: "/quiz",
+                      progress: 85
+                    },
+                    {
+                      id: "final-loading",
+                      title: "Loading Final",
+                      component: "LoadingManager",
+                      route: "/quiz",
+                      progress: 95
+                    },
+                    {
+                      id: "result-page",
+                      title: "Página de Resultado",
+                      component: "ResultPage",
+                      route: "/resultado",
+                      progress: 100
+                    },
+                    {
+                      id: "discover-style",
+                      title: "Quiz Descubra Seu Estilo",
+                      component: "QuizDescubraSeuEstilo",
+                      route: "/quiz-descubra-seu-estilo",
+                      progress: 100
+                    }
                   ];
+
+                  const livePages = liveSteps.map(step => ({
+                    id: step.id,
+                    title: step.title,
+                    type: step.id.includes("intro") ? "intro" : 
+                          step.id.includes("question") ? "question" : 
+                          step.id.includes("loading") ? "loading" :
+                          step.id.includes("result") ? "result" :
+                          step.id.includes("discover") ? "offer" : "transition",
+                    progress: step.progress,
+                    showHeader: true,
+                    showProgress: step.progress > 0,
+                    components: [
+                      {
+                        id: `${step.id}-info`,
+                        type: "title" as const,
+                        data: {
+                          text: `ETAPA REAL: ${step.component}`,
+                          fontSize: "1.2rem",
+                          color: "#059669"
+                        },
+                        style: {
+                          textAlign: "center" as const,
+                          backgroundColor: "#ecfdf5",
+                          padding: "1rem",
+                          borderRadius: "8px",
+                          border: "2px solid #059669",
+                          marginBottom: "1rem"
+                        }
+                      },
+                      {
+                        id: `${step.id}-route`,
+                        type: "text" as const,
+                        data: {
+                          text: `Rota: ${step.route}`,
+                          fontSize: "0.9rem",
+                          color: "#6b7280"
+                        },
+                        style: {
+                          textAlign: "center" as const,
+                          marginBottom: "0.5rem"
+                        }
+                      }
+                    ]
+                  }));
 
                   setCurrentFunnel((prev) => ({
                     ...prev,
-                    pages: completeFunnel,
-                    name: "Quiz Completo de Estilo Pessoal"
+                    pages: livePages,
+                    name: "Quiz - Etapas Reais das Rotas Funcionais"
                   }));
 
                   toast({
-                    title: "🎯 Funil Completo Carregado!",
-                    description: "Todas as 21 etapas do quiz foram configuradas conforme o documento.",
+                    title: "✅ Etapas Reais Carregadas!",
+                    description: `${livePages.length} etapas funcionais mapeadas das rotas`,
                   });
                 }}
               >
-                🚀 CARREGAR FUNIL COMPLETO (21 ETAPAS)
+                ⚡ CARREGAR TODAS AS ETAPAS REAIS
               </Button>
+
+              {/* Botões individuais para etapas específicas */}
+              <div className="grid grid-cols-1 gap-1 mt-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="justify-start h-8 text-xs"
+                  onClick={() => {
+                    const introPage = {
+                      id: "quiz-intro",
+                      title: "QuizIntro",
+                      type: "intro" as const,
+                      progress: 0,
+                      showHeader: false,
+                      showProgress: false,
+                      components: [
+                        {
+                          id: "intro-title",
+                          type: "title" as const,
+                          data: { text: "ETAPA REAL: QuizIntro", color: "#059669" },
+                          style: { textAlign: "center" as const, backgroundColor: "#ecfdf5", padding: "1rem", borderRadius: "8px" }
+                        },
+                        {
+                          id: "intro-route",
+                          type: "text" as const,
+                          data: { text: "Rota: /quiz", color: "#6b7280" },
+                          style: { textAlign: "center" as const }
+                        }
+                      ]
+                    };
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, introPage] }));
+                    toast({ title: "✅ QuizIntro adicionado!", description: "Etapa real da rota /quiz" });
+                  }}
+                >
+                  🏠 QuizIntro (/quiz)
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="justify-start h-8 text-xs"
+                  onClick={() => {
+                    const questionsPage = {
+                      id: "quiz-questions",
+                      title: "QuizContent",
+                      type: "question" as const,
+                      progress: 50,
+                      showHeader: true,
+                      showProgress: true,
+                      components: [
+                        {
+                          id: "questions-title",
+                          type: "title" as const,
+                          data: { text: "ETAPA REAL: QuizContent", color: "#059669" },
+                          style: { textAlign: "center" as const, backgroundColor: "#ecfdf5", padding: "1rem", borderRadius: "8px" }
+                        },
+                        {
+                          id: "questions-route",
+                          type: "text" as const,
+                          data: { text: "Rota: /quiz (10 questões)", color: "#6b7280" },
+                          style: { textAlign: "center" as const }
+                        }
+                      ]
+                    };
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, questionsPage] }));
+                    toast({ title: "✅ QuizContent adicionado!", description: "Etapa real das questões normais" });
+                  }}
+                >
+                  ❓ QuizContent (10 questões)
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="justify-start h-8 text-xs"
+                  onClick={() => {
+                    const transitionPage = {
+                      id: "main-transition",
+                      title: "MainTransition",
+                      type: "transition" as const,
+                      progress: 65,
+                      showHeader: true,
+                      showProgress: true,
+                      components: [
+                        {
+                          id: "transition-title",
+                          type: "title" as const,
+                          data: { text: "ETAPA REAL: MainTransition", color: "#059669" },
+                          style: { textAlign: "center" as const, backgroundColor: "#ecfdf5", padding: "1rem", borderRadius: "8px" }
+                        },
+                        {
+                          id: "transition-route",
+                          type: "text" as const,
+                          data: { text: "Rota: /quiz (transição)", color: "#6b7280" },
+                          style: { textAlign: "center" as const }
+                        }
+                      ]
+                    };
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, transitionPage] }));
+                    toast({ title: "✅ MainTransition adicionado!", description: "Etapa real de transição" });
+                  }}
+                >
+                  🔄 MainTransition
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="justify-start h-8 text-xs"
+                  onClick={() => {
+                    const strategicPage = {
+                      id: "strategic-questions",
+                      title: "QuizTransition",
+                      type: "transition" as const,
+                      progress: 85,
+                      showHeader: true,
+                      showProgress: true,
+                      components: [
+                        {
+                          id: "strategic-title",
+                          type: "title" as const,
+                          data: { text: "ETAPA REAL: QuizTransition", color: "#059669" },
+                          style: { textAlign: "center" as const, backgroundColor: "#ecfdf5", padding: "1rem", borderRadius: "8px" }
+                        },
+                        {
+                          id: "strategic-route",
+                          type: "text" as const,
+                          data: { text: "Rota: /quiz (6 questões estratégicas)", color: "#6b7280" },
+                          style: { textAlign: "center" as const }
+                        }
+                      ]
+                    };
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, strategicPage] }));
+                    toast({ title: "✅ QuizTransition adicionado!", description: "Etapa real das questões estratégicas" });
+                  }}
+                >
+                  🎯 QuizTransition (estratégicas)
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="justify-start h-8 text-xs"
+                  onClick={() => {
+                    const loadingPage = {
+                      id: "final-loading",
+                      title: "LoadingManager",
+                      type: "loading" as const,
+                      progress: 95,
+                      showHeader: true,
+                      showProgress: true,
+                      components: [
+                        {
+                          id: "loading-title",
+                          type: "title" as const,
+                          data: { text: "ETAPA REAL: LoadingManager", color: "#059669" },
+                          style: { textAlign: "center" as const, backgroundColor: "#ecfdf5", padding: "1rem", borderRadius: "8px" }
+                        },
+                        {
+                          id: "loading-route",
+                          type: "text" as const,
+                          data: { text: "Rota: /quiz (loading final)", color: "#6b7280" },
+                          style: { textAlign: "center" as const }
+                        }
+                      ]
+                    };
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, loadingPage] }));
+                    toast({ title: "✅ LoadingManager adicionado!", description: "Etapa real de loading" });
+                  }}
+                >
+                  ⏳ LoadingManager
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="justify-start h-8 text-xs"
+                  onClick={() => {
+                    const resultPage = {
+                      id: "result-page",
+                      title: "ResultPage",
+                      type: "result" as const,
+                      progress: 100,
+                      showHeader: true,
+                      showProgress: false,
+                      components: [
+                        {
+                          id: "result-title",
+                          type: "title" as const,
+                          data: { text: "ETAPA REAL: ResultPage", color: "#059669" },
+                          style: { textAlign: "center" as const, backgroundColor: "#ecfdf5", padding: "1rem", borderRadius: "8px" }
+                        },
+                        {
+                          id: "result-route",
+                          type: "text" as const,
+                          data: { text: "Rota: /resultado", color: "#6b7280" },
+                          style: { textAlign: "center" as const }
+                        }
+                      ]
+                    };
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, resultPage] }));
+                    toast({ title: "✅ ResultPage adicionado!", description: "Etapa real da rota /resultado" });
+                  }}
+                >
+                  🎉 ResultPage (/resultado)
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="justify-start h-8 text-xs"
+                  onClick={() => {
+                    const offerPage = {
+                      id: "discover-style",
+                      title: "QuizDescubraSeuEstilo",
+                      type: "offer" as const,
+                      progress: 100,
+                      showHeader: true,
+                      showProgress: false,
+                      components: [
+                        {
+                          id: "offer-title",
+                          type: "title" as const,
+                          data: { text: "ETAPA REAL: QuizDescubraSeuEstilo", color: "#059669" },
+                          style: { textAlign: "center" as const, backgroundColor: "#ecfdf5", padding: "1rem", borderRadius: "8px" }
+                        },
+                        {
+                          id: "offer-route",
+                          type: "text" as const,
+                          data: { text: "Rota: /quiz-descubra-seu-estilo", color: "#6b7280" },
+                          style: { textAlign: "center" as const }
+                        }
+                      ]
+                    };
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, offerPage] }));
+                    toast({ title: "✅ QuizDescubraSeuEstilo adicionado!", description: "Etapa real da rota de oferta" });
+                  }}
+                >
+                  💰 QuizDescubraSeuEstilo (/offer)
+                </Button>
+              </div>
 
               <div className="space-y-1">
                 <Button
