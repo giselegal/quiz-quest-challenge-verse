@@ -9,8 +9,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { useToast } from '@/hooks/use-toast';
 import {
   Play, Settings, Eye, Download, Upload, Copy, 
-  Globe, BarChart3, Target, MessageSquare, Clock,
-  Plus, Trash2, Move
+  Globe, BarChart3, Target, Plus, Trash2
 } from 'lucide-react';
 
 // Tipos necessários
@@ -296,77 +295,32 @@ const SimpleDragDropEditor: React.FC = () => {
   ];
 
   return (
-    <div className="h-screen flex bg-gray-50">
-      {/* COLUNA 1: ETAPAS DO FUNIL - 180px */}
-      <div className="w-[180px] min-w-[180px] border-r border-gray-200 bg-gray-900 text-white overflow-hidden flex flex-col">
-        <div className="p-3 border-b border-gray-700">
-          <button className="w-full mb-3 px-3 py-2 text-xs bg-gray-700 hover:bg-gray-600 rounded flex items-center gap-2">
-            <Plus className="h-3 w-3" />
-            Adicionar Etapa
-          </button>
-        </div>
+    <div className="h-screen flex bg-gray-50 simple-editor">
+      {/* COLUNA 1: ETAPAS DO FUNIL - 260px */}
+      <div className="w-[260px] min-w-[260px] border-r border-gray-200 bg-white overflow-hidden flex flex-col shadow-sm">
+        <div className="p-4 border-b border-gray-200 bg-gray-50">
+          <h2 className="text-xs font-medium text-gray-600 uppercase tracking-wide mb-3">
+            Etapas do Funil
+          </h2>
 
-        <ScrollArea className="flex-1">
-          <div className="p-2 space-y-1">
-            {currentFunnel.pages.map((page, index) => (
-              <div
-                key={page.id}
-                className={`p-2 rounded cursor-pointer transition-colors text-xs flex items-center gap-2 ${
-                  selectedPageId === page.id
-                    ? "bg-blue-600 text-white"
-                    : "hover:bg-gray-700 text-gray-300"
-                }`}
-                onClick={() => setSelectedPageId(page.id)}
-              >
-                <div className="w-4 h-4 bg-gray-600 rounded-sm flex items-center justify-center text-xs">
-                  {index + 1}
-                </div>
-                <span className="truncate">Etapa {index + 1}</span>
-              </div>
-            ))}
-            
-            {/* Etapas disponíveis para adicionar */}
-            {functionalSteps.map((step, index) => {
-              const isAdded = currentFunnel.pages.some(p => p.id === step.id);
-              if (isAdded) return null;
-              
-              return (
-                <div
-                  key={`available-${step.id}-${index}`}
-                  className="p-2 rounded cursor-pointer transition-colors text-xs flex items-center gap-2 hover:bg-gray-700 text-gray-400 border border-gray-700 border-dashed"
-                  onClick={() => addStepToFunnel(step)}
-                >
-                  <div className="w-4 h-4 bg-gray-700 rounded-sm flex items-center justify-center text-xs">
-                    +
-                  </div>
-                  <span className="truncate">{step.title}</span>
-                </div>
-              );
-            })}
-          </div>
-        </ScrollArea>
-      </div>
-
-      {/* COLUNA 2: COMPONENTES/FERRAMENTAS - 200px */}
-      <div className="w-[200px] min-w-[200px] border-r border-gray-200 bg-white overflow-hidden flex flex-col">
-        <div className="p-3 border-b border-gray-200 bg-gray-50">
-          <div className="flex gap-1 mb-3">
+          {/* Navegação simplificada */}
+          <div className="flex border-b border-gray-200 -mx-4 mb-3">
             <button
               onClick={() => setActiveTab("editor")}
-              className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
+              className={`px-4 py-2 text-xs font-medium transition-colors ${
                 activeTab === "editor"
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-600 hover:text-gray-800"
+                  ? "text-blue-600 border-b-2 border-blue-600"
+                  : "text-gray-500 hover:text-gray-700"
               }`}
             >
               Editor
             </button>
             <button
               onClick={() => setActiveTab("config")}
-              className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
+              className={`px-4 py-2 text-xs font-medium transition-colors ${
                 activeTab === "config"
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-600 hover:text-gray-800"
+                  ? "text-blue-600 border-b-2 border-blue-600"
+                  : "text-gray-500 hover:text-gray-700"
               }`}
             >
               Config
@@ -374,43 +328,68 @@ const SimpleDragDropEditor: React.FC = () => {
           </div>
         </div>
 
-        <ScrollArea className="flex-1 p-2">
+        <ScrollArea className="flex-1 p-4">
           {activeTab === "editor" ? (
-            <div className="space-y-2">
-              {/* Componentes como no CaktoQuiz */}
-              {[
-                { icon: "⚠️", name: "Alerta", type: "alert" },
-                { icon: "📝", name: "Argumentos", type: "text" },
-                { icon: "🔊", name: "Áudio", type: "audio" },
-                { icon: "🔘", name: "Botão", type: "button" },
-                { icon: "⏳", name: "Carregando", type: "loading" },
-                { icon: "🎠", name: "Carrossel", type: "carousel" },
-                { icon: "🏷️", name: "Cartesiano", type: "cartesian" },
-                { icon: "🔗", name: "Comparar", type: "compare", badge: "Novo" },
-                { icon: "📞", name: "Contati", type: "contact", badge: "Novo" },
-                { icon: "📊", name: "Depoimentos", type: "testimonial" },
-                { icon: "📄", name: "Entrada", type: "input" },
-                { icon: "🎯", name: "Espaçador", type: "spacer" },
-                { icon: "❓", name: "FAQ", type: "faq", badge: "Novo" },
-                { icon: "📊", name: "Gráficos", type: "chart" },
-                { icon: "🖼️", name: "Imagem", type: "image" },
-                { icon: "📋", name: "Lista", type: "list", badge: "Novo" },
-                { icon: "🏷️", name: "Marquise", type: "marquee", badge: "Novo" },
-                { icon: "📏", name: "Nível", type: "level" }
-              ].map((component) => (
-                <div
-                  key={component.type}
-                  className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded cursor-pointer text-xs border border-gray-200"
-                >
-                  <span className="text-sm">{component.icon}</span>
-                  <span className="flex-1">{component.name}</span>
-                  {component.badge && (
-                    <span className="px-1 py-0.5 bg-blue-100 text-blue-700 rounded text-xs">
-                      {component.badge}
-                    </span>
-                  )}
+            <div className="space-y-3">
+              <div className="mb-4">
+                <h3 className="text-xs font-medium text-gray-700 mb-2">ETAPAS DISPONÍVEIS</h3>
+                <div className="space-y-2">
+                  {functionalSteps.map((step) => (
+                    <Button
+                      key={step.id}
+                      onClick={() => addStepToFunnel(step)}
+                      size="sm"
+                      variant="outline"
+                      className="w-full justify-start text-xs h-auto py-2 px-3"
+                    >
+                      <Plus className="h-3 w-3 mr-2" />
+                      <div className="text-left">
+                        <div className="font-medium">{step.title}</div>
+                        <div className="text-xs text-muted-foreground">{step.description}</div>
+                      </div>
+                    </Button>
+                  ))}
                 </div>
-              ))}
+              </div>
+
+              {currentFunnel.pages.length > 0 && (
+                <div>
+                  <h3 className="text-xs font-medium text-gray-700 mb-2">PÁGINAS NO FUNIL</h3>
+                  <div className="space-y-2">
+                    {currentFunnel.pages.map((page, index) => (
+                      <div
+                        key={page.id}
+                        className={`p-2 border rounded-md cursor-pointer transition-colors ${
+                          selectedPageId === page.id
+                            ? "border-blue-300 bg-blue-50"
+                            : "border-gray-200 hover:border-gray-300"
+                        }`}
+                        onClick={() => setSelectedPageId(page.id)}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1">
+                            <div className="text-xs font-medium">{page.title}</div>
+                            <div className="text-xs text-muted-foreground">{page.components.length} componentes</div>
+                          </div>
+                          <div className="flex gap-1">
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                removePageFromFunnel(page.id);
+                              }}
+                              className="h-6 w-6 p-0"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="space-y-4">
@@ -533,240 +512,41 @@ const SimpleDragDropEditor: React.FC = () => {
         </ScrollArea>
       </div>
 
-      {/* COLUNA 3: CANVAS PRINCIPAL */}
-      <div className="flex-1 flex flex-col bg-gray-100">
-        {/* Header do Canvas - similar ao CaktoQuiz */}
-        <div className="h-14 border-b border-gray-200 flex items-center justify-between px-4 bg-gray-900 text-white">
+      {/* COLUNA 2: CANVAS PRINCIPAL */}
+      <div className="flex-1 flex flex-col bg-white">
+        {/* Header do Canvas */}
+        <div className="h-14 border-b border-gray-200 flex items-center justify-between px-6 bg-white">
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <div className="flex gap-1">
-                <button className="w-3 h-3 bg-red-500 rounded-full"></button>
-                <button className="w-3 h-3 bg-yellow-500 rounded-full"></button>
-                <button className="w-3 h-3 bg-green-500 rounded-full"></button>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-2 text-sm">
-              <Globe className="h-4 w-4" />
-              <span className="text-gray-300">Construtor</span>
-              <span className="text-gray-400">|</span>
-              <span className="text-gray-300">Fluxo</span>
-              <span className="text-gray-400">|</span>
-              <span className="text-gray-300">Design</span>
-              <span className="text-gray-400">|</span>
-              <span className="text-gray-300">Leads</span>
-              <span className="text-gray-400">|</span>
-              <span className="text-gray-300">Configurações</span>
-            </div>
+            <h1 className="text-sm font-medium text-gray-900">{currentFunnel.name}</h1>
+            {selectedPage && (
+              <span className="text-xs text-gray-500">• {selectedPage.title}</span>
+            )}
           </div>
           
           <div className="flex items-center gap-2">
-            <Button size="sm" variant="outline" className="text-xs bg-gray-700 border-gray-600 text-white hover:bg-gray-600">
-              Salvar
+            <Button size="sm" variant="outline" className="text-xs">
+              <Eye className="h-3 w-3 mr-1" />
+              Preview
             </Button>
-            <Button size="sm" className="text-xs bg-green-600 hover:bg-green-700">
+            <Button size="sm" className="text-xs">
+              <Play className="h-3 w-3 mr-1" />
               Publicar
             </Button>
           </div>
         </div>
 
-        {/* Canvas Area - Preview da página como no CaktoQuiz */}
-        <div className="flex-1 p-6 overflow-auto bg-gray-100">
+        {/* Canvas Area */}
+        <div className="flex-1 p-6 overflow-auto">
           {selectedPage ? (
-            <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-sm border min-h-[600px]">
-              {/* Header da página */}
-              <div className="p-6 border-b">
-                <div className="text-center mb-4">
-                  <div className="w-16 h-16 mx-auto mb-2 bg-gray-200 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-bold text-gray-600">LOGO</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-orange-400 h-2 rounded-full" style={{width: `${selectedPage.progress}%`}}></div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Conteúdo da página */}
-              <div className="p-8">
-                {selectedPage.type === "intro" && (
-                  <div className="text-center space-y-6">
-                    <div 
-                      className={`p-4 rounded-lg cursor-pointer transition-all ${
-                        selectedComponentId === "page-title" 
-                          ? "border-2 border-dashed border-blue-500 bg-blue-50" 
-                          : "border-2 border-transparent hover:border-gray-300"
-                      }`}
-                      onClick={() => setSelectedComponentId("page-title")}
-                    >
-                      <h1 className="text-3xl font-bold text-gray-900 mb-2">Teste de Estilo Pessoal</h1>
-                    </div>
-                    
-                    <div 
-                      className={`p-4 rounded-lg cursor-pointer transition-all ${
-                        selectedComponentId === "page-image" 
-                          ? "border-2 border-dashed border-blue-500 bg-blue-50" 
-                          : "border-2 border-transparent hover:border-gray-300"
-                      }`}
-                      onClick={() => setSelectedComponentId("page-image")}
-                    >
-                      <img 
-                        src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp" 
-                        alt="Mulheres com diferentes estilos"
-                        className="w-full max-w-md mx-auto rounded-lg"
-                      />
-                    </div>
-                    
-                    <div 
-                      className={`p-4 rounded-lg cursor-pointer transition-all ${
-                        selectedComponentId === "name-input" 
-                          ? "border-2 border-dashed border-blue-500 bg-blue-50" 
-                          : "border-2 border-transparent hover:border-gray-300"
-                      }`}
-                      onClick={() => setSelectedComponentId("name-input")}
-                    >
-                      <div className="max-w-sm mx-auto">
-                        <Label className="text-sm font-medium text-gray-700 mb-2 block">NOME *</Label>
-                        <Input 
-                          placeholder="Digite seu nome aqui..."
-                          className="mb-4"
-                        />
-                      </div>
-                    </div>
-                    
-                    <div 
-                      className={`p-4 rounded-lg cursor-pointer transition-all ${
-                        selectedComponentId === "start-button" 
-                          ? "border-2 border-dashed border-blue-500 bg-blue-50" 
-                          : "border-2 border-transparent hover:border-gray-300"
-                      }`}
-                      onClick={() => setSelectedComponentId("start-button")}
-                    >
-                      <Button className="w-full max-w-sm mx-auto bg-orange-400 hover:bg-orange-500 text-white font-medium py-3">
-                        Continuar
-                      </Button>
-                    </div>
-                  </div>
-                )}
-                
-                {selectedPage.type === "question" && (
-                  <div className="space-y-6">
-                    <div 
-                      className={`p-4 rounded-lg cursor-pointer transition-all ${
-                        selectedComponentId === "question-title" 
-                          ? "border-2 border-dashed border-blue-500 bg-blue-50" 
-                          : "border-2 border-transparent hover:border-gray-300"
-                      }`}
-                      onClick={() => setSelectedComponentId("question-title")}
-                    >
-                      <h2 className="text-2xl font-bold text-center text-gray-900 mb-6">
-                        4- O que mais chama sua atenção nos detalhes das roupas?
-                      </h2>
-                    </div>
-                    
-                    <div 
-                      className={`p-4 rounded-lg cursor-pointer transition-all ${
-                        selectedComponentId === "question-options" 
-                          ? "border-2 border-dashed border-blue-500 bg-blue-50" 
-                          : "border-2 border-transparent hover:border-gray-300"
-                      }`}
-                      onClick={() => setSelectedComponentId("question-options")}
-                    >
-                      <div className="grid grid-cols-2 gap-4 mb-6">
-                        {/* Opção A */}
-                        <div className="border border-gray-300 rounded-lg p-4 hover:border-gray-400 cursor-pointer">
-                          <img 
-                            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp"
-                            alt="Opção A"
-                            className="w-full h-40 object-cover rounded-lg mb-3"
-                          />
-                          <p className="text-sm font-medium text-gray-900">
-                            <strong>A) Poucos detalhes,</strong> básico e prático.
-                          </p>
-                        </div>
-                        
-                        {/* Opção B */}
-                        <div className="border border-gray-300 rounded-lg p-4 hover:border-gray-400 cursor-pointer">
-                          <img 
-                            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp"
-                            alt="Opção B"
-                            className="w-full h-40 object-cover rounded-lg mb-3"
-                          />
-                          <p className="text-sm font-medium text-gray-900">
-                            <strong>B) Bem discretos e sutis,</strong> clean e clássico.
-                          </p>
-                        </div>
-                        
-                        {/* Opção C */}
-                        <div className="border border-gray-300 rounded-lg p-4 hover:border-gray-400 cursor-pointer">
-                          <img 
-                            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp"
-                            alt="Opção C"
-                            className="w-full h-40 object-cover rounded-lg mb-3"
-                          />
-                          <p className="text-sm font-medium text-gray-900">
-                            <strong>C) Básicos, mas com um</strong> toque de estilo.
-                          </p>
-                        </div>
-                        
-                        {/* Opção D */}
-                        <div className="border border-gray-300 rounded-lg p-4 hover:border-gray-400 cursor-pointer">
-                          <img 
-                            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp"
-                            alt="Opção D"
-                            className="w-full h-40 object-cover rounded-lg mb-3"
-                          />
-                          <p className="text-sm font-medium text-gray-900">
-                            <strong>D) Detalhes refinados,</strong> elegantes e que deixam tudo especial.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                
-                {selectedPage.type === "result" && (
-                  <div className="text-center space-y-6">
-                    <div 
-                      className={`p-4 rounded-lg cursor-pointer transition-all ${
-                        selectedComponentId === "result-title" 
-                          ? "border-2 border-dashed border-blue-500 bg-blue-50" 
-                          : "border-2 border-transparent hover:border-gray-300"
-                      }`}
-                      onClick={() => setSelectedComponentId("result-title")}
-                    >
-                      <h1 className="text-3xl font-bold text-gray-900 mb-4">Seu Estilo Pessoal</h1>
-                    </div>
-                    
-                    <div 
-                      className={`p-4 rounded-lg cursor-pointer transition-all ${
-                        selectedComponentId === "result-content" 
-                          ? "border-2 border-dashed border-blue-500 bg-blue-50" 
-                          : "border-2 border-transparent hover:border-gray-300"
-                      }`}
-                      onClick={() => setSelectedComponentId("result-content")}
-                    >
-                      <div className="bg-gray-50 rounded-lg p-6">
-                        <h2 className="text-xl font-bold text-gray-900 mb-2">Estilo Natural</h2>
-                        <p className="text-gray-700 mb-4">
-                          Baseado nas suas respostas, identificamos que você tem um estilo natural e despojado.
-                        </p>
-                        <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
-                          <div className="bg-green-500 h-3 rounded-full" style={{width: '85%'}}></div>
-                        </div>
-                        <span className="text-sm text-gray-600">85% de compatibilidade</span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                
-                {/* Renderização dinâmica dos componentes da página */}
+            <div className="max-w-md mx-auto bg-white border border-gray-200 rounded-lg shadow-sm">
+              <div className="p-6 space-y-4">
                 {selectedPage.components.map((component, index) => (
                   <div
                     key={component.id}
-                    className={`my-4 p-3 rounded-lg cursor-pointer transition-all ${
+                    className={`p-3 border rounded-md cursor-pointer transition-colors ${
                       selectedComponentId === component.id
-                        ? "border-2 border-dashed border-blue-500 bg-blue-50"
-                        : "border-2 border-transparent hover:border-gray-300"
+                        ? "border-blue-300 bg-blue-50"
+                        : "border-gray-200 hover:border-gray-300"
                     }`}
                     onClick={() => setSelectedComponentId(component.id)}
                   >
@@ -785,7 +565,7 @@ const SimpleDragDropEditor: React.FC = () => {
                     
                     {component.type === "subtitle" && (
                       <h2 
-                        className="font-medium text-gray-600"
+                        className="font-medium"
                         style={{
                           fontSize: component.style.fontSize,
                           textAlign: component.style.textAlign,
@@ -796,12 +576,24 @@ const SimpleDragDropEditor: React.FC = () => {
                       </h2>
                     )}
                     
+                    {component.type === "text" && (
+                      <p 
+                        style={{
+                          fontSize: component.style.fontSize,
+                          textAlign: component.style.textAlign,
+                          color: component.style.color
+                        }}
+                      >
+                        {component.data.text}
+                      </p>
+                    )}
+                    
                     {component.type === "input" && (
                       <div>
-                        <Label className="text-sm font-medium">{component.data.text}</Label>
+                        <Label className="text-sm">{component.data.text}</Label>
                         <Input 
                           placeholder={component.data.placeholder}
-                          className="mt-2"
+                          className="mt-1"
                         />
                       </div>
                     )}
@@ -817,6 +609,20 @@ const SimpleDragDropEditor: React.FC = () => {
                         {component.data.text}
                       </Button>
                     )}
+                    
+                    {component.type === "options" && (
+                      <div className="space-y-2">
+                        {component.data.options?.map((option) => (
+                          <Button
+                            key={option.id}
+                            variant="outline"
+                            className="w-full p-4 h-auto text-left"
+                          >
+                            {option.text}
+                          </Button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -824,9 +630,9 @@ const SimpleDragDropEditor: React.FC = () => {
           ) : (
             <div className="flex-1 flex items-center justify-center text-center">
               <div className="text-gray-500">
-                <div className="text-lg font-medium mb-2">Selecione uma etapa para editar</div>
+                <div className="text-lg font-medium mb-2">Selecione uma página para editar</div>
                 <div className="text-sm">
-                  Clique em uma etapa na primeira coluna à esquerda
+                  Clique em uma etapa à esquerda ou adicione uma nova página ao funil
                 </div>
               </div>
             </div>
@@ -834,56 +640,12 @@ const SimpleDragDropEditor: React.FC = () => {
         </div>
       </div>
 
-      {/* COLUNA 4: PROPRIEDADES - 280px */}
-      <div className="w-[280px] min-w-[280px] border-l border-gray-200 bg-white">
-        <div className="p-3 border-b border-gray-200 bg-gray-50">
-          <div className="text-xs font-medium text-gray-700 mb-2">Título da Etapa</div>
-          <div className="text-sm font-medium">
-            {selectedPage ? selectedPage.title : "Etapa 1"}
-          </div>
-        </div>
-        
-        <div className="p-3 border-b border-gray-200">
-          <div className="text-xs font-medium text-gray-700 mb-2">Nome da Etapa</div>
-          <Input 
-            value={selectedPage ? selectedPage.title : "Etapa 1"} 
-            className="h-8 text-sm"
-            onChange={(e) => {
-              if (selectedPage) {
-                const updatedPages = currentFunnel.pages.map(page => {
-                  if (page.id === selectedPageId) {
-                    return { ...page, title: e.target.value };
-                  }
-                  return page;
-                });
-                setCurrentFunnel(prev => ({ ...prev, pages: updatedPages }));
-              }
-            }}
-          />
-        </div>
-        
-        <div className="p-3 border-b border-gray-200">
-          <div className="text-xs font-medium text-gray-700 mb-3">Header</div>
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs">Mostrar Logo</span>
-              <button className="w-10 h-6 bg-green-500 rounded-full relative">
-                <div className="w-4 h-4 bg-white rounded-full absolute right-1 top-1"></div>
-              </button>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-xs">Mostrar Progresso</span>
-              <button className="w-10 h-6 bg-green-500 rounded-full relative">
-                <div className="w-4 h-4 bg-white rounded-full absolute right-1 top-1"></div>
-              </button>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-xs">Permitir Voltar</span>
-              <button className="w-10 h-6 bg-green-500 rounded-full relative">
-                <div className="w-4 h-4 bg-white rounded-full absolute right-1 top-1"></div>
-              </button>
-            </div>
-          </div>
+      {/* COLUNA 3: PROPRIEDADES - 300px */}
+      <div className="w-[300px] min-w-[300px] border-l border-gray-200 bg-white">
+        <div className="p-4 border-b border-gray-200 bg-gray-50">
+          <h2 className="text-xs font-medium text-gray-600 uppercase tracking-wide">
+            Propriedades
+          </h2>
         </div>
         
         <ScrollArea className="h-[calc(100vh-57px)] p-4">
