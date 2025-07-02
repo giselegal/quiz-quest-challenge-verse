@@ -5838,10 +5838,64 @@ const SimpleDragDropEditor: React.FC = () => {
                       id: "cakto-quiz-intro",
                       title: "Teste de Estilo Pessoal",
                       type: "intro" as const,
-                      progress: 7.14,
+                      progress: 14.3,
                       showHeader: true,
                       showProgress: true,
                       components: [
+                        {
+                          id: "cakto-header-container",
+                          type: "text" as const,
+                          data: {
+                            text: "<!-- Header Container CaktoQuiz -->",
+                            color: "#666",
+                            fontSize: "0.8rem"
+                          },
+                          style: {
+                            display: "flex",
+                            flexDirection: "row",
+                            width: "100%",
+                            height: "auto",
+                            justifyContent: "center",
+                            position: "relative",
+                            marginBottom: "1rem"
+                          }
+                        },
+                        {
+                          id: "cakto-back-button",
+                          type: "button" as const,
+                          data: {
+                            text: "←",
+                            variant: "ghost"
+                          },
+                          style: {
+                            position: "absolute",
+                            left: "0",
+                            height: "2.5rem",
+                            width: "2.5rem",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: "0.375rem",
+                            fontSize: "1rem"
+                          }
+                        },
+                        {
+                          id: "cakto-header-content",
+                          type: "text" as const,
+                          data: {
+                            text: "<!-- Content Center -->",
+                            color: "#666"
+                          },
+                          style: {
+                            display: "flex",
+                            flexDirection: "column",
+                            width: "100%",
+                            justifyContent: "start",
+                            alignItems: "center",
+                            gap: "1rem",
+                            marginBottom: "1rem"
+                          }
+                        },
                         {
                           id: "cakto-logo",
                           type: "logo" as const,
@@ -5852,17 +5906,16 @@ const SimpleDragDropEditor: React.FC = () => {
                             height: 96
                           },
                           style: {
-                            textAlign: "center" as const,
                             maxWidth: "96px",
                             objectCover: "cover",
-                            marginBottom: "1rem"
+                            textAlign: "center" as const
                           }
                         },
                         {
                           id: "cakto-progress",
                           type: "progress" as const,
                           data: {
-                            progressValue: 7.14,
+                            progressValue: 14.3,
                             showPercentage: false,
                             color: "hsl(var(--primary))",
                             backgroundColor: "rgb(212, 212, 216)",
@@ -5872,7 +5925,8 @@ const SimpleDragDropEditor: React.FC = () => {
                             width: "100%",
                             borderRadius: "9999px",
                             overflow: "hidden",
-                            marginBottom: "1rem"
+                            position: "relative",
+                            backgroundColor: "rgb(212, 212, 216)"
                           }
                         },
                         {
@@ -5947,10 +6001,10 @@ const SimpleDragDropEditor: React.FC = () => {
                       ]
                     };
                     setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, caktoQuizIntroPage] }));
-                    toast({ title: "✅ ETAPA 17 REPLICADA!", description: "Estrutura idêntica ao CaktoQuiz: logo 96x96, progress 7.14%, h1 text-3xl font-bold, imagem max-w-96, input com label NOME *, botão h-14" });
+                    toast({ title: "✅ HEADER CAKTOQUIZ COMPLETO!", description: "Estrutura completa: botão voltar absolute left-0, logo max-w-24, progress 14.3% (translateX -85.7%), layout flex-row justify-center relative" });
                   }}
                 >
-                  ✨ ETAPA 17 - CaktoQuiz Exato
+                  ✨ HEADER COMPLETO - CaktoQuiz
                 </Button>
 
                 <Button
