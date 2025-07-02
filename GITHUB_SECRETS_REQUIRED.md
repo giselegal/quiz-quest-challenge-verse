@@ -12,6 +12,7 @@ Para o deploy automático funcionar corretamente, configure as seguintes secrets
 ## Configurações de Deploy no Workflow
 
 O workflow está configurado com os seguintes valores:
+
 - Server: `ftp.giselegalvao.com.br`
 - Username: `u116045488.giselegalvao`
 - Diretório remoto: `/u116045488/domains/giselegalvao.com.br/public_html/quiz-de-estilo/`
@@ -27,6 +28,7 @@ O workflow está configurado com os seguintes valores:
 ## Verificação do Deploy
 
 Após configurar as secrets e fazer push:
+
 1. O workflow será executado automaticamente
 2. Verifique em "Actions" se o deploy foi bem-sucedido
 3. Acesse https://giselegalvao.com.br/quiz-de-estilo/ para testar
@@ -34,6 +36,7 @@ Após configurar as secrets e fazer push:
 ## Troubleshooting
 
 Se o deploy falhar:
+
 1. Verifique se a secret `FTP_PASSWORD` está configurada
 2. Confirme se as credenciais do FTP estão corretas
 3. Verifique os logs do workflow em "Actions"
