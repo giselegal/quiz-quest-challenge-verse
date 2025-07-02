@@ -3,7 +3,7 @@
 # Habilitar reescrita de URL para SPA
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /
+    RewriteBase /quiz-de-estilo/
     
     # Regras específicas para rotas conhecidas
     # Rota para a página principal
@@ -14,6 +14,10 @@
     
     # Rota para quiz
     RewriteRule ^quiz-descubra-seu-estilo/?$ index.html [L]
+    
+    # Rota para editores
+    RewriteRule ^editor-visual/?$ index.html [L]
+    RewriteRule ^simple-editor/?$ index.html [L]
     
     # Para qualquer outra URL que não seja um arquivo ou diretório existente
     RewriteCond %{REQUEST_FILENAME} !-f

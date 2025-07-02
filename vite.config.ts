@@ -7,7 +7,7 @@ import { componentTagger } from "./src/plugins/lovable-component-tagger.ts";
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   root: ".",
-  base: "./",
+  base: mode === "production" ? "/quiz-de-estilo/" : "./",
 
   server: {
     host: "0.0.0.0",
