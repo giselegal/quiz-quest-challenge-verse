@@ -5832,6 +5832,130 @@ const SimpleDragDropEditor: React.FC = () => {
                 <Button
                   variant="outline"
                   size="sm"
+                  className="justify-start h-8 text-xs bg-green-50 border-green-300"
+                  onClick={() => {
+                    const caktoQuizIntroPage = {
+                      id: "cakto-quiz-intro",
+                      title: "Teste de Estilo Pessoal",
+                      type: "intro" as const,
+                      progress: 7.14,
+                      showHeader: true,
+                      showProgress: true,
+                      components: [
+                        {
+                          id: "cakto-logo",
+                          type: "logo" as const,
+                          data: {
+                            src: "https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png",
+                            alt: "Logo",
+                            width: 96,
+                            height: 96
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            maxWidth: "96px",
+                            objectCover: "cover",
+                            marginBottom: "1rem"
+                          }
+                        },
+                        {
+                          id: "cakto-progress",
+                          type: "progress" as const,
+                          data: {
+                            progressValue: 7.14,
+                            showPercentage: false,
+                            color: "hsl(var(--primary))",
+                            backgroundColor: "rgb(212, 212, 216)",
+                            height: 8
+                          },
+                          style: {
+                            width: "100%",
+                            borderRadius: "9999px",
+                            overflow: "hidden",
+                            marginBottom: "1rem"
+                          }
+                        },
+                        {
+                          id: "cakto-title",
+                          type: "title" as const,
+                          data: {
+                            text: "Teste de Estilo Pessoal",
+                            fontSize: "1.875rem",
+                            fontWeight: "700",
+                            color: "inherit"
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            marginBottom: "1rem",
+                            minWidth: "100%"
+                          }
+                        },
+                        {
+                          id: "cakto-image",
+                          type: "image" as const,
+                          data: {
+                            src: "https://cakto-quiz-br01.b-cdn.net/uploads/ecbe689b-1c0a-4071-98d3-4d391b6dd98f.png",
+                            alt: "Imagem",
+                            width: 640,
+                            height: 480
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            maxWidth: "384px",
+                            margin: "0 auto",
+                            objectCover: "cover",
+                            borderRadius: "0.5rem",
+                            marginBottom: "1rem"
+                          }
+                        },
+                        {
+                          id: "cakto-input",
+                          type: "input" as const,
+                          data: {
+                            label: "NOME *",
+                            placeholder: "Digite seu nome aqui..",
+                            required: true,
+                            type: "text"
+                          },
+                          style: {
+                            width: "100%",
+                            display: "grid",
+                            alignItems: "center",
+                            gap: "0.375rem",
+                            marginBottom: "1rem"
+                          }
+                        },
+                        {
+                          id: "cakto-button",
+                          type: "button" as const,
+                          data: {
+                            text: "Continuar",
+                            variant: "primary"
+                          },
+                          style: {
+                            minWidth: "100%",
+                            height: "3.5rem",
+                            backgroundColor: "hsl(var(--primary))",
+                            color: "hsl(var(--primary-foreground))",
+                            borderRadius: "0.375rem",
+                            padding: "0.5rem 1rem"
+                          }
+                        }
+                      ]
+                    };
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, caktoQuizIntroPage] }));
+                    toast({ title: "✅ ETAPA 17 REPLICADA!", description: "Estrutura idêntica ao CaktoQuiz: logo 96x96, progress 7.14%, h1 text-3xl font-bold, imagem max-w-96, input com label NOME *, botão h-14" });
+                  }}
+                >
+                  ✨ ETAPA 17 - CaktoQuiz Exato
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
                   className="justify-start h-8 text-xs"
                   onClick={() => {
                     const questionsPage = {
