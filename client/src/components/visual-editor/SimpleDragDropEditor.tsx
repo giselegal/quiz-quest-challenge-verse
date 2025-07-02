@@ -857,118 +857,141 @@ interface ComponentType {
   description: string;
 }
 
-// Componentes disponíveis - TODOS do funil + PÁGINAS DE VENDA
+// Componentes organizados por categoria - estilo CaktoQuiz
+const COMPONENT_CATEGORIES = {
+  basic: {
+    title: "📝 BÁSICOS",
+    color: "blue",
+    components: [
+      {
+        type: "logo" as const,
+        name: "Logo",
+        icon: ImageIcon,
+        description: "Logo da marca",
+      },
+      {
+        type: "title" as const,
+        name: "Título",
+        icon: Type,
+        description: "Título principal",
+      },
+      {
+        type: "subtitle" as const,
+        name: "Subtítulo",
+        icon: Type,
+        description: "Texto secundário",
+      },
+      {
+        type: "text" as const,
+        name: "Texto",
+        icon: Type,
+        description: "Parágrafo normal",
+      },
+      {
+        type: "image" as const,
+        name: "Imagem",
+        icon: ImageIcon,
+        description: "Imagem responsiva",
+      },
+      {
+        type: "button" as const,
+        name: "Botão",
+        icon: MousePointer,
+        description: "Botão de ação",
+      },
+      {
+        type: "spacer" as const,
+        name: "Espaço",
+        icon: Layout,
+        description: "Espaçamento vertical",
+      },
+    ]
+  },
+  interactive: {
+    title: "🔘 INTERATIVOS",
+    color: "green", 
+    components: [
+      {
+        type: "progress" as const,
+        name: "Progresso",
+        icon: Layout,
+        description: "Barra de progresso",
+      },
+      {
+        type: "input" as const,
+        name: "Campo",
+        icon: Type,
+        description: "Campo de entrada",
+      },
+      {
+        type: "options" as const,
+        name: "Opções",
+        icon: Layout,
+        description: "Lista de opções",
+      },
+    ]
+  },
+  sales: {
+    title: "💰 VENDAS",
+    color: "orange",
+    components: [
+      {
+        type: "video" as const,
+        name: "Vídeo",
+        icon: Video,
+        description: "Player de vídeo",
+      },
+      {
+        type: "testimonial" as const,
+        name: "Depoimento",
+        icon: Star,
+        description: "Depoimento de cliente",
+      },
+      {
+        type: "price" as const,
+        name: "Preço",
+        icon: DollarSign,
+        description: "Exibição de preço",
+      },
+      {
+        type: "countdown" as const,
+        name: "Countdown",
+        icon: Clock,
+        description: "Timer de urgência",
+      },
+      {
+        type: "guarantee" as const,
+        name: "Garantia",
+        icon: Shield,
+        description: "Selo de garantia",
+      },
+      {
+        type: "bonus" as const,
+        name: "Bônus",
+        icon: Gift,
+        description: "Lista de bônus",
+      },
+      {
+        type: "faq" as const,
+        name: "FAQ",
+        icon: HelpCircle,
+        description: "Perguntas frequentes",
+      },
+      {
+        type: "social-proof" as const,
+        name: "Prova Social",
+        icon: Users,
+        description: "Contador de vendas",
+      },
+    ]
+  }
+};
+
+// Lista plana para compatibilidade
 const COMPONENTS: ComponentType[] = [
-  // Componentes básicos
-  {
-    type: "logo",
-    name: "Logo",
-    icon: ImageIcon,
-    description: "Logo da marca",
-  },
-  {
-    type: "progress",
-    name: "Progresso",
-    icon: Layout,
-    description: "Barra de progresso",
-  },
-  {
-    type: "title",
-    name: "Título",
-    icon: Type,
-    description: "Título principal",
-  },
-  {
-    type: "subtitle",
-    name: "Subtítulo",
-    icon: Type,
-    description: "Texto secundário",
-  },
-  {
-    type: "text",
-    name: "Texto",
-    icon: Type,
-    description: "Parágrafo normal",
-  },
-  {
-    type: "image",
-    name: "Imagem",
-    icon: ImageIcon,
-    description: "Imagem responsiva",
-  },
-  {
-    type: "input",
-    name: "Campo",
-    icon: Type,
-    description: "Campo de entrada",
-  },
-  {
-    type: "options",
-    name: "Opções",
-    icon: Layout,
-    description: "Lista de opções",
-  },
-  {
-    type: "button",
-    name: "Botão",
-    icon: MousePointer,
-    description: "Botão de ação",
-  },
-  {
-    type: "spacer",
-    name: "Espaço",
-    icon: Layout,
-    description: "Espaçamento vertical",
-  },
-  // Componentes de venda
-  {
-    type: "video",
-    name: "Vídeo",
-    icon: Video,
-    description: "Player de vídeo",
-  },
-  {
-    type: "testimonial",
-    name: "Depoimento",
-    icon: Star,
-    description: "Depoimento de cliente",
-  },
-  {
-    type: "price",
-    name: "Preço",
-    icon: DollarSign,
-    description: "Exibição de preço",
-  },
-  {
-    type: "countdown",
-    name: "Countdown",
-    icon: Clock,
-    description: "Timer de urgência",
-  },
-  {
-    type: "guarantee",
-    name: "Garantia",
-    icon: Shield,
-    description: "Selo de garantia",
-  },
-  {
-    type: "bonus",
-    name: "Bônus",
-    icon: Gift,
-    description: "Lista de bônus",
-  },
-  {
-    type: "faq",
-    name: "FAQ",
-    icon: HelpCircle,
-    description: "Perguntas frequentes",
-  },
-  {
-    type: "social-proof",
-    name: "Prova Social",
-    icon: Users,
-    description: "Contador de vendas",
-  },
+  ...COMPONENT_CATEGORIES.basic.components,
+  ...COMPONENT_CATEGORIES.interactive.components, 
+  ...COMPONENT_CATEGORIES.sales.components,
 ];
 
 // Templates de páginas do funil completo - TODAS AS ETAPAS REAIS DO QUIZ
@@ -5677,69 +5700,52 @@ const SimpleDragDropEditor: React.FC = () => {
 
         <ScrollArea className="flex-1">
           <div className="p-3">
-            {/* Componentes Básicos */}
-            <div className="mb-4">
-              <h3 className="text-xs font-semibold mb-2 text-blue-700">
-                📝 BÁSICOS
-              </h3>
-              <div className="space-y-1">
-                {COMPONENTS.slice(0, 10).map((componentType) => {
-                  const Icon = componentType.icon;
-                  return (
-                    <div
-                      key={componentType.type}
-                      className="component-item p-2 rounded border cursor-grab bg-white hover:bg-blue-100 transition-colors"
-                      draggable
-                      onDragStart={(e) => handleDragStart(e, componentType)}
-                    >
-                      <div className="flex items-center gap-2">
-                        <Icon className="h-3 w-3 text-blue-600" />
-                        <div>
-                          <div className="font-medium text-xs">
-                            {componentType.name}
-                          </div>
-                          <div className="text-xs text-muted-foreground truncate">
-                            {componentType.description}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Componentes de Venda */}
-            <div>
-              <h3 className="text-xs font-semibold mb-2 text-emerald-700">
-                💰 VENDAS
-              </h3>
-              <div className="space-y-1">
-                {COMPONENTS.slice(10).map((componentType) => {
-                  const Icon = componentType.icon;
-                  return (
-                    <div
-                      key={componentType.type}
-                      className="component-item p-2 rounded border cursor-grab bg-white hover:bg-emerald-100 transition-colors"
-                      draggable
-                      onDragStart={(e) => handleDragStart(e, componentType)}
-                    >
-                      <div className="flex items-center gap-2">
-                        <Icon className="h-3 w-3 text-emerald-600" />
-                        <div>
-                          <div className="font-medium text-xs">
-                            {componentType.name}
-                          </div>
-                          <div className="text-xs text-muted-foreground truncate">
-                            {componentType.description}
+            {/* Renderizar categorias organizadas */}
+            {Object.entries(COMPONENT_CATEGORIES).map(([categoryKey, category]) => (
+              <div key={categoryKey} className="mb-4">
+                <h3 className={`text-xs font-semibold mb-2 ${
+                  category.color === 'blue' ? 'text-blue-700' :
+                  category.color === 'green' ? 'text-green-700' :
+                  category.color === 'orange' ? 'text-orange-700' : 'text-gray-700'
+                }`}>
+                  {category.title}
+                </h3>
+                <div className="space-y-1">
+                  {category.components.map((componentType) => {
+                    const Icon = componentType.icon;
+                    
+                    return (
+                      <div
+                        key={componentType.type}
+                        className={`component-item p-2 rounded border cursor-grab bg-white transition-colors ${
+                          category.color === 'blue' ? 'hover:bg-blue-100' :
+                          category.color === 'green' ? 'hover:bg-green-100' :
+                          category.color === 'orange' ? 'hover:bg-orange-100' : 'hover:bg-gray-100'
+                        }`}
+                        draggable
+                        onDragStart={(e) => handleDragStart(e, componentType)}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Icon className={`h-3 w-3 ${
+                            category.color === 'blue' ? 'text-blue-600' :
+                            category.color === 'green' ? 'text-green-600' :
+                            category.color === 'orange' ? 'text-orange-600' : 'text-gray-600'
+                          }`} />
+                          <div>
+                            <div className="font-medium text-xs">
+                              {componentType.name}
+                            </div>
+                            <div className="text-xs text-muted-foreground truncate">
+                              {componentType.description}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </ScrollArea>
       </div>
