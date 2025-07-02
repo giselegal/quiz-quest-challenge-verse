@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import { useQuizConfig } from '@/hooks/useQuizConfig';
 
 // Design tokens centralizados - apenas os essenciais
 const colors = {
@@ -44,11 +45,26 @@ interface QuizIntroProps {
 /**
  * QuizIntro - Componente ultra-otimizado da página inicial do quiz
  * Renderização imediata sem estados de carregamento
+ * Agora conectado com configurações do SimpleDragDropEditor
  */
 type QuizIntroComponent = React.FC<QuizIntroProps>;
 const QuizIntro: QuizIntroComponent = ({ onStart }) => {
   const [nome, setNome] = useState('');
   const [error, setError] = useState('');
+  
+  // Conecta com configurações do editor
+  const { getComponentText, isLoading: configLoading, quizConfig } = useQuizConfig();
+  
+  // Log para demonstrar a conexão funcionando
+  useEffect(() => {
+    if (!configLoading && quizConfig) {
+      console.log('🎯 QuizIntro conectado com SimpleDragDropEditor:', {
+        configPages: quizConfig.pages?.length || 0,
+        introTitle: getComponentText('intro', 'title', 'Não configurado'),
+        hasEditorConfig: !!quizConfig
+      });
+    }
+  }, [configLoading, quizConfig, getComponentText]);
   
   // Função simplificada de submit
   const handleSubmit = (e: React.FormEvent) => {
@@ -140,7 +156,7 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
           </div>
         </div>
 
-        {/* Título principal com a fonte Playfair Display */}
+        {/* Título principal com configuração dinâmica do editor */}
         <h1
           className="text-2xl font-bold text-center leading-tight px-2 sm:text-3xl md:text-4xl playfair-display text-[#432818]"
           style={{
@@ -148,8 +164,15 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
             fontWeight: 400,
           }}
         >
-          <span className="text-[#B89B7A]">Chega</span> de um guarda-roupa lotado e da sensação de que nada combina com{' '}
-          <span className="text-[#B89B7A]">Você</span>.
+          {/* Usa texto do editor ou fallback para o texto padrão */}
+          {!configLoading && getComponentText('intro', 'title') ? (
+            getComponentText('intro', 'title')
+          ) : (
+            <>
+              <span className="text-[#B89B7A]">Chega</span> de um guarda-roupa lotado e da sensação de que nada combina com{' '}
+              <span className="text-[#B89B7A]">Você</span>.
+            </>
+          )}
         </h1>
       </header>
 
