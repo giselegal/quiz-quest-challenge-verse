@@ -1,40 +1,70 @@
 #!/bin/bash
 
-echo "🔍 TESTE DE CONECTIVIDADE FTP HOSTINGER"
-echo "========================================="
+# 🔧 TESTE DE CONECTIVIDADE FTP - DIAGNÓSTICO COMPLETO
+echo "� TESTE DE CONECTIVIDADE FTP - HOSTINGER"
+echo "========================================"
 
-# Configurações
-FTP_SERVER1="files.000webhost.com"
-FTP_SERVER2="185.158.133.1"
-FTP_USER="u116045488"
-FTP_PORT="21"
+# Configurações FTP atuais do workflow
+FTP_SERVER="ftp.giselegalvao.com.br"
+FTP_USER="u116045488.giselegalvao"
+FTP_PATH="/u116045488/domains/giselegalvao.com.br/public_html/quiz-de-estilo/"
 
+echo "📋 Configurações do Deploy:"
+echo "  Server: $FTP_SERVER"
+echo "  User: $FTP_USER"  
+echo "  Path: $FTP_PATH"
+echo "  Password: ❌ FALTANDO - CONFIGURE NO GITHUB SECRETS"
+echo ""
+
+echo "🔍 Executando testes de conectividade..."
+
+# Teste 1: Resolução DNS
 echo "1. Testando resolução DNS..."
-echo "   - Servidor 1: $FTP_SERVER1"
-dig +short $FTP_SERVER1 2>/dev/null || echo "   ❌ DNS não resolve"
+if nslookup $FTP_SERVER > /dev/null 2>&1; then
+    echo "   ✅ DNS resolve corretamente"
+    IP=$(nslookup $FTP_SERVER | grep -A1 "Name:" | tail -1 | awk '{print $2}')
+    echo "   IP: $IP"
+else
+    echo "   ❌ Erro na resolução DNS"
+fi
 
-echo "   - Servidor 2: $FTP_SERVER2"
-dig +short $FTP_SERVER2 2>/dev/null || echo "   ❌ DNS não resolve"
+# Teste 2: Conectividade básica
+echo ""
+echo "2. Testando conectividade na porta 21..."
+if timeout 10s bash -c "echo 'QUIT' | nc $FTP_SERVER 21" > /dev/null 2>&1; then
+    echo "   ✅ Porta 21 acessível"
+else
+    echo "   ❌ Porta 21 inacessível ou filtrada"
+fi
 
-echo -e "\n2. Testando conectividade na porta 21..."
-echo "   - Testando $FTP_SERVER1:21"
-timeout 10s bash -c "echo 'QUIT' | telnet $FTP_SERVER1 21" 2>/dev/null | head -3 || echo "   ❌ Não conectou"
+# Teste 3: Curl FTP
+echo ""
+echo "3. Testando com curl..."
+if curl -s --connect-timeout 10 --max-time 20 "ftp://$FTP_SERVER" > /dev/null 2>&1; then
+    echo "   ✅ Servidor FTP responde ao curl"
+else
+    echo "   ❌ Servidor FTP não responde ao curl"
+fi
 
-echo "   - Testando $FTP_SERVER2:21"
-timeout 10s bash -c "echo 'QUIT' | telnet $FTP_SERVER2 21" 2>/dev/null | head -3 || echo "   ❌ Não conectou"
+echo ""
+echo "🎯 DIAGNÓSTICO:"
+echo "   • Servidor FTP: $FTP_SERVER"
+echo "   • Usuário: $FTP_USER"
+echo "   • ❌ PROBLEMA PRINCIPAL: Secret FTP_PASSWORD não configurada"
+echo ""
 
-echo -e "\n3. Testando conectividade SFTP (porta 22)..."
-echo "   - Testando SFTP em $FTP_SERVER2:22"
-timeout 10s ssh -o ConnectTimeout=5 -o StrictHostKeyChecking=no $FTP_USER@$FTP_SERVER2 exit 2>/dev/null && echo "   ✅ SFTP conectou!" || echo "   ❌ SFTP não conectou"
+echo "⚡ SOLUÇÃO IMEDIATA:"
+echo "   1. Acesse: https://github.com/[SEU-USUARIO]/quiz-quest-challenge-verse/settings/secrets/actions"
+echo "   2. Clique: 'New repository secret'"
+echo "   3. Nome: FTP_PASSWORD"
+echo "   4. Valor: [Senha do FTP do Hostinger]"
+echo "   5. Salve a secret"
+echo "   6. Execute o workflow manualmente"
+echo ""
 
-echo -e "\n4. Informações do sistema:"
-echo "   - IP externo: $(curl -s ifconfig.me || echo 'não detectado')"
-echo "   - Data/hora: $(date)"
+echo "🔗 Links úteis:"
+echo "   • GitHub Actions: https://github.com/[SEU-USUARIO]/quiz-quest-challenge-verse/actions"
+echo "   • Site após deploy: https://giselegalvao.com.br/quiz-de-estilo/"
+echo ""
 
-echo -e "\n📋 RECOMENDAÇÕES:"
-echo "   • Se FTP falhar, usar SFTP"
-echo "   • Verificar se senha FTP está no GitHub Secrets"
-echo "   • Testar com Filezilla localmente primeiro"
-echo "   • Contatar suporte Hostinger se nada funcionar"
-
-echo -e "\n✅ Teste concluído!"
+echo "✅ Teste concluído! Configure a secret FTP_PASSWORD para continuar."
