@@ -7,7 +7,7 @@ import { componentTagger } from "./src/plugins/lovable-component-tagger.ts";
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   root: ".",
-  base: mode === "production" ? "/quiz-de-estilo/" : "./",
+  base: mode === "production" ? "/quiz-de-estilo/" : "/",
 
   server: {
     host: "0.0.0.0",
@@ -98,6 +98,13 @@ export default defineConfig(({ mode }) => ({
           if (/woff2?|ttf|otf|eot/i.test(extType || "")) {
             return `assets/fonts/[name]-[hash][extname]`;
           }
+          return `assets/[name]-[hash][extname]`;
+        },
+      },
+    },
+    cssCodeSplit: true,
+    chunkSizeWarningLimit: 1000,
+  },
           return `assets/[name]-[hash][extname]`;
         },
       },
