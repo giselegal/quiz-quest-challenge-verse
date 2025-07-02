@@ -92,10 +92,10 @@ const App = () => {
                   path="/editor-visual"
                   component={SimpleDragDropEditor}
                 />
-                {/* Simple Editor - Editor Moderno CaktoQuiz-style */}
+                {/* Simple Editor - usando o mesmo editor robusto */}
                 <Route
                   path="/simple-editor"
-                  component={ModernQuizEditor}
+                  component={SimpleDragDropEditor}
                 />
                 {/* Editor Melhorado - nova versão organizada */}
                 <Route
