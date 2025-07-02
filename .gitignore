@@ -8,6 +8,10 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+
+# Arquivos problemáticos do Git LFS
+google-chrome.deb
+
 dist
 dist-ssr
 *.local
