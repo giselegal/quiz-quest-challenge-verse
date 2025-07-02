@@ -3166,6 +3166,16 @@ const SimpleDragDropEditor: React.FC = () => {
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
   const [deviceView, setDeviceView] = useState<"mobile" | "tablet" | "desktop">("desktop");
+  const [draggedType, setDraggedType] = useState<ComponentType | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const [selectedOptions, setSelectedOptions] = useState<{
+    [questionId: string]: string[];
+  }>({});
+
+  // Estados para A/B Testing
+  const [isAbTestMode, setIsAbTestMode] = useState(false);
+  const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
   
   const currentPage = currentFunnel?.pages?.[currentPageIndex] || null;
 
@@ -3180,16 +3190,6 @@ const SimpleDragDropEditor: React.FC = () => {
       </div>
     );
   }
-  const [draggedType, setDraggedType] = useState<ComponentType | null>(null);
-  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
-  const [selectedOptions, setSelectedOptions] = useState<{
-    [questionId: string]: string[];
-  }>({});
-
-  // Estados para A/B Testing
-  const [isAbTestMode, setIsAbTestMode] = useState(false);
-  const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
-  const [isPreviewMode, setIsPreviewMode] = useState(false);
 
   // Páginas atuais baseadas na variante selecionada
   const currentPages = useMemo(() => {
@@ -5688,7 +5688,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   onClick={() => {
                     const introPage = {
                       id: "quiz-intro",
-                      title: "QuizIntro",
+                      title: "Descubra Seu Estilo Pessoal",
                       type: "intro" as const,
                       progress: 0,
                       showHeader: false,
@@ -5697,22 +5697,75 @@ const SimpleDragDropEditor: React.FC = () => {
                         {
                           id: "intro-title",
                           type: "title" as const,
-                          data: { text: "ETAPA REAL: QuizIntro", color: "#059669" },
-                          style: { textAlign: "center" as const, backgroundColor: "#ecfdf5", padding: "1rem", borderRadius: "8px" }
+                          data: { 
+                            text: "Descubra Seu Estilo Pessoal",
+                            fontSize: "2.5rem",
+                            fontWeight: "bold",
+                            color: "#432818"
+                          },
+                          style: { 
+                            textAlign: "center" as const,
+                            marginBottom: "1.5rem",
+                            fontFamily: "Inter, sans-serif"
+                          }
                         },
                         {
-                          id: "intro-route",
-                          type: "text" as const,
-                          data: { text: "Rota: /quiz", color: "#6b7280" },
-                          style: { textAlign: "center" as const }
+                          id: "intro-subtitle",
+                          type: "subtitle" as const,
+                          data: { 
+                            text: "Responda algumas perguntas rápidas e descubra qual estilo combina mais com você",
+                            fontSize: "1.2rem",
+                            color: "#8F7A6A"
+                          },
+                          style: { 
+                            textAlign: "center" as const,
+                            marginBottom: "2rem",
+                            lineHeight: "1.6"
+                          }
+                        },
+                        {
+                          id: "intro-input",
+                          type: "input" as const,
+                          data: {
+                            placeholder: "Digite seu nome",
+                            label: "Como você gostaria de ser chamada?",
+                            required: true
+                          },
+                          style: {
+                            maxWidth: "400px",
+                            margin: "0 auto 1.5rem auto",
+                            padding: "0.75rem",
+                            borderRadius: "8px",
+                            border: "2px solid #e2e8f0"
+                          }
+                        },
+                        {
+                          id: "intro-button",
+                          type: "button" as const,
+                          data: {
+                            text: "Iniciar Quiz",
+                            variant: "primary"
+                          },
+                          style: {
+                            backgroundColor: "#B89B7A",
+                            color: "white",
+                            padding: "0.75rem 2rem",
+                            borderRadius: "8px",
+                            fontSize: "1.1rem",
+                            fontWeight: "600",
+                            display: "block",
+                            margin: "0 auto",
+                            border: "none",
+                            cursor: "pointer"
+                          }
                         }
                       ]
                     };
                     setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, introPage] }));
-                    toast({ title: "✅ QuizIntro adicionado!", description: "Etapa real da rota /quiz" });
+                    toast({ title: "✅ QuizIntro configurado!", description: "Página inicial completa adicionada" });
                   }}
                 >
-                  🏠 QuizIntro (/quiz)
+                  🏠 QuizIntro (Página Inicial)
                 </Button>
 
                 <Button
@@ -5722,31 +5775,119 @@ const SimpleDragDropEditor: React.FC = () => {
                   onClick={() => {
                     const questionsPage = {
                       id: "quiz-questions",
-                      title: "QuizContent",
+                      title: "QUAL O SEU TIPO DE ROUPA FAVORITA?",
                       type: "question" as const,
                       progress: 50,
                       showHeader: true,
                       showProgress: true,
                       components: [
                         {
-                          id: "questions-title",
+                          id: "question-title",
                           type: "title" as const,
-                          data: { text: "ETAPA REAL: QuizContent", color: "#059669" },
-                          style: { textAlign: "center" as const, backgroundColor: "#ecfdf5", padding: "1rem", borderRadius: "8px" }
+                          data: { 
+                            text: "QUAL O SEU TIPO DE ROUPA FAVORITA?",
+                            fontSize: "1.8rem",
+                            fontWeight: "600",
+                            color: "#432818"
+                          },
+                          style: { 
+                            textAlign: "center" as const,
+                            marginBottom: "2rem"
+                          }
                         },
                         {
-                          id: "questions-route",
-                          type: "text" as const,
-                          data: { text: "Rota: /quiz (10 questões)", color: "#6b7280" },
-                          style: { textAlign: "center" as const }
+                          id: "question-subtitle",
+                          type: "subtitle" as const,
+                          data: { 
+                            text: "Escolha até 3 opções que mais combinam com você",
+                            fontSize: "1rem",
+                            color: "#8F7A6A"
+                          },
+                          style: { 
+                            textAlign: "center" as const,
+                            marginBottom: "2rem"
+                          }
+                        },
+                        {
+                          id: "question-options",
+                          type: "options" as const,
+                          data: {
+                            multiSelect: true,
+                            maxSelections: 3,
+                            hasImages: true,
+                            options: [
+                              {
+                                id: "1a",
+                                text: "Conforto, leveza e praticidade no vestir.",
+                                image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
+                                value: "natural",
+                                category: "Natural"
+                              },
+                              {
+                                id: "1b", 
+                                text: "Discrição, caimento clássico e sobriedade.",
+                                image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
+                                value: "classico",
+                                category: "Clássico"
+                              },
+                              {
+                                id: "1c",
+                                text: "Praticidade com um toque de estilo atual.",
+                                image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
+                                value: "contemporaneo",
+                                category: "Contemporâneo"
+                              },
+                              {
+                                id: "1d",
+                                text: "Elegância refinada, moderna e sem exageros.",
+                                image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
+                                value: "elegante",
+                                category: "Elegante"
+                              },
+                              {
+                                id: "1e",
+                                text: "Delicadeza em tecidos suaves e fluidos.",
+                                image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/1_gqaadq.webp",
+                                value: "romantico",
+                                category: "Romântico"
+                              },
+                              {
+                                id: "1f",
+                                text: "Ousadia, originalidade e expressão pessoal.",
+                                image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_igc9ur.webp",
+                                value: "criativo",
+                                category: "Criativo"
+                              }
+                            ]
+                          },
+                          style: {
+                            display: "grid",
+                            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+                            gap: "1rem",
+                            maxWidth: "800px",
+                            margin: "0 auto"
+                          }
+                        },
+                        {
+                          id: "question-progress",
+                          type: "progress" as const,
+                          data: {
+                            progressValue: 10,
+                            text: "Questão 1 de 10"
+                          },
+                          style: {
+                            marginTop: "2rem",
+                            maxWidth: "400px",
+                            margin: "2rem auto 0"
+                          }
                         }
                       ]
                     };
                     setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, questionsPage] }));
-                    toast({ title: "✅ QuizContent adicionado!", description: "Etapa real das questões normais" });
+                    toast({ title: "✅ Questão do Quiz configurada!", description: "Questão real com todas as opções e imagens" });
                   }}
                 >
-                  ❓ QuizContent (10 questões)
+                  ❓ Questão do Quiz (Exemplo)
                 </Button>
 
                 <Button
