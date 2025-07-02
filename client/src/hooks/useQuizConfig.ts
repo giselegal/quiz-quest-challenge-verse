@@ -1,117 +1,141 @@
+import { useState, useEffect } from 'react';
 
-import { useState, useEffect, useCallback } from 'react';
-import { QuizQuestion, QuizOption } from '@/types/quiz';
-import { toast } from '@/components/ui/use-toast';
-
-// Storage keys
-const QUIZ_CONFIG_KEY = 'quiz_config';
-
-interface QuizConfig {
-  questions: QuizQuestion[];
+// Tipos para configuração do quiz editável
+export interface QuizStep {
+  id: string;
   title: string;
-  description: string;
-  version: number;
-  updatedAt: string;
+  type: 'intro' | 'question' | 'transition' | 'loading' | 'result' | 'offer';
+  progress: number;
+  showHeader: boolean;
+  showProgress: boolean;
+  components: QuizComponent[];
 }
 
-export const useQuizConfig = () => {
-  const [config, setConfig] = useState<QuizConfig | null>(null);
-  const [loading, setLoading] = useState(true);
+export interface QuizComponent {
+  id: string;
+  type: string;
+  data: Record<string, any>;
+  style?: Record<string, any>;
+}
 
-  // Load config from localStorage
-  useEffect(() => {
-    const loadConfig = () => {
-      setLoading(true);
-      try {
-        const savedConfig = localStorage.getItem(QUIZ_CONFIG_KEY);
-        if (savedConfig) {
-          setConfig(JSON.parse(savedConfig));
-        } else {
-          // Initialize with default config
-          const defaultConfig: QuizConfig = {
-            questions: [],
-            title: 'Quiz de Estilo Pessoal',
-            description: 'Descubra seu estilo predominante respondendo às perguntas abaixo.',
-            version: 1,
-            updatedAt: new Date().toISOString()
-          };
-          setConfig(defaultConfig);
-          localStorage.setItem(QUIZ_CONFIG_KEY, JSON.stringify(defaultConfig));
-        }
-      } catch (error) {
-        console.error('Error loading quiz config:', error);
-        toast({
-          title: "Erro ao carregar configuração",
-          description: "Não foi possível carregar a configuração do quiz.",
-          variant: "destructive"
+export interface QuizFunnel {
+  id: string;
+  name: string;
+  pages: QuizStep[];
+  variants?: any[];
+}
+
+export interface QuizQuestion {
+  id: string;
+  text: string;
+  options: Array<{
+    id: string;
+    text: string;
+    points: Record<string, number>;
+  }>;
+}
+
+/**
+ * Hook para acessar configurações do quiz criadas no SimpleDragDropEditor
+ * Conecta o editor visual com o quiz funcional
+ */
+export const useQuizConfig = () => {
+  const [quizConfig, setQuizConfig] = useState<QuizFunnel | null>(null);
+  const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Carrega configurações do localStorage (salvas pelo editor)
+  const loadQuizConfig = () => {
+    try {
+      const savedConfig = localStorage.getItem('quiz_funnel_config');
+      if (savedConfig) {
+        const config = JSON.parse(savedConfig);
+        setQuizConfig(config);
+        
+        // Extrai questões das páginas configuradas
+        const questions = extractQuestionsFromConfig(config);
+        setQuizQuestions(questions);
+        
+        console.log('📥 Configuração do quiz carregada:', {
+          pages: config.pages?.length || 0,
+          questions: questions.length
         });
-      } finally {
-        setLoading(false);
+      }
+    } catch (error) {
+      console.warn('Erro ao carregar configuração do quiz:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Extrai questões das páginas configuradas no editor
+  const extractQuestionsFromConfig = (config: QuizFunnel): QuizQuestion[] => {
+    if (!config.pages) return [];
+
+    const questions: QuizQuestion[] = [];
+    
+    config.pages.forEach(page => {
+      if (page.type === 'question' && page.components) {
+        // Procura por componentes de questão
+        page.components.forEach(component => {
+          if (component.type === 'options' && component.data?.options) {
+            const question: QuizQuestion = {
+              id: page.id,
+              text: component.data.text || `Questão ${questions.length + 1}`,
+              options: component.data.options.map((opt: any) => ({
+                id: opt.id || `${page.id}_${opt.text}`,
+                text: opt.text,
+                points: opt.points || {}
+              }))
+            };
+            questions.push(question);
+          }
+        });
+      }
+    });
+
+    return questions;
+  };
+
+  // Busca uma página específica por tipo
+  const getPageByType = (type: string) => {
+    return quizConfig?.pages?.find(page => page.type === type) || null;
+  };
+
+  // Busca componentes de uma página por tipo
+  const getComponentsByType = (pageType: string, componentType: string) => {
+    const page = getPageByType(pageType);
+    return page?.components?.filter(comp => comp.type === componentType) || [];
+  };
+
+  // Busca texto de um componente específico
+  const getComponentText = (pageType: string, componentType: string, defaultText = '') => {
+    const components = getComponentsByType(pageType, componentType);
+    return components[0]?.data?.text || defaultText;
+  };
+
+  // Recarrega configurações quando localStorage muda
+  useEffect(() => {
+    loadQuizConfig();
+
+    // Listen for storage changes (quando editor salva)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'quiz_funnel_config') {
+        loadQuizConfig();
       }
     };
 
-    loadConfig();
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
-
-  // Save config to localStorage
-  const saveConfig = useCallback((newConfig: QuizConfig) => {
-    try {
-      const updatedConfig = {
-        ...newConfig,
-        updatedAt: new Date().toISOString(),
-        version: (newConfig.version || 0) + 1
-      };
-      localStorage.setItem(QUIZ_CONFIG_KEY, JSON.stringify(updatedConfig));
-      setConfig(updatedConfig);
-      return true;
-    } catch (error) {
-      console.error('Error saving quiz config:', error);
-      toast({
-        title: "Erro ao salvar configuração",
-        description: "Não foi possível salvar a configuração do quiz.",
-        variant: "destructive"
-      });
-      return false;
-    }
-  }, []);
-
-  // Update questions
-  const updateQuestions = useCallback((questions: QuizQuestion[]) => {
-    if (!config) return false;
-    return saveConfig({
-      ...config,
-      questions
-    });
-  }, [config, saveConfig]);
-
-  // Add a question
-  const addQuestion = useCallback((question: QuizQuestion) => {
-    if (!config) return false;
-    return updateQuestions([...config.questions, question]);
-  }, [config, updateQuestions]);
-
-  // Update a question
-  const updateQuestion = useCallback((questionId: string, updates: Partial<QuizQuestion>) => {
-    if (!config) return false;
-    const updatedQuestions = config.questions.map(q => 
-      q.id === questionId ? { ...q, ...updates } : q
-    );
-    return updateQuestions(updatedQuestions);
-  }, [config, updateQuestions]);
-
-  // Delete a question
-  const deleteQuestion = useCallback((questionId: string) => {
-    if (!config) return false;
-    return updateQuestions(config.questions.filter(q => q.id !== questionId));
-  }, [config, updateQuestions]);
 
   return {
-    config,
-    loading,
-    saveConfig,
-    updateQuestions,
-    addQuestion,
-    updateQuestion,
-    deleteQuestion
+    quizConfig,
+    quizQuestions,
+    isLoading,
+    getPageByType,
+    getComponentsByType,
+    getComponentText,
+    reloadConfig: loadQuizConfig
   };
 };
