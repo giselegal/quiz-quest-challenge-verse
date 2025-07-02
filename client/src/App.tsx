@@ -36,6 +36,9 @@ const SimpleDragDropEditor = lazy(
 const ImprovedQuizEditor = lazy(
   () => import("./components/visual-editor/ImprovedQuizEditor")
 );
+const ModernQuizEditor = lazy(
+  () => import("./components/visual-editor/ModernQuizEditor")
+);
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App = () => {
@@ -89,10 +92,10 @@ const App = () => {
                   path="/editor-visual"
                   component={SimpleDragDropEditor}
                 />
-                {/* Simple Editor - usando o mesmo editor robusto */}
+                {/* Simple Editor - Editor Moderno CaktoQuiz-style */}
                 <Route
                   path="/simple-editor"
-                  component={SimpleDragDropEditor}
+                  component={ModernQuizEditor}
                 />
                 {/* Editor Melhorado - nova versão organizada */}
                 <Route
