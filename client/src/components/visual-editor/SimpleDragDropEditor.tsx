@@ -570,98 +570,255 @@ const SimpleDragDropEditor: React.FC = () => {
           </div>
         </div>
 
-        {/* Canvas Area - Simulando o mobile preview como no CaktoQuiz */}
-        <div className="flex-1 p-8 overflow-auto">
+        {/* Canvas Area - Preview da página como no CaktoQuiz */}
+        <div className="flex-1 p-6 overflow-auto bg-gray-100">
           {selectedPage ? (
-            <div className="max-w-sm mx-auto">
-              {/* Simulador de celular */}
-              <div className="bg-gray-800 rounded-[2rem] p-2 shadow-2xl">
-                <div className="bg-white rounded-[1.5rem] overflow-hidden h-[600px]">
-                  {/* Status bar */}
-                  <div className="bg-gray-900 text-white text-xs px-4 py-1 flex justify-between items-center">
-                    <span>9:41</span>
-                    <div className="flex gap-1">
-                      <div className="w-4 h-2 bg-white rounded-sm"></div>
-                      <div className="w-1 h-2 bg-white rounded-sm"></div>
-                      <div className="w-6 h-2 bg-white rounded-sm"></div>
-                    </div>
+            <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-sm border min-h-[600px]">
+              {/* Header da página */}
+              <div className="p-6 border-b">
+                <div className="text-center mb-4">
+                  <div className="w-16 h-16 mx-auto mb-2 bg-gray-200 rounded-full flex items-center justify-center">
+                    <span className="text-xs font-bold text-gray-600">LOGO</span>
                   </div>
-                  
-                  {/* Header da página */}
-                  <div className="bg-orange-400 h-1"></div>
-                  
-                  {/* Conteúdo da página */}
-                  <div className="p-6 space-y-4 h-full overflow-auto">
-                    <div className="text-center">
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="bg-orange-400 h-2 rounded-full" style={{width: `${selectedPage.progress}%`}}></div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Conteúdo da página */}
+              <div className="p-8">
+                {selectedPage.type === "intro" && (
+                  <div className="text-center space-y-6">
+                    <div 
+                      className={`p-4 rounded-lg cursor-pointer transition-all ${
+                        selectedComponentId === "page-title" 
+                          ? "border-2 border-dashed border-blue-500 bg-blue-50" 
+                          : "border-2 border-transparent hover:border-gray-300"
+                      }`}
+                      onClick={() => setSelectedComponentId("page-title")}
+                    >
+                      <h1 className="text-3xl font-bold text-gray-900 mb-2">Teste de Estilo Pessoal</h1>
+                    </div>
+                    
+                    <div 
+                      className={`p-4 rounded-lg cursor-pointer transition-all ${
+                        selectedComponentId === "page-image" 
+                          ? "border-2 border-dashed border-blue-500 bg-blue-50" 
+                          : "border-2 border-transparent hover:border-gray-300"
+                      }`}
+                      onClick={() => setSelectedComponentId("page-image")}
+                    >
                       <img 
                         src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp" 
                         alt="Mulheres com diferentes estilos"
-                        className="w-full h-32 object-cover rounded-lg mb-4"
+                        className="w-full max-w-md mx-auto rounded-lg"
                       />
-                      <h1 className="text-xl font-bold mb-2">Teste de Estilo Pessoal</h1>
                     </div>
                     
-                    {selectedPage.components.map((component, index) => (
-                      <div
-                        key={component.id}
-                        className={`p-2 rounded cursor-pointer transition-colors ${
-                          selectedComponentId === component.id
-                            ? "ring-2 ring-blue-400 bg-blue-50"
-                            : "hover:bg-gray-50"
-                        }`}
-                        onClick={() => setSelectedComponentId(component.id)}
-                      >
-                        {component.type === "title" && (
-                          <h1 
-                            className="font-bold"
-                            style={{
-                              fontSize: component.style.fontSize,
-                              textAlign: component.style.textAlign,
-                              color: component.style.color
-                            }}
-                          >
-                            {component.data.text}
-                          </h1>
-                        )}
-                        
-                        {component.type === "subtitle" && (
-                          <h2 
-                            className="font-medium text-gray-600"
-                            style={{
-                              fontSize: component.style.fontSize,
-                              textAlign: component.style.textAlign,
-                              color: component.style.color
-                            }}
-                          >
-                            {component.data.text}
-                          </h2>
-                        )}
-                        
-                        {component.type === "input" && (
-                          <div>
-                            <Label className="text-sm font-medium">{component.data.text}</Label>
-                            <Input 
-                              placeholder={component.data.placeholder}
-                              className="mt-2"
-                            />
-                          </div>
-                        )}
-                        
-                        {component.type === "button" && (
-                          <Button 
-                            className="w-full"
-                            style={{
-                              backgroundColor: component.style.backgroundColor,
-                              color: component.style.color
-                            }}
-                          >
-                            {component.data.text}
-                          </Button>
-                        )}
+                    <div 
+                      className={`p-4 rounded-lg cursor-pointer transition-all ${
+                        selectedComponentId === "name-input" 
+                          ? "border-2 border-dashed border-blue-500 bg-blue-50" 
+                          : "border-2 border-transparent hover:border-gray-300"
+                      }`}
+                      onClick={() => setSelectedComponentId("name-input")}
+                    >
+                      <div className="max-w-sm mx-auto">
+                        <Label className="text-sm font-medium text-gray-700 mb-2 block">NOME *</Label>
+                        <Input 
+                          placeholder="Digite seu nome aqui..."
+                          className="mb-4"
+                        />
                       </div>
-                    ))}
+                    </div>
+                    
+                    <div 
+                      className={`p-4 rounded-lg cursor-pointer transition-all ${
+                        selectedComponentId === "start-button" 
+                          ? "border-2 border-dashed border-blue-500 bg-blue-50" 
+                          : "border-2 border-transparent hover:border-gray-300"
+                      }`}
+                      onClick={() => setSelectedComponentId("start-button")}
+                    >
+                      <Button className="w-full max-w-sm mx-auto bg-orange-400 hover:bg-orange-500 text-white font-medium py-3">
+                        Continuar
+                      </Button>
+                    </div>
                   </div>
-                </div>
+                )}
+                
+                {selectedPage.type === "question" && (
+                  <div className="space-y-6">
+                    <div 
+                      className={`p-4 rounded-lg cursor-pointer transition-all ${
+                        selectedComponentId === "question-title" 
+                          ? "border-2 border-dashed border-blue-500 bg-blue-50" 
+                          : "border-2 border-transparent hover:border-gray-300"
+                      }`}
+                      onClick={() => setSelectedComponentId("question-title")}
+                    >
+                      <h2 className="text-2xl font-bold text-center text-gray-900 mb-6">
+                        4- O que mais chama sua atenção nos detalhes das roupas?
+                      </h2>
+                    </div>
+                    
+                    <div 
+                      className={`p-4 rounded-lg cursor-pointer transition-all ${
+                        selectedComponentId === "question-options" 
+                          ? "border-2 border-dashed border-blue-500 bg-blue-50" 
+                          : "border-2 border-transparent hover:border-gray-300"
+                      }`}
+                      onClick={() => setSelectedComponentId("question-options")}
+                    >
+                      <div className="grid grid-cols-2 gap-4 mb-6">
+                        {/* Opção A */}
+                        <div className="border border-gray-300 rounded-lg p-4 hover:border-gray-400 cursor-pointer">
+                          <img 
+                            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp"
+                            alt="Opção A"
+                            className="w-full h-40 object-cover rounded-lg mb-3"
+                          />
+                          <p className="text-sm font-medium text-gray-900">
+                            <strong>A) Poucos detalhes,</strong> básico e prático.
+                          </p>
+                        </div>
+                        
+                        {/* Opção B */}
+                        <div className="border border-gray-300 rounded-lg p-4 hover:border-gray-400 cursor-pointer">
+                          <img 
+                            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp"
+                            alt="Opção B"
+                            className="w-full h-40 object-cover rounded-lg mb-3"
+                          />
+                          <p className="text-sm font-medium text-gray-900">
+                            <strong>B) Bem discretos e sutis,</strong> clean e clássico.
+                          </p>
+                        </div>
+                        
+                        {/* Opção C */}
+                        <div className="border border-gray-300 rounded-lg p-4 hover:border-gray-400 cursor-pointer">
+                          <img 
+                            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp"
+                            alt="Opção C"
+                            className="w-full h-40 object-cover rounded-lg mb-3"
+                          />
+                          <p className="text-sm font-medium text-gray-900">
+                            <strong>C) Básicos, mas com um</strong> toque de estilo.
+                          </p>
+                        </div>
+                        
+                        {/* Opção D */}
+                        <div className="border border-gray-300 rounded-lg p-4 hover:border-gray-400 cursor-pointer">
+                          <img 
+                            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp"
+                            alt="Opção D"
+                            className="w-full h-40 object-cover rounded-lg mb-3"
+                          />
+                          <p className="text-sm font-medium text-gray-900">
+                            <strong>D) Detalhes refinados,</strong> elegantes e que deixam tudo especial.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                {selectedPage.type === "result" && (
+                  <div className="text-center space-y-6">
+                    <div 
+                      className={`p-4 rounded-lg cursor-pointer transition-all ${
+                        selectedComponentId === "result-title" 
+                          ? "border-2 border-dashed border-blue-500 bg-blue-50" 
+                          : "border-2 border-transparent hover:border-gray-300"
+                      }`}
+                      onClick={() => setSelectedComponentId("result-title")}
+                    >
+                      <h1 className="text-3xl font-bold text-gray-900 mb-4">Seu Estilo Pessoal</h1>
+                    </div>
+                    
+                    <div 
+                      className={`p-4 rounded-lg cursor-pointer transition-all ${
+                        selectedComponentId === "result-content" 
+                          ? "border-2 border-dashed border-blue-500 bg-blue-50" 
+                          : "border-2 border-transparent hover:border-gray-300"
+                      }`}
+                      onClick={() => setSelectedComponentId("result-content")}
+                    >
+                      <div className="bg-gray-50 rounded-lg p-6">
+                        <h2 className="text-xl font-bold text-gray-900 mb-2">Estilo Natural</h2>
+                        <p className="text-gray-700 mb-4">
+                          Baseado nas suas respostas, identificamos que você tem um estilo natural e despojado.
+                        </p>
+                        <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
+                          <div className="bg-green-500 h-3 rounded-full" style={{width: '85%'}}></div>
+                        </div>
+                        <span className="text-sm text-gray-600">85% de compatibilidade</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                {/* Renderização dinâmica dos componentes da página */}
+                {selectedPage.components.map((component, index) => (
+                  <div
+                    key={component.id}
+                    className={`my-4 p-3 rounded-lg cursor-pointer transition-all ${
+                      selectedComponentId === component.id
+                        ? "border-2 border-dashed border-blue-500 bg-blue-50"
+                        : "border-2 border-transparent hover:border-gray-300"
+                    }`}
+                    onClick={() => setSelectedComponentId(component.id)}
+                  >
+                    {component.type === "title" && (
+                      <h1 
+                        className="font-bold"
+                        style={{
+                          fontSize: component.style.fontSize,
+                          textAlign: component.style.textAlign,
+                          color: component.style.color
+                        }}
+                      >
+                        {component.data.text}
+                      </h1>
+                    )}
+                    
+                    {component.type === "subtitle" && (
+                      <h2 
+                        className="font-medium text-gray-600"
+                        style={{
+                          fontSize: component.style.fontSize,
+                          textAlign: component.style.textAlign,
+                          color: component.style.color
+                        }}
+                      >
+                        {component.data.text}
+                      </h2>
+                    )}
+                    
+                    {component.type === "input" && (
+                      <div>
+                        <Label className="text-sm font-medium">{component.data.text}</Label>
+                        <Input 
+                          placeholder={component.data.placeholder}
+                          className="mt-2"
+                        />
+                      </div>
+                    )}
+                    
+                    {component.type === "button" && (
+                      <Button 
+                        className="w-full"
+                        style={{
+                          backgroundColor: component.style.backgroundColor,
+                          color: component.style.color
+                        }}
+                      >
+                        {component.data.text}
+                      </Button>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
           ) : (
