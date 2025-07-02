@@ -5563,6 +5563,41 @@ const SimpleDragDropEditor: React.FC = () => {
               <h3 className="text-xs font-semibold mb-2">
                 📋 TEMPLATES PRONTOS
               </h3>
+
+              {/* Botão para carregar funil completo */}
+              <Button
+                variant="default"
+                size="sm"
+                className="w-full justify-start h-10 text-xs mb-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold"
+                onClick={() => {
+                  // Carrega funil completo com todas as 18 etapas
+                  const realQuestions = generateRealQuestionTemplates();
+                  const strategicQuestions = generateStrategicQuestionTemplates();
+                  
+                  const completeFunnel = [
+                    REAL_QUIZ_TEMPLATES.intro,
+                    ...realQuestions, // 10 questões normais
+                    ...strategicQuestions, // 7 questões estratégicas + transições
+                    REAL_QUIZ_TEMPLATES.loading,
+                    REAL_QUIZ_TEMPLATES.result,
+                    REAL_QUIZ_TEMPLATES.offer
+                  ];
+
+                  setCurrentFunnel((prev) => ({
+                    ...prev,
+                    pages: completeFunnel,
+                    name: "Quiz Completo de Estilo Pessoal"
+                  }));
+
+                  toast({
+                    title: "🎯 Funil Completo Carregado!",
+                    description: "Todas as 21 etapas do quiz foram configuradas conforme o documento.",
+                  });
+                }}
+              >
+                🚀 CARREGAR FUNIL COMPLETO (21 ETAPAS)
+              </Button>
+
               <div className="space-y-1">
                 <Button
                   variant="outline"
