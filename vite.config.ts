@@ -24,7 +24,7 @@ export default defineConfig(({ mode }) => ({
       "quiz-sell-genius-66.lovableproject.com",
       "a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com",
       "localhost",
-      "127.0.0.1"
+      "127.0.0.1",
     ],
   },
 
