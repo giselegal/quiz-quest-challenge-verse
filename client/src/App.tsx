@@ -81,17 +81,16 @@ const App = () => {
                   path="/descubra-seu-estilo"
                   component={QuizDescubraSeuEstilo}
                 />
-                {/* Editor Visual - Temporariamente desabilitado devido a problemas de null safety */}
-                {/*
+                {/* Editor Visual */}
                 <Route
                   path="/editor-visual"
                   component={SimpleDragDropEditor}
                 />
+                {/* Simple Editor - usando o mesmo editor robusto */}
                 <Route
                   path="/simple-editor"
                   component={SimpleDragDropEditor}
                 />
-                */}
                 {/* Admin - protegido com AdminAuthProvider */}
                 <Route path="/admin/:rest*">
                   {() => (

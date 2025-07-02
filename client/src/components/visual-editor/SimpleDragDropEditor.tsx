@@ -3100,7 +3100,19 @@ const SimpleDragDropEditor: React.FC = () => {
   } = useVersionManager(currentFunnel.id);
 
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
-  const currentPage = currentFunnel.pages[currentPageIndex];
+  const currentPage = currentFunnel?.pages?.[currentPageIndex] || null;
+
+  // Early return se currentPage for null para evitar erros de runtime
+  if (!currentPage) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center p-8">
+          <h1 className="text-2xl font-bold mb-4 text-[#432818]">Editor Carregando...</h1>
+          <p className="text-[#8F7A6A]">Inicializando editor visual</p>
+        </div>
+      </div>
+    );
+  }
 
   const [selectedComponent, setSelectedComponent] = useState<string | null>(
     null
@@ -3478,16 +3490,18 @@ const SimpleDragDropEditor: React.FC = () => {
   };
 
   const duplicatePage = () => {
+    if (!currentPage) return;
+    
     const newPage: SimplePage = {
       ...currentPage,
       id: `page-${Date.now()}`,
       title: `${currentPage.title} (Cópia)`,
-      components: currentPage?.components?.map((comp) => ({
+      components: currentPage.components?.map((comp) => ({
         ...comp,
         id: `${comp.type}-${Date.now()}-${Math.random()
           .toString(36)
           .substr(2, 9)}`,
-      })),
+      })) || [],
     };
 
     setCurrentFunnel((prev) => ({
@@ -3740,7 +3754,7 @@ const SimpleDragDropEditor: React.FC = () => {
   };
 
   const duplicateComponent = (componentId: string) => {
-    const component = currentPage.components.find((c) => c.id === componentId);
+    const component = currentPage?.components?.find((c) => c.id === componentId);
     if (component) {
       const newComponent: SimpleComponent = {
         ...component,
@@ -3748,7 +3762,7 @@ const SimpleDragDropEditor: React.FC = () => {
         data: { ...component.data },
       };
 
-      const index = currentPage.components.findIndex(
+      const index = currentPage?.components?.findIndex(
         (c) => c.id === componentId
       );
       setCurrentFunnel((prev) => ({
@@ -4758,7 +4772,7 @@ const SimpleDragDropEditor: React.FC = () => {
   };
 
   const renderPropertiesPanel = () => {
-    const component = currentPage.components.find(
+    const component = currentPage?.components?.find(
       (c) => c.id === selectedComponent
     );
     if (!component) return null;
@@ -5725,7 +5739,7 @@ const SimpleDragDropEditor: React.FC = () => {
               >
                 <div className="container mx-auto px-4 py-8 w-full max-w-5xl">
                   {/* Drop Zone inicial */}
-                  {currentPage.components.length === 0 && (
+                  {(!currentPage?.components || currentPage.components.length === 0) && (
                     <div
                       className="drop-zone"
                       style={{ minHeight: "200px" }}
@@ -5741,7 +5755,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   )}
 
                   {/* Componentes da Página */}
-                  {currentPage.components.map((component, index) => (
+                  {currentPage?.components?.map((component, index) => (
                     <React.Fragment key={component.id}>
                       {/* Drop Zone antes do componente */}
                       <div
@@ -5798,9 +5812,9 @@ const SimpleDragDropEditor: React.FC = () => {
                   <div
                     className="drop-zone"
                     onDragOver={(e) =>
-                      handleDragOver(e, currentPage.components.length)
+                      handleDragOver(e, currentPage?.components?.length || 0)
                     }
-                    onDrop={(e) => handleDrop(e, currentPage.components.length)}
+                    onDrop={(e) => handleDrop(e, currentPage?.components?.length || 0)}
                   />
 
                   {/* Navegação do Quiz - Idêntica ao Real */}
@@ -5856,7 +5870,7 @@ const SimpleDragDropEditor: React.FC = () => {
           <p className="text-xs text-muted-foreground">
             {selectedComponent
               ? `Editando: ${
-                  currentPage.components.find((c) => c.id === selectedComponent)
+                  currentPage?.components?.find((c) => c.id === selectedComponent)
                     ?.type || "componente"
                 }`
               : "Selecione um componente para editar"}
