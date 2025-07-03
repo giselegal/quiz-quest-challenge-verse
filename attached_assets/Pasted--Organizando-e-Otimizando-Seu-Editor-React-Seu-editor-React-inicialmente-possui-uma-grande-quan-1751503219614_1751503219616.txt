@@ -1,0 +1,1061 @@
+## Organizando e Otimizando Seu Editor React
+
+Seu editor React, inicialmente, possui uma grande quantidade de código em um único arquivo, com CSS inline e a lógica de dados misturada. Para torná-lo mais organizado, eficiente e fácil de manter, vamos refatorá-lo seguindo princípios de modularização, separação de responsabilidades e otimização de performance.
+
+---
+
+### Visão Geral da Refatoração
+
+A refatoração será dividida nas seguintes etapas principais:
+
+1.  **Estrutura de Pastas e Arquivos**: Criar uma organização lógica para os diferentes tipos de arquivos.
+2.  **Extração de Interfaces**: Mover todas as definições de interfaces para arquivos separados.
+3.  **Extração de Dados e Configurações**: Centralizar dados estáticos (templates, definições de componentes, estado inicial) em seus próprios arquivos.
+4.  **Extração de CSS para Módulos**: Mudar o CSS inline e as strings de CSS para arquivos de módulo CSS (`.module.css`).
+5.  **Criação de Componentes Menores e Reutilizáveis**: Quebrar o `SimpleDragDropEditor` em componentes menores, cada um com uma responsabilidade específica.
+6.  **Otimização de Performance**: Utilizar `React.memo` e `useCallback` onde apropriado para evitar re-renderizações desnecessárias.
+
+---
+
+### Passo a Passo Detalhado
+
+#### Passo 1: Estrutura de Pastas e Arquivos
+
+Crie a seguinte estrutura de diretórios no seu projeto `src/`:
+
+src/
+├── components/
+│   ├── ui/ (Seus componentes de UI existentes como Card, Button, Input, etc.)
+│   ├── editor/
+│   │   ├── panels/
+│   │   │   ├── ConfigPanel.tsx
+│   │   │   ├── FunnelManagementPanel.tsx
+│   │   │   ├── VersioningPanel.tsx
+│   │   │   └── PropertiesPanel.tsx
+│   │   ├── ComponentList.tsx
+│   │   ├── PageEditor.tsx
+│   │   └── SimpleDragDropEditor.tsx
+│   ├── quiz/
+│   │   ├── QuizPreview.tsx
+│   │   ├── components/
+│   │   │   ├── QuizButton.tsx
+│   │   │   ├── QuizCountdown.tsx
+│   │   │   ├── QuizFaq.tsx
+│   │   │   ├── QuizGuarantee.tsx
+│   │   │   ├── QuizImage.tsx
+│   │   │   ├── QuizInput.tsx
+│   │   │   ├── QuizLogo.tsx
+│   │   │   ├── QuizOptions.tsx
+│   │   │   ├── QuizPrice.tsx
+│   │   │   ├── QuizProgress.tsx
+│   │   │   ├── QuizSocialProof.tsx
+│   │   │   ├── QuizSpacer.tsx
+│   │   │   ├── QuizText.tsx
+│   │   │   ├── QuizTestimonial.tsx
+│   │   │   └── QuizVideo.tsx
+│   │   └── hooks/
+│   │       └── useQuizLogic.ts (Seu mock ou lógica real do quiz)
+│   ├── shared/
+│   │   ├── Icon.tsx (Se precisar de um componente de ícone genérico)
+│   │   └── LoadingSpinner.tsx
+├── hooks/
+│   ├── useFunnelManager.ts
+│   ├── useVersionManager.ts
+│   └── useToast.ts
+├── data/
+│   ├── quizTemplates.ts
+│   ├── realQuizTemplates.ts (Seu arquivo original de templates de questões)
+│   ├── componentDefinitions.ts
+│   └── initialFunnelState.ts
+├── interfaces/
+│   ├── quiz.ts
+│   └── editor.ts
+├── styles/
+│   ├── quiz.module.css
+│   ├── editor.module.css
+│   └── globals.css (Se você tiver estilos globais para o projeto)
+├── utils/
+│   └── helpers.ts
+└── App.tsx / main.tsx (Arquivo principal onde o editor será renderizado)
+
+
+#### Passo 2: Extração de Interfaces
+
+Crie os arquivos `src/interfaces/quiz.ts` e `src/interfaces/editor.ts` e mova as interfaces correspondentes para eles.
+
+**`src/interfaces/quiz.ts`**
+
+```typescript
+export interface QuizConfig {
+  domain: string;
+  seo: {
+    title: string;
+    description: string;
+    keywords: string;
+  };
+  pixel: {
+    facebookPixelId: string;
+    googleAnalyticsId: string;
+  };
+  utm: {
+    source: string;
+    medium: string;
+    campaign: string;
+    content: string;
+    term: string;
+  };
+  scoring: {
+    normalQuestionPoints: number;
+    strategicQuestionPoints: number;
+    autoAdvanceNormal: boolean;
+    autoAdvanceStrategic: boolean;
+    normalSelectionLimit: number;
+    strategicSelectionLimit: number;
+  };
+  results: {
+    showUserName: boolean;
+    showPrimaryStyle: boolean;
+    showSecondaryStyles: boolean;
+    showPercentages: boolean;
+    showStyleImages: boolean;
+    showStyleGuides: boolean;
+  };
+}
+
+export interface QuizOption {
+  id: string;
+  text: string;
+  image?: string;
+  value: string;
+  category?: string;
+}
+
+export interface BonusItem {
+  id: string;
+  title: string;
+  value: string;
+  description?: string;
+}
+
+export interface FaqItem {
+  id: string;
+  question: string;
+  answer: string;
+}
+
+export interface SimpleComponent {
+  id: string;
+  type:
+    | "title"
+    | "subtitle"
+    | "text"
+    | "image"
+    | "button"
+    | "spacer"
+    | "input"
+    | "options"
+    | "progress"
+    | "logo"
+    | "video"
+    | "testimonial"
+    | "price"
+    | "countdown"
+    | "guarantee"
+    | "bonus"
+    | "faq"
+    | "social-proof";
+  data: {
+    text?: string;
+    src?: string;
+    alt?: string;
+    height?: number;
+    label?: string;
+    placeholder?: string;
+    required?: boolean;
+    options?: QuizOption[];
+    multiSelect?: boolean;
+    hasImages?: boolean;
+    progressValue?: number;
+    videoUrl?: string;
+    price?: string;
+    originalPrice?: string;
+    installments?: string;
+    currency?: string;
+    endDate?: string;
+    title?: string;
+    name?: string;
+    role?: string;
+    avatar?: string;
+    testimonialAuthor?: string;
+    testimonialRole?: string;
+    testimonialImage?: string;
+    guaranteeDays?: number;
+    bonuses?: BonusItem[];
+    bonusItems?: BonusItem[];
+    faqs?: FaqItem[];
+    faqItems?: FaqItem[];
+    customerCount?: string;
+    rating?: string;
+    reviewCount?: string;
+    socialProofCount?: number;
+    socialProofText?: string;
+  };
+  style: {
+    fontSize?: string;
+    fontWeight?: string;
+    textAlign?: "left" | "center" | "right";
+    color?: string;
+    backgroundColor?: string;
+    padding?: string;
+    margin?: string;
+    borderRadius?: string;
+  };
+}
+
+export interface SimplePage {
+  id: string;
+  title: string;
+  type:
+    | "intro"
+    | "question"
+    | "loading"
+    | "result"
+    | "offer"
+    | "transition"
+    | "sales"
+    | "checkout"
+    | "upsell"
+    | "thankyou"
+    | "webinar"
+    | "launch";
+  progress: number;
+  showHeader: boolean;
+  showProgress: boolean;
+  components: SimpleComponent[];
+}
+
+export interface QuizVariant {
+  id: string;
+  name: string;
+  description: string;
+  pages: SimplePage[];
+  trafficPercent: number;
+  isActive: boolean;
+  createdAt?: string;
+}
+
+export interface QuizFunnel {
+  id: string;
+  name: string;
+  pages: SimplePage[];
+  variants?: QuizVariant[];
+  updatedAt?: string;
+  createdAt?: string;
+}
+src/interfaces/editor.ts
+
+TypeScript
+
+import { LucideIcon } from "lucide-react";
+import { SimpleComponent } from "./quiz";
+
+export interface ComponentType {
+  type: SimpleComponent["type"];
+  name: string;
+  icon: LucideIcon;
+  description: string;
+}
+
+export interface ComponentCategory {
+  title: string;
+  color: string;
+  components: ComponentType[];
+}
+Passo 3: Extração de Dados e Configurações
+Crie os arquivos em src/data/ e src/utils/ e mova os dados e as funções auxiliares para eles.
+
+src/data/quizTemplates.ts:
+
+TypeScript
+
+import { SimplePage } from "@/interfaces/quiz";
+import {
+  QUIZ_TEMPLATES as REAL_QUIZ_TEMPLATES_SOURCE,
+  generateRealQuestionTemplates,
+  generateStrategicQuestionTemplates,
+} from "./realQuizTemplates";
+
+export const QUIZ_TEMPLATES = REAL_QUIZ_TEMPLATES_SOURCE;
+
+export const generateInitialFunnelPages = (): SimplePage[] => {
+  const realQuestions = generateRealQuestionTemplates();
+  const strategicQuestions = generateStrategicQuestionTemplates();
+
+  return [
+    QUIZ_TEMPLATES.intro,
+    ...realQuestions,
+    QUIZ_TEMPLATES.transition,
+    ...strategicQuestions,
+    QUIZ_TEMPLATES.loading,
+    QUIZ_TEMPLATES.result,
+    QUIZ_TEMPLATES.offer,
+    QUIZ_TEMPLATES.salesPage,
+    QUIZ_TEMPLATES.checkout,
+    QUIZ_TEMPLATES.upsell,
+  ];
+};
+src/data/componentDefinitions.ts:
+
+TypeScript
+
+import {
+  Save,
+  Trash2,
+  Copy,
+  Monitor,
+  Smartphone,
+  Tablet,
+  ChevronUp,
+  ChevronDown,
+  Type,
+  Image as ImageIcon,
+  MousePointer,
+  Layout,
+  GripVertical,
+  Eye,
+  Plus,
+  ArrowLeft,
+  ArrowRight,
+  Play,
+  Download,
+  Upload,
+  Video,
+  Star,
+  DollarSign,
+  Clock,
+  Shield,
+  Gift,
+  HelpCircle,
+  Users,
+  Settings,
+  Globe,
+  BarChart3,
+  Target,
+  Link,
+  TrendingUp,
+} from "lucide-react";
+import { ComponentType, ComponentCategory } from "@/interfaces/editor";
+
+export const COMPONENT_CATEGORIES: {
+  [key: string]: ComponentCategory;
+} = {
+  basic: {
+    title: "📝 BÁSICOS",
+    color: "blue",
+    components: [
+      {
+        type: "logo",
+        name: "Logo",
+        icon: ImageIcon,
+        description: "Logo da marca",
+      },
+      {
+        type: "title",
+        name: "Título",
+        icon: Type,
+        description: "Título principal",
+      },
+      {
+        type: "subtitle",
+        name: "Subtítulo",
+        icon: Type,
+        description: "Texto secundário",
+      },
+      {
+        type: "text",
+        name: "Texto",
+        icon: Type,
+        description: "Parágrafo normal",
+      },
+      {
+        type: "image",
+        name: "Imagem",
+        icon: ImageIcon,
+        description: "Imagem responsiva",
+      },
+      {
+        type: "button",
+        name: "Botão",
+        icon: MousePointer,
+        description: "Botão de ação",
+      },
+      {
+        type: "spacer",
+        name: "Espaço",
+        icon: Layout,
+        description: "Espaçamento vertical",
+      },
+    ],
+  },
+  interactive: {
+    title: "🔘 INTERATIVOS",
+    color: "green",
+    components: [
+      {
+        type: "progress",
+        name: "Progresso",
+        icon: Layout,
+        description: "Barra de progresso",
+      },
+      {
+        type: "input",
+        name: "Campo",
+        icon: Type,
+        description: "Campo de entrada",
+      },
+      {
+        type: "options",
+        name: "Opções",
+        icon: Layout,
+        description: "Lista de opções",
+      },
+    ],
+  },
+  sales: {
+    title: "💰 VENDAS",
+    color: "orange",
+    components: [
+      {
+        type: "video",
+        name: "Vídeo",
+        icon: Video,
+        description: "Player de vídeo",
+      },
+      {
+        type: "testimonial",
+        name: "Depoimento",
+        icon: Star,
+        description: "Depoimento de cliente",
+      },
+      {
+        type: "price",
+        name: "Preço",
+        icon: DollarSign,
+        description: "Exibição de preço",
+      },
+      {
+        type: "countdown",
+        name: "Countdown",
+        icon: Clock,
+        description: "Timer de urgência",
+      },
+      {
+        type: "guarantee",
+        name: "Garantia",
+        icon: Shield,
+        description: "Selo de garantia",
+      },
+      {
+        type: "bonus",
+        name: "Bônus",
+        icon: Gift,
+        description: "Lista de bônus",
+      },
+      {
+        type: "faq",
+        name: "FAQ",
+        icon: HelpCircle,
+        description: "Perguntas frequentes",
+      },
+      {
+        type: "social-proof",
+        name: "Prova Social",
+        icon: Users,
+        description: "Contador de vendas",
+      },
+    ],
+  },
+};
+
+export const ALL_COMPONENTS: ComponentType[] = Object.values(
+  COMPONENT_CATEGORIES
+).flatMap((category) => category.components);
+src/data/initialFunnelState.ts:
+
+TypeScript
+
+import { QuizConfig, QuizFunnel } from "@/interfaces/quiz";
+import { generateInitialFunnelPages } from "./quizTemplates";
+
+export const initialQuizConfig: QuizConfig = {
+  domain: "[https://giselegalvao.com.br](https://giselegalvao.com.br)",
+  seo: {
+    title: "Quiz: Descubra Seu Estilo Pessoal Único",
+    description:
+      "Descubra seu estilo pessoal único com nosso quiz personalizado. Transforme seu visual e ganhe confiança com dicas exclusivas de moda.",
+    keywords:
+      "quiz estilo, moda feminina, consultoria de imagem, estilo pessoal, transformação visual",
+  },
+  pixel: {
+    facebookPixelId: "1311550759901086",
+    googleAnalyticsId: "G-XXXXXXXXXX",
+  },
+  utm: {
+    source: "facebook",
+    medium: "cpc",
+    campaign: "quiz_style_2025",
+    content: "criativo-1",
+    term: "estilo_elegante",
+  },
+  scoring: {
+    normalQuestionPoints: 1,
+    strategicQuestionPoints: 0,
+    autoAdvanceNormal: true,
+    autoAdvanceStrategic: false,
+    normalSelectionLimit: 3,
+    strategicSelectionLimit: 2,
+  },
+  results: {
+    showUserName: true,
+    showPrimaryStyle: true,
+    showSecondaryStyles: true,
+    showPercentages: true,
+    showStyleImages: true,
+    showStyleGuides: true,
+  },
+};
+
+export const initialQuizFunnel: QuizFunnel = {
+  id: "quiz-funnel-real",
+  name: "Quiz de Estilo Pessoal - Funil Completo",
+  pages: generateInitialFunnelPages(),
+};
+src/utils/helpers.ts:
+
+TypeScript
+
+import { SimpleComponent, QuizOption, BonusItem, FaqItem } from "@/interfaces/quiz";
+
+export const getDefaultData = (type: SimpleComponent["type"]): SimpleComponent["data"] => {
+  switch (type) {
+    case "logo":
+      return {
+        src: "[https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp](https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp)",
+        alt: "Logo",
+      };
+    case "progress":
+      return { progressValue: 50 };
+    case "title":
+      return { text: "Novo Título" };
+    case "subtitle":
+      return { text: "Novo Subtítulo" };
+    case "text":
+      return { text: "Digite seu texto aqui..." };
+    case "image":
+      return {
+        src: "[https://via.placeholder.com/400x300/B89B7A/FFFFFF?text=Nova+Imagem](https://via.placeholder.com/400x300/B89B7A/FFFFFF?text=Nova+Imagem)",
+        alt: "Nova imagem",
+      };
+    case "input":
+      return {
+        label: "CAMPO",
+        placeholder: "Digite aqui...",
+        required: false,
+      };
+    case "options":
+      return {
+        hasImages: false,
+        multiSelect: false,
+        options: [
+          { id: "opt-1", text: "Opção 1", value: "option1" },
+          { id: "opt-2", text: "Opção 2", value: "option2" },
+        ],
+      };
+    case "button":
+      return { text: "CLIQUE AQUI" };
+    case "spacer":
+      return { height: 32 };
+    case "video":
+      return {
+        videoUrl: "",
+      };
+    case "testimonial":
+      return {
+        text: "Este produto mudou minha vida completamente! Recomendo para todos que querem resultados reais.",
+        name: "Cliente Satisfeito",
+        role: "Cliente verificado",
+        avatar: "[https://via.placeholder.com/60x60/B89B7A/FFFFFF?text=](https://via.placeholder.com/60x60/B89B7A/FFFFFF?text=)👤",
+      };
+    case "price":
+      return {
+        price: "97",
+        originalPrice: "197",
+        installments: "9,90",
+      };
+    case "countdown":
+      return {
+        title: "⏰ OFERTA LIMITADA!",
+      };
+    case "guarantee":
+      return {
+        title: "Garantia de 30 Dias",
+        text: "Se não ficar satisfeito, devolvemos 100% do seu dinheiro!",
+      };
+    case "bonus":
+      return {
+        bonuses: [
+          {
+            id: "bonus1",
+            title: "Bônus #1: Guia Completo",
+            value: "R$ 197",
+            description: "Material exclusivo para acelerar seus resultados",
+          },
+          {
+            id: "bonus2",
+            title: "Bônus #2: Acesso VIP",
+            value: "R$ 297",
+            description: "Grupo exclusivo para networking",
+          },
+        ],
+      };
+    case "faq":
+      return {
+        faqs: [
+          {
+            id: "faq1",
+            question: "Como funciona a garantia?",
+            answer:
+              "Oferecemos 30 dias de garantia incondicional. Se não ficar satisfeito, devolvemos seu dinheiro.",
+          },
+          {
+            id: "faq2",
+            question: "Quanto tempo tenho acesso?",
+            answer:
+              "O acesso é vitalício! Você pode acessar quando quiser, quantas vezes quiser.",
+          },
+        ],
+      };
+    case "social-proof":
+      return {
+        customerCount: "5.000",
+        rating: "4.9",
+        reviewCount: "1.247",
+      };
+    default:
+      return {};
+  }
+};
+
+export const getDefaultStyle = (type: SimpleComponent["type"]): SimpleComponent["style"] => {
+  switch (type) {
+    case "title":
+      return {
+        fontSize: "2.5rem",
+        fontWeight: "700",
+        textAlign: "center",
+        color: "#432818",
+      };
+    case "subtitle":
+      return {
+        fontSize: "1.25rem",
+        textAlign: "center",
+        color: "#6B4F43",
+      };
+    case "text":
+      return {
+        fontSize: "1rem",
+        textAlign: "left",
+        color: "#374151",
+      };
+    default:
+      return {};
+  }
+};
+Passo 4: Extração de CSS para Módulos
+Crie os arquivos src/styles/quiz.module.css e src/styles/editor.module.css e mova o CSS correspondente para eles.
+
+src/styles/quiz.module.css:
+
+CSS
+
+/* src/styles/quiz.module.css */
+
+/* Importação da fonte do quiz real */
+@import url('[https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap)');
+@import url('[https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap](https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap)');
+
+:root {
+  /* Cores idênticas ao quiz real */
+  --quiz-primary-color: #b89b7a;
+  --quiz-secondary-color: #432818;
+  --quiz-accent-color: #d4c4a0;
+  --quiz-bg-color: #fefefe;
+  --quiz-text-color: #432818;
+  --quiz-text-secondary-color: #6b4f43;
+  --quiz-border-light: #e5e7eb;
+  --quiz-border-hover: #d4c4b0;
+  --quiz-success: #059669;
+  --quiz-warning: #dc2626;
+  --quiz-neutral: #6b7280;
+
+  /* Tipografia idêntica ao quiz real */
+  --quiz-font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --quiz-font-display: "Playfair Display", serif;
+  --quiz-font-size-title: 1.875rem;
+  --quiz-font-size-subtitle: 1.25rem;
+  --quiz-font-size-body: 1rem;
+  --quiz-font-size-small: 0.875rem;
+
+  /* Layout idêntico ao quiz real */
+  --quiz-border-radius: 0.75rem;
+  --quiz-shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --quiz-shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --quiz-shadow-strong: 0 8px 24px rgba(0, 0, 0, 0.2);
+
+  /* Espaçamentos idênticos ao quiz real */
+  --quiz-spacing-compact: 0.5rem;
+  --quiz-spacing-normal: 1rem;
+  --quiz-spacing-spacious: 1.5rem;
+
+  /* Transições idênticas ao quiz real */
+  --quiz-transition-fast: 150ms ease-in-out;
+  --quiz-transition-normal: 300ms ease-in-out;
+  --quiz-transition-slow: 500ms ease-in-out;
+}
+
+/* Container principal - IDÊNTICO ao quiz real */
+.quiz-container {
+  font-family: var(--quiz-font-family);
+  background: linear-gradient(135deg, #fffbf7 0%, #fdf8f3 100%);
+  min-height: 100vh;
+  color: var(--quiz-text-color);
+}
+
+.quiz-dynamic-theme {
+  background-color: var(--quiz-bg-color);
+  color: var(--quiz-text-color);
+  font-family: var(--quiz-font-family);
+}
+
+/* Headers e títulos - IDÊNTICOS ao quiz real */
+.quiz-dynamic-theme h1,
+.quiz-dynamic-theme h2,
+.quiz-dynamic-theme h3 {
+  color: var(--quiz-text-color);
+  font-family: var(--quiz-font-display);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.quiz-dynamic-theme h1 {
+  font-size: var(--quiz-font-size-title);
+}
+
+.quiz-dynamic-theme h2 {
+  font-size: var(--quiz-font-size-subtitle);
+}
+
+/* Opções do Quiz - EXATAMENTE como o exemplo HTML fornecido */
+.quiz-option {
+  /* Classes exatas do exemplo HTML */
+  white-space: nowrap; /* whitespace-nowrap */
+  border-radius: 0.375rem; /* rounded-md */
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 500; /* font-medium */
+  transition: colors 0.2s; /* transition-colors */
+
+  /* Focus visible styles */
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+
+  /* Disabled styles */
+  pointer-events: auto;
+
+  /* Option specific classes do exemplo */
+  border: none; /* sem borda */
+  background: #fefefe; /* cor de fundo do quiz */
+  color: #000;
+  padding: 0 1rem; /* px-4 */
+  overflow: hidden;
+  min-width: 100%; /* min-w-full */
+  gap: 0.5rem; /* gap-2 */
+  display: flex;
+  height: auto; /* h-auto */
+  padding-top: 0.5rem; /* py-2 */
+  padding-bottom: 0.5rem; /* py-2 */
+  flex-direction: column; /* flex-col */
+  justify-content: space-between; /* Espaço entre imagem e texto */
+  align-items: center; /* items-center */
+  justify-content: flex-start; /* justify-start */
+  box-shadow: none; /* drop-shadow-none */
+  cursor: pointer;
+
+  /* Position e will-change */
+  position: relative;
+  will-change: transform, box-shadow, border-color;
+}
+
+/* Estados de Hover - Efeito sutil de sombra */
+.quiz-option:hover:not(.disabled) {
+  background: #fefefe;
+  color: #432818;
+  box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.1);
+  border: none;
+  transform: none; /* Sem movimento */
+}
+
+/* Estados Selecionados - Apenas sombra ao redor */
+.quiz-option.selected {
+  background: #fefefe;
+  color: #432818;
+  box-shadow: 0 8px 30px rgba(67, 40, 24, 0.25);
+  border: none;
+  transform: none; /* Sem movimento */
+}
+
+/* Focus visible - como no exemplo */
+.quiz-option:focus-visible {
+  outline: 2px solid #432818; /* ring-2 ring-ring */
+  outline-offset: 2px; /* ring-offset-2 */
+}
+
+/* Disabled - como no exemplo */
+.quiz-option.disabled {
+  pointer-events: none; /* disabled:pointer-events-none */
+  opacity: 0.5; /* disabled:opacity-50 */
+}
+
+/* Questões Estratégicas - seguir mesmo padrão do exemplo */
+.quiz-option.strategic {
+  border-radius: 0.375rem; /* rounded-md */
+  padding: 1rem;
+  flex-direction: column; /* questões estratégicas não são flex-col-reverse */
+}
+
+.quiz-option.strategic:hover:not(.disabled) {
+  background: #fefefe;
+  color: #432818;
+  box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.1);
+  border: none;
+  transform: none;
+}
+
+.quiz-option.strategic.selected {
+  background: #fefefe;
+  color: #432818;
+  box-shadow: 0 8px 30px rgba(67, 40, 24, 0.25);
+  border: none;
+  transform: none;
+}
+
+/* Estados Desabilitados */
+.quiz-option.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.quiz-option.disabled:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  background: #fefefe !important;
+  opacity: 0.5 !important;
+}
+
+/* Imagens das Opções - EXATAMENTE como o exemplo HTML */
+.quiz-option-image {
+  width: 100%; /* w-full */
+  border-radius: 0.375rem 0.375rem 0 0; /* rounded-t-md */
+  background: white; /* bg-white */
+  height: 100%; /* h-full */
+  object-fit: cover;
+  border: none;
+  transition: none; /* Sem transições conforme exemplo */
+}
+
+/* Sem efeitos hover nas imagens conforme exemplo */
+.quiz-option:hover:not(.disabled) .quiz-option-image {
+  transform: none;
+}
+
+.quiz-option.selected .quiz-option-image {
+  transform: none;
+}
+
+/* Grids - Layout IDÊNTICO ao quiz real e ao exemplo fornecido */
+.quiz-grid-images {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem; /* gap-2 = 8px = 0.5rem */
+  max-width: 768px;
+  margin: 0 auto;
+}
+
+.quiz-grid-images-mobile {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.quiz-grid-images-desktop {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  max-width: 768px;
+  margin: 0 auto;
+}
+
+.quiz-grid-images-large {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Manter 2 colunas mesmo para muitas opções */
+  gap: 0.5rem;
+  max-width: 768px;
+  margin: 0 auto;
+}
+
+.quiz-grid-text {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.quiz-grid-strategic {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Tipografia das Opções - EXATAMENTE como o exemplo HTML */
+.quiz-option-text-normal {
+  padding: 0.5rem 1rem; /* py-2 px-4 */
+  width: 100%; /* w-full */
+  display: flex;
+  flex-direction: row; /* flex-row */
+  font-size: 1rem; /* text-base */
+  align-items: center; /* items-center */
+  color: #432818; /* cor padrão do quiz */
+  justify-content: space-between; /* justify-between */
+  text-align: center;
+  font-weight: 500;
+  line-height: 1.5;
+  margin-top: 0; /* removida margem superior */
+}
+
+.quiz-option-text-strategic {
+  font-size: 1.25rem;
+  line-height: 1.4;
+  font-weight: 600;
+  color: #432818; /* cor padrão */
+  text-align: center;
+  padding: 0.5rem 1rem;
+}
+
+/* Texto das opções em estado selecionado - mesmo que normal */
+.quiz-option.selected .quiz-option-text-normal,
+.quiz-option.selected .quiz-option-text-strategic {
+  color: #432818 !important; /* Mantém a cor padrão */
+  font-weight: 600; /* Deixa o texto um pouco mais forte */
+}
+
+/* Texto das opções em estado hover - mesmo que normal */
+.quiz-option:hover:not(.disabled) .quiz-option-text-normal,
+.quiz-option:hover:not(.disabled) .quiz-option-text-strategic {
+  color: #432818 !important; /* Mantém a cor padrão */
+}
+
+/* Container do texto das opções - ajustado para ficar na parte inferior */
+.quiz-option-text-container {
+  word-break: break-word; /* break-word */
+  width: 100%; /* w-full */
+  text-align: center; /* text-centered */
+  margin-top: auto; /* Empurra para a parte inferior */
+  padding: 0.5rem; /* Espaçamento uniforme */
+  align-self: flex-end; /* Alinha na parte inferior */
+  position: relative; /* Permite posicionamento */
+  min-height: 3rem; /* Altura mínima para o texto */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Indicadores de Seleção - Removidos para seguir o exemplo fornecido */
+.quiz-check-normal {
+  display: none; /* Ocultar indicadores no novo design */
+}
+
+.quiz-check-strategic {
+  display: none; /* Ocultar indicadores no novo design */
+}
+
+/* Botões - IDÊNTICOS ao quiz real */
+.quiz-btn-primary {
+  background: linear-gradient(135deg, var(--quiz-primary-color) 0%, var(--quiz-secondary-color) 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(184, 155, 122, 0.25);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.quiz-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(184, 155, 122, 0.35);
+}
+
+/* Animações melhoradas - Experiência visual suave */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Animação de entrada das opções */
+.quiz-option-animate {
+  animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: calc(var(--animation-order, 0) * 0.1s);
+  opacity: 0; /* Inicia invisível */
+}
+
+/* Animação de entrada dos contadores */
+.quiz-counter-animate {
+  animation: slideInFrom
