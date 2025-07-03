@@ -18,6 +18,16 @@ import {
   Play
 } from "lucide-react";
 
+// Importar componentes do quiz para renderização no canvas
+import QuizIntro from "@/components/QuizIntro";
+import { QuizQuestion } from "@/components/QuizQuestion";
+import QuizTransition from "@/components/QuizTransition";
+import QuizResult from "@/components/QuizResult";
+import QuizOfferPage from "@/components/QuizOfferPage";
+import { quizQuestions } from "@/data/quizQuestions";
+import { strategicQuestions } from "@/data/strategicQuestions";
+import { StyleResult } from "@/types/quiz";
+
 const SimpleDragDropEditor: React.FC = () => {
   const [selectedStage, setSelectedStage] = useState<string | null>(null);
   
@@ -228,6 +238,105 @@ const SimpleDragDropEditor: React.FC = () => {
 
   const selectedStageData = selectedStage ? funnelStages.find(s => s.id === selectedStage) : null;
 
+  // Mock data para preview dos componentes
+  const mockStyleResult: StyleResult = {
+    category: "Clássico" as const,
+    score: 8,
+    percentage: 35
+  };
+
+  // Mock question data para demonstração
+  const mockQuestion = {
+    id: "1",
+    title: "QUAL O SEU TIPO DE ROUPA FAVORITA?",
+    type: "both" as const,
+    multiSelect: 3,
+    options: [
+      {
+        id: "1a",
+        text: "Conforto, leveza e praticidade no vestir.",
+        imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
+        styleCategory: "Natural" as const,
+        points: 1
+      },
+      {
+        id: "1b", 
+        text: "Discrição, caimento clássico e sobriedade.",
+        imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
+        styleCategory: "Clássico" as const,
+        points: 1
+      }
+    ]
+  };
+
+  // Função para renderizar o componente correto baseado na etapa
+  const renderStageComponent = (stage: any) => {
+    if (!stage) return null;
+
+    const className = "transform scale-75 origin-top";
+
+    switch (stage.type) {
+      case "intro":
+        return (
+          <div className={className}>
+            <QuizIntro onStart={() => {}} />
+          </div>
+        );
+
+      case "question":
+      case "strategic":
+        return (
+          <div className={className}>
+            <QuizQuestion 
+              question={mockQuestion}
+              onAnswer={() => {}}
+              currentAnswers={[]}
+              autoAdvance={false}
+              isStrategicQuestion={stage.type === "strategic"}
+            />
+          </div>
+        );
+
+      case "transition":
+        return (
+          <div className={className}>
+            <QuizTransition 
+              onContinue={() => {}}
+              onAnswer={() => {}}
+              currentAnswers={[]}
+            />
+          </div>
+        );
+
+      case "result":
+        return (
+          <div className={className}>
+            <QuizResult 
+              primaryStyle={mockStyleResult}
+              secondaryStyles={[]}
+              previewMode={true}
+            />
+          </div>
+        );
+
+      case "offer":
+        return (
+          <div className={className}>
+            <QuizOfferPage />
+          </div>
+        );
+
+      default:
+        return (
+          <div className="p-8 text-center bg-slate-800 rounded-lg border border-slate-700">
+            <div className="text-4xl mb-4">{stage.icon}</div>
+            <h3 className="text-white text-lg font-semibold mb-2">{stage.name}</h3>
+            <p className="text-slate-400">{stage.description}</p>
+          </div>
+        );
+    }
+  };
+
   return (
     <div className="h-screen bg-slate-900 text-white">
       {/* Header */}
@@ -354,41 +463,15 @@ const SimpleDragDropEditor: React.FC = () => {
             </div>
 
             {/* Canvas Content */}
-            <div className="flex-1 p-6 overflow-auto">
+            <div className="flex-1 p-6 overflow-auto bg-slate-900">
               {selectedStageData ? (
-                <div className="max-w-md mx-auto">
-                  <Card className="bg-slate-800 border-slate-700">
-                    <CardHeader className="pb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-lg">
-                          {selectedStageData.icon}
-                        </div>
-                        <div>
-                          <CardTitle className="text-white text-lg">{selectedStageData.name}</CardTitle>
-                          <p className="text-slate-400 text-sm">{selectedStageData.description}</p>
-                        </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4 text-sm">
-                        <div>
-                          <span className="text-slate-400">Tipo:</span>
-                          <p className="text-white font-medium">{getTypeLabel(selectedStageData.type)}</p>
-                        </div>
-                        <div>
-                          <span className="text-slate-400">Rota:</span>
-                          <p className="text-white font-medium font-mono text-xs">{selectedStageData.route}</p>
-                        </div>
-                      </div>
-                      
-                      <div className="pt-4 border-t border-slate-700">
-                        <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                          <Edit3 className="w-4 h-4 mr-2" />
-                          Editar Conteúdo
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
+                <div className="h-full">
+                  {/* Preview do componente real */}
+                  <div className="bg-white rounded-lg shadow-xl mx-auto max-w-2xl h-full overflow-auto">
+                    <div className="h-full">
+                      {renderStageComponent(selectedStageData)}
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <div className="h-full flex items-center justify-center">
@@ -398,8 +481,13 @@ const SimpleDragDropEditor: React.FC = () => {
                     </div>
                     <h3 className="text-lg font-semibold text-white mb-2">Selecione uma etapa do funil</h3>
                     <p className="text-slate-400 max-w-sm">
-                      Escolha uma das {funnelStages.length} etapas na barra lateral para visualizar e editar seu conteúdo.
+                      Escolha uma das {funnelStages.length} etapas na barra lateral para visualizar o componente real.
                     </p>
+                    <div className="mt-6 p-4 bg-slate-800 rounded-lg border border-slate-700 max-w-md mx-auto">
+                      <p className="text-xs text-slate-300">
+                        ✨ <strong>Preview Real:</strong> Os componentes que aparecem aqui são os mesmos que os usuários veem no quiz
+                      </p>
+                    </div>
                   </div>
                 </div>
               )}
