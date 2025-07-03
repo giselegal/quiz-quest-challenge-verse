@@ -6,12 +6,19 @@ export interface ComponentType {
   name: string;
   icon: LucideIcon;
   description: string;
+  category?: string;
+  defaultData?: any;
 }
 
 export interface ComponentCategory {
   title: string;
   color: string;
   components: ComponentType[];
+  description?: string;
+}
+
+export interface ComponentCategories {
+  [key: string]: ComponentCategory;
 }
 
 export interface ComponentInstance {
@@ -30,6 +37,17 @@ export interface EditorComponent {
   defaultProps: Record<string, any>;
 }
 
+export interface EditorState {
+  isDragging: boolean;
+  dragOverIndex: number | null;
+  selectedComponentId: string | null;
+  currentPageIndex: number;
+  deviceView: 'mobile' | 'tablet' | 'desktop';
+  activeTab: 'editor' | 'funis' | 'historico' | 'config';
+  activeConfigSection: string;
+  isPreviewMode: boolean;
+}
+
 export interface Version {
   id: string;
   timestamp: number;
@@ -44,4 +62,11 @@ export interface VersionChange {
   component?: string;
   page?: string;
   description: string;
+}
+
+export interface VersionMetadata {
+  currentVersion: number;
+  totalVersions: number;
+  lastSavedAt: string;
+  autoSaveInterval: number;
 }
