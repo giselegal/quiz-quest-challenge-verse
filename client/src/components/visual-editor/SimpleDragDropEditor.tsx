@@ -5284,7 +5284,7 @@ const SimpleDragDropEditor: React.FC = () => {
   };
 
   return (
-    <div className="h-screen flex bg-background simple-editor">
+    <><div className="h-screen flex bg-background simple-editor">
       {/* COLUNA 1: ETAPAS REAIS DO FUNIL - 260px */}
       <div className="w-[260px] min-w-[260px] border-r bg-slate-50 overflow-hidden flex flex-col">
         <div className="p-3 border-b bg-slate-100">
@@ -5292,7 +5292,7 @@ const SimpleDragDropEditor: React.FC = () => {
             🎯 ETAPAS REAIS DO FUNIL
           </h2>
           <p className="text-xs text-gray-600 mb-2">Mapeadas do /quiz funcionante</p>
-          
+
           {/* Botão para o novo editor modular */}
           <Button
             size="sm"
@@ -5354,15 +5354,12 @@ const SimpleDragDropEditor: React.FC = () => {
                 <Label className="text-xs">Nome do Funil</Label>
                 <Input
                   value={currentFunnel.name}
-                  onChange={(e) =>
-                    setCurrentFunnel((prev) => ({
-                      ...prev,
-                      name: e.target.value,
-                    }))
-                  }
+                  onChange={(e) => setCurrentFunnel((prev) => ({
+                    ...prev,
+                    name: e.target.value,
+                  }))}
                   className="mt-1 text-sm h-8"
-                  placeholder="Nome do seu quiz"
-                />
+                  placeholder="Nome do seu quiz" />
               </div>
             </>
           )}
@@ -5557,7 +5554,7 @@ const SimpleDragDropEditor: React.FC = () => {
               <h4 className="text-xs font-medium text-gray-700 mb-2">
                 FLUXO REAL DO QUIZ
               </h4>
-              
+
               {REAL_FUNNEL_STEPS.map((step, index) => (
                 <div key={step.id} className="relative">
                   <Button
@@ -5576,7 +5573,7 @@ const SimpleDragDropEditor: React.FC = () => {
                           pages: updatedPages
                         }));
                       }
-                    }}
+                    } }
                   >
                     <div className="flex items-center gap-2 w-full">
                       <Badge
@@ -5601,7 +5598,7 @@ const SimpleDragDropEditor: React.FC = () => {
                       </div>
                     </div>
                   </Button>
-                  
+
                   {/* Indicador de estado/props */}
                   <div className="ml-8 mt-1 text-xs text-gray-500 truncate">
                     🔧 {step.state}
@@ -5609,7 +5606,7 @@ const SimpleDragDropEditor: React.FC = () => {
                 </div>
               ))}
             </div>
-            
+
             {/* Botão para carregar todas as etapas */}
             <div className="pt-2 border-t">
               <Button
@@ -5628,1487 +5625,1485 @@ const SimpleDragDropEditor: React.FC = () => {
                     title: "✅ Funil Real Carregado!",
                     description: `${REAL_FUNNEL_STEPS.length} etapas funcionais criadas`,
                   });
-                }}
+                } }
               >
                 📥 CARREGAR TODAS AS ETAPAS
               </Button>
             </div>
-        </ScrollArea>
+          </></ScrollArea>
       </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="justify-start h-8 text-xs"
-                  onClick={() => {
-                    const introPage = {
-                      id: "quiz-intro",
-                      title: "Descubra Seu Estilo Pessoal",
-                      type: "intro" as const,
-                      progress: 0,
-                      showHeader: false,
-                      showProgress: false,
-                      components: [
-                        {
-                          id: "header-logo",
-                          type: "logo" as const,
-                          data: {
-                            src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
-                            alt: "Gisele Galvão - Consultoria de Estilo",
-                            width: 200,
-                            height: 80
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "2rem",
-                            display: "block",
-                            margin: "0 auto 2rem"
-                          }
-                        },
-                        {
-                          id: "progress-bar",
-                          type: "progress" as const,
-                          data: {
-                            progressValue: 0,
-                            showPercentage: false,
-                            color: "#D4AF37",
-                            backgroundColor: "#f0f0f0",
-                            height: "8px"
-                          },
-                          style: {
-                            maxWidth: "600px",
-                            margin: "0 auto 3rem",
-                            borderRadius: "4px"
-                          }
-                        },
-                        {
-                          id: "intro-title",
-                          type: "title" as const,
-                          data: { 
-                            text: "Teste de Estilo Pessoal",
-                            fontSize: "2.8rem",
-                            fontWeight: "400",
-                            color: "#2c2c2c",
-                            fontFamily: "Georgia, serif"
-                          },
-                          style: { 
-                            textAlign: "center" as const,
-                            marginBottom: "3rem",
-                            letterSpacing: "-0.02em"
-                          }
-                        },
-                        {
-                          id: "hero-image",
-                          type: "image" as const,
-                          data: {
-                            src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.jpg",
-                            alt: "Grupo de mulheres estilosas",
-                            width: 600,
-                            height: 300
-                          },
-                          style: {
-                            borderRadius: "16px",
-                            border: "3px dashed #D4AF37",
-                            padding: "1rem",
-                            backgroundColor: "#fafafa",
-                            margin: "0 auto 3rem",
-                            display: "block",
-                            maxWidth: "600px"
-                          }
-                        },
-                        {
-                          id: "name-label",
-                          type: "text" as const,
-                          data: {
-                            text: "NOME*",
-                            fontSize: "0.9rem",
-                            fontWeight: "600",
-                            color: "#666",
-                            letterSpacing: "0.05em"
-                          },
-                          style: {
-                            textAlign: "left" as const,
-                            marginBottom: "0.5rem",
-                            maxWidth: "400px",
-                            margin: "0 auto 0.5rem"
-                          }
-                        },
-                        {
-                          id: "intro-input",
-                          type: "input" as const,
-                          data: {
-                            placeholder: "Digite seu nome aqui...",
-                            required: true,
-                            type: "text"
-                          },
-                          style: {
-                            maxWidth: "400px",
-                            margin: "0 auto 2rem auto",
-                            padding: "1rem",
-                            borderRadius: "8px",
-                            border: "1px solid #ddd",
-                            backgroundColor: "#f8f8f8",
-                            fontSize: "1rem",
-                            color: "#333"
-                          }
-                        },
-                        {
-                          id: "intro-button",
-                          type: "button" as const,
-                          data: {
-                            text: "Continuar",
-                            variant: "primary"
-                          },
-                          style: {
-                            backgroundColor: "#D4AF37",
-                            color: "white",
-                            padding: "1rem 3rem",
-                            borderRadius: "8px",
-                            fontSize: "1.1rem",
-                            fontWeight: "500",
-                            display: "block",
-                            margin: "0 auto",
-                            border: "none",
-                            cursor: "pointer",
-                            minWidth: "200px",
-                            textTransform: "uppercase",
-                            letterSpacing: "0.05em"
-                          }
-                        }
-                      ]
-                    };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, introPage] }));
-                    toast({ title: "✅ QuizIntro configurado!", description: "Página inicial completa adicionada" });
-                  }}
-                >
-                  🏠 QuizIntro (Página Inicial)
-                </Button>
+      <Button
+        variant="outline"
+        size="sm"
+        className="justify-start h-8 text-xs"
+        onClick={() => {
+          const introPage = {
+            id: "quiz-intro",
+            title: "Descubra Seu Estilo Pessoal",
+            type: "intro" as const,
+            progress: 0,
+            showHeader: false,
+            showProgress: false,
+            components: [
+              {
+                id: "header-logo",
+                type: "logo" as const,
+                data: {
+                  src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
+                  alt: "Gisele Galvão - Consultoria de Estilo",
+                  width: 200,
+                  height: 80
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "2rem",
+                  display: "block",
+                  margin: "0 auto 2rem"
+                }
+              },
+              {
+                id: "progress-bar",
+                type: "progress" as const,
+                data: {
+                  progressValue: 0,
+                  showPercentage: false,
+                  color: "#D4AF37",
+                  backgroundColor: "#f0f0f0",
+                  height: "8px"
+                },
+                style: {
+                  maxWidth: "600px",
+                  margin: "0 auto 3rem",
+                  borderRadius: "4px"
+                }
+              },
+              {
+                id: "intro-title",
+                type: "title" as const,
+                data: {
+                  text: "Teste de Estilo Pessoal",
+                  fontSize: "2.8rem",
+                  fontWeight: "400",
+                  color: "#2c2c2c",
+                  fontFamily: "Georgia, serif"
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "3rem",
+                  letterSpacing: "-0.02em"
+                }
+              },
+              {
+                id: "hero-image",
+                type: "image" as const,
+                data: {
+                  src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.jpg",
+                  alt: "Grupo de mulheres estilosas",
+                  width: 600,
+                  height: 300
+                },
+                style: {
+                  borderRadius: "16px",
+                  border: "3px dashed #D4AF37",
+                  padding: "1rem",
+                  backgroundColor: "#fafafa",
+                  margin: "0 auto 3rem",
+                  display: "block",
+                  maxWidth: "600px"
+                }
+              },
+              {
+                id: "name-label",
+                type: "text" as const,
+                data: {
+                  text: "NOME*",
+                  fontSize: "0.9rem",
+                  fontWeight: "600",
+                  color: "#666",
+                  letterSpacing: "0.05em"
+                },
+                style: {
+                  textAlign: "left" as const,
+                  marginBottom: "0.5rem",
+                  maxWidth: "400px",
+                  margin: "0 auto 0.5rem"
+                }
+              },
+              {
+                id: "intro-input",
+                type: "input" as const,
+                data: {
+                  placeholder: "Digite seu nome aqui...",
+                  required: true,
+                  type: "text"
+                },
+                style: {
+                  maxWidth: "400px",
+                  margin: "0 auto 2rem auto",
+                  padding: "1rem",
+                  borderRadius: "8px",
+                  border: "1px solid #ddd",
+                  backgroundColor: "#f8f8f8",
+                  fontSize: "1rem",
+                  color: "#333"
+                }
+              },
+              {
+                id: "intro-button",
+                type: "button" as const,
+                data: {
+                  text: "Continuar",
+                  variant: "primary"
+                },
+                style: {
+                  backgroundColor: "#D4AF37",
+                  color: "white",
+                  padding: "1rem 3rem",
+                  borderRadius: "8px",
+                  fontSize: "1.1rem",
+                  fontWeight: "500",
+                  display: "block",
+                  margin: "0 auto",
+                  border: "none",
+                  cursor: "pointer",
+                  minWidth: "200px",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.05em"
+                }
+              }
+            ]
+          };
+          setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, introPage] }));
+          toast({ title: "✅ QuizIntro configurado!", description: "Página inicial completa adicionada" });
+        } }
+      >
+        🏠 QuizIntro (Página Inicial)
+      </Button>
 
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="justify-start h-8 text-xs bg-green-50 border-green-300"
-                  onClick={() => {
-                    const caktoQuizIntroPage = {
-                      id: "cakto-quiz-intro",
-                      title: "Teste de Estilo Pessoal",
-                      type: "intro" as const,
-                      progress: 7.14,
-                      showHeader: true,
-                      showProgress: true,
-                      components: [
-                        {
-                          id: "cakto-logo",
-                          type: "logo" as const,
-                          data: {
-                            src: "https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png",
-                            alt: "Logo",
-                            width: 96,
-                            height: 96
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            maxWidth: "96px",
-                            objectCover: "cover",
-                            marginBottom: "1rem"
-                          }
-                        },
-                        {
-                          id: "cakto-progress",
-                          type: "progress" as const,
-                          data: {
-                            progressValue: 7.14,
-                            showPercentage: false,
-                            color: "hsl(var(--primary))",
-                            backgroundColor: "rgb(212, 212, 216)",
-                            height: 8
-                          },
-                          style: {
-                            width: "100%",
-                            borderRadius: "9999px",
-                            overflow: "hidden",
-                            marginBottom: "1rem"
-                          }
-                        },
-                        {
-                          id: "cakto-title",
-                          type: "title" as const,
-                          data: {
-                            text: "Teste de Estilo Pessoal",
-                            fontSize: "1.875rem",
-                            fontWeight: "700",
-                            color: "inherit"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "1rem",
-                            minWidth: "100%"
-                          }
-                        },
-                        {
-                          id: "cakto-image",
-                          type: "image" as const,
-                          data: {
-                            src: "https://cakto-quiz-br01.b-cdn.net/uploads/ecbe689b-1c0a-4071-98d3-4d391b6dd98f.png",
-                            alt: "Imagem",
-                            width: 640,
-                            height: 480
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            maxWidth: "384px",
-                            margin: "0 auto",
-                            objectCover: "cover",
-                            borderRadius: "0.5rem",
-                            marginBottom: "1rem"
-                          }
-                        },
-                        {
-                          id: "cakto-input",
-                          type: "input" as const,
-                          data: {
-                            label: "NOME *",
-                            placeholder: "Digite seu nome aqui..",
-                            required: true,
-                            type: "text"
-                          },
-                          style: {
-                            width: "100%",
-                            display: "grid",
-                            alignItems: "center",
-                            gap: "0.375rem",
-                            marginBottom: "1rem"
-                          }
-                        },
-                        {
-                          id: "cakto-button",
-                          type: "button" as const,
-                          data: {
-                            text: "Continuar",
-                            variant: "primary"
-                          },
-                          style: {
-                            minWidth: "100%",
-                            height: "3.5rem",
-                            backgroundColor: "hsl(var(--primary))",
-                            color: "hsl(var(--primary-foreground))",
-                            borderRadius: "0.375rem",
-                            padding: "0.5rem 1rem"
-                          }
-                        }
-                      ]
-                    };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, caktoQuizIntroPage] }));
-                    toast({ title: "✅ ETAPA 17 REPLICADA!", description: "Estrutura idêntica ao CaktoQuiz: logo 96x96, progress 7.14%, h1 text-3xl font-bold, imagem max-w-96, input com label NOME *, botão h-14" });
-                  }}
-                >
-                  📱 Tela 1: Entrada do Nome
-                </Button>
+      <Button
+        variant="outline"
+        size="sm"
+        className="justify-start h-8 text-xs bg-green-50 border-green-300"
+        onClick={() => {
+          const caktoQuizIntroPage = {
+            id: "cakto-quiz-intro",
+            title: "Teste de Estilo Pessoal",
+            type: "intro" as const,
+            progress: 7.14,
+            showHeader: true,
+            showProgress: true,
+            components: [
+              {
+                id: "cakto-logo",
+                type: "logo" as const,
+                data: {
+                  src: "https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png",
+                  alt: "Logo",
+                  width: 96,
+                  height: 96
+                },
+                style: {
+                  textAlign: "center" as const,
+                  maxWidth: "96px",
+                  objectCover: "cover",
+                  marginBottom: "1rem"
+                }
+              },
+              {
+                id: "cakto-progress",
+                type: "progress" as const,
+                data: {
+                  progressValue: 7.14,
+                  showPercentage: false,
+                  color: "hsl(var(--primary))",
+                  backgroundColor: "rgb(212, 212, 216)",
+                  height: 8
+                },
+                style: {
+                  width: "100%",
+                  borderRadius: "9999px",
+                  overflow: "hidden",
+                  marginBottom: "1rem"
+                }
+              },
+              {
+                id: "cakto-title",
+                type: "title" as const,
+                data: {
+                  text: "Teste de Estilo Pessoal",
+                  fontSize: "1.875rem",
+                  fontWeight: "700",
+                  color: "inherit"
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "1rem",
+                  minWidth: "100%"
+                }
+              },
+              {
+                id: "cakto-image",
+                type: "image" as const,
+                data: {
+                  src: "https://cakto-quiz-br01.b-cdn.net/uploads/ecbe689b-1c0a-4071-98d3-4d391b6dd98f.png",
+                  alt: "Imagem",
+                  width: 640,
+                  height: 480
+                },
+                style: {
+                  textAlign: "center" as const,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  maxWidth: "384px",
+                  margin: "0 auto",
+                  objectCover: "cover",
+                  borderRadius: "0.5rem",
+                  marginBottom: "1rem"
+                }
+              },
+              {
+                id: "cakto-input",
+                type: "input" as const,
+                data: {
+                  label: "NOME *",
+                  placeholder: "Digite seu nome aqui..",
+                  required: true,
+                  type: "text"
+                },
+                style: {
+                  width: "100%",
+                  display: "grid",
+                  alignItems: "center",
+                  gap: "0.375rem",
+                  marginBottom: "1rem"
+                }
+              },
+              {
+                id: "cakto-button",
+                type: "button" as const,
+                data: {
+                  text: "Continuar",
+                  variant: "primary"
+                },
+                style: {
+                  minWidth: "100%",
+                  height: "3.5rem",
+                  backgroundColor: "hsl(var(--primary))",
+                  color: "hsl(var(--primary-foreground))",
+                  borderRadius: "0.375rem",
+                  padding: "0.5rem 1rem"
+                }
+              }
+            ]
+          };
+          setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, caktoQuizIntroPage] }));
+          toast({ title: "✅ ETAPA 17 REPLICADA!", description: "Estrutura idêntica ao CaktoQuiz: logo 96x96, progress 7.14%, h1 text-3xl font-bold, imagem max-w-96, input com label NOME *, botão h-14" });
+        } }
+      >
+        📱 Tela 1: Entrada do Nome
+      </Button>
 
-                {/* TELA 2: Questão 1 - Roupa Favorita */}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="justify-start h-8 text-xs bg-blue-50 border-blue-300"
-                  onClick={() => {
-                    const q1Screen = {
-                      id: "question-1-screen",
-                      title: "Tela 2: Q1 - Roupa Favorita",
-                      type: "question" as const,
-                      progress: 10,
-                      showHeader: true,
-                      showProgress: true,
-                      components: [
-                        {
-                          id: "q1-title",
-                          type: "title" as const,
-                          data: {
-                            text: "QUAL O SEU TIPO DE ROUPA FAVORITA?",
-                            fontSize: "1.5rem",
-                            fontWeight: "600",
-                            color: "inherit"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "q1-options",
-                          type: "options" as const,
-                          data: {
-                            text: "Selecione até 3 opções:",
-                            maxSelections: 3,
-                            options: [
-                              { id: "opt1", text: "Vestidos elegantes", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_9_mgkdnb.webp", value: "vestidos" },
-                              { id: "opt2", text: "Roupas casuais", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921098/Espanhol_Portugu%C3%AAs_5_cptzyb.webp", value: "casual" },
-                              { id: "opt3", text: "Look profissional", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp", value: "profissional" }
-                            ]
-                          },
-                          style: {
-                            display: "grid",
-                            gap: "1rem",
-                            marginBottom: "2rem"
-                          }
-                        }
-                      ]
-                    };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, q1Screen] }));
-                    toast({ title: "✅ Tela 2 adicionada", description: "Q1: Roupa Favorita" });
-                  }}
-                >
-                  📝 Tela 2: Q1 - Roupa Favorita
-                </Button>
+      {/* TELA 2: Questão 1 - Roupa Favorita */}
+      <Button
+        variant="outline"
+        size="sm"
+        className="justify-start h-8 text-xs bg-blue-50 border-blue-300"
+        onClick={() => {
+          const q1Screen = {
+            id: "question-1-screen",
+            title: "Tela 2: Q1 - Roupa Favorita",
+            type: "question" as const,
+            progress: 10,
+            showHeader: true,
+            showProgress: true,
+            components: [
+              {
+                id: "q1-title",
+                type: "title" as const,
+                data: {
+                  text: "QUAL O SEU TIPO DE ROUPA FAVORITA?",
+                  fontSize: "1.5rem",
+                  fontWeight: "600",
+                  color: "inherit"
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "2rem"
+                }
+              },
+              {
+                id: "q1-options",
+                type: "options" as const,
+                data: {
+                  text: "Selecione até 3 opções:",
+                  maxSelections: 3,
+                  options: [
+                    { id: "opt1", text: "Vestidos elegantes", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_9_mgkdnb.webp", value: "vestidos" },
+                    { id: "opt2", text: "Roupas casuais", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921098/Espanhol_Portugu%C3%AAs_5_cptzyb.webp", value: "casual" },
+                    { id: "opt3", text: "Look profissional", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp", value: "profissional" }
+                  ]
+                },
+                style: {
+                  display: "grid",
+                  gap: "1rem",
+                  marginBottom: "2rem"
+                }
+              }
+            ]
+          };
+          setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, q1Screen] }));
+          toast({ title: "✅ Tela 2 adicionada", description: "Q1: Roupa Favorita" });
+        } }
+      >
+        📝 Tela 2: Q1 - Roupa Favorita
+      </Button>
 
-                {/* TELAS 3-11: Questões 2-10 (Exemplo para Q2) */}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="justify-start h-8 text-xs bg-blue-50 border-blue-300"
-                  onClick={() => {
-                    const q2Screen = {
-                      id: "question-2-screen",
-                      title: "Tela 3: Q2 - Personalidade",
-                      type: "question" as const,
-                      progress: 20,
-                      showHeader: true,
-                      showProgress: true,
-                      components: [
-                        {
-                          id: "q2-title",
-                          type: "title" as const,
-                          data: {
-                            text: "Como você descreveria sua personalidade?",
-                            fontSize: "1.5rem",
-                            fontWeight: "600",
-                            color: "inherit"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "q2-options",
-                          type: "options" as const,
-                          data: {
-                            text: "Selecione até 3 opções:",
-                            maxSelections: 3,
-                            options: [
-                              { id: "opt1", text: "Confiante", imageUrl: "", value: "confiante" },
-                              { id: "opt2", text: "Criativa", imageUrl: "", value: "criativa" },
-                              { id: "opt3", text: "Elegante", imageUrl: "", value: "elegante" },
-                              { id: "opt4", text: "Descontraída", imageUrl: "", value: "descontraida" }
-                            ]
-                          },
-                          style: {
-                            display: "grid",
-                            gap: "1rem",
-                            marginBottom: "2rem"
-                          }
-                        }
-                      ]
-                    };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, q2Screen] }));
-                    toast({ title: "✅ Tela 3 adicionada", description: "Q2: Personalidade" });
-                  }}
-                >
-                  📝 Tela 3: Q2 - Personalidade
-                </Button>
+      {/* TELAS 3-11: Questões 2-10 (Exemplo para Q2) */}
+      <Button
+        variant="outline"
+        size="sm"
+        className="justify-start h-8 text-xs bg-blue-50 border-blue-300"
+        onClick={() => {
+          const q2Screen = {
+            id: "question-2-screen",
+            title: "Tela 3: Q2 - Personalidade",
+            type: "question" as const,
+            progress: 20,
+            showHeader: true,
+            showProgress: true,
+            components: [
+              {
+                id: "q2-title",
+                type: "title" as const,
+                data: {
+                  text: "Como você descreveria sua personalidade?",
+                  fontSize: "1.5rem",
+                  fontWeight: "600",
+                  color: "inherit"
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "2rem"
+                }
+              },
+              {
+                id: "q2-options",
+                type: "options" as const,
+                data: {
+                  text: "Selecione até 3 opções:",
+                  maxSelections: 3,
+                  options: [
+                    { id: "opt1", text: "Confiante", imageUrl: "", value: "confiante" },
+                    { id: "opt2", text: "Criativa", imageUrl: "", value: "criativa" },
+                    { id: "opt3", text: "Elegante", imageUrl: "", value: "elegante" },
+                    { id: "opt4", text: "Descontraída", imageUrl: "", value: "descontraida" }
+                  ]
+                },
+                style: {
+                  display: "grid",
+                  gap: "1rem",
+                  marginBottom: "2rem"
+                }
+              }
+            ]
+          };
+          setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, q2Screen] }));
+          toast({ title: "✅ Tela 3 adicionada", description: "Q2: Personalidade" });
+        } }
+      >
+        📝 Tela 3: Q2 - Personalidade
+      </Button>
 
-                {/* Botão para adicionar todas as 10 questões normais */}
-                <Button
-                  variant="default"
-                  size="sm"
-                  className="justify-start h-8 text-xs bg-blue-600 hover:bg-blue-700 text-white"
-                  onClick={() => {
-                    const questionTitles = [
-                      "QUAL O SEU TIPO DE ROUPA FAVORITA?",
-                      "Como você descreveria sua personalidade?",
-                      "Qual visual você mais admira?",
-                      "Quais detalhes chamam sua atenção?",
-                      "Que tipo de estampas você prefere?",
-                      "Qual casaco/jaqueta combina com você?",
-                      "Que estilo de calça você usa mais?",
-                      "Que tipo de sapato você escolheria?",
-                      "Quais acessórios você mais usa?",
-                      "Que tipo de tecido você prefere?"
-                    ];
+      {/* Botão para adicionar todas as 10 questões normais */}
+      <Button
+        variant="default"
+        size="sm"
+        className="justify-start h-8 text-xs bg-blue-600 hover:bg-blue-700 text-white"
+        onClick={() => {
+          const questionTitles = [
+            "QUAL O SEU TIPO DE ROUPA FAVORITA?",
+            "Como você descreveria sua personalidade?",
+            "Qual visual você mais admira?",
+            "Quais detalhes chamam sua atenção?",
+            "Que tipo de estampas você prefere?",
+            "Qual casaco/jaqueta combina com você?",
+            "Que estilo de calça você usa mais?",
+            "Que tipo de sapato você escolheria?",
+            "Quais acessórios você mais usa?",
+            "Que tipo de tecido você prefere?"
+          ];
 
-                    const questionScreens = questionTitles.map((title, index) => ({
-                      id: `question-${index + 1}-screen`,
-                      title: `Tela ${index + 2}: Q${index + 1} - ${title.split(' ')[0]}`,
-                      type: "question" as const,
-                      progress: (index + 1) * 10,
-                      showHeader: true,
-                      showProgress: true,
-                      components: [
-                        {
-                          id: `q${index + 1}-title`,
-                          type: "title" as const,
-                          data: {
-                            text: title,
-                            fontSize: "1.5rem",
-                            fontWeight: "600",
-                            color: "inherit"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: `q${index + 1}-options`,
-                          type: "options" as const,
-                          data: {
-                            text: "Selecione até 3 opções:",
-                            maxSelections: 3,
-                            options: [
-                              { id: "opt1", text: `Opção 1 - Q${index + 1}`, imageUrl: "", value: `option1_q${index + 1}` },
-                              { id: "opt2", text: `Opção 2 - Q${index + 1}`, imageUrl: "", value: `option2_q${index + 1}` },
-                              { id: "opt3", text: `Opção 3 - Q${index + 1}`, imageUrl: "", value: `option3_q${index + 1}` }
-                            ]
-                          },
-                          style: {
-                            display: "grid",
-                            gap: "1rem",
-                            marginBottom: "2rem"
-                          }
-                        }
-                      ]
-                    }));
+          const questionScreens = questionTitles.map((title, index) => ({
+            id: `question-${index + 1}-screen`,
+            title: `Tela ${index + 2}: Q${index + 1} - ${title.split(' ')[0]}`,
+            type: "question" as const,
+            progress: (index + 1) * 10,
+            showHeader: true,
+            showProgress: true,
+            components: [
+              {
+                id: `q${index + 1}-title`,
+                type: "title" as const,
+                data: {
+                  text: title,
+                  fontSize: "1.5rem",
+                  fontWeight: "600",
+                  color: "inherit"
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "2rem"
+                }
+              },
+              {
+                id: `q${index + 1}-options`,
+                type: "options" as const,
+                data: {
+                  text: "Selecione até 3 opções:",
+                  maxSelections: 3,
+                  options: [
+                    { id: "opt1", text: `Opção 1 - Q${index + 1}`, imageUrl: "", value: `option1_q${index + 1}` },
+                    { id: "opt2", text: `Opção 2 - Q${index + 1}`, imageUrl: "", value: `option2_q${index + 1}` },
+                    { id: "opt3", text: `Opção 3 - Q${index + 1}`, imageUrl: "", value: `option3_q${index + 1}` }
+                  ]
+                },
+                style: {
+                  display: "grid",
+                  gap: "1rem",
+                  marginBottom: "2rem"
+                }
+              }
+            ]
+          }));
 
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, ...questionScreens] }));
-                    toast({ title: "✅ Questões 1-10 adicionadas", description: "10 telas de questões normais criadas" });
-                  }}
-                >
-                  📝 + Todas as Questões (Q1-Q10)
-                </Button>
+          setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, ...questionScreens] }));
+          toast({ title: "✅ Questões 1-10 adicionadas", description: "10 telas de questões normais criadas" });
+        } }
+      >
+        📝 + Todas as Questões (Q1-Q10)
+      </Button>
 
-                {/* TELA 12: Transição */}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="justify-start h-8 text-xs bg-yellow-50 border-yellow-300"
-                  onClick={() => {
-                    const transitionScreen = {
-                      id: "transition-screen",
-                      title: "Tela 12: Transição",
-                      type: "transition" as const,
-                      progress: 65,
-                      showHeader: true,
-                      showProgress: true,
-                      components: [
-                        {
-                          id: "transition-title",
-                          type: "title" as const,
-                          data: {
-                            text: "Agora vamos descobrir mais sobre você...",
-                            fontSize: "1.5rem",
-                            fontWeight: "600",
-                            color: "inherit"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "transition-subtitle",
-                          type: "subtitle" as const,
-                          data: {
-                            text: "Estas próximas perguntas nos ajudarão a personalizar ainda mais seu resultado",
-                            fontSize: "1rem",
-                            color: "#666"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "continue-button",
-                          type: "button" as const,
-                          data: {
-                            text: "Continuar",
-                            variant: "primary"
-                          },
-                          style: {
-                            width: "100%",
-                            height: "3rem",
-                            backgroundColor: "hsl(var(--primary))",
-                            color: "hsl(var(--primary-foreground))"
-                          }
-                        }
-                      ]
-                    };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, transitionScreen] }));
-                    toast({ title: "✅ Tela 12 adicionada", description: "Transição entre questões normais e estratégicas" });
-                  }}
-                >
-                  🔄 Tela 12: Transição
-                </Button>
+      {/* TELA 12: Transição */}
+      <Button
+        variant="outline"
+        size="sm"
+        className="justify-start h-8 text-xs bg-yellow-50 border-yellow-300"
+        onClick={() => {
+          const transitionScreen = {
+            id: "transition-screen",
+            title: "Tela 12: Transição",
+            type: "transition" as const,
+            progress: 65,
+            showHeader: true,
+            showProgress: true,
+            components: [
+              {
+                id: "transition-title",
+                type: "title" as const,
+                data: {
+                  text: "Agora vamos descobrir mais sobre você...",
+                  fontSize: "1.5rem",
+                  fontWeight: "600",
+                  color: "inherit"
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "2rem"
+                }
+              },
+              {
+                id: "transition-subtitle",
+                type: "subtitle" as const,
+                data: {
+                  text: "Estas próximas perguntas nos ajudarão a personalizar ainda mais seu resultado",
+                  fontSize: "1rem",
+                  color: "#666"
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "2rem"
+                }
+              },
+              {
+                id: "continue-button",
+                type: "button" as const,
+                data: {
+                  text: "Continuar",
+                  variant: "primary"
+                },
+                style: {
+                  width: "100%",
+                  height: "3rem",
+                  backgroundColor: "hsl(var(--primary))",
+                  color: "hsl(var(--primary-foreground))"
+                }
+              }
+            ]
+          };
+          setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, transitionScreen] }));
+          toast({ title: "✅ Tela 12 adicionada", description: "Transição entre questões normais e estratégicas" });
+        } }
+      >
+        🔄 Tela 12: Transição
+      </Button>
 
-                {/* TELAS 13-18: Questões Estratégicas */}
-                <Button
-                  variant="default"
-                  size="sm"
-                  className="justify-start h-8 text-xs bg-purple-600 hover:bg-purple-700 text-white"
-                  onClick={() => {
-                    const strategicTitles = [
-                      "Como você se vê hoje em relação ao seu estilo?",
-                      "Quais são seus principais desafios ao se vestir?",
-                      "Com que frequência você fica indecisa sobre o que vestir?",
-                      "Você teria interesse em receber um material personalizado sobre seu estilo?",
-                      "Quanto você investiria em um guia completo de estilo por R$97?",
-                      "Que tipo de resultado você espera alcançar?"
-                    ];
+      {/* TELAS 13-18: Questões Estratégicas */}
+      <Button
+        variant="default"
+        size="sm"
+        className="justify-start h-8 text-xs bg-purple-600 hover:bg-purple-700 text-white"
+        onClick={() => {
+          const strategicTitles = [
+            "Como você se vê hoje em relação ao seu estilo?",
+            "Quais são seus principais desafios ao se vestir?",
+            "Com que frequência você fica indecisa sobre o que vestir?",
+            "Você teria interesse em receber um material personalizado sobre seu estilo?",
+            "Quanto você investiria em um guia completo de estilo por R$97?",
+            "Que tipo de resultado você espera alcançar?"
+          ];
 
-                    const strategicScreens = strategicTitles.map((title, index) => ({
-                      id: `strategic-${index + 1}-screen`,
-                      title: `Tela ${13 + index}: E${index + 1} - Estratégica`,
-                      type: "question" as const,
-                      progress: 70 + (index * 3),
-                      showHeader: true,
-                      showProgress: true,
-                      components: [
-                        {
-                          id: `e${index + 1}-title`,
-                          type: "title" as const,
-                          data: {
-                            text: title,
-                            fontSize: "1.5rem",
-                            fontWeight: "600",
-                            color: "inherit"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: `e${index + 1}-options`,
-                          type: "options" as const,
-                          data: {
-                            text: "Selecione uma opção:",
-                            maxSelections: 1,
-                            options: [
-                              { id: "opt1", text: `Resposta 1 - E${index + 1}`, imageUrl: "", value: `answer1_e${index + 1}` },
-                              { id: "opt2", text: `Resposta 2 - E${index + 1}`, imageUrl: "", value: `answer2_e${index + 1}` },
-                              { id: "opt3", text: `Resposta 3 - E${index + 1}`, imageUrl: "", value: `answer3_e${index + 1}` }
-                            ]
-                          },
-                          style: {
-                            display: "grid",
-                            gap: "1rem",
-                            marginBottom: "2rem"
-                          }
-                        }
-                      ]
-                    }));
+          const strategicScreens = strategicTitles.map((title, index) => ({
+            id: `strategic-${index + 1}-screen`,
+            title: `Tela ${13 + index}: E${index + 1} - Estratégica`,
+            type: "question" as const,
+            progress: 70 + (index * 3),
+            showHeader: true,
+            showProgress: true,
+            components: [
+              {
+                id: `e${index + 1}-title`,
+                type: "title" as const,
+                data: {
+                  text: title,
+                  fontSize: "1.5rem",
+                  fontWeight: "600",
+                  color: "inherit"
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "2rem"
+                }
+              },
+              {
+                id: `e${index + 1}-options`,
+                type: "options" as const,
+                data: {
+                  text: "Selecione uma opção:",
+                  maxSelections: 1,
+                  options: [
+                    { id: "opt1", text: `Resposta 1 - E${index + 1}`, imageUrl: "", value: `answer1_e${index + 1}` },
+                    { id: "opt2", text: `Resposta 2 - E${index + 1}`, imageUrl: "", value: `answer2_e${index + 1}` },
+                    { id: "opt3", text: `Resposta 3 - E${index + 1}`, imageUrl: "", value: `answer3_e${index + 1}` }
+                  ]
+                },
+                style: {
+                  display: "grid",
+                  gap: "1rem",
+                  marginBottom: "2rem"
+                }
+              }
+            ]
+          }));
 
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, ...strategicScreens] }));
-                    toast({ title: "✅ Questões Estratégicas adicionadas", description: "6 telas de questões estratégicas criadas" });
-                  }}
-                >
-                  🎯 + Questões Estratégicas (E1-E6)
-                </Button>
+          setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, ...strategicScreens] }));
+          toast({ title: "✅ Questões Estratégicas adicionadas", description: "6 telas de questões estratégicas criadas" });
+        } }
+      >
+        🎯 + Questões Estratégicas (E1-E6)
+      </Button>
 
-                {/* TELA 19: Loading */}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="justify-start h-8 text-xs bg-gray-50 border-gray-300"
-                  onClick={() => {
-                    const loadingScreen = {
-                      id: "loading-screen",
-                      title: "Tela 19: Loading",
-                      type: "loading" as const,
-                      progress: 95,
-                      showHeader: true,
-                      showProgress: true,
-                      components: [
-                        {
-                          id: "loading-title",
-                          type: "title" as const,
-                          data: {
-                            text: "Calculando seu resultado...",
-                            fontSize: "1.5rem",
-                            fontWeight: "600",
-                            color: "inherit"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "loading-progress",
-                          type: "progress" as const,
-                          data: {
-                            progressValue: 95,
-                            showPercentage: true,
-                            color: "hsl(var(--primary))",
-                            backgroundColor: "rgb(212, 212, 216)",
-                            height: 8
-                          },
-                          style: {
-                            width: "100%",
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "loading-text",
-                          type: "text" as const,
-                          data: {
-                            text: "Analisando suas respostas e definindo seu estilo personalizado...",
-                            fontSize: "1rem",
-                            color: "#666"
-                          },
-                          style: {
-                            textAlign: "center" as const
-                          }
-                        }
-                      ]
-                    };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, loadingScreen] }));
-                    toast({ title: "✅ Tela 19 adicionada", description: "Loading - Calculando resultado" });
-                  }}
-                >
-                  ⏳ Tela 19: Loading
-                </Button>
+      {/* TELA 19: Loading */}
+      <Button
+        variant="outline"
+        size="sm"
+        className="justify-start h-8 text-xs bg-gray-50 border-gray-300"
+        onClick={() => {
+          const loadingScreen = {
+            id: "loading-screen",
+            title: "Tela 19: Loading",
+            type: "loading" as const,
+            progress: 95,
+            showHeader: true,
+            showProgress: true,
+            components: [
+              {
+                id: "loading-title",
+                type: "title" as const,
+                data: {
+                  text: "Calculando seu resultado...",
+                  fontSize: "1.5rem",
+                  fontWeight: "600",
+                  color: "inherit"
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "2rem"
+                }
+              },
+              {
+                id: "loading-progress",
+                type: "progress" as const,
+                data: {
+                  progressValue: 95,
+                  showPercentage: true,
+                  color: "hsl(var(--primary))",
+                  backgroundColor: "rgb(212, 212, 216)",
+                  height: 8
+                },
+                style: {
+                  width: "100%",
+                  marginBottom: "2rem"
+                }
+              },
+              {
+                id: "loading-text",
+                type: "text" as const,
+                data: {
+                  text: "Analisando suas respostas e definindo seu estilo personalizado...",
+                  fontSize: "1rem",
+                  color: "#666"
+                },
+                style: {
+                  textAlign: "center" as const
+                }
+              }
+            ]
+          };
+          setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, loadingScreen] }));
+          toast({ title: "✅ Tela 19 adicionada", description: "Loading - Calculando resultado" });
+        } }
+      >
+        ⏳ Tela 19: Loading
+      </Button>
 
-                {/* TELA 20: Resultado */}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="justify-start h-8 text-xs bg-green-50 border-green-300"
-                  onClick={() => {
-                    const resultScreen = {
-                      id: "result-screen",
-                      title: "Tela 20: Resultado",
-                      type: "result" as const,
-                      progress: 100,
-                      showHeader: true,
-                      showProgress: false,
-                      components: [
-                        {
-                          id: "result-title",
-                          type: "title" as const,
-                          data: {
-                            text: "Seu Estilo Personalizado",
-                            fontSize: "2rem",
-                            fontWeight: "700",
-                            color: "inherit"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "style-result",
-                          type: "subtitle" as const,
-                          data: {
-                            text: "Natural Autêntica",
-                            fontSize: "1.5rem",
-                            color: "hsl(var(--primary))"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "result-description",
-                          type: "text" as const,
-                          data: {
-                            text: "Seu estilo reflete autenticidade e naturalidade. Você prefere peças confortáveis que expressam sua personalidade verdadeira.",
-                            fontSize: "1rem",
-                            color: "#666"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "cta-button",
-                          type: "button" as const,
-                          data: {
-                            text: "Ver Guia Completo",
-                            variant: "primary"
-                          },
-                          style: {
-                            width: "100%",
-                            height: "3.5rem",
-                            backgroundColor: "hsl(var(--primary))",
-                            color: "hsl(var(--primary-foreground))"
-                          }
-                        }
-                      ]
-                    };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, resultScreen] }));
-                    toast({ title: "✅ Tela 20 adicionada", description: "Resultado - Página /resultado" });
-                  }}
-                >
-                  🎉 Tela 20: Resultado
-                </Button>
+      {/* TELA 20: Resultado */}
+      <Button
+        variant="outline"
+        size="sm"
+        className="justify-start h-8 text-xs bg-green-50 border-green-300"
+        onClick={() => {
+          const resultScreen = {
+            id: "result-screen",
+            title: "Tela 20: Resultado",
+            type: "result" as const,
+            progress: 100,
+            showHeader: true,
+            showProgress: false,
+            components: [
+              {
+                id: "result-title",
+                type: "title" as const,
+                data: {
+                  text: "Seu Estilo Personalizado",
+                  fontSize: "2rem",
+                  fontWeight: "700",
+                  color: "inherit"
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "2rem"
+                }
+              },
+              {
+                id: "style-result",
+                type: "subtitle" as const,
+                data: {
+                  text: "Natural Autêntica",
+                  fontSize: "1.5rem",
+                  color: "hsl(var(--primary))"
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "2rem"
+                }
+              },
+              {
+                id: "result-description",
+                type: "text" as const,
+                data: {
+                  text: "Seu estilo reflete autenticidade e naturalidade. Você prefere peças confortáveis que expressam sua personalidade verdadeira.",
+                  fontSize: "1rem",
+                  color: "#666"
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "2rem"
+                }
+              },
+              {
+                id: "cta-button",
+                type: "button" as const,
+                data: {
+                  text: "Ver Guia Completo",
+                  variant: "primary"
+                },
+                style: {
+                  width: "100%",
+                  height: "3.5rem",
+                  backgroundColor: "hsl(var(--primary))",
+                  color: "hsl(var(--primary-foreground))"
+                }
+              }
+            ]
+          };
+          setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, resultScreen] }));
+          toast({ title: "✅ Tela 20 adicionada", description: "Resultado - Página /resultado" });
+        } }
+      >
+        🎉 Tela 20: Resultado
+      </Button>
 
-                {/* TELA 21: Oferta/Upsell */}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="justify-start h-8 text-xs bg-orange-50 border-orange-300"
-                  onClick={() => {
-                    const offerScreen = {
-                      id: "offer-screen",
-                      title: "Tela 21: Oferta/Upsell",
-                      type: "offer" as const,
-                      progress: 100,
-                      showHeader: true,
-                      showProgress: false,
-                      components: [
-                        {
-                          id: "offer-title",
-                          type: "title" as const,
-                          data: {
-                            text: "Guia Completo de Estilo Personalizado",
-                            fontSize: "2rem",
-                            fontWeight: "700",
-                            color: "inherit"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "offer-price",
-                          type: "price" as const,
-                          data: {
-                            price: "97",
-                            currency: "R$",
-                            originalPrice: "197",
-                            discount: "50%"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "offer-cta",
-                          type: "button" as const,
-                          data: {
-                            text: "Garantir Meu Guia Agora",
-                            variant: "primary"
-                          },
-                          style: {
-                            width: "100%",
-                            height: "3.5rem",
-                            backgroundColor: "hsl(var(--primary))",
-                            color: "hsl(var(--primary-foreground))"
-                          }
-                        }
-                      ]
-                    };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, offerScreen] }));
-                    toast({ title: "✅ Tela 21 adicionada", description: "Oferta/Upsell - Página de venda" });
-                  }}
-                >
-                  💰 Tela 21: Oferta/Upsell
-                </Button>
+      {/* TELA 21: Oferta/Upsell */}
+      <Button
+        variant="outline"
+        size="sm"
+        className="justify-start h-8 text-xs bg-orange-50 border-orange-300"
+        onClick={() => {
+          const offerScreen = {
+            id: "offer-screen",
+            title: "Tela 21: Oferta/Upsell",
+            type: "offer" as const,
+            progress: 100,
+            showHeader: true,
+            showProgress: false,
+            components: [
+              {
+                id: "offer-title",
+                type: "title" as const,
+                data: {
+                  text: "Guia Completo de Estilo Personalizado",
+                  fontSize: "2rem",
+                  fontWeight: "700",
+                  color: "inherit"
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "2rem"
+                }
+              },
+              {
+                id: "offer-price",
+                type: "price" as const,
+                data: {
+                  price: "97",
+                  currency: "R$",
+                  originalPrice: "197",
+                  discount: "50%"
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "2rem"
+                }
+              },
+              {
+                id: "offer-cta",
+                type: "button" as const,
+                data: {
+                  text: "Garantir Meu Guia Agora",
+                  variant: "primary"
+                },
+                style: {
+                  width: "100%",
+                  height: "3.5rem",
+                  backgroundColor: "hsl(var(--primary))",
+                  color: "hsl(var(--primary-foreground))"
+                }
+              }
+            ]
+          };
+          setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, offerScreen] }));
+          toast({ title: "✅ Tela 21 adicionada", description: "Oferta/Upsell - Página de venda" });
+        } }
+      >
+        💰 Tela 21: Oferta/Upsell
+      </Button>
 
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="justify-start h-8 text-xs"
-                  onClick={() => {
-                    const questionsPage = {
-                      id: "quiz-questions",
-                      title: "QUAL O SEU TIPO DE ROUPA FAVORITA?",
-                      type: "question" as const,
-                      progress: 50,
-                      showHeader: true,
-                      showProgress: true,
-                      components: [
-                        {
-                          id: "question-title",
-                          type: "title" as const,
-                          data: { 
-                            text: "QUAL O SEU TIPO DE ROUPA FAVORITA?",
-                            fontSize: "1.8rem",
-                            fontWeight: "600",
-                            color: "#432818"
-                          },
-                          style: { 
-                            textAlign: "center" as const,
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "question-subtitle",
-                          type: "subtitle" as const,
-                          data: { 
-                            text: "Escolha até 3 opções que mais combinam com você",
-                            fontSize: "1rem",
-                            color: "#8F7A6A"
-                          },
-                          style: { 
-                            textAlign: "center" as const,
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "question-options",
-                          type: "options" as const,
-                          data: {
-                            multiSelect: true,
-                            maxSelections: 3,
-                            hasImages: true,
-                            layoutType: "grid-2x3",
-                            showBorders: true,
-                            borderStyle: "dashed",
-                            borderColor: "#B89B7A",
-                            borderWidth: "2px",
-                            borderRadius: "12px",
-                            imageAspectRatio: "3:4",
-                            textPosition: "bottom",
-                            hoverEffect: "scale",
-                            selectionStyle: "highlight",
-                            options: [
-                              {
-                                id: "1a",
-                                text: "A) Amo roupas confortáveis e práticas para o dia a dia.",
-                                image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
-                                value: "natural",
-                                category: "Natural",
-                                points: { natural: 3, classico: 0, contemporaneo: 1, elegante: 0, romantico: 0, criativo: 0 }
-                              },
-                              {
-                                id: "1b", 
-                                text: "B) Prefiro peças discretas, clássicas e atemporais.",
-                                image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
-                                value: "classico",
-                                category: "Clássico",
-                                points: { natural: 0, classico: 3, contemporaneo: 1, elegante: 2, romantico: 0, criativo: 0 }
-                              },
-                              {
-                                id: "1c",
-                                text: "C) Gosto de roupas casuais, mas com um toque de estilo.",
-                                image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
-                                value: "contemporaneo",
-                                category: "Contemporâneo",
-                                points: { natural: 1, classico: 1, contemporaneo: 3, elegante: 1, romantico: 0, criativo: 1 }
-                              },
-                              {
-                                id: "1d",
-                                text: "D) Escolho peças elegantes, com cortes impecáveis e sofisticados.",
-                                image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
-                                value: "elegante",
-                                category: "Elegante",
-                                points: { natural: 0, classico: 2, contemporaneo: 1, elegante: 3, romantico: 1, criativo: 0 }
-                              },
-                              {
-                                id: "1e",
-                                text: "E) Adoro roupas leves e delicadas, com cores suaves.",
-                                image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/1_gqaadq.webp",
-                                value: "romantico",
-                                category: "Romântico",
-                                points: { natural: 1, classico: 0, contemporaneo: 0, elegante: 1, romantico: 3, criativo: 1 }
-                              },
-                              {
-                                id: "1f",
-                                text: "F) Roupas que valorizem meu corpo são as minhas favoritas.",
-                                image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_igc9ur.webp",
-                                value: "criativo",
-                                category: "Criativo",
-                                points: { natural: 0, classico: 0, contemporaneo: 1, elegante: 2, romantico: 1, criativo: 3 }
-                              }
-                            ]
-                          },
-                          style: {
-                            display: "grid",
-                            gridTemplateColumns: "repeat(2, 1fr)",
-                            gridTemplateRows: "repeat(3, 1fr)",
-                            gap: "1.5rem",
-                            maxWidth: "700px",
-                            margin: "0 auto",
-                            padding: "2rem",
-                            backgroundColor: "#fafafa",
-                            borderRadius: "16px",
-                            border: "3px dashed #B89B7A"
-                          }
-                        },
-                        {
-                          id: "question-progress",
-                          type: "progress" as const,
-                          data: {
-                            progressValue: 10,
-                            text: "Questão 1 de 10"
-                          },
-                          style: {
-                            marginTop: "2rem",
-                            maxWidth: "400px",
-                            margin: "2rem auto 0"
-                          }
-                        }
-                      ]
-                    };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, questionsPage] }));
-                    toast({ title: "✅ Questão do Quiz configurada!", description: "Questão real com todas as opções e imagens" });
-                  }}
-                >
-                  ❓ Questão do Quiz (Exemplo)
-                </Button>
+      <Button
+        variant="outline"
+        size="sm"
+        className="justify-start h-8 text-xs"
+        onClick={() => {
+          const questionsPage = {
+            id: "quiz-questions",
+            title: "QUAL O SEU TIPO DE ROUPA FAVORITA?",
+            type: "question" as const,
+            progress: 50,
+            showHeader: true,
+            showProgress: true,
+            components: [
+              {
+                id: "question-title",
+                type: "title" as const,
+                data: {
+                  text: "QUAL O SEU TIPO DE ROUPA FAVORITA?",
+                  fontSize: "1.8rem",
+                  fontWeight: "600",
+                  color: "#432818"
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "2rem"
+                }
+              },
+              {
+                id: "question-subtitle",
+                type: "subtitle" as const,
+                data: {
+                  text: "Escolha até 3 opções que mais combinam com você",
+                  fontSize: "1rem",
+                  color: "#8F7A6A"
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "2rem"
+                }
+              },
+              {
+                id: "question-options",
+                type: "options" as const,
+                data: {
+                  multiSelect: true,
+                  maxSelections: 3,
+                  hasImages: true,
+                  layoutType: "grid-2x3",
+                  showBorders: true,
+                  borderStyle: "dashed",
+                  borderColor: "#B89B7A",
+                  borderWidth: "2px",
+                  borderRadius: "12px",
+                  imageAspectRatio: "3:4",
+                  textPosition: "bottom",
+                  hoverEffect: "scale",
+                  selectionStyle: "highlight",
+                  options: [
+                    {
+                      id: "1a",
+                      text: "A) Amo roupas confortáveis e práticas para o dia a dia.",
+                      image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
+                      value: "natural",
+                      category: "Natural",
+                      points: { natural: 3, classico: 0, contemporaneo: 1, elegante: 0, romantico: 0, criativo: 0 }
+                    },
+                    {
+                      id: "1b",
+                      text: "B) Prefiro peças discretas, clássicas e atemporais.",
+                      image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
+                      value: "classico",
+                      category: "Clássico",
+                      points: { natural: 0, classico: 3, contemporaneo: 1, elegante: 2, romantico: 0, criativo: 0 }
+                    },
+                    {
+                      id: "1c",
+                      text: "C) Gosto de roupas casuais, mas com um toque de estilo.",
+                      image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
+                      value: "contemporaneo",
+                      category: "Contemporâneo",
+                      points: { natural: 1, classico: 1, contemporaneo: 3, elegante: 1, romantico: 0, criativo: 1 }
+                    },
+                    {
+                      id: "1d",
+                      text: "D) Escolho peças elegantes, com cortes impecáveis e sofisticados.",
+                      image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
+                      value: "elegante",
+                      category: "Elegante",
+                      points: { natural: 0, classico: 2, contemporaneo: 1, elegante: 3, romantico: 1, criativo: 0 }
+                    },
+                    {
+                      id: "1e",
+                      text: "E) Adoro roupas leves e delicadas, com cores suaves.",
+                      image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/1_gqaadq.webp",
+                      value: "romantico",
+                      category: "Romântico",
+                      points: { natural: 1, classico: 0, contemporaneo: 0, elegante: 1, romantico: 3, criativo: 1 }
+                    },
+                    {
+                      id: "1f",
+                      text: "F) Roupas que valorizem meu corpo são as minhas favoritas.",
+                      image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_igc9ur.webp",
+                      value: "criativo",
+                      category: "Criativo",
+                      points: { natural: 0, classico: 0, contemporaneo: 1, elegante: 2, romantico: 1, criativo: 3 }
+                    }
+                  ]
+                },
+                style: {
+                  display: "grid",
+                  gridTemplateColumns: "repeat(2, 1fr)",
+                  gridTemplateRows: "repeat(3, 1fr)",
+                  gap: "1.5rem",
+                  maxWidth: "700px",
+                  margin: "0 auto",
+                  padding: "2rem",
+                  backgroundColor: "#fafafa",
+                  borderRadius: "16px",
+                  border: "3px dashed #B89B7A"
+                }
+              },
+              {
+                id: "question-progress",
+                type: "progress" as const,
+                data: {
+                  progressValue: 10,
+                  text: "Questão 1 de 10"
+                },
+                style: {
+                  marginTop: "2rem",
+                  maxWidth: "400px",
+                  margin: "2rem auto 0"
+                }
+              }
+            ]
+          };
+          setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, questionsPage] }));
+          toast({ title: "✅ Questão do Quiz configurada!", description: "Questão real com todas as opções e imagens" });
+        } }
+      >
+        ❓ Questão do Quiz (Exemplo)
+      </Button>
 
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="justify-start h-8 text-xs"
-                  onClick={() => {
-                    const transitionPage = {
-                      id: "main-transition",
-                      title: "MainTransition",
-                      type: "transition" as const,
-                      progress: 65,
-                      showHeader: true,
-                      showProgress: true,
-                      components: [
-                        {
-                          id: "transition-title",
-                          type: "title" as const,
-                          data: { text: "ETAPA REAL: MainTransition", color: "#059669" },
-                          style: { textAlign: "center" as const, backgroundColor: "#ecfdf5", padding: "1rem", borderRadius: "8px" }
-                        },
-                        {
-                          id: "transition-route",
-                          type: "text" as const,
-                          data: { text: "Rota: /quiz (transição)", color: "#6b7280" },
-                          style: { textAlign: "center" as const }
-                        }
-                      ]
-                    };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, transitionPage] }));
-                    toast({ title: "✅ MainTransition adicionado!", description: "Etapa real de transição" });
-                  }}
-                >
-                  🔄 MainTransition
-                </Button>
+      <Button
+        variant="outline"
+        size="sm"
+        className="justify-start h-8 text-xs"
+        onClick={() => {
+          const transitionPage = {
+            id: "main-transition",
+            title: "MainTransition",
+            type: "transition" as const,
+            progress: 65,
+            showHeader: true,
+            showProgress: true,
+            components: [
+              {
+                id: "transition-title",
+                type: "title" as const,
+                data: { text: "ETAPA REAL: MainTransition", color: "#059669" },
+                style: { textAlign: "center" as const, backgroundColor: "#ecfdf5", padding: "1rem", borderRadius: "8px" }
+              },
+              {
+                id: "transition-route",
+                type: "text" as const,
+                data: { text: "Rota: /quiz (transição)", color: "#6b7280" },
+                style: { textAlign: "center" as const }
+              }
+            ]
+          };
+          setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, transitionPage] }));
+          toast({ title: "✅ MainTransition adicionado!", description: "Etapa real de transição" });
+        } }
+      >
+        🔄 MainTransition
+      </Button>
 
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="justify-start h-8 text-xs"
-                  onClick={() => {
-                    const strategicPage = {
-                      id: "strategic-questions",
-                      title: "11. Como você gosta de realizar suas compras?",
-                      type: "question" as const,
-                      progress: 85,
-                      showHeader: true,
-                      showProgress: true,
-                      components: [
-                        {
-                          id: "header-logo-strategic",
-                          type: "logo" as const,
-                          data: {
-                            src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
-                            alt: "Gisele Galvão - Consultoria de Estilo",
-                            width: 200,
-                            height: 80
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "1rem",
-                            display: "block",
-                            margin: "0 auto 1rem"
-                          }
-                        },
-                        {
-                          id: "strategic-progress",
-                          type: "progress" as const,
-                          data: {
-                            progressValue: 85,
-                            showPercentage: false,
-                            color: "#D4AF37",
-                            backgroundColor: "#f0f0f0",
-                            height: "8px"
-                          },
-                          style: {
-                            maxWidth: "600px",
-                            margin: "0 auto 2rem",
-                            borderRadius: "4px"
-                          }
-                        },
-                        {
-                          id: "strategic-title",
-                          type: "title" as const,
-                          data: {
-                            text: "11. Como você gosta de realizar suas compras?",
-                            fontSize: "1.8rem",
-                            fontWeight: "400",
-                            color: "#2c2c2c",
-                            fontFamily: "Georgia, serif"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "strategic-options",
-                          type: "options" as const,
-                          data: {
-                            multiSelect: false,
-                            hasImages: false,
-                            layoutType: "vertical-list",
-                            showBorders: true,
-                            borderStyle: "dashed",
-                            borderColor: "#D4AF37",
-                            borderWidth: "2px",
-                            borderRadius: "8px",
-                            selectionStyle: "highlight",
-                            options: [
-                              {
-                                id: "s1a",
-                                text: "A) Compro quando preciso, não gosto de perder tempo e adoro facilidades.",
-                                value: "pratico",
-                                category: "Comprador Prático",
-                                icon: "🛒"
-                              },
-                              {
-                                id: "s1b",
-                                text: "B) Faço compras planejadas, priorizo qualidade e espero até encontrar a peça perfeita.",
-                                value: "planejado",
-                                category: "Comprador Planejado",
-                                icon: "📝"
-                              },
-                              {
-                                id: "s1c",
-                                text: "C) Compro peças para atualizar meu guarda-roupa. Às vezes, compro pela internet pela praticidade.",
-                                value: "atualizador",
-                                category: "Comprador Atualizador",
-                                icon: "💻"
-                              },
-                              {
-                                id: "s1d",
-                                text: "D) Compro pensando no status que a peça pode me proporcionar. Gosto de qualidade e atualidade.",
-                                value: "status",
-                                category: "Comprador Status",
-                                icon: "✨"
-                              },
-                              {
-                                id: "s1e",
-                                text: "E) Adoro ir às compras, compro por prazer e presto atenção nos detalhes, principalmente nos delicados.",
-                                value: "prazer",
-                                category: "Comprador Prazer",
-                                icon: "💕"
-                              },
-                              {
-                                id: "s1f",
-                                text: "F) Adoro comprar peças que valorizem meu corpo, independente da moda. Gosto de efeito único.",
-                                value: "corpo",
-                                category: "Comprador Corpo",
-                                icon: "💃"
-                              },
-                              {
-                                id: "s1g",
-                                text: "G) Gosto de lugares alternativos, como brechós e feiras de artesanato, pois adoro o incomum.",
-                                value: "alternativo",
-                                category: "Comprador Alternativo",
-                                icon: "🎨"
-                              },
-                              {
-                                id: "s1h",
-                                text: "H) Compro apenas o que me chama atenção, independente da moda. Gosto de efeito único.",
-                                value: "unico",
-                                category: "Comprador Único",
-                                icon: "🌟"
-                              }
-                            ]
-                          },
-                          style: {
-                            maxWidth: "700px",
-                            margin: "0 auto",
-                            padding: "2rem",
-                            backgroundColor: "#fafafa",
-                            borderRadius: "16px",
-                            border: "3px dashed #D4AF37"
-                          }
-                        }
-                      ]
-                    };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, strategicPage] }));
-                    toast({ title: "✅ Questão Estratégica Configurada!", description: "Questão realista com todas as opções como CaktoQuiz" });
-                  }}
-                >
-                  🎯 Questão Estratégica (Realista)
-                </Button>
+      <Button
+        variant="outline"
+        size="sm"
+        className="justify-start h-8 text-xs"
+        onClick={() => {
+          const strategicPage = {
+            id: "strategic-questions",
+            title: "11. Como você gosta de realizar suas compras?",
+            type: "question" as const,
+            progress: 85,
+            showHeader: true,
+            showProgress: true,
+            components: [
+              {
+                id: "header-logo-strategic",
+                type: "logo" as const,
+                data: {
+                  src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
+                  alt: "Gisele Galvão - Consultoria de Estilo",
+                  width: 200,
+                  height: 80
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "1rem",
+                  display: "block",
+                  margin: "0 auto 1rem"
+                }
+              },
+              {
+                id: "strategic-progress",
+                type: "progress" as const,
+                data: {
+                  progressValue: 85,
+                  showPercentage: false,
+                  color: "#D4AF37",
+                  backgroundColor: "#f0f0f0",
+                  height: "8px"
+                },
+                style: {
+                  maxWidth: "600px",
+                  margin: "0 auto 2rem",
+                  borderRadius: "4px"
+                }
+              },
+              {
+                id: "strategic-title",
+                type: "title" as const,
+                data: {
+                  text: "11. Como você gosta de realizar suas compras?",
+                  fontSize: "1.8rem",
+                  fontWeight: "400",
+                  color: "#2c2c2c",
+                  fontFamily: "Georgia, serif"
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "2rem"
+                }
+              },
+              {
+                id: "strategic-options",
+                type: "options" as const,
+                data: {
+                  multiSelect: false,
+                  hasImages: false,
+                  layoutType: "vertical-list",
+                  showBorders: true,
+                  borderStyle: "dashed",
+                  borderColor: "#D4AF37",
+                  borderWidth: "2px",
+                  borderRadius: "8px",
+                  selectionStyle: "highlight",
+                  options: [
+                    {
+                      id: "s1a",
+                      text: "A) Compro quando preciso, não gosto de perder tempo e adoro facilidades.",
+                      value: "pratico",
+                      category: "Comprador Prático",
+                      icon: "🛒"
+                    },
+                    {
+                      id: "s1b",
+                      text: "B) Faço compras planejadas, priorizo qualidade e espero até encontrar a peça perfeita.",
+                      value: "planejado",
+                      category: "Comprador Planejado",
+                      icon: "📝"
+                    },
+                    {
+                      id: "s1c",
+                      text: "C) Compro peças para atualizar meu guarda-roupa. Às vezes, compro pela internet pela praticidade.",
+                      value: "atualizador",
+                      category: "Comprador Atualizador",
+                      icon: "💻"
+                    },
+                    {
+                      id: "s1d",
+                      text: "D) Compro pensando no status que a peça pode me proporcionar. Gosto de qualidade e atualidade.",
+                      value: "status",
+                      category: "Comprador Status",
+                      icon: "✨"
+                    },
+                    {
+                      id: "s1e",
+                      text: "E) Adoro ir às compras, compro por prazer e presto atenção nos detalhes, principalmente nos delicados.",
+                      value: "prazer",
+                      category: "Comprador Prazer",
+                      icon: "💕"
+                    },
+                    {
+                      id: "s1f",
+                      text: "F) Adoro comprar peças que valorizem meu corpo, independente da moda. Gosto de efeito único.",
+                      value: "corpo",
+                      category: "Comprador Corpo",
+                      icon: "💃"
+                    },
+                    {
+                      id: "s1g",
+                      text: "G) Gosto de lugares alternativos, como brechós e feiras de artesanato, pois adoro o incomum.",
+                      value: "alternativo",
+                      category: "Comprador Alternativo",
+                      icon: "🎨"
+                    },
+                    {
+                      id: "s1h",
+                      text: "H) Compro apenas o que me chama atenção, independente da moda. Gosto de efeito único.",
+                      value: "unico",
+                      category: "Comprador Único",
+                      icon: "🌟"
+                    }
+                  ]
+                },
+                style: {
+                  maxWidth: "700px",
+                  margin: "0 auto",
+                  padding: "2rem",
+                  backgroundColor: "#fafafa",
+                  borderRadius: "16px",
+                  border: "3px dashed #D4AF37"
+                }
+              }
+            ]
+          };
+          setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, strategicPage] }));
+          toast({ title: "✅ Questão Estratégica Configurada!", description: "Questão realista com todas as opções como CaktoQuiz" });
+        } }
+      >
+        🎯 Questão Estratégica (Realista)
+      </Button>
 
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="justify-start h-8 text-xs"
-                  onClick={() => {
-                    const loadingPage = {
-                      id: "final-loading",
-                      title: "LoadingManager",
-                      type: "loading" as const,
-                      progress: 95,
-                      showHeader: true,
-                      showProgress: true,
-                      components: [
-                        {
-                          id: "loading-title",
-                          type: "title" as const,
-                          data: { text: "ETAPA REAL: LoadingManager", color: "#059669" },
-                          style: { textAlign: "center" as const, backgroundColor: "#ecfdf5", padding: "1rem", borderRadius: "8px" }
-                        },
-                        {
-                          id: "loading-route",
-                          type: "text" as const,
-                          data: { text: "Rota: /quiz (loading final)", color: "#6b7280" },
-                          style: { textAlign: "center" as const }
-                        }
-                      ]
-                    };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, loadingPage] }));
-                    toast({ title: "✅ LoadingManager adicionado!", description: "Etapa real de loading" });
-                  }}
-                >
-                  ⏳ LoadingManager
-                </Button>
+      <Button
+        variant="outline"
+        size="sm"
+        className="justify-start h-8 text-xs"
+        onClick={() => {
+          const loadingPage = {
+            id: "final-loading",
+            title: "LoadingManager",
+            type: "loading" as const,
+            progress: 95,
+            showHeader: true,
+            showProgress: true,
+            components: [
+              {
+                id: "loading-title",
+                type: "title" as const,
+                data: { text: "ETAPA REAL: LoadingManager", color: "#059669" },
+                style: { textAlign: "center" as const, backgroundColor: "#ecfdf5", padding: "1rem", borderRadius: "8px" }
+              },
+              {
+                id: "loading-route",
+                type: "text" as const,
+                data: { text: "Rota: /quiz (loading final)", color: "#6b7280" },
+                style: { textAlign: "center" as const }
+              }
+            ]
+          };
+          setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, loadingPage] }));
+          toast({ title: "✅ LoadingManager adicionado!", description: "Etapa real de loading" });
+        } }
+      >
+        ⏳ LoadingManager
+      </Button>
 
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="justify-start h-8 text-xs"
-                  onClick={() => {
-                    const resultPage = {
-                      id: "result-page",
-                      title: "Seu Estilo Principal: Clássico",
-                      type: "result" as const,
-                      progress: 100,
-                      showHeader: false,
-                      showProgress: false,
-                      components: [
-                        {
-                          id: "result-logo",
-                          type: "logo" as const,
-                          data: {
-                            src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
-                            alt: "Gisele Galvão - Consultoria de Estilo",
-                            width: 200,
-                            height: 80
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "2rem",
-                            display: "block",
-                            margin: "0 auto 2rem"
-                          }
-                        },
-                        {
-                          id: "congratulations",
-                          type: "title" as const,
-                          data: {
-                            text: "Parabéns! Descobrimos seu estilo pessoal",
-                            fontSize: "1.8rem",
-                            fontWeight: "400",
-                            color: "#2c2c2c",
-                            fontFamily: "Georgia, serif"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "primary-style-card",
-                          type: "text" as const,
-                          data: {
-                            text: "Seu estilo principal:",
-                            fontSize: "1.1rem",
-                            fontWeight: "600",
-                            color: "#666"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "1rem"
-                          }
-                        },
-                        {
-                          id: "style-title",
-                          type: "title" as const,
-                          data: {
-                            text: "CLÁSSICO ELEGANTE",
-                            fontSize: "2.5rem",
-                            fontWeight: "700",
-                            color: "#D4AF37",
-                            letterSpacing: "0.1em"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "1rem",
-                            textTransform: "uppercase"
-                          }
-                        },
-                        {
-                          id: "style-percentage",
-                          type: "text" as const,
-                          data: {
-                            text: "85% de compatibilidade",
-                            fontSize: "1.2rem",
-                            fontWeight: "500",
-                            color: "#059669"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "3rem"
-                          }
-                        },
-                        {
-                          id: "style-description",
-                          type: "text" as const,
-                          data: {
-                            text: "Você possui uma elegância natural e atemporal. Prefere peças bem estruturadas, cortes clássicos e cores neutras sofisticadas. Seu guarda-roupa é investimento em qualidade, versatilidade e durabilidade.",
-                            fontSize: "1.1rem",
-                            color: "#555",
-                            lineHeight: "1.6"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            maxWidth: "600px",
-                            margin: "0 auto 3rem",
-                            padding: "2rem",
-                            backgroundColor: "#f8f9fa",
-                            borderRadius: "12px",
-                            border: "1px solid #e9ecef"
-                          }
-                        },
-                        {
-                          id: "secondary-styles-title",
-                          type: "title" as const,
-                          data: {
-                            text: "Seus estilos secundários:",
-                            fontSize: "1.5rem",
-                            fontWeight: "600",
-                            color: "#2c2c2c"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "secondary-styles",
-                          type: "text" as const,
-                          data: {
-                            text: "• Elegante (65%) - Sofisticação e refinamento\n• Natural (45%) - Conforto e praticidade\n• Contemporâneo (35%) - Tendências modernas",
-                            fontSize: "1rem",
-                            color: "#666",
-                            lineHeight: "1.8"
-                          },
-                          style: {
-                            textAlign: "left" as const,
-                            maxWidth: "500px",
-                            margin: "0 auto 3rem",
-                            padding: "1.5rem",
-                            backgroundColor: "#fafafa",
-                            borderRadius: "8px",
-                            border: "1px solid #e5e7eb"
-                          }
-                        },
-                        {
-                          id: "cta-button",
-                          type: "button" as const,
-                          data: {
-                            text: "QUERO MEU GUIA COMPLETO",
-                            variant: "primary"
-                          },
-                          style: {
-                            backgroundColor: "#D4AF37",
-                            color: "white",
-                            padding: "1.2rem 3rem",
-                            borderRadius: "8px",
-                            fontSize: "1.1rem",
-                            fontWeight: "600",
-                            display: "block",
-                            margin: "0 auto",
-                            border: "none",
-                            cursor: "pointer",
-                            textTransform: "uppercase",
-                            letterSpacing: "0.05em",
-                            minWidth: "300px"
-                          }
-                        }
-                      ]
-                    };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, resultPage] }));
-                    toast({ title: "✅ Página de Resultado Configurada!", description: "Layout completo com resultado personalizado" });
-                  }}
-                >
-                  🎉 Página de Resultado (Completa)
-                </Button>
+      <Button
+        variant="outline"
+        size="sm"
+        className="justify-start h-8 text-xs"
+        onClick={() => {
+          const resultPage = {
+            id: "result-page",
+            title: "Seu Estilo Principal: Clássico",
+            type: "result" as const,
+            progress: 100,
+            showHeader: false,
+            showProgress: false,
+            components: [
+              {
+                id: "result-logo",
+                type: "logo" as const,
+                data: {
+                  src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
+                  alt: "Gisele Galvão - Consultoria de Estilo",
+                  width: 200,
+                  height: 80
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "2rem",
+                  display: "block",
+                  margin: "0 auto 2rem"
+                }
+              },
+              {
+                id: "congratulations",
+                type: "title" as const,
+                data: {
+                  text: "Parabéns! Descobrimos seu estilo pessoal",
+                  fontSize: "1.8rem",
+                  fontWeight: "400",
+                  color: "#2c2c2c",
+                  fontFamily: "Georgia, serif"
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "2rem"
+                }
+              },
+              {
+                id: "primary-style-card",
+                type: "text" as const,
+                data: {
+                  text: "Seu estilo principal:",
+                  fontSize: "1.1rem",
+                  fontWeight: "600",
+                  color: "#666"
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "1rem"
+                }
+              },
+              {
+                id: "style-title",
+                type: "title" as const,
+                data: {
+                  text: "CLÁSSICO ELEGANTE",
+                  fontSize: "2.5rem",
+                  fontWeight: "700",
+                  color: "#D4AF37",
+                  letterSpacing: "0.1em"
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "1rem",
+                  textTransform: "uppercase"
+                }
+              },
+              {
+                id: "style-percentage",
+                type: "text" as const,
+                data: {
+                  text: "85% de compatibilidade",
+                  fontSize: "1.2rem",
+                  fontWeight: "500",
+                  color: "#059669"
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "3rem"
+                }
+              },
+              {
+                id: "style-description",
+                type: "text" as const,
+                data: {
+                  text: "Você possui uma elegância natural e atemporal. Prefere peças bem estruturadas, cortes clássicos e cores neutras sofisticadas. Seu guarda-roupa é investimento em qualidade, versatilidade e durabilidade.",
+                  fontSize: "1.1rem",
+                  color: "#555",
+                  lineHeight: "1.6"
+                },
+                style: {
+                  textAlign: "center" as const,
+                  maxWidth: "600px",
+                  margin: "0 auto 3rem",
+                  padding: "2rem",
+                  backgroundColor: "#f8f9fa",
+                  borderRadius: "12px",
+                  border: "1px solid #e9ecef"
+                }
+              },
+              {
+                id: "secondary-styles-title",
+                type: "title" as const,
+                data: {
+                  text: "Seus estilos secundários:",
+                  fontSize: "1.5rem",
+                  fontWeight: "600",
+                  color: "#2c2c2c"
+                },
+                style: {
+                  textAlign: "center" as const,
+                  marginBottom: "2rem"
+                }
+              },
+              {
+                id: "secondary-styles",
+                type: "text" as const,
+                data: {
+                  text: "• Elegante (65%) - Sofisticação e refinamento\n• Natural (45%) - Conforto e praticidade\n• Contemporâneo (35%) - Tendências modernas",
+                  fontSize: "1rem",
+                  color: "#666",
+                  lineHeight: "1.8"
+                },
+                style: {
+                  textAlign: "left" as const,
+                  maxWidth: "500px",
+                  margin: "0 auto 3rem",
+                  padding: "1.5rem",
+                  backgroundColor: "#fafafa",
+                  borderRadius: "8px",
+                  border: "1px solid #e5e7eb"
+                }
+              },
+              {
+                id: "cta-button",
+                type: "button" as const,
+                data: {
+                  text: "QUERO MEU GUIA COMPLETO",
+                  variant: "primary"
+                },
+                style: {
+                  backgroundColor: "#D4AF37",
+                  color: "white",
+                  padding: "1.2rem 3rem",
+                  borderRadius: "8px",
+                  fontSize: "1.1rem",
+                  fontWeight: "600",
+                  display: "block",
+                  margin: "0 auto",
+                  border: "none",
+                  cursor: "pointer",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.05em",
+                  minWidth: "300px"
+                }
+              }
+            ]
+          };
+          setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, resultPage] }));
+          toast({ title: "✅ Página de Resultado Configurada!", description: "Layout completo com resultado personalizado" });
+        } }
+      >
+        🎉 Página de Resultado (Completa)
+      </Button>
 
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="justify-start h-8 text-xs"
-                  onClick={() => {
-                    const offerPage = {
-                      id: "discover-style",
-                      title: "QuizDescubraSeuEstilo",
-                      type: "offer" as const,
-                      progress: 100,
-                      showHeader: true,
-                      showProgress: false,
-                      components: [
-                        {
-                          id: "offer-title",
-                          type: "title" as const,
-                          data: { text: "ETAPA REAL: QuizDescubraSeuEstilo", color: "#059669" },
-                          style: { textAlign: "center" as const, backgroundColor: "#ecfdf5", padding: "1rem", borderRadius: "8px" }
-                        },
-                        {
-                          id: "offer-route",
-                          type: "text" as const,
-                          data: { text: "Rota: /quiz-descubra-seu-estilo", color: "#6b7280" },
-                          style: { textAlign: "center" as const }
-                        }
-                      ]
-                    };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, offerPage] }));
-                    toast({ title: "✅ QuizDescubraSeuEstilo adicionado!", description: "Etapa real da rota de oferta" });
-                  }}
-                >
-                  💰 QuizDescubraSeuEstilo (/offer)
-                </Button>
-              </div>
+      <Button
+        variant="outline"
+        size="sm"
+        className="justify-start h-8 text-xs"
+        onClick={() => {
+          const offerPage = {
+            id: "discover-style",
+            title: "QuizDescubraSeuEstilo",
+            type: "offer" as const,
+            progress: 100,
+            showHeader: true,
+            showProgress: false,
+            components: [
+              {
+                id: "offer-title",
+                type: "title" as const,
+                data: { text: "ETAPA REAL: QuizDescubraSeuEstilo", color: "#059669" },
+                style: { textAlign: "center" as const, backgroundColor: "#ecfdf5", padding: "1rem", borderRadius: "8px" }
+              },
+              {
+                id: "offer-route",
+                type: "text" as const,
+                data: { text: "Rota: /quiz-descubra-seu-estilo", color: "#6b7280" },
+                style: { textAlign: "center" as const }
+              }
+            ]
+          };
+          setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, offerPage] }));
+          toast({ title: "✅ QuizDescubraSeuEstilo adicionado!", description: "Etapa real da rota de oferta" });
+        } }
+      >
+        💰 QuizDescubraSeuEstilo (/offer)
+      </Button>
+    </div><div className="space-y-1">
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full justify-start h-8 text-xs"
+          onClick={() => {
+            const newPages = [...currentFunnel.pages];
+            newPages[currentPageIndex] = REAL_QUIZ_TEMPLATES.intro;
+            setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
+          } }
+        >
+          📝 Introdução
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full justify-start h-8 text-xs"
+          onClick={() => {
+            const realQuestions = generateRealQuestionTemplates();
+            const newPages = [...currentFunnel.pages];
+            newPages[currentPageIndex] = realQuestions[0]; // Primeira questão real
+            setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
+          } }
+        >
+          🖼️ Questão Real (Visual)
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full justify-start h-8 text-xs"
+          onClick={() => {
+            const realQuestions = generateRealQuestionTemplates();
+            const newPages = [...currentFunnel.pages];
+            newPages[currentPageIndex] = realQuestions[1]; // Segunda questão real
+            setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
+          } }
+        >
+          📄 Questão Real (Texto)
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full justify-start h-8 text-xs"
+          onClick={() => {
+            const newPages = [...currentFunnel.pages];
+            newPages[currentPageIndex] = REAL_QUIZ_TEMPLATES.loading;
+            setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
+          } }
+        >
+          ⏳ Loading
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full justify-start h-8 text-xs"
+          onClick={() => {
+            const newPages = [...currentFunnel.pages];
+            newPages[currentPageIndex] = REAL_QUIZ_TEMPLATES.result;
+            setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
+          } }
+        >
+          🎯 Resultado
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full justify-start h-8 text-xs"
+          onClick={() => {
+            const newPages = [...currentFunnel.pages];
+            newPages[currentPageIndex] = REAL_QUIZ_TEMPLATES.offer;
+            setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
+          } }
+        >
+          💰 Oferta
+        </Button>
 
-              <div className="space-y-1">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full justify-start h-8 text-xs"
-                  onClick={() => {
-                    const newPages = [...currentFunnel.pages];
-                    newPages[currentPageIndex] = REAL_QUIZ_TEMPLATES.intro;
-                    setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
-                  }}
-                >
-                  📝 Introdução
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full justify-start h-8 text-xs"
-                  onClick={() => {
-                    const realQuestions = generateRealQuestionTemplates();
-                    const newPages = [...currentFunnel.pages];
-                    newPages[currentPageIndex] = realQuestions[0]; // Primeira questão real
-                    setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
-                  }}
-                >
-                  🖼️ Questão Real (Visual)
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full justify-start h-8 text-xs"
-                  onClick={() => {
-                    const realQuestions = generateRealQuestionTemplates();
-                    const newPages = [...currentFunnel.pages];
-                    newPages[currentPageIndex] = realQuestions[1]; // Segunda questão real
-                    setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
-                  }}
-                >
-                  📄 Questão Real (Texto)
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full justify-start h-8 text-xs"
-                  onClick={() => {
-                    const newPages = [...currentFunnel.pages];
-                    newPages[currentPageIndex] = REAL_QUIZ_TEMPLATES.loading;
-                    setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
-                  }}
-                >
-                  ⏳ Loading
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full justify-start h-8 text-xs"
-                  onClick={() => {
-                    const newPages = [...currentFunnel.pages];
-                    newPages[currentPageIndex] = REAL_QUIZ_TEMPLATES.result;
-                    setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
-                  }}
-                >
-                  🎯 Resultado
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full justify-start h-8 text-xs"
-                  onClick={() => {
-                    const newPages = [...currentFunnel.pages];
-                    newPages[currentPageIndex] = REAL_QUIZ_TEMPLATES.offer;
-                    setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
-                  }}
-                >
-                  💰 Oferta
-                </Button>
+        <div className="text-xs font-medium text-emerald-600 mt-2 mb-1">
+          📊 PÁGINAS DE VENDA
+        </div>
 
-                <div className="text-xs font-medium text-emerald-600 mt-2 mb-1">
-                  📊 PÁGINAS DE VENDA
-                </div>
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full justify-start h-8 text-xs"
+          onClick={() => {
+            const newPages = [...currentFunnel.pages];
+            newPages[currentPageIndex] = QUIZ_TEMPLATES.salesPage;
+            setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
+          } }
+        >
+          🏪 Vendas Completa
+        </Button>
 
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full justify-start h-8 text-xs"
-                  onClick={() => {
-                    const newPages = [...currentFunnel.pages];
-                    newPages[currentPageIndex] = QUIZ_TEMPLATES.salesPage;
-                    setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
-                  }}
-                >
-                  🏪 Vendas Completa
-                </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full justify-start h-8 text-xs"
+          onClick={() => {
+            const newPages = [...currentFunnel.pages];
+            newPages[currentPageIndex] = QUIZ_TEMPLATES.checkout;
+            setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
+          } }
+        >
+          💳 Checkout
+        </Button>
 
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full justify-start h-8 text-xs"
-                  onClick={() => {
-                    const newPages = [...currentFunnel.pages];
-                    newPages[currentPageIndex] = QUIZ_TEMPLATES.checkout;
-                    setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
-                  }}
-                >
-                  💳 Checkout
-                </Button>
-
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full justify-start h-8 text-xs"
-                  onClick={() => {
-                    const newPages = [...currentFunnel.pages];
-                    newPages[currentPageIndex] = QUIZ_TEMPLATES.upsell;
-                    setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
-                  }}
-                >
-                  🚀 Upsell
-                </Button>
-              </div>
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full justify-start h-8 text-xs"
+          onClick={() => {
+            const newPages = [...currentFunnel.pages];
+            newPages[currentPageIndex] = QUIZ_TEMPLATES.upsell;
+            setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
+          } }
+        >
+          🚀 Upsell
+        </Button>
+      </div></>
             </div>
           </div>
         </ScrollArea>
@@ -7116,65 +7111,57 @@ const SimpleDragDropEditor: React.FC = () => {
 
       {/* COLUNA 2: COMPONENTES - 240px */}
       <div className="w-[240px] min-w-[240px] border-r bg-blue-50 overflow-hidden flex flex-col">
-        <div className="p-3 border-b bg-blue-100">
+        <><div className="p-3 border-b bg-blue-100">
           <h2 className="text-sm font-semibold mb-2 flex items-center gap-2">
             🧩 COMPONENTES
           </h2>
           <p className="text-xs text-muted-foreground">
             Arraste e solte no canvas
           </p>
-        </div>
+        </div><ScrollArea className="flex-1">
+            <div className="p-3">
+              {/* Renderizar categorias organizadas */}
+              {Object.entries(COMPONENT_CATEGORIES).map(([categoryKey, category]) => (
+                <div key={categoryKey} className="mb-4">
+                  <h3 className={`text-xs font-semibold mb-2 ${category.color === 'blue' ? 'text-blue-700' :
+                      category.color === 'green' ? 'text-green-700' :
+                        category.color === 'orange' ? 'text-orange-700' : 'text-gray-700'}`}>
+                    {category.title}
+                  </h3>
+                  <div className="space-y-1">
+                    {category.components.map((componentType) => {
+                      const Icon = componentType.icon;
 
-        <ScrollArea className="flex-1">
-          <div className="p-3">
-            {/* Renderizar categorias organizadas */}
-            {Object.entries(COMPONENT_CATEGORIES).map(([categoryKey, category]) => (
-              <div key={categoryKey} className="mb-4">
-                <h3 className={`text-xs font-semibold mb-2 ${
-                  category.color === 'blue' ? 'text-blue-700' :
-                  category.color === 'green' ? 'text-green-700' :
-                  category.color === 'orange' ? 'text-orange-700' : 'text-gray-700'
-                }`}>
-                  {category.title}
-                </h3>
-                <div className="space-y-1">
-                  {category.components.map((componentType) => {
-                    const Icon = componentType.icon;
-                    
-                    return (
-                      <div
-                        key={componentType.type}
-                        className={`component-item p-2 rounded border cursor-grab bg-white transition-colors ${
-                          category.color === 'blue' ? 'hover:bg-blue-100' :
-                          category.color === 'green' ? 'hover:bg-green-100' :
-                          category.color === 'orange' ? 'hover:bg-orange-100' : 'hover:bg-gray-100'
-                        }`}
-                        draggable
-                        onDragStart={(e) => handleDragStart(e, componentType)}
-                      >
-                        <div className="flex items-center gap-2">
-                          <Icon className={`h-3 w-3 ${
-                            category.color === 'blue' ? 'text-blue-600' :
-                            category.color === 'green' ? 'text-green-600' :
-                            category.color === 'orange' ? 'text-orange-600' : 'text-gray-600'
-                          }`} />
-                          <div>
-                            <div className="font-medium text-xs">
-                              {componentType.name}
-                            </div>
-                            <div className="text-xs text-muted-foreground truncate">
-                              {componentType.description}
+                      return (
+                        <div
+                          key={componentType.type}
+                          className={`component-item p-2 rounded border cursor-grab bg-white transition-colors ${category.color === 'blue' ? 'hover:bg-blue-100' :
+                              category.color === 'green' ? 'hover:bg-green-100' :
+                                category.color === 'orange' ? 'hover:bg-orange-100' : 'hover:bg-gray-100'}`}
+                          draggable
+                          onDragStart={(e) => handleDragStart(e, componentType)}
+                        >
+                          <div className="flex items-center gap-2">
+                            <Icon className={`h-3 w-3 ${category.color === 'blue' ? 'text-blue-600' :
+                                category.color === 'green' ? 'text-green-600' :
+                                  category.color === 'orange' ? 'text-orange-600' : 'text-gray-600'}`} />
+                            <div>
+                              <div className="font-medium text-xs">
+                                {componentType.name}
+                              </div>
+                              <div className="text-xs text-muted-foreground truncate">
+                                {componentType.description}
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </ScrollArea>
+              ))}
+            </div>
+          </ScrollArea></>
       </div>
 
       {/* COLUNA 3: CANVAS - Flex restante */}
