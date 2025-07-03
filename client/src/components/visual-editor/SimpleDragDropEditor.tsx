@@ -5263,6 +5263,16 @@ const SimpleDragDropEditor: React.FC = () => {
           <h2 className="text-sm font-semibold mb-2 flex items-center gap-2">
             🔄 ETAPAS DO FUNIL
           </h2>
+          
+          {/* Botão para o novo editor modular */}
+          <Button
+            size="sm"
+            variant="default"
+            className="w-full mb-2 bg-gradient-to-r from-amber-500 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white"
+            onClick={() => window.location.href = '/editor-modular-final'}
+          >
+            🚀 ACESSAR EDITOR MODULAR
+          </Button>
 
           {/* Abas do Editor */}
           <div className="flex gap-1 mb-3">
