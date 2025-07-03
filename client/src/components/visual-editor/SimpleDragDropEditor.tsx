@@ -5554,31 +5554,296 @@ const SimpleDragDropEditor: React.FC = () => {
               ))}
             </div>
 
-            {/* ETAPAS REAIS DO FUNIL */}
+            {/* Templates Prontos */}
             <div className="mt-4">
-              <h3 className="text-xs font-semibold mb-2 text-emerald-700">
-                🎯 ETAPAS REAIS DO FUNIL
+              <h3 className="text-xs font-semibold mb-2">
+                ⚡ ETAPAS REAIS DAS ROTAS
               </h3>
-              
-              {/* TELAS REAIS DO FUNIL - Cada tela que o usuário vê */}
+
+              {/* Botão para carregar etapas reais funcionais */}
+              <Button
+                variant="default"
+                size="sm"
+                className="w-full justify-start h-10 text-xs mb-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold"
+                onClick={() => {
+                  // Etapas reais mapeadas diretamente das rotas funcionais
+                  const liveSteps = [
+                    {
+                      id: "quiz-intro",
+                      title: "Descubra Seu Estilo Pessoal",
+                      component: "QuizIntro",
+                      route: "/quiz",
+                      progress: 0
+                    },
+                    {
+                      id: "quiz-questions-1-10",
+                      title: "10 Questões Normais do Quiz",
+                      component: "QuizContent",
+                      route: "/quiz",
+                      progress: 60
+                    },
+                    {
+                      id: "main-transition",
+                      title: "Transição Principal",
+                      component: "MainTransition",
+                      route: "/quiz",
+                      progress: 65
+                    },
+                    {
+                      id: "strategic-questions",
+                      title: "6 Questões Estratégicas",
+                      component: "QuizTransition",
+                      route: "/quiz",
+                      progress: 85
+                    },
+                    {
+                      id: "final-loading",
+                      title: "Loading Final",
+                      component: "LoadingManager",
+                      route: "/quiz",
+                      progress: 95
+                    },
+                    {
+                      id: "result-page",
+                      title: "Página de Resultado",
+                      component: "ResultPage",
+                      route: "/resultado",
+                      progress: 100
+                    },
+                    {
+                      id: "discover-style",
+                      title: "Quiz Descubra Seu Estilo",
+                      component: "QuizDescubraSeuEstilo",
+                      route: "/quiz-descubra-seu-estilo",
+                      progress: 100
+                    }
+                  ];
+
+                  const livePages = liveSteps.map(step => ({
+                    id: step.id,
+                    title: step.title,
+                    type: step.id.includes("intro") ? "intro" : 
+                          step.id.includes("question") ? "question" : 
+                          step.id.includes("loading") ? "loading" :
+                          step.id.includes("result") ? "result" :
+                          step.id.includes("discover") ? "offer" : "transition",
+                    progress: step.progress,
+                    showHeader: true,
+                    showProgress: step.progress > 0,
+                    components: [
+                      {
+                        id: `${step.id}-info`,
+                        type: "title" as const,
+                        data: {
+                          text: `ETAPA REAL: ${step.component}`,
+                          fontSize: "1.2rem",
+                          color: "#059669"
+                        },
+                        style: {
+                          textAlign: "center" as const,
+                          backgroundColor: "#ecfdf5",
+                          padding: "1rem",
+                          borderRadius: "8px",
+                          border: "2px solid #059669",
+                          marginBottom: "1rem"
+                        }
+                      },
+                      {
+                        id: `${step.id}-route`,
+                        type: "text" as const,
+                        data: {
+                          text: `Rota: ${step.route}`,
+                          fontSize: "0.9rem",
+                          color: "#6b7280"
+                        },
+                        style: {
+                          textAlign: "center" as const,
+                          marginBottom: "0.5rem"
+                        }
+                      }
+                    ]
+                  }));
+
+                  setCurrentFunnel((prev) => ({
+                    ...prev,
+                    pages: livePages,
+                    name: "Quiz - Etapas Reais das Rotas Funcionais"
+                  }));
+
+                  toast({
+                    title: "✅ Etapas Reais Carregadas!",
+                    description: `${livePages.length} etapas funcionais mapeadas das rotas`,
+                  });
+                }}
+              >
+                ⚡ CARREGAR TODAS AS ETAPAS REAIS
+              </Button>
+
+              {/* Botões individuais para etapas específicas */}
               <div className="grid grid-cols-1 gap-1 mt-2">
-                
-                {/* TELA 1: Entrada do Nome */}
                 <Button
                   variant="outline"
                   size="sm"
-                  className="justify-start h-8 text-xs bg-emerald-50 border-emerald-300"
+                  className="justify-start h-8 text-xs"
                   onClick={() => {
-                    const introScreen = {
-                      id: "intro-screen",
-                      title: "Tela 1: Entrada do Nome",
+                    const introPage = {
+                      id: "quiz-intro",
+                      title: "Descubra Seu Estilo Pessoal",
                       type: "intro" as const,
                       progress: 0,
-                      showHeader: true,
+                      showHeader: false,
                       showProgress: false,
                       components: [
                         {
-                          id: "intro-logo",
+                          id: "header-logo",
+                          type: "logo" as const,
+                          data: {
+                            src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
+                            alt: "Gisele Galvão - Consultoria de Estilo",
+                            width: 200,
+                            height: 80
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            marginBottom: "2rem",
+                            display: "block",
+                            margin: "0 auto 2rem"
+                          }
+                        },
+                        {
+                          id: "progress-bar",
+                          type: "progress" as const,
+                          data: {
+                            progressValue: 0,
+                            showPercentage: false,
+                            color: "#D4AF37",
+                            backgroundColor: "#f0f0f0",
+                            height: "8px"
+                          },
+                          style: {
+                            maxWidth: "600px",
+                            margin: "0 auto 3rem",
+                            borderRadius: "4px"
+                          }
+                        },
+                        {
+                          id: "intro-title",
+                          type: "title" as const,
+                          data: { 
+                            text: "Teste de Estilo Pessoal",
+                            fontSize: "2.8rem",
+                            fontWeight: "400",
+                            color: "#2c2c2c",
+                            fontFamily: "Georgia, serif"
+                          },
+                          style: { 
+                            textAlign: "center" as const,
+                            marginBottom: "3rem",
+                            letterSpacing: "-0.02em"
+                          }
+                        },
+                        {
+                          id: "hero-image",
+                          type: "image" as const,
+                          data: {
+                            src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.jpg",
+                            alt: "Grupo de mulheres estilosas",
+                            width: 600,
+                            height: 300
+                          },
+                          style: {
+                            borderRadius: "16px",
+                            border: "3px dashed #D4AF37",
+                            padding: "1rem",
+                            backgroundColor: "#fafafa",
+                            margin: "0 auto 3rem",
+                            display: "block",
+                            maxWidth: "600px"
+                          }
+                        },
+                        {
+                          id: "name-label",
+                          type: "text" as const,
+                          data: {
+                            text: "NOME*",
+                            fontSize: "0.9rem",
+                            fontWeight: "600",
+                            color: "#666",
+                            letterSpacing: "0.05em"
+                          },
+                          style: {
+                            textAlign: "left" as const,
+                            marginBottom: "0.5rem",
+                            maxWidth: "400px",
+                            margin: "0 auto 0.5rem"
+                          }
+                        },
+                        {
+                          id: "intro-input",
+                          type: "input" as const,
+                          data: {
+                            placeholder: "Digite seu nome aqui...",
+                            required: true,
+                            type: "text"
+                          },
+                          style: {
+                            maxWidth: "400px",
+                            margin: "0 auto 2rem auto",
+                            padding: "1rem",
+                            borderRadius: "8px",
+                            border: "1px solid #ddd",
+                            backgroundColor: "#f8f8f8",
+                            fontSize: "1rem",
+                            color: "#333"
+                          }
+                        },
+                        {
+                          id: "intro-button",
+                          type: "button" as const,
+                          data: {
+                            text: "Continuar",
+                            variant: "primary"
+                          },
+                          style: {
+                            backgroundColor: "#D4AF37",
+                            color: "white",
+                            padding: "1rem 3rem",
+                            borderRadius: "8px",
+                            fontSize: "1.1rem",
+                            fontWeight: "500",
+                            display: "block",
+                            margin: "0 auto",
+                            border: "none",
+                            cursor: "pointer",
+                            minWidth: "200px",
+                            textTransform: "uppercase",
+                            letterSpacing: "0.05em"
+                          }
+                        }
+                      ]
+                    };
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, introPage] }));
+                    toast({ title: "✅ QuizIntro configurado!", description: "Página inicial completa adicionada" });
+                  }}
+                >
+                  🏠 QuizIntro (Página Inicial)
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="justify-start h-8 text-xs bg-green-50 border-green-300"
+                  onClick={() => {
+                    const caktoQuizIntroPage = {
+                      id: "cakto-quiz-intro",
+                      title: "Teste de Estilo Pessoal",
+                      type: "intro" as const,
+                      progress: 7.14,
+                      showHeader: true,
+                      showProgress: true,
+                      components: [
+                        {
+                          id: "cakto-logo",
                           type: "logo" as const,
                           data: {
                             src: "https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png",
@@ -5589,11 +5854,29 @@ const SimpleDragDropEditor: React.FC = () => {
                           style: {
                             textAlign: "center" as const,
                             maxWidth: "96px",
+                            objectCover: "cover",
                             marginBottom: "1rem"
                           }
                         },
                         {
-                          id: "intro-title",
+                          id: "cakto-progress",
+                          type: "progress" as const,
+                          data: {
+                            progressValue: 7.14,
+                            showPercentage: false,
+                            color: "hsl(var(--primary))",
+                            backgroundColor: "rgb(212, 212, 216)",
+                            height: 8
+                          },
+                          style: {
+                            width: "100%",
+                            borderRadius: "9999px",
+                            overflow: "hidden",
+                            marginBottom: "1rem"
+                          }
+                        },
+                        {
+                          id: "cakto-title",
                           type: "title" as const,
                           data: {
                             text: "Teste de Estilo Pessoal",
@@ -5608,7 +5891,7 @@ const SimpleDragDropEditor: React.FC = () => {
                           }
                         },
                         {
-                          id: "intro-image",
+                          id: "cakto-image",
                           type: "image" as const,
                           data: {
                             src: "https://cakto-quiz-br01.b-cdn.net/uploads/ecbe689b-1c0a-4071-98d3-4d391b6dd98f.png",
@@ -5618,14 +5901,18 @@ const SimpleDragDropEditor: React.FC = () => {
                           },
                           style: {
                             textAlign: "center" as const,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
                             maxWidth: "384px",
                             margin: "0 auto",
+                            objectCover: "cover",
                             borderRadius: "0.5rem",
                             marginBottom: "1rem"
                           }
                         },
                         {
-                          id: "name-input",
+                          id: "cakto-input",
                           type: "input" as const,
                           data: {
                             label: "NOME *",
@@ -5635,11 +5922,14 @@ const SimpleDragDropEditor: React.FC = () => {
                           },
                           style: {
                             width: "100%",
+                            display: "grid",
+                            alignItems: "center",
+                            gap: "0.375rem",
                             marginBottom: "1rem"
                           }
                         },
                         {
-                          id: "start-button",
+                          id: "cakto-button",
                           type: "button" as const,
                           data: {
                             text: "Continuar",
@@ -5650,15 +5940,19 @@ const SimpleDragDropEditor: React.FC = () => {
                             height: "3.5rem",
                             backgroundColor: "hsl(var(--primary))",
                             color: "hsl(var(--primary-foreground))",
-                            borderRadius: "0.375rem"
+                            borderRadius: "0.375rem",
+                            padding: "0.5rem 1rem"
                           }
                         }
                       ]
                     };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, introScreen] }));
-                    toast({ title: "✅ Tela 1 adicionada", description: "Entrada do Nome - QuizIntro" });
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, caktoQuizIntroPage] }));
+                    toast({ title: "✅ ETAPA 17 REPLICADA!", description: "Estrutura idêntica ao CaktoQuiz: logo 96x96, progress 7.14%, h1 text-3xl font-bold, imagem max-w-96, input com label NOME *, botão h-14" });
                   }}
                 >
+<<<<<<< HEAD
+                  ✨ ETAPA 17 - CaktoQuiz Exato
+=======
                   📱 Tela 1: Entrada do Nome
                 </Button>
 
@@ -6175,6 +6469,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   }}
                 >
                   💰 Tela 21: Oferta/Upsell
+>>>>>>> e3df6263084c251ab32a2aa425fbb30b0a930527
                 </Button>
 
                 <Button
