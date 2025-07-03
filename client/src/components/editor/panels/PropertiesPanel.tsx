@@ -6,11 +6,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
 import { Trash2, Settings } from 'lucide-react';
-import { ComponentInstance } from '@/interfaces/editor';
+import { SimpleComponent } from '@/interfaces/quiz';
 
 interface PropertiesPanelProps {
-  selectedComponent: ComponentInstance | null;
-  onComponentUpdate: (updates: Partial<ComponentInstance>) => void;
+  selectedComponent: SimpleComponent | null;
+  onComponentUpdate: (updates: Partial<SimpleComponent>) => void;
   onComponentDelete: (componentId: string) => void;
 }
 
@@ -32,17 +32,17 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
 
   const handlePropChange = (key: string, value: any) => {
     onComponentUpdate({
-      props: {
-        ...selectedComponent.props,
+      data: {
+        ...selectedComponent.data,
         [key]: value,
       },
     });
   };
 
   const renderPropertyEditor = () => {
-    const { componentId, props } = selectedComponent;
+    const { type, data } = selectedComponent;
 
-    switch (componentId) {
+    switch (type) {
       case 'title':
       case 'subtitle':
         return (
@@ -51,7 +51,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               <Label htmlFor="text">Texto</Label>
               <Textarea
                 id="text"
-                value={props.text || ''}
+                value={data.text || ''}
                 onChange={(e) => handlePropChange('text', e.target.value)}
                 rows={3}
               />
@@ -60,7 +60,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               <Label htmlFor="alignment">Alinhamento</Label>
               <select
                 id="alignment"
-                value={props.alignment || 'center'}
+                value={data.alignment || 'center'}
                 onChange={(e) => handlePropChange('alignment', e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
               >
@@ -74,7 +74,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               <Input
                 id="color"
                 type="color"
-                value={props.color || '#432818'}
+                value={data.color || '#432818'}
                 onChange={(e) => handlePropChange('color', e.target.value)}
               />
             </div>
@@ -82,7 +82,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               <Label htmlFor="fontSize">Tamanho da Fonte</Label>
               <Input
                 id="fontSize"
-                value={props.fontSize || ''}
+                value={data.fontSize || ''}
                 onChange={(e) => handlePropChange('fontSize', e.target.value)}
                 placeholder="ex: 2rem, 24px"
               />
@@ -97,7 +97,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               <Label htmlFor="text">Texto</Label>
               <Textarea
                 id="text"
-                value={props.text || ''}
+                value={data.text || ''}
                 onChange={(e) => handlePropChange('text', e.target.value)}
                 rows={5}
               />
@@ -106,7 +106,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               <Label htmlFor="alignment">Alinhamento</Label>
               <select
                 id="alignment"
-                value={props.alignment || 'left'}
+                value={data.alignment || 'left'}
                 onChange={(e) => handlePropChange('alignment', e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
               >
@@ -121,7 +121,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               <Input
                 id="color"
                 type="color"
-                value={props.color || '#432818'}
+                value={data.color || '#432818'}
                 onChange={(e) => handlePropChange('color', e.target.value)}
               />
             </div>
@@ -135,7 +135,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               <Label htmlFor="src">URL da Imagem</Label>
               <Input
                 id="src"
-                value={props.src || ''}
+                value={data.src || ''}
                 onChange={(e) => handlePropChange('src', e.target.value)}
                 placeholder="https://..."
               />
@@ -144,7 +144,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               <Label htmlFor="alt">Texto Alternativo</Label>
               <Input
                 id="alt"
-                value={props.alt || ''}
+                value={data.alt || ''}
                 onChange={(e) => handlePropChange('alt', e.target.value)}
               />
             </div>
@@ -152,7 +152,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               <Label htmlFor="width">Largura</Label>
               <Input
                 id="width"
-                value={props.width || '100%'}
+                value={data.width || '100%'}
                 onChange={(e) => handlePropChange('width', e.target.value)}
                 placeholder="ex: 100%, 300px"
               />
@@ -161,7 +161,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               <Label htmlFor="alignment">Alinhamento</Label>
               <select
                 id="alignment"
-                value={props.alignment || 'center'}
+                value={data.alignment || 'center'}
                 onChange={(e) => handlePropChange('alignment', e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
               >
@@ -180,7 +180,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               <Label htmlFor="text">Texto do Botão</Label>
               <Input
                 id="text"
-                value={props.text || ''}
+                value={data.text || ''}
                 onChange={(e) => handlePropChange('text', e.target.value)}
               />
             </div>
@@ -188,7 +188,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               <Label htmlFor="type">Tipo</Label>
               <select
                 id="type"
-                value={props.type || 'primary'}
+                value={data.type || 'primary'}
                 onChange={(e) => handlePropChange('type', e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
               >
@@ -201,7 +201,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               <Label htmlFor="size">Tamanho</Label>
               <select
                 id="size"
-                value={props.size || 'medium'}
+                value={data.size || 'medium'}
                 onChange={(e) => handlePropChange('size', e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
               >
@@ -215,7 +215,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               <Input
                 id="backgroundColor"
                 type="color"
-                value={props.backgroundColor || '#b89b7a'}
+                value={data.backgroundColor || '#b89b7a'}
                 onChange={(e) => handlePropChange('backgroundColor', e.target.value)}
               />
             </div>
@@ -229,7 +229,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               <Label htmlFor="height">Altura</Label>
               <Input
                 id="height"
-                value={props.height || '2rem'}
+                value={data.height || '2rem'}
                 onChange={(e) => handlePropChange('height', e.target.value)}
                 placeholder="ex: 2rem, 32px"
               />
@@ -246,7 +246,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               <Label htmlFor="label">Rótulo</Label>
               <Input
                 id="label"
-                value={props.label || ''}
+                value={data.label || ''}
                 onChange={(e) => handlePropChange('label', e.target.value)}
               />
             </div>
@@ -254,14 +254,14 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               <Label htmlFor="placeholder">Placeholder</Label>
               <Input
                 id="placeholder"
-                value={props.placeholder || ''}
+                value={data.placeholder || ''}
                 onChange={(e) => handlePropChange('placeholder', e.target.value)}
               />
             </div>
             <div className="flex items-center space-x-2">
               <Switch
                 id="required"
-                checked={props.required || false}
+                checked={data.required || false}
                 onCheckedChange={(checked) => handlePropChange('required', checked)}
               />
               <Label htmlFor="required">Obrigatório</Label>
@@ -282,7 +282,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
     <Card className="h-full">
       <CardHeader>
         <CardTitle className="text-sm flex items-center justify-between">
-          <span>Propriedades - {selectedComponent.componentId}</span>
+          <span>Propriedades - {selectedComponent.type}</span>
           <Button
             variant="ghost"
             size="sm"

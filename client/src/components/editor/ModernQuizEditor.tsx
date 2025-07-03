@@ -365,7 +365,7 @@ const ModernQuizEditor: React.FC<ModernQuizEditorProps> = ({
             <div className={styles.rightPanelContent}>
               <PropertiesPanel
                 selectedComponent={selectedComponent}
-                onComponentUpdate={(updates: Partial<ComponentInstance>) => {
+                onComponentUpdate={(updates: Partial<SimpleComponent>) => {
                   if (selectedComponent && funnelManager.activeFunnelId) {
                     // Update component logic here
                     console.log('Component update:', updates);

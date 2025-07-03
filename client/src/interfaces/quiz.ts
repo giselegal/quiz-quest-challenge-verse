@@ -64,10 +64,13 @@ export interface SimpleComponent {
     | "title"
     | "subtitle"
     | "text"
+    | "paragraph"
     | "image"
     | "button"
     | "spacer"
     | "input"
+    | "email"
+    | "phone"
     | "options"
     | "progress"
     | "logo"
@@ -123,6 +126,9 @@ export interface SimpleComponent {
     fontWeight?: string;
     variant?: string;
     maxSelections?: number;
+    alignment?: "left" | "center" | "right";
+    size?: "small" | "medium" | "large";
+    [key: string]: any; // Allow additional properties
   };
   style: {
     fontSize?: string;

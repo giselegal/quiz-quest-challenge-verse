@@ -7,7 +7,8 @@ import {
   Video, Star, DollarSign, Clock, Shield, Gift, 
   HelpCircle, Users, BarChart3, Mail, Phone, MapPin
 } from 'lucide-react';
-import { ComponentInstance, EditorComponent } from '@/interfaces/editor';
+import { EditorComponent } from '@/interfaces/editor';
+import { SimpleComponent } from '@/interfaces/quiz';
 import styles from '@/styles/editor.module.css';
 
 // Definição dos componentes disponíveis
@@ -315,8 +316,8 @@ const COMPONENT_CATEGORIES = {
 };
 
 interface ComponentListProps {
-  onComponentSelect: (component: ComponentInstance | null) => void;
-  selectedComponent: ComponentInstance | null;
+  onComponentSelect: (component: SimpleComponent | null) => void;
+  selectedComponent: SimpleComponent | null;
 }
 
 const ComponentList: React.FC<ComponentListProps> = ({
@@ -333,11 +334,11 @@ const ComponentList: React.FC<ComponentListProps> = ({
 
   const handleComponentClick = (component: EditorComponent) => {
     // Create a new component instance
-    const newComponent: ComponentInstance = {
+    const newComponent: SimpleComponent = {
       id: `${component.id}_${Date.now()}`,
-      componentId: component.id,
-      props: { ...component.defaultProps },
-      order: 0,
+      type: component.id as SimpleComponent['type'],
+      data: { ...component.defaultProps },
+      style: {},
     };
     
     onComponentSelect(newComponent);
@@ -383,7 +384,7 @@ const ComponentList: React.FC<ComponentListProps> = ({
               <div className="grid grid-cols-1 gap-2">
                 {category.components.map((component) => {
                   const Icon = component.icon;
-                  const isSelected = selectedComponent?.componentId === component.id;
+                  const isSelected = selectedComponent?.type === component.id;
 
                   return (
                     <div
