@@ -110,6 +110,11 @@ const App = () => {
                   path="/editor-modular"
                   component={EditorTestPage}
                 />
+                {/* Editor Modular Direto - implementação modular final */}
+                <Route
+                  path="/editor-modular-final"
+                  component={lazy(() => import("./components/editor/ModularQuizEditor"))}
+                />
                 {/* Admin - protegido com AdminAuthProvider */}
                 <Route path="/admin/:rest*">
                   {() => (
