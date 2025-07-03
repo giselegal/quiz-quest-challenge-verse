@@ -139,12 +139,9 @@ interface PageData {
   };
 }
 
-// Initial page data based on quiz structure
-const INITIAL_PAGE_DATA: PageData = {
-  id: "intro",
-  title: "Introdução",
-  components: [],
-  settings: {
+// Page templates for different step types
+const getPageTemplate = (stepId: string, stepType: string, stepTitle: string): PageData => {
+  const baseSettings = {
     layout: "Em Lista",
     direction: "Vertical",
     disposition: "Centro",
@@ -160,8 +157,108 @@ const INITIAL_PAGE_DATA: PageData = {
       details: "Simples",
       style: "Moderno",
     },
-  },
+  };
+
+  const templates: Record<string, ComponentData[]> = {
+    intro: [
+      {
+        id: "intro-heading",
+        type: "heading",
+        data: { text: "Descubra Seu Estilo Pessoal", size: "2xl" }
+      },
+      {
+        id: "intro-text",
+        type: "text",
+        data: { text: "Responda às perguntas abaixo para descobrir qual estilo combina mais com você." }
+      },
+      {
+        id: "intro-button",
+        type: "button",
+        data: { text: "Começar Quiz", link: "#start-quiz", style: "primary" }
+      }
+    ],
+    question: [
+      {
+        id: "question-component",
+        type: "quiz-question",
+        data: { 
+          question: stepTitle || "Qual é sua preferência?",
+          options: [
+            "Opção A - Estilo clássico e elegante",
+            "Opção B - Estilo moderno e despojado", 
+            "Opção C - Estilo romântico e delicado",
+            "Opção D - Estilo criativo e único"
+          ]
+        }
+      },
+      {
+        id: "question-progress",
+        type: "quiz-progress",
+        data: { progress: 30, current: 3, total: 10 }
+      }
+    ],
+    transition: [
+      {
+        id: "transition-component",
+        type: "quiz-transition",
+        data: {
+          title: "🕐 Enquanto calculamos o seu resultado...",
+          description: "Queremos te fazer algumas perguntas que vão tornar sua experiência ainda mais completa.",
+          subtitle: "💬 Responda com sinceridade. Isso é só entre você e a sua nova versão."
+        }
+      }
+    ],
+    result: [
+      {
+        id: "result-component",
+        type: "quiz-result",
+        data: {
+          style: "Elegante Clássico",
+          description: "Você tem um estilo sofisticado e refinado, que preza pela elegância em todas as ocasiões.",
+          characteristics: ["Peças atemporais", "Cores neutras", "Cortes clássicos", "Acessórios discretos"],
+          tips: ["Invista em peças de qualidade", "Prefira tecidos nobres", "Mantenha um guarda-roupa cápsula"]
+        }
+      }
+    ],
+    offer: [
+      {
+        id: "offer-heading",
+        type: "heading",
+        data: { text: "Guia Completo de Estilo - R$ 97", size: "2xl" }
+      },
+      {
+        id: "offer-description",
+        type: "text", 
+        data: { text: "Transforme seu estilo com nosso guia completo personalizado para seu perfil." }
+      },
+      {
+        id: "offer-price",
+        type: "price-offer",
+        data: {
+          originalPrice: "R$ 197",
+          currentPrice: "R$ 97",
+          discount: "50% OFF",
+          urgency: "Oferta válida por apenas 24 horas"
+        }
+      },
+      {
+        id: "offer-button",
+        type: "button",
+        data: { text: "Quero Meu Guia Agora", link: "#checkout", style: "primary" }
+      }
+    ]
+  };
+
+  return {
+    id: stepId,
+    title: stepTitle,
+    components: templates[stepType] || [],
+    settings: baseSettings
+  };
 };
+
+// Initial page data
+const INITIAL_PAGE_DATA: PageData = getPageTemplate("intro", "intro", "Introdução do Quiz");
 
 const EnhancedSimpleDragDropEditor: React.FC = () => {
   const [selectedStep, setSelectedStep] = useState<string>("intro");
@@ -174,7 +271,9 @@ const EnhancedSimpleDragDropEditor: React.FC = () => {
   useEffect(() => {
     const step = FUNNEL_STEPS.find(s => s.id === selectedStep);
     if (step) {
-      setCurrentPage(prev => ({ ...prev, id: step.id, title: step.title }));
+      const pageTemplate = getPageTemplate(step.id, step.type, step.title);
+      setCurrentPage(pageTemplate);
+      setSelectedComponent(null); // Clear selected component when changing pages
     }
   }, [selectedStep]);
 
