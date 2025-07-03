@@ -68,6 +68,7 @@ import {
   Target,
   Link,
   TrendingUp,
+  LucideProps,
 } from "lucide-react";
 
 // Interfaces
@@ -7124,27 +7125,31 @@ const SimpleDragDropEditor: React.FC = () => {
               {Object.entries(COMPONENT_CATEGORIES).map(([categoryKey, category]) => (
                 <div key={categoryKey} className="mb-4">
                   <h3 className={`text-xs font-semibold mb-2 ${category.color === 'blue' ? 'text-blue-700' :
-                      category.color === 'green' ? 'text-green-700' :
-                        category.color === 'orange' ? 'text-orange-700' : 'text-gray-700'}`}>
+                    category.color === 'green' ? 'text-green-700' :
+                      category.color === 'orange' ? 'text-orange-700' : 'text-gray-700'}`}>
                     {category.title}
                   </h3>
                   <div className="space-y-1">
                     {category.components.map((componentType) => {
                       const Icon = componentType.icon;
 
+                      function handleDragStart(e: React.DragEvent<HTMLDivElement>, componentType: { type: "logo"; name: string; icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>; description: string; } | { type: "title"; name: string; icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>; description: string; } | { type: "subtitle"; name: string; icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>; description: string; } | { type: "text"; name: string; icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>; description: string; } | { type: "image"; name: string; icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>; description: string; } | { type: "button"; name: string; icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>; description: string; } | { type: "spacer"; name: string; icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>; description: string; } | { type: "progress"; name: string; icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>; description: string; } | { type: "input"; name: string; icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>; description: string; } | { type: "options"; name: string; icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>; description: string; } | { type: "video"; name: string; icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>; description: string; } | { type: "testimonial"; name: string; icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>; description: string; } | { type: "price"; name: string; icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>; description: string; } | { type: "countdown"; name: string; icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>; description: string; } | { type: "guarantee"; name: string; icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>; description: string; } | { type: "bonus"; name: string; icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>; description: string; } | { type: "faq"; name: string; icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>; description: string; } | { type: "social-proof"; name: string; icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>; description: string; }): void {
+                        throw new Error("Function not implemented.");
+                      }
+
                       return (
                         <div
                           key={componentType.type}
                           className={`component-item p-2 rounded border cursor-grab bg-white transition-colors ${category.color === 'blue' ? 'hover:bg-blue-100' :
-                              category.color === 'green' ? 'hover:bg-green-100' :
-                                category.color === 'orange' ? 'hover:bg-orange-100' : 'hover:bg-gray-100'}`}
+                            category.color === 'green' ? 'hover:bg-green-100' :
+                              category.color === 'orange' ? 'hover:bg-orange-100' : 'hover:bg-gray-100'}`}
                           draggable
                           onDragStart={(e) => handleDragStart(e, componentType)}
                         >
                           <div className="flex items-center gap-2">
                             <Icon className={`h-3 w-3 ${category.color === 'blue' ? 'text-blue-600' :
-                                category.color === 'green' ? 'text-green-600' :
-                                  category.color === 'orange' ? 'text-orange-600' : 'text-gray-600'}`} />
+                              category.color === 'green' ? 'text-green-600' :
+                                category.color === 'orange' ? 'text-orange-600' : 'text-gray-600'}`} />
                             <div>
                               <div className="font-medium text-xs">
                                 {componentType.name}
