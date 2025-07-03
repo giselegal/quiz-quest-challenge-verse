@@ -9,6 +9,8 @@ import {
   type QuizParticipant,
   type InsertQuizParticipant
 } from "@shared/schema";
+import { eq } from "drizzle-orm";
+import { db } from "./db";
 
 // modify the interface with any CRUD methods
 // you might need
@@ -89,4 +91,36 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export class DatabaseStorage implements IStorage {
+  async getUser(id: number): Promise<User | undefined> {
+    const result = await db.select().from(users).where(eq(users.id, id)).limit(1);
+    return result[0];
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const result = await db.select().from(users).where(eq(users.username, username)).limit(1);
+    return result[0];
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const result = await db.insert(users).values(insertUser).returning();
+    return result[0];
+  }
+
+  async createUtmAnalytics(utmData: InsertUtmAnalytics): Promise<UtmAnalytics> {
+    const result = await db.insert(utmAnalytics).values(utmData).returning();
+    return result[0];
+  }
+
+  async createQuizParticipant(participant: InsertQuizParticipant): Promise<QuizParticipant> {
+    const result = await db.insert(quizParticipants).values(participant).returning();
+    return result[0];
+  }
+
+  async getUtmAnalytics(): Promise<UtmAnalytics[]> {
+    return await db.select().from(utmAnalytics);
+  }
+}
+
+// Use database storage in production, memory storage for development
+export const storage = process.env.NODE_ENV === 'production' ? new DatabaseStorage() : new MemStorage();

@@ -57,7 +57,7 @@ export const UtmTab: React.FC<UtmTabProps> = ({
     fetchUtmData();
   }, [analyticsData]);
   
-  // Process the UTM data from Supabase into the format we need
+  // Process the UTM data from the server API into the format we need
   const processUtmData = (data: any[]): UtmData[] => {
     // If there's no data yet, provide some sample data
     if (!data || data.length === 0) {
