@@ -5950,9 +5950,6 @@ const SimpleDragDropEditor: React.FC = () => {
                     toast({ title: "✅ ETAPA 17 REPLICADA!", description: "Estrutura idêntica ao CaktoQuiz: logo 96x96, progress 7.14%, h1 text-3xl font-bold, imagem max-w-96, input com label NOME *, botão h-14" });
                   }}
                 >
-<<<<<<< HEAD
-                  ✨ ETAPA 17 - CaktoQuiz Exato
-=======
                   📱 Tela 1: Entrada do Nome
                 </Button>
 
@@ -6469,7 +6466,6 @@ const SimpleDragDropEditor: React.FC = () => {
                   }}
                 >
                   💰 Tela 21: Oferta/Upsell
->>>>>>> e3df6263084c251ab32a2aa425fbb30b0a930527
                 </Button>
 
                 <Button
