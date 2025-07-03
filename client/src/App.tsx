@@ -39,6 +39,9 @@ const ImprovedQuizEditor = lazy(
 const ModernQuizEditor = lazy(
   () => import("./components/visual-editor/ModernQuizEditor")
 );
+const EditorTestPage = lazy(
+  () => import("./components/editor/EditorTestPage")
+);
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App = () => {
@@ -101,6 +104,11 @@ const App = () => {
                 <Route
                   path="/editor-improved"
                   component={ImprovedQuizEditor}
+                />
+                {/* Editor Modular - nova arquitetura modular */}
+                <Route
+                  path="/editor-modular"
+                  component={EditorTestPage}
                 />
                 {/* Admin - protegido com AdminAuthProvider */}
                 <Route path="/admin/:rest*">
