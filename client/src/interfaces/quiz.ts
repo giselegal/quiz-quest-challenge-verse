@@ -169,6 +169,11 @@ export interface SimplePage {
   multiSelect?: number;
 }
 
+export interface ComponentProps {
+  isSelected?: boolean;
+  onClick?: () => void;
+}
+
 export interface QuizVariant {
   id: string;
   name: string;
