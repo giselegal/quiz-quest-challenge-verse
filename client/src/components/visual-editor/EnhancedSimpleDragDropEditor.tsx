@@ -22,14 +22,15 @@ import {
   Sliders,
   X,
   MousePointer,
-  Help,
+  HelpCircle,
   CheckSquare,
   BarChart,
   Timer,
   Receipt,
   Shield,
   Gift,
-  Clock
+  Clock,
+  Minus
 } from "lucide-react";
 
 // Funnel Steps Configuration - Based on real quiz structure
@@ -70,9 +71,10 @@ const COMPONENT_LIBRARY: ComponentLibraryItem[] = [
   { id: "image", label: "Imagem", icon: Image, category: "basic" },
   { id: "video", label: "Vídeo", icon: Video, category: "basic" },
   { id: "button", label: "Botão", icon: MousePointer, category: "basic" },
+  { id: "divider", label: "Divisor", icon: Minus, category: "basic" },
   
   // Quiz Específico
-  { id: "quiz-question", label: "Pergunta Quiz", icon: Help, category: "quiz" },
+  { id: "quiz-question", label: "Pergunta Quiz", icon: HelpCircle, category: "quiz" },
   { id: "quiz-options", label: "Opções Múltipla Escolha", icon: CheckSquare, category: "quiz" },
   { id: "quiz-progress", label: "Barra Progresso", icon: BarChart, category: "quiz" },
   { id: "quiz-timer", label: "Cronômetro", icon: Timer, category: "quiz", new: true },
@@ -335,8 +337,8 @@ const EnhancedSimpleDragDropEditor: React.FC = () => {
 
   return (
     <div className="h-screen bg-gray-100 flex overflow-hidden">
-      {/* Left Sidebar - Funnel Steps */}
-      <div className="w-80 bg-gray-900 text-white flex flex-col">
+      {/* Painel 1: Etapas do Funil */}
+      <div className="w-72 bg-gray-900 text-white flex flex-col border-r border-gray-800">
         <div className="p-4 border-b border-gray-800">
           <h2 className="text-xl font-bold">Etapas do Funil</h2>
           <p className="text-sm text-gray-400 mt-1">Quiz Estilo + Oferta</p>
@@ -368,131 +370,128 @@ const EnhancedSimpleDragDropEditor: React.FC = () => {
         </ScrollArea>
       </div>
 
-      {/* Middle Area - Component Library Sidebar + Canvas */}
-      <div className="flex-1 flex">
-        {/* Component Library Sidebar */}
-        <div className="w-64 bg-gray-900 border-r border-gray-800 flex flex-col">
-          <div className="p-4 border-b border-gray-800">
-            <h3 className="text-lg font-semibold text-white">Componentes</h3>
-            <p className="text-sm text-gray-400">Arraste para o canvas</p>
-          </div>
-          
-          <ScrollArea className="flex-1 p-2">
-            <div className="space-y-1">
-              {COMPONENT_LIBRARY.map((comp) => (
-                <div
-                  key={comp.id}
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, comp.id)}
-                  className="flex items-center space-x-3 p-3 bg-gray-800 hover:bg-gray-700 rounded-lg cursor-grab active:cursor-grabbing transition-colors group"
-                >
-                  <div className="relative">
-                    <comp.icon className="w-5 h-5 text-gray-300 group-hover:text-white" />
-                    {comp.new && (
-                      <Badge className="absolute -top-1 -right-1 text-xs bg-blue-600 text-white px-1 py-0.5 rounded-full">
-                        Novo
-                      </Badge>
-                    )}
+      {/* Painel 2: Biblioteca de Componentes */}
+      <div className="w-64 bg-gray-900 text-white flex flex-col border-r border-gray-800">
+        <div className="p-4 border-b border-gray-800">
+          <h3 className="text-lg font-semibold">Componentes</h3>
+          <p className="text-sm text-gray-400">Arraste para o canvas</p>
+        </div>
+        
+        <ScrollArea className="flex-1 p-2">
+          <div className="space-y-1">
+            {COMPONENT_LIBRARY.map((comp) => (
+              <div
+                key={comp.id}
+                draggable
+                onDragStart={(e) => handleDragStart(e, comp.id)}
+                className="flex items-center space-x-3 p-3 bg-gray-800 hover:bg-gray-700 rounded-lg cursor-grab active:cursor-grabbing transition-colors group"
+              >
+                <div className="relative">
+                  <comp.icon className="w-5 h-5 text-gray-300 group-hover:text-white" />
+                  {comp.new && (
+                    <Badge className="absolute -top-1 -right-1 text-xs bg-blue-600 text-white px-1 py-0.5 rounded-full">
+                      Novo
+                    </Badge>
+                  )}
+                </div>
+                <div className="flex-1">
+                  <div className="text-sm text-gray-200 group-hover:text-white font-medium">
+                    {comp.label}
                   </div>
-                  <div className="flex-1">
-                    <div className="text-sm text-gray-200 group-hover:text-white font-medium">
-                      {comp.label}
-                    </div>
-                    <div className="text-xs text-gray-500 capitalize">
-                      {comp.category}
-                    </div>
+                  <div className="text-xs text-gray-500 capitalize">
+                    {comp.category}
                   </div>
                 </div>
-              ))}
+              </div>
+            ))}
+          </div>
+        </ScrollArea>
+      </div>
+
+      {/* Painel 3: Canvas Principal */}
+      <div className="flex-1 p-6 overflow-auto bg-gray-50">
+        {/* Toolbar */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center space-x-4">
+            <h1 className="text-xl font-semibold text-gray-800">
+              Editor de Funil - Quiz Estilo
+            </h1>
+            <Badge variant="outline" className="text-sm">
+              {currentPage.title}
+            </Badge>
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            {/* View Mode Selector */}
+            <div className="flex bg-gray-200 rounded-lg p-1">
+              <Button
+                variant={viewMode === "desktop" ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setViewMode("desktop")}
+              >
+                <Monitor className="w-4 h-4" />
+              </Button>
+              <Button
+                variant={viewMode === "tablet" ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setViewMode("tablet")}
+              >
+                <Tablet className="w-4 h-4" />
+              </Button>
+              <Button
+                variant={viewMode === "mobile" ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setViewMode("mobile")}
+              >
+                <Smartphone className="w-4 h-4" />
+              </Button>
             </div>
-          </ScrollArea>
+
+            <Button variant="outline" size="sm">
+              <Eye className="w-4 h-4 mr-2" />
+              Preview
+            </Button>
+            
+            <Button size="sm">
+              <Save className="w-4 h-4 mr-2" />
+              Salvar
+            </Button>
+            
+            <Button size="sm" className="bg-green-600 hover:bg-green-700">
+              Publicar
+            </Button>
+          </div>
         </div>
 
-        {/* Main Canvas Area */}
-        <div className="flex-1 p-6 overflow-auto">
-          {/* Toolbar */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center space-x-4">
-              <h1 className="text-xl font-semibold text-gray-800">
-                Editor de Funil - Quiz Estilo
-              </h1>
-              <Badge variant="outline" className="text-sm">
-                {currentPage.title}
-              </Badge>
+        {/* Canvas Container */}
+        <div 
+          className="min-h-[600px] bg-white border-2 border-dashed border-gray-300 rounded-lg p-6 mx-auto shadow-lg"
+          style={{
+            maxWidth: viewMode === "mobile" ? "375px" : viewMode === "tablet" ? "768px" : "100%"
+          }}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+        >
+          {currentPage.components.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full text-gray-500">
+              <Layout className="w-12 h-12 mb-4" />
+              <h3 className="text-lg font-medium mb-2">Canvas vazio</h3>
+              <p className="text-center">
+                Arraste componentes da biblioteca ao lado para construir sua página do quiz
+              </p>
+              <p className="text-sm text-gray-400 mt-2">
+                Ex: Pergunta + Opções + Botão Continuar
+              </p>
             </div>
-            
-            <div className="flex items-center space-x-2">
-              {/* View Mode Selector */}
-              <div className="flex bg-gray-200 rounded-lg p-1">
-                <Button
-                  variant={viewMode === "desktop" ? "default" : "ghost"}
-                  size="sm"
-                  onClick={() => setViewMode("desktop")}
-                >
-                  <Monitor className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant={viewMode === "tablet" ? "default" : "ghost"}
-                  size="sm"
-                  onClick={() => setViewMode("tablet")}
-                >
-                  <Tablet className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant={viewMode === "mobile" ? "default" : "ghost"}
-                  size="sm"
-                  onClick={() => setViewMode("mobile")}
-                >
-                  <Smartphone className="w-4 h-4" />
-                </Button>
-              </div>
-
-              <Button variant="outline" size="sm">
-                <Eye className="w-4 h-4 mr-2" />
-                Preview
-              </Button>
-              
-              <Button size="sm">
-                <Save className="w-4 h-4 mr-2" />
-                Salvar
-              </Button>
-              
-              <Button size="sm" className="bg-green-600 hover:bg-green-700">
-                Publicar
-              </Button>
+          ) : (
+            <div className="space-y-6">
+              {currentPage.components.map(renderComponent)}
             </div>
-          </div>
-
-          {/* Canvas Container */}
-          <div 
-            className="min-h-[600px] bg-white border-2 border-dashed border-gray-300 rounded-lg p-6 mx-auto shadow-lg"
-            style={{
-              maxWidth: viewMode === "mobile" ? "375px" : viewMode === "tablet" ? "768px" : "100%"
-            }}
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
-          >
-            {currentPage.components.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-gray-500">
-                <Layout className="w-12 h-12 mb-4" />
-                <h3 className="text-lg font-medium mb-2">Canvas vazio</h3>
-                <p className="text-center">
-                  Arraste componentes da biblioteca ao lado para construir sua página do quiz
-                </p>
-                <p className="text-sm text-gray-400 mt-2">
-                  Ex: Pergunta + Opções + Botão Continuar
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                {currentPage.components.map(renderComponent)}
-              </div>
-            )}
-          </div>
+          )}
         </div>
       </div>
 
-      {/* Right Sidebar - Properties Panel */}
+      {/* Painel 4: Propriedades */}
       <div className="w-96 bg-gray-900 text-white border-l border-gray-800 flex flex-col">
         <div className="p-4 border-b border-gray-800">
           <h3 className="text-lg font-semibold">Propriedades</h3>
