@@ -283,33 +283,53 @@ const ModernQuizEditor: React.FC<ModernQuizEditorProps> = ({
                 
                 <TabsContent value="funnels" className="h-full m-0">
                   <FunnelManagementPanel
-                    funnels={funnelManager.funnels}
-                    currentFunnel={currentFunnel}
-                    onLoadFunnel={funnelManager.setActiveFunnel}
-                    onDeleteFunnel={funnelManager.deleteFunnel}
-                    onCreateFunnel={funnelManager.createFunnel}
-                    onDuplicateFunnel={funnelManager.duplicateFunnel}
-                    isLoading={funnelManager.isLoading}
+                    funnel={currentFunnel}
+                    onFunnelUpdate={(updatedFunnel: QuizFunnel) => {
+                      if (funnelManager.activeFunnelId) {
+                        funnelManager.updateFunnel(funnelManager.activeFunnelId, updatedFunnel);
+                      }
+                    }}
+                    onPageSelect={setCurrentPageIndex}
+                    selectedPageIndex={currentPageIndex}
                   />
                 </TabsContent>
                 
                 <TabsContent value="history" className="h-full m-0">
                   <VersioningPanel
-                    versions={versionManager.versions}
-                    activeVersion={versionManager.activeVersion}
-                    onLoadVersion={versionManager.activateVersion}
-                    onDeleteVersion={versionManager.deleteVersion}
-                    onCreateVersion={versionManager.createVersion}
-                    onCompareVersions={versionManager.compareVersions}
-                    isLoading={versionManager.isCreating || versionManager.isDeleting}
+                    funnel={currentFunnel}
+                    onFunnelUpdate={(updatedFunnel: QuizFunnel) => {
+                      if (funnelManager.activeFunnelId) {
+                        funnelManager.updateFunnel(funnelManager.activeFunnelId, updatedFunnel);
+                      }
+                    }}
                   />
                 </TabsContent>
                 
                 <TabsContent value="config" className="h-full m-0">
                   <ConfigPanel
-                    config={currentFunnel.config}
+                    config={currentFunnel.config || {
+                      domain: '',
+                      seo: { title: '', description: '', keywords: '' },
+                      pixel: { facebookPixelId: '', googleAnalyticsId: '' },
+                      utm: { source: '', medium: '', campaign: '', content: '', term: '' },
+                      scoring: {
+                        normalQuestionPoints: 1,
+                        strategicQuestionPoints: 2,
+                        autoAdvanceNormal: false,
+                        autoAdvanceStrategic: false,
+                        normalSelectionLimit: 1,
+                        strategicSelectionLimit: 1,
+                      },
+                      results: {
+                        showUserName: true,
+                        showPrimaryStyle: true,
+                        showSecondaryStyles: true,
+                        showPercentages: true,
+                        showStyleImages: true,
+                        showStyleGuides: true,
+                      },
+                    }}
                     onConfigUpdate={handleConfigUpdate}
-                    onConfigSectionUpdate={handleConfigSectionUpdate}
                   />
                 </TabsContent>
                 
@@ -332,7 +352,7 @@ const ModernQuizEditor: React.FC<ModernQuizEditorProps> = ({
               deviceView={deviceView}
               selectedComponent={selectedComponent}
               onComponentSelect={handleComponentSelect}
-              onFunnelUpdate={(updates) => {
+              onFunnelUpdate={(updates: QuizFunnel) => {
                 if (funnelManager.activeFunnelId) {
                   funnelManager.updateFunnel(funnelManager.activeFunnelId, updates);
                 }
@@ -349,13 +369,13 @@ const ModernQuizEditor: React.FC<ModernQuizEditorProps> = ({
             <div className={styles.rightPanelContent}>
               <PropertiesPanel
                 selectedComponent={selectedComponent}
-                onComponentUpdate={(updates) => {
+                onComponentUpdate={(updates: Partial<ComponentInstance>) => {
                   if (selectedComponent && funnelManager.activeFunnelId) {
                     // Update component logic here
                     console.log('Component update:', updates);
                   }
                 }}
-                onComponentDelete={(componentId) => {
+                onComponentDelete={(componentId: string) => {
                   // Delete component logic here
                   console.log('Delete component:', componentId);
                   setSelectedComponent(null);
