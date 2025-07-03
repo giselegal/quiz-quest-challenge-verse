@@ -5560,385 +5560,62 @@ const SimpleDragDropEditor: React.FC = () => {
                 🎯 ETAPAS REAIS DO FUNIL
               </h3>
               
-              {/* 6 ETAPAS ESSENCIAIS DO FUNIL */}
+              {/* 6 ETAPAS FIXAS DO FUNIL */}
               <div className="grid grid-cols-1 gap-2 mt-2">
                 
-                {/* 1. INTRO - Entrada do Nome */}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="justify-start h-10 text-xs bg-emerald-50 border-emerald-300 font-medium"
-                  onClick={() => {
-                    const introPage = {
-                      id: "intro-page",
-                      title: "1. Introdução do Quiz",
-                      type: "intro" as const,
-                      progress: 0,
-                      showHeader: true,
-                      showProgress: false,
-                      components: [
-                        {
-                          id: "intro-logo",
-                          type: "logo" as const,
-                          data: {
-                            src: "https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png",
-                            alt: "Logo",
-                            width: 96,
-                            height: 96
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "1rem"
-                          }
-                        },
-                        {
-                          id: "intro-title",
-                          type: "title" as const,
-                          data: {
-                            text: "Teste de Estilo Pessoal"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            fontSize: "1.875rem",
-                            fontWeight: "700",
-                            marginBottom: "1rem"
-                          }
-                        },
-                        {
-                          id: "intro-image",
-                          type: "image" as const,
-                          data: {
-                            src: "https://cakto-quiz-br01.b-cdn.net/uploads/ecbe689b-1c0a-4071-98d3-4d391b6dd98f.png",
-                            alt: "Imagem do Quiz"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            maxWidth: "384px",
-                            margin: "0 auto 1rem"
-                          }
-                        },
-                        {
-                          id: "name-input",
-                          type: "input" as const,
-                          data: {
-                            label: "NOME *",
-                            placeholder: "Digite seu nome aqui..",
-                            required: true
-                          },
-                          style: {
-                            width: "100%",
-                            marginBottom: "1rem"
-                          }
-                        },
-                        {
-                          id: "start-button",
-                          type: "button" as const,
-                          data: {
-                            text: "Continuar"
-                          },
-                          style: {
-                            width: "100%",
-                            height: "3.5rem"
-                          }
-                        }
-                      ]
-                    };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, introPage] }));
-                    toast({ title: "✅ Etapa 1 adicionada", description: "Introdução do Quiz" });
-                  }}
-                >
-                  🏠 1. Introdução do Quiz
-                </Button>
+                {/* 1. INTRODUÇÃO */}
+                <div className="flex items-center justify-between p-3 rounded-lg bg-emerald-50 border border-emerald-300">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">🏠</span>
+                    <span className="text-sm font-medium text-emerald-800">1. Introdução do Quiz</span>
+                  </div>
+                  <span className="text-xs text-emerald-600 font-medium">0%</span>
+                </div>
 
                 {/* 2. QUESTÕES NORMAIS */}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="justify-start h-10 text-xs bg-blue-50 border-blue-300 font-medium"
-                  onClick={() => {
-                    const questionsPage = {
-                      id: "questions-page",
-                      title: "2. Questões Normais (1-10)",
-                      type: "question" as const,
-                      progress: 50,
-                      showHeader: true,
-                      showProgress: true,
-                      components: [
-                        {
-                          id: "question-title",
-                          type: "title" as const,
-                          data: {
-                            text: "QUAL O SEU TIPO DE ROUPA FAVORITA?"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            fontSize: "1.5rem",
-                            fontWeight: "600",
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "question-options",
-                          type: "options" as const,
-                          data: {
-                            text: "Selecione até 3 opções:",
-                            multiSelect: true,
-                            options: [
-                              { id: "opt1", text: "Vestidos elegantes", value: "vestidos", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_9_mgkdnb.webp" },
-                              { id: "opt2", text: "Roupas casuais", value: "casual", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921098/Espanhol_Portugu%C3%AAs_5_cptzyb.webp" },
-                              { id: "opt3", text: "Look profissional", value: "profissional", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp" }
-                            ]
-                          },
-                          style: {
-                            display: "grid",
-                            gap: "1rem",
-                            marginBottom: "2rem"
-                          }
-                        }
-                      ]
-                    };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, questionsPage] }));
-                    toast({ title: "✅ Etapa 2 adicionada", description: "Questões Normais (1-10)" });
-                  }}
-                >
-                  📝 2. Questões Normais (1-10)
-                </Button>
+                <div className="flex items-center justify-between p-3 rounded-lg bg-blue-50 border border-blue-300">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">📝</span>
+                    <span className="text-sm font-medium text-blue-800">2. Questões Normais (1-10)</span>
+                  </div>
+                  <span className="text-xs text-blue-600 font-medium">50%</span>
+                </div>
 
                 {/* 3. TRANSIÇÃO */}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="justify-start h-10 text-xs bg-yellow-50 border-yellow-300 font-medium"
-                  onClick={() => {
-                    const transitionPage = {
-                      id: "transition-page",
-                      title: "3. Transição",
-                      type: "transition" as const,
-                      progress: 65,
-                      showHeader: true,
-                      showProgress: true,
-                      components: [
-                        {
-                          id: "transition-title",
-                          type: "title" as const,
-                          data: {
-                            text: "Agora vamos descobrir mais sobre você..."
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            fontSize: "1.5rem",
-                            fontWeight: "600",
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "transition-subtitle",
-                          type: "subtitle" as const,
-                          data: {
-                            text: "Estas próximas perguntas nos ajudarão a personalizar ainda mais seu resultado"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            fontSize: "1rem",
-                            color: "#666",
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "continue-button",
-                          type: "button" as const,
-                          data: {
-                            text: "Continuar"
-                          },
-                          style: {
-                            width: "100%",
-                            height: "3rem"
-                          }
-                        }
-                      ]
-                    };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, transitionPage] }));
-                    toast({ title: "✅ Etapa 3 adicionada", description: "Transição" });
-                  }}
-                >
-                  🔄 3. Transição
-                </Button>
+                <div className="flex items-center justify-between p-3 rounded-lg bg-yellow-50 border border-yellow-300">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">🔄</span>
+                    <span className="text-sm font-medium text-yellow-800">3. Transição</span>
+                  </div>
+                  <span className="text-xs text-yellow-600 font-medium">65%</span>
+                </div>
 
                 {/* 4. QUESTÕES ESTRATÉGICAS */}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="justify-start h-10 text-xs bg-purple-50 border-purple-300 font-medium"
-                  onClick={() => {
-                    const strategicPage = {
-                      id: "strategic-page",
-                      title: "4. Questões Estratégicas",
-                      type: "question" as const,
-                      progress: 85,
-                      showHeader: true,
-                      showProgress: true,
-                      components: [
-                        {
-                          id: "strategic-title",
-                          type: "title" as const,
-                          data: {
-                            text: "Como você se vê hoje em relação ao seu estilo?"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            fontSize: "1.5rem",
-                            fontWeight: "600",
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "strategic-options",
-                          type: "options" as const,
-                          data: {
-                            text: "Selecione uma opção:",
-                            multiSelect: false,
-                            options: [
-                              { id: "opt1", text: "Confiante e segura", value: "confiante" },
-                              { id: "opt2", text: "Insegura sobre minhas escolhas", value: "insegura" },
-                              { id: "opt3", text: "Perdida sem direção", value: "perdida" },
-                              { id: "opt4", text: "Procurando por mudanças", value: "mudancas" }
-                            ]
-                          },
-                          style: {
-                            display: "grid",
-                            gap: "1rem",
-                            marginBottom: "2rem"
-                          }
-                        }
-                      ]
-                    };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, strategicPage] }));
-                    toast({ title: "✅ Etapa 4 adicionada", description: "Questões Estratégicas" });
-                  }}
-                >
-                  🎯 4. Questões Estratégicas
-                </Button>
+                <div className="flex items-center justify-between p-3 rounded-lg bg-purple-50 border border-purple-300">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">🎯</span>
+                    <span className="text-sm font-medium text-purple-800">4. Questões Estratégicas</span>
+                  </div>
+                  <span className="text-xs text-purple-600 font-medium">85%</span>
+                </div>
 
                 {/* 5. LOADING */}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="justify-start h-10 text-xs bg-gray-50 border-gray-300 font-medium"
-                  onClick={() => {
-                    const loadingPage = {
-                      id: "loading-page",
-                      title: "5. Loading",
-                      type: "loading" as const,
-                      progress: 95,
-                      showHeader: true,
-                      showProgress: true,
-                      components: [
-                        {
-                          id: "loading-title",
-                          type: "title" as const,
-                          data: {
-                            text: "Calculando seu resultado..."
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            fontSize: "1.5rem",
-                            fontWeight: "600",
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "loading-text",
-                          type: "text" as const,
-                          data: {
-                            text: "Analisando suas respostas e definindo seu estilo personalizado..."
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            fontSize: "1rem",
-                            color: "#666"
-                          }
-                        }
-                      ]
-                    };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, loadingPage] }));
-                    toast({ title: "✅ Etapa 5 adicionada", description: "Loading" });
-                  }}
-                >
-                  ⏳ 5. Loading
-                </Button>
+                <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50 border border-gray-300">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">⏳</span>
+                    <span className="text-sm font-medium text-gray-800">5. Loading</span>
+                  </div>
+                  <span className="text-xs text-gray-600 font-medium">95%</span>
+                </div>
 
                 {/* 6. RESULTADO */}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="justify-start h-10 text-xs bg-green-50 border-green-300 font-medium"
-                  onClick={() => {
-                    const resultPage = {
-                      id: "result-page",
-                      title: "6. Resultado",
-                      type: "result" as const,
-                      progress: 100,
-                      showHeader: true,
-                      showProgress: false,
-                      components: [
-                        {
-                          id: "result-title",
-                          type: "title" as const,
-                          data: {
-                            text: "Seu Estilo Personalizado"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            fontSize: "2rem",
-                            fontWeight: "700",
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "style-result",
-                          type: "subtitle" as const,
-                          data: {
-                            text: "Natural Autêntica"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            fontSize: "1.5rem",
-                            color: "hsl(var(--primary))",
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "result-description",
-                          type: "text" as const,
-                          data: {
-                            text: "Seu estilo reflete autenticidade e naturalidade. Você prefere peças confortáveis que expressam sua personalidade verdadeira."
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            fontSize: "1rem",
-                            color: "#666",
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "cta-button",
-                          type: "button" as const,
-                          data: {
-                            text: "Ver Guia Completo"
-                          },
-                          style: {
-                            width: "100%",
-                            height: "3.5rem"
-                          }
-                        }
-                      ]
-                    };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, resultPage] }));
-                    toast({ title: "✅ Etapa 6 adicionada", description: "Resultado" });
-                  }}
-                >
-                  🎉 6. Resultado
-                </Button>
+                <div className="flex items-center justify-between p-3 rounded-lg bg-green-50 border border-green-300">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">🎉</span>
+                    <span className="text-sm font-medium text-green-800">6. Resultado</span>
+                  </div>
+                  <span className="text-xs text-green-600 font-medium">100%</span>
+                </div>
 
                 <Button
                   variant="outline"
