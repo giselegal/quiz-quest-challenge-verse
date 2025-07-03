@@ -7,36 +7,22 @@ import {
   Plus, Copy, Trash2, Move, Eye, EyeOff,
   ArrowLeft, ArrowRight, MoreVertical
 } from 'lucide-react';
-import { QuizFunnel } from '@/interfaces/quiz';
-import { ComponentInstance } from '@/interfaces/editor';
+import { QuizFunnel, SimpleComponent } from '@/interfaces/quiz';
 import styles from '@/styles/editor.module.css';
 
 // Import component renderers
-import QuizTitle from '@/components/quiz/components/QuizTitle';
-import QuizSubtitle from '@/components/quiz/components/QuizSubtitle';
-import QuizParagraph from '@/components/quiz/components/QuizParagraph';
-import QuizImage from '@/components/quiz/components/QuizImage';
-import QuizButton from '@/components/quiz/components/QuizButton';
-import QuizSpacer from '@/components/quiz/components/QuizSpacer';
-import QuizProgress from '@/components/quiz/components/QuizProgress';
-import QuizInput from '@/components/quiz/components/QuizInput';
-import QuizOptions from '@/components/quiz/components/QuizOptions';
-import QuizVideo from '@/components/quiz/components/QuizVideo';
-import QuizTestimonial from '@/components/quiz/components/QuizTestimonial';
-import QuizPrice from '@/components/quiz/components/QuizPrice';
-import QuizCountdown from '@/components/quiz/components/QuizCountdown';
-import QuizGuarantee from '@/components/quiz/components/QuizGuarantee';
-import QuizBonus from '@/components/quiz/components/QuizBonus';
-import QuizFAQ from '@/components/quiz/components/QuizFAQ';
-import QuizSocialProof from '@/components/quiz/components/QuizSocialProof';
-import QuizEmail from '@/components/quiz/components/QuizEmail';
-import QuizPhone from '@/components/quiz/components/QuizPhone';
+import {
+  QuizTitle, QuizSubtitle, QuizParagraph, QuizImage, QuizButton,
+  QuizSpacer, QuizProgress, QuizInput, QuizOptions, QuizVideo,
+  QuizTestimonial, QuizPrice, QuizCountdown, QuizGuarantee,
+  QuizBonus, QuizFAQ, QuizSocialProof, QuizEmail, QuizPhone
+} from '@/components/quiz/components';
 
 interface PageEditorCanvasProps {
   funnel: QuizFunnel;
   deviceView: 'desktop' | 'tablet' | 'mobile';
-  selectedComponent: ComponentInstance | null;
-  onComponentSelect: (component: ComponentInstance | null) => void;
+  selectedComponent: SimpleComponent | null;
+  onComponentSelect: (component: SimpleComponent | null) => void;
   onFunnelUpdate: (funnel: QuizFunnel) => void;
   isDragging: boolean;
 }
@@ -76,27 +62,8 @@ const PageEditorCanvas: React.FC<PageEditorCanvasProps> = ({
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
 
-  // Mock pages for now - in real implementation, these would come from funnel
-  const pages = [
-    {
-      id: 'intro',
-      name: 'Introdução',
-      type: 'intro' as const,
-      components: [],
-    },
-    {
-      id: 'question1',
-      name: 'Pergunta 1',
-      type: 'question' as const,
-      components: [],
-    },
-    {
-      id: 'result',
-      name: 'Resultado',
-      type: 'result' as const,
-      components: [],
-    },
-  ];
+  // Use funnel pages instead of mock data
+  const pages = funnel.pages;
 
   const currentPage = pages[currentPageIndex];
 
@@ -122,11 +89,11 @@ const PageEditorCanvas: React.FC<PageEditorCanvasProps> = ({
       if (!componentData) return;
 
       const component = JSON.parse(componentData);
-      const newComponent: ComponentInstance = {
+      const newComponent: SimpleComponent = {
         id: `${component.id}_${Date.now()}`,
-        componentId: component.id,
-        props: { ...component.defaultProps },
-        order: index,
+        type: component.id,
+        data: { ...component.defaultProps },
+        style: {},
       };
 
       // Add component to current page
@@ -165,26 +132,27 @@ const PageEditorCanvas: React.FC<PageEditorCanvasProps> = ({
   }, []);
 
   // Render component
-  const renderComponent = useCallback((component: ComponentInstance) => {
-    const Renderer = ComponentRenderers[component.componentId as keyof typeof ComponentRenderers];
+  const renderComponent = useCallback((component: SimpleComponent) => {
+    const Renderer = ComponentRenderers[component.type as keyof typeof ComponentRenderers];
     
     if (!Renderer) {
       return (
         <div className="p-4 border border-red-300 bg-red-50 rounded">
-          <p className="text-red-600">Componente não encontrado: {component.componentId}</p>
+          <p className="text-red-600">Componente não encontrado: {component.type}</p>
         </div>
       );
     }
 
-    return <Renderer {...component.props} />;
+    // Type assertion to handle generic props
+    const Component = Renderer as React.ComponentType<any>;
+    return <Component {...(component.data || {})} />;
   }, []);
 
   // Handle component actions
-  const handleDuplicateComponent = useCallback((component: ComponentInstance) => {
-    const duplicatedComponent: ComponentInstance = {
+  const handleDuplicateComponent = useCallback((component: SimpleComponent) => {
+    const duplicatedComponent: SimpleComponent = {
       ...component,
-      id: `${component.componentId}_${Date.now()}`,
-      order: component.order + 1,
+      id: `${component.type}_${Date.now()}`,
     };
 
     const updatedComponents = [...currentPage.components];
@@ -248,7 +216,7 @@ const PageEditorCanvas: React.FC<PageEditorCanvasProps> = ({
             >
               {pages.map((page, index) => (
                 <option key={page.id} value={index}>
-                  {index + 1}. {page.name}
+                  {index + 1}. {page.title}
                 </option>
               ))}
             </select>
@@ -379,7 +347,7 @@ const PageEditorCanvas: React.FC<PageEditorCanvasProps> = ({
                   {selectedComponent?.id === component.id && (
                     <div className="absolute -top-6 left-0">
                       <Badge variant="default" className="text-xs">
-                        {component.componentId}
+                        {component.type}
                       </Badge>
                     </div>
                   )}

@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface QuizImageProps {
-  src: string;
+  src?:string;
   alt: string;
   width?: string | number;
   height?: string | number;
@@ -11,7 +11,7 @@ interface QuizImageProps {
 }
 
 const QuizImage: React.FC<QuizImageProps> = ({
-  src,
+  src = '',
   alt,
   width = '100%',
   height = 'auto',

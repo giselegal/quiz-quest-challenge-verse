@@ -2,7 +2,7 @@ import React from 'react';
 import quizStyles from '@/styles/quiz.module.css';
 
 interface QuizButtonProps {
-  text: string;
+  text?:string;
   type?: 'primary' | 'secondary' | 'outline';
   size?: 'small' | 'medium' | 'large';
   width?: string | number;
@@ -16,7 +16,7 @@ interface QuizButtonProps {
 }
 
 const QuizButton: React.FC<QuizButtonProps> = ({
-  text,
+  text = '',
   type = 'primary',
   size = 'medium',
   width = 'auto',

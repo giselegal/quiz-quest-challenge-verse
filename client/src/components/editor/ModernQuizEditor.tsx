@@ -11,20 +11,16 @@ import {
 import { toast } from '@/components/ui/use-toast';
 
 // Components
-import ComponentList from './ComponentList';
-import PageEditorCanvas from './PageEditorCanvas';
-import PropertiesPanel from './panels/PropertiesPanel';
-import ConfigPanel from './panels/ConfigPanel';
-import FunnelManagementPanel from './panels/FunnelManagementPanel';
-import VersioningPanel from './panels/VersioningPanel';
+import { ComponentList, PageEditorCanvas } from './';
+import { PropertiesPanel, ConfigPanel, FunnelManagementPanel, VersioningPanel } from './panels';
 
 // Hooks
 import { useFunnelManager } from '@/hooks/useFunnelManager';
 import { useVersionManager } from '@/hooks/useVersionManager';
 
 // Interfaces
-import { QuizFunnel, QuizConfig } from '@/interfaces/quiz';
-import { ComponentInstance, EditorComponent } from '@/interfaces/editor';
+import { QuizFunnel, QuizConfig, SimpleComponent } from '@/interfaces/quiz';
+import { EditorComponent } from '@/interfaces/editor';
 
 // Styles
 import styles from '@/styles/editor.module.css';
@@ -45,7 +41,7 @@ const ModernQuizEditor: React.FC<ModernQuizEditorProps> = ({
   // State
   const [activeTab, setActiveTab] = useState<string>('editor');
   const [deviceView, setDeviceView] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
-  const [selectedComponent, setSelectedComponent] = useState<ComponentInstance | null>(null);
+  const [selectedComponent, setSelectedComponent] = useState<SimpleComponent | null>(null);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
@@ -109,7 +105,7 @@ const ModernQuizEditor: React.FC<ModernQuizEditorProps> = ({
     setDeviceView(device);
   }, []);
 
-  const handleComponentSelect = useCallback((component: ComponentInstance | null) => {
+  const handleComponentSelect = useCallback((component: SimpleComponent | null) => {
     setSelectedComponent(component);
   }, []);
 

@@ -2,7 +2,7 @@ import React from 'react';
 import quizStyles from '@/styles/quiz.module.css';
 
 interface QuizSubtitleProps {
-  text: string;
+  text?: string;
   level?: 2 | 3 | 4 | 5 | 6;
   alignment?: 'left' | 'center' | 'right';
   color?: string;
@@ -12,7 +12,7 @@ interface QuizSubtitleProps {
 }
 
 const QuizSubtitle: React.FC<QuizSubtitleProps> = ({
-  text,
+  text = '',
   level = 2,
   alignment = 'center',
   color = '#6b4f43',

@@ -2,7 +2,7 @@ import React from 'react';
 import quizStyles from '@/styles/quiz.module.css';
 
 interface QuizParagraphProps {
-  text: string;
+  text?:string;
   alignment?: 'left' | 'center' | 'right' | 'justify';
   color?: string;
   fontSize?: string;
@@ -11,7 +11,7 @@ interface QuizParagraphProps {
 }
 
 const QuizParagraph: React.FC<QuizParagraphProps> = ({
-  text,
+  text = '',
   alignment = 'left',
   color = '#432818',
   fontSize = '1rem',

@@ -13,7 +13,7 @@ interface QuizInputProps {
 
 const QuizInput: React.FC<QuizInputProps> = ({
   label,
-  placeholder,
+  placeholder = '',
   type = 'text',
   required = false,
   width = '100%',
