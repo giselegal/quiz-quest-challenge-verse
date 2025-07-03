@@ -1,124 +1,31 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
+import react from "@vitejs/plugin-react";
 import path from "path";
-import compression from "vite-plugin-compression";
-import { componentTagger } from "./src/plugins/lovable-component-tagger.ts";
+import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 
-// https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  root: ".",
-  base: mode === "production" ? "/quiz-de-estilo/" : "/",
-
-  server: {
-    host: "0.0.0.0",
-    port: 8080,
-    // Configurações CORS e mime-types para desenvolvimento
-    headers: {
-      "X-Content-Type-Options": "nosniff",
-      "Access-Control-Allow-Origin": "*",
-    },
-    fs: {
-      allow: ["../"],
-    },
-    allowedHosts: [
-      "quiz-sell-genius-66.lovableproject.com",
-      "a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com",
-      "localhost",
-      "127.0.0.1",
-    ],
-  },
-
+export default defineConfig({
   plugins: [
     react(),
-    componentTagger(),
-    // Compressão GZIP
-    compression({
-      algorithm: "gzip",
-      ext: ".gz",
-      threshold: 10240,
-      deleteOriginFile: false,
-    }),
-    // Compressão Brotli
-    compression({
-      algorithm: "brotliCompress",
-      ext: ".br",
-      threshold: 10240,
-      deleteOriginFile: false,
-    }),
+    runtimeErrorOverlay(),
+    ...(process.env.NODE_ENV !== "production" &&
+    process.env.REPL_ID !== undefined
+      ? [
+          await import("@replit/vite-plugin-cartographer").then((m) =>
+            m.cartographer(),
+          ),
+        ]
+      : []),
   ],
-
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      "@": path.resolve(import.meta.dirname, "client", "src"),
+      "@shared": path.resolve(import.meta.dirname, "shared"),
+      "@assets": path.resolve(import.meta.dirname, "attached_assets"),
     },
-    extensions: [".js", ".jsx", ".ts", ".tsx", ".json"],
   },
-
+  root: path.resolve(import.meta.dirname, "client"),
   build: {
-    outDir: "dist",
-    assetsDir: "assets",
+    outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
-    sourcemap: false,
-    target: "es2015",
-    minify: "terser",
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-        pure_funcs: ["console.log", "console.info"],
-      },
-    },
-    // Configurações para evitar problemas de MIME type
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          "vendor-react": ["react", "react-dom", "react-router-dom"],
-          "vendor-ui": [
-            "@radix-ui/react-dialog",
-            "@radix-ui/react-dropdown-menu",
-            "@radix-ui/react-select",
-            "@radix-ui/react-tabs",
-          ],
-          "vendor-utils": ["lodash", "date-fns", "clsx", "tailwind-merge"],
-          analytics: ["./src/utils/analytics", "./src/utils/facebookPixel"],
-          charts: ["recharts"],
-          animations: ["framer-motion"],
-        },
-        chunkFileNames: (chunkInfo) => {
-          const facadeModuleId = chunkInfo.facadeModuleId
-            ? chunkInfo.facadeModuleId.split("/").pop()
-            : "chunk";
-          return `assets/${facadeModuleId}-[hash].js`;
-        },
-        assetFileNames: (assetInfo) => {
-          const extType = assetInfo.name?.split(".").at(1);
-          if (/webp|png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType || "")) {
-            return `assets/images/[name]-[hash][extname]`;
-          }
-          if (/woff2?|ttf|otf|eot/i.test(extType || "")) {
-            return `assets/fonts/[name]-[hash][extname]`;
-          }
-          return `assets/[name]-[hash][extname]`;
-        },
-      },
-    },
-    cssCodeSplit: true,
-    chunkSizeWarningLimit: 1000,
   },
-
-  optimizeDeps: {
-    include: ["react", "react-dom", "react-router-dom"],
-    exclude: ["@huggingface/transformers"],
-  },
-
-  css: {
-    devSourcemap: mode === "development",
-  },
-
-  // Lovable integration configuration (sem token)
-  define: {
-    __LOVABLE_PROJECT_ID__: JSON.stringify("quiz-sell-genius-66"),
-    __LOVABLE_ENABLED__: JSON.stringify(true),
-    __LOVABLE_SYNC_METHOD__: JSON.stringify("webhook-alternative"),
-  },
-}));
+});
