@@ -42,6 +42,7 @@ const ModernQuizEditor = lazy(
 const EditorTestPage = lazy(
   () => import("./components/editor/EditorTestPage")
 );
+const EditorFixedPage = lazy(() => import("./pages/EditorFixedPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App = () => {
@@ -114,6 +115,11 @@ const App = () => {
                 <Route
                   path="/editor-modular-final"
                   component={lazy(() => import("./components/editor/ModularQuizEditor"))}
+                />
+                {/* Editor Fixed - versão corrigida com FunnelStepsColumn integrado */}
+                <Route
+                  path="/editor-fixed"
+                  component={EditorFixedPage}
                 />
                 {/* Admin - protegido com AdminAuthProvider */}
                 <Route path="/admin/:rest*">

@@ -33,6 +33,7 @@ import {
   generateRealQuestionTemplates,
   generateStrategicQuestionTemplates,
 } from "@/data/realQuizTemplates";
+import FunnelStepsColumn, { REAL_FUNNEL_STEPS } from "./FunnelStepsColumn";
 import {
   Save,
   Trash2,
@@ -3005,25 +3006,294 @@ const QUIZ_TEMPLATES = {
 };
 
 /**
- * Cria uma página baseada em uma etapa real do funil
+ * Cria uma página baseada em uma etapa real do funil com componentes específicos
  */
 const createPageFromRealStep = (step: typeof REAL_FUNNEL_STEPS[0]) => {
-  return {
+  const basePageConfig = {
     id: step.id,
     title: step.title,
-    type: step.id.includes("intro") ? "intro" : 
-          step.id.includes("question") ? "question" : 
-          step.id.includes("transition") ? "transition" :
-          step.id.includes("result") ? "result" : "other",
     progress: step.progress,
     showHeader: true,
     showProgress: step.progress > 0,
+  };
+
+  // Criar componentes específicos para cada tipo de etapa
+  if (step.id === "quiz-intro") {
+    return {
+      ...basePageConfig,
+      type: "intro" as const,
+      showHeader: false,
+      components: [
+        {
+          id: `${step.id}-logo`,
+          type: "image" as const,
+          data: {
+            src: "/lovable-uploads/ba1b8b50-79b3-4528-b6b7-af4e90b4e70b.png",
+            alt: "Logo Gisele Galvão",
+            configurable: true,
+            label: "Logo"
+          },
+          style: { width: "120px", margin: "0 auto 1rem" }
+        },
+        {
+          id: `${step.id}-title`,
+          type: "heading" as const,
+          data: {
+            text: "Descubra Seu Estilo Pessoal",
+            level: 1,
+            configurable: true,
+            label: "Título Principal"
+          },
+          style: { textAlign: "center", marginBottom: "1rem" }
+        },
+        {
+          id: `${step.id}-subtitle`,
+          type: "text" as const,
+          data: {
+            text: "Chega de guarda-roupa lotado e sensação de não ter nada para vestir!",
+            configurable: true,
+            label: "Subtítulo"
+          },
+          style: { textAlign: "center", marginBottom: "2rem", fontSize: "1.1rem" }
+        },
+        {
+          id: `${step.id}-input`,
+          type: "input" as const,
+          data: {
+            placeholder: "Digite seu nome aqui...",
+            required: true,
+            configurable: true,
+            label: "Campo de Nome"
+          },
+          style: { marginBottom: "1.5rem" }
+        },
+        {
+          id: `${step.id}-button`,
+          type: "button" as const,
+          data: {
+            text: "COMEÇAR AGORA",
+            configurable: true,
+            label: "Botão Principal"
+          },
+          style: { width: "100%", backgroundColor: "#b89b7a" }
+        }
+      ]
+    };
+  }
+
+  if (step.id === "quiz-questions-1-10") {
+    return {
+      ...basePageConfig,
+      type: "question" as const,
+      components: [
+        {
+          id: `${step.id}-title`,
+          type: "heading" as const,
+          data: {
+            text: "Qual é o seu tipo de roupa favorita?",
+            level: 2,
+            configurable: true,
+            label: "Título da Questão"
+          },
+          style: { textAlign: "center", marginBottom: "2rem" }
+        },
+        {
+          id: `${step.id}-options`,
+          type: "quiz-options" as const,
+          data: {
+            options: [
+              "Vestidos fluidos e femininos",
+              "Looks estruturados e elegantes", 
+              "Peças casuais e confortáveis",
+              "Visuais criativos e únicos",
+              "Roupas clássicas e atemporais",
+              "Combinações modernas e trendy",
+              "Looks românticos e delicados",
+              "Peças despojadas e práticas"
+            ],
+            multiSelect: true,
+            minSelections: 3,
+            maxSelections: 3,
+            configurable: true,
+            label: "Opções da Questão"
+          },
+          style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }
+        }
+      ]
+    };
+  }
+
+  if (step.id === "main-transition") {
+    return {
+      ...basePageConfig,
+      type: "transition" as const,
+      components: [
+        {
+          id: `${step.id}-title`,
+          type: "heading" as const,
+          data: {
+            text: "Enquanto calculamos o seu resultado...",
+            level: 2,
+            configurable: true,
+            label: "Título da Transição"
+          },
+          style: { textAlign: "center", marginBottom: "1.5rem" }
+        },
+        {
+          id: `${step.id}-subtitle`,
+          type: "text" as const,
+          data: {
+            text: "Queremos te fazer algumas perguntas rápidas para uma experiência ainda mais completa",
+            configurable: true,
+            label: "Texto Explicativo"
+          },
+          style: { textAlign: "center", marginBottom: "2rem" }
+        },
+        {
+          id: `${step.id}-button`,
+          type: "button" as const,
+          data: {
+            text: "Continuar",
+            configurable: true,
+            label: "Botão de Continuar"
+          },
+          style: { width: "100%", backgroundColor: "#b89b7a" }
+        }
+      ]
+    };
+  }
+
+  if (step.id.includes("strategic-question")) {
+    return {
+      ...basePageConfig,
+      type: "strategic-question" as const,
+      components: [
+        {
+          id: `${step.id}-title`,
+          type: "heading" as const,
+          data: {
+            text: "Como você se vê hoje?",
+            level: 2,
+            configurable: true,
+            label: "Título da Questão Estratégica"
+          },
+          style: { textAlign: "center", marginBottom: "1rem" }
+        },
+        {
+          id: `${step.id}-subtitle`,
+          type: "text" as const,
+          data: {
+            text: "Quando você se olha no espelho, como se sente?",
+            configurable: true,
+            label: "Subtítulo da Questão"
+          },
+          style: { textAlign: "center", marginBottom: "2rem", fontSize: "1rem" }
+        },
+        {
+          id: `${step.id}-options`,
+          type: "quiz-options" as const,
+          data: {
+            options: [
+              "Me sinto desconectada da mulher que sou hoje",
+              "Tenho dúvidas sobre o que realmente me valoriza",
+              "Às vezes acerto, às vezes erro",
+              "Me sinto segura, mas sei que posso evoluir"
+            ],
+            multiSelect: false,
+            minSelections: 1,
+            maxSelections: 1,
+            configurable: true,
+            label: "Opções Estratégicas"
+          },
+          style: { display: "flex", flexDirection: "column", gap: "1rem" }
+        }
+      ]
+    };
+  }
+
+  if (step.id.includes("result-page")) {
+    return {
+      ...basePageConfig,
+      type: "result" as const,
+      showProgress: false,
+      components: [
+        {
+          id: `${step.id}-user-name`,
+          type: "text" as const,
+          data: {
+            text: "Parabéns, [NOME]!",
+            configurable: true,
+            label: "Saudação Personalizada"
+          },
+          style: { textAlign: "center", fontSize: "1.5rem", marginBottom: "1rem" }
+        },
+        {
+          id: `${step.id}-style-title`,
+          type: "heading" as const,
+          data: {
+            text: "Seu estilo é ELEGANTE",
+            level: 1,
+            configurable: true,
+            label: "Nome do Estilo Identificado"
+          },
+          style: { textAlign: "center", marginBottom: "1.5rem", color: "#b89b7a" }
+        },
+        {
+          id: `${step.id}-style-description`,
+          type: "text" as const,
+          data: {
+            text: "Você tem um estilo sofisticado e atemporal. Prefere peças bem estruturadas e de qualidade.",
+            configurable: true,
+            label: "Descrição do Estilo"
+          },
+          style: { textAlign: "center", marginBottom: "2rem", fontSize: "1.1rem" }
+        },
+        {
+          id: `${step.id}-style-image`,
+          type: "image" as const,
+          data: {
+            src: "/placeholder.svg",
+            alt: "Estilo Elegante",
+            configurable: true,
+            label: "Imagem do Estilo"
+          },
+          style: { width: "100%", maxWidth: "400px", margin: "0 auto 2rem" }
+        },
+        {
+          id: `${step.id}-offer-section`,
+          type: "text" as const,
+          data: {
+            text: "Quer descobrir mais sobre seu estilo e como aplicá-lo no dia a dia?",
+            configurable: true,
+            label: "Introdução da Oferta"
+          },
+          style: { textAlign: "center", marginBottom: "1.5rem" }
+        },
+        {
+          id: `${step.id}-cta-button`,
+          type: "button" as const,
+          data: {
+            text: "QUERO MEUS GUIAS DE ESTILO",
+            configurable: true,
+            label: "CTA Principal"
+          },
+          style: { width: "100%", backgroundColor: "#b89b7a", padding: "1rem" }
+        }
+      ]
+    };
+  }
+
+  // Para outros tipos de etapa, criar uma estrutura genérica
+  return {
+    ...basePageConfig,
+    type: "other" as const,
     components: step.editableElements.map((element, index) => ({
-      id: `${step.id}-${element.type}-${index}`,
-      type: element.type as any,
+      id: `${step.id}-element-${index}`,
+      type: "text" as const,
       data: {
-        text: element.current || element.label,
+        text: element,
         configurable: true,
+        label: element,
         stepId: step.id,
         componentName: step.component
       },
@@ -3067,6 +3337,9 @@ const SimpleDragDropEditor: React.FC = () => {
 
   // Estado da aba ativa
   const [activeTab, setActiveTab] = useState<string>("editor");
+
+  // Estado da etapa selecionada no FunnelStepsColumn
+  const [selectedStepId, setSelectedStepId] = useState<string>("");
 
   // Estado da seção ativa de configuração
   const [activeConfigSection, setActiveConfigSection] =
@@ -3206,6 +3479,41 @@ const SimpleDragDropEditor: React.FC = () => {
   const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   
+  // Estados para FunnelStepsColumn
+  const [selectedStepId, setSelectedStepId] = useState<string | null>(null);
+
+  /**
+   * Função para lidar com seleção de etapas do FunnelStepsColumn
+   */
+  const handleStepSelect = (step: typeof REAL_FUNNEL_STEPS[0]) => {
+    setSelectedStepId(step.id);
+    
+    // Verificar se já existe uma página para esta etapa
+    const existingPageIndex = currentFunnel.pages.findIndex(page => page.id === step.id);
+    
+    if (existingPageIndex !== -1) {
+      // Se existe, navegar para ela
+      setCurrentPageIndex(existingPageIndex);
+    } else {
+      // Se não existe, criar nova página baseada na etapa
+      const newPage = createPageFromRealStep(step);
+      const newPages = [...currentFunnel.pages, newPage];
+      
+      setCurrentFunnel(prev => ({
+        ...prev,
+        pages: newPages
+      }));
+      
+      // Navegar para a nova página
+      setCurrentPageIndex(newPages.length - 1);
+      
+      toast({
+        title: "✅ Etapa adicionada!",
+        description: `${step.title} criada com ${step.editableElements.length} elementos editáveis.`,
+      });
+    }
+  };
+
   const currentPage = currentFunnel?.pages?.[currentPageIndex] || null;
 
   // Loading state se currentPage for null
@@ -5285,9 +5593,14 @@ const SimpleDragDropEditor: React.FC = () => {
   };
 
   return (
-    <><div className="h-screen flex bg-background simple-editor">
-      {/* COLUNA 1: ETAPAS REAIS DO FUNIL - 260px */}
-      <div className="w-[260px] min-w-[260px] border-r bg-slate-50 overflow-hidden flex flex-col">
+    <div className="h-screen flex bg-background simple-editor">
+      {/* COLUNA 1: ETAPAS REAIS DO FUNIL */}
+      <FunnelStepsColumn 
+        onStepSelect={handleStepSelect}
+        selectedStepId={selectedStepId}
+      />
+
+      {/* COLUNA 2: COMPONENTES - 240px */}
         <div className="p-3 border-b bg-slate-100">
           <h2 className="text-sm font-semibold mb-2 flex items-center gap-2">
             🎯 ETAPAS REAIS DO FUNIL
@@ -5631,7 +5944,7 @@ const SimpleDragDropEditor: React.FC = () => {
                 📥 CARREGAR TODAS AS ETAPAS
               </Button>
             </div>
-          </></ScrollArea>
+          </ScrollArea>
       </div>
       <Button
         variant="outline"
