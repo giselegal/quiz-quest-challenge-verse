@@ -5560,62 +5560,83 @@ const SimpleDragDropEditor: React.FC = () => {
                 🎯 ETAPAS REAIS DO FUNIL
               </h3>
               
-              {/* 6 ETAPAS FIXAS DO FUNIL */}
-              <div className="grid grid-cols-1 gap-2 mt-2">
+              {/* 18 ETAPAS INDIVIDUAIS DO FUNIL */}
+              <div className="grid grid-cols-1 gap-1 mt-2">
                 
-                {/* 1. INTRODUÇÃO */}
-                <div className="flex items-center justify-between p-3 rounded-lg bg-emerald-50 border border-emerald-300">
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">🏠</span>
-                    <span className="text-sm font-medium text-emerald-800">1. Introdução do Quiz</span>
-                  </div>
-                  <span className="text-xs text-emerald-600 font-medium">0%</span>
-                </div>
+                {/* INTRO */}
+                <Button variant="outline" size="sm" className="justify-start h-8 text-xs bg-emerald-50 border-emerald-300">
+                  🏠 QuizIntro - Coleta do nome
+                </Button>
 
-                {/* 2. QUESTÕES NORMAIS */}
-                <div className="flex items-center justify-between p-3 rounded-lg bg-blue-50 border border-blue-300">
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">📝</span>
-                    <span className="text-sm font-medium text-blue-800">2. Questões Normais (1-10)</span>
-                  </div>
-                  <span className="text-xs text-blue-600 font-medium">50%</span>
-                </div>
+                {/* Q1-Q10: QUESTÕES NORMAIS */}
+                <Button variant="outline" size="sm" className="justify-start h-8 text-xs bg-blue-50 border-blue-300">
+                  📝 Q1 - Tipo de roupa favorita
+                </Button>
+                <Button variant="outline" size="sm" className="justify-start h-8 text-xs bg-blue-50 border-blue-300">
+                  📝 Q2 - Personalidade
+                </Button>
+                <Button variant="outline" size="sm" className="justify-start h-8 text-xs bg-blue-50 border-blue-300">
+                  📝 Q3 - Visual que se identifica
+                </Button>
+                <Button variant="outline" size="sm" className="justify-start h-8 text-xs bg-blue-50 border-blue-300">
+                  📝 Q4 - Detalhes que gosta
+                </Button>
+                <Button variant="outline" size="sm" className="justify-start h-8 text-xs bg-blue-50 border-blue-300">
+                  📝 Q5 - Estampas favoritas
+                </Button>
+                <Button variant="outline" size="sm" className="justify-start h-8 text-xs bg-blue-50 border-blue-300">
+                  📝 Q6 - Casaco favorito
+                </Button>
+                <Button variant="outline" size="sm" className="justify-start h-8 text-xs bg-blue-50 border-blue-300">
+                  📝 Q7 - Calça favorita
+                </Button>
+                <Button variant="outline" size="sm" className="justify-start h-8 text-xs bg-blue-50 border-blue-300">
+                  📝 Q8 - Sapatos favoritos
+                </Button>
+                <Button variant="outline" size="sm" className="justify-start h-8 text-xs bg-blue-50 border-blue-300">
+                  📝 Q9 - Acessórios
+                </Button>
+                <Button variant="outline" size="sm" className="justify-start h-8 text-xs bg-blue-50 border-blue-300">
+                  📝 Q10 - Tecidos
+                </Button>
 
-                {/* 3. TRANSIÇÃO */}
-                <div className="flex items-center justify-between p-3 rounded-lg bg-yellow-50 border border-yellow-300">
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">🔄</span>
-                    <span className="text-sm font-medium text-yellow-800">3. Transição</span>
-                  </div>
-                  <span className="text-xs text-yellow-600 font-medium">65%</span>
-                </div>
+                {/* TRANSIÇÃO 1 */}
+                <Button variant="outline" size="sm" className="justify-start h-8 text-xs bg-yellow-50 border-yellow-300">
+                  🔄 Transição 1 - Enquanto calculamos...
+                </Button>
 
-                {/* 4. QUESTÕES ESTRATÉGICAS */}
-                <div className="flex items-center justify-between p-3 rounded-lg bg-purple-50 border border-purple-300">
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">🎯</span>
-                    <span className="text-sm font-medium text-purple-800">4. Questões Estratégicas</span>
-                  </div>
-                  <span className="text-xs text-purple-600 font-medium">85%</span>
-                </div>
+                {/* Q11-Q17: QUESTÕES ESTRATÉGICAS */}
+                <Button variant="outline" size="sm" className="justify-start h-8 text-xs bg-purple-50 border-purple-300">
+                  🎯 Q11 - Como você se vê hoje?
+                </Button>
+                <Button variant="outline" size="sm" className="justify-start h-8 text-xs bg-purple-50 border-purple-300">
+                  🎯 Q12 - O que mais te desafia?
+                </Button>
+                <Button variant="outline" size="sm" className="justify-start h-8 text-xs bg-purple-50 border-purple-300">
+                  🎯 Q13 - Frequência de indecisão
+                </Button>
+                <Button variant="outline" size="sm" className="justify-start h-8 text-xs bg-purple-50 border-purple-300">
+                  🎯 Q14 - Material estratégico
+                </Button>
+                <Button variant="outline" size="sm" className="justify-start h-8 text-xs bg-purple-50 border-purple-300">
+                  🎯 Q15 - Investimento R$ 97
+                </Button>
+                <Button variant="outline" size="sm" className="justify-start h-8 text-xs bg-purple-50 border-purple-300">
+                  🎯 Q16 - Resultados desejados
+                </Button>
 
-                {/* 5. LOADING */}
-                <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50 border border-gray-300">
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">⏳</span>
-                    <span className="text-sm font-medium text-gray-800">5. Loading</span>
-                  </div>
-                  <span className="text-xs text-gray-600 font-medium">95%</span>
-                </div>
+                {/* TRANSIÇÃO 2 */}
+                <Button variant="outline" size="sm" className="justify-start h-8 text-xs bg-yellow-50 border-yellow-300">
+                  🔄 Transição 2 - Obrigada por compartilhar
+                </Button>
 
-                {/* 6. RESULTADO */}
-                <div className="flex items-center justify-between p-3 rounded-lg bg-green-50 border border-green-300">
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">🎉</span>
-                    <span className="text-sm font-medium text-green-800">6. Resultado</span>
-                  </div>
-                  <span className="text-xs text-green-600 font-medium">100%</span>
-                </div>
+                {/* RESULTADO */}
+                <Button variant="outline" size="sm" className="justify-start h-8 text-xs bg-green-50 border-green-300">
+                  🎉 Resultado - /resultado (Teste A)
+                </Button>
+                <Button variant="outline" size="sm" className="justify-start h-8 text-xs bg-orange-50 border-orange-300">
+                  💰 Oferta - /quiz-descubra-seu-estilo (Teste B)
+                </Button>
 
                 <Button
                   variant="outline"
