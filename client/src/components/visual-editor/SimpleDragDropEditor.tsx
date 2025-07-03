@@ -1,33 +1,217 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { 
+  Settings, 
+  Eye, 
+  Edit3, 
+  Move, 
+  Copy, 
+  Trash2, 
+  Plus,
+  ChevronRight,
+  Play
+} from "lucide-react";
 
 const SimpleDragDropEditor: React.FC = () => {
-  // Definição das 18 etapas do funil conforme fluxo do usuário
+  const [selectedStage, setSelectedStage] = useState<string | null>(null);
+  
+  // Definição das 18 etapas do funil baseadas no fluxo real
   const funnelStages = [
-    { id: "1", name: "QuizIntro - Coleta do nome", type: "intro", color: "bg-blue-100 border-blue-300 text-blue-700" },
-    { id: "2", name: "Q1 - Roupa favorita", type: "question", color: "bg-green-100 border-green-300 text-green-700" },
-    { id: "3", name: "Q2 - Personalidade", type: "question", color: "bg-green-100 border-green-300 text-green-700" },
-    { id: "4", name: "Q3 - Visual no espelho", type: "question", color: "bg-green-100 border-green-300 text-green-700" },
-    { id: "5", name: "Q4 - Detalhes importantes", type: "question", color: "bg-green-100 border-green-300 text-green-700" },
-    { id: "6", name: "Q5 - Estampas favoritas", type: "question", color: "bg-green-100 border-green-300 text-green-700" },
-    { id: "7", name: "Q6 - Casaco ideal", type: "question", color: "bg-green-100 border-green-300 text-green-700" },
-    { id: "8", name: "Q7 - Calça preferida", type: "question", color: "bg-green-100 border-green-300 text-green-700" },
-    { id: "9", name: "Q8 - Sapatos favoritos", type: "question", color: "bg-green-100 border-green-300 text-green-700" },
-    { id: "10", name: "Q9 - Acessórios", type: "question", color: "bg-green-100 border-green-300 text-green-700" },
-    { id: "11", name: "Q10 - Tecidos preferidos", type: "question", color: "bg-green-100 border-green-300 text-green-700" },
-    { id: "12", name: "QuizTransition - Primeira transição", type: "transition", color: "bg-orange-100 border-orange-300 text-orange-700" },
-    { id: "13", name: "S1 - Como se vê hoje", type: "strategic", color: "bg-yellow-100 border-yellow-300 text-yellow-700" },
-    { id: "14", name: "S2 - Desafios ao se vestir", type: "strategic", color: "bg-yellow-100 border-yellow-300 text-yellow-700" },
-    { id: "15", name: "S3 - Frequência de indecisão", type: "strategic", color: "bg-yellow-100 border-yellow-300 text-yellow-700" },
-    { id: "16", name: "S4 - Interesse em material", type: "strategic", color: "bg-yellow-100 border-yellow-300 text-yellow-700" },
-    { id: "17", name: "S5 - Preço R$97", type: "strategic", color: "bg-yellow-100 border-yellow-300 text-yellow-700" },
-    { id: "18", name: "S6 - Resultados desejados", type: "strategic", color: "bg-yellow-100 border-yellow-300 text-yellow-700" },
-    { id: "19", name: "Transição Final", type: "transition", color: "bg-orange-100 border-orange-300 text-orange-700" },
-    { id: "20", name: "Resultado - /resultado", type: "result", color: "bg-purple-100 border-purple-300 text-purple-700" },
-    { id: "21", name: "Oferta - /quiz-descubra-seu-estilo", type: "offer", color: "bg-pink-100 border-pink-300 text-pink-700" }
+    { 
+      id: "intro", 
+      name: "QuizIntro - Coleta do nome", 
+      type: "intro", 
+      route: "/",
+      description: "Página inicial com entrada do nome",
+      color: "bg-indigo-50 border-indigo-200 hover:bg-indigo-100",
+      icon: "🚀"
+    },
+    { 
+      id: "q1", 
+      name: "Q1 - Roupa favorita", 
+      type: "question", 
+      route: "/quiz/1",
+      description: "Primeira questão: tipo de roupa favorita",
+      color: "bg-emerald-50 border-emerald-200 hover:bg-emerald-100",
+      icon: "👕"
+    },
+    { 
+      id: "q2", 
+      name: "Q2 - Personalidade", 
+      type: "question", 
+      route: "/quiz/2",
+      description: "Como você se descreve",
+      color: "bg-emerald-50 border-emerald-200 hover:bg-emerald-100",
+      icon: "✨"
+    },
+    { 
+      id: "q3", 
+      name: "Q3 - Visual no espelho", 
+      type: "question", 
+      route: "/quiz/3",
+      description: "Como se vê ao se olhar no espelho",
+      color: "bg-emerald-50 border-emerald-200 hover:bg-emerald-100",
+      icon: "🪞"
+    },
+    { 
+      id: "q4", 
+      name: "Q4 - Detalhes importantes", 
+      type: "question", 
+      route: "/quiz/4",
+      description: "O que mais valoriza no look",
+      color: "bg-emerald-50 border-emerald-200 hover:bg-emerald-100",
+      icon: "💎"
+    },
+    { 
+      id: "q5", 
+      name: "Q5 - Estampas favoritas", 
+      type: "question", 
+      route: "/quiz/5",
+      description: "Tipo de estampa preferida",
+      color: "bg-emerald-50 border-emerald-200 hover:bg-emerald-100",
+      icon: "🎨"
+    },
+    { 
+      id: "q6", 
+      name: "Q6 - Casaco ideal", 
+      type: "question", 
+      route: "/quiz/6",
+      description: "Estilo de casaco preferido",
+      color: "bg-emerald-50 border-emerald-200 hover:bg-emerald-100",
+      icon: "🧥"
+    },
+    { 
+      id: "q7", 
+      name: "Q7 - Calça preferida", 
+      type: "question", 
+      route: "/quiz/7",
+      description: "Tipo de calça favorita",
+      color: "bg-emerald-50 border-emerald-200 hover:bg-emerald-100",
+      icon: "👖"
+    },
+    { 
+      id: "q8", 
+      name: "Q8 - Sapatos favoritos", 
+      type: "question", 
+      route: "/quiz/8",
+      description: "Estilo de sapato preferido",
+      color: "bg-emerald-50 border-emerald-200 hover:bg-emerald-100",
+      icon: "👠"
+    },
+    { 
+      id: "q9", 
+      name: "Q9 - Acessórios", 
+      type: "question", 
+      route: "/quiz/9",
+      description: "Acessórios que mais usa",
+      color: "bg-emerald-50 border-emerald-200 hover:bg-emerald-100",
+      icon: "💍"
+    },
+    { 
+      id: "q10", 
+      name: "Q10 - Tecidos preferidos", 
+      type: "question", 
+      route: "/quiz/10",
+      description: "Material de roupa favorito",
+      color: "bg-emerald-50 border-emerald-200 hover:bg-emerald-100",
+      icon: "🧵"
+    },
+    { 
+      id: "transition1", 
+      name: "QuizTransition - 1ª Transição", 
+      type: "transition", 
+      route: "/quiz/transition",
+      description: "Transição para questões estratégicas",
+      color: "bg-amber-50 border-amber-200 hover:bg-amber-100",
+      icon: "⚡"
+    },
+    { 
+      id: "s1", 
+      name: "S1 - Como se vê hoje", 
+      type: "strategic", 
+      route: "/quiz/strategic/1",
+      description: "Autopercepção atual",
+      color: "bg-violet-50 border-violet-200 hover:bg-violet-100",
+      icon: "🎯"
+    },
+    { 
+      id: "s2", 
+      name: "S2 - Desafios ao se vestir", 
+      type: "strategic", 
+      route: "/quiz/strategic/2",
+      description: "Principais dificuldades",
+      color: "bg-violet-50 border-violet-200 hover:bg-violet-100",
+      icon: "🤔"
+    },
+    { 
+      id: "s3", 
+      name: "S3 - Frequência de indecisão", 
+      type: "strategic", 
+      route: "/quiz/strategic/3",
+      description: "Com que frequência fica indecisa",
+      color: "bg-violet-50 border-violet-200 hover:bg-violet-100",
+      icon: "⏰"
+    },
+    { 
+      id: "s4", 
+      name: "S4 - Interesse em material", 
+      type: "strategic", 
+      route: "/quiz/strategic/4",
+      description: "Interesse em guias de estilo",
+      color: "bg-violet-50 border-violet-200 hover:bg-violet-100",
+      icon: "📚"
+    },
+    { 
+      id: "s5", 
+      name: "S5 - Preço R$97", 
+      type: "strategic", 
+      route: "/quiz/strategic/5",
+      description: "Validação de preço",
+      color: "bg-violet-50 border-violet-200 hover:bg-violet-100",
+      icon: "💰"
+    },
+    { 
+      id: "s6", 
+      name: "S6 - Resultados desejados", 
+      type: "strategic", 
+      route: "/quiz/strategic/6",
+      description: "O que espera alcançar",
+      color: "bg-violet-50 border-violet-200 hover:bg-violet-100",
+      icon: "🎉"
+    },
+    { 
+      id: "transition2", 
+      name: "Transição Final", 
+      type: "transition", 
+      route: "/quiz/final-transition",
+      description: "Preparação para resultado",
+      color: "bg-amber-50 border-amber-200 hover:bg-amber-100",
+      icon: "🏁"
+    },
+    { 
+      id: "result", 
+      name: "Resultado - Teste A", 
+      type: "result", 
+      route: "/resultado",
+      description: "Página de resultado do quiz",
+      color: "bg-rose-50 border-rose-200 hover:bg-rose-100",
+      icon: "🎊"
+    },
+    { 
+      id: "offer", 
+      name: "Oferta - Teste B", 
+      type: "offer", 
+      route: "/quiz-descubra-seu-estilo",
+      description: "Página de oferta/venda",
+      color: "bg-pink-50 border-pink-200 hover:bg-pink-100",
+      icon: "💝"
+    }
   ];
 
   const getTypeLabel = (type: string) => {
@@ -42,51 +226,84 @@ const SimpleDragDropEditor: React.FC = () => {
     }
   };
 
+  const selectedStageData = selectedStage ? funnelStages.find(s => s.id === selectedStage) : null;
+
   return (
-    <div className="h-screen bg-gray-50">
+    <div className="h-screen bg-slate-900 text-white">
       {/* Header */}
-      <div className="bg-white border-b px-6 py-4">
+      <div className="bg-slate-800 border-b border-slate-700 px-6 py-4">
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-bold text-gray-900">Editor de Funil - Quiz de Estilo</h1>
-            <p className="text-sm text-gray-500">18 etapas individuais do fluxo completo</p>
+          <div className="flex items-center gap-4">
+            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
+              <Settings className="w-4 h-4 text-white" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-white">Quiz Funnel Builder</h1>
+              <p className="text-sm text-slate-400">Editor visual do funil de conversão</p>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Badge variant="outline">Layout 4 Colunas</Badge>
-            <Badge variant="outline">18 Etapas</Badge>
+          <div className="flex items-center gap-3">
+            <Button size="sm" variant="outline" className="bg-slate-700 border-slate-600 text-white hover:bg-slate-600">
+              <Eye className="w-4 h-4 mr-2" />
+              Preview
+            </Button>
+            <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+              <Play className="w-4 h-4 mr-2" />
+              Testar Funil
+            </Button>
           </div>
         </div>
       </div>
 
-      {/* Layout 4 Colunas */}
+      {/* Layout Principal */}
       <div className="flex h-[calc(100vh-80px)]">
         
-        {/* Coluna 1: Etapas do Funil */}
-        <div className="w-80 border-r bg-white">
-          <div className="p-4 border-b">
-            <h2 className="text-lg font-semibold">🎯 Etapas do Funil</h2>
-            <p className="text-xs text-gray-500 mt-1">
-              Clique em uma etapa para editar
+        {/* Sidebar: Etapas do Funil */}
+        <div className="w-80 border-r border-slate-700 bg-slate-800">
+          <div className="p-4 border-b border-slate-700">
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-semibold text-white">Etapas do Funil</h2>
+              <Badge variant="outline" className="border-slate-600 text-slate-300">
+                {funnelStages.length}
+              </Badge>
+            </div>
+            <p className="text-xs text-slate-400 mt-1">
+              Clique para editar uma etapa
             </p>
           </div>
           
           <ScrollArea className="h-[calc(100vh-140px)]">
-            <div className="p-4 space-y-2">
+            <div className="p-3 space-y-1">
               {funnelStages.map((stage, index) => (
                 <Button
                   key={stage.id}
-                  variant="outline"
+                  variant={selectedStage === stage.id ? "default" : "ghost"}
                   size="sm"
-                  className={`w-full justify-start h-auto p-3 text-left ${stage.color}`}
+                  onClick={() => setSelectedStage(stage.id)}
+                  className={`w-full justify-start h-auto p-3 text-left transition-all duration-200 ${
+                    selectedStage === stage.id 
+                      ? "bg-blue-600 hover:bg-blue-700 text-white shadow-lg" 
+                      : "hover:bg-slate-700 text-slate-300"
+                  }`}
                 >
-                  <div className="flex flex-col items-start w-full">
-                    <div className="flex items-center justify-between w-full">
-                      <Badge variant="secondary" className="text-xs mb-1">
-                        {getTypeLabel(stage.type)}
-                      </Badge>
-                      <span className="text-xs text-gray-500">#{index + 1}</span>
+                  <div className="flex items-center gap-3 w-full">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-slate-700 flex items-center justify-center text-sm">
+                      {stage.icon}
                     </div>
-                    <span className="text-xs font-medium">{stage.name}</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-1">
+                        <Badge 
+                          variant="secondary" 
+                          className="text-xs bg-slate-600 text-slate-200 border-slate-500"
+                        >
+                          {getTypeLabel(stage.type)}
+                        </Badge>
+                        <span className="text-xs text-slate-400">#{index + 1}</span>
+                      </div>
+                      <p className="text-xs font-medium truncate">{stage.name}</p>
+                      <p className="text-xs text-slate-400 truncate">{stage.route}</p>
+                    </div>
+                    <ChevronRight className="w-4 h-4 flex-shrink-0 text-slate-400" />
                   </div>
                 </Button>
               ))}
@@ -94,122 +311,199 @@ const SimpleDragDropEditor: React.FC = () => {
           </ScrollArea>
         </div>
 
-        {/* Coluna 2: Preview */}
-        <div className="flex-1 border-r bg-gray-50">
-          <div className="h-full flex flex-col items-center justify-center">
-            <div className="text-center text-gray-500">
-              <div className="w-16 h-16 bg-gray-200 rounded-lg mb-4 mx-auto flex items-center justify-center">
-                <span className="text-2xl">👁️</span>
+        {/* Canvas Principal */}
+        <div className="flex-1 bg-slate-900">
+          <div className="h-full flex flex-col">
+            {/* Toolbar do Canvas */}
+            <div className="border-b border-slate-700 bg-slate-800 p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  {selectedStageData ? (
+                    <>
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-slate-700 flex items-center justify-center">
+                          {selectedStageData.icon}
+                        </div>
+                        <div>
+                          <h3 className="text-sm font-semibold text-white">{selectedStageData.name}</h3>
+                          <p className="text-xs text-slate-400">{selectedStageData.description}</p>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <div>
+                      <h3 className="text-sm font-semibold text-white">Selecione uma etapa</h3>
+                      <p className="text-xs text-slate-400">Escolha uma etapa para editar</p>
+                    </div>
+                  )}
+                </div>
+                
+                {selectedStageData && (
+                  <div className="flex items-center gap-2">
+                    <Button size="sm" variant="outline" className="bg-slate-700 border-slate-600 text-white hover:bg-slate-600">
+                      <Copy className="w-4 h-4 mr-2" />
+                      Duplicar
+                    </Button>
+                    <Button size="sm" variant="outline" className="bg-slate-700 border-slate-600 text-white hover:bg-slate-600">
+                      <Move className="w-4 h-4 mr-2" />
+                      Mover
+                    </Button>
+                  </div>
+                )}
               </div>
-              <h3 className="text-lg font-semibold mb-2">Preview do Funil</h3>
-              <p className="text-sm">Selecione uma etapa para visualizar</p>
-              <div className="mt-4 p-4 bg-white rounded-lg border max-w-sm">
-                <p className="text-xs text-gray-600">
-                  💡 <strong>Dica:</strong> Cada botão representa uma tela individual que o usuário vê durante o quiz
-                </p>
-              </div>
+            </div>
+
+            {/* Canvas Content */}
+            <div className="flex-1 p-6 overflow-auto">
+              {selectedStageData ? (
+                <div className="max-w-md mx-auto">
+                  <Card className="bg-slate-800 border-slate-700">
+                    <CardHeader className="pb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-lg">
+                          {selectedStageData.icon}
+                        </div>
+                        <div>
+                          <CardTitle className="text-white text-lg">{selectedStageData.name}</CardTitle>
+                          <p className="text-slate-400 text-sm">{selectedStageData.description}</p>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <span className="text-slate-400">Tipo:</span>
+                          <p className="text-white font-medium">{getTypeLabel(selectedStageData.type)}</p>
+                        </div>
+                        <div>
+                          <span className="text-slate-400">Rota:</span>
+                          <p className="text-white font-medium font-mono text-xs">{selectedStageData.route}</p>
+                        </div>
+                      </div>
+                      
+                      <div className="pt-4 border-t border-slate-700">
+                        <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                          <Edit3 className="w-4 h-4 mr-2" />
+                          Editar Conteúdo
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              ) : (
+                <div className="h-full flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mb-4 mx-auto">
+                      <Settings className="w-8 h-8 text-slate-400" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-white mb-2">Selecione uma etapa do funil</h3>
+                    <p className="text-slate-400 max-w-sm">
+                      Escolha uma das {funnelStages.length} etapas na barra lateral para visualizar e editar seu conteúdo.
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Coluna 3: Configurações */}
-        <div className="w-80 border-r bg-white">
-          <div className="p-4 border-b">
-            <h2 className="text-lg font-semibold">⚙️ Configurações</h2>
-            <p className="text-xs text-gray-500 mt-1">
-              Propriedades da etapa selecionada
+        {/* Painel de Propriedades */}
+        <div className="w-80 border-l border-slate-700 bg-slate-800">
+          <div className="p-4 border-b border-slate-700">
+            <h2 className="text-sm font-semibold text-white">Propriedades</h2>
+            <p className="text-xs text-slate-400 mt-1">
+              Configurações da etapa selecionada
             </p>
           </div>
           
-          <div className="p-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-sm">Configuração do Funil</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="text-center text-gray-500">
-                  <p className="text-sm">Selecione uma etapa para configurar</p>
-                </div>
-                
-                <div className="space-y-2">
-                  <h4 className="text-xs font-semibold text-gray-700">Tipos de Etapa:</h4>
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 bg-blue-200 rounded"></div>
-                      <span className="text-xs">Intro (1 etapa)</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 bg-green-200 rounded"></div>
-                      <span className="text-xs">Questões (10 etapas)</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 bg-yellow-200 rounded"></div>
-                      <span className="text-xs">Estratégicas (6 etapas)</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 bg-orange-200 rounded"></div>
-                      <span className="text-xs">Transições (2 etapas)</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 bg-purple-200 rounded"></div>
-                      <span className="text-xs">Resultado (1 etapa)</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 bg-pink-200 rounded"></div>
-                      <span className="text-xs">Oferta (1 etapa)</span>
+          <ScrollArea className="h-[calc(100vh-140px)]">
+            <div className="p-4 space-y-4">
+              {selectedStageData ? (
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="stage-name" className="text-slate-300 text-xs">Nome da Etapa</Label>
+                    <Input 
+                      id="stage-name"
+                      defaultValue={selectedStageData.name}
+                      className="mt-1 bg-slate-700 border-slate-600 text-white"
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="stage-description" className="text-slate-300 text-xs">Descrição</Label>
+                    <Textarea 
+                      id="stage-description"
+                      defaultValue={selectedStageData.description}
+                      className="mt-1 bg-slate-700 border-slate-600 text-white"
+                      rows={3}
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="stage-route" className="text-slate-300 text-xs">Rota</Label>
+                    <Input 
+                      id="stage-route"
+                      defaultValue={selectedStageData.route}
+                      className="mt-1 bg-slate-700 border-slate-600 text-white font-mono text-xs"
+                    />
+                  </div>
+                  
+                  <div className="pt-4 border-t border-slate-700">
+                    <h4 className="text-xs font-semibold text-slate-300 mb-3">Ações</h4>
+                    <div className="space-y-2">
+                      <Button size="sm" variant="outline" className="w-full bg-slate-700 border-slate-600 text-white hover:bg-slate-600">
+                        <Eye className="w-4 h-4 mr-2" />
+                        Visualizar
+                      </Button>
+                      <Button size="sm" variant="outline" className="w-full bg-slate-700 border-slate-600 text-white hover:bg-slate-600">
+                        <Copy className="w-4 h-4 mr-2" />
+                        Duplicar
+                      </Button>
+                      <Button size="sm" variant="outline" className="w-full bg-red-900 border-red-700 text-red-200 hover:bg-red-800">
+                        <Trash2 className="w-4 h-4 mr-2" />
+                        Remover
+                      </Button>
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              ) : (
+                <div className="text-center text-slate-400">
+                  <p className="text-sm">Selecione uma etapa para ver suas propriedades</p>
+                </div>
+              )}
+              
+              <div className="pt-4 border-t border-slate-700">
+                <h4 className="text-xs font-semibold text-slate-300 mb-3">Estatísticas do Funil</h4>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-slate-400">Total de etapas:</span>
+                    <Badge variant="outline" className="border-slate-600 text-slate-300">
+                      {funnelStages.length}
+                    </Badge>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-slate-400">Questões normais:</span>
+                    <Badge variant="outline" className="border-emerald-600 text-emerald-300">
+                      10
+                    </Badge>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-slate-400">Questões estratégicas:</span>
+                    <Badge variant="outline" className="border-violet-600 text-violet-300">
+                      6
+                    </Badge>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-slate-400">Transições:</span>
+                    <Badge variant="outline" className="border-amber-600 text-amber-300">
+                      2
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ScrollArea>
         </div>
-
-        {/* Coluna 4: Versioning */}
-        <div className="w-80 bg-gray-50">
-          <div className="p-4 border-b bg-white">
-            <h2 className="text-lg font-semibold">🔄 Versionamento</h2>
-            <p className="text-xs text-gray-500 mt-1">
-              Auto-save ativo · Backup automático
-            </p>
-          </div>
-          
-          <div className="p-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-sm">Status do Funil</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-gray-600">Total de etapas:</span>
-                    <Badge variant="outline">{funnelStages.length}</Badge>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-gray-600">Questões normais:</span>
-                    <Badge variant="outline">10</Badge>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-gray-600">Questões estratégicas:</span>
-                    <Badge variant="outline">6</Badge>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-gray-600">Transições:</span>
-                    <Badge variant="outline">2</Badge>
-                  </div>
-                </div>
-                
-                <div className="pt-4 border-t">
-                  <p className="text-xs text-green-600 font-medium">✅ Funil configurado corretamente</p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Todas as 18 etapas estão organizadas conforme o fluxo definido
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-        
       </div>
     </div>
   );
