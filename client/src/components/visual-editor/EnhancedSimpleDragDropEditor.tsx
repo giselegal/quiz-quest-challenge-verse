@@ -42,17 +42,34 @@ interface FunnelStep {
 }
 
 const FUNNEL_STEPS: FunnelStep[] = [
-  { id: "intro", title: "Introdução", type: "intro" },
-  { id: "question-1", title: "Roupa Favorita", type: "question" },
-  { id: "question-2", title: "Personalidade", type: "question" },
-  { id: "question-3", title: "Visual", type: "question" },
-  { id: "question-4", title: "Detalhes", type: "question" },
-  { id: "question-5", title: "Estampas", type: "question" },
-  { id: "transition-1", title: "Transição Estratégica", type: "transition" },
-  { id: "strategic-1", title: "Como se vê hoje", type: "question" },
-  { id: "strategic-2", title: "Desafios", type: "question" },
-  { id: "result", title: "Resultado", type: "result" },
-  { id: "offer", title: "Oferta R$97", type: "offer" },
+  // Questões Normais do Quiz (1-10)
+  { id: "intro", title: "Introdução do Quiz", type: "intro" },
+  { id: "question-1", title: "Q1: Tipo de Roupa Favorita", type: "question" },
+  { id: "question-2", title: "Q2: Personalidade/Humor", type: "question" },
+  { id: "question-3", title: "Q3: Visual Preferido", type: "question" },
+  { id: "question-4", title: "Q4: Detalhes que Valorizam", type: "question" },
+  { id: "question-5", title: "Q5: Estampas/Tecidos", type: "question" },
+  { id: "question-6", title: "Q6: Casaco/Outerwear", type: "question" },
+  { id: "question-7", title: "Q7: Calça Favorita", type: "question" },
+  { id: "question-8", title: "Q8: Sapatos/Footwear", type: "question" },
+  { id: "question-9", title: "Q9: Acessórios", type: "question" },
+  { id: "question-10", title: "Q10: Tecidos Preferidos", type: "question" },
+  
+  // Transição Estratégica
+  { id: "transition-1", title: "Transição: Calculando Resultado", type: "transition" },
+  
+  // Questões Estratégicas (S1-S6)
+  { id: "strategic-1", title: "S1: Como se vê hoje", type: "question" },
+  { id: "strategic-2", title: "S2: Desafios ao se vestir", type: "question" },
+  { id: "strategic-3", title: "S3: Frequência de indecisão", type: "question" },
+  { id: "strategic-4", title: "S4: Interesse em material", type: "question" },
+  { id: "strategic-5", title: "S5: Preço R$97", type: "question" },
+  { id: "strategic-6", title: "S6: Resultados desejados", type: "question" },
+  
+  // Transição Final e Resultado
+  { id: "transition-2", title: "Transição: Preparando Resultado", type: "transition" },
+  { id: "result", title: "Página de Resultado", type: "result" },
+  { id: "offer", title: "Página de Oferta R$97", type: "offer" },
 ];
 
 // Component Library - Real quiz components
@@ -78,6 +95,8 @@ const COMPONENT_LIBRARY: ComponentLibraryItem[] = [
   { id: "quiz-options", label: "Opções Múltipla Escolha", icon: CheckSquare, category: "quiz" },
   { id: "quiz-progress", label: "Barra Progresso", icon: BarChart, category: "quiz" },
   { id: "quiz-result", label: "Resultado do Quiz", icon: Gift, category: "quiz", new: true },
+  { id: "quiz-transition", label: "Transição do Quiz", icon: Clock, category: "quiz" },
+  { id: "strategic-question", label: "Pergunta Estratégica", icon: Users, category: "quiz" },
   { id: "quiz-timer", label: "Cronômetro", icon: Timer, category: "quiz" },
   
   // Vendas
@@ -224,6 +243,21 @@ const EnhancedSimpleDragDropEditor: React.FC = () => {
         progress: 70,
         current: 7,
         total: 10
+      },
+      "quiz-transition": {
+        title: "🕐 Enquanto calculamos o seu resultado...",
+        description: "Queremos te fazer algumas perguntas que vão tornar sua experiência ainda mais completa. A ideia é simples: te ajudar a enxergar com mais clareza onde você está agora — e para onde pode ir com mais intenção, leveza e autenticidade.",
+        subtitle: "💬 Responda com sinceridade. Isso é só entre você e a sua nova versão."
+      },
+      "strategic-question": {
+        question: "Como você se vê hoje?",
+        subtitle: "Quando você se olha no espelho, como se sente com sua imagem pessoal atualmente?",
+        options: [
+          "Me sinto desconectada da mulher que sou hoje",
+          "Tenho dúvidas sobre o que realmente me valoriza",
+          "Às vezes acerto, às vezes erro",
+          "Me sinto segura, mas sei que posso evoluir"
+        ]
       },
       "price-offer": { 
         price: "R$ 97", 
@@ -391,6 +425,40 @@ const EnhancedSimpleDragDropEditor: React.FC = () => {
             ></div>
             <div className="text-center text-sm text-gray-600 mt-2">
               Questão {component.data.current || 7} de {component.data.total || 10}
+            </div>
+          </div>
+        )}
+
+        {/* Quiz Transition Component */}
+        {component.type === "quiz-transition" && (
+          <div className="text-center space-y-6 bg-gradient-to-br from-orange-50 to-yellow-50 p-8 rounded-xl border border-orange-200">
+            <div className="text-4xl mb-4">🕐</div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">{component.data.title}</h2>
+            <p className="text-lg text-gray-700 leading-relaxed max-w-2xl mx-auto mb-6">
+              {component.data.description}
+            </p>
+            <p className="text-base text-gray-600 font-medium">
+              {component.data.subtitle}
+            </p>
+          </div>
+        )}
+
+        {/* Strategic Question Component */}
+        {component.type === "strategic-question" && (
+          <div className="space-y-6 bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+            <div className="text-center space-y-4">
+              <h2 className="text-2xl font-bold text-gray-800">{component.data.question}</h2>
+              <p className="text-gray-600 text-lg">{component.data.subtitle}</p>
+            </div>
+            <div className="space-y-3">
+              {component.data.options.map((option: string, index: number) => (
+                <div key={index} className="border-2 border-gray-200 rounded-lg p-4 hover:border-blue-500 hover:bg-blue-50 cursor-pointer transition-all duration-200">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-5 h-5 border-2 border-gray-300 rounded-full"></div>
+                    <span className="text-gray-700">{option}</span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         )}
