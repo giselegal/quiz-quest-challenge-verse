@@ -5697,9 +5697,9 @@ const SimpleDragDropEditor: React.FC = () => {
                             text: "Selecione até 3 opções:",
                             maxSelections: 3,
                             options: [
-                              { id: "opt1", text: "Vestidos elegantes", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_9_mgkdnb.webp" },
-                              { id: "opt2", text: "Roupas casuais", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921098/Espanhol_Portugu%C3%AAs_5_cptzyb.webp" },
-                              { id: "opt3", text: "Look profissional", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp" }
+                              { id: "opt1", text: "Vestidos elegantes", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_9_mgkdnb.webp", value: "vestidos" },
+                              { id: "opt2", text: "Roupas casuais", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921098/Espanhol_Portugu%C3%AAs_5_cptzyb.webp", value: "casual" },
+                              { id: "opt3", text: "Look profissional", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp", value: "profissional" }
                             ]
                           },
                           style: {
@@ -5752,10 +5752,10 @@ const SimpleDragDropEditor: React.FC = () => {
                             text: "Selecione até 3 opções:",
                             maxSelections: 3,
                             options: [
-                              { id: "opt1", text: "Confiante", imageUrl: "" },
-                              { id: "opt2", text: "Criativa", imageUrl: "" },
-                              { id: "opt3", text: "Elegante", imageUrl: "" },
-                              { id: "opt4", text: "Descontraída", imageUrl: "" }
+                              { id: "opt1", text: "Confiante", imageUrl: "", value: "confiante" },
+                              { id: "opt2", text: "Criativa", imageUrl: "", value: "criativa" },
+                              { id: "opt3", text: "Elegante", imageUrl: "", value: "elegante" },
+                              { id: "opt4", text: "Descontraída", imageUrl: "", value: "descontraida" }
                             ]
                           },
                           style: {
@@ -5821,9 +5821,9 @@ const SimpleDragDropEditor: React.FC = () => {
                             text: "Selecione até 3 opções:",
                             maxSelections: 3,
                             options: [
-                              { id: "opt1", text: `Opção 1 - Q${index + 1}`, imageUrl: "" },
-                              { id: "opt2", text: `Opção 2 - Q${index + 1}`, imageUrl: "" },
-                              { id: "opt3", text: `Opção 3 - Q${index + 1}`, imageUrl: "" }
+                              { id: "opt1", text: `Opção 1 - Q${index + 1}`, imageUrl: "", value: `option1_q${index + 1}` },
+                              { id: "opt2", text: `Opção 2 - Q${index + 1}`, imageUrl: "", value: `option2_q${index + 1}` },
+                              { id: "opt3", text: `Opção 3 - Q${index + 1}`, imageUrl: "", value: `option3_q${index + 1}` }
                             ]
                           },
                           style: {
@@ -5950,9 +5950,9 @@ const SimpleDragDropEditor: React.FC = () => {
                             text: "Selecione uma opção:",
                             maxSelections: 1,
                             options: [
-                              { id: "opt1", text: `Resposta 1 - E${index + 1}`, imageUrl: "" },
-                              { id: "opt2", text: `Resposta 2 - E${index + 1}`, imageUrl: "" },
-                              { id: "opt3", text: `Resposta 3 - E${index + 1}`, imageUrl: "" }
+                              { id: "opt1", text: `Resposta 1 - E${index + 1}`, imageUrl: "", value: `answer1_e${index + 1}` },
+                              { id: "opt2", text: `Resposta 2 - E${index + 1}`, imageUrl: "", value: `answer2_e${index + 1}` },
+                              { id: "opt3", text: `Resposta 3 - E${index + 1}`, imageUrl: "", value: `answer3_e${index + 1}` }
                             ]
                           },
                           style: {
