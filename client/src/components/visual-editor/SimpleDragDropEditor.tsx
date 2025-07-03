@@ -5560,18 +5560,18 @@ const SimpleDragDropEditor: React.FC = () => {
                 🎯 ETAPAS REAIS DO FUNIL
               </h3>
               
-              {/* TELAS REAIS DO FUNIL - Cada tela que o usuário vê */}
-              <div className="grid grid-cols-1 gap-1 mt-2">
+              {/* 6 ETAPAS ESSENCIAIS DO FUNIL */}
+              <div className="grid grid-cols-1 gap-2 mt-2">
                 
-                {/* TELA 1: Entrada do Nome */}
+                {/* 1. INTRO - Entrada do Nome */}
                 <Button
                   variant="outline"
                   size="sm"
-                  className="justify-start h-8 text-xs bg-emerald-50 border-emerald-300"
+                  className="justify-start h-10 text-xs bg-emerald-50 border-emerald-300 font-medium"
                   onClick={() => {
-                    const introScreen = {
-                      id: "intro-screen",
-                      title: "Tela 1: Entrada do Nome",
+                    const introPage = {
+                      id: "intro-page",
+                      title: "1. Introdução do Quiz",
                       type: "intro" as const,
                       progress: 0,
                       showHeader: true,
@@ -5588,7 +5588,6 @@ const SimpleDragDropEditor: React.FC = () => {
                           },
                           style: {
                             textAlign: "center" as const,
-                            maxWidth: "96px",
                             marginBottom: "1rem"
                           }
                         },
@@ -5596,15 +5595,13 @@ const SimpleDragDropEditor: React.FC = () => {
                           id: "intro-title",
                           type: "title" as const,
                           data: {
-                            text: "Teste de Estilo Pessoal",
-                            fontSize: "1.875rem",
-                            fontWeight: "700",
-                            color: "inherit"
+                            text: "Teste de Estilo Pessoal"
                           },
                           style: {
                             textAlign: "center" as const,
-                            marginBottom: "1rem",
-                            minWidth: "100%"
+                            fontSize: "1.875rem",
+                            fontWeight: "700",
+                            marginBottom: "1rem"
                           }
                         },
                         {
@@ -5612,16 +5609,12 @@ const SimpleDragDropEditor: React.FC = () => {
                           type: "image" as const,
                           data: {
                             src: "https://cakto-quiz-br01.b-cdn.net/uploads/ecbe689b-1c0a-4071-98d3-4d391b6dd98f.png",
-                            alt: "Imagem",
-                            width: 640,
-                            height: 480
+                            alt: "Imagem do Quiz"
                           },
                           style: {
                             textAlign: "center" as const,
                             maxWidth: "384px",
-                            margin: "0 auto",
-                            borderRadius: "0.5rem",
-                            marginBottom: "1rem"
+                            margin: "0 auto 1rem"
                           }
                         },
                         {
@@ -5630,8 +5623,7 @@ const SimpleDragDropEditor: React.FC = () => {
                           data: {
                             label: "NOME *",
                             placeholder: "Digite seu nome aqui..",
-                            required: true,
-                            type: "text"
+                            required: true
                           },
                           style: {
                             width: "100%",
@@ -5642,64 +5634,59 @@ const SimpleDragDropEditor: React.FC = () => {
                           id: "start-button",
                           type: "button" as const,
                           data: {
-                            text: "Continuar",
-                            variant: "primary"
+                            text: "Continuar"
                           },
                           style: {
-                            minWidth: "100%",
-                            height: "3.5rem",
-                            backgroundColor: "hsl(var(--primary))",
-                            color: "hsl(var(--primary-foreground))",
-                            borderRadius: "0.375rem"
+                            width: "100%",
+                            height: "3.5rem"
                           }
                         }
                       ]
                     };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, introScreen] }));
-                    toast({ title: "✅ Tela 1 adicionada", description: "Entrada do Nome - QuizIntro" });
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, introPage] }));
+                    toast({ title: "✅ Etapa 1 adicionada", description: "Introdução do Quiz" });
                   }}
                 >
-                  📱 Tela 1: Entrada do Nome
+                  🏠 1. Introdução do Quiz
                 </Button>
 
-                {/* TELA 2: Questão 1 - Roupa Favorita */}
+                {/* 2. QUESTÕES NORMAIS */}
                 <Button
                   variant="outline"
                   size="sm"
-                  className="justify-start h-8 text-xs bg-blue-50 border-blue-300"
+                  className="justify-start h-10 text-xs bg-blue-50 border-blue-300 font-medium"
                   onClick={() => {
-                    const q1Screen = {
-                      id: "question-1-screen",
-                      title: "Tela 2: Q1 - Roupa Favorita",
+                    const questionsPage = {
+                      id: "questions-page",
+                      title: "2. Questões Normais (1-10)",
                       type: "question" as const,
-                      progress: 10,
+                      progress: 50,
                       showHeader: true,
                       showProgress: true,
                       components: [
                         {
-                          id: "q1-title",
+                          id: "question-title",
                           type: "title" as const,
                           data: {
-                            text: "QUAL O SEU TIPO DE ROUPA FAVORITA?",
-                            fontSize: "1.5rem",
-                            fontWeight: "600",
-                            color: "inherit"
+                            text: "QUAL O SEU TIPO DE ROUPA FAVORITA?"
                           },
                           style: {
                             textAlign: "center" as const,
+                            fontSize: "1.5rem",
+                            fontWeight: "600",
                             marginBottom: "2rem"
                           }
                         },
                         {
-                          id: "q1-options",
+                          id: "question-options",
                           type: "options" as const,
                           data: {
                             text: "Selecione até 3 opções:",
-                            maxSelections: 3,
+                            multiSelect: true,
                             options: [
-                              { id: "opt1", text: "Vestidos elegantes", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_9_mgkdnb.webp" },
-                              { id: "opt2", text: "Roupas casuais", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921098/Espanhol_Portugu%C3%AAs_5_cptzyb.webp" },
-                              { id: "opt3", text: "Look profissional", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp" }
+                              { id: "opt1", text: "Vestidos elegantes", value: "vestidos", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_9_mgkdnb.webp" },
+                              { id: "opt2", text: "Roupas casuais", value: "casual", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921098/Espanhol_Portugu%C3%AAs_5_cptzyb.webp" },
+                              { id: "opt3", text: "Look profissional", value: "profissional", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp" }
                             ]
                           },
                           style: {
@@ -5710,147 +5697,22 @@ const SimpleDragDropEditor: React.FC = () => {
                         }
                       ]
                     };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, q1Screen] }));
-                    toast({ title: "✅ Tela 2 adicionada", description: "Q1: Roupa Favorita" });
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, questionsPage] }));
+                    toast({ title: "✅ Etapa 2 adicionada", description: "Questões Normais (1-10)" });
                   }}
                 >
-                  📝 Tela 2: Q1 - Roupa Favorita
+                  📝 2. Questões Normais (1-10)
                 </Button>
 
-                {/* TELAS 3-11: Questões 2-10 (Exemplo para Q2) */}
+                {/* 3. TRANSIÇÃO */}
                 <Button
                   variant="outline"
                   size="sm"
-                  className="justify-start h-8 text-xs bg-blue-50 border-blue-300"
+                  className="justify-start h-10 text-xs bg-yellow-50 border-yellow-300 font-medium"
                   onClick={() => {
-                    const q2Screen = {
-                      id: "question-2-screen",
-                      title: "Tela 3: Q2 - Personalidade",
-                      type: "question" as const,
-                      progress: 20,
-                      showHeader: true,
-                      showProgress: true,
-                      components: [
-                        {
-                          id: "q2-title",
-                          type: "title" as const,
-                          data: {
-                            text: "Como você descreveria sua personalidade?",
-                            fontSize: "1.5rem",
-                            fontWeight: "600",
-                            color: "inherit"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "q2-options",
-                          type: "options" as const,
-                          data: {
-                            text: "Selecione até 3 opções:",
-                            maxSelections: 3,
-                            options: [
-                              { id: "opt1", text: "Confiante", imageUrl: "" },
-                              { id: "opt2", text: "Criativa", imageUrl: "" },
-                              { id: "opt3", text: "Elegante", imageUrl: "" },
-                              { id: "opt4", text: "Descontraída", imageUrl: "" }
-                            ]
-                          },
-                          style: {
-                            display: "grid",
-                            gap: "1rem",
-                            marginBottom: "2rem"
-                          }
-                        }
-                      ]
-                    };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, q2Screen] }));
-                    toast({ title: "✅ Tela 3 adicionada", description: "Q2: Personalidade" });
-                  }}
-                >
-                  📝 Tela 3: Q2 - Personalidade
-                </Button>
-
-                {/* Botão para adicionar todas as 10 questões normais */}
-                <Button
-                  variant="default"
-                  size="sm"
-                  className="justify-start h-8 text-xs bg-blue-600 hover:bg-blue-700 text-white"
-                  onClick={() => {
-                    const questionTitles = [
-                      "QUAL O SEU TIPO DE ROUPA FAVORITA?",
-                      "Como você descreveria sua personalidade?",
-                      "Qual visual você mais admira?",
-                      "Quais detalhes chamam sua atenção?",
-                      "Que tipo de estampas você prefere?",
-                      "Qual casaco/jaqueta combina com você?",
-                      "Que estilo de calça você usa mais?",
-                      "Que tipo de sapato você escolheria?",
-                      "Quais acessórios você mais usa?",
-                      "Que tipo de tecido você prefere?"
-                    ];
-
-                    const questionScreens = questionTitles.map((title, index) => ({
-                      id: `question-${index + 1}-screen`,
-                      title: `Tela ${index + 2}: Q${index + 1} - ${title.split(' ')[0]}`,
-                      type: "question" as const,
-                      progress: (index + 1) * 10,
-                      showHeader: true,
-                      showProgress: true,
-                      components: [
-                        {
-                          id: `q${index + 1}-title`,
-                          type: "title" as const,
-                          data: {
-                            text: title,
-                            fontSize: "1.5rem",
-                            fontWeight: "600",
-                            color: "inherit"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: `q${index + 1}-options`,
-                          type: "options" as const,
-                          data: {
-                            text: "Selecione até 3 opções:",
-                            maxSelections: 3,
-                            options: [
-                              { id: "opt1", text: `Opção 1 - Q${index + 1}`, imageUrl: "" },
-                              { id: "opt2", text: `Opção 2 - Q${index + 1}`, imageUrl: "" },
-                              { id: "opt3", text: `Opção 3 - Q${index + 1}`, imageUrl: "" }
-                            ]
-                          },
-                          style: {
-                            display: "grid",
-                            gap: "1rem",
-                            marginBottom: "2rem"
-                          }
-                        }
-                      ]
-                    }));
-
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, ...questionScreens] }));
-                    toast({ title: "✅ Questões 1-10 adicionadas", description: "10 telas de questões normais criadas" });
-                  }}
-                >
-                  📝 + Todas as Questões (Q1-Q10)
-                </Button>
-
-                {/* TELA 12: Transição */}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="justify-start h-8 text-xs bg-yellow-50 border-yellow-300"
-                  onClick={() => {
-                    const transitionScreen = {
-                      id: "transition-screen",
-                      title: "Tela 12: Transição",
+                    const transitionPage = {
+                      id: "transition-page",
+                      title: "3. Transição",
                       type: "transition" as const,
                       progress: 65,
                       showHeader: true,
@@ -5860,13 +5722,12 @@ const SimpleDragDropEditor: React.FC = () => {
                           id: "transition-title",
                           type: "title" as const,
                           data: {
-                            text: "Agora vamos descobrir mais sobre você...",
-                            fontSize: "1.5rem",
-                            fontWeight: "600",
-                            color: "inherit"
+                            text: "Agora vamos descobrir mais sobre você..."
                           },
                           style: {
                             textAlign: "center" as const,
+                            fontSize: "1.5rem",
+                            fontWeight: "600",
                             marginBottom: "2rem"
                           }
                         },
@@ -5874,12 +5735,12 @@ const SimpleDragDropEditor: React.FC = () => {
                           id: "transition-subtitle",
                           type: "subtitle" as const,
                           data: {
-                            text: "Estas próximas perguntas nos ajudarão a personalizar ainda mais seu resultado",
-                            fontSize: "1rem",
-                            color: "#666"
+                            text: "Estas próximas perguntas nos ajudarão a personalizar ainda mais seu resultado"
                           },
                           style: {
                             textAlign: "center" as const,
+                            fontSize: "1rem",
+                            color: "#666",
                             marginBottom: "2rem"
                           }
                         },
@@ -5887,72 +5748,60 @@ const SimpleDragDropEditor: React.FC = () => {
                           id: "continue-button",
                           type: "button" as const,
                           data: {
-                            text: "Continuar",
-                            variant: "primary"
+                            text: "Continuar"
                           },
                           style: {
                             width: "100%",
-                            height: "3rem",
-                            backgroundColor: "hsl(var(--primary))",
-                            color: "hsl(var(--primary-foreground))"
+                            height: "3rem"
                           }
                         }
                       ]
                     };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, transitionScreen] }));
-                    toast({ title: "✅ Tela 12 adicionada", description: "Transição entre questões normais e estratégicas" });
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, transitionPage] }));
+                    toast({ title: "✅ Etapa 3 adicionada", description: "Transição" });
                   }}
                 >
-                  🔄 Tela 12: Transição
+                  🔄 3. Transição
                 </Button>
 
-                {/* TELAS 13-18: Questões Estratégicas */}
+                {/* 4. QUESTÕES ESTRATÉGICAS */}
                 <Button
-                  variant="default"
+                  variant="outline"
                   size="sm"
-                  className="justify-start h-8 text-xs bg-purple-600 hover:bg-purple-700 text-white"
+                  className="justify-start h-10 text-xs bg-purple-50 border-purple-300 font-medium"
                   onClick={() => {
-                    const strategicTitles = [
-                      "Como você se vê hoje em relação ao seu estilo?",
-                      "Quais são seus principais desafios ao se vestir?",
-                      "Com que frequência você fica indecisa sobre o que vestir?",
-                      "Você teria interesse em receber um material personalizado sobre seu estilo?",
-                      "Quanto você investiria em um guia completo de estilo por R$97?",
-                      "Que tipo de resultado você espera alcançar?"
-                    ];
-
-                    const strategicScreens = strategicTitles.map((title, index) => ({
-                      id: `strategic-${index + 1}-screen`,
-                      title: `Tela ${13 + index}: E${index + 1} - Estratégica`,
+                    const strategicPage = {
+                      id: "strategic-page",
+                      title: "4. Questões Estratégicas",
                       type: "question" as const,
-                      progress: 70 + (index * 3),
+                      progress: 85,
                       showHeader: true,
                       showProgress: true,
                       components: [
                         {
-                          id: `e${index + 1}-title`,
+                          id: "strategic-title",
                           type: "title" as const,
                           data: {
-                            text: title,
-                            fontSize: "1.5rem",
-                            fontWeight: "600",
-                            color: "inherit"
+                            text: "Como você se vê hoje em relação ao seu estilo?"
                           },
                           style: {
                             textAlign: "center" as const,
+                            fontSize: "1.5rem",
+                            fontWeight: "600",
                             marginBottom: "2rem"
                           }
                         },
                         {
-                          id: `e${index + 1}-options`,
+                          id: "strategic-options",
                           type: "options" as const,
                           data: {
                             text: "Selecione uma opção:",
-                            maxSelections: 1,
+                            multiSelect: false,
                             options: [
-                              { id: "opt1", text: `Resposta 1 - E${index + 1}`, imageUrl: "" },
-                              { id: "opt2", text: `Resposta 2 - E${index + 1}`, imageUrl: "" },
-                              { id: "opt3", text: `Resposta 3 - E${index + 1}`, imageUrl: "" }
+                              { id: "opt1", text: "Confiante e segura", value: "confiante" },
+                              { id: "opt2", text: "Insegura sobre minhas escolhas", value: "insegura" },
+                              { id: "opt3", text: "Perdida sem direção", value: "perdida" },
+                              { id: "opt4", text: "Procurando por mudanças", value: "mudancas" }
                             ]
                           },
                           style: {
@@ -5962,24 +5811,23 @@ const SimpleDragDropEditor: React.FC = () => {
                           }
                         }
                       ]
-                    }));
-
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, ...strategicScreens] }));
-                    toast({ title: "✅ Questões Estratégicas adicionadas", description: "6 telas de questões estratégicas criadas" });
+                    };
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, strategicPage] }));
+                    toast({ title: "✅ Etapa 4 adicionada", description: "Questões Estratégicas" });
                   }}
                 >
-                  🎯 + Questões Estratégicas (E1-E6)
+                  🎯 4. Questões Estratégicas
                 </Button>
 
-                {/* TELA 19: Loading */}
+                {/* 5. LOADING */}
                 <Button
                   variant="outline"
                   size="sm"
-                  className="justify-start h-8 text-xs bg-gray-50 border-gray-300"
+                  className="justify-start h-10 text-xs bg-gray-50 border-gray-300 font-medium"
                   onClick={() => {
-                    const loadingScreen = {
-                      id: "loading-screen",
-                      title: "Tela 19: Loading",
+                    const loadingPage = {
+                      id: "loading-page",
+                      title: "5. Loading",
                       type: "loading" as const,
                       progress: 95,
                       showHeader: true,
@@ -5989,28 +5837,12 @@ const SimpleDragDropEditor: React.FC = () => {
                           id: "loading-title",
                           type: "title" as const,
                           data: {
-                            text: "Calculando seu resultado...",
-                            fontSize: "1.5rem",
-                            fontWeight: "600",
-                            color: "inherit"
+                            text: "Calculando seu resultado..."
                           },
                           style: {
                             textAlign: "center" as const,
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "loading-progress",
-                          type: "progress" as const,
-                          data: {
-                            progressValue: 95,
-                            showPercentage: true,
-                            color: "hsl(var(--primary))",
-                            backgroundColor: "rgb(212, 212, 216)",
-                            height: 8
-                          },
-                          style: {
-                            width: "100%",
+                            fontSize: "1.5rem",
+                            fontWeight: "600",
                             marginBottom: "2rem"
                           }
                         },
@@ -6018,32 +5850,32 @@ const SimpleDragDropEditor: React.FC = () => {
                           id: "loading-text",
                           type: "text" as const,
                           data: {
-                            text: "Analisando suas respostas e definindo seu estilo personalizado...",
-                            fontSize: "1rem",
-                            color: "#666"
+                            text: "Analisando suas respostas e definindo seu estilo personalizado..."
                           },
                           style: {
-                            textAlign: "center" as const
+                            textAlign: "center" as const,
+                            fontSize: "1rem",
+                            color: "#666"
                           }
                         }
                       ]
                     };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, loadingScreen] }));
-                    toast({ title: "✅ Tela 19 adicionada", description: "Loading - Calculando resultado" });
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, loadingPage] }));
+                    toast({ title: "✅ Etapa 5 adicionada", description: "Loading" });
                   }}
                 >
-                  ⏳ Tela 19: Loading
+                  ⏳ 5. Loading
                 </Button>
 
-                {/* TELA 20: Resultado */}
+                {/* 6. RESULTADO */}
                 <Button
                   variant="outline"
                   size="sm"
-                  className="justify-start h-8 text-xs bg-green-50 border-green-300"
+                  className="justify-start h-10 text-xs bg-green-50 border-green-300 font-medium"
                   onClick={() => {
-                    const resultScreen = {
-                      id: "result-screen",
-                      title: "Tela 20: Resultado",
+                    const resultPage = {
+                      id: "result-page",
+                      title: "6. Resultado",
                       type: "result" as const,
                       progress: 100,
                       showHeader: true,
@@ -6053,13 +5885,12 @@ const SimpleDragDropEditor: React.FC = () => {
                           id: "result-title",
                           type: "title" as const,
                           data: {
-                            text: "Seu Estilo Personalizado",
-                            fontSize: "2rem",
-                            fontWeight: "700",
-                            color: "inherit"
+                            text: "Seu Estilo Personalizado"
                           },
                           style: {
                             textAlign: "center" as const,
+                            fontSize: "2rem",
+                            fontWeight: "700",
                             marginBottom: "2rem"
                           }
                         },
@@ -6067,12 +5898,12 @@ const SimpleDragDropEditor: React.FC = () => {
                           id: "style-result",
                           type: "subtitle" as const,
                           data: {
-                            text: "Natural Autêntica",
-                            fontSize: "1.5rem",
-                            color: "hsl(var(--primary))"
+                            text: "Natural Autêntica"
                           },
                           style: {
                             textAlign: "center" as const,
+                            fontSize: "1.5rem",
+                            color: "hsl(var(--primary))",
                             marginBottom: "2rem"
                           }
                         },
@@ -6080,12 +5911,12 @@ const SimpleDragDropEditor: React.FC = () => {
                           id: "result-description",
                           type: "text" as const,
                           data: {
-                            text: "Seu estilo reflete autenticidade e naturalidade. Você prefere peças confortáveis que expressam sua personalidade verdadeira.",
-                            fontSize: "1rem",
-                            color: "#666"
+                            text: "Seu estilo reflete autenticidade e naturalidade. Você prefere peças confortáveis que expressam sua personalidade verdadeira."
                           },
                           style: {
                             textAlign: "center" as const,
+                            fontSize: "1rem",
+                            color: "#666",
                             marginBottom: "2rem"
                           }
                         },
@@ -6093,88 +5924,20 @@ const SimpleDragDropEditor: React.FC = () => {
                           id: "cta-button",
                           type: "button" as const,
                           data: {
-                            text: "Ver Guia Completo",
-                            variant: "primary"
+                            text: "Ver Guia Completo"
                           },
                           style: {
                             width: "100%",
-                            height: "3.5rem",
-                            backgroundColor: "hsl(var(--primary))",
-                            color: "hsl(var(--primary-foreground))"
+                            height: "3.5rem"
                           }
                         }
                       ]
                     };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, resultScreen] }));
-                    toast({ title: "✅ Tela 20 adicionada", description: "Resultado - Página /resultado" });
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, resultPage] }));
+                    toast({ title: "✅ Etapa 6 adicionada", description: "Resultado" });
                   }}
                 >
-                  🎉 Tela 20: Resultado
-                </Button>
-
-                {/* TELA 21: Oferta/Upsell */}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="justify-start h-8 text-xs bg-orange-50 border-orange-300"
-                  onClick={() => {
-                    const offerScreen = {
-                      id: "offer-screen",
-                      title: "Tela 21: Oferta/Upsell",
-                      type: "offer" as const,
-                      progress: 100,
-                      showHeader: true,
-                      showProgress: false,
-                      components: [
-                        {
-                          id: "offer-title",
-                          type: "title" as const,
-                          data: {
-                            text: "Guia Completo de Estilo Personalizado",
-                            fontSize: "2rem",
-                            fontWeight: "700",
-                            color: "inherit"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "offer-price",
-                          type: "price" as const,
-                          data: {
-                            price: "97",
-                            currency: "R$",
-                            originalPrice: "197",
-                            discount: "50%"
-                          },
-                          style: {
-                            textAlign: "center" as const,
-                            marginBottom: "2rem"
-                          }
-                        },
-                        {
-                          id: "offer-cta",
-                          type: "button" as const,
-                          data: {
-                            text: "Garantir Meu Guia Agora",
-                            variant: "primary"
-                          },
-                          style: {
-                            width: "100%",
-                            height: "3.5rem",
-                            backgroundColor: "hsl(var(--primary))",
-                            color: "hsl(var(--primary-foreground))"
-                          }
-                        }
-                      ]
-                    };
-                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, offerScreen] }));
-                    toast({ title: "✅ Tela 21 adicionada", description: "Oferta/Upsell - Página de venda" });
-                  }}
-                >
-                  💰 Tela 21: Oferta/Upsell
+                  🎉 6. Resultado
                 </Button>
 
                 <Button
