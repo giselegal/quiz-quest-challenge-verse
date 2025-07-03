@@ -3003,6 +3003,34 @@ const QUIZ_TEMPLATES = {
   },
 };
 
+/**
+ * Cria uma página baseada em uma etapa real do funil
+ */
+const createPageFromRealStep = (step: typeof REAL_FUNNEL_STEPS[0]) => {
+  return {
+    id: step.id,
+    title: step.title,
+    type: step.id.includes("intro") ? "intro" : 
+          step.id.includes("question") ? "question" : 
+          step.id.includes("transition") ? "transition" :
+          step.id.includes("result") ? "result" : "other",
+    progress: step.progress,
+    showHeader: true,
+    showProgress: step.progress > 0,
+    components: step.editableElements.map((element, index) => ({
+      id: `${step.id}-${element.type}-${index}`,
+      type: element.type as any,
+      data: {
+        text: element.current || element.label,
+        configurable: true,
+        stepId: step.id,
+        componentName: step.component
+      },
+      style: {}
+    }))
+  };
+};
+
 const SimpleDragDropEditor: React.FC = () => {
   const { toast } = useToast();
 
@@ -5257,12 +5285,13 @@ const SimpleDragDropEditor: React.FC = () => {
 
   return (
     <div className="h-screen flex bg-background simple-editor">
-      {/* COLUNA 1: ETAPAS DO FUNIL - 260px */}
+      {/* COLUNA 1: ETAPAS REAIS DO FUNIL - 260px */}
       <div className="w-[260px] min-w-[260px] border-r bg-slate-50 overflow-hidden flex flex-col">
         <div className="p-3 border-b bg-slate-100">
           <h2 className="text-sm font-semibold mb-2 flex items-center gap-2">
-            🔄 ETAPAS DO FUNIL
+            🎯 ETAPAS REAIS DO FUNIL
           </h2>
+          <p className="text-xs text-gray-600 mb-2">Mapeadas do /quiz funcionante</p>
           
           {/* Botão para o novo editor modular */}
           <Button
@@ -5523,174 +5552,89 @@ const SimpleDragDropEditor: React.FC = () => {
 
         <ScrollArea className="flex-1">
           <div className="p-3 space-y-2">
-            {/* Lista de Páginas */}
-            <div className="space-y-1">
-              {currentFunnel.pages.map((page, index) => (
-                <div key={page?.id || `page-${index}`} className="relative">
+            {/* Lista das Etapas Reais do Funil */}
+            <div className="space-y-2">
+              <h4 className="text-xs font-medium text-gray-700 mb-2">
+                FLUXO REAL DO QUIZ
+              </h4>
+              
+              {REAL_FUNNEL_STEPS.map((step, index) => (
+                <div key={step.id} className="relative">
                   <Button
                     variant={index === currentPageIndex ? "default" : "outline"}
                     size="sm"
-                    className="w-full justify-start h-auto p-2"
-                    onClick={() => setCurrentPageIndex(index)}
+                    className="w-full justify-start h-auto p-2 text-left"
+                    onClick={() => {
+                      setCurrentPageIndex(index);
+                      // Criar página baseada na etapa real se não existir
+                      if (!currentFunnel.pages[index]) {
+                        const newPage = createPageFromRealStep(step);
+                        const updatedPages = [...currentFunnel.pages];
+                        updatedPages[index] = newPage;
+                        setCurrentFunnel(prev => ({
+                          ...prev,
+                          pages: updatedPages
+                        }));
+                      }
+                    }}
                   >
                     <div className="flex items-center gap-2 w-full">
                       <Badge
-                        variant="secondary"
-                        className="text-xs h-5 w-5 p-0 flex items-center justify-center"
+                        variant={step.progress === 100 ? "default" : "secondary"}
+                        className="text-xs h-5 min-w-5 p-0 flex items-center justify-center"
                       >
                         {index + 1}
                       </Badge>
-                      <div className="flex-1 text-left">
+                      <div className="flex-1">
                         <div className="font-medium text-xs truncate">
-                          {page?.title || 'Página sem título'}
+                          {step.title}
                         </div>
                         <div className="text-xs text-muted-foreground truncate">
-                          {page?.type || 'quiz'} • {page?.components?.length || 0} itens
+                          {step.component} • {step.progress}%
+                        </div>
+                        <div className="text-xs text-blue-600 truncate">
+                          {step.route}
                         </div>
                       </div>
-                      <div className="text-xs text-muted-foreground">
-                        {page?.progress || 0}%
+                      <div className="text-xs text-gray-400">
+                        {step.editableElements.length} elementos
                       </div>
                     </div>
                   </Button>
-
-                  {/* Conectores visuais */}
-                  {index < currentFunnel.pages.length - 1 && (
-                    <div className="flex justify-center mt-1 mb-1">
-                      <ChevronDown className="h-3 w-3 text-muted-foreground" />
-                    </div>
-                  )}
+                  
+                  {/* Indicador de estado/props */}
+                  <div className="ml-8 mt-1 text-xs text-gray-500 truncate">
+                    🔧 {step.state}
+                  </div>
                 </div>
               ))}
             </div>
-
-            {/* Templates Prontos */}
-            <div className="mt-4">
-              <h3 className="text-xs font-semibold mb-2">
-                ⚡ ETAPAS REAIS DAS ROTAS
-              </h3>
-
-              {/* Botão para carregar etapas reais funcionais */}
+            
+            {/* Botão para carregar todas as etapas */}
+            <div className="pt-2 border-t">
               <Button
                 variant="default"
                 size="sm"
-                className="w-full justify-start h-10 text-xs mb-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold"
+                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
                 onClick={() => {
-                  // Etapas reais mapeadas diretamente das rotas funcionais
-                  const liveSteps = [
-                    {
-                      id: "quiz-intro",
-                      title: "Descubra Seu Estilo Pessoal",
-                      component: "QuizIntro",
-                      route: "/quiz",
-                      progress: 0
-                    },
-                    {
-                      id: "quiz-questions-1-10",
-                      title: "10 Questões Normais do Quiz",
-                      component: "QuizContent",
-                      route: "/quiz",
-                      progress: 60
-                    },
-                    {
-                      id: "main-transition",
-                      title: "Transição Principal",
-                      component: "MainTransition",
-                      route: "/quiz",
-                      progress: 65
-                    },
-                    {
-                      id: "strategic-questions",
-                      title: "6 Questões Estratégicas",
-                      component: "QuizTransition",
-                      route: "/quiz",
-                      progress: 85
-                    },
-                    {
-                      id: "final-loading",
-                      title: "Loading Final",
-                      component: "LoadingManager",
-                      route: "/quiz",
-                      progress: 95
-                    },
-                    {
-                      id: "result-page",
-                      title: "Página de Resultado",
-                      component: "ResultPage",
-                      route: "/resultado",
-                      progress: 100
-                    },
-                    {
-                      id: "discover-style",
-                      title: "Quiz Descubra Seu Estilo",
-                      component: "QuizDescubraSeuEstilo",
-                      route: "/quiz-descubra-seu-estilo",
-                      progress: 100
-                    }
-                  ];
-
-                  const livePages = liveSteps.map(step => ({
-                    id: step.id,
-                    title: step.title,
-                    type: step.id.includes("intro") ? "intro" : 
-                          step.id.includes("question") ? "question" : 
-                          step.id.includes("loading") ? "loading" :
-                          step.id.includes("result") ? "result" :
-                          step.id.includes("discover") ? "offer" : "transition",
-                    progress: step.progress,
-                    showHeader: true,
-                    showProgress: step.progress > 0,
-                    components: [
-                      {
-                        id: `${step.id}-info`,
-                        type: "title" as const,
-                        data: {
-                          text: `ETAPA REAL: ${step.component}`,
-                          fontSize: "1.2rem",
-                          color: "#059669"
-                        },
-                        style: {
-                          textAlign: "center" as const,
-                          backgroundColor: "#ecfdf5",
-                          padding: "1rem",
-                          borderRadius: "8px",
-                          border: "2px solid #059669",
-                          marginBottom: "1rem"
-                        }
-                      },
-                      {
-                        id: `${step.id}-route`,
-                        type: "text" as const,
-                        data: {
-                          text: `Rota: ${step.route}`,
-                          fontSize: "0.9rem",
-                          color: "#6b7280"
-                        },
-                        style: {
-                          textAlign: "center" as const,
-                          marginBottom: "0.5rem"
-                        }
-                      }
-                    ]
-                  }));
-
-                  setCurrentFunnel((prev) => ({
+                  // Criar todas as páginas baseadas nas etapas reais
+                  const newPages = REAL_FUNNEL_STEPS.map(step => createPageFromRealStep(step));
+                  setCurrentFunnel(prev => ({
                     ...prev,
-                    pages: livePages,
-                    name: "Quiz - Etapas Reais das Rotas Funcionais"
+                    name: "Funil Completo - Etapas Reais",
+                    pages: newPages
                   }));
-
                   toast({
-                    title: "✅ Etapas Reais Carregadas!",
-                    description: `${livePages.length} etapas funcionais mapeadas das rotas`,
+                    title: "✅ Funil Real Carregado!",
+                    description: `${REAL_FUNNEL_STEPS.length} etapas funcionais criadas`,
                   });
                 }}
               >
-                ⚡ CARREGAR TODAS AS ETAPAS REAIS
+                📥 CARREGAR TODAS AS ETAPAS
               </Button>
-
-              {/* Botões individuais para etapas específicas */}
-              <div className="grid grid-cols-1 gap-1 mt-2">
+            </div>
+        </ScrollArea>
+      </div>
                 <Button
                   variant="outline"
                   size="sm"
