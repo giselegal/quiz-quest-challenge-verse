@@ -33,6 +33,9 @@ const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
 const SimpleDragDropEditor = lazy(
   () => import("./components/visual-editor/SimpleDragDropEditor")
 );
+const EnhancedSimpleDragDropEditor = lazy(
+  () => import("./components/visual-editor/EnhancedSimpleDragDropEditor")
+);
 const ImprovedQuizEditor = lazy(
   () => import("./components/visual-editor/ImprovedQuizEditor")
 );
@@ -96,10 +99,15 @@ const App = () => {
                   path="/editor-visual"
                   component={SimpleDragDropEditor}
                 />
-                {/* Simple Editor - usando o mesmo editor robusto */}
+                {/* Simple Editor - enhanced professional version */}
                 <Route
                   path="/simple-editor"
-                  component={SimpleDragDropEditor}
+                  component={EnhancedSimpleDragDropEditor}
+                />
+                {/* Enhanced Professional Editor */}
+                <Route
+                  path="/enhanced-editor"
+                  component={EnhancedSimpleDragDropEditor}
                 />
                 {/* Editor Melhorado - nova versão organizada */}
                 <Route
