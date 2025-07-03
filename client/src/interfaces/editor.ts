@@ -14,6 +14,22 @@ export interface ComponentCategory {
   components: ComponentType[];
 }
 
+export interface ComponentInstance {
+  id: string;
+  componentId: string;
+  props: Record<string, any>;
+  order: number;
+}
+
+export interface EditorComponent {
+  id: string;
+  name: string;
+  icon: LucideIcon;
+  description: string;
+  category: string;
+  defaultProps: Record<string, any>;
+}
+
 export interface Version {
   id: string;
   timestamp: number;
