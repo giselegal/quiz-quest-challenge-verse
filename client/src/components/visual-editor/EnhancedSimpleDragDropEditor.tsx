@@ -77,7 +77,8 @@ const COMPONENT_LIBRARY: ComponentLibraryItem[] = [
   { id: "quiz-question", label: "Pergunta Quiz", icon: HelpCircle, category: "quiz" },
   { id: "quiz-options", label: "Opções Múltipla Escolha", icon: CheckSquare, category: "quiz" },
   { id: "quiz-progress", label: "Barra Progresso", icon: BarChart, category: "quiz" },
-  { id: "quiz-timer", label: "Cronômetro", icon: Timer, category: "quiz", new: true },
+  { id: "quiz-result", label: "Resultado do Quiz", icon: Gift, category: "quiz", new: true },
+  { id: "quiz-timer", label: "Cronômetro", icon: Timer, category: "quiz" },
   
   // Vendas
   { id: "testimonial", label: "Depoimento", icon: Users, category: "sales" },
@@ -213,6 +214,17 @@ const EnhancedSimpleDragDropEditor: React.FC = () => {
         text: "Descobri meu estilo e agora me visto com muito mais confiança!", 
         avatar: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/testimonial.webp" 
       },
+      "quiz-result": {
+        styleName: "Estilo Elegante",
+        description: "Você tem um estilo sofisticado e refinado, que preza pela elegância em todas as ocasiões. Sua personalidade forte se reflete nas escolhas conscientes e na busca pela qualidade.",
+        characteristics: ["Peças atemporais", "Cores neutras", "Cortes clássicos", "Acessórios discretos"],
+        tips: ["Invista em peças de qualidade", "Prefira tecidos nobres", "Mantenha um guarda-roupa cápsula", "Escolha acessórios com parcimônia"]
+      },
+      "quiz-progress": {
+        progress: 70,
+        current: 7,
+        total: 10
+      },
       "price-offer": { 
         price: "R$ 97", 
         old_price: "R$ 297", 
@@ -259,15 +271,18 @@ const EnhancedSimpleDragDropEditor: React.FC = () => {
           </div>
         )}
         
-        {/* Real Quiz Options Component */}
+        {/* Real Quiz Options Component - Interactive Style Choices */}
         {component.type === "quiz-options" && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {component.data.options.map((option: any, index: number) => (
-              <div key={index} className="border rounded-lg p-4 hover:border-blue-500 cursor-pointer">
-                <div className="aspect-square bg-gray-200 rounded-lg mb-3 overflow-hidden">
-                  <Image className="w-full h-full object-cover" />
+              <div key={index} className="group border-2 border-gray-200 rounded-xl p-4 hover:border-blue-500 hover:shadow-lg cursor-pointer transition-all duration-200 bg-white">
+                <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg mb-3 overflow-hidden relative">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Image className="w-8 h-8 text-gray-400" />
+                  </div>
+                  <div className="absolute top-2 right-2 w-6 h-6 border-2 border-gray-300 rounded-full group-hover:border-blue-500 transition-colors"></div>
                 </div>
-                <p className="text-sm text-gray-700">{option.text}</p>
+                <p className="text-sm text-gray-700 leading-relaxed">{option.text}</p>
               </div>
             ))}
           </div>
@@ -294,22 +309,111 @@ const EnhancedSimpleDragDropEditor: React.FC = () => {
           </div>
         )}
         
-        {/* Price Offer Component */}
-        {component.type === "price-offer" && (
-          <div className="border rounded-lg p-6 bg-gradient-to-r from-blue-50 to-purple-50">
-            <h3 className="text-2xl font-bold text-center mb-4">{component.data.title}</h3>
-            <div className="text-center mb-4">
-              <span className="text-4xl font-bold text-green-600">{component.data.price}</span>
-              <span className="text-xl text-gray-500 line-through ml-2">{component.data.old_price}</span>
+        {/* Quiz Result Component */}
+        {component.type === "quiz-result" && (
+          <div className="text-center space-y-6 bg-gradient-to-br from-blue-50 to-purple-50 p-8 rounded-xl">
+            <div className="w-24 h-24 mx-auto bg-blue-500 rounded-full flex items-center justify-center mb-4">
+              <span className="text-2xl text-white font-bold">🎯</span>
             </div>
-            <ul className="space-y-2">
-              {component.data.features.map((feature: string, index: number) => (
-                <li key={index} className="flex items-center">
-                  <CheckSquare className="w-5 h-5 text-green-500 mr-2" />
-                  {feature}
-                </li>
-              ))}
-            </ul>
+            <h2 className="text-3xl font-bold text-gray-800">Seu Estilo é: {component.data.styleName}</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+              {component.data.description}
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+              <div className="bg-white p-4 rounded-lg shadow-sm">
+                <h4 className="font-semibold text-gray-800 mb-2">Características</h4>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  {component.data.characteristics?.map((char: string, index: number) => (
+                    <li key={index}>• {char}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="bg-white p-4 rounded-lg shadow-sm">
+                <h4 className="font-semibold text-gray-800 mb-2">Dicas de Styling</h4>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  {component.data.tips?.map((tip: string, index: number) => (
+                    <li key={index}>• {tip}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Price Offer Component - Enhanced for Quiz */}
+        {component.type === "price-offer" && (
+          <div className="bg-gradient-to-br from-green-50 to-blue-50 border-2 border-green-200 rounded-xl p-8 relative overflow-hidden">
+            <div className="absolute top-0 right-0 bg-red-500 text-white px-4 py-2 text-sm font-bold transform rotate-12 translate-x-4 -translate-y-2">
+              OFERTA ESPECIAL
+            </div>
+            <div className="text-center">
+              <h3 className="text-3xl font-bold text-gray-800 mb-2">{component.data.title}</h3>
+              <p className="text-gray-600 mb-6">Descubra seu estilo completo com nossa consultoria personalizada</p>
+              
+              <div className="mb-6">
+                <div className="text-sm text-gray-500 mb-2">DE:</div>
+                <span className="text-2xl text-gray-500 line-through">{component.data.old_price}</span>
+                <div className="text-sm text-gray-500 mt-1 mb-4">POR APENAS:</div>
+                <span className="text-5xl font-bold text-green-600">{component.data.price}</span>
+                <div className="text-sm text-gray-600 mt-2">ou 12x de R$ 9,70</div>
+              </div>
+
+              <div className="bg-white rounded-lg p-6 mb-6 shadow-sm">
+                <h4 className="font-bold text-gray-800 mb-4">O que você vai receber:</h4>
+                <div className="space-y-3">
+                  {component.data.features.map((feature: string, index: number) => (
+                    <div key={index} className="flex items-center text-left">
+                      <CheckSquare className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+                      <span className="text-gray-700">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <Button className="w-full bg-green-600 hover:bg-green-700 text-white text-lg py-4 rounded-lg font-bold">
+                QUERO DESCOBRIR MEU ESTILO COMPLETO
+              </Button>
+              
+              <div className="flex items-center justify-center mt-4 text-sm text-gray-600">
+                <Shield className="w-4 h-4 mr-2" />
+                Garantia de 30 dias ou seu dinheiro de volta
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Progress Bar Component */}
+        {component.type === "quiz-progress" && (
+          <div className="w-full bg-gray-200 rounded-full h-3 mb-4">
+            <div 
+              className="bg-blue-500 h-3 rounded-full transition-all duration-300" 
+              style={{ width: `${component.data.progress || 70}%` }}
+            ></div>
+            <div className="text-center text-sm text-gray-600 mt-2">
+              Questão {component.data.current || 7} de {component.data.total || 10}
+            </div>
+          </div>
+        )}
+
+        {/* Testimonial Component - Enhanced */}
+        {component.type === "testimonial" && (
+          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div className="flex items-start space-x-4">
+              <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
+                <Users className="w-6 h-6 text-gray-600" />
+              </div>
+              <div className="flex-1">
+                <p className="text-gray-700 italic mb-3">"{component.data.text}"</p>
+                <div className="flex items-center">
+                  <span className="font-semibold text-gray-800">{component.data.name}</span>
+                  <div className="flex ml-2">
+                    {[1,2,3,4,5].map(star => (
+                      <span key={star} className="text-yellow-400">⭐</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
         
