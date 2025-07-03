@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Layout, 
   Type, 
@@ -509,75 +510,82 @@ const EnhancedSimpleDragDropEditor: React.FC = () => {
 
   return (
     <div className="h-screen bg-gray-100 flex overflow-hidden">
-      {/* Painel 1: Etapas do Funil */}
-      <div className="w-72 bg-gray-900 text-white flex flex-col border-r border-gray-800">
-        <div className="p-4 border-b border-gray-800">
-          <h2 className="text-xl font-bold">Etapas do Funil</h2>
-          <p className="text-sm text-gray-400 mt-1">Quiz Estilo + Oferta</p>
+      {/* Painel 1: Etapas do Funil - Sidebar Compacta */}
+      <div className="w-64 bg-gray-900 text-white flex flex-col border-r border-gray-800">
+        <div className="p-3 border-b border-gray-800">
+          <h2 className="text-lg font-bold">Etapas do Funil</h2>
+          <p className="text-xs text-gray-400 mt-1">Quiz Estilo + Oferta</p>
         </div>
         
-        <ScrollArea className="flex-1 p-2">
+        <ScrollArea className="flex-1 p-1">
           {FUNNEL_STEPS.map((step, index) => (
-            <Button
+            <div
               key={step.id}
-              variant={selectedStep === step.id ? "default" : "ghost"}
-              className={`w-full justify-start mb-2 ${
+              className={`flex items-center space-x-2 p-2 mb-1 rounded cursor-pointer transition-colors ${
                 selectedStep === step.id 
-                  ? "bg-blue-600 hover:bg-blue-700" 
+                  ? "bg-blue-600 text-white" 
                   : "text-gray-300 hover:text-white hover:bg-gray-800"
               }`}
               onClick={() => setSelectedStep(step.id)}
             >
-              <div className="flex items-center space-x-3">
-                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center text-xs">
+              <div className="flex items-center space-x-2 w-full">
+                <span className="flex-shrink-0 w-5 h-5 rounded bg-gray-700 flex items-center justify-center text-xs font-medium">
                   {index + 1}
                 </span>
-                <div className="text-left">
-                  <div className="font-medium">{step.title}</div>
+                <div className="text-left flex-1 min-w-0">
+                  <div className="text-sm font-medium truncate">{step.title}</div>
                   <div className="text-xs text-gray-400 capitalize">{step.type}</div>
                 </div>
               </div>
-            </Button>
+            </div>
           ))}
         </ScrollArea>
       </div>
 
       {/* Painel 2: Biblioteca de Componentes */}
-      <div className="w-64 bg-gray-900 text-white flex flex-col border-r border-gray-800">
-        <div className="p-4 border-b border-gray-800">
-          <h3 className="text-lg font-semibold">Componentes</h3>
-          <p className="text-sm text-gray-400">Arraste para o canvas</p>
+      <div className="w-60 bg-white flex flex-col border-r border-gray-300">
+        <div className="p-3 border-b border-gray-200">
+          <h3 className="text-base font-semibold text-gray-800">Componentes</h3>
+          <p className="text-xs text-gray-500">Arraste para o canvas</p>
         </div>
         
-        <ScrollArea className="flex-1 p-2">
-          <div className="space-y-1">
-            {COMPONENT_LIBRARY.map((comp) => (
-              <div
-                key={comp.id}
-                draggable
-                onDragStart={(e) => handleDragStart(e, comp.id)}
-                className="flex items-center space-x-3 p-3 bg-gray-800 hover:bg-gray-700 rounded-lg cursor-grab active:cursor-grabbing transition-colors group"
-              >
-                <div className="relative">
-                  <comp.icon className="w-5 h-5 text-gray-300 group-hover:text-white" />
-                  {comp.new && (
-                    <Badge className="absolute -top-1 -right-1 text-xs bg-blue-600 text-white px-1 py-0.5 rounded-full">
-                      Novo
-                    </Badge>
-                  )}
-                </div>
-                <div className="flex-1">
-                  <div className="text-sm text-gray-200 group-hover:text-white font-medium">
-                    {comp.label}
-                  </div>
-                  <div className="text-xs text-gray-500 capitalize">
-                    {comp.category}
-                  </div>
-                </div>
-              </div>
+        <Tabs defaultValue="basic" className="flex-1 flex flex-col">
+          <TabsList className="grid w-full grid-cols-3 mx-2 mt-2 text-xs h-8">
+            <TabsTrigger value="basic" className="text-xs py-1">Básico</TabsTrigger>
+            <TabsTrigger value="quiz" className="text-xs py-1">Quiz</TabsTrigger>
+            <TabsTrigger value="sales" className="text-xs py-1">Vendas</TabsTrigger>
+          </TabsList>
+          
+          <ScrollArea className="flex-1 p-2">
+            {["basic", "quiz", "sales"].map(category => (
+              <TabsContent key={category} value={category} className="mt-2 space-y-1">
+                {COMPONENT_LIBRARY
+                  .filter(comp => comp.category === category)
+                  .map(component => (
+                    <div
+                      key={component.id}
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, component.id)}
+                      className="flex items-center space-x-2 p-2 bg-gray-50 hover:bg-gray-100 rounded cursor-grab active:cursor-grabbing transition-colors group border border-gray-200"
+                    >
+                      <component.icon className="w-4 h-4 text-gray-600 flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs font-medium text-gray-800 truncate">
+                          {component.label}
+                        </div>
+                        {component.new && (
+                          <Badge className="text-xs bg-green-100 text-green-700 px-1 py-0 mt-1">
+                            Novo
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                }
+              </TabsContent>
             ))}
-          </div>
-        </ScrollArea>
+          </ScrollArea>
+        </Tabs>
       </div>
 
       {/* Painel 3: Canvas Principal */}
@@ -664,10 +672,10 @@ const EnhancedSimpleDragDropEditor: React.FC = () => {
       </div>
 
       {/* Painel 4: Propriedades */}
-      <div className="w-96 bg-gray-900 text-white border-l border-gray-800 flex flex-col">
-        <div className="p-4 border-b border-gray-800">
-          <h3 className="text-lg font-semibold">Propriedades</h3>
-          <p className="text-sm text-gray-400">Configure o componente</p>
+      <div className="w-80 bg-white border-l border-gray-300 flex flex-col">
+        <div className="p-4 border-b border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-800">Propriedades</h3>
+          <p className="text-sm text-gray-500">Configure o componente</p>
         </div>
 
         <ScrollArea className="flex-1 p-4">
@@ -806,9 +814,9 @@ const EnhancedSimpleDragDropEditor: React.FC = () => {
               </Card>
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center h-full text-gray-400">
+            <div className="flex flex-col items-center justify-center h-full text-gray-500">
               <Sliders className="w-12 h-12 mb-4" />
-              <h3 className="text-lg font-medium mb-2">Selecione um componente</h3>
+              <h3 className="text-lg font-medium mb-2 text-gray-800">Selecione um componente</h3>
               <p className="text-center text-sm">
                 Clique em um componente no canvas para configurar suas propriedades
               </p>
