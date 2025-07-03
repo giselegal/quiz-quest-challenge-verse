@@ -5950,7 +5950,526 @@ const SimpleDragDropEditor: React.FC = () => {
                     toast({ title: "✅ ETAPA 17 REPLICADA!", description: "Estrutura idêntica ao CaktoQuiz: logo 96x96, progress 7.14%, h1 text-3xl font-bold, imagem max-w-96, input com label NOME *, botão h-14" });
                   }}
                 >
+<<<<<<< HEAD
                   ✨ ETAPA 17 - CaktoQuiz Exato
+=======
+                  📱 Tela 1: Entrada do Nome
+                </Button>
+
+                {/* TELA 2: Questão 1 - Roupa Favorita */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="justify-start h-8 text-xs bg-blue-50 border-blue-300"
+                  onClick={() => {
+                    const q1Screen = {
+                      id: "question-1-screen",
+                      title: "Tela 2: Q1 - Roupa Favorita",
+                      type: "question" as const,
+                      progress: 10,
+                      showHeader: true,
+                      showProgress: true,
+                      components: [
+                        {
+                          id: "q1-title",
+                          type: "title" as const,
+                          data: {
+                            text: "QUAL O SEU TIPO DE ROUPA FAVORITA?",
+                            fontSize: "1.5rem",
+                            fontWeight: "600",
+                            color: "inherit"
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            marginBottom: "2rem"
+                          }
+                        },
+                        {
+                          id: "q1-options",
+                          type: "options" as const,
+                          data: {
+                            text: "Selecione até 3 opções:",
+                            maxSelections: 3,
+                            options: [
+                              { id: "opt1", text: "Vestidos elegantes", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_9_mgkdnb.webp", value: "vestidos" },
+                              { id: "opt2", text: "Roupas casuais", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921098/Espanhol_Portugu%C3%AAs_5_cptzyb.webp", value: "casual" },
+                              { id: "opt3", text: "Look profissional", imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp", value: "profissional" }
+                            ]
+                          },
+                          style: {
+                            display: "grid",
+                            gap: "1rem",
+                            marginBottom: "2rem"
+                          }
+                        }
+                      ]
+                    };
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, q1Screen] }));
+                    toast({ title: "✅ Tela 2 adicionada", description: "Q1: Roupa Favorita" });
+                  }}
+                >
+                  📝 Tela 2: Q1 - Roupa Favorita
+                </Button>
+
+                {/* TELAS 3-11: Questões 2-10 (Exemplo para Q2) */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="justify-start h-8 text-xs bg-blue-50 border-blue-300"
+                  onClick={() => {
+                    const q2Screen = {
+                      id: "question-2-screen",
+                      title: "Tela 3: Q2 - Personalidade",
+                      type: "question" as const,
+                      progress: 20,
+                      showHeader: true,
+                      showProgress: true,
+                      components: [
+                        {
+                          id: "q2-title",
+                          type: "title" as const,
+                          data: {
+                            text: "Como você descreveria sua personalidade?",
+                            fontSize: "1.5rem",
+                            fontWeight: "600",
+                            color: "inherit"
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            marginBottom: "2rem"
+                          }
+                        },
+                        {
+                          id: "q2-options",
+                          type: "options" as const,
+                          data: {
+                            text: "Selecione até 3 opções:",
+                            maxSelections: 3,
+                            options: [
+                              { id: "opt1", text: "Confiante", imageUrl: "", value: "confiante" },
+                              { id: "opt2", text: "Criativa", imageUrl: "", value: "criativa" },
+                              { id: "opt3", text: "Elegante", imageUrl: "", value: "elegante" },
+                              { id: "opt4", text: "Descontraída", imageUrl: "", value: "descontraida" }
+                            ]
+                          },
+                          style: {
+                            display: "grid",
+                            gap: "1rem",
+                            marginBottom: "2rem"
+                          }
+                        }
+                      ]
+                    };
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, q2Screen] }));
+                    toast({ title: "✅ Tela 3 adicionada", description: "Q2: Personalidade" });
+                  }}
+                >
+                  📝 Tela 3: Q2 - Personalidade
+                </Button>
+
+                {/* Botão para adicionar todas as 10 questões normais */}
+                <Button
+                  variant="default"
+                  size="sm"
+                  className="justify-start h-8 text-xs bg-blue-600 hover:bg-blue-700 text-white"
+                  onClick={() => {
+                    const questionTitles = [
+                      "QUAL O SEU TIPO DE ROUPA FAVORITA?",
+                      "Como você descreveria sua personalidade?",
+                      "Qual visual você mais admira?",
+                      "Quais detalhes chamam sua atenção?",
+                      "Que tipo de estampas você prefere?",
+                      "Qual casaco/jaqueta combina com você?",
+                      "Que estilo de calça você usa mais?",
+                      "Que tipo de sapato você escolheria?",
+                      "Quais acessórios você mais usa?",
+                      "Que tipo de tecido você prefere?"
+                    ];
+
+                    const questionScreens = questionTitles.map((title, index) => ({
+                      id: `question-${index + 1}-screen`,
+                      title: `Tela ${index + 2}: Q${index + 1} - ${title.split(' ')[0]}`,
+                      type: "question" as const,
+                      progress: (index + 1) * 10,
+                      showHeader: true,
+                      showProgress: true,
+                      components: [
+                        {
+                          id: `q${index + 1}-title`,
+                          type: "title" as const,
+                          data: {
+                            text: title,
+                            fontSize: "1.5rem",
+                            fontWeight: "600",
+                            color: "inherit"
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            marginBottom: "2rem"
+                          }
+                        },
+                        {
+                          id: `q${index + 1}-options`,
+                          type: "options" as const,
+                          data: {
+                            text: "Selecione até 3 opções:",
+                            maxSelections: 3,
+                            options: [
+                              { id: "opt1", text: `Opção 1 - Q${index + 1}`, imageUrl: "", value: `option1_q${index + 1}` },
+                              { id: "opt2", text: `Opção 2 - Q${index + 1}`, imageUrl: "", value: `option2_q${index + 1}` },
+                              { id: "opt3", text: `Opção 3 - Q${index + 1}`, imageUrl: "", value: `option3_q${index + 1}` }
+                            ]
+                          },
+                          style: {
+                            display: "grid",
+                            gap: "1rem",
+                            marginBottom: "2rem"
+                          }
+                        }
+                      ]
+                    }));
+
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, ...questionScreens] }));
+                    toast({ title: "✅ Questões 1-10 adicionadas", description: "10 telas de questões normais criadas" });
+                  }}
+                >
+                  📝 + Todas as Questões (Q1-Q10)
+                </Button>
+
+                {/* TELA 12: Transição */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="justify-start h-8 text-xs bg-yellow-50 border-yellow-300"
+                  onClick={() => {
+                    const transitionScreen = {
+                      id: "transition-screen",
+                      title: "Tela 12: Transição",
+                      type: "transition" as const,
+                      progress: 65,
+                      showHeader: true,
+                      showProgress: true,
+                      components: [
+                        {
+                          id: "transition-title",
+                          type: "title" as const,
+                          data: {
+                            text: "Agora vamos descobrir mais sobre você...",
+                            fontSize: "1.5rem",
+                            fontWeight: "600",
+                            color: "inherit"
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            marginBottom: "2rem"
+                          }
+                        },
+                        {
+                          id: "transition-subtitle",
+                          type: "subtitle" as const,
+                          data: {
+                            text: "Estas próximas perguntas nos ajudarão a personalizar ainda mais seu resultado",
+                            fontSize: "1rem",
+                            color: "#666"
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            marginBottom: "2rem"
+                          }
+                        },
+                        {
+                          id: "continue-button",
+                          type: "button" as const,
+                          data: {
+                            text: "Continuar",
+                            variant: "primary"
+                          },
+                          style: {
+                            width: "100%",
+                            height: "3rem",
+                            backgroundColor: "hsl(var(--primary))",
+                            color: "hsl(var(--primary-foreground))"
+                          }
+                        }
+                      ]
+                    };
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, transitionScreen] }));
+                    toast({ title: "✅ Tela 12 adicionada", description: "Transição entre questões normais e estratégicas" });
+                  }}
+                >
+                  🔄 Tela 12: Transição
+                </Button>
+
+                {/* TELAS 13-18: Questões Estratégicas */}
+                <Button
+                  variant="default"
+                  size="sm"
+                  className="justify-start h-8 text-xs bg-purple-600 hover:bg-purple-700 text-white"
+                  onClick={() => {
+                    const strategicTitles = [
+                      "Como você se vê hoje em relação ao seu estilo?",
+                      "Quais são seus principais desafios ao se vestir?",
+                      "Com que frequência você fica indecisa sobre o que vestir?",
+                      "Você teria interesse em receber um material personalizado sobre seu estilo?",
+                      "Quanto você investiria em um guia completo de estilo por R$97?",
+                      "Que tipo de resultado você espera alcançar?"
+                    ];
+
+                    const strategicScreens = strategicTitles.map((title, index) => ({
+                      id: `strategic-${index + 1}-screen`,
+                      title: `Tela ${13 + index}: E${index + 1} - Estratégica`,
+                      type: "question" as const,
+                      progress: 70 + (index * 3),
+                      showHeader: true,
+                      showProgress: true,
+                      components: [
+                        {
+                          id: `e${index + 1}-title`,
+                          type: "title" as const,
+                          data: {
+                            text: title,
+                            fontSize: "1.5rem",
+                            fontWeight: "600",
+                            color: "inherit"
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            marginBottom: "2rem"
+                          }
+                        },
+                        {
+                          id: `e${index + 1}-options`,
+                          type: "options" as const,
+                          data: {
+                            text: "Selecione uma opção:",
+                            maxSelections: 1,
+                            options: [
+                              { id: "opt1", text: `Resposta 1 - E${index + 1}`, imageUrl: "", value: `answer1_e${index + 1}` },
+                              { id: "opt2", text: `Resposta 2 - E${index + 1}`, imageUrl: "", value: `answer2_e${index + 1}` },
+                              { id: "opt3", text: `Resposta 3 - E${index + 1}`, imageUrl: "", value: `answer3_e${index + 1}` }
+                            ]
+                          },
+                          style: {
+                            display: "grid",
+                            gap: "1rem",
+                            marginBottom: "2rem"
+                          }
+                        }
+                      ]
+                    }));
+
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, ...strategicScreens] }));
+                    toast({ title: "✅ Questões Estratégicas adicionadas", description: "6 telas de questões estratégicas criadas" });
+                  }}
+                >
+                  🎯 + Questões Estratégicas (E1-E6)
+                </Button>
+
+                {/* TELA 19: Loading */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="justify-start h-8 text-xs bg-gray-50 border-gray-300"
+                  onClick={() => {
+                    const loadingScreen = {
+                      id: "loading-screen",
+                      title: "Tela 19: Loading",
+                      type: "loading" as const,
+                      progress: 95,
+                      showHeader: true,
+                      showProgress: true,
+                      components: [
+                        {
+                          id: "loading-title",
+                          type: "title" as const,
+                          data: {
+                            text: "Calculando seu resultado...",
+                            fontSize: "1.5rem",
+                            fontWeight: "600",
+                            color: "inherit"
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            marginBottom: "2rem"
+                          }
+                        },
+                        {
+                          id: "loading-progress",
+                          type: "progress" as const,
+                          data: {
+                            progressValue: 95,
+                            showPercentage: true,
+                            color: "hsl(var(--primary))",
+                            backgroundColor: "rgb(212, 212, 216)",
+                            height: 8
+                          },
+                          style: {
+                            width: "100%",
+                            marginBottom: "2rem"
+                          }
+                        },
+                        {
+                          id: "loading-text",
+                          type: "text" as const,
+                          data: {
+                            text: "Analisando suas respostas e definindo seu estilo personalizado...",
+                            fontSize: "1rem",
+                            color: "#666"
+                          },
+                          style: {
+                            textAlign: "center" as const
+                          }
+                        }
+                      ]
+                    };
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, loadingScreen] }));
+                    toast({ title: "✅ Tela 19 adicionada", description: "Loading - Calculando resultado" });
+                  }}
+                >
+                  ⏳ Tela 19: Loading
+                </Button>
+
+                {/* TELA 20: Resultado */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="justify-start h-8 text-xs bg-green-50 border-green-300"
+                  onClick={() => {
+                    const resultScreen = {
+                      id: "result-screen",
+                      title: "Tela 20: Resultado",
+                      type: "result" as const,
+                      progress: 100,
+                      showHeader: true,
+                      showProgress: false,
+                      components: [
+                        {
+                          id: "result-title",
+                          type: "title" as const,
+                          data: {
+                            text: "Seu Estilo Personalizado",
+                            fontSize: "2rem",
+                            fontWeight: "700",
+                            color: "inherit"
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            marginBottom: "2rem"
+                          }
+                        },
+                        {
+                          id: "style-result",
+                          type: "subtitle" as const,
+                          data: {
+                            text: "Natural Autêntica",
+                            fontSize: "1.5rem",
+                            color: "hsl(var(--primary))"
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            marginBottom: "2rem"
+                          }
+                        },
+                        {
+                          id: "result-description",
+                          type: "text" as const,
+                          data: {
+                            text: "Seu estilo reflete autenticidade e naturalidade. Você prefere peças confortáveis que expressam sua personalidade verdadeira.",
+                            fontSize: "1rem",
+                            color: "#666"
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            marginBottom: "2rem"
+                          }
+                        },
+                        {
+                          id: "cta-button",
+                          type: "button" as const,
+                          data: {
+                            text: "Ver Guia Completo",
+                            variant: "primary"
+                          },
+                          style: {
+                            width: "100%",
+                            height: "3.5rem",
+                            backgroundColor: "hsl(var(--primary))",
+                            color: "hsl(var(--primary-foreground))"
+                          }
+                        }
+                      ]
+                    };
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, resultScreen] }));
+                    toast({ title: "✅ Tela 20 adicionada", description: "Resultado - Página /resultado" });
+                  }}
+                >
+                  🎉 Tela 20: Resultado
+                </Button>
+
+                {/* TELA 21: Oferta/Upsell */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="justify-start h-8 text-xs bg-orange-50 border-orange-300"
+                  onClick={() => {
+                    const offerScreen = {
+                      id: "offer-screen",
+                      title: "Tela 21: Oferta/Upsell",
+                      type: "offer" as const,
+                      progress: 100,
+                      showHeader: true,
+                      showProgress: false,
+                      components: [
+                        {
+                          id: "offer-title",
+                          type: "title" as const,
+                          data: {
+                            text: "Guia Completo de Estilo Personalizado",
+                            fontSize: "2rem",
+                            fontWeight: "700",
+                            color: "inherit"
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            marginBottom: "2rem"
+                          }
+                        },
+                        {
+                          id: "offer-price",
+                          type: "price" as const,
+                          data: {
+                            price: "97",
+                            currency: "R$",
+                            originalPrice: "197",
+                            discount: "50%"
+                          },
+                          style: {
+                            textAlign: "center" as const,
+                            marginBottom: "2rem"
+                          }
+                        },
+                        {
+                          id: "offer-cta",
+                          type: "button" as const,
+                          data: {
+                            text: "Garantir Meu Guia Agora",
+                            variant: "primary"
+                          },
+                          style: {
+                            width: "100%",
+                            height: "3.5rem",
+                            backgroundColor: "hsl(var(--primary))",
+                            color: "hsl(var(--primary-foreground))"
+                          }
+                        }
+                      ]
+                    };
+                    setCurrentFunnel(prev => ({ ...prev, pages: [...prev.pages, offerScreen] }));
+                    toast({ title: "✅ Tela 21 adicionada", description: "Oferta/Upsell - Página de venda" });
+                  }}
+                >
+                  💰 Tela 21: Oferta/Upsell
+>>>>>>> e3df6263084c251ab32a2aa425fbb30b0a930527
                 </Button>
 
                 <Button
