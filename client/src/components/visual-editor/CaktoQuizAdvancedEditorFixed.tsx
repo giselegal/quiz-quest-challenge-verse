@@ -123,6 +123,10 @@ const createInitialFunnel = (): FunnelData => ({
           id: 'intro-header',
           type: 'header',
           order: 1,
+          content: {
+            title: 'Descubra Seu Estilo Único',
+            subtitle: 'Um quiz personalizado para transformar seu guarda-roupa'
+          },
           settings: {
             title: 'Descubra Seu Estilo Único',
             subtitle: 'Um quiz personalizado para transformar seu guarda-roupa',
@@ -924,6 +928,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       id: `${blockType}-${Date.now()}`,
       type: blockType,
       order: currentPage.blocks.length + 1,
+      content: {},
       settings: {}
     };
 
@@ -1111,6 +1116,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           id: `${blockType}-${Date.now()}`,
           type: blockType,
           order: targetIndex + 1,
+          content: {},
           settings: {}
         };
 
@@ -2683,10 +2689,10 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 {/* Cabeçalho do bloco */}
                 <div className="pb-4 border-b">
                   <h3 className="font-medium text-sm mb-2">
-                    {blockLibrary.find(b => b.type === selectedBlock.type)?.name || selectedBlock.type}
+                    {blockLibrary.find(b => b.type === selectedBlock?.type)?.name || selectedBlock?.type || 'Bloco Desconhecido'}
                   </h3>
                   <p className="text-xs text-gray-500">
-                    {blockLibrary.find(b => b.type === selectedBlock.type)?.description || 'Bloco personalizado'}
+                    {blockLibrary.find(b => b.type === selectedBlock?.type)?.description || 'Bloco personalizado'}
                   </p>
                   
                   {/* Ações do bloco */}
@@ -2825,27 +2831,29 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 </div>
 
                 {/* Propriedades específicas do bloco */}
-                {selectedBlock.type === 'header' && (
-                  <div className="space-y-4">
-                    <div>
-                      <Label className="text-xs">Título</Label>
-                      <Input
-                        value={selectedBlock.settings.title || ''}
-                        onChange={(e) => updateBlockSetting('title', e.target.value)}
-                        className="text-sm h-8 mt-1"
-                        placeholder="Digite o título"
-                      />
-                    </div>
-                    
-                    <div>
-                      <Label className="text-xs">Subtítulo</Label>
-                      <Input
-                        value={selectedBlock.settings.subtitle || ''}
-                        onChange={(e) => updateBlockSetting('subtitle', e.target.value)}
-                        className="text-sm h-8 mt-1"
-                        placeholder="Digite o subtítulo"
-                      />
-                    </div>
+                {selectedBlock && selectedBlock.settings && (
+                  <>
+                    {selectedBlock.type === 'header' && (
+                      <div className="space-y-4">
+                        <div>
+                          <Label className="text-xs">Título</Label>
+                          <Input
+                            value={selectedBlock.settings.title || ''}
+                            onChange={(e) => updateBlockSetting('title', e.target.value)}
+                            className="text-sm h-8 mt-1"
+                            placeholder="Digite o título"
+                          />
+                        </div>
+                        
+                        <div>
+                          <Label className="text-xs">Subtítulo</Label>
+                          <Input
+                            value={selectedBlock.settings.subtitle || ''}
+                            onChange={(e) => updateBlockSetting('subtitle', e.target.value)}
+                            className="text-sm h-8 mt-1"
+                            placeholder="Digite o subtítulo"
+                          />
+                        </div>
                     
                     <div>
                       <Label className="text-xs">Tamanho do Título</Label>
@@ -2975,7 +2983,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                     <div>
                       <Label className="text-xs">Largura</Label>
                       <Input
-                        value={selectedBlock.settings.width || '100%'}
+                        value={selectedBlock?.settings?.width || '100%'}
                         onChange={(e) => updateBlockSetting('width', e.target.value)}
                         className="text-sm h-8 mt-1"
                         placeholder="100% ou 500px"
@@ -3976,6 +3984,8 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                     </div>
                   </div>
                 </div>
+                </>
+                )}
               </div>
             ) : (
               <div className="text-center py-8 text-gray-500">
