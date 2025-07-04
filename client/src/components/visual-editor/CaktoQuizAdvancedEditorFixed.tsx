@@ -683,12 +683,229 @@ const blockLibrary = [
   }
 ];
 
+// Templates pré-configurados
+const pageTemplates = [
+  {
+    id: 'intro-complete',
+    name: 'Introdução Completa',
+    type: 'intro',
+    description: 'Página de introdução com todos os elementos',
+    blocks: [
+      {
+        id: 'template-header',
+        type: 'header',
+        order: 1,
+        settings: {
+          title: 'Descubra Seu Estilo Único',
+          subtitle: 'Um quiz personalizado para transformar seu guarda-roupa',
+          titleSize: 'large',
+          alignment: 'center'
+        }
+      },
+      {
+        id: 'template-hero-image',
+        type: 'image',
+        order: 2,
+        settings: {
+          src: 'https://res.cloudinary.com/dqljyf76t/image/upload/f_webp,q_70,w_800,h_600,c_fit/v1744911572/quiz_intro_image.webp',
+          alt: 'Quiz de Estilo',
+          alignment: 'center'
+        }
+      },
+      {
+        id: 'template-description',
+        type: 'text',
+        order: 3,
+        settings: {
+          content: 'Descubra qual é o seu perfil de estilo e receba dicas personalizadas para valorizar ainda mais sua beleza natural.',
+          fontSize: 'medium',
+          alignment: 'center'
+        }
+      },
+      {
+        id: 'template-name-input',
+        type: 'form-input',
+        order: 4,
+        settings: {
+          label: 'Como você gostaria de ser chamada?',
+          placeholder: 'Digite seu nome aqui...',
+          required: true,
+          type: 'text'
+        }
+      },
+      {
+        id: 'template-cta-button',
+        type: 'button',
+        order: 5,
+        settings: {
+          text: 'Começar o Quiz',
+          style: 'primary',
+          size: 'large',
+          fullWidth: true
+        }
+      }
+    ]
+  },
+  {
+    id: 'question-standard',
+    name: 'Questão Padrão',
+    type: 'question',
+    description: 'Pergunta com múltiplas opções',
+    blocks: [
+      {
+        id: 'template-question',
+        type: 'question-multiple',
+        order: 1,
+        settings: {
+          question: 'Qual destas opções melhor descreve seu estilo?',
+          options: [
+            { id: 'a', text: 'Clássico e elegante', value: 'classic' },
+            { id: 'b', text: 'Moderno e minimalista', value: 'modern' },
+            { id: 'c', text: 'Romântico e feminino', value: 'romantic' },
+            { id: 'd', text: 'Casual e confortável', value: 'casual' }
+          ],
+          required: true
+        }
+      }
+    ]
+  },
+  {
+    id: 'strategic-question-template',
+    name: 'Questão Estratégica',
+    type: 'strategic',
+    description: 'Pergunta de qualificação de lead',
+    blocks: [
+      {
+        id: 'template-strategic-question',
+        type: 'strategic-question',
+        order: 1,
+        settings: {
+          question: 'Você estaria interessada em receber um guia personalizado para o seu estilo?',
+          options: [
+            { id: 'a', text: 'Sim, definitivamente!', value: 'high' },
+            { id: 'b', text: 'Talvez, preciso saber mais', value: 'medium' },
+            { id: 'c', text: 'Não, não me interessa', value: 'low' }
+          ],
+          required: true
+        }
+      }
+    ]
+  },
+  {
+    id: 'main-transition-template',
+    name: 'Transição Principal',
+    type: 'main-transition',
+    description: 'Loading após questões principais',
+    blocks: [
+      {
+        id: 'template-transition-header',
+        type: 'header',
+        order: 1,
+        settings: {
+          title: 'Analisando suas respostas...',
+          subtitle: 'Criando seu perfil personalizado',
+          alignment: 'center'
+        }
+      },
+      {
+        id: 'template-loading',
+        type: 'loading-animation',
+        order: 2,
+        settings: {
+          type: 'elegant',
+          message: 'Processando suas preferências...',
+          duration: 4000
+        }
+      }
+    ]
+  },
+  {
+    id: 'result-complete',
+    name: 'Resultado Completo',
+    type: 'result',
+    description: 'Página de resultado com oferta',
+    blocks: [
+      {
+        id: 'template-result-header',
+        type: 'header',
+        order: 1,
+        settings: {
+          title: 'Parabéns! Descobrimos Seu Perfil',
+          subtitle: 'Resultado baseado em suas respostas',
+          alignment: 'center'
+        }
+      },
+      {
+        id: 'template-style-display',
+        type: 'style-result-display',
+        order: 2,
+        settings: {
+          styleName: 'Elegante Clássica',
+          styleImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/f_webp,q_70,w_600,h_400,c_fit/v1744911572/style_classic.webp',
+          styleDescription: 'Seu estilo é sofisticado e atemporal. Você valoriza peças de qualidade, cortes bem estruturados e uma paleta de cores mais neutra e elegante.',
+          percentMatch: 92
+        }
+      },
+      {
+        id: 'template-sales-offer',
+        type: 'sales-offer',
+        order: 3,
+        settings: {
+          title: 'Transforme Seu Guarda-Roupa Hoje!',
+          subtitle: 'Guias Personalizados de Estilo',
+          originalPrice: 'R$ 297,00',
+          currentPrice: 'R$ 97,00',
+          discount: '67% OFF',
+          urgency: 'Oferta válida apenas hoje!'
+        }
+      },
+      {
+        id: 'template-testimonials',
+        type: 'testimonials-grid',
+        order: 4,
+        settings: {
+          testimonials: [
+            {
+              author: 'Maria Silva',
+              role: 'Empresária',
+              text: 'O quiz mudou completamente minha forma de me vestir!',
+              rating: 5,
+              avatar: 'https://via.placeholder.com/60x60?text=M'
+            },
+            {
+              author: 'Ana Costa',
+              role: 'Professora',
+              text: 'Descobri meu estilo verdadeiro, amei o resultado!',
+              rating: 5,
+              avatar: 'https://via.placeholder.com/60x60?text=A'
+            }
+          ]
+        }
+      },
+      {
+        id: 'template-guarantee',
+        type: 'guarantee-section',
+        order: 5,
+        settings: {
+          title: 'Garantia de 30 dias',
+          description: 'Se não ficar satisfeita, devolvemos 100% do seu dinheiro.',
+          features: [
+            'Garantia incondicional',
+            'Suporte 24/7',
+            'Acesso vitalício'
+          ]
+        }
+      }
+    ]
+  }
+];
+
 const CaktoQuizAdvancedEditor: React.FC = () => {
   // Estados principais
   const [funnel, setFunnel] = useState<Funnel>(createInitialFunnel);
   const [currentPageId, setCurrentPageId] = useState<string>('intro');
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'funnel' | 'blocks' | 'settings'>('funnel');
+  const [activeTab, setActiveTab] = useState<'funnel' | 'blocks' | 'templates' | 'settings'>('funnel');
   const [deviceView, setDeviceView] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
   const [isAutoSaving, setIsAutoSaving] = useState<boolean>(false);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -953,6 +1170,41 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'copy';
   }, []);
+
+  // Função para adicionar nova página
+  const addNewPage = useCallback((template?: any) => {
+    const newPageId = `page-${Date.now()}`;
+    const newPage: FunnelPage = {
+      id: newPageId,
+      name: template ? template.name : 'Nova Página',
+      title: template ? template.name : 'Nova Página',
+      type: template ? template.type : 'question',
+      settings: {
+        backgroundColor: '#ffffff',
+        textColor: '#432818',
+        showProgress: true,
+        progressValue: 50
+      },
+      blocks: template ? template.blocks.map((block: any, index: number) => ({
+        ...block,
+        id: `${block.type}-${Date.now()}-${index}`,
+        order: index + 1
+      })) : []
+    };
+
+    setFunnel(prev => ({
+      ...prev,
+      pages: [...prev.pages, newPage]
+    }));
+
+    setCurrentPageId(newPageId);
+
+    toast({
+      title: "Nova página criada!",
+      description: template ? `Página criada com template "${template.name}"` : "Nova página criada com sucesso",
+      variant: "default",
+    });
+  }, [toast]);
 
   // Função para salvar o funil
   const saveFunnel = useCallback(() => {
@@ -1760,17 +2012,29 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     <div className="flex h-screen bg-gray-50">
       {/* SIDEBAR ESQUERDA */}
       <div className="w-80 bg-white border-r shadow-lg flex flex-col">
-        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'funnel' | 'blocks' | 'settings')} className="flex-1 flex flex-col">
-          <TabsList className="grid w-full grid-cols-3 m-2">
+        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'funnel' | 'blocks' | 'templates' | 'settings')} className="flex-1 flex flex-col">
+          <TabsList className="grid w-full grid-cols-4 m-2">
             <TabsTrigger value="funnel" className="text-xs">Funil</TabsTrigger>
             <TabsTrigger value="blocks" className="text-xs">Blocos</TabsTrigger>
+            <TabsTrigger value="templates" className="text-xs">Templates</TabsTrigger>
             <TabsTrigger value="settings" className="text-xs">Config</TabsTrigger>
           </TabsList>
 
           <TabsContent value="funnel" className="flex-1 p-2">
             <ScrollArea className="h-full">
               <div className="space-y-2">
-                <h3 className="text-sm font-medium mb-3">Páginas do Funil</h3>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-sm font-medium">Páginas do Funil</h3>
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => addNewPage()}
+                    className="h-6 text-xs"
+                  >
+                    <Plus className="h-3 w-3 mr-1" />
+                    Nova
+                  </Button>
+                </div>
                 {funnel.pages.map((page, index) => (
                   <div
                     key={page.id}
@@ -1849,6 +2113,77 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
             </ScrollArea>
           </TabsContent>
 
+          <TabsContent value="templates" className="flex-1 p-2">
+            <ScrollArea className="h-full">
+              <div className="space-y-3">
+                <h3 className="text-sm font-medium mb-3">Templates de Página</h3>
+                
+                {pageTemplates.map((template) => (
+                  <div
+                    key={template.id}
+                    className="group p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors hover:shadow-sm"
+                    onClick={() => {
+                      // Aplicar template à página atual
+                      if (currentPage) {
+                        const newBlocks = template.blocks.map((block, index) => ({
+                          ...block,
+                          id: `${block.type}-${Date.now()}-${index}`,
+                          order: index + 1
+                        }));
+                        
+                        setFunnel(prev => ({
+                          ...prev,
+                          pages: prev.pages.map(page => 
+                            page.id === currentPageId 
+                              ? { ...page, blocks: newBlocks }
+                              : page
+                          )
+                        }));
+
+                        // Notificação de sucesso
+                        toast({
+                          title: "Template aplicado!",
+                          description: `Template "${template.name}" foi aplicado à página atual.`,
+                          variant: "default",
+                        });
+                      }
+                    }}
+                  >
+                    <div className="flex items-start space-x-3">
+                      <div className="w-8 h-8 bg-[#B89B7A] rounded flex items-center justify-center text-white text-xs font-bold">
+                        {template.name.charAt(0)}
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">{template.name}</p>
+                        <p className="text-xs text-gray-500 mb-1">{template.description}</p>
+                        <div className="flex items-center gap-1">
+                          <Badge variant="outline" className="text-xs">
+                            {template.type}
+                          </Badge>
+                          <Badge variant="secondary" className="text-xs">
+                            {template.blocks.length} blocos
+                          </Badge>
+                        </div>
+                      </div>
+                      <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Button size="sm" variant="outline" className="h-6 text-xs">
+                          Aplicar
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <h4 className="text-sm font-medium text-blue-800 mb-2">💡 Como usar</h4>
+                  <p className="text-xs text-blue-700">
+                    Clique em um template para aplicá-lo à página atual. Os blocos existentes serão substituídos pelos do template.
+                  </p>
+                </div>
+              </div>
+            </ScrollArea>
+          </TabsContent>
+
           <TabsContent value="settings" className="flex-1 p-2">
             <ScrollArea className="h-full">
               <div className="space-y-4">
@@ -1888,6 +2223,76 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                     }))}
                   />
                   <Label className="text-xs">Funil Publicado</Label>
+                </div>
+
+                <div className="border-t pt-4">
+                  <h4 className="text-sm font-medium mb-3">Configurações Avançadas</h4>
+                  
+                  <div>
+                    <Label className="text-xs">Tema</Label>
+                    <select 
+                      value={funnel.config.theme}
+                      onChange={(e) => setFunnel(prev => ({
+                        ...prev,
+                        config: { ...prev.config, theme: e.target.value }
+                      }))}
+                      className="w-full h-8 text-sm border border-gray-300 rounded mt-1 px-2"
+                    >
+                      <option value="caktoquiz">CaktoQuiz</option>
+                      <option value="minimal">Minimal</option>
+                      <option value="elegant">Elegante</option>
+                    </select>
+                  </div>
+
+                  <div className="mt-3">
+                    <Label className="text-xs">Versão A/B Testing</Label>
+                    <div className="flex gap-2 mt-1">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          // Implementar lógica A/B testing
+                          toast({
+                            title: "A/B Testing",
+                            description: "Funcionalidade em desenvolvimento",
+                            variant: "default",
+                          });
+                        }}
+                        className="flex-1 h-8 text-xs"
+                      >
+                        Versão A
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          // Implementar lógica A/B testing
+                          toast({
+                            title: "A/B Testing",
+                            description: "Funcionalidade em desenvolvimento",
+                            variant: "default",
+                          });
+                        }}
+                        className="flex-1 h-8 text-xs"
+                      >
+                        Versão B
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="mt-3">
+                    <Label className="text-xs">Analytics</Label>
+                    <div className="grid grid-cols-2 gap-2 mt-1">
+                      <div className="bg-gray-50 p-2 rounded text-center">
+                        <div className="text-lg font-bold text-gray-800">0</div>
+                        <div className="text-xs text-gray-600">Visualizações</div>
+                      </div>
+                      <div className="bg-gray-50 p-2 rounded text-center">
+                        <div className="text-lg font-bold text-gray-800">0%</div>
+                        <div className="text-xs text-gray-600">Conversão</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </ScrollArea>
@@ -2977,6 +3382,392 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                         className="text-sm h-8 mt-1"
                         placeholder="Descrição do vídeo"
                       />
+                    </div>
+                  </div>
+                )}
+
+                {selectedBlock.type === 'loading-animation' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Mensagem</Label>
+                      <Input
+                        value={selectedBlock.settings.message || ''}
+                        onChange={(e) => updateBlockSetting('message', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Processando suas respostas..."
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Tipo de Animação</Label>
+                      <select 
+                        value={selectedBlock.settings.type || 'spinning'}
+                        onChange={(e) => updateBlockSetting('type', e.target.value)}
+                        className="w-full h-8 text-sm border border-gray-300 rounded mt-1 px-2"
+                      >
+                        <option value="spinning">Girando</option>
+                        <option value="elegant">Elegante</option>
+                        <option value="dots">Pontos</option>
+                        <option value="bars">Barras</option>
+                      </select>
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Duração (ms)</Label>
+                      <Input
+                        type="number"
+                        value={selectedBlock.settings.duration || 4000}
+                        onChange={(e) => updateBlockSetting('duration', parseInt(e.target.value))}
+                        className="text-sm h-8 mt-1"
+                        placeholder="4000"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {selectedBlock.type === 'style-result-display' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Nome do Estilo</Label>
+                      <Input
+                        value={selectedBlock.settings.styleName || ''}
+                        onChange={(e) => updateBlockSetting('styleName', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Elegante Clássica"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">URL da Imagem do Estilo</Label>
+                      <Input
+                        value={selectedBlock.settings.styleImage || ''}
+                        onChange={(e) => updateBlockSetting('styleImage', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="https://exemplo.com/estilo.jpg"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Descrição do Estilo</Label>
+                      <Textarea
+                        value={selectedBlock.settings.styleDescription || ''}
+                        onChange={(e) => updateBlockSetting('styleDescription', e.target.value)}
+                        className="text-sm resize-none mt-1"
+                        rows={4}
+                        placeholder="Descrição detalhada do estilo personalizado..."
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Porcentagem de Compatibilidade</Label>
+                      <Input
+                        type="number"
+                        min="1"
+                        max="100"
+                        value={selectedBlock.settings.percentMatch || 92}
+                        onChange={(e) => updateBlockSetting('percentMatch', parseInt(e.target.value))}
+                        className="text-sm h-8 mt-1"
+                        placeholder="92"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {selectedBlock.type === 'sales-offer' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Título da Oferta</Label>
+                      <Input
+                        value={selectedBlock.settings.title || ''}
+                        onChange={(e) => updateBlockSetting('title', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Transforme Seu Guarda-Roupa Hoje!"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Subtítulo</Label>
+                      <Input
+                        value={selectedBlock.settings.subtitle || ''}
+                        onChange={(e) => updateBlockSetting('subtitle', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Guias Personalizados de Estilo"
+                      />
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <Label className="text-xs">Preço Original</Label>
+                        <Input
+                          value={selectedBlock.settings.originalPrice || ''}
+                          onChange={(e) => updateBlockSetting('originalPrice', e.target.value)}
+                          className="text-sm h-8 mt-1"
+                          placeholder="R$ 297,00"
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs">Preço Atual</Label>
+                        <Input
+                          value={selectedBlock.settings.currentPrice || ''}
+                          onChange={(e) => updateBlockSetting('currentPrice', e.target.value)}
+                          className="text-sm h-8 mt-1"
+                          placeholder="R$ 97,00"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Desconto</Label>
+                      <Input
+                        value={selectedBlock.settings.discount || ''}
+                        onChange={(e) => updateBlockSetting('discount', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="67% OFF"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Urgência</Label>
+                      <Input
+                        value={selectedBlock.settings.urgency || ''}
+                        onChange={(e) => updateBlockSetting('urgency', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Oferta válida apenas hoje!"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {selectedBlock.type === 'testimonials-grid' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Depoimentos</Label>
+                      <div className="space-y-3 mt-1">
+                        {(selectedBlock.settings.testimonials || []).map((testimonial: any, index: number) => (
+                          <div key={index} className="border border-gray-200 rounded p-3 space-y-2">
+                            <Input
+                              value={testimonial.author}
+                              onChange={(e) => {
+                                const testimonials = [...(selectedBlock.settings.testimonials || [])];
+                                testimonials[index] = { ...testimonials[index], author: e.target.value };
+                                updateBlockSetting('testimonials', testimonials);
+                              }}
+                              className="text-sm h-8"
+                              placeholder="Nome do cliente"
+                            />
+                            <Input
+                              value={testimonial.role}
+                              onChange={(e) => {
+                                const testimonials = [...(selectedBlock.settings.testimonials || [])];
+                                testimonials[index] = { ...testimonials[index], role: e.target.value };
+                                updateBlockSetting('testimonials', testimonials);
+                              }}
+                              className="text-sm h-8"
+                              placeholder="Profissão"
+                            />
+                            <Textarea
+                              value={testimonial.text}
+                              onChange={(e) => {
+                                const testimonials = [...(selectedBlock.settings.testimonials || [])];
+                                testimonials[index] = { ...testimonials[index], text: e.target.value };
+                                updateBlockSetting('testimonials', testimonials);
+                              }}
+                              className="text-sm resize-none"
+                              rows={2}
+                              placeholder="Texto do depoimento"
+                            />
+                            <div className="flex gap-2">
+                              <Input
+                                value={testimonial.avatar}
+                                onChange={(e) => {
+                                  const testimonials = [...(selectedBlock.settings.testimonials || [])];
+                                  testimonials[index] = { ...testimonials[index], avatar: e.target.value };
+                                  updateBlockSetting('testimonials', testimonials);
+                                }}
+                                className="text-sm h-8 flex-1"
+                                placeholder="URL do avatar"
+                              />
+                              <select 
+                                value={testimonial.rating || 5}
+                                onChange={(e) => {
+                                  const testimonials = [...(selectedBlock.settings.testimonials || [])];
+                                  testimonials[index] = { ...testimonials[index], rating: parseInt(e.target.value) };
+                                  updateBlockSetting('testimonials', testimonials);
+                                }}
+                                className="h-8 text-sm border border-gray-300 rounded px-2"
+                              >
+                                <option value="1">1⭐</option>
+                                <option value="2">2⭐</option>
+                                <option value="3">3⭐</option>
+                                <option value="4">4⭐</option>
+                                <option value="5">5⭐</option>
+                              </select>
+                            </div>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                const testimonials = [...(selectedBlock.settings.testimonials || [])];
+                                testimonials.splice(index, 1);
+                                updateBlockSetting('testimonials', testimonials);
+                              }}
+                              className="h-6 text-xs w-full"
+                            >
+                              <Trash2 className="h-3 w-3 mr-1" />
+                              Remover
+                            </Button>
+                          </div>
+                        ))}
+                        
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            const testimonials = [...(selectedBlock.settings.testimonials || [])];
+                            testimonials.push({
+                              author: 'Nova Cliente',
+                              role: 'Cliente Satisfeita',
+                              text: 'Adorei o resultado!',
+                              rating: 5,
+                              avatar: 'https://via.placeholder.com/60x60?text=👤'
+                            });
+                            updateBlockSetting('testimonials', testimonials);
+                          }}
+                          className="w-full h-8"
+                        >
+                          <Plus className="h-3 w-3 mr-1" />
+                          Adicionar Depoimento
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {selectedBlock.type === 'guarantee-section' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Título da Garantia</Label>
+                      <Input
+                        value={selectedBlock.settings.title || ''}
+                        onChange={(e) => updateBlockSetting('title', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Garantia de Satisfação"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Descrição</Label>
+                      <Textarea
+                        value={selectedBlock.settings.description || ''}
+                        onChange={(e) => updateBlockSetting('description', e.target.value)}
+                        className="text-sm resize-none mt-1"
+                        rows={3}
+                        placeholder="Sua satisfação é garantida..."
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Recursos da Garantia</Label>
+                      <div className="space-y-2 mt-1">
+                        {(selectedBlock.settings.features || []).map((feature: string, index: number) => (
+                          <div key={index} className="flex gap-2">
+                            <Input
+                              value={feature}
+                              onChange={(e) => {
+                                const features = [...(selectedBlock.settings.features || [])];
+                                features[index] = e.target.value;
+                                updateBlockSetting('features', features);
+                              }}
+                              className="text-sm h-8 flex-1"
+                              placeholder="Recurso da garantia"
+                            />
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                const features = [...(selectedBlock.settings.features || [])];
+                                features.splice(index, 1);
+                                updateBlockSetting('features', features);
+                              }}
+                              className="h-8 w-8 p-0"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        ))}
+                        
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            const features = [...(selectedBlock.settings.features || [])];
+                            features.push('Novo recurso');
+                            updateBlockSetting('features', features);
+                          }}
+                          className="w-full h-8"
+                        >
+                          <Plus className="h-3 w-3 mr-1" />
+                          Adicionar Recurso
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {selectedBlock.type === 'strategic-question' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Pergunta Estratégica</Label>
+                      <Textarea
+                        value={selectedBlock.settings.question || ''}
+                        onChange={(e) => updateBlockSetting('question', e.target.value)}
+                        className="text-sm resize-none mt-1"
+                        rows={3}
+                        placeholder="Digite a pergunta estratégica"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Opções</Label>
+                      <div className="space-y-2 mt-1">
+                        {(selectedBlock.settings.options || []).map((option: any, index: number) => (
+                          <div key={index} className="flex gap-2">
+                            <Input
+                              value={option.text}
+                              onChange={(e) => updateQuestionOption(index, 'text', e.target.value)}
+                              className="text-sm h-8 flex-1"
+                              placeholder={`Opção ${String.fromCharCode(65 + index)}`}
+                            />
+                            <select 
+                              value={option.value}
+                              onChange={(e) => updateQuestionOption(index, 'value', e.target.value)}
+                              className="h-8 text-sm border border-gray-300 rounded px-2"
+                            >
+                              <option value="high">Alto interesse</option>
+                              <option value="medium">Médio interesse</option>
+                              <option value="low">Baixo interesse</option>
+                            </select>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => removeQuestionOption(index)}
+                              className="h-8 w-8 p-0"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        ))}
+                        
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={addQuestionOption}
+                          className="w-full h-8"
+                        >
+                          <Plus className="h-3 w-3 mr-1" />
+                          Adicionar Opção
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 )}
