@@ -2631,8 +2631,8 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
               className="flex flex-col gap-4 md:gap-6 h-full justify-between p-3 md:p-5 pb-10"
               onClick={() => setSelectedBlockId(null)}
               style={{
-                backgroundColor: currentPage?.settings.backgroundColor || '#ffffff',
-                color: currentPage?.settings.textColor || '#432818'
+                backgroundColor: currentPage?.settings?.backgroundColor || '#ffffff',
+                color: currentPage?.settings?.textColor || '#432818'
               }}
             >
               {currentPage ? (
