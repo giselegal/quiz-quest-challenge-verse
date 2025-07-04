@@ -112,6 +112,12 @@ const createInitialFunnel = (): FunnelData => ({
   id: crypto.randomUUID(),
   name: 'Quiz CaktoQuiz - Descubra Seu Estilo',
   description: 'Funil completo para descoberta do estilo pessoal',
+  config: {
+    name: 'Quiz CaktoQuiz - Descubra Seu Estilo',
+    description: 'Funil completo para descoberta do estilo pessoal',
+    isPublished: false,
+    theme: 'caktoquiz'
+  },
   pages: [
     // 1. Página de Introdução
     {
@@ -699,6 +705,47 @@ const blockLibrary = [
     description: 'Input específico para telefone',
     icon: <Calendar className="w-4 h-4" />,
     category: 'Formulário'
+  },
+  // Blocos específicos do Quiz
+  { 
+    id: 'quiz-intro-section',
+    type: 'quiz-intro-section', 
+    name: 'Seção de Introdução do Quiz', 
+    description: 'Bloco completo de introdução com CTA',
+    icon: <Sparkles className="w-4 h-4" />,
+    category: 'Quiz'
+  },
+  { 
+    id: 'quiz-progress-bar',
+    type: 'quiz-progress-bar', 
+    name: 'Barra de Progresso', 
+    description: 'Indicador visual do progresso do quiz',
+    icon: <Target className="w-4 h-4" />,
+    category: 'Quiz'
+  },
+  { 
+    id: 'quiz-navigation-controls',
+    type: 'quiz-navigation-controls', 
+    name: 'Controles de Navegação', 
+    description: 'Botões de voltar/avançar do quiz',
+    icon: <ArrowRight className="w-4 h-4" />,
+    category: 'Quiz'
+  },
+  { 
+    id: 'quiz-transition-page',
+    type: 'quiz-transition-page', 
+    name: 'Página de Transição', 
+    description: 'Página entre seções do quiz',
+    icon: <RotateCcw className="w-4 h-4" />,
+    category: 'Quiz'
+  },
+  { 
+    id: 'quiz-final-transition',
+    type: 'quiz-final-transition', 
+    name: 'Transição Final', 
+    description: 'Página de loading antes do resultado',
+    icon: <Trophy className="w-4 h-4" />,
+    category: 'Quiz'
   }
 ];
 
@@ -944,18 +991,32 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
   }, [funnel]);
 
   // Computed values
-  const currentPage = useMemo(() => 
-    funnel.pages.find(page => page.id === currentPageId), 
-    [funnel.pages, currentPageId]
-  );
+  const currentPage = useMemo(() => {
+    const page = funnel?.pages?.find(page => page.id === currentPageId);
+    
+    // Garantir que a página tenha estrutura válida
+    if (page && !page.settings) {
+      return {
+        ...page,
+        settings: {
+          backgroundColor: '#ffffff',
+          textColor: '#432818',
+          showProgress: true,
+          progressValue: 50
+        }
+      };
+    }
+    
+    return page;
+  }, [funnel?.pages, currentPageId]);
 
   const currentPageIndex = useMemo(() => 
-    funnel.pages.findIndex(page => page.id === currentPageId), 
-    [funnel.pages, currentPageId]
+    funnel?.pages?.findIndex(page => page.id === currentPageId) || 0, 
+    [funnel?.pages, currentPageId]
   );
 
   const selectedBlock = useMemo(() => 
-    currentPage?.blocks.find(block => block.id === selectedBlockId), 
+    currentPage?.blocks?.find(block => block.id === selectedBlockId), 
     [currentPage?.blocks, selectedBlockId]
   );
 
@@ -2221,6 +2282,221 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 placeholder={block?.settings?.placeholder || '(11) 99999-9999'}
                 className="w-full h-12 text-base border-2 border-[#B89B7A]/30 focus:border-[#B89B7A] rounded-xl bg-white focus:ring-2 focus:ring-[#B89B7A]/20"
               />
+            </div>
+          </div>
+        );
+        break;
+
+      case 'transition-text':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-8 text-center">
+            <div className="max-w-2xl mx-auto space-y-4">
+              <h3 className="text-2xl font-bold text-[#432818]">
+                {block?.settings?.title || 'Processando suas respostas...'}
+              </h3>
+              <p className="text-lg text-[#6B5B73] leading-relaxed">
+                {block?.settings?.description || 'Aguarde enquanto calculamos seu perfil personalizado.'}
+              </p>
+              {block?.settings?.showProgress && (
+                <div className="w-full bg-gray-200 rounded-full h-2 max-w-md mx-auto">
+                  <div 
+                    className="bg-[#B89B7A] h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${block?.settings?.progressValue || 75}%` }}
+                  ></div>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+        break;
+
+      case 'quiz-intro-section':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-12 text-center">
+            <div className="max-w-3xl mx-auto space-y-8">
+              <div className="space-y-4">
+                <h1 className="text-4xl md:text-5xl font-bold text-[#432818] font-playfair">
+                  {block?.settings?.title || 'Descubra Seu Estilo Único'}
+                </h1>
+                <p className="text-xl text-[#6B5B73] leading-relaxed">
+                  {block?.settings?.subtitle || 'Um quiz personalizado para transformar seu guarda-roupa'}
+                </p>
+              </div>
+              
+              {block?.settings?.showBenefits && (
+                <div className="grid md:grid-cols-3 gap-6 my-8">
+                  <div className="text-center">
+                    <div className="w-12 h-12 bg-[#B89B7A] rounded-full flex items-center justify-center mx-auto mb-3">
+                      <Star className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className="font-semibold text-[#432818] mb-2">Personalizado</h3>
+                    <p className="text-sm text-[#6B5B73]">Resultado único para você</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-12 h-12 bg-[#B89B7A] rounded-full flex items-center justify-center mx-auto mb-3">
+                      <Clock className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className="font-semibold text-[#432818] mb-2">Rápido</h3>
+                    <p className="text-sm text-[#6B5B73]">Apenas 3 minutos</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-12 h-12 bg-[#B89B7A] rounded-full flex items-center justify-center mx-auto mb-3">
+                      <Gift className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className="font-semibold text-[#432818] mb-2">Gratuito</h3>
+                    <p className="text-sm text-[#6B5B73]">100% sem custo</p>
+                  </div>
+                </div>
+              )}
+              
+              <Button className="bg-[#B89B7A] hover:bg-[#A1835D] text-white px-12 py-4 text-lg rounded-full font-semibold transform hover:scale-105 transition-all">
+                {block?.settings?.ctaText || 'Começar Quiz Agora'}
+              </Button>
+              
+              {block?.settings?.showTrust && (
+                <div className="flex items-center justify-center gap-2 text-sm text-[#6B5B73] mt-4">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  <span>Mais de 10.000 mulheres já fizeram o quiz</span>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+        break;
+
+      case 'quiz-progress-bar':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+            <div className="max-w-2xl mx-auto">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium text-[#432818]">
+                  Progresso do Quiz
+                </span>
+                <span className="text-sm text-[#6B5B73]">
+                  {block?.settings?.currentStep || 3} de {block?.settings?.totalSteps || 7}
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-3">
+                <div 
+                  className="bg-gradient-to-r from-[#B89B7A] to-[#A1835D] h-3 rounded-full transition-all duration-500 relative"
+                  style={{ width: `${block?.settings?.progressPercent || 43}%` }}
+                >
+                  <div className="absolute right-0 top-0 w-3 h-3 bg-white border-2 border-[#B89B7A] rounded-full transform translate-x-1/2"></div>
+                </div>
+              </div>
+              {block?.settings?.showStepName && (
+                <div className="text-center mt-2 text-sm text-[#6B5B73]">
+                  {block?.settings?.stepName || 'Definindo seu perfil'}
+                </div>
+              )}
+            </div>
+          </div>
+        );
+        break;
+
+      case 'quiz-navigation-controls':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+            <div className="flex justify-between items-center max-w-2xl mx-auto">
+              <Button 
+                variant="outline" 
+                className="border-[#B89B7A] text-[#B89B7A] hover:bg-[#B89B7A] hover:text-white px-6 py-3 rounded-full"
+                disabled={block?.settings?.hideBackButton}
+              >
+                <ArrowRight className="w-4 h-4 mr-2 rotate-180" />
+                {block?.settings?.backButtonText || 'Voltar'}
+              </Button>
+              
+              <div className="text-center">
+                <span className="text-sm text-[#6B5B73]">
+                  Questão {block?.settings?.currentQuestion || 3} de {block?.settings?.totalQuestions || 7}
+                </span>
+              </div>
+              
+              <Button 
+                className="bg-[#B89B7A] hover:bg-[#A1835D] text-white px-6 py-3 rounded-full"
+                disabled={block?.settings?.hideNextButton}
+              >
+                {block?.settings?.nextButtonText || 'Próxima'}
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'quiz-transition-page':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-16 text-center">
+            <div className="max-w-2xl mx-auto space-y-6">
+              <div className="w-20 h-20 bg-gradient-to-r from-[#B89B7A] to-[#A1835D] rounded-full flex items-center justify-center mx-auto">
+                <Trophy className="w-10 h-10 text-white" />
+              </div>
+              
+              <h2 className="text-3xl font-bold text-[#432818]">
+                {block?.settings?.title || 'Ótimo Progresso!'}
+              </h2>
+              
+              <p className="text-lg text-[#6B5B73] leading-relaxed">
+                {block?.settings?.description || 'Você está indo muito bem. Vamos continuar descobrindo seu estilo único.'}
+              </p>
+              
+              {block?.settings?.showProgress && (
+                <div className="w-full bg-gray-200 rounded-full h-2 max-w-md mx-auto">
+                  <div 
+                    className="bg-[#B89B7A] h-2 rounded-full transition-all duration-500"
+                    style={{ width: `${block?.settings?.progressValue || 60}%` }}
+                  ></div>
+                </div>
+              )}
+              
+              <Button className="bg-[#B89B7A] hover:bg-[#A1835D] text-white px-8 py-3 rounded-full font-semibold mt-6">
+                {block?.settings?.ctaText || 'Continuar Quiz'}
+              </Button>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'quiz-final-transition':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-20 text-center">
+            <div className="max-w-2xl mx-auto space-y-8">
+              <div className="relative">
+                <div className="w-24 h-24 border-4 border-[#B89B7A] border-t-transparent rounded-full animate-spin mx-auto"></div>
+                <div className="absolute inset-0 w-24 h-24 border-4 border-transparent border-r-[#6B5B73] rounded-full animate-ping mx-auto"></div>
+              </div>
+              
+              <div className="space-y-4">
+                <h2 className="text-3xl font-bold text-[#432818]">
+                  {block?.settings?.title || 'Processando Suas Respostas...'}
+                </h2>
+                
+                <p className="text-lg text-[#6B5B73]">
+                  {block?.settings?.description || 'Estamos analisando suas preferências para criar seu perfil único de estilo.'}
+                </p>
+              </div>
+              
+              {block?.settings?.showSteps && (
+                <div className="space-y-3 max-w-md mx-auto">
+                  <div className="flex items-center text-left">
+                    <CheckCircle className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span className="text-sm text-[#432818]">Analisando suas cores favoritas</span>
+                  </div>
+                  <div className="flex items-center text-left">
+                    <CheckCircle className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span className="text-sm text-[#432818]">Identificando seu estilo de vida</span>
+                  </div>
+                  <div className="flex items-center text-left">
+                    <RotateCcw className="w-5 h-5 text-[#B89B7A] mr-3 flex-shrink-0 animate-spin" />
+                    <span className="text-sm text-[#6B5B73]">Criando seu perfil personalizado</span>
+                  </div>
+                </div>
+              )}
+              
+              <div className="text-sm text-[#6B5B73] italic">
+                {block?.settings?.waitMessage || 'Isso levará apenas alguns segundos...'}
+              </div>
             </div>
           </div>
         );
