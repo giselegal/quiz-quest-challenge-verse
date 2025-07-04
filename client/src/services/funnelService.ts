@@ -29,16 +29,18 @@ export interface FunnelData {
 export interface PageData {
   id: string;
   type: string;
+  name?: string; // Adicionando propriedade name
   title?: string;
-  order: number;
+  order?: number; // Tornando opcional para compatibilidade
   blocks: BlockData[];
   metadata?: any;
+  settings?: any; // Adicionando para compatibilidade
 }
 
 export interface BlockData {
   id: string;
   type: string;
-  content: any;
+  content?: any; // Tornando opcional para compatibilidade
   styles?: any;
   position?: {
     x: number;
@@ -256,7 +258,7 @@ class FunnelService {
         await this.createFunnelPage({
           funnelId: funnel.id,
           pageType: pageData.type,
-          pageOrder: pageData.order,
+          pageOrder: pageData.order || 0,
           title: pageData.title || null,
           blocks: pageData.blocks,
           metadata: pageData.metadata || null,

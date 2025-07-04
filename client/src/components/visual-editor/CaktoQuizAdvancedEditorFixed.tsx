@@ -1463,21 +1463,21 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           <div 
             style={{
               ...baseStyle,
-              textAlign: block.settings.alignment || 'center'
+              textAlign: block?.settings?.alignment || 'center'
             }} 
             onClick={handleBlockClick} 
             className="py-4"
           >
             <h1 className={`font-bold text-[#432818] mb-4 font-playfair ${
-              block.settings.titleSize === 'small' ? 'text-xl md:text-2xl' :
-              block.settings.titleSize === 'medium' ? 'text-2xl md:text-3xl' :
+              block?.settings?.titleSize === 'small' ? 'text-xl md:text-2xl' :
+              block?.settings?.titleSize === 'medium' ? 'text-2xl md:text-3xl' :
               'text-3xl md:text-4xl'
             }`}>
-              {block.settings.title || 'Título do Cabeçalho'}
+              {block?.settings?.title || 'Título do Cabeçalho'}
             </h1>
-            {block.settings.subtitle && (
+            {block?.settings?.subtitle && (
               <p className="text-lg text-[#6B5B73] mb-6">
-                {block.settings.subtitle}
+                {block?.settings?.subtitle}
               </p>
             )}
           </div>
@@ -1489,17 +1489,17 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           <div 
             style={{
               ...baseStyle,
-              textAlign: block.settings.alignment || 'left'
+              textAlign: block?.settings?.alignment || 'left'
             }} 
             onClick={handleBlockClick}
             className="py-2"
           >
             <p className={`text-[#432818] leading-relaxed ${
-              block.settings.fontSize === 'small' ? 'text-sm' :
-              block.settings.fontSize === 'large' ? 'text-lg' :
+              block?.settings?.fontSize === 'small' ? 'text-sm' :
+              block?.settings?.fontSize === 'large' ? 'text-lg' :
               'text-base'
             }`}>
-              {block.settings.content || 'Conteúdo do texto aqui...'}
+              {block?.settings?.content || 'Conteúdo do texto aqui...'}
             </p>
           </div>
         );
@@ -1510,23 +1510,23 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           <div 
             style={{
               ...baseStyle,
-              textAlign: block.settings.alignment || 'center'
+              textAlign: block?.settings?.alignment || 'center'
             }} 
             onClick={handleBlockClick} 
             className="py-4"
           >
             <img
-              src={block.settings.src || 'https://via.placeholder.com/600x400?text=Imagem'}
-              alt={block.settings.alt || 'Imagem'}
+              src={block?.settings?.src || 'https://via.placeholder.com/600x400?text=Imagem'}
+              alt={block?.settings?.alt || 'Imagem'}
               className="max-w-full h-auto rounded-lg shadow-md mx-auto"
-              style={{ width: block.settings.width || 'auto' }}
+              style={{ width: block?.settings?.width || 'auto' }}
             />
           </div>
         );
         break;
 
       case 'button':
-        const buttonStyle = block.settings.style || 'primary';
+        const buttonStyle = block?.settings?.style || 'primary';
         const buttonClasses: Record<string, string> = {
           primary: 'bg-[#B89B7A] hover:bg-[#A1835D] text-white',
           secondary: 'bg-gray-200 hover:bg-gray-300 text-gray-800',
@@ -2183,8 +2183,8 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-gray-900">{page.name}</p>
-                        <p className="text-xs text-gray-500">{page.blocks.length} blocos</p>
+                        <p className="text-sm font-medium text-gray-900">{page?.name || `Página ${index + 1}`}</p>
+                        <p className="text-xs text-gray-500">{page?.blocks?.length || 0} blocos</p>
                       </div>
                       <Badge variant="outline" className="text-xs">
                         {index + 1}
@@ -2226,10 +2226,10 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                             onDragEnd={() => setIsDragging(false)}
                           >
                             <div className="flex items-center space-x-3">
-                              <div className="text-gray-600">{block.icon}</div>
+                              <div className="text-gray-600">{block?.icon}</div>
                               <div className="flex-1">
-                                <p className="text-sm font-medium text-gray-900">{block.name}</p>
-                                <p className="text-xs text-gray-500">{block.description}</p>
+                                <p className="text-sm font-medium text-gray-900">{block?.name || 'Bloco'}</p>
+                                <p className="text-xs text-gray-500">{block?.description || 'Sem descrição'}</p>
                               </div>
                               <div className="opacity-0 group-hover:opacity-100 transition-opacity">
                                 <div className="w-3 h-4 flex flex-col justify-center items-center">
@@ -2287,11 +2287,11 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                   >
                     <div className="flex items-start space-x-3">
                       <div className="w-8 h-8 bg-[#B89B7A] rounded flex items-center justify-center text-white text-xs font-bold">
-                        {template.name.charAt(0)}
+                        {template?.name?.charAt(0) || 'T'}
                       </div>
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900">{template.name}</p>
-                        <p className="text-xs text-gray-500 mb-1">{template.description}</p>
+                        <p className="text-sm font-medium text-gray-900">{template?.name || 'Template'}</p>
+                        <p className="text-xs text-gray-500 mb-1">{template?.description || 'Sem descrição'}</p>
                         <div className="flex items-center gap-1">
                           <Badge variant="outline" className="text-xs">
                             {template.type}
@@ -2328,7 +2328,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 <div>
                   <Label className="text-xs">Nome do Funil</Label>
                   <Input
-                    value={funnel.config.name}
+                    value={funnel?.config?.name || ''}
                     onChange={(e) => setFunnel(prev => ({
                       ...prev,
                       config: { ...prev.config, name: e.target.value }
@@ -2973,7 +2973,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                     <div>
                       <Label className="text-xs">Texto Alternativo</Label>
                       <Input
-                        value={selectedBlock.settings.alt || ''}
+                        value={selectedBlock?.settings?.alt || ''}
                         onChange={(e) => updateBlockSetting('alt', e.target.value)}
                         className="text-sm h-8 mt-1"
                         placeholder="Descrição da imagem"
