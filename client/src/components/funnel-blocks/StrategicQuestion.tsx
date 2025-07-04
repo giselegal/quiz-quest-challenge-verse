@@ -40,7 +40,7 @@ interface StrategicQuestionProps extends StyleProps {
 export const StrategicQuestion: React.FC<StrategicQuestionProps> = ({
   question,
   questionNumber,
-  totalStrategicQuestions = 7,
+  totalStrategicQuestions = 6,
   options,
   required = true,
   animationConfig = {},

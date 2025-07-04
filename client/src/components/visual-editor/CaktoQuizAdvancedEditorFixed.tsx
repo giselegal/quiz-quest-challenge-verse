@@ -37,6 +37,7 @@ import {
 } from '@/components/ui/toaster';
 import { useToast } from '@/hooks/use-toast';
 import { funnelService, type FunnelData, type PageData, type BlockData } from '@/services/funnelService';
+import { REAL_QUIZ_QUESTIONS, STRATEGIC_QUESTIONS, TRANSITIONS } from './realQuizData';
 import {
   Type,
   Image as ImageIcon,
@@ -185,8 +186,8 @@ const createInitialFunnel = (): FunnelData => ({
         }
       ]
     },
-    // 2-11. Perguntas principais (10 perguntas)
-    ...Array.from({ length: 10 }, (_, i) => ({
+    // 2-11. Perguntas principais (10 perguntas reais)
+    ...REAL_QUIZ_QUESTIONS.map((questionData, i) => ({
       id: `question-${i + 1}`,
       name: `Pergunta ${i + 1}`,
       title: `Pergunta ${i + 1} de 10`,
@@ -203,23 +204,25 @@ const createInitialFunnel = (): FunnelData => ({
           type: 'question-multiple',
           order: 1,
           settings: {
-            question: `Esta é a pergunta ${i + 1} sobre seu estilo pessoal`,
-            options: [
-              { id: 'a', text: 'Opção A - Estilo clássico', value: 'classic' },
-              { id: 'b', text: 'Opção B - Estilo moderno', value: 'modern' },
-              { id: 'c', text: 'Opção C - Estilo romântico', value: 'romantic' },
-              { id: 'd', text: 'Opção D - Estilo casual', value: 'casual' }
-            ],
-            required: true
+            question: questionData.question,
+            options: questionData.options.map(opt => ({
+              id: opt.id,
+              text: opt.text,
+              value: opt.value,
+              imageUrl: (opt as any).imageUrl || undefined
+            })),
+            required: true,
+            multipleSelection: questionData.multipleSelection || false,
+            maxSelections: questionData.maxSelections || 1
           }
         }
       ]
     })),
-    // 12. Página de Transição Principal
+    // 12. Página de Transição Principal (com textos reais)
     {
       id: 'main-transition',
       name: 'Transição Principal',
-      title: 'Analisando Respostas',
+      title: 'Enquanto calculamos seu resultado...',
       type: 'main-transition',
       settings: {
         backgroundColor: '#f9f4ef',
@@ -234,15 +237,36 @@ const createInitialFunnel = (): FunnelData => ({
           type: 'header',
           order: 1,
           settings: {
-            title: 'Analisando suas respostas...',
-            subtitle: 'Criando seu perfil personalizado',
+            title: TRANSITIONS.mainTransition.title,
+            subtitle: TRANSITIONS.mainTransition.message,
             alignment: 'center'
+          }
+        },
+        {
+          id: 'main-transition-description',
+          type: 'text',
+          order: 2,
+          settings: {
+            content: TRANSITIONS.mainTransition.submessage,
+            fontSize: 'medium',
+            alignment: 'center'
+          }
+        },
+        {
+          id: 'main-transition-additional',
+          type: 'text',
+          order: 3,
+          settings: {
+            content: TRANSITIONS.mainTransition.additionalMessage,
+            fontSize: 'small',
+            alignment: 'center',
+            style: { fontStyle: 'italic' }
           }
         },
         {
           id: 'main-transition-loader',
           type: 'loading-animation',
-          order: 2,
+          order: 4,
           settings: {
             type: 'spinning',
             message: 'Processando suas preferências...',
@@ -251,8 +275,8 @@ const createInitialFunnel = (): FunnelData => ({
         }
       ]
     },
-    // 13-19. Perguntas estratégicas (7 perguntas)
-    ...Array.from({ length: 7 }, (_, i) => ({
+    // 13-18. Perguntas estratégicas (6 questões reais)
+    ...STRATEGIC_QUESTIONS.map((questionData, i) => ({
       id: `strategic-${i + 1}`,
       name: `Estratégica ${i + 1}`,
       title: `Pergunta Estratégica ${i + 1}`,
@@ -261,7 +285,7 @@ const createInitialFunnel = (): FunnelData => ({
         backgroundColor: '#ffffff',
         textColor: '#432818',
         showProgress: true,
-        progressValue: 80 + (i + 1) * 2.5
+        progressValue: 80 + (i + 1) * 3.33  // Ajustado para 6 questões
       },
       blocks: [
         {
@@ -269,29 +293,30 @@ const createInitialFunnel = (): FunnelData => ({
           type: 'question-strategic',
           order: 1,
           settings: {
-            question: `Pergunta estratégica ${i + 1} sobre seus objetivos de estilo`,
-            options: [
-              { id: 'a', text: 'Sim, definitivamente', value: 'high' },
-              { id: 'b', text: 'Talvez, preciso saber mais', value: 'medium' },
-              { id: 'c', text: 'Não, não me interessa', value: 'low' }
-            ],
+            question: questionData.question,
+            subtitle: questionData.subtitle || undefined,
+            options: questionData.options.map(opt => ({
+              id: opt.id,
+              text: opt.text,
+              value: opt.value
+            })),
             required: true
           }
         }
       ]
     })),
-    // 20. Página de Transição Final
+    // 20. Página de Transição Final (com textos reais)
     {
       id: 'final-transition',
       name: 'Transição Final',
-      title: 'Finalizando Análise',
+      title: TRANSITIONS.finalTransition.title,
       type: 'final-transition',
       settings: {
         backgroundColor: '#432818',
         textColor: '#ffffff',
         showProgress: true,
         progressValue: 95,
-        transitionDuration: 3000
+        transitionDuration: TRANSITIONS.finalTransition.duration
       },
       blocks: [
         {
@@ -299,8 +324,8 @@ const createInitialFunnel = (): FunnelData => ({
           type: 'header',
           order: 1,
           settings: {
-            title: 'Obrigada por compartilhar!',
-            subtitle: 'Preparando seu resultado personalizado...',
+            title: TRANSITIONS.finalTransition.title,
+            subtitle: TRANSITIONS.finalTransition.message,
             alignment: 'center',
             color: 'white'
           }
@@ -312,7 +337,7 @@ const createInitialFunnel = (): FunnelData => ({
           settings: {
             type: 'elegant',
             message: 'Criando seu guia de estilo...',
-            duration: 3000
+            duration: TRANSITIONS.finalTransition.duration
           }
         }
       ]
