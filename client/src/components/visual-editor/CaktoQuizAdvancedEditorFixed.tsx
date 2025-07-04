@@ -2143,6 +2143,18 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     return content;
   };
 
+  // Verificação de segurança - renderiza estado de loading se os dados não estão prontos
+  if (!funnel || !funnel.pages || funnel.pages.length === 0) {
+    return (
+      <div className="flex h-screen bg-gray-50 items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Carregando editor...</p>
+        </div>
+      </div>
+    );
+  }
+
   // Render principal
   return (
     <div className="flex h-screen bg-gray-50">
@@ -2539,7 +2551,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
             'max-w-4xl'
           }`}>
             {/* Header da página com progress bar */}
-            {currentPage && currentPage.settings.showProgress && (
+            {currentPage && currentPage.settings?.showProgress && (
               <div className="flex flex-col gap-4 p-5 border-b">
                 <div className="flex flex-row w-full h-auto justify-center relative">
                   <div className="flex flex-col w-full justify-start items-center gap-4">
@@ -2557,7 +2569,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                       <div 
                         className="progress h-full w-full flex-1 bg-[#B89B7A] transition-all" 
                         style={{ 
-                          transform: `translateX(-${100 - (currentPage.settings.progressValue || 0)}%)` 
+                          transform: `translateX(-${100 - (currentPage.settings?.progressValue || 0)}%)` 
                         }}
                       />
                     </div>
@@ -2757,7 +2769,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                           }));
                         }
                       }}
-                      disabled={!currentPage || currentPage.blocks.findIndex(b => b.id === selectedBlockId) === (currentPage?.blocks.length || 1) - 1}
+                      disabled={!currentPage || currentPage.blocks.findIndex(b => b.id === selectedBlockId) === (currentPage.blocks.length || 1) - 1}
                       className="h-7 text-xs"
                     >
                       ↓ Descer
