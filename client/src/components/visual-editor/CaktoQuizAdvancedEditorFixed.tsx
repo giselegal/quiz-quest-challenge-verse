@@ -118,6 +118,12 @@ const createInitialFunnel = (): FunnelData => ({
       type: 'intro',
       title: 'Bem-vinda ao Quiz',
       order: 1,
+      settings: {
+        backgroundColor: '#ffffff',
+        textColor: '#432818',
+        showProgress: false,
+        progressValue: 0
+      },
       blocks: [
         {
           id: 'intro-header',
@@ -2143,18 +2149,6 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     return content;
   };
 
-  // Verificação de segurança - renderiza estado de loading se os dados não estão prontos
-  if (!funnel || !funnel.pages || funnel.pages.length === 0) {
-    return (
-      <div className="flex h-screen bg-gray-50 items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Carregando editor...</p>
-        </div>
-      </div>
-    );
-  }
-
   // Render principal
   return (
     <div className="flex h-screen bg-gray-50">
@@ -2769,7 +2763,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                           }));
                         }
                       }}
-                      disabled={!currentPage || currentPage.blocks.findIndex(b => b.id === selectedBlockId) === (currentPage.blocks.length || 1) - 1}
+                      disabled={!currentPage || currentPage.blocks.findIndex(b => b.id === selectedBlockId) === (currentPage?.blocks.length || 1) - 1}
                       className="h-7 text-xs"
                     >
                       ↓ Descer
