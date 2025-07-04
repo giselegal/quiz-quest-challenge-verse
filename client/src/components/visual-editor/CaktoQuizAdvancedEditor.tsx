@@ -1842,17 +1842,147 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                   />
                   <Label className="text-xs">Funil Publicado</Label>
                 </div>
-              </div>
-            </ScrollArea>
-          </TabsContent>
-        </Tabs>
-      </div>
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </Button>
+                </div>
+              )) || []}
+              <Button
+                size="sm"      {/* CANVAS PRINCIPAL */}
+                variant="outline"
+                onClick={() => {
+                  const newOption = {white flex items-center justify-between px-4">
+                    id: `option-${Date.now()}`,
+                    text: `Nova opção`,
+                    value: `option-${Date.now()}`
+                  };
+                  const updatedOptions = [...(selectedBlock.settings.options || []), newOption];="text-sm font-medium">
+                  updateBlock(selectedBlock.id, {Page?.title || 'Nenhuma página selecionada'}
+                    settings: { ...selectedBlock.settings, options: updatedOptions }an>
+                  });xt-xs capitalize">
+                }}ge?.type}
+                className="w-full h-8"
+              >
+                <Plus className="h-3 w-3 mr-1" />
+                Adicionar Opçãoe="flex items-center gap-2">
+              </Button>
+            </div>assName="flex gap-1">
+          </div>
+        )}
 
-      {/* CANVAS PRINCIPAL */}
-      <div className="flex-1 flex flex-col">
-        {/* Header do Canvas */}
-        <div className="h-14 border-b bg-white flex items-center justify-between px-4">
-          <div className="flex items-center gap-3">
+        {selectedBlock.type === 'progress' && (
+          <div>
+            <Label className="text-xs">Valor do Progresso (%)</Label>
+            <InputssName="h-3 w-3" />
+              type="number"
+              min="0"
+              max="100"iew === 'tablet' ? 'default' : 'outline'}
+              value={selectedBlock.settings.progressValue || 0}
+              onChange={(e) => updateBlock(selectedBlock.id, {
+                settings: { ...selectedBlock.settings, progressValue: parseInt(e.target.value) || 0 }
+              })}
+              className="text-sm h-8 mt-1"sName="h-3 w-3" />
+            />
+          </div>
+        )}iant={deviceView === 'desktop' ? 'default' : 'outline'}
+                size="sm"
+        {/* Estilos comuns */}')}
+        <div className="border-t pt-4">
+          <h4 className="text-xs font-medium mb-2">Estilo</h4>
+          itor className="h-3 w-3" />
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <Label className="text-xs">Tamanho da Fonte</Label>
+              <Select
+                value={selectedBlock.settings.style?.fontSize || '1rem'}? 'default' : 'outline'}
+                onValueChange={(value) => updateBlock(selectedBlock.id, {
+                  settings: { Mode(!isPreviewMode)}
+                    ...selectedBlock.settings, 
+                    style: { ...selectedBlock.settings.style, fontSize: value }
+                  }
+                })}
+              >
+                <SelectTrigger className="h-8 text-xs">
+                  <SelectValue /> className="h-8">
+                </SelectTrigger>lassName="h-3 w-3 mr-1" />
+                <SelectContent>
+                  <SelectItem value="0.75rem">Pequeno</SelectItem>>
+                  <SelectItem value="1rem">Normal</SelectItem>
+                  <SelectItem value="1.25rem">Médio</SelectItem>
+                  <SelectItem value="1.5rem">Grande</SelectItem>
+                  <SelectItem value="1.875rem">Extra Grande</SelectItem>
+                </SelectContent>50 overflow-auto">
+              </Select>te rounded-lg shadow-lg overflow-hidden ${
+            </div>
+            ceView === 'tablet' ? 'max-w-2xl' :
+            <div>
+              <Label className="text-xs">Alinhamento</Label>
+              <Select
+                value={selectedBlock.settings.style?.textAlign || 'left'}600px] p-6 space-y-4"
+                onValueChange={(value: 'left' | 'center' | 'right') => updateBlock(selectedBlock.id, { => setSelectedBlockId(null)}
+                  settings: { 
+                    ...selectedBlock.settings, 
+                    style: { ...selectedBlock.settings.style, textAlign: value }tColor || '#2c2c2c'
+                  }
+                })}
+              >
+                <SelectTrigger className="h-8 text-xs">
+                  <SelectValue />ágina */}
+                </SelectTrigger>
+                <SelectContent>b-6">
+                  <SelectItem value="left">Esquerda</SelectItem>
+                  <SelectItem value="center">Centro</SelectItem>ssName="bg-blue-600 h-2 rounded-full transition-all duration-300" 
+                  <SelectItem value="right">Direita</SelectItem>gs.progressValue}%` }}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+ina */}
+          {selectedBlock.type !== 'image' && (Page.blocks.length > 0 ? (
+            <div className="mt-2">ntPage.blocks
+              <Label className="text-xs">Cor do Texto</Label>t((a, b) => a.order - b.order)
+              <Inputap(block => renderBlock(block))
+                type="color" : (
+                value={selectedBlock.settings.style?.color || '#000000'}<div className="text-center py-12 text-gray-500">
+                onChange={(e) => updateBlock(selectedBlock.id, {yout className="h-8 w-8 mx-auto mb-4 opacity-50" />
+                  settings: {  className="mb-2">Esta página está vazia</p>
+                    ...selectedBlock.settings,                       <p className="text-sm">Adicione blocos da biblioteca para começar</p>
+                    style: { ...selectedBlock.settings.style, color: e.target.value }
+                  }
+                })}
+                className="text-sm h-8 mt-1"
+              /><div className="text-center py-12 text-gray-500">
+            </div>leText className="h-8 w-8 mx-auto mb-4 opacity-50" />
+          )}p>
+        </div>ssName="text-sm">Selecione uma página para começar a editar</p>
+      </div>
+    );
+  };
+
+  return (
+    <div className="h-screen flex bg-background">
+      {/* SIDEBAR: Páginas e Blocos */}
+      <div className="w-80 border-r bg-slate-50 flex flex-col">ITA: Propriedades */}
+        <div className="p-4 border-b bg-white">      <div className="w-80 border-l bg-white flex flex-col">
+          <h1 className="text-lg font-bold text-gray-800 flex items-center gap-2">e="h-14 border-b flex items-center px-4">
+            🎯 CaktoQuiz Advanced Editorer gap-2">
+          </h1>Name="h-4 w-4" />
+          <p className="text-sm text-gray-600 mt-1">
+            Editor de funil estilo CaktoQuiz
+          </p>
+        </div>
+sName="flex-1 p-4">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
+          <TabsList className="grid w-full grid-cols-3 m-2">
+            <TabsTrigger value="pages" className="text-xs">Páginas</TabsTrigger>
+            <TabsTrigger value="blocks" className="text-xs">Blocos</TabsTrigger>
+            <TabsTrigger value="config" className="text-xs">Config</TabsTrigger>      <Toaster />
+          </TabsList>
+
+          <TabsContent value="pages" className="flex-1 p-2">
+            <ScrollArea className="h-full">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between mb-3">                  <h3 className="text-sm font-medium">Páginas do Funil</h3>                  <Button size="sm" variant="outline" className="h-6 text-xs">                    <Plus className="h-3 w-3" />                  </Button>                </div>                                {funnel.pages.map((page, index) => (                  <Card                     key={page.id}                    className={`cursor-pointer transition-all hover:shadow-md ${                      currentPageIndex === index ? 'border-blue-500 bg-blue-50' : ''                    }`}                    onClick={() => setCurrentPageIndex(index)}                  >                    <CardContent className="p-3">                      <div className="flex items-center justify-between">                        <div className="flex items-center gap-2">                          <Badge variant={page.type === 'intro' ? 'default' : 'secondary'} className="text-xs">                            {index + 1}                          </Badge>                          <div>                            <p className="text-sm font-medium truncate">{page.title}</p>                            <p className="text-xs text-muted-foreground capitalize">{page.type}</p>                          </div>                        </div>                        <div className="text-xs text-muted-foreground">                          {page.blocks.length} blocos                        </div>                      </div>                    </CardContent>                  </Card>                ))}                {/* Botões para adicionar páginas */}                <div className="space-y-1 pt-2 border-t">                  <p className="text-xs text-muted-foreground mb-2">Adicionar Página:</p>                  {[                    { type: 'intro' as const, label: 'Introdução', icon: '🏠' },                    { type: 'question' as const, label: 'Pergunta', icon: '❓' },                    { type: 'result' as const, label: 'Resultado', icon: '🎯' },                    { type: 'offer' as const, label: 'Oferta', icon: '💰' }                  ].map(pageType => (                    <Button                      key={pageType.type}                      size="sm"                      variant="outline"                      onClick={() => addNewPage(pageType.type)}                      className="w-full justify-start h-8 text-xs"                    >                      {pageType.icon} {pageType.label}                    </Button>                  ))}                </div>              </div>            </ScrollArea>          </TabsContent>          <TabsContent value="blocks" className="flex-1 p-2">            <ScrollArea className="h-full">              <div className="space-y-3">                <h3 className="text-sm font-medium">Biblioteca de Blocos</h3>                                {['Texto', 'Mídia', 'Interação', 'Formulário', 'Quiz', 'UI'].map(category => (                  <div key={category}>                    <h4 className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wide">                      {category}                    </h4>                    <div className="space-y-1">                      {BLOCK_LIBRARY.filter(block => block.category === category).map(block => {                        const Icon = block.icon;                        return (                          <Button                            key={block.id}                            size="sm"                            variant="outline"                            onClick={() => addBlock(block.id)}                            className="w-full justify-start h-10 text-xs"                            disabled={!currentPage}                          >                            <Icon className="h-3 w-3 mr-2" />                            <div className="text-left">                              <div className="font-medium">{block.name}</div>                              <div className="text-xs text-muted-foreground">{block.description}</div>                            </div>                          </Button>                        );                      })}                    </div>                  </div>                ))}              </div>            </ScrollArea>          </TabsContent>          <TabsContent value="config" className="flex-1 p-2">            <ScrollArea className="h-full">              <div className="space-y-4">                <h3 className="text-sm font-medium">Configurações do Funil</h3>                                <div>                  <Label className="text-xs">Nome do Funil</Label>                  <Input                    value={funnel.config.name}                    onChange={(e) => setFunnel(prev => ({                      ...prev,                      config: { ...prev.config, name: e.target.value }                    }))}                    className="text-sm h-8 mt-1"                  />                </div>                <div>                  <Label className="text-xs">Descrição</Label>                  <Textarea                    value={funnel.config.description}                    onChange={(e) => setFunnel(prev => ({                      ...prev,                      config: { ...prev.config, description: e.target.value }                    }))}                    className="text-sm resize-none mt-1"                    rows={3}                  />                </div>                <div>                  <Label className="text-xs">Domínio</Label>                  <Input                    value={funnel.config.domain}                    onChange={(e) => setFunnel(prev => ({                      ...prev,                      config: { ...prev.config, domain: e.target.value }                    }))}                    className="text-sm h-8 mt-1"                    placeholder="https://quiz.cakto.com.br"                  />                </div>                <div className="flex items-center space-x-2">                  <Switch                    checked={funnel.config.isPublished}                    onCheckedChange={(checked) => setFunnel(prev => ({                      ...prev,                      config: { ...prev.config, isPublished: checked }                    }))}                  />                  <Label className="text-xs">Funil Publicado</Label>                </div>              </div>            </ScrollArea>          </TabsContent>        </Tabs>      </div>      {/* CANVAS PRINCIPAL */}      <div className="flex-1 flex flex-col">        {/* Header do Canvas */}        <div className="h-14 border-b bg-white flex items-center justify-between px-4">          <div className="flex items-center gap-3">
             <Badge variant="outline" className="text-xs">
               Página {currentPageIndex + 1} de {funnel.pages.length}
             </Badge>
@@ -1943,42 +2073,4 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                       .sort((a, b) => a.order - b.order)
                       .map(block => renderBlock(block))
                   ) : (
-                    <div className="text-center py-12 text-gray-500">
-                      <Layout className="h-8 w-8 mx-auto mb-4 opacity-50" />
-                      <p className="mb-2">Esta página está vazia</p>
-                      <p className="text-sm">Adicione blocos da biblioteca para começar</p>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className="text-center py-12 text-gray-500">
-                  <FileText className="h-8 w-8 mx-auto mb-4 opacity-50" />
-                  <p className="mb-2">Nenhuma página selecionada</p>
-                  <p className="text-sm">Selecione uma página para começar a editar</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* SIDEBAR DIREITA: Propriedades */}
-      <div className="w-80 border-l bg-white flex flex-col">
-        <div className="h-14 border-b flex items-center px-4">
-          <h2 className="text-sm font-semibold flex items-center gap-2">
-            <Settings className="h-4 w-4" />
-            Propriedades
-          </h2>
-        </div>
-
-        <ScrollArea className="flex-1 p-4">
-          {renderPropertiesPanel()}
-        </ScrollArea>
-      </div>
-
-      <Toaster />
-    </div>
-  );
-};
-
-export default CaktoQuizAdvancedEditor;
+                    <div className="text-center py-12 text-gray-500">continue</div>
