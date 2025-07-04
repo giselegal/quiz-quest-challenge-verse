@@ -20,7 +20,7 @@ import {
   Save, Eye, Monitor, Tablet, Smartphone, Settings, Plus, Trash2, Copy,
   GripVertical, Edit3, Image as ImageIcon, Type, MousePointer, Layout,
   BarChart3, Users, HelpCircle, Gift, Clock, ArrowRight, Play, FileText,
-  Palette, Zap, Target, ChevronDown, ChevronRight
+  Palette, Zap, Target, ChevronDown, ChevronRight, Shield
 } from 'lucide-react';
 
 // Interfaces para o Editor de Funil CaktoQuiz Style
@@ -71,6 +71,28 @@ interface FunnelBlock {
     required?: boolean;
     buttonText?: string;
     href?: string;
+    // Novas propriedades para blocos específicos
+    progressValue?: number; // para progress bar
+    duration?: number; // para loading animation
+    animationType?: string; // para loading animation
+    questionType?: string; // para strategic question
+    styleType?: string; // para style result display
+    showImage?: boolean; // para style result display
+    showDescription?: boolean; // para style result display
+    productName?: string; // para sales offer
+    price?: string; // para sales offer
+    originalPrice?: string; // para sales offer
+    ctaText?: string; // para sales offer
+    urgency?: boolean; // para sales offer
+    testimonials?: Array<{
+      name: string;
+      text: string;
+      image: string;
+    }>; // para testimonials grid
+    columns?: number; // para testimonials grid
+    guaranteeText?: string; // para guarantee section
+    guaranteeDetails?: string; // para guarantee section
+    showIcon?: boolean; // para guarantee section
   };
 }
 
@@ -133,7 +155,7 @@ const FUNNEL_TEMPLATES = {
               src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
               alt: 'Logo Gisele Galvão',
               style: {
-                textAlign: 'center',
+                textAlign: 'center' as const,
                 margin: '0 0 2rem 0'
               }
             }
@@ -147,7 +169,7 @@ const FUNNEL_TEMPLATES = {
               style: {
                 fontSize: '1.875rem',
                 fontWeight: '700',
-                textAlign: 'center',
+                textAlign: 'center' as const,
                 margin: '0 0 1rem 0'
               }
             }
@@ -160,7 +182,7 @@ const FUNNEL_TEMPLATES = {
               src: 'https://cakto-quiz-br01.b-cdn.net/uploads/ecbe689b-1c0a-4071-98d3-4d391b6dd98f.png',
               alt: 'Quiz Hero Image',
               style: {
-                textAlign: 'center',
+                textAlign: 'center' as const,
                 borderRadius: '0.5rem',
                 margin: '0 0 1rem 0'
               }
@@ -189,7 +211,406 @@ const FUNNEL_TEMPLATES = {
                 color: 'white',
                 padding: '0.5rem 1rem',
                 borderRadius: '0.375rem',
-                textAlign: 'center'
+                textAlign: 'center' as const
+              }
+            }
+          }
+        ]
+      },
+      // QUESTÃO EXEMPLO (Q1-Q10)
+      {
+        id: 'question-1',
+        title: 'Questão 1 - Tipo de Roupa',
+        type: 'question' as const,
+        order: 2,
+        isActive: true,
+        settings: {
+          showProgress: true,
+          progressValue: 14.28,
+          backgroundColor: '#ffffff',
+          textColor: '#2c2c2c',
+          maxWidth: '600px'
+        },
+        blocks: [
+          {
+            id: 'progress-q1',
+            type: 'progress' as const,
+            order: 1,
+            settings: {
+              progressValue: 14.28,
+              style: {
+                margin: '0 0 2rem 0'
+              }
+            }
+          },
+          {
+            id: 'question-q1',
+            type: 'question' as const,
+            order: 2,
+            settings: {
+              content: 'Qual o seu tipo de roupa favorita?',
+              style: {
+                fontSize: '1.25rem',
+                fontWeight: '600',
+                textAlign: 'center',
+                margin: '0 0 1.5rem 0'
+              }
+            }
+          },
+          {
+            id: 'options-q1',
+            type: 'options' as const,
+            order: 3,
+            settings: {
+              options: [
+                { id: '1', text: 'Conforto, leveza e praticidade no vestir', value: 'natural' },
+                { id: '2', text: 'Discrição, caimento clássico e sobriedade', value: 'classico' },
+                { id: '3', text: 'Praticidade com um toque de estilo atual', value: 'contemporaneo' },
+                { id: '4', text: 'Elegância refinada, moderna e sem exageros', value: 'elegante' }
+              ],
+              maxSelections: 3,
+              style: {
+                margin: '0 0 1rem 0'
+              }
+            }
+          }
+        ]
+      },
+      // TRANSIÇÃO PRINCIPAL
+      {
+        id: 'main-transition',
+        title: 'Transição Principal',
+        type: 'main-transition' as const,
+        order: 12,
+        isActive: true,
+        settings: {
+          showProgress: true,
+          progressValue: 78.57,
+          backgroundColor: '#ffffff',
+          textColor: '#2c2c2c',
+          maxWidth: '600px'
+        },
+        blocks: [
+          {
+            id: 'progress-transition',
+            type: 'progress' as const,
+            order: 1,
+            settings: {
+              progressValue: 78.57,
+              style: {
+                margin: '0 0 2rem 0'
+              }
+            }
+          },
+          {
+            id: 'transition-loading',
+            type: 'loading-animation' as const,
+            order: 2,
+            settings: {
+              duration: 3000,
+              animationType: 'spinner',
+              style: {
+                textAlign: 'center',
+                margin: '2rem 0'
+              }
+            }
+          },
+          {
+            id: 'transition-text-1',
+            type: 'transition-text' as const,
+            order: 3,
+            settings: {
+              content: 'Analisando suas respostas...',
+              style: {
+                fontSize: '1.125rem',
+                textAlign: 'center',
+                margin: '1rem 0'
+              }
+            }
+          },
+          {
+            id: 'transition-text-2',
+            type: 'transition-text' as const,
+            order: 4,
+            settings: {
+              content: 'Criando seu perfil de estilo personalizado...',
+              style: {
+                fontSize: '1rem',
+                textAlign: 'center',
+                margin: '1rem 0',
+                color: '#666'
+              }
+            }
+          }
+        ]
+      },
+      // QUESTÃO ESTRATÉGICA EXEMPLO
+      {
+        id: 'strategic-1',
+        title: 'Questão Estratégica 1',
+        type: 'strategic' as const,
+        order: 13,
+        isActive: true,
+        settings: {
+          showProgress: true,
+          progressValue: 85.71,
+          backgroundColor: '#ffffff',
+          textColor: '#2c2c2c',
+          maxWidth: '600px'
+        },
+        blocks: [
+          {
+            id: 'progress-strategic',
+            type: 'progress' as const,
+            order: 1,
+            settings: {
+              progressValue: 85.71,
+              style: {
+                margin: '0 0 2rem 0'
+              }
+            }
+          },
+          {
+            id: 'strategic-question-1',
+            type: 'strategic-question' as const,
+            order: 2,
+            settings: {
+              content: 'Você já considerou investir em algum guia ou consultoria de estilo no passado?',
+              questionType: 'strategic',
+              style: {
+                fontSize: '1.25rem',
+                fontWeight: '600',
+                textAlign: 'center',
+                margin: '0 0 1.5rem 0'
+              }
+            }
+          },
+          {
+            id: 'strategic-options-1',
+            type: 'options' as const,
+            order: 3,
+            settings: {
+              options: [
+                { id: '1', text: 'Sim, já pesquisei mas não cheguei a comprar', value: 'researched' },
+                { id: '2', text: 'Sim, já investi em algum curso/guia/consultoria', value: 'invested' },
+                { id: '3', text: 'Não, esta é a primeira vez que considero isso', value: 'first-time' },
+                { id: '4', text: 'Prefiro não responder', value: 'no-answer' }
+              ],
+              maxSelections: 1,
+              style: {
+                margin: '0 0 1rem 0'
+              }
+            }
+          }
+        ]
+      },
+      // TRANSIÇÃO FINAL
+      {
+        id: 'final-transition',
+        title: 'Transição Final',
+        type: 'final-transition' as const,
+        order: 19,
+        isActive: true,
+        settings: {
+          showProgress: true,
+          progressValue: 100,
+          backgroundColor: '#ffffff',
+          textColor: '#2c2c2c',
+          maxWidth: '600px'
+        },
+        blocks: [
+          {
+            id: 'progress-final',
+            type: 'progress' as const,
+            order: 1,
+            settings: {
+              progressValue: 100,
+              style: {
+                margin: '0 0 2rem 0'
+              }
+            }
+          },
+          {
+            id: 'final-loading',
+            type: 'loading-animation' as const,
+            order: 2,
+            settings: {
+              duration: 4000,
+              animationType: 'celebration',
+              style: {
+                textAlign: 'center',
+                margin: '2rem 0'
+              }
+            }
+          },
+          {
+            id: 'final-text',
+            type: 'transition-text' as const,
+            order: 3,
+            settings: {
+              content: 'Obrigada por compartilhar! Preparando seu resultado personalizado...',
+              style: {
+                fontSize: '1.125rem',
+                textAlign: 'center',
+                margin: '1rem 0'
+              }
+            }
+          }
+        ]
+      },
+      // PÁGINA DE RESULTADO (VARIANTE A)
+      {
+        id: 'result-page',
+        title: 'Resultado - Variante A',
+        type: 'result' as const,
+        order: 20,
+        isActive: true,
+        settings: {
+          showProgress: false,
+          progressValue: 100,
+          backgroundColor: '#ffffff',
+          textColor: '#2c2c2c',
+          maxWidth: '800px'
+        },
+        blocks: [
+          {
+            id: 'result-header',
+            type: 'heading' as const,
+            order: 1,
+            settings: {
+              content: 'Seu Estilo Pessoal',
+              style: {
+                fontSize: '2rem',
+                fontWeight: '700',
+                textAlign: 'center',
+                margin: '0 0 2rem 0'
+              }
+            }
+          },
+          {
+            id: 'style-display',
+            type: 'style-result-display' as const,
+            order: 2,
+            settings: {
+              styleType: 'primary',
+              showImage: true,
+              showDescription: true,
+              style: {
+                textAlign: 'center',
+                margin: '2rem 0'
+              }
+            }
+          },
+          {
+            id: 'sales-offer-main',
+            type: 'sales-offer' as const,
+            order: 3,
+            settings: {
+              productName: 'Guias de Estilo Completo',
+              price: 'R$ 97,00',
+              originalPrice: 'R$ 297,00',
+              ctaText: 'Quero Meus Guias',
+              urgency: true,
+              style: {
+                backgroundColor: '#f8f9fa',
+                padding: '2rem',
+                borderRadius: '1rem',
+                margin: '2rem 0'
+              }
+            }
+          },
+          {
+            id: 'testimonials',
+            type: 'testimonials-grid' as const,
+            order: 4,
+            settings: {
+              testimonials: [
+                { name: 'Ana Paula', text: 'Transformou completamente meu guarda-roupa!', image: '/placeholder.svg' },
+                { name: 'Marina Silva', text: 'Finalmente encontrei meu estilo!', image: '/placeholder.svg' }
+              ],
+              columns: 2,
+              style: {
+                margin: '2rem 0'
+              }
+            }
+          },
+          {
+            id: 'guarantee',
+            type: 'guarantee-section' as const,
+            order: 5,
+            settings: {
+              guaranteeText: 'Garantia de 7 dias',
+              guaranteeDetails: 'Se não ficar satisfeita, devolvemos seu dinheiro',
+              showIcon: true,
+              style: {
+                backgroundColor: '#e8f5e8',
+                padding: '1.5rem',
+                borderRadius: '0.5rem',
+                textAlign: 'center',
+                margin: '1.5rem 0'
+              }
+            }
+          }
+        ]
+      },
+      // PÁGINA DE RESULTADO (VARIANTE B)
+      {
+        id: 'result-variant-b',
+        title: 'Resultado - Variante B',
+        type: 'result-variant-b' as const,
+        order: 21,
+        isActive: false,
+        settings: {
+          showProgress: false,
+          progressValue: 100,
+          backgroundColor: '#ffffff',
+          textColor: '#2c2c2c',
+          maxWidth: '1000px'
+        },
+        blocks: [
+          {
+            id: 'hero-variant-b',
+            type: 'heading' as const,
+            order: 1,
+            settings: {
+              content: 'Descubra Seu Estilo Pessoal',
+              style: {
+                fontSize: '2.5rem',
+                fontWeight: '800',
+                textAlign: 'center',
+                margin: '0 0 1rem 0'
+              }
+            }
+          },
+          {
+            id: 'subtitle-variant-b',
+            type: 'text' as const,
+            order: 2,
+            settings: {
+              content: 'Transforme sua imagem e autoestima com nossos Guias de Estilo personalizados',
+              style: {
+                fontSize: '1.25rem',
+                textAlign: 'center',
+                margin: '0 0 2rem 0',
+                color: '#666'
+              }
+            }
+          },
+          {
+            id: 'offer-variant-b',
+            type: 'sales-offer' as const,
+            order: 3,
+            settings: {
+              productName: 'Pacote Completo de Estilo',
+              price: 'R$ 97,00',
+              originalPrice: 'R$ 297,00',
+              ctaText: 'Quero Descobrir Meu Estilo',
+              urgency: true,
+              style: {
+                backgroundColor: '#f0f8ff',
+                padding: '3rem',
+                borderRadius: '1.5rem',
+                margin: '2rem 0'
               }
             }
           }
@@ -322,6 +743,126 @@ const BLOCK_LIBRARY = [
       progressValue: 50,
       style: {
         margin: '0 0 1rem 0'
+      }
+    }
+  },
+  // NOVOS BLOCOS ESPECÍFICOS DO FUNIL
+  {
+    id: 'loading-animation',
+    name: 'Loading Animado',
+    icon: Clock,
+    category: 'Transição',
+    description: 'Tela de loading com animação',
+    defaultSettings: {
+      duration: 3000,
+      animationType: 'spinner',
+      style: {
+        textAlign: 'center' as const,
+        margin: '2rem 0'
+      }
+    }
+  },
+  {
+    id: 'transition-text',
+    name: 'Texto de Transição',
+    icon: Zap,
+    category: 'Transição',
+    description: 'Texto personalizado durante loading',
+    defaultSettings: {
+      content: 'Analisando suas respostas...',
+      style: {
+        fontSize: '1.125rem',
+        textAlign: 'center' as const,
+        margin: '1rem 0'
+      }
+    }
+  },
+  {
+    id: 'strategic-question',
+    name: 'Questão Estratégica',
+    icon: Target,
+    category: 'Quiz Avançado',
+    description: 'Pergunta de qualificação de lead',
+    defaultSettings: {
+      content: 'Pergunta estratégica...',
+      questionType: 'strategic',
+      style: {
+        fontSize: '1.25rem',
+        fontWeight: '600',
+        textAlign: 'center' as const,
+        margin: '0 0 1.5rem 0'
+      }
+    }
+  },
+  {
+    id: 'style-result-display',
+    name: 'Exibição de Estilo',
+    icon: Palette,
+    category: 'Resultado',
+    description: 'Mostra estilo calculado com imagem',
+    defaultSettings: {
+      styleType: 'primary',
+      showImage: true,
+      showDescription: true,
+      style: {
+        textAlign: 'center' as const,
+        margin: '2rem 0'
+      }
+    }
+  },
+  {
+    id: 'sales-offer',
+    name: 'Oferta de Venda',
+    icon: Gift,
+    category: 'Vendas',
+    description: 'Seção de oferta com preço e CTA',
+    defaultSettings: {
+      productName: 'Guias de Estilo Completo',
+      price: 'R$ 97,00',
+      originalPrice: 'R$ 297,00',
+      ctaText: 'Quero Meus Guias',
+      urgency: true,
+      style: {
+        backgroundColor: '#f8f9fa',
+        padding: '2rem',
+        borderRadius: '1rem',
+        margin: '2rem 0'
+      }
+    }
+  },
+  {
+    id: 'testimonials-grid',
+    name: 'Grade de Depoimentos',
+    icon: Users,
+    category: 'Prova Social',
+    description: 'Grid de depoimentos com fotos',
+    defaultSettings: {
+      testimonials: [
+        { name: 'Cliente 1', text: 'Transformou meu guarda-roupa!', image: '/placeholder.svg' },
+        { name: 'Cliente 2', text: 'Finalmente encontrei meu estilo!', image: '/placeholder.svg' }
+      ],
+      columns: 2,
+      style: {
+        margin: '2rem 0'
+      }
+    }
+  },
+  {
+    id: 'guarantee-section',
+    name: 'Seção de Garantia',
+    icon: Shield,
+    category: 'Vendas',
+    description: 'Garantia com ícones e detalhes',
+    defaultSettings: {
+      guaranteeText: 'Garantia de 7 dias',
+      guaranteeDetails: 'Se não ficar satisfeita, devolvemos seu dinheiro',
+      showIcon: true,
+      style: {
+        backgroundColor: '#e8f5e8',
+        padding: '1.5rem',
+        borderRadius: '0.5rem',
+        textAlign: 'center' as const,
+        margin: '1.5rem 0'
       }
     }
   }
