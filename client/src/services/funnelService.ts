@@ -44,6 +44,10 @@ export interface BlockData {
     x: number;
     y: number;
   };
+  // Compatibilidade com editor atual
+  order?: number;
+  settings?: any;
+  style?: any;
 }
 
 class FunnelService {
@@ -214,7 +218,7 @@ class FunnelService {
       funnel = await this.createFunnel({
         name: funnelData.name,
         description: funnelData.description,
-        userId: userId || null,
+        userId: userId || undefined,
         settings: funnelData.settings || null,
       });
     } else {
@@ -263,7 +267,7 @@ class FunnelService {
     // Create version snapshot
     await this.createFunnelVersion({
       funnelId: funnel.id,
-      version: funnel.version + 1,
+      version: (funnel.version || 0) + 1,
       funnelData: funnelData,
       createdBy: userId || null,
     });

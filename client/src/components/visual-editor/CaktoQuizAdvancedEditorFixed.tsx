@@ -116,18 +116,8 @@ const createInitialFunnel = (): FunnelData => ({
     {
       id: 'intro',
       type: 'intro',
-      title: 'Introdução',
-      order: 1,
-      blocks: [],
-      name: 'Introdução',
       title: 'Bem-vinda ao Quiz',
-      type: 'intro',
-      settings: {
-        backgroundColor: '#ffffff',
-        textColor: '#432818',
-        showProgress: true,
-        progressValue: 5
-      },
+      order: 1,
       blocks: [
         {
           id: 'intro-header',
@@ -1405,18 +1395,42 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
   // Auto-save a cada 30 segundos
   React.useEffect(() => {
-    const autoSaveInterval = setInterval(() => {
+    const autoSaveInterval = setInterval(async () => {
       setIsAutoSaving(true);
-      setTimeout(() => {
+      try {
+        // Converter dados do editor para formato do serviço
+        const funnelData: FunnelData = {
+          ...funnel,
+          pages: funnel.pages.map((page, index) => ({
+            id: page.id,
+            type: page.type,
+            title: page.title,
+            order: index + 1,
+            blocks: page.blocks.map((block, blockIndex) => ({
+              id: block.id,
+              type: block.type,
+              content: block.settings || {},
+              styles: block.style,
+              position: { x: 0, y: blockIndex * 100 }
+            })),
+            metadata: page.settings
+          }))
+        };
+
+        // Tentar salvar no backend
         try {
-          localStorage.setItem('caktoquiz-funnel', JSON.stringify(funnel));
-          console.log('Auto-save realizado');
-        } catch (error) {
-          console.error('Erro no auto-save:', error);
-        } finally {
-          setIsAutoSaving(false);
+          await funnelService.saveFunnelData(funnelData, 1); // TODO: usar userId real
+          console.log('Auto-save realizado no backend');
+        } catch (backendError) {
+          // Fallback para localStorage
+          localStorage.setItem('caktoquiz-funnel', JSON.stringify(funnelData));
+          console.log('Auto-save realizado no localStorage');
         }
-      }, 500);
+      } catch (error) {
+        console.error('Erro no auto-save:', error);
+      } finally {
+        setTimeout(() => setIsAutoSaving(false), 1000);
+      }
     }, 30000); // 30 segundos
 
     return () => clearInterval(autoSaveInterval);
@@ -2487,9 +2501,25 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 </div>
               )}
               
-              <Button size="sm" className="h-8 bg-[#B89B7A] hover:bg-[#A1835D]" onClick={saveFunnel}>
+              <Button 
+                size="sm" 
+                variant="outline" 
+                className="h-8" 
+                onClick={loadSavedFunnel}
+                disabled={isLoading}
+              >
+                <Download className="h-3 w-3 mr-1" />
+                {isLoading ? 'Carregando...' : 'Carregar'}
+              </Button>
+              
+              <Button 
+                size="sm" 
+                className="h-8 bg-[#B89B7A] hover:bg-[#A1835D]" 
+                onClick={saveFunnel}
+                disabled={isSaving}
+              >
                 <Save className="h-3 w-3 mr-1" />
-                Salvar
+                {isSaving ? 'Salvando...' : 'Salvar'}
               </Button>
             </div>
           </div>
