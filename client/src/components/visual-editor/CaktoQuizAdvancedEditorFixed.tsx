@@ -133,15 +133,27 @@ const createInitialFunnel = (): FunnelData => ({
       },
       blocks: [
         {
-          id: 'intro-section',
-          type: 'quiz-intro-section',
+          id: 'intro-header',
+          type: 'header',
           order: 1,
           settings: {
-            title: 'Descubra Seu Estilo Único',
-            subtitle: 'Um quiz personalizado para transformar seu guarda-roupa',
-            showBenefits: true,
-            ctaText: 'Começar Quiz Agora',
-            showTrust: true
+            title: 'Chega de um guarda-roupa lotado e da sensação de que nada combina com Você.',
+            subtitle: 'Em poucos minutos, descubra seu Estilo Predominante — e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.',
+            titleSize: 'large',
+            alignment: 'center',
+            color: '#432818'
+          }
+        },
+        {
+          id: 'intro-image',
+          type: 'image',
+          order: 2,
+          settings: {
+            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp',
+            alt: 'Descubra seu estilo predominante e transforme seu guarda-roupa',
+            width: 300,
+            height: 204,
+            alignment: 'center'
           }
         },
         {
@@ -344,70 +356,52 @@ const createInitialFunnel = (): FunnelData => ({
           type: 'header',
           order: 1,
           settings: {
-            title: 'Parabéns! Descobrimos Seu Perfil',
-            subtitle: 'Resultado baseado em suas respostas',
-            alignment: 'center'
+            title: 'Seu Estilo Predominante',
+            subtitle: 'Resultado baseado em suas respostas pessoais',
+            alignment: 'center',
+            color: '#432818'
+          }
+        },
+        {
+          id: 'result-progress',
+          type: 'quiz-progress-bar',
+          order: 2,
+          settings: {
+            value: 95,
+            label: 'Seu estilo predominante',
+            showPercentage: true
           }
         },
         {
           id: 'result-style-display',
           type: 'style-result-display',
-          order: 2,
-          settings: {
-            styleName: 'Seu Estilo Personalizado',
-            styleImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp',
-            styleDescription: 'Baseado nas suas respostas, identificamos seu perfil único de estilo que reflete sua personalidade e preferências.',
-            percentMatch: 92
-          }
-        },
-        {
-          id: 'result-sales-offer',
-          type: 'sales-offer',
           order: 3,
           settings: {
-            title: 'Transforme Seu Guarda-Roupa Hoje!',
-            subtitle: 'Guias Personalizados de Estilo',
-            originalPrice: 'R$ 297,00',
-            currentPrice: 'R$ 97,00',
-            discount: '67% OFF',
-            urgency: 'Oferta válida apenas hoje!'
+            styleName: 'Seu Perfil de Estilo Único',
+            styleImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp',
+            styleDescription: 'Baseado nas suas respostas, identificamos seu perfil único de estilo que reflete sua personalidade e preferências.',
+            percentMatch: 95
           }
         },
         {
-          id: 'result-testimonials',
-          type: 'testimonials-grid',
+          id: 'result-secondary-styles',
+          type: 'text',
           order: 4,
           settings: {
-            testimonials: [
-              {
-                author: 'Maria Silva',
-                role: 'Empresária',
-                text: 'O quiz mudou completamente minha forma de me vestir!',
-                rating: 5,
-                avatar: 'https://via.placeholder.com/60x60?text=M'
-              },
-              {
-                author: 'Ana Costa',
-                role: 'Professora',
-                text: 'Descobri meu estilo verdadeiro, amei o resultado!',
-                rating: 5,
-                avatar: 'https://via.placeholder.com/60x60?text=A'
-              }
-            ]
+            content: 'Estilos que Também Influenciam Você: Combine elementos de diferentes estilos para criar looks únicos.',
+            alignment: 'center',
+            size: 'medium'
           }
         },
         {
-          id: 'result-guarantee',
-          type: 'guarantee-section',
+          id: 'result-cta-button',
+          type: 'button',
           order: 5,
           settings: {
-            title: 'Garantia de 30 dias',
-            description: 'Se não ficar satisfeita, devolvemos 100% do seu dinheiro.',
-            features: [
-              'Garantia incondicional',
-              'Suporte 24/7',
-              'Acesso vitalício'
-            ]
+            text: 'Descobrir Como Aplicar Meu Estilo',
+            style: 'primary',
+            size: 'large',
+            alignment: 'center'
           }
         }
       ]
@@ -417,72 +411,92 @@ const createInitialFunnel = (): FunnelData => ({
     {
       id: 'etapa-21-oferta-b',
       name: 'Etapa 21: Oferta B (/quiz-descubra-seu-estilo)',
-      title: 'Oferta Especial',
+      title: 'Descubra Seu Estilo Predominante',
       type: 'offer',
       order: 21,
       settings: {
-        backgroundColor: '#432818',
-        textColor: '#ffffff',
+        backgroundColor: '#FFFBF7',
+        textColor: '#432818',
         showProgress: false,
         abTestVariant: 'B'
       },
       blocks: [
         {
-          id: 'offer-header',
-          type: 'header',
+          id: 'offer-badge',
+          type: 'social-proof',
           order: 1,
           settings: {
-            title: 'Descubra Seu Estilo Único',
-            subtitle: 'Transforme seu guarda-roupa com nosso guia completo',
-            titleSize: 'large',
-            alignment: 'center',
-            color: 'white'
+            title: '3000+ mulheres transformadas',
+            icon: 'award',
+            style: 'badge'
           }
         },
         {
-          id: 'offer-price',
-          type: 'price',
+          id: 'offer-header',
+          type: 'header',
           order: 2,
           settings: {
-            originalPrice: 'R$ 297,00',
-            currentPrice: 'R$ 97,00',
-            discount: '67% OFF',
-            urgency: 'Oferta por tempo limitado!'
+            title: 'Descubra Seu Estilo Predominante em 5 Minutos',
+            subtitle: 'Tenha finalmente um guarda-roupa que funciona 100%, onde tudo combina e reflete sua personalidade',
+            titleSize: 'large',
+            alignment: 'center',
+            color: '#432818'
           }
         },
         {
-          id: 'offer-bonus',
-          type: 'bonus',
+          id: 'offer-hero-image',
+          type: 'image',
           order: 3,
           settings: {
-            title: 'E-book Exclusivo de Estilo',
-            description: 'Guia completo com dicas avançadas de styling',
-            value: 'R$ 47,00'
+            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/hero_complementary_image.webp',
+            alt: 'Transformação de guarda-roupa',
+            width: 600,
+            height: 400,
+            alignment: 'center'
           }
         },
         {
-          id: 'offer-guarantee',
-          type: 'guarantee-section',
+          id: 'offer-cta-main',
+          type: 'button',
           order: 4,
           settings: {
-            title: 'Garantia de 30 Dias',
-            description: 'Se não ficar satisfeita, devolvemos 100% do seu dinheiro',
-            features: [
-              'Garantia incondicional',
-              'Suporte personalizado',
-              'Acesso vitalício'
-            ]
+            text: 'Descobrir Meu Estilo Agora',
+            style: 'primary',
+            size: 'large',
+            alignment: 'center'
           }
         },
         {
-          id: 'offer-cta',
-          type: 'button',
+          id: 'offer-trust-elements',
+          type: 'social-proof',
           order: 5,
           settings: {
-            text: 'Quero Transformar Meu Estilo Agora!',
-            style: 'accent',
-            size: 'lg',
-            fullWidth: true
+            features: [
+              '100% Seguro',
+              '7 Dias Garantia'
+            ],
+            style: 'inline'
+          }
+        },
+        {
+          id: 'offer-problem-header',
+          type: 'header',
+          order: 6,
+          settings: {
+            title: 'Você se identifica com isso?',
+            subtitle: 'Guarda-roupa cheio mas nunca tem o que vestir? Não sabe qual é seu estilo verdadeiro?',
+            alignment: 'left'
+          }
+        },
+        {
+          id: 'offer-countdown',
+          type: 'countdown',
+          order: 7,
+          settings: {
+            title: 'Esta oferta expira em:',
+            hours: 1,
+            minutes: 59,
+            seconds: 59
           }
         }
       ]
