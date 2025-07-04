@@ -244,10 +244,10 @@ const BLOCK_LIBRARY = [
     description: 'Opções de resposta do quiz',
     defaultSettings: {
       options: [
-        { id: '1', text: 'Conforto, leveza e praticidade no vestir', value: 'natural' },
-        { id: '2', text: 'Discrição, caimento clássico e sobriedade', value: 'classico' },
-        { id: '3', text: 'Praticidade com um toque de estilo atual', value: 'contemporaneo' },
-        { id: '4', text: 'Elegância refinada, moderna e sem exageros', value: 'elegante' }
+        { id: '1', text: 'Conforto, leveza e praticidade no vestir', value: 'natural', image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp' },
+        { id: '2', text: 'Discrição, caimento clássico e sobriedade', value: 'classico', image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp' },
+        { id: '3', text: 'Praticidade com um toque de estilo atual', value: 'contemporaneo', image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp' },
+        { id: '4', text: 'Elegância refinada, moderna e sem exageros', value: 'elegante', image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp' }
       ],
       maxSelections: 3,
       style: {
@@ -436,7 +436,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
   const currentPage = funnel.pages[currentPageIndex];
   const selectedBlock = currentPage?.blocks.find(block => block.id === selectedBlockId);
 
-  // Inicializar com uma página exemplo
+  // Inicializar com uma página exemplo usando elementos reais do funil
   useEffect(() => {
     if (funnel.pages.length === 0) {
       setFunnel(prev => ({
@@ -457,7 +457,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
             },
             blocks: [
               {
-                id: 'logo',
+                id: 'logo-brand',
                 type: 'image' as const,
                 order: 1,
                 settings: {
@@ -470,18 +470,74 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 }
               },
               {
-                id: 'title',
+                id: 'title-main',
                 type: 'heading' as const,
                 order: 2,
                 settings: {
-                  content: 'Chega de um guarda-roupa lotado e da sensação de que nada combina com Você.',
+                  content: '<span class="text-[#B89B7A]">Chega</span> de um guarda-roupa lotado e da sensação de que nada combina com <span class="text-[#B89B7A]">Você</span>.',
                   style: {
-                    fontSize: '1.875rem',
+                    fontSize: '2rem',
                     fontWeight: '400',
                     textAlign: 'center' as const,
-                    margin: '0 0 1rem 0',
+                    margin: '0 0 2rem 0',
                     color: '#432818',
                     fontFamily: '"Playfair Display", serif'
+                  }
+                }
+              },
+              {
+                id: 'intro-image',
+                type: 'image' as const,
+                order: 3,
+                settings: {
+                  src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.png',
+                  alt: 'Descubra seu estilo predominante',
+                  style: {
+                    textAlign: 'center' as const,
+                    margin: '0 0 2rem 0'
+                  }
+                }
+              },
+              {
+                id: 'description-text',
+                type: 'text' as const,
+                order: 4,
+                settings: {
+                  content: 'Em poucos minutos, descubra seu <strong class="text-[#B89B7A]">Estilo Predominante</strong> — e aprenda a montar looks que realmente refletem sua <strong class="text-[#432818]">essência</strong>, com praticidade e <strong class="text-[#432818]">confiança</strong>.',
+                  style: {
+                    fontSize: '1rem',
+                    textAlign: 'center' as const,
+                    margin: '0 0 2rem 0',
+                    color: '#6B7280',
+                    lineHeight: '1.6'
+                  }
+                }
+              },
+              {
+                id: 'name-input',
+                type: 'input' as const,
+                order: 5,
+                settings: {
+                  placeholder: 'Digite seu nome',
+                  required: true,
+                  style: {
+                    margin: '0 0 1.5rem 0'
+                  }
+                }
+              },
+              {
+                id: 'cta-button',
+                type: 'button' as const,
+                order: 6,
+                settings: {
+                  buttonText: 'Quero Descobrir meu Estilo Agora!',
+                  style: {
+                    backgroundColor: '#B89B7A',
+                    color: 'white',
+                    padding: '0.75rem 2rem',
+                    borderRadius: '9999px',
+                    textAlign: 'center' as const,
+                    margin: '0 0 1rem 0'
                   }
                 }
               }
@@ -887,23 +943,64 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         break;
 
       case 'style-result-display':
+        const styleType = block.settings.styleType || 'Clássico';
+        const styleData = styleConfig[styleType as keyof typeof styleConfig];
+        const percentage = 85; // Valor demo
+        
         content = (
           <div style={baseStyle} onClick={handleBlockClick}>
-            <div className="text-center bg-white rounded-lg p-6 shadow-md border border-[#B89B7A]/20">
-              <h3 className="text-xl font-medium text-[#432818] mb-4">Seu Estilo Predominante</h3>
-              <div className="max-w-[238px] mx-auto relative mb-4">
-                <img 
-                  src="https://cakto-quiz-br01.b-cdn.net/uploads/ecbe689b-1c0a-4071-98d3-4d391b6dd98f.png" 
-                  alt="Estilo Resultado" 
-                  className="w-full h-auto rounded-lg shadow-md"
-                />
-                <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
-                <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>
-              </div>
-              <p className="text-[#432818] leading-relaxed">
-                Seu estilo reflete elegância e sofisticação, com peças atemporais que valorizam sua personalidade única.
-              </p>
-            </div>
+            <Card className="p-6 bg-white shadow-md border border-[#B89B7A]/20">
+              <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
+                <div className="text-center mb-8">
+                  <div className="max-w-md mx-auto mb-6">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm text-[#8F7A6A]">
+                        Seu estilo predominante
+                      </span>
+                      <span className="text-[#aa6b5d] font-medium">{percentage}%</span>
+                    </div>
+                    <Progress 
+                      value={percentage} 
+                      className="h-2 bg-[#F3E8E6]" 
+                      style={{
+                        ['--progress-background' as any]: 'linear-gradient(to right, #B89B7A, #aa6b5d)'
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-8 items-center">
+                  <div className="space-y-4">
+                    <p className="text-[#432818] leading-relaxed">{styleData?.description}</p>
+                    <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10">
+                      <h3 className="text-lg font-medium text-[#432818] mb-2">Estilos que Também Influenciam Você</h3>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-[#8F7A6A]">Natural</span>
+                          <span className="text-[#aa6b5d] font-medium text-sm">65%</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-[#8F7A6A]">Romântico</span>
+                          <span className="text-[#aa6b5d] font-medium text-sm">45%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="max-w-[238px] mx-auto relative">
+                    <img 
+                      src={`${styleData?.image}?q=auto:best&f=auto&w=238`} 
+                      alt={`Estilo ${styleType}`} 
+                      className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+                      width="238"
+                      height="auto"
+                    />
+                    {/* Cantos elegantes decorativos */}
+                    <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
+                    <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>
+                  </div>
+                </div>
+              </AnimatedWrapper>
+            </Card>
           </div>
         );
         break;
@@ -911,73 +1008,126 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       case 'sales-offer':
         content = (
           <div style={baseStyle} onClick={handleBlockClick}>
-            <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 max-w-md mx-auto">
-              <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">
-                {block.settings.productName || 'Guia de Estilo Completo'}
-              </h3>
-              
-              <div className="space-y-3 mb-6">
-                <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
-                  <span>Guia Principal</span>
-                  <span className="font-medium">R$ 67,00</span>
-                </div>
-                <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
-                  <span>Bônus - Peças-chave</span>
-                  <span className="font-medium">R$ 79,00</span>
-                </div>
-                <div className="flex justify-between items-center p-2 pt-3 font-bold">
-                  <span>Valor Total</span>
-                  <div className="relative">
-                    <span className="text-gray-500 line-through">{block.settings.originalPrice || 'R$ 175,00'}</span>
+            <div className="max-w-2xl mx-auto">
+              {/* Seção de Garantia */}
+              <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#B89B7A]/10 mb-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <Shield className="h-12 w-12 text-[#B89B7A]" />
+                  <div>
+                    <h3 className="text-xl font-semibold text-[#432818]">
+                      Garantia de 7 Dias
+                    </h3>
+                    <p className="text-[#8F7A6A]">100% do seu dinheiro de volta</p>
                   </div>
                 </div>
-              </div>
-              
-              <div className="text-center p-4 bg-[#f9f4ef] rounded-lg mb-4">
-                <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
-                <p className="text-4xl font-bold text-[#B89B7A]">{block.settings.price || 'R$ 39,00'}</p>
-                <p className="text-xs text-gray-600 mt-1">Pagamento único</p>
+                <p className="text-[#8F7A6A]">
+                  Estou tão confiante de que estes materiais vão transformar sua
+                  relação com a sua imagem pessoal que ofereço uma garantia
+                  incondicional de 7 dias.
+                </p>
               </div>
 
-              <button className="w-full bg-gradient-to-r from-[#4CAF50] to-[#45a049] text-white py-3 px-6 rounded-md shadow-lg transition-all hover:scale-105">
-                <div className="flex items-center justify-center gap-2">
-                  <ShoppingCart className="w-4 h-4" />
-                  <span>{block.settings.ctaText || 'Quero Meu Guia Agora'}</span>
+              {/* Oferta Principal */}
+              <div className="bg-gradient-to-r from-[#B89B7A] to-[#A68A6A] rounded-2xl p-8 text-white">
+                <h3 className="text-2xl font-playfair mb-4 text-center">Investimento Único</h3>
+                
+                <div className="text-center mb-6">
+                  <span className="text-4xl font-bold">R$ 39,00</span>
+                  <p className="text-white/80">à vista ou 5x de R$ 8,83</p>
                 </div>
-              </button>
+
+                <div className="grid md:grid-cols-2 gap-4 text-left mb-6">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4" />
+                      <span className="text-sm">Quiz de Estilo Personalizado</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4" />
+                      <span className="text-sm">Guia de Imagem e Estilo</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4" />
+                      <span className="text-sm">Guia das Peças-Chave</span>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4" />
+                      <span className="text-sm">Guia de Visagismo Facial</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4" />
+                      <span className="text-sm">Compra segura</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Shield className="h-4 w-4" />
+                      <span className="text-sm">Garantia de 7 dias</span>
+                    </div>
+                  </div>
+                </div>
+
+                <Button 
+                  className="w-full bg-gradient-to-r from-[#4CAF50] to-[#45a049] hover:from-[#45a049] hover:to-[#3d8b40] text-white py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105 font-bold text-lg"
+                >
+                  <div className="flex items-center justify-center gap-3">
+                    <ShoppingCart className="w-5 h-5" />
+                    <span>{block.settings.ctaText || 'Quero Descobrir Meu Estilo'}</span>
+                    <ArrowRight className="w-5 h-5" />
+                  </div>
+                </Button>
+              </div>
             </div>
           </div>
         );
         break;
 
       case 'testimonials-grid':
+        const realTestimonials = [
+          { 
+            name: 'Ana Paula Rodrigues', 
+            text: 'Transformou completamente meu guarda-roupa! Agora sei exatamente o que me favorece e me sinto mais confiante.', 
+            image: 'https://images.unsplash.com/photo-1494790108755-2616b612b5bb?w=80&h=80&fit=crop&crop=face' 
+          },
+          { 
+            name: 'Marina Silva', 
+            text: 'Finalmente encontrei meu estilo! O guia me ajudou a entender como valorizar minha beleza natural.', 
+            image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face' 
+          },
+          { 
+            name: 'Carla Mendes', 
+            text: 'Incrível como pequenos ajustes fizeram toda a diferença. Recomendo para todas as mulheres!', 
+            image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=face' 
+          }
+        ];
+        
+        const testimonialsToShow = block.settings.testimonials || realTestimonials;
+        
         content = (
           <div style={baseStyle} onClick={handleBlockClick}>
-            <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20">
-              <h3 className="text-xl font-medium text-center text-[#432818] mb-6">O que nossas clientes dizem</h3>
-              <div className={`grid gap-4 ${block.settings.columns === 1 ? 'grid-cols-1' : block.settings.columns === 3 ? 'grid-cols-1 md:grid-cols-3' : 'grid-cols-1 md:grid-cols-2'}`}>
-                {block.settings.testimonials?.map((testimonial, index) => (
-                  <div key={index} className="bg-[#f9f4ef] p-4 rounded-lg">
-                    <div className="flex items-center mb-3">
+            <div className="bg-white p-8 rounded-2xl shadow-md border border-[#B89B7A]/20">
+              <h3 className="text-2xl font-medium text-center text-[#432818] mb-8 font-playfair">O que nossas clientes dizem</h3>
+              <div className={`grid gap-6 ${block.settings.columns === 1 ? 'grid-cols-1' : block.settings.columns === 3 ? 'grid-cols-1 md:grid-cols-3' : 'grid-cols-1 md:grid-cols-2'}`}>
+                {testimonialsToShow.map((testimonial, index) => (
+                  <div key={index} className="bg-[#f9f4ef] p-6 rounded-xl border border-[#B89B7A]/10 hover:shadow-lg transition-shadow">
+                    <div className="flex items-center mb-4">
                       <img 
-                        src={testimonial.image || '/placeholder.svg'} 
+                        src={testimonial.image} 
                         alt={testimonial.name}
-                        className="w-10 h-10 rounded-full mr-3"
+                        className="w-12 h-12 rounded-full mr-4 object-cover border-2 border-[#B89B7A]/20"
                       />
                       <div>
-                        <p className="font-medium text-[#432818]">{testimonial.name}</p>
-                        <div className="flex text-yellow-400">
+                        <p className="font-semibold text-[#432818]">{testimonial.name}</p>
+                        <div className="flex text-[#B89B7A]">
                           {[1,2,3,4,5].map(star => (
-                            <Star key={star} className="w-3 h-3 fill-current" />
+                            <Star key={star} className="w-4 h-4 fill-current" />
                           ))}
                         </div>
                       </div>
                     </div>
-                    <p className="text-sm text-[#432818]">"{testimonial.text}"</p>
+                    <p className="text-[#432818] leading-relaxed">"{testimonial.text}"</p>
                   </div>
-                )) || (
-                  <p className="text-gray-500 text-center col-span-full">Adicione depoimentos...</p>
-                )}
+                ))}
               </div>
             </div>
           </div>
@@ -1163,6 +1313,93 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 })}
                 className="text-sm h-8 mt-1"
                 placeholder="R$ 175,00"
+              />
+            </div>
+            <div>
+              <Label className="text-xs">Texto do CTA</Label>
+              <Input
+                value={selectedBlock.settings.ctaText || ''}
+                onChange={(e) => updateBlock(selectedBlock.id, {
+                  settings: { ...selectedBlock.settings, ctaText: e.target.value }
+                })}
+                className="text-sm h-8 mt-1"
+                placeholder="Quero Descobrir Meu Estilo"
+              />
+            </div>
+          </div>
+        )}
+
+        {selectedBlock.type === 'style-result-display' && (
+          <div className="space-y-3">
+            <div>
+              <Label className="text-xs">Tipo de Estilo</Label>
+              <Select
+                value={selectedBlock.settings.styleType || 'Clássico'}
+                onValueChange={(value) => updateBlock(selectedBlock.id, {
+                  settings: { ...selectedBlock.settings, styleType: value }
+                })}
+              >
+                <SelectTrigger className="h-8 text-xs">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.keys(styleConfig).map(style => (
+                    <SelectItem key={style} value={style}>{style}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Switch
+                checked={selectedBlock.settings.showImage !== false}
+                onCheckedChange={(checked) => updateBlock(selectedBlock.id, {
+                  settings: { ...selectedBlock.settings, showImage: checked }
+                })}
+              />
+              <Label className="text-xs">Mostrar Imagem</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Switch
+                checked={selectedBlock.settings.showDescription !== false}
+                onCheckedChange={(checked) => updateBlock(selectedBlock.id, {
+                  settings: { ...selectedBlock.settings, showDescription: checked }
+                })}
+              />
+              <Label className="text-xs">Mostrar Descrição</Label>
+            </div>
+          </div>
+        )}
+
+        {selectedBlock.type === 'options' && (
+          <div className="space-y-3">
+            <div>
+              <Label className="text-xs">Máximo de Seleções</Label>
+              <Input
+                type="number"
+                min="1"
+                value={selectedBlock.settings.maxSelections || 1}
+                onChange={(e) => updateBlock(selectedBlock.id, {
+                  settings: { ...selectedBlock.settings, maxSelections: parseInt(e.target.value) || 1 }
+                })}
+                className="text-sm h-8 mt-1"
+              />
+            </div>
+            <div>
+              <Label className="text-xs">Opções (JSON)</Label>
+              <Textarea
+                value={JSON.stringify(selectedBlock.settings.options || [], null, 2)}
+                onChange={(e) => {
+                  try {
+                    const options = JSON.parse(e.target.value);
+                    updateBlock(selectedBlock.id, {
+                      settings: { ...selectedBlock.settings, options }
+                    });
+                  } catch (error) {
+                    // Ignore invalid JSON
+                  }
+                }}
+                className="text-xs resize-none mt-1 font-mono"
+                rows={6}
               />
             </div>
           </div>
