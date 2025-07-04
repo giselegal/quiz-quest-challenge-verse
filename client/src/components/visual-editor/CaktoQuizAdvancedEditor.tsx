@@ -27,7 +27,7 @@ import {
 interface FunnelPage {
   id: string;
   title: string;
-  type: 'intro' | 'question' | 'strategic' | 'transition' | 'result' | 'offer' | 'thank-you';
+  type: 'intro' | 'question' | 'strategic' | 'main-transition' | 'final-transition' | 'result' | 'result-variant-b' | 'offer' | 'thank-you';
   order: number;
   isActive: boolean;
   settings: {
@@ -42,7 +42,7 @@ interface FunnelPage {
 
 interface FunnelBlock {
   id: string;
-  type: 'heading' | 'text' | 'image' | 'button' | 'input' | 'question' | 'options' | 'progress' | 'video' | 'divider';
+  type: 'heading' | 'text' | 'image' | 'button' | 'input' | 'question' | 'options' | 'progress' | 'video' | 'divider' | 'loading-animation' | 'transition-text' | 'style-result-display' | 'sales-offer' | 'testimonials-grid' | 'guarantee-section' | 'strategic-question';
   order: number;
   settings: {
     content?: string;
