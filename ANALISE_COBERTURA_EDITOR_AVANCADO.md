@@ -175,25 +175,36 @@
 }
 ```
 
-## 🎯 COBERTURA ATUAL: ~40%
+## 🎯 COBERTURA ATUAL: ~70% (APÓS MELHORIAS)
 
-### ✅ FUNCIONA BEM (40%):
-- Introdução básica ✅
-- Estrutura de questões ✅
-- Blocos fundamentais ✅
-- Sistema de páginas ✅
+### ✅ FUNCIONA BEM (70%):
+- ✅ Introdução básica 
+- ✅ Estrutura de questões
+- ✅ Blocos fundamentais
+- ✅ Sistema de páginas
+- ✅ **NOVOS TIPOS DE PÁGINA:**
+  - 'main-transition' ✅
+  - 'final-transition' ✅
+  - 'strategic' ✅
+  - 'result-variant-b' ✅
+- ✅ **NOVOS BLOCOS ESPECÍFICOS:**
+  - Loading animado ✅
+  - Texto de transição ✅
+  - Questão estratégica ✅
+  - Exibição de estilo ✅
+  - Oferta de venda ✅
+  - Grade de depoimentos ✅
+  - Seção de garantia ✅
 
-### ⚠️ PRECISA MELHORAR (30%):
-- Questões estratégicas (estrutura existe, falta template)
-- Resultado básico (estrutura existe, falta complexidade)
-- Configurações avançadas
+### ⚠️ PRECISA MELHORAR (20%):
+- Renderização dos novos blocos no canvas
+- Painel de propriedades para blocos específicos
+- Templates completos pré-configurados
 
-### ❌ FALTA IMPLEMENTAR (30%):
-- Transições com loading
-- Sistema A/B testing
-- Blocos de vendas complexos
-- Cálculo automático de estilo
-- Templates específicos do funil
+### ❌ FALTA IMPLEMENTAR (10%):
+- Sistema A/B testing automático
+- Cálculo automático de estilo no resultado
+- Integração com dados reais do quiz
 
 ## 📝 PRÓXIMOS PASSOS PRIORITÁRIOS
 
