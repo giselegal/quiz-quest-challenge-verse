@@ -107,23 +107,23 @@ interface FunnelConfig {
   theme: string;
 }
 
-// Dados iniciais do funil
+// Dados iniciais do funil - EXATAMENTE como o quiz real
 const createInitialFunnel = (): FunnelData => ({
   id: crypto.randomUUID(),
   name: 'Quiz CaktoQuiz - Descubra Seu Estilo',
-  description: 'Funil completo para descoberta do estilo pessoal',
+  description: 'Funil completo para descoberta do estilo pessoal - 21 etapas',
   config: {
     name: 'Quiz CaktoQuiz - Descubra Seu Estilo',
-    description: 'Funil completo para descoberta do estilo pessoal',
+    description: 'Funil completo para descoberta do estilo pessoal - 21 etapas',
     isPublished: false,
     theme: 'caktoquiz'
   },
   pages: [
-    // 1. Página de Introdução
+    // ETAPA 1: QuizIntrodução → Coleta do nome
     {
-      id: 'intro',
+      id: 'etapa-1-intro',
       type: 'intro',
-      title: 'Bem-vinda ao Quiz',
+      title: 'Etapa 1: Introdução (Coleta do Nome)',
       order: 1,
       settings: {
         backgroundColor: '#ffffff',
@@ -133,82 +133,60 @@ const createInitialFunnel = (): FunnelData => ({
       },
       blocks: [
         {
-          id: 'intro-header',
-          type: 'header',
+          id: 'intro-section',
+          type: 'quiz-intro-section',
           order: 1,
-          content: {
-            title: 'Descubra Seu Estilo Único',
-            subtitle: 'Um quiz personalizado para transformar seu guarda-roupa'
-          },
           settings: {
             title: 'Descubra Seu Estilo Único',
             subtitle: 'Um quiz personalizado para transformar seu guarda-roupa',
-            titleSize: 'large',
-            alignment: 'center'
+            showBenefits: true,
+            ctaText: 'Começar Quiz Agora',
+            showTrust: true
           }
         },
         {
-          id: 'intro-image',
-          type: 'image',
-          order: 2,
-          settings: {
-            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/f_webp,q_70,w_800,h_600,c_fit/v1744911572/quiz_intro_image.webp',
-            alt: 'Mulher elegante descobrindo seu estilo',
-            width: '100%',
-            alignment: 'center'
-          }
-        },
-        {
-          id: 'intro-description',
-          type: 'text',
-          order: 3,
-          settings: {
-            content: 'Em apenas alguns minutos, você descobrirá qual é o seu perfil de estilo e receberá dicas personalizadas para valorizar ainda mais sua beleza natural.',
-            fontSize: 'medium',
-            alignment: 'center'
-          }
-        },
-        {
-          id: 'intro-name-input',
+          id: 'name-input',
           type: 'form-input',
-          order: 4,
+          order: 2,
           settings: {
             label: 'Como você gostaria de ser chamada?',
             placeholder: 'Digite seu nome aqui...',
             required: true,
             type: 'text'
           }
-        },
-        {
-          id: 'intro-button',
-          type: 'button',
-          order: 5,
-          settings: {
-            text: 'Começar o Quiz',
-            style: 'primary',
-            size: 'large',
-            fullWidth: true
-          }
         }
       ]
     },
-    // 2-11. Perguntas principais (10 perguntas reais)
+
+    // ETAPAS 2-11: 10 questões principais com pontuação
     ...REAL_QUIZ_QUESTIONS.map((questionData, i) => ({
-      id: `question-${i + 1}`,
-      name: `Pergunta ${i + 1}`,
-      title: `Pergunta ${i + 1} de 10`,
+      id: `etapa-${i + 2}-questao-${i + 1}`,
+      name: `Etapa ${i + 2}: Questão ${i + 1}`,
+      title: questionData.question,
       type: 'question' as const,
+      order: i + 2,
       settings: {
         backgroundColor: '#ffffff',
         textColor: '#432818',
         showProgress: true,
-        progressValue: 10 + (i + 1) * 6
+        progressValue: 5 + (i + 1) * 5 // 5% a 55%
       },
       blocks: [
         {
-          id: `q${i + 1}-question`,
-          type: 'question-multiple',
+          id: `progress-q${i + 1}`,
+          type: 'quiz-progress-bar',
           order: 1,
+          settings: {
+            currentStep: i + 1,
+            totalSteps: 18,
+            progressPercent: 5 + (i + 1) * 5,
+            stepName: `Questão ${i + 1} de 10`
+          }
+        },
+        {
+          id: `question-${i + 1}`,
+          type: 'question-multiple',
+          order: 2,
           settings: {
             question: questionData.question,
             options: questionData.options.map(opt => ({
@@ -221,20 +199,34 @@ const createInitialFunnel = (): FunnelData => ({
             multipleSelection: questionData.multipleSelection || false,
             maxSelections: questionData.maxSelections || 1
           }
+        },
+        {
+          id: `navigation-q${i + 1}`,
+          type: 'quiz-navigation-controls',
+          order: 3,
+          settings: {
+            currentQuestion: i + 1,
+            totalQuestions: 10,
+            hideBackButton: i === 0,
+            backButtonText: 'Voltar',
+            nextButtonText: i === 9 ? 'Continuar' : 'Próxima'
+          }
         }
       ]
     })),
-    // 12. Página de Transição Principal (com textos reais)
+
+    // ETAPA 12: QuizTransição → Apresenta primeira questão estratégica
     {
-      id: 'main-transition',
-      name: 'Transição Principal',
-      title: 'Enquanto calculamos seu resultado...',
+      id: 'etapa-12-transicao-1',
+      name: 'Etapa 12: Transição 1',
+      title: TRANSITIONS.mainTransition.title,
       type: 'main-transition',
+      order: 12,
       settings: {
         backgroundColor: '#f9f4ef',
         textColor: '#432818',
         showProgress: true,
-        progressValue: 75,
+        progressValue: 60,
         transitionDuration: 4000
       },
       blocks: [
@@ -259,44 +251,35 @@ const createInitialFunnel = (): FunnelData => ({
           }
         },
         {
-          id: 'main-transition-additional',
+          id: 'main-transition-note',
           type: 'text',
           order: 3,
           settings: {
             content: TRANSITIONS.mainTransition.additionalMessage,
             fontSize: 'small',
-            alignment: 'center',
-            style: { fontStyle: 'italic' }
-          }
-        },
-        {
-          id: 'main-transition-loader',
-          type: 'loading-animation',
-          order: 4,
-          settings: {
-            type: 'spinning',
-            message: 'Processando suas preferências...',
-            duration: 4000
+            alignment: 'center'
           }
         }
       ]
     },
-    // 13-18. Perguntas estratégicas (6 questões reais)
+
+    // ETAPAS 13-18: 6 questões estratégicas restantes
     ...STRATEGIC_QUESTIONS.map((questionData, i) => ({
-      id: `strategic-${i + 1}`,
-      name: `Estratégica ${i + 1}`,
-      title: `Pergunta Estratégica ${i + 1}`,
+      id: `etapa-${i + 13}-estrategica-${i + 1}`,
+      name: `Etapa ${i + 13}: Estratégica ${i + 1}`,
+      title: questionData.question,
       type: 'strategic' as const,
+      order: i + 13,
       settings: {
         backgroundColor: '#ffffff',
         textColor: '#432818',
         showProgress: true,
-        progressValue: 80 + (i + 1) * 3.33  // Ajustado para 6 questões
+        progressValue: 65 + (i + 1) * 5 // 70% a 95%
       },
       blocks: [
         {
-          id: `s${i + 1}-question`,
-          type: 'question-strategic',
+          id: `strategic-${i + 1}`,
+          type: 'strategic-question',
           order: 1,
           settings: {
             question: questionData.question,
@@ -311,12 +294,14 @@ const createInitialFunnel = (): FunnelData => ({
         }
       ]
     })),
-    // 20. Página de Transição Final (com textos reais)
+
+    // ETAPA 19: Transição Final (antes do resultado)
     {
-      id: 'final-transition',
-      name: 'Transição Final',
+      id: 'etapa-19-transicao-final',
+      name: 'Etapa 19: Transição Final',
       title: TRANSITIONS.finalTransition.title,
       type: 'final-transition',
+      order: 19,
       settings: {
         backgroundColor: '#432818',
         textColor: '#ffffff',
@@ -326,34 +311,26 @@ const createInitialFunnel = (): FunnelData => ({
       },
       blocks: [
         {
-          id: 'final-transition-header',
-          type: 'header',
+          id: 'final-transition',
+          type: 'quiz-final-transition',
           order: 1,
           settings: {
             title: TRANSITIONS.finalTransition.title,
-            subtitle: TRANSITIONS.finalTransition.message,
-            alignment: 'center',
-            color: 'white'
-          }
-        },
-        {
-          id: 'final-transition-loader',
-          type: 'loading-animation',
-          order: 2,
-          settings: {
-            type: 'elegant',
-            message: 'Criando seu guia de estilo...',
-            duration: TRANSITIONS.finalTransition.duration
+            description: TRANSITIONS.finalTransition.message,
+            showSteps: true,
+            waitMessage: 'Isso levará apenas alguns segundos...'
           }
         }
       ]
     },
-    // 21. Página de Resultado
+
+    // ETAPA 20: Resultado A (/resultado) - Teste A do funil
     {
-      id: 'result',
-      name: 'Resultado',
+      id: 'etapa-20-resultado-a',
+      name: 'Etapa 20: Resultado A (/resultado)',
       title: 'Seu Perfil de Estilo',
       type: 'result',
+      order: 20,
       settings: {
         backgroundColor: '#ffffff',
         textColor: '#432818',
@@ -377,9 +354,9 @@ const createInitialFunnel = (): FunnelData => ({
           type: 'style-result-display',
           order: 2,
           settings: {
-            styleName: 'Elegante Clássica',
-            styleImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/f_webp,q_70,w_600,h_400,c_fit/v1744911572/style_classic.webp',
-            styleDescription: 'Seu estilo é sofisticado e atemporal. Você valoriza peças de qualidade, cortes bem estruturados e uma paleta de cores mais neutra e elegante.',
+            styleName: 'Seu Estilo Personalizado',
+            styleImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp',
+            styleDescription: 'Baseado nas suas respostas, identificamos seu perfil único de estilo que reflete sua personalidade e preferências.',
             percentMatch: 92
           }
         },
@@ -435,16 +412,19 @@ const createInitialFunnel = (): FunnelData => ({
         }
       ]
     },
-    // 21. Página de Oferta
+
+    // ETAPA 21: Teste B: /quiz-descubra-seu-estilo - (QuizOfferPage)
     {
-      id: 'offer',
-      name: 'Oferta',
+      id: 'etapa-21-oferta-b',
+      name: 'Etapa 21: Oferta B (/quiz-descubra-seu-estilo)',
       title: 'Oferta Especial',
       type: 'offer',
+      order: 21,
       settings: {
         backgroundColor: '#432818',
         textColor: '#ffffff',
-        showProgress: false
+        showProgress: false,
+        abTestVariant: 'B'
       },
       blocks: [
         {
@@ -452,8 +432,9 @@ const createInitialFunnel = (): FunnelData => ({
           type: 'header',
           order: 1,
           settings: {
-            title: 'Transforme Seu Guarda-Roupa Hoje!',
-            subtitle: 'Consultoria Personalizada de Estilo',
+            title: 'Descubra Seu Estilo Único',
+            subtitle: 'Transforme seu guarda-roupa com nosso guia completo',
+            titleSize: 'large',
             alignment: 'center',
             color: 'white'
           }
@@ -466,17 +447,41 @@ const createInitialFunnel = (): FunnelData => ({
             originalPrice: 'R$ 297,00',
             currentPrice: 'R$ 97,00',
             discount: '67% OFF',
-            urgency: 'Oferta válida apenas hoje!'
+            urgency: 'Oferta por tempo limitado!'
+          }
+        },
+        {
+          id: 'offer-bonus',
+          type: 'bonus',
+          order: 3,
+          settings: {
+            title: 'E-book Exclusivo de Estilo',
+            description: 'Guia completo com dicas avançadas de styling',
+            value: 'R$ 47,00'
+          }
+        },
+        {
+          id: 'offer-guarantee',
+          type: 'guarantee-section',
+          order: 4,
+          settings: {
+            title: 'Garantia de 30 Dias',
+            description: 'Se não ficar satisfeita, devolvemos 100% do seu dinheiro',
+            features: [
+              'Garantia incondicional',
+              'Suporte personalizado',
+              'Acesso vitalício'
+            ]
           }
         },
         {
           id: 'offer-cta',
           type: 'button',
-          order: 3,
+          order: 5,
           settings: {
-            text: 'Quero Transformar Meu Estilo Agora',
+            text: 'Quero Transformar Meu Estilo Agora!',
             style: 'accent',
-            size: 'large',
+            size: 'lg',
             fullWidth: true
           }
         }
@@ -752,183 +757,270 @@ const blockLibrary = [
 // Templates pré-configurados
 const pageTemplates = [
   {
-    id: 'intro-complete',
-    name: 'Introdução Completa',
+    id: 'etapa-1-intro',
+    name: 'Etapa 1: Introdução (Coleta Nome)',
     type: 'intro',
-    description: 'Página de introdução com todos os elementos',
+    description: 'Página de introdução completa com coleta de nome',
     blocks: [
       {
-        id: 'template-header',
-        type: 'header',
+        id: 'template-quiz-intro',
+        type: 'quiz-intro-section',
         order: 1,
         settings: {
           title: 'Descubra Seu Estilo Único',
           subtitle: 'Um quiz personalizado para transformar seu guarda-roupa',
-          titleSize: 'large',
-          alignment: 'center'
+          showBenefits: true,
+          ctaText: 'Começar Quiz Agora',
+          showTrust: true
         }
       },
       {
-        id: 'template-hero-image',
-        type: 'image',
+        id: 'template-progress',
+        type: 'quiz-progress-bar',
         order: 2,
         settings: {
-          src: 'https://res.cloudinary.com/dqljyf76t/image/upload/f_webp,q_70,w_800,h_600,c_fit/v1744911572/quiz_intro_image.webp',
-          alt: 'Quiz de Estilo',
-          alignment: 'center'
+          currentStep: 0,
+          totalSteps: 18,
+          progressPercent: 0,
+          stepName: 'Introdução'
+        }
+      }
+    ]
+  },
+  {
+    id: 'etapa-2-questao-1',
+    name: 'Etapa 2: Questão 1 - Tipo de Roupa',
+    type: 'question',
+    description: 'Qual o seu tipo de roupa favorita? (texto + imagem)',
+    blocks: [
+      {
+        id: 'template-progress-q1',
+        type: 'quiz-progress-bar',
+        order: 1,
+        settings: {
+          currentStep: 1,
+          totalSteps: 18,
+          progressPercent: 6,
+          stepName: 'Questão 1 de 10'
         }
       },
       {
-        id: 'template-description',
-        type: 'text',
+        id: 'template-question-1',
+        type: 'question-multiple',
+        order: 2,
+        settings: {
+          question: 'Qual o seu tipo de roupa favorita?',
+          multipleSelection: true,
+          maxSelections: 3,
+          options: [
+            {
+              id: 'natural',
+              text: 'Conforto, leveza e praticidade no vestir',
+              imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp',
+              value: 'natural'
+            },
+            {
+              id: 'classico',
+              text: 'Discrição, caimento clássico e sobriedade',
+              imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp',
+              value: 'classico'
+            },
+            {
+              id: 'contemporaneo',
+              text: 'Praticidade com um toque de estilo atual',
+              imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp',
+              value: 'contemporaneo'
+            },
+            {
+              id: 'elegante',
+              text: 'Elegância refinada, moderna e sem exageros',
+              imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp',
+              value: 'elegante'
+            },
+            {
+              id: 'romantico',
+              text: 'Delicadeza em tecidos suaves e fluidos',
+              imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp',
+              value: 'romantico'
+            },
+            {
+              id: 'sexy',
+              text: 'Sensualidade com destaque para o corpo',
+              imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp',
+              value: 'sexy'
+            },
+            {
+              id: 'dramatico',
+              text: 'Impacto visual com peças estruturadas e assimétricas',
+              imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp',
+              value: 'dramatico'
+            },
+            {
+              id: 'criativo',
+              text: 'Mix criativo com formas ousadas e originais',
+              imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp',
+              value: 'criativo'
+            }
+          ]
+        }
+      },
+      {
+        id: 'template-navigation-q1',
+        type: 'quiz-navigation-controls',
         order: 3,
         settings: {
-          content: 'Descubra qual é o seu perfil de estilo e receba dicas personalizadas para valorizar ainda mais sua beleza natural.',
+          currentQuestion: 1,
+          totalQuestions: 10,
+          hideBackButton: true,
+          backButtonText: 'Voltar',
+          nextButtonText: 'Próxima'
+        }
+      }
+    ]
+  },
+  {
+    id: 'etapa-3-questao-2',
+    name: 'Etapa 3: Questão 2 - Personalidade',
+    type: 'question',
+    description: 'Resuma a sua personalidade (apenas texto)',
+    blocks: [
+      {
+        id: 'template-progress-q2',
+        type: 'quiz-progress-bar',
+        order: 1,
+        settings: {
+          currentStep: 2,
+          totalSteps: 18,
+          progressPercent: 11,
+          stepName: 'Questão 2 de 10'
+        }
+      },
+      {
+        id: 'template-question-2',
+        type: 'question-multiple',
+        order: 2,
+        settings: {
+          question: 'Resuma a sua personalidade:',
+          multipleSelection: true,
+          maxSelections: 3,
+          options: [
+            { id: 'natural', text: 'Informal, espontânea, alegre, essencialista', value: 'natural' },
+            { id: 'classico', text: 'Conservadora, séria, organizada', value: 'classico' },
+            { id: 'contemporaneo', text: 'Informada, ativa, prática', value: 'contemporaneo' },
+            { id: 'elegante', text: 'Exigente, sofisticada, seletiva', value: 'elegante' },
+            { id: 'romantico', text: 'Feminina, meiga, delicada, sensível', value: 'romantico' },
+            { id: 'sexy', text: 'Glamorosa, vaidosa, sensual', value: 'sexy' },
+            { id: 'dramatico', text: 'Cosmopolita, moderna e audaciosa', value: 'dramatico' },
+            { id: 'criativo', text: 'Exótica, aventureira, livre', value: 'criativo' }
+          ]
+        }
+      },
+      {
+        id: 'template-navigation-q2',
+        type: 'quiz-navigation-controls',
+        order: 3,
+        settings: {
+          currentQuestion: 2,
+          totalQuestions: 10,
+          hideBackButton: false,
+          backButtonText: 'Voltar',
+          nextButtonText: 'Próxima'
+        }
+      }
+    ]
+  },
+  {
+    id: 'etapa-12-transicao-1',
+    name: 'Etapa 12: Transição 1 - Antes Estratégicas',
+    type: 'main-transition',
+    description: 'Página de transição antes das questões estratégicas',
+    blocks: [
+      {
+        id: 'template-transition-1',
+        type: 'quiz-transition-page',
+        order: 1,
+        settings: {
+          title: '🕐 Enquanto calculamos o seu resultado...',
+          description: 'Queremos te fazer algumas perguntas que vão tornar sua experiência ainda mais completa. A ideia é simples: te ajudar a enxergar com mais clareza onde você está agora — e para onde pode ir com mais intenção, leveza e autenticidade.',
+          showProgress: true,
+          progressValue: 60,
+          ctaText: 'Continuar'
+        }
+      },
+      {
+        id: 'template-transition-note',
+        type: 'text',
+        order: 2,
+        settings: {
+          content: '💬 Responda com sinceridade. Isso é só entre você e a sua nova versão.',
           fontSize: 'medium',
           alignment: 'center'
         }
-      },
-      {
-        id: 'template-name-input',
-        type: 'form-input',
-        order: 4,
-        settings: {
-          label: 'Como você gostaria de ser chamada?',
-          placeholder: 'Digite seu nome aqui...',
-          required: true,
-          type: 'text'
-        }
-      },
-      {
-        id: 'template-cta-button',
-        type: 'button',
-        order: 5,
-        settings: {
-          text: 'Começar o Quiz',
-          style: 'primary',
-          size: 'large',
-          fullWidth: true
-        }
       }
     ]
   },
   {
-    id: 'question-standard',
-    name: 'Questão Padrão',
-    type: 'question',
-    description: 'Pergunta com múltiplas opções',
-    blocks: [
-      {
-        id: 'template-question',
-        type: 'question-multiple',
-        order: 1,
-        settings: {
-          question: 'Qual destas opções melhor descreve seu estilo?',
-          options: [
-            { id: 'a', text: 'Clássico e elegante', value: 'classic' },
-            { id: 'b', text: 'Moderno e minimalista', value: 'modern' },
-            { id: 'c', text: 'Romântico e feminino', value: 'romantic' },
-            { id: 'd', text: 'Casual e confortável', value: 'casual' }
-          ],
-          required: true
-        }
-      }
-    ]
-  },
-  {
-    id: 'strategic-question-template',
-    name: 'Questão Estratégica',
+    id: 'etapa-13-estrategica-1',
+    name: 'Etapa 13: Estratégica 1 - Como se vê',
     type: 'strategic',
-    description: 'Pergunta de qualificação de lead',
+    description: 'Como você se vê hoje?',
     blocks: [
       {
-        id: 'template-strategic-question',
+        id: 'template-strategic-1',
         type: 'strategic-question',
         order: 1,
         settings: {
-          question: 'Você estaria interessada em receber um guia personalizado para o seu estilo?',
+          question: 'Como você se vê hoje? Quando você se olha no espelho, como se sente com sua imagem pessoal atualmente?',
           options: [
-            { id: 'a', text: 'Sim, definitivamente!', value: 'high' },
-            { id: 'b', text: 'Talvez, preciso saber mais', value: 'medium' },
-            { id: 'c', text: 'Não, não me interessa', value: 'low' }
-          ],
-          required: true
+            { id: 'a', text: 'Me sinto desconectada da mulher que sou hoje', value: 'desconectada' },
+            { id: 'b', text: 'Tenho dúvidas sobre o que realmente me valoriza', value: 'duvidas' },
+            { id: 'c', text: 'Às vezes acerto, às vezes erro', value: 'indefinida' },
+            { id: 'd', text: 'Me sinto segura, mas sei que posso evoluir', value: 'segura' }
+          ]
         }
       }
     ]
   },
   {
-    id: 'main-transition-template',
-    name: 'Transição Principal',
-    type: 'main-transition',
-    description: 'Loading após questões principais',
+    id: 'etapa-19-transicao-final',
+    name: 'Etapa 19: Transição Final',
+    type: 'final-transition',
+    description: 'Página de loading antes do resultado',
     blocks: [
       {
-        id: 'template-transition-header',
-        type: 'header',
+        id: 'template-final-transition',
+        type: 'quiz-final-transition',
         order: 1,
         settings: {
-          title: 'Analisando suas respostas...',
-          subtitle: 'Criando seu perfil personalizado',
-          alignment: 'center'
-        }
-      },
-      {
-        id: 'template-loading',
-        type: 'loading-animation',
-        order: 2,
-        settings: {
-          type: 'elegant',
-          message: 'Processando suas preferências...',
-          duration: 4000
+          title: 'Processando Suas Respostas...',
+          description: 'Obrigada por compartilhar. Estamos analisando suas preferências para criar seu perfil único de estilo.',
+          showSteps: true,
+          waitMessage: 'Isso levará apenas alguns segundos...'
         }
       }
     ]
   },
   {
-    id: 'result-complete',
-    name: 'Resultado Completo',
+    id: 'etapa-20-resultado-a',
+    name: 'Etapa 20: Resultado A (/resultado)',
     type: 'result',
-    description: 'Página de resultado com oferta',
+    description: 'Página de resultado completa - Teste A',
     blocks: [
       {
-        id: 'template-result-header',
-        type: 'header',
+        id: 'template-result-display',
+        type: 'style-result-display',
         order: 1,
         settings: {
-          title: 'Parabéns! Descobrimos Seu Perfil',
-          subtitle: 'Resultado baseado em suas respostas',
-          alignment: 'center'
+          styleName: 'Seu Estilo Personalizado',
+          percentMatch: 92,
+          styleDescription: 'Baseado nas suas respostas, identificamos seu perfil único de estilo que reflete sua personalidade e preferências.',
+          styleImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp'
         }
       },
       {
-        id: 'template-style-display',
-        type: 'style-result-display',
-        order: 2,
-        settings: {
-          styleName: 'Elegante Clássica',
-          styleImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/f_webp,q_70,w_600,h_400,c_fit/v1744911572/style_classic.webp',
-          styleDescription: 'Seu estilo é sofisticado e atemporal. Você valoriza peças de qualidade, cortes bem estruturados e uma paleta de cores mais neutra e elegante.',
-          percentMatch: 92
-        }
-      },
-      {
-        id: 'template-sales-offer',
-        type: 'sales-offer',
-        order: 3,
-        settings: {
-          title: 'Transforme Seu Guarda-Roupa Hoje!',
-          subtitle: 'Guias Personalizados de Estilo',
-          originalPrice: 'R$ 297,00',
-          currentPrice: 'R$ 97,00',
-          discount: '67% OFF',
-          urgency: 'Oferta válida apenas hoje!'
-        }
-      },
-      {
-        id: 'template-testimonials',
+        id: 'template-testimonials-result',
         type: 'testimonials-grid',
-        order: 4,
+        order: 2,
         settings: {
           testimonials: [
             {
@@ -949,17 +1041,81 @@ const pageTemplates = [
         }
       },
       {
-        id: 'template-guarantee',
-        type: 'guarantee-section',
-        order: 5,
+        id: 'template-sales-offer-result',
+        type: 'sales-offer',
+        order: 3,
         settings: {
-          title: 'Garantia de 30 dias',
-          description: 'Se não ficar satisfeita, devolvemos 100% do seu dinheiro.',
+          title: 'Transforme Seu Estilo Hoje',
+          subtitle: 'Guia Completo de Estilo Personalizado',
+          originalPrice: 'R$ 197,00',
+          currentPrice: 'R$ 97,00',
+          discount: '50% OFF',
+          urgency: 'Oferta limitada - apenas hoje!'
+        }
+      }
+    ]
+  },
+  {
+    id: 'etapa-21-oferta-b',
+    name: 'Etapa 21: Oferta B (/quiz-descubra-seu-estilo)',
+    type: 'offer',
+    description: 'Página de oferta - Teste B',
+    blocks: [
+      {
+        id: 'template-offer-header',
+        type: 'header',
+        order: 1,
+        settings: {
+          title: 'Descubra Seu Estilo Único',
+          subtitle: 'Transforme seu guarda-roupa com nosso guia completo',
+          titleSize: 'large',
+          alignment: 'center'
+        }
+      },
+      {
+        id: 'template-offer-price',
+        type: 'price',
+        order: 2,
+        settings: {
+          originalPrice: 'R$ 197,00',
+          currentPrice: 'R$ 97,00',
+          discount: '50% OFF',
+          urgency: 'Oferta por tempo limitado!'
+        }
+      },
+      {
+        id: 'template-offer-bonus',
+        type: 'bonus',
+        order: 3,
+        settings: {
+          title: 'E-book Exclusivo de Estilo',
+          description: 'Guia completo com dicas avançadas de styling',
+          value: 'R$ 47,00'
+        }
+      },
+      {
+        id: 'template-offer-guarantee',
+        type: 'guarantee-section',
+        order: 4,
+        settings: {
+          title: 'Garantia de 30 Dias',
+          description: 'Se não ficar satisfeita, devolvemos 100% do seu dinheiro',
           features: [
             'Garantia incondicional',
-            'Suporte 24/7',
+            'Suporte personalizado',
             'Acesso vitalício'
           ]
+        }
+      },
+      {
+        id: 'template-offer-cta',
+        type: 'button',
+        order: 5,
+        settings: {
+          text: 'Quero Transformar Meu Estilo Agora!',
+          style: 'primary',
+          size: 'lg',
+          fullWidth: true
         }
       }
     ]
@@ -969,7 +1125,7 @@ const pageTemplates = [
 const CaktoQuizAdvancedEditor: React.FC = () => {
   // Estados principais
   const [funnel, setFunnel] = useState<FunnelData>(createInitialFunnel);
-  const [currentPageId, setCurrentPageId] = useState<string>('intro');
+  const [currentPageId, setCurrentPageId] = useState<string>('etapa-1-intro');
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'funnel' | 'blocks' | 'templates' | 'settings'>('funnel');
   const [deviceView, setDeviceView] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
