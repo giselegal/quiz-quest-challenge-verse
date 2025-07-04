@@ -462,15 +462,16 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
   const currentPage = funnel.pages[currentPageIndex];
   const selectedBlock = currentPage?.blocks.find(block => block.id === selectedBlockId);
 
-  // Inicializar com uma página exemplo usando elementos reais do funil
+  // Inicializar com todas as etapas reais do funil CaktoQuiz
   useEffect(() => {
     if (funnel.pages.length === 0) {
       setFunnel(prev => ({
         ...prev,
         pages: [
+          // ETAPA 1: INTRO
           {
             id: 'intro',
-            title: 'Introdução',
+            title: 'Introdução do Quiz',
             type: 'intro' as const,
             order: 1,
             isActive: true,
