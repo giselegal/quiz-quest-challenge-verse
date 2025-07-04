@@ -251,7 +251,7 @@ export const QuizQuestion: React.FC<QuizQuestionProps> = ({
         onClick={() => handleOptionSelect(option.id)}
         data-testid={`option-${option.id}`}
       >
-        <div className={contentClasses}>
+        <div className={option.imageUrl ? "space-y-3" : contentClasses}>
           {/* Indicador de seleção */}
           {optionStyle === 'radio' && (
             <div className={`w-4 h-4 rounded-full border-2 ${
@@ -275,17 +275,32 @@ export const QuizQuestion: React.FC<QuizQuestionProps> = ({
             </div>
           )}
           
-          {/* Letra da opção */}
-          {showLetters && optionStyle === 'card' && (
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-              isSelected ? 'bg-[#B89B7A] text-white' : 'bg-gray-200 text-gray-600'
-            }`}>
-              {letter}
+          {/* Imagem da opção (se houver) */}
+          {option.imageUrl && (
+            <div className="w-full mb-3">
+              <img
+                src={option.imageUrl}
+                alt={option.text}
+                className="w-full h-32 object-cover rounded-lg"
+                loading="lazy"
+              />
             </div>
           )}
           
-          {/* Texto da opção */}
-          <span className="flex-1 text-left">{option.text}</span>
+          {/* Texto e letra em uma linha quando há imagem */}
+          <div className={option.imageUrl ? "flex items-center space-x-3" : "contents"}>
+            {/* Letra da opção */}
+            {showLetters && optionStyle === 'card' && (
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
+                isSelected ? 'bg-[#B89B7A] text-white' : 'bg-gray-200 text-gray-600'
+              }`}>
+                {letter}
+              </div>
+            )}
+            
+            {/* Texto da opção */}
+            <span className="flex-1 text-left">{option.text}</span>
+          </div>
         </div>
       </div>
     );

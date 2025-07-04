@@ -32,14 +32,8 @@ export { default as CountdownTimer } from './CountdownTimer';
 export { default as PriceComparison } from './PriceComparison';
 export { default as VideoSection } from './VideoSection';
 export { default as FeatureHighlight } from './FeatureHighlight';
-// export { default as BonusSection } from './BonusSection';
-// export { default as VideoSection } from './VideoSection';
-// export { default as CountdownTimer } from './CountdownTimer';
-// export { default as StrategicQuestion } from './StrategicQuestion';
-// export { default as BeforeAfter } from './BeforeAfter';
-// export { default as MentorSection } from './MentorSection';
-// export { default as PriceComparison } from './PriceComparison';
-// export { default as FeatureHighlight } from './FeatureHighlight';
+export { default as QuizTransition } from './QuizTransition';
+export { default as StrategicQuestion } from './StrategicQuestion';
 
 /**
  * GUIA DE USO:

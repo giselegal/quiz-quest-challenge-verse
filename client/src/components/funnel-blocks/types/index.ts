@@ -51,6 +51,7 @@ export interface QuestionOption {
   id: string;
   text: string;
   value: string | number;
+  imageUrl?: string;
   isCorrect?: boolean;
   weight?: number;
   category?: string;
