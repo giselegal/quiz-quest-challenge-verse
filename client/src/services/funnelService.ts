@@ -12,6 +12,12 @@ export interface FunnelData {
   name: string;
   description?: string;
   pages: PageData[];
+  config?: {
+    name?: string;
+    description?: string;
+    isPublished?: boolean;
+    theme?: string;
+  };
   settings?: {
     theme?: string;
     primaryColor?: string;

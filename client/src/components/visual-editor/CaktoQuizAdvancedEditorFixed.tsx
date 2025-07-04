@@ -2340,7 +2340,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 <div>
                   <Label className="text-xs">Descrição</Label>
                   <Textarea
-                    value={funnel.config.description}
+                    value={funnel?.config?.description || ''}
                     onChange={(e) => setFunnel(prev => ({
                       ...prev,
                       config: { ...prev.config, description: e.target.value }
@@ -2352,7 +2352,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
                 <div className="flex items-center space-x-2">
                   <Switch
-                    checked={funnel.config.isPublished}
+                    checked={funnel?.config?.isPublished || false}
                     onCheckedChange={(checked) => setFunnel(prev => ({
                       ...prev,
                       config: { ...prev.config, isPublished: checked }
@@ -2367,7 +2367,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                   <div>
                     <Label className="text-xs">Tema</Label>
                     <select 
-                      value={funnel.config.theme}
+                      value={funnel?.config?.theme || 'default'}
                       onChange={(e) => setFunnel(prev => ({
                         ...prev,
                         config: { ...prev.config, theme: e.target.value }
@@ -2582,7 +2582,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                       {currentPage.blocks.length > 0 ? (
                         <>
                           {currentPage.blocks
-                            .sort((a, b) => a.order - b.order)
+                            .sort((a, b) => (a?.order || 0) - (b?.order || 0))
                             .map((block, index) => (
                               <div 
                                 key={block.id}
@@ -2771,7 +2771,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                         const newBlock: FunnelBlock = {
                           ...selectedBlock,
                           id: `${selectedBlock.type}-${Date.now()}`,
-                          order: selectedBlock.order + 1
+                          order: (selectedBlock?.order || 0) + 1
                         };
                         
                         setFunnel(prev => ({
@@ -2782,12 +2782,12 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                                   ...page, 
                                   blocks: [
                                     ...page.blocks.map(b => 
-                                      b.order > selectedBlock.order 
-                                        ? { ...b, order: b.order + 1 }
+                                      (b?.order || 0) > (selectedBlock?.order || 0)
+                                        ? { ...b, order: (b?.order || 0) + 1 }
                                         : b
                                     ),
                                     newBlock
-                                  ].sort((a, b) => a.order - b.order)
+                                  ].sort((a, b) => (a?.order || 0) - (b?.order || 0))
                                 }
                               : page
                           )
