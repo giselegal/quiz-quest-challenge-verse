@@ -1537,14 +1537,14 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           <div style={baseStyle} onClick={handleBlockClick} className="text-center py-4">
             <Button 
               className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${buttonClasses[buttonStyle] || buttonClasses.primary} ${
-                block.settings.fullWidth ? 'w-full' : ''
+                block?.settings?.fullWidth ? 'w-full' : ''
               } ${
-                block.settings.size === 'sm' ? 'px-6 py-2 text-sm' :
-                block.settings.size === 'lg' ? 'px-12 py-4 text-lg' :
+                block?.settings?.size === 'sm' ? 'px-6 py-2 text-sm' :
+                block?.settings?.size === 'lg' ? 'px-12 py-4 text-lg' :
                 'px-8 py-3'
               }`}
             >
-              {block.settings.text || 'Texto do Botão'}
+              {block?.settings?.text || 'Texto do Botão'}
             </Button>
           </div>
         );
@@ -1555,12 +1555,12 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           <div style={baseStyle} onClick={handleBlockClick} className="py-4">
             <div className="space-y-2">
               <Label className="text-sm font-medium text-[#432818]">
-                {block.settings.label || 'Campo de entrada'}
-                {block.settings.required && <span className="text-red-500 ml-1">*</span>}
+                {block?.settings?.label || 'Campo de entrada'}
+                {block?.settings?.required && <span className="text-red-500 ml-1">*</span>}
               </Label>
               <Input
-                type={block.settings.type || 'text'}
-                placeholder={block.settings.placeholder || 'Digite aqui...'}
+                type={block?.settings?.type || 'text'}
+                placeholder={block?.settings?.placeholder || 'Digite aqui...'}
                 className="w-full h-12 text-base border-2 border-[#B89B7A]/30 focus:border-[#B89B7A] rounded-xl bg-white focus:ring-2 focus:ring-[#B89B7A]/20"
               />
             </div>
@@ -1573,10 +1573,10 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           <div style={baseStyle} onClick={handleBlockClick} className="py-6">
             <div className="space-y-6">
               <h3 className="text-xl md:text-2xl font-semibold text-[#432818] text-center leading-relaxed">
-                {block.settings.question || 'Qual é a sua pergunta?'}
+                {block?.settings?.question || 'Qual é a sua pergunta?'}
               </h3>
               <div className="space-y-3">
-                {(block.settings.options || [
+                {(block?.settings?.options || [
                   { id: 'a', text: 'Opção A', value: 'a' },
                   { id: 'b', text: 'Opção B', value: 'b' },
                   { id: 'c', text: 'Opção C', value: 'c' },
@@ -1606,10 +1606,10 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           <div style={baseStyle} onClick={handleBlockClick} className="py-6">
             <div className="space-y-6">
               <h3 className="text-xl md:text-2xl font-semibold text-[#432818] text-center leading-relaxed">
-                {block.settings.question || 'Pergunta estratégica sobre seus objetivos'}
+                {block?.settings?.question || 'Pergunta estratégica sobre seus objetivos'}
               </h3>
               <div className="space-y-3">
-                {(block.settings.options || [
+                {(block?.settings?.options || [
                   { id: 'a', text: 'Sim, definitivamente', value: 'high' },
                   { id: 'b', text: 'Talvez, preciso saber mais', value: 'medium' },
                   { id: 'c', text: 'Não, não me interessa', value: 'low' }
@@ -1636,7 +1636,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
             <div className="inline-flex items-center space-x-3">
               <RotateCcw className="h-8 w-8 animate-spin text-[#B89B7A]" />
               <span className="text-[#432818] text-lg font-medium">
-                {block.settings.message || 'Carregando...'}
+                {block?.settings?.message || 'Carregando...'}
               </span>
             </div>
           </div>
@@ -1647,22 +1647,22 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         content = (
           <div style={baseStyle} onClick={handleBlockClick} className="text-center py-6">
             <div className="bg-gradient-to-br from-[#B89B7A] to-[#A1835D] p-8 rounded-2xl text-white shadow-2xl max-w-md mx-auto">
-              {block.settings.originalPrice && (
+              {block?.settings?.originalPrice && (
                 <div className="text-xl line-through opacity-75 mb-2">
-                  {block.settings.originalPrice}
+                  {block?.settings?.originalPrice}
                 </div>
               )}
               <div className="text-5xl font-bold mb-4">
-                {block.settings.currentPrice || 'R$ 97,00'}
+                {block?.settings?.currentPrice || 'R$ 97,00'}
               </div>
-              {block.settings.discount && (
+              {block?.settings?.discount && (
                 <div className="text-sm font-semibold bg-red-500 text-white px-4 py-2 rounded-full inline-block mb-4 animate-pulse">
-                  {block.settings.discount}
+                  {block?.settings?.discount}
                 </div>
               )}
-              {block.settings.urgency && (
+              {block?.settings?.urgency && (
                 <div className="text-base opacity-90 font-medium">
-                  {block.settings.urgency}
+                  {block?.settings?.urgency}
                 </div>
               )}
             </div>
@@ -1675,12 +1675,12 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           <div 
             style={{
               ...baseStyle,
-              height: block.settings.height || '50px'
+              height: block?.settings?.height || '50px'
             }} 
             onClick={handleBlockClick}
             className="w-full bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-500 text-sm"
           >
-            Espaçador ({block.settings.height || '50px'})
+            Espaçador ({block?.settings?.height || '50px'})
           </div>
         );
         break;
@@ -1691,26 +1691,26 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
             <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 max-w-lg mx-auto">
               <div className="flex items-center mb-4">
                 <img
-                  src={block.settings.avatar || 'https://via.placeholder.com/60x60?text=👤'}
-                  alt={block.settings.author || 'Cliente'}
+                  src={block?.settings?.avatar || 'https://via.placeholder.com/60x60?text=👤'}
+                  alt={block?.settings?.author || 'Cliente'}
                   className="w-12 h-12 rounded-full mr-4"
                 />
                 <div>
                   <p className="font-semibold text-[#432818]">
-                    {block.settings.author || 'Maria Silva'}
+                    {block?.settings?.author || 'Maria Silva'}
                   </p>
                   <p className="text-sm text-gray-600">
-                    {block.settings.role || 'Cliente satisfeita'}
+                    {block?.settings?.role || 'Cliente satisfeita'}
                   </p>
                 </div>
               </div>
               <div className="flex mb-3">
-                {Array.from({ length: block.settings.rating || 5 }, (_, i) => (
+                {Array.from({ length: block?.settings?.rating || 5 }, (_, i) => (
                   <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                 ))}
               </div>
               <blockquote className="text-[#432818] italic">
-                "{block.settings.text || 'Este produto mudou minha vida! Recomendo para todos.'}"
+                "{block?.settings?.text || 'Este produto mudou minha vida! Recomendo para todos.'}"
               </blockquote>
             </div>
           </div>
@@ -1727,10 +1727,10 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="font-semibold text-green-800">
-                    {block.settings.title || 'Garantia de 30 dias'}
+                    {block?.settings?.title || 'Garantia de 30 dias'}
                   </h4>
                   <p className="text-sm text-green-700">
-                    {block.settings.description || 'Se não ficar satisfeito, devolvemos 100% do seu dinheiro.'}
+                    {block?.settings?.description || 'Se não ficar satisfeito, devolvemos 100% do seu dinheiro.'}
                   </p>
                 </div>
               </div>
@@ -1744,7 +1744,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           <div style={baseStyle} onClick={handleBlockClick} className="py-6">
             <div className="text-center bg-red-50 border-2 border-red-200 rounded-2xl p-6 max-w-md mx-auto">
               <h4 className="font-bold text-red-800 mb-4">
-                {block.settings.title || 'Oferta por tempo limitado!'}
+                {block?.settings?.title || 'Oferta por tempo limitado!'}
               </h4>
               <div className="flex justify-center gap-4">
                 <div className="bg-red-600 text-white p-3 rounded-lg">
@@ -1774,13 +1774,13 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 <span className="font-bold text-lg">BÔNUS ESPECIAL</span>
               </div>
               <h4 className="font-bold text-xl mb-2">
-                {block.settings.title || 'E-book Exclusivo de Estilo'}
+                {block?.settings?.title || 'E-book Exclusivo de Estilo'}
               </h4>
               <p className="text-sm opacity-90">
-                {block.settings.description || 'Guia completo com dicas avançadas de styling'}
+                {block?.settings?.description || 'Guia completo com dicas avançadas de styling'}
               </p>
               <div className="mt-3 text-sm font-semibold">
-                Valor: {block.settings.value || 'R$ 47,00'}
+                Valor: {block?.settings?.value || 'R$ 47,00'}
               </div>
             </div>
           </div>
@@ -1795,7 +1795,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 Perguntas Frequentes
               </h3>
               <div className="space-y-4">
-                {(block.settings.questions || [
+                {(block?.settings?.questions || [
                   { question: 'Como funciona o quiz?', answer: 'É muito simples! Você responde algumas perguntas e recebe seu resultado personalizado.' },
                   { question: 'Quanto tempo demora?', answer: 'O quiz leva apenas 3 minutos para ser concluído.' }
                 ]).map((faq: any, index: number) => (
@@ -1821,26 +1821,26 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
               <div className="grid grid-cols-3 gap-4">
                 <div>
                   <div className="text-2xl font-bold text-blue-600">
-                    {block.settings.number1 || '10.000+'}
+                    {block?.settings?.number1 || '10.000+'}
                   </div>
                   <div className="text-sm text-blue-800">
-                    {block.settings.label1 || 'Mulheres'}
+                    {block?.settings?.label1 || 'Mulheres'}
                   </div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-blue-600">
-                    {block.settings.number2 || '4.9★'}
+                    {block?.settings?.number2 || '4.9★'}
                   </div>
                   <div className="text-sm text-blue-800">
-                    {block.settings.label2 || 'Avaliação'}
+                    {block?.settings?.label2 || 'Avaliação'}
                   </div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-blue-600">
-                    {block.settings.number3 || '99%'}
+                    {block?.settings?.number3 || '99%'}
                   </div>
                   <div className="text-sm text-blue-800">
-                    {block.settings.label3 || 'Satisfação'}
+                    {block?.settings?.label3 || 'Satisfação'}
                   </div>
                 </div>
               </div>
@@ -1854,9 +1854,9 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           <div style={baseStyle} onClick={handleBlockClick} className="py-6">
             <div className="max-w-2xl mx-auto">
               <div className="bg-gray-900 rounded-2xl overflow-hidden aspect-video relative">
-                {block.settings.videoUrl ? (
+                {block?.settings?.videoUrl ? (
                   <iframe
-                    src={block.settings.videoUrl}
+                    src={block?.settings?.videoUrl}
                     className="w-full h-full"
                     frameBorder="0"
                     allowFullScreen
@@ -1871,9 +1871,9 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                   </div>
                 )}
               </div>
-              {block.settings.caption && (
+              {block?.settings?.caption && (
                 <p className="text-center text-sm text-gray-600 mt-3">
-                  {block.settings.caption}
+                  {block?.settings?.caption}
                 </p>
               )}
             </div>
@@ -1886,7 +1886,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         content = (
           <div style={baseStyle} onClick={handleBlockClick} className="text-center py-12">
             <div className="inline-flex flex-col items-center space-y-4">
-              {block.settings.type === 'elegant' ? (
+              {block?.settings?.type === 'elegant' ? (
                 <div className="relative">
                   <div className="w-16 h-16 border-4 border-[#B89B7A] border-t-transparent rounded-full animate-spin"></div>
                   <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-[#6B5B73] rounded-full animate-ping"></div>
@@ -1895,11 +1895,11 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 <RotateCcw className="h-10 w-10 animate-spin text-[#B89B7A]" />
               )}
               <span className="text-[#432818] text-lg font-medium">
-                {block.settings.message || 'Carregando...'}
+                {block?.settings?.message || 'Carregando...'}
               </span>
-              {block.settings.duration && (
+              {block?.settings?.duration && (
                 <div className="text-sm text-gray-500">
-                  Duração: {block.settings.duration / 1000}s
+                  Duração: {block?.settings?.duration / 1000}s
                 </div>
               )}
             </div>
@@ -1913,27 +1913,27 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
             <div className="max-w-2xl mx-auto text-center">
               <div className="mb-6">
                 <h2 className="text-3xl font-bold text-[#432818] mb-2">
-                  {block.settings.styleName || 'Seu Estilo'}
+                  {block?.settings?.styleName || 'Seu Estilo'}
                 </h2>
-                {block.settings.percentMatch && (
+                {block?.settings?.percentMatch && (
                   <div className="text-lg text-[#B89B7A] font-semibold">
-                    {block.settings.percentMatch}% de compatibilidade
+                    {block?.settings?.percentMatch}% de compatibilidade
                   </div>
                 )}
               </div>
               
-              {block.settings.styleImage && (
+              {block?.settings?.styleImage && (
                 <div className="mb-6">
                   <img
-                    src={block.settings.styleImage}
-                    alt={block.settings.styleName || 'Estilo'}
+                    src={block?.settings?.styleImage}
+                    alt={block?.settings?.styleName || 'Estilo'}
                     className="w-full max-w-md mx-auto rounded-2xl shadow-lg"
                   />
                 </div>
               )}
               
               <p className="text-lg text-[#432818] leading-relaxed">
-                {block.settings.styleDescription || 'Descrição do seu estilo personalizado.'}
+                {block?.settings?.styleDescription || 'Descrição do seu estilo personalizado.'}
               </p>
             </div>
           </div>
@@ -1946,31 +1946,31 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
             <div className="max-w-3xl mx-auto">
               <div className="bg-gradient-to-br from-[#B89B7A] to-[#A1835D] rounded-3xl p-8 text-white text-center shadow-2xl">
                 <h3 className="text-3xl font-bold mb-4">
-                  {block.settings.title || 'Oferta Especial'}
+                  {block?.settings?.title || 'Oferta Especial'}
                 </h3>
                 <p className="text-xl mb-6 opacity-90">
-                  {block.settings.subtitle || 'Não perca esta oportunidade'}
+                  {block?.settings?.subtitle || 'Não perca esta oportunidade'}
                 </p>
                 
                 <div className="flex justify-center items-center gap-4 mb-6">
-                  {block.settings.originalPrice && (
+                  {block?.settings?.originalPrice && (
                     <span className="text-xl line-through opacity-75">
-                      {block.settings.originalPrice}
+                      {block?.settings?.originalPrice}
                     </span>
                   )}
                   <span className="text-5xl font-bold">
-                    {block.settings.currentPrice || 'R$ 97,00'}
+                    {block?.settings?.currentPrice || 'R$ 97,00'}
                   </span>
-                  {block.settings.discount && (
+                  {block?.settings?.discount && (
                     <span className="bg-red-500 text-white px-4 py-2 rounded-full text-sm font-bold animate-pulse">
-                      {block.settings.discount}
+                      {block?.settings?.discount}
                     </span>
                   )}
                 </div>
                 
-                {block.settings.urgency && (
+                {block?.settings?.urgency && (
                   <p className="text-lg mb-6 opacity-90 font-semibold">
-                    {block.settings.urgency}
+                    {block?.settings?.urgency}
                   </p>
                 )}
                 
@@ -1991,7 +1991,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 O que nossas clientes dizem
               </h3>
               <div className="grid md:grid-cols-2 gap-6">
-                {(block.settings.testimonials || [
+                {(block?.settings?.testimonials || [
                   {
                     author: 'Cliente Satisfeita',
                     role: 'Usuária do Quiz',
@@ -2038,16 +2038,16 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 </div>
                 
                 <h4 className="text-2xl font-bold text-green-800 mb-4">
-                  {block.settings.title || 'Garantia de Satisfação'}
+                  {block?.settings?.title || 'Garantia de Satisfação'}
                 </h4>
                 
                 <p className="text-green-700 text-lg mb-6">
-                  {block.settings.description || 'Sua satisfação é garantida'}
+                  {block?.settings?.description || 'Sua satisfação é garantida'}
                 </p>
                 
-                {block.settings.features && (
+                {block?.settings?.features && (
                   <div className="space-y-3">
-                    {block.settings.features.map((feature: string, index: number) => (
+                    {block?.settings?.features.map((feature: string, index: number) => (
                       <div key={index} className="flex items-center justify-center">
                         <CheckCircle className="w-5 h-5 text-green-600 mr-3" />
                         <span className="text-green-800 font-medium">{feature}</span>
@@ -2070,12 +2070,12 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                   Pergunta Estratégica
                 </span>
                 <h3 className="text-xl md:text-2xl font-semibold text-[#432818] leading-relaxed">
-                  {block.settings.question || 'Pergunta estratégica sobre seus objetivos'}
+                  {block?.settings?.question || 'Pergunta estratégica sobre seus objetivos'}
                 </h3>
               </div>
               
               <div className="space-y-3">
-                {(block.settings.options || [
+                {(block?.settings?.options || [
                   { id: 'a', text: 'Sim, definitivamente', value: 'high' },
                   { id: 'b', text: 'Talvez, preciso saber mais', value: 'medium' },
                   { id: 'c', text: 'Não, não me interessa', value: 'low' }
@@ -2101,12 +2101,12 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           <div style={baseStyle} onClick={handleBlockClick} className="py-4">
             <div className="space-y-2 max-w-md mx-auto">
               <Label className="text-sm font-medium text-[#432818]">
-                {block.settings.label || 'Email'}
-                {block.settings.required && <span className="text-red-500 ml-1">*</span>}
+                {block?.settings?.label || 'Email'}
+                {block?.settings?.required && <span className="text-red-500 ml-1">*</span>}
               </Label>
               <Input
                 type="email"
-                placeholder={block.settings.placeholder || 'seu@email.com'}
+                placeholder={block?.settings?.placeholder || 'seu@email.com'}
                 className="w-full h-12 text-base border-2 border-[#B89B7A]/30 focus:border-[#B89B7A] rounded-xl bg-white focus:ring-2 focus:ring-[#B89B7A]/20"
               />
             </div>
@@ -2119,12 +2119,12 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           <div style={baseStyle} onClick={handleBlockClick} className="py-4">
             <div className="space-y-2 max-w-md mx-auto">
               <Label className="text-sm font-medium text-[#432818]">
-                {block.settings.label || 'Telefone'}
-                {block.settings.required && <span className="text-red-500 ml-1">*</span>}
+                {block?.settings?.label || 'Telefone'}
+                {block?.settings?.required && <span className="text-red-500 ml-1">*</span>}
               </Label>
               <Input
                 type="tel"
-                placeholder={block.settings.placeholder || '(11) 99999-9999'}
+                placeholder={block?.settings?.placeholder || '(11) 99999-9999'}
                 className="w-full h-12 text-base border-2 border-[#B89B7A]/30 focus:border-[#B89B7A] rounded-xl bg-white focus:ring-2 focus:ring-[#B89B7A]/20"
               />
             </div>
