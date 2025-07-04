@@ -1732,6 +1732,242 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           </div>
         )}
 
+        {/* PAINÉIS ESPECÍFICOS PARA NOVOS BLOCOS */}
+        {selectedBlock.type === 'loading-animation' && (
+          <div className="space-y-3">
+            <div>
+              <Label className="text-xs">Duração (ms)</Label>
+              <Input
+                type="number"
+                value={selectedBlock.settings.duration || 3000}
+                onChange={(e) => updateBlock(selectedBlock.id, {
+                  settings: { ...selectedBlock.settings, duration: parseInt(e.target.value) || 3000 }
+                })}
+                className="text-sm h-8 mt-1"
+              />
+            </div>
+            <div>
+              <Label className="text-xs">Tipo de Animação</Label>
+              <Select
+                value={selectedBlock.settings.animationType || 'spinner'}
+                onValueChange={(value) => updateBlock(selectedBlock.id, {
+                  settings: { ...selectedBlock.settings, animationType: value }
+                })}
+              >
+                <SelectTrigger className="h-8 text-xs">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="spinner">Spinner</SelectItem>
+                  <SelectItem value="dots">Pontos</SelectItem>
+                  <SelectItem value="pulse">Pulse</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        )}
+
+        {selectedBlock.type === 'transition-text' && (
+          <div>
+            <Label className="text-xs">Texto da Transição</Label>
+            <Textarea
+              value={selectedBlock.settings.content || ''}
+              onChange={(e) => updateBlock(selectedBlock.id, {
+                settings: { ...selectedBlock.settings, content: e.target.value }
+              })}
+              className="text-sm resize-none mt-1"
+              rows={2}
+              placeholder="Ex: Analisando suas respostas..."
+            />
+          </div>
+        )}
+
+        {selectedBlock.type === 'strategic-question' && (
+          <div>
+            <Label className="text-xs">Pergunta Estratégica</Label>
+            <Textarea
+              value={selectedBlock.settings.content || ''}
+              onChange={(e) => updateBlock(selectedBlock.id, {
+                settings: { ...selectedBlock.settings, content: e.target.value }
+              })}
+              className="text-sm resize-none mt-1"
+              rows={3}
+              placeholder="Ex: Você já considerou investir em consultoria de estilo?"
+            />
+          </div>
+        )}
+
+        {selectedBlock.type === 'style-result-display' && (
+          <div className="space-y-3">
+            <div>
+              <Label className="text-xs">Tipo de Estilo</Label>
+              <Select
+                value={selectedBlock.settings.styleType || 'primary'}
+                onValueChange={(value) => updateBlock(selectedBlock.id, {
+                  settings: { ...selectedBlock.settings, styleType: value }
+                })}
+              >
+                <SelectTrigger className="h-8 text-xs">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="natural">Natural</SelectItem>
+                  <SelectItem value="classico">Clássico</SelectItem>
+                  <SelectItem value="contemporaneo">Contemporâneo</SelectItem>
+                  <SelectItem value="elegante">Elegante</SelectItem>
+                  <SelectItem value="romantico">Romântico</SelectItem>
+                  <SelectItem value="sexy">Sexy</SelectItem>
+                  <SelectItem value="dramatico">Dramático</SelectItem>
+                  <SelectItem value="criativo">Criativo</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Switch
+                checked={selectedBlock.settings.showImage || false}
+                onCheckedChange={(checked) => updateBlock(selectedBlock.id, {
+                  settings: { ...selectedBlock.settings, showImage: checked }
+                })}
+              />
+              <Label className="text-xs">Mostrar imagem</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Switch
+                checked={selectedBlock.settings.showDescription || false}
+                onCheckedChange={(checked) => updateBlock(selectedBlock.id, {
+                  settings: { ...selectedBlock.settings, showDescription: checked }
+                })}
+              />
+              <Label className="text-xs">Mostrar descrição</Label>
+            </div>
+          </div>
+        )}
+
+        {selectedBlock.type === 'sales-offer' && (
+          <div className="space-y-3">
+            <div>
+              <Label className="text-xs">Nome do Produto</Label>
+              <Input
+                value={selectedBlock.settings.productName || ''}
+                onChange={(e) => updateBlock(selectedBlock.id, {
+                  settings: { ...selectedBlock.settings, productName: e.target.value }
+                })}
+                className="text-sm h-8 mt-1"
+                placeholder="Ex: Guias de Estilo Completo"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <Label className="text-xs">Preço Atual</Label>
+                <Input
+                  value={selectedBlock.settings.price || ''}
+                  onChange={(e) => updateBlock(selectedBlock.id, {
+                    settings: { ...selectedBlock.settings, price: e.target.value }
+                  })}
+                  className="text-sm h-8 mt-1"
+                  placeholder="R$ 97,00"
+                />
+              </div>
+              <div>
+                <Label className="text-xs">Preço Original</Label>
+                <Input
+                  value={selectedBlock.settings.originalPrice || ''}
+                  onChange={(e) => updateBlock(selectedBlock.id, {
+                    settings: { ...selectedBlock.settings, originalPrice: e.target.value }
+                  })}
+                  className="text-sm h-8 mt-1"
+                  placeholder="R$ 297,00"
+                />
+              </div>
+            </div>
+            <div>
+              <Label className="text-xs">Texto do CTA</Label>
+              <Input
+                value={selectedBlock.settings.ctaText || ''}
+                onChange={(e) => updateBlock(selectedBlock.id, {
+                  settings: { ...selectedBlock.settings, ctaText: e.target.value }
+                })}
+                className="text-sm h-8 mt-1"
+                placeholder="QUERO DESCOBRIR MEU ESTILO"
+              />
+            </div>
+            <div className="flex items-center space-x-2">
+              <Switch
+                checked={selectedBlock.settings.urgency || false}
+                onCheckedChange={(checked) => updateBlock(selectedBlock.id, {
+                  settings: { ...selectedBlock.settings, urgency: checked }
+                })}
+              />
+              <Label className="text-xs">Mostrar urgência</Label>
+            </div>
+          </div>
+        )}
+
+        {selectedBlock.type === 'testimonials-grid' && (
+          <div className="space-y-3">
+            <div>
+              <Label className="text-xs">Número de Colunas</Label>
+              <Select
+                value={String(selectedBlock.settings.columns || 2)}
+                onValueChange={(value) => updateBlock(selectedBlock.id, {
+                  settings: { ...selectedBlock.settings, columns: parseInt(value) }
+                })}
+              >
+                <SelectTrigger className="h-8 text-xs">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">1 Coluna</SelectItem>
+                  <SelectItem value="2">2 Colunas</SelectItem>
+                  <SelectItem value="3">3 Colunas</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label className="text-xs">Depoimentos</Label>
+              <p className="text-xs text-gray-500 mt-1">Configure os depoimentos abaixo:</p>
+              {/* Aqui pode adicionar interface para gerenciar depoimentos */}
+            </div>
+          </div>
+        )}
+
+        {selectedBlock.type === 'guarantee-section' && (
+          <div className="space-y-3">
+            <div>
+              <Label className="text-xs">Texto da Garantia</Label>
+              <Input
+                value={selectedBlock.settings.guaranteeText || ''}
+                onChange={(e) => updateBlock(selectedBlock.id, {
+                  settings: { ...selectedBlock.settings, guaranteeText: e.target.value }
+                })}
+                className="text-sm h-8 mt-1"
+                placeholder="Garantia de 7 dias"
+              />
+            </div>
+            <div>
+              <Label className="text-xs">Detalhes da Garantia</Label>
+              <Textarea
+                value={selectedBlock.settings.guaranteeDetails || ''}
+                onChange={(e) => updateBlock(selectedBlock.id, {
+                  settings: { ...selectedBlock.settings, guaranteeDetails: e.target.value }
+                })}
+                className="text-sm resize-none mt-1"
+                rows={2}
+                placeholder="Se não ficar satisfeita, devolvemos seu dinheiro"
+              />
+            </div>
+            <div className="flex items-center space-x-2">
+              <Switch
+                checked={selectedBlock.settings.showIcon || false}
+                onCheckedChange={(checked) => updateBlock(selectedBlock.id, {
+                  settings: { ...selectedBlock.settings, showIcon: checked }
+                })}
+              />
+              <Label className="text-xs">Mostrar ícone</Label>
+            </div>
+          </div>
+        )}
+
         {/* Estilos comuns */}
         <div className="border-t pt-4">
           <h4 className="text-xs font-medium mb-2">Estilo</h4>
