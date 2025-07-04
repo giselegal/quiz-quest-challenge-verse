@@ -935,6 +935,14 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
   // Hook para toast
   const { toast } = useToast();
 
+  // Garantir que o funnel tenha estrutura válida
+  React.useEffect(() => {
+    if (!funnel || !funnel.pages || funnel.pages.length === 0) {
+      console.log('Inicializando funnel com dados padrão...');
+      setFunnel(createInitialFunnel());
+    }
+  }, [funnel]);
+
   // Computed values
   const currentPage = useMemo(() => 
     funnel.pages.find(page => page.id === currentPageId), 
@@ -1324,7 +1332,23 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       const savedFunnel = localStorage.getItem('caktoquiz-funnel');
       if (savedFunnel) {
         const parsedFunnel = JSON.parse(savedFunnel);
-        setFunnel(parsedFunnel);
+        
+        // Garantir que as páginas tenham a estrutura correta
+        const normalizedFunnel = {
+          ...parsedFunnel,
+          pages: parsedFunnel.pages?.map((page: any) => ({
+            ...page,
+            settings: page.settings || {
+              backgroundColor: '#ffffff',
+              textColor: '#432818',
+              showProgress: true,
+              progressValue: 50
+            },
+            blocks: page.blocks || []
+          })) || []
+        };
+        
+        setFunnel(normalizedFunnel);
         console.log('Funil carregado do localStorage!');
       }
     } catch (error) {
@@ -1389,8 +1413,17 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
   // Carregar funil salvo na inicialização
   React.useEffect(() => {
-    loadSavedFunnel();
-  }, [loadSavedFunnel]);
+    // Verificar se o funil atual tem estrutura válida
+    if (!funnel?.pages || funnel.pages.length === 0) {
+      console.log('Inicializando funil padrão...');
+      return;
+    }
+    
+    // Só carregar funil salvo se não for o inicial
+    if (funnel.pages.length > 0 && funnel.pages[0]?.id === 'intro') {
+      loadSavedFunnel();
+    }
+  }, []); // Remover dependência para evitar loops
 
   // Atalhos de teclado
   React.useEffect(() => {
