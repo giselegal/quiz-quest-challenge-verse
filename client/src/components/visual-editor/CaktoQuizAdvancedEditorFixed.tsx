@@ -1606,27 +1606,44 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
               <h3 className="text-xl md:text-2xl font-semibold text-[#432818] text-center leading-relaxed">
                 {block?.settings?.question || 'Qual é a sua pergunta?'}
               </h3>
-              <div className="space-y-3">
+              <div className="grid gap-4 md:grid-cols-2">
                 {(block?.settings?.options || [
                   { id: 'a', text: 'Opção A', value: 'a' },
                   { id: 'b', text: 'Opção B', value: 'b' },
                   { id: 'c', text: 'Opção C', value: 'c' },
                   { id: 'd', text: 'Opção D', value: 'd' }
                 ]).map((option: any, index: number) => (
-                  <Button
+                  <div
                     key={option.id}
-                    variant="outline"
-                    className="w-full p-4 h-auto text-left justify-start border-2 border-[#B89B7A]/30 hover:border-[#B89B7A] hover:bg-[#f9f4ef] rounded-xl transition-all duration-200 text-base group"
+                    className="border-2 border-[#B89B7A]/30 hover:border-[#B89B7A] hover:bg-[#f9f4ef] rounded-xl transition-all duration-200 cursor-pointer group"
                   >
-                    <span className="font-semibold text-[#B89B7A] mr-3 min-w-[24px] group-hover:scale-110 transition-transform">
-                      {String.fromCharCode(65 + index)}.
-                    </span>
-                    <span className="text-[#432818] group-hover:text-[#432818]">
-                      {option.text}
-                    </span>
-                  </Button>
+                    {option.imageUrl && (
+                      <div className="aspect-[4/3] overflow-hidden rounded-t-xl">
+                        <img
+                          src={option.imageUrl}
+                          alt={option.text}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                    )}
+                    <div className="p-4">
+                      <div className="flex items-start gap-3">
+                        <span className="font-bold text-[#B89B7A] text-lg min-w-[24px] group-hover:scale-110 transition-transform">
+                          {String.fromCharCode(65 + index)}.
+                        </span>
+                        <span className="text-[#432818] group-hover:text-[#432818] text-sm leading-relaxed">
+                          {option.text}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 ))}
               </div>
+              {block?.settings?.multipleSelection && (
+                <div className="text-center text-sm text-[#6B5B73] italic">
+                  Selecione até {block?.settings?.maxSelections || 3} opções
+                </div>
+              )}
             </div>
           </div>
         );
@@ -1639,21 +1656,27 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
               <h3 className="text-xl md:text-2xl font-semibold text-[#432818] text-center leading-relaxed">
                 {block?.settings?.question || 'Pergunta estratégica sobre seus objetivos'}
               </h3>
-              <div className="space-y-3">
+              {block?.settings?.subtitle && (
+                <p className="text-center text-[#6B5B73] text-lg">
+                  {block?.settings?.subtitle}
+                </p>
+              )}
+              <div className="space-y-3 max-w-2xl mx-auto">
                 {(block?.settings?.options || [
                   { id: 'a', text: 'Sim, definitivamente', value: 'high' },
                   { id: 'b', text: 'Talvez, preciso saber mais', value: 'medium' },
                   { id: 'c', text: 'Não, não me interessa', value: 'low' }
-                ]).map((option: any) => (
-                  <Button
+                ]).map((option: any, index: number) => (
+                  <div
                     key={option.id}
-                    variant="outline"
-                    className="w-full p-4 h-auto text-center border-2 border-[#6B5B73]/30 hover:border-[#6B5B73] hover:bg-[#6B5B73]/10 rounded-xl transition-all duration-200 text-base group"
+                    className="border-2 border-[#6B5B73]/30 hover:border-[#6B5B73] hover:bg-[#6B5B73]/10 rounded-xl transition-all duration-200 cursor-pointer group p-4"
                   >
-                    <span className="text-[#432818] group-hover:text-[#6B5B73] font-medium">
-                      {option.text}
-                    </span>
-                  </Button>
+                    <div className="flex items-center justify-center text-center">
+                      <span className="text-[#432818] group-hover:text-[#6B5B73] font-medium">
+                        {option.text}
+                      </span>
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
@@ -1946,11 +1969,11 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 <h2 className="text-3xl font-bold text-[#432818] mb-2">
                   {block?.settings?.styleName || 'Seu Estilo'}
                 </h2>
-                {block?.settings?.percentMatch && (
-                  <div className="text-lg text-[#B89B7A] font-semibold">
-                    {block?.settings?.percentMatch}% de compatibilidade
+                <div className="flex justify-center items-center gap-4 mb-4">
+                  <div className="text-2xl font-semibold text-[#B89B7A]">
+                    {block?.settings?.percentMatch || 92}% de compatibilidade
                   </div>
-                )}
+                </div>
               </div>
               
               {block?.settings?.styleImage && (
@@ -1958,13 +1981,13 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                   <img
                     src={block?.settings?.styleImage}
                     alt={block?.settings?.styleName || 'Estilo'}
-                    className="w-full max-w-md mx-auto rounded-2xl shadow-lg"
+                    className="w-full max-w-md mx-auto rounded-xl shadow-lg"
                   />
                 </div>
               )}
               
-              <p className="text-lg text-[#432818] leading-relaxed">
-                {block?.settings?.styleDescription || 'Descrição do seu estilo personalizado.'}
+              <p className="text-lg text-[#6B5B73] leading-relaxed">
+                {block?.settings?.styleDescription || 'Descrição do seu estilo personalizado baseado nas suas respostas.'}
               </p>
             </div>
           </div>
@@ -2024,11 +2047,18 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
               <div className="grid md:grid-cols-2 gap-6">
                 {(block?.settings?.testimonials || [
                   {
-                    author: 'Cliente Satisfeita',
-                    role: 'Usuária do Quiz',
-                    text: 'Adorei descobrir meu estilo!',
+                    author: 'Maria Silva',
+                    role: 'Empresária',
+                    text: 'O quiz mudou completamente minha forma de me vestir!',
                     rating: 5,
-                    avatar: 'https://via.placeholder.com/60x60?text=👤'
+                    avatar: 'https://via.placeholder.com/60x60?text=M'
+                  },
+                  {
+                    author: 'Ana Costa',
+                    role: 'Professora',
+                    text: 'Descobri meu estilo verdadeiro, amei o resultado!',
+                    rating: 5,
+                    avatar: 'https://via.placeholder.com/60x60?text=A'
                   }
                 ]).map((testimonial: any, index: number) => (
                   <div key={index} className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
@@ -2039,8 +2069,8 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                         className="w-12 h-12 rounded-full mr-4"
                       />
                       <div>
-                        <p className="font-semibold text-[#432818]">{testimonial.author}</p>
-                        <p className="text-sm text-gray-600">{testimonial.role}</p>
+                        <h4 className="font-semibold text-[#432818]">{testimonial.author}</h4>
+                        <p className="text-sm text-[#6B5B73]">{testimonial.role}</p>
                       </div>
                     </div>
                     <div className="flex mb-3">
