@@ -549,6 +549,8 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'funnel' | 'blocks' | 'settings'>('funnel');
   const [deviceView, setDeviceView] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
   const [isAutoSaving, setIsAutoSaving] = useState<boolean>(false);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
 
   // Hook para toast
   const { toast } = useToast();
@@ -700,6 +702,115 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
     updateBlockSetting('questions', questions);
   }, [selectedBlockId, selectedBlock, updateBlockSetting]);
+
+  // Funções de Drag & Drop modernas
+  const handleDragStart = useCallback((e: React.DragEvent, blockId: string, sourceIndex: number) => {
+    setIsDragging(true);
+    e.dataTransfer.setData('application/json', JSON.stringify({
+      type: 'reorder',
+      blockId,
+      sourceIndex
+    }));
+    e.dataTransfer.effectAllowed = 'move';
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent, targetIndex: number) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOverIndex(targetIndex);
+  }, []);
+
+  const handleDragLeave = useCallback(() => {
+    setDragOverIndex(null);
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent, targetIndex: number) => {
+    e.preventDefault();
+    setIsDragging(false);
+    setDragOverIndex(null);
+
+    try {
+      const data = JSON.parse(e.dataTransfer.getData('application/json'));
+      
+      if (data.type === 'reorder' && currentPage) {
+        const blocks = [...currentPage.blocks];
+        const sourceIndex = data.sourceIndex;
+        
+        if (sourceIndex !== targetIndex) {
+          // Remover o bloco da posição original
+          const [movedBlock] = blocks.splice(sourceIndex, 1);
+          
+          // Inserir na nova posição
+          blocks.splice(targetIndex, 0, movedBlock);
+          
+          // Atualizar orders
+          blocks.forEach((block, index) => {
+            block.order = index + 1;
+          });
+          
+          setFunnel(prev => ({
+            ...prev,
+            pages: prev.pages.map(page => 
+              page.id === currentPageId 
+                ? { ...page, blocks }
+                : page
+            )
+          }));
+        }
+      }
+    } catch (error) {
+      // Se não conseguir fazer parse, pode ser um novo bloco da biblioteca
+      const blockType = e.dataTransfer.getData('text/plain');
+      if (blockType && currentPage) {
+        const newBlock: FunnelBlock = {
+          id: `${blockType}-${Date.now()}`,
+          type: blockType,
+          order: targetIndex + 1,
+          settings: {}
+        };
+
+        const blocks = [...currentPage.blocks];
+        blocks.splice(targetIndex, 0, newBlock);
+        
+        // Reordenar todos os blocos
+        blocks.forEach((block, index) => {
+          block.order = index + 1;
+        });
+
+        setFunnel(prev => ({
+          ...prev,
+          pages: prev.pages.map(page => 
+            page.id === currentPageId 
+              ? { ...page, blocks }
+              : page
+          )
+        }));
+
+        setSelectedBlockId(newBlock.id);
+      }
+    }
+  }, [currentPage, currentPageId]);
+
+  const handleDragEnd = useCallback(() => {
+    setIsDragging(false);
+    setDragOverIndex(null);
+  }, []);
+
+  const handleCanvasDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    setDragOverIndex(null);
+
+    const blockType = e.dataTransfer.getData('text/plain');
+    if (blockType && currentPage) {
+      addBlock(blockType);
+    }
+  }, [currentPage, addBlock]);
+
+  const handleCanvasDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+  }, []);
 
   // Função para salvar o funil
   const saveFunnel = useCallback(() => {
@@ -1347,14 +1458,28 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                         {categoryBlocks.map((block) => (
                           <div
                             key={block.type}
-                            className="p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors"
+                            className="group p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors hover:shadow-sm"
                             onClick={() => addBlock(block.type)}
+                            draggable
+                            onDragStart={(e) => {
+                              e.dataTransfer.setData('text/plain', block.type);
+                              e.dataTransfer.effectAllowed = 'copy';
+                              setIsDragging(true);
+                            }}
+                            onDragEnd={() => setIsDragging(false)}
                           >
                             <div className="flex items-center space-x-3">
                               <div className="text-gray-600">{block.icon}</div>
-                              <div>
+                              <div className="flex-1">
                                 <p className="text-sm font-medium text-gray-900">{block.name}</p>
                                 <p className="text-xs text-gray-500">{block.description}</p>
+                              </div>
+                              <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div className="w-3 h-4 flex flex-col justify-center items-center">
+                                  <div className="w-0.5 h-0.5 bg-gray-400 rounded-full mb-0.5"></div>
+                                  <div className="w-0.5 h-0.5 bg-gray-400 rounded-full mb-0.5"></div>
+                                  <div className="w-0.5 h-0.5 bg-gray-400 rounded-full"></div>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -1541,30 +1666,80 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                   <div className="main-content w-full relative mx-auto h-full">
                     <div className="flex flex-row flex-wrap pb-10">
                       {currentPage.blocks.length > 0 ? (
-                        currentPage.blocks
-                          .sort((a, b) => a.order - b.order)
-                          .map(block => (
-                            <div 
-                              key={block.id}
-                              className="group/canvas-item max-w-full canvas-item min-h-[1.25rem] relative self-auto mr-auto mb-4 w-full"
-                            >
+                        <>
+                          {currentPage.blocks
+                            .sort((a, b) => a.order - b.order)
+                            .map((block, index) => (
                               <div 
-                                className={`min-h-[1.25rem] min-w-full relative self-auto box-border ${
-                                  selectedBlockId === block.id 
-                                    ? 'border-2 border-blue-500 border-dashed' 
-                                    : 'group-hover/canvas-item:border-2 hover:border-2 border-dashed border-blue-500'
-                                } rounded-md`}
-                                style={{ opacity: 1 }}
+                                key={block.id}
+                                className="group/canvas-item max-w-full canvas-item min-h-[1.25rem] relative self-auto mr-auto mb-4 w-full"
+                                draggable
+                                onDragStart={(e) => handleDragStart(e, block.id, index)}
+                                onDragOver={(e) => handleDragOver(e, index)}
+                                onDragLeave={handleDragLeave}
+                                onDrop={(e) => handleDrop(e, index)}
+                                onDragEnd={handleDragEnd}
                               >
-                                {renderBlock(block)}
+                                {/* Indicador visual de drop zone */}
+                                {dragOverIndex === index && isDragging && (
+                                  <div className="absolute -top-1 left-0 right-0 h-0.5 bg-blue-500 rounded-full z-10" />
+                                )}
+                                
+                                <div 
+                                  className={`min-h-[1.25rem] min-w-full relative self-auto box-border ${
+                                    selectedBlockId === block.id 
+                                      ? 'border-2 border-blue-500 border-dashed' 
+                                      : 'group-hover/canvas-item:border-2 hover:border-2 border-dashed border-blue-500'
+                                  } rounded-md transition-all duration-200 ${
+                                    isDragging && dragOverIndex === index 
+                                      ? 'bg-blue-50 border-blue-300' 
+                                      : ''
+                                  }`}
+                                  style={{ 
+                                    opacity: isDragging && selectedBlockId === block.id ? 0.5 : 1 
+                                  }}
+                                >
+                                  {/* Controles de drag handle - visível no hover */}
+                                  <div className="absolute -left-6 top-1/2 transform -translate-y-1/2 opacity-0 group-hover/canvas-item:opacity-100 transition-opacity">
+                                    <div className="w-4 h-8 bg-gray-200 rounded border border-gray-300 flex flex-col justify-center items-center cursor-grab hover:bg-gray-300 active:cursor-grabbing">
+                                      <div className="w-0.5 h-0.5 bg-gray-500 rounded-full mb-0.5"></div>
+                                      <div className="w-0.5 h-0.5 bg-gray-500 rounded-full mb-0.5"></div>
+                                      <div className="w-0.5 h-0.5 bg-gray-500 rounded-full"></div>
+                                    </div>
+                                  </div>
+                                  
+                                  {renderBlock(block)}
+                                </div>
                               </div>
-                            </div>
-                          ))
+                            ))}
+                          
+                          {/* Drop zone no final para adicionar novos blocos */}
+                          <div 
+                            className={`w-full h-16 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-gray-500 text-sm transition-all ${
+                              isDragging ? 'border-blue-400 bg-blue-50 text-blue-600' : 'hover:border-gray-400 hover:bg-gray-50'
+                            }`}
+                            onDragOver={handleCanvasDragOver}
+                            onDrop={handleCanvasDrop}
+                          >
+                            <Plus className="h-4 w-4 mr-2" />
+                            {isDragging ? 'Solte aqui para adicionar' : 'Arraste um bloco aqui ou clique na biblioteca'}
+                          </div>
+                        </>
                       ) : (
-                        <div className="text-center py-12 text-gray-500 w-full">
+                        <div 
+                          className={`text-center py-12 text-gray-500 w-full border-2 border-dashed border-gray-300 rounded-lg transition-all ${
+                            isDragging ? 'border-blue-400 bg-blue-50 text-blue-600' : 'hover:border-gray-400'
+                          }`}
+                          onDragOver={handleCanvasDragOver}
+                          onDrop={handleCanvasDrop}
+                        >
                           <Layout className="h-8 w-8 mx-auto mb-4 opacity-50" />
-                          <p className="font-medium mb-2">Esta página está vazia</p>
-                          <p className="text-sm">Adicione blocos da biblioteca para começar</p>
+                          <p className="font-medium mb-2">
+                            {isDragging ? 'Solte aqui para adicionar o primeiro bloco' : 'Esta página está vazia'}
+                          </p>
+                          <p className="text-sm">
+                            {isDragging ? '' : 'Adicione blocos da biblioteca para começar'}
+                          </p>
                         </div>
                       )}
                     </div>
