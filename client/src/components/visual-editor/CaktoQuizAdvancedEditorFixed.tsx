@@ -16,6 +16,19 @@ import { useToast } from '@/hooks/use-toast';
 import { Toaster } from '@/components/ui/toaster';
 import { Progress } from '@/components/ui/progress';
 
+// Componentes reais do funil CaktoQuiz
+import QuizIntro from '@/components/QuizIntro';
+import { QuizQuestion } from '@/components/QuizQuestion';
+import { QuizOption } from '@/components/quiz/QuizOption';
+import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
+import { styleConfig } from '@/config/styleConfig';
+import { highlightStrategicWords } from '@/utils/textHighlight';
+import { StaggeredOptionAnimations } from '@/components/effects/StaggeredOptionAnimations';
+import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
+import MentorSection from '@/components/result/MentorSection';
+import GuaranteeSection from '@/components/result/GuaranteeSection';
+import Testimonials from '@/components/quiz-result/sales/Testimonials';
+
 // Ícones
 import {
   Save, Eye, Monitor, Tablet, Smartphone, Settings, Plus, Trash2, Copy,
@@ -614,53 +627,108 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     switch (block.type) {
       case 'heading':
         content = (
-          <h1 
-            style={baseStyle} 
-            onClick={handleBlockClick}
-            className="font-playfair"
-          >
-            {block.settings.content || 'Título'}
-          </h1>
+          <div style={baseStyle} onClick={handleBlockClick}>
+            <h1 
+              className="font-playfair text-center text-[#432818] font-semibold"
+              style={{
+                fontFamily: '"Playfair Display", serif',
+                fontSize: block.settings.style?.fontSize || '1.5rem',
+                fontWeight: block.settings.style?.fontWeight || '600',
+                textAlign: block.settings.style?.textAlign || 'center',
+                color: block.settings.style?.color || '#432818',
+                margin: block.settings.style?.margin || '0 0 1rem 0'
+              }}
+            >
+              {block.settings.content ? (
+                <span dangerouslySetInnerHTML={{ __html: highlightStrategicWords(block.settings.content) }} />
+              ) : (
+                'Título'
+              )}
+            </h1>
+          </div>
         );
         break;
         
       case 'text':
         content = (
-          <p style={baseStyle} onClick={handleBlockClick}>
-            {block.settings.content || 'Texto'}
-          </p>
+          <div style={baseStyle} onClick={handleBlockClick}>
+            <p 
+              className="text-[#432818] leading-relaxed"
+              style={{
+                fontSize: block.settings.style?.fontSize || '1rem',
+                textAlign: block.settings.style?.textAlign || 'left',
+                color: block.settings.style?.color || '#432818',
+                lineHeight: '1.6'
+              }}
+            >
+              {block.settings.content || 'Texto'}
+            </p>
+          </div>
         );
         break;
         
       case 'image':
+        const isLogoImage = block.settings.src?.includes('LOGO_DA_MARCA_GISELE');
         content = (
           <div style={{ ...baseStyle, textAlign: block.settings.style?.textAlign || 'center' }} onClick={handleBlockClick}>
-            <img 
-              src={block.settings.src || 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'} 
-              alt={block.settings.alt || 'Imagem'}
-              style={{ maxWidth: '100%', height: 'auto', borderRadius: '4px' }}
-            />
+            {isLogoImage ? (
+              // Renderização específica para logo com barra dourada
+              <div className="flex flex-col items-center space-y-2">
+                <picture>
+                  <source srcSet="https://res.cloudinary.com/dqljyf76t/image/upload/f_webp,q_70,w_120,h_50,c_fit/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp" type="image/webp" />
+                  <img
+                    src="https://res.cloudinary.com/dqljyf76t/image/upload/f_png,q_70,w_120,h_50,c_fit/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.png"
+                    alt="Logo Gisele Galvão"
+                    style={{ height: 'auto', maxWidth: '120px' }}
+                    width={120}
+                    height={50}
+                  />
+                </picture>
+                <div
+                  className="h-[3px] bg-[#B89B7A] rounded-full"
+                  style={{
+                    width: '300px',
+                    maxWidth: '90%',
+                    margin: '0 auto',
+                  }}
+                />
+              </div>
+            ) : (
+              <img 
+                src={block.settings.src || 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.png'} 
+                alt={block.settings.alt || 'Imagem'}
+                style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
+              />
+            )}
           </div>
         );
         break;
         
       case 'button':
+        const isCtaButton = block.settings.buttonText?.includes('Descobrir') || block.settings.buttonText?.includes('Quero');
         content = (
           <div style={{ ...baseStyle, textAlign: block.settings.style?.textAlign || 'center' }} onClick={handleBlockClick}>
             <button 
-              className="transition-all duration-300 hover:scale-[1.01] shadow-md"
+              className={`transition-all duration-300 hover:scale-[1.01] shadow-md font-semibold ${
+                isCtaButton 
+                  ? 'bg-[#B89B7A] hover:bg-[#A1835D] text-white rounded-full px-8 py-3' 
+                  : 'bg-[#B89B7A] hover:bg-[#A1835D] text-white rounded-md px-6 py-2'
+              }`}
               style={{
                 backgroundColor: block.settings.style?.backgroundColor || '#B89B7A',
                 color: block.settings.style?.color || 'white',
-                padding: block.settings.style?.padding || '0.75rem 1.5rem',
-                borderRadius: block.settings.style?.borderRadius || '0.375rem',
+                padding: block.settings.style?.padding || (isCtaButton ? '0.75rem 2rem' : '0.5rem 1.5rem'),
+                borderRadius: block.settings.style?.borderRadius || (isCtaButton ? '9999px' : '0.375rem'),
                 border: 'none',
                 cursor: 'pointer',
-                fontSize: '1rem',
-                fontWeight: '500'
+                fontSize: isCtaButton ? '1.125rem' : '1rem',
+                fontWeight: '600'
               }}
             >
-              {block.settings.buttonText || 'Botão'}
+              <span className="flex items-center justify-center gap-2">
+                {block.settings.buttonText || 'Botão'}
+                {isCtaButton && <ArrowRight className="w-4 h-4" />}
+              </span>
             </button>
           </div>
         );
@@ -669,17 +737,21 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       case 'input':
         content = (
           <div style={baseStyle} onClick={handleBlockClick}>
-            <label className="block text-xs font-semibold text-[#432818] mb-1.5">
-              NOME {block.settings.required && <span className="text-red-500">*</span>}
-            </label>
-            <input 
-              type="text"
-              placeholder={block.settings.placeholder || 'Digite aqui...'}
-              className="w-full p-2.5 bg-[#FEFEFE] rounded-md border-2 border-[#B89B7A] focus:outline-none focus:ring-2 focus:ring-[#A1835D]"
-              style={{
-                fontSize: '1rem'
-              }}
-            />
+            <div className="w-full max-w-xs mx-auto">
+              <label className="block text-xs font-semibold text-[#432818] mb-1.5 uppercase tracking-wide">
+                {block.settings.placeholder?.includes('nome') ? 'NOME' : 'CAMPO'} 
+                {block.settings.required && <span className="text-red-500 ml-1">*</span>}
+              </label>
+              <Input
+                type="text"
+                placeholder={block.settings.placeholder || 'Digite seu nome'}
+                className="w-full p-2.5 bg-[#FEFEFE] rounded-md border-2 border-[#B89B7A] focus:outline-none focus:ring-2 focus:ring-[#A1835D] focus:border-[#A1835D] transition-colors"
+                style={{
+                  fontSize: '1rem'
+                }}
+                disabled
+              />
+            </div>
           </div>
         );
         break;
@@ -720,21 +792,55 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         break;
         
       case 'options':
+        const hasImageOptions = block.settings.options?.some(opt => opt.image);
         content = (
           <div style={baseStyle} onClick={handleBlockClick}>
-            <div className="grid gap-3">
-              {block.settings.options?.map((option, index) => (
-                <div 
-                  key={option.id}
-                  className="p-4 border-2 border-[#e5e7eb] rounded-lg cursor-pointer transition-all hover:border-[#B89B7A] hover:shadow-md"
-                  style={{
-                    backgroundColor: '#ffffff'
-                  }}
-                >
-                  {option.text}
-                </div>
-              )) || (
-                <div className="p-4 border-2 dashed border-[#d1d5db] rounded-lg text-gray-500">
+            <div className={`grid gap-3 ${hasImageOptions ? 'grid-cols-2' : 'grid-cols-1'}`}>
+              {block.settings.options?.map((option, index) => {
+                const optionProps = {
+                  id: option.id,
+                  text: option.text,
+                  image: option.image,
+                  value: option.value
+                };
+                
+                return (
+                  <div
+                    key={option.id}
+                    className={`relative cursor-pointer transition-all duration-200 ${
+                      hasImageOptions 
+                        ? 'aspect-square rounded-lg overflow-hidden border-2 border-transparent hover:border-[#B89B7A]' 
+                        : 'p-4 border-2 border-[#e5e7eb] rounded-lg hover:border-[#B89B7A] hover:shadow-md'
+                    }`}
+                    style={{
+                      backgroundColor: hasImageOptions ? 'transparent' : '#ffffff'
+                    }}
+                  >
+                    {hasImageOptions && option.image ? (
+                      <div className="w-full h-full relative">
+                        <img 
+                          src={option.image} 
+                          alt={option.text}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                        <div className="absolute bottom-2 left-2 right-2">
+                          <p className="text-white text-sm font-medium text-center">
+                            {option.text}
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center h-full">
+                        <span className="text-[#432818] font-medium text-center">
+                          {option.text}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                );
+              }) || (
+                <div className="p-4 border-2 dashed border-[#d1d5db] rounded-lg text-gray-500 text-center">
                   Adicione opções...
                 </div>
               )}
