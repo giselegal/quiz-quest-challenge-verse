@@ -87,13 +87,15 @@ interface FunnelPage {
   id: string;
   name: string;
   title: string;
-  type: 'intro' | 'question' | 'transition' | 'strategic' | 'result' | 'offer';
+  type: 'intro' | 'question' | 'main-transition' | 'strategic' | 'final-transition' | 'result' | 'result-variant-b' | 'offer';
   blocks: FunnelBlock[];
   settings: {
     backgroundColor?: string;
     textColor?: string;
     showProgress?: boolean;
     progressValue?: number;
+    transitionDuration?: number; // Para transições
+    abTestVariant?: 'A' | 'B'; // Para A/B testing
   };
 }
 
@@ -219,36 +221,38 @@ const createInitialFunnel = (): Funnel => ({
         }
       ]
     })),
-    // 12. Página de Transição
+    // 12. Página de Transição Principal
     {
-      id: 'transition',
-      name: 'Transição',
-      title: 'Processando Respostas',
-      type: 'transition',
+      id: 'main-transition',
+      name: 'Transição Principal',
+      title: 'Analisando Respostas',
+      type: 'main-transition',
       settings: {
         backgroundColor: '#f9f4ef',
         textColor: '#432818',
         showProgress: true,
-        progressValue: 75
+        progressValue: 75,
+        transitionDuration: 4000
       },
       blocks: [
         {
-          id: 'transition-header',
+          id: 'main-transition-header',
           type: 'header',
           order: 1,
           settings: {
-            title: 'Estamos Analisando Seu Perfil...',
-            subtitle: 'Preparando suas recomendações personalizadas',
+            title: 'Analisando suas respostas...',
+            subtitle: 'Criando seu perfil personalizado',
             alignment: 'center'
           }
         },
         {
-          id: 'transition-loader',
-          type: 'loader',
+          id: 'main-transition-loader',
+          type: 'loading-animation',
           order: 2,
           settings: {
             type: 'spinning',
-            message: 'Analisando suas preferências...'
+            message: 'Processando suas preferências...',
+            duration: 4000
           }
         }
       ]
@@ -282,7 +286,44 @@ const createInitialFunnel = (): Funnel => ({
         }
       ]
     })),
-    // 20. Página de Resultado
+    // 20. Página de Transição Final
+    {
+      id: 'final-transition',
+      name: 'Transição Final',
+      title: 'Finalizando Análise',
+      type: 'final-transition',
+      settings: {
+        backgroundColor: '#432818',
+        textColor: '#ffffff',
+        showProgress: true,
+        progressValue: 95,
+        transitionDuration: 3000
+      },
+      blocks: [
+        {
+          id: 'final-transition-header',
+          type: 'header',
+          order: 1,
+          settings: {
+            title: 'Obrigada por compartilhar!',
+            subtitle: 'Preparando seu resultado personalizado...',
+            alignment: 'center',
+            color: 'white'
+          }
+        },
+        {
+          id: 'final-transition-loader',
+          type: 'loading-animation',
+          order: 2,
+          settings: {
+            type: 'elegant',
+            message: 'Criando seu guia de estilo...',
+            duration: 3000
+          }
+        }
+      ]
+    },
+    // 21. Página de Resultado
     {
       id: 'result',
       name: 'Resultado',
@@ -292,7 +333,8 @@ const createInitialFunnel = (): Funnel => ({
         backgroundColor: '#ffffff',
         textColor: '#432818',
         showProgress: true,
-        progressValue: 100
+        progressValue: 100,
+        abTestVariant: 'A'
       },
       blocks: [
         {
@@ -301,28 +343,69 @@ const createInitialFunnel = (): Funnel => ({
           order: 1,
           settings: {
             title: 'Parabéns! Descobrimos Seu Perfil',
-            subtitle: 'Você é do tipo: Elegante Clássica',
+            subtitle: 'Resultado baseado em suas respostas',
             alignment: 'center'
           }
         },
         {
-          id: 'result-profile-image',
-          type: 'image',
+          id: 'result-style-display',
+          type: 'style-result-display',
           order: 2,
           settings: {
-            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/f_webp,q_70,w_600,h_400,c_fit/v1744911572/style_classic.webp',
-            alt: 'Estilo Elegante Clássica',
-            alignment: 'center'
+            styleName: 'Elegante Clássica',
+            styleImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/f_webp,q_70,w_600,h_400,c_fit/v1744911572/style_classic.webp',
+            styleDescription: 'Seu estilo é sofisticado e atemporal. Você valoriza peças de qualidade, cortes bem estruturados e uma paleta de cores mais neutra e elegante.',
+            percentMatch: 92
           }
         },
         {
-          id: 'result-description',
-          type: 'text',
+          id: 'result-sales-offer',
+          type: 'sales-offer',
           order: 3,
           settings: {
-            content: 'Seu estilo é sofisticado e atemporal. Você valoriza peças de qualidade, cortes bem estruturados e uma paleta de cores mais neutra e elegante.',
-            fontSize: 'medium',
-            alignment: 'center'
+            title: 'Transforme Seu Guarda-Roupa Hoje!',
+            subtitle: 'Guias Personalizados de Estilo',
+            originalPrice: 'R$ 297,00',
+            currentPrice: 'R$ 97,00',
+            discount: '67% OFF',
+            urgency: 'Oferta válida apenas hoje!'
+          }
+        },
+        {
+          id: 'result-testimonials',
+          type: 'testimonials-grid',
+          order: 4,
+          settings: {
+            testimonials: [
+              {
+                author: 'Maria Silva',
+                role: 'Empresária',
+                text: 'O quiz mudou completamente minha forma de me vestir!',
+                rating: 5,
+                avatar: 'https://via.placeholder.com/60x60?text=M'
+              },
+              {
+                author: 'Ana Costa',
+                role: 'Professora',
+                text: 'Descobri meu estilo verdadeiro, amei o resultado!',
+                rating: 5,
+                avatar: 'https://via.placeholder.com/60x60?text=A'
+              }
+            ]
+          }
+        },
+        {
+          id: 'result-guarantee',
+          type: 'guarantee-section',
+          order: 5,
+          settings: {
+            title: 'Garantia de 30 dias',
+            description: 'Se não ficar satisfeita, devolvemos 100% do seu dinheiro.',
+            features: [
+              'Garantia incondicional',
+              'Suporte 24/7',
+              'Acesso vitalício'
+            ]
           }
         }
       ]
@@ -440,6 +523,65 @@ const blockLibrary = [
     icon: <Layout className="w-4 h-4" />,
     category: 'Formulário'
   },
+  // Transição
+  { 
+    id: 'loading-animation',
+    type: 'loading-animation', 
+    name: 'Loading Animado', 
+    description: 'Animação de carregamento customizada',
+    icon: <RotateCcw className="w-4 h-4" />,
+    category: 'Transição'
+  },
+  { 
+    id: 'transition-text',
+    type: 'transition-text', 
+    name: 'Texto de Transição', 
+    description: 'Texto personalizado durante loading',
+    icon: <Type className="w-4 h-4" />,
+    category: 'Transição'
+  },
+  // Resultado Específico
+  { 
+    id: 'style-result-display',
+    type: 'style-result-display', 
+    name: 'Exibição de Estilo', 
+    description: 'Mostra estilo calculado com imagem',
+    icon: <Sparkles className="w-4 h-4" />,
+    category: 'Resultado'
+  },
+  { 
+    id: 'sales-offer',
+    type: 'sales-offer', 
+    name: 'Oferta de Venda', 
+    description: 'Seção de oferta com preço e CTA',
+    icon: <CreditCard className="w-4 h-4" />,
+    category: 'Vendas'
+  },
+  { 
+    id: 'testimonials-grid',
+    type: 'testimonials-grid', 
+    name: 'Grade de Depoimentos', 
+    description: 'Grid de depoimentos com fotos',
+    icon: <Users className="w-4 h-4" />,
+    category: 'Social'
+  },
+  { 
+    id: 'guarantee-section',
+    type: 'guarantee-section', 
+    name: 'Seção de Garantia', 
+    description: 'Garantia com ícones e detalhes',
+    icon: <CheckCircle className="w-4 h-4" />,
+    category: 'Vendas'
+  },
+  // Quiz Estratégico
+  { 
+    id: 'strategic-question',
+    type: 'strategic-question', 
+    name: 'Questão Estratégica', 
+    description: 'Pergunta de qualificação de lead',
+    icon: <Target className="w-4 h-4" />,
+    category: 'Quiz Avançado'
+  },
   // UI
   { 
     id: 'spacer',
@@ -452,10 +594,10 @@ const blockLibrary = [
   { 
     id: 'loader',
     type: 'loader', 
-    name: 'Loading', 
-    description: 'Indicador de carregamento',
+    name: 'Loading Simples', 
+    description: 'Indicador de carregamento básico',
     icon: <RotateCcw className="w-4 h-4" />,
-    category: 'Transição'
+    category: 'UI'
   },
   // Vendas
   { 
@@ -1346,6 +1488,221 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                   {block.settings.caption}
                 </p>
               )}
+            </div>
+          </div>
+        );
+        break;
+
+      // Novos blocos específicos
+      case 'loading-animation':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="text-center py-12">
+            <div className="inline-flex flex-col items-center space-y-4">
+              {block.settings.type === 'elegant' ? (
+                <div className="relative">
+                  <div className="w-16 h-16 border-4 border-[#B89B7A] border-t-transparent rounded-full animate-spin"></div>
+                  <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-[#6B5B73] rounded-full animate-ping"></div>
+                </div>
+              ) : (
+                <RotateCcw className="h-10 w-10 animate-spin text-[#B89B7A]" />
+              )}
+              <span className="text-[#432818] text-lg font-medium">
+                {block.settings.message || 'Carregando...'}
+              </span>
+              {block.settings.duration && (
+                <div className="text-sm text-gray-500">
+                  Duração: {block.settings.duration / 1000}s
+                </div>
+              )}
+            </div>
+          </div>
+        );
+        break;
+
+      case 'style-result-display':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+            <div className="max-w-2xl mx-auto text-center">
+              <div className="mb-6">
+                <h2 className="text-3xl font-bold text-[#432818] mb-2">
+                  {block.settings.styleName || 'Seu Estilo'}
+                </h2>
+                {block.settings.percentMatch && (
+                  <div className="text-lg text-[#B89B7A] font-semibold">
+                    {block.settings.percentMatch}% de compatibilidade
+                  </div>
+                )}
+              </div>
+              
+              {block.settings.styleImage && (
+                <div className="mb-6">
+                  <img
+                    src={block.settings.styleImage}
+                    alt={block.settings.styleName || 'Estilo'}
+                    className="w-full max-w-md mx-auto rounded-2xl shadow-lg"
+                  />
+                </div>
+              )}
+              
+              <p className="text-lg text-[#432818] leading-relaxed">
+                {block.settings.styleDescription || 'Descrição do seu estilo personalizado.'}
+              </p>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'sales-offer':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+            <div className="max-w-3xl mx-auto">
+              <div className="bg-gradient-to-br from-[#B89B7A] to-[#A1835D] rounded-3xl p-8 text-white text-center shadow-2xl">
+                <h3 className="text-3xl font-bold mb-4">
+                  {block.settings.title || 'Oferta Especial'}
+                </h3>
+                <p className="text-xl mb-6 opacity-90">
+                  {block.settings.subtitle || 'Não perca esta oportunidade'}
+                </p>
+                
+                <div className="flex justify-center items-center gap-4 mb-6">
+                  {block.settings.originalPrice && (
+                    <span className="text-xl line-through opacity-75">
+                      {block.settings.originalPrice}
+                    </span>
+                  )}
+                  <span className="text-5xl font-bold">
+                    {block.settings.currentPrice || 'R$ 97,00'}
+                  </span>
+                  {block.settings.discount && (
+                    <span className="bg-red-500 text-white px-4 py-2 rounded-full text-sm font-bold animate-pulse">
+                      {block.settings.discount}
+                    </span>
+                  )}
+                </div>
+                
+                {block.settings.urgency && (
+                  <p className="text-lg mb-6 opacity-90 font-semibold">
+                    {block.settings.urgency}
+                  </p>
+                )}
+                
+                <Button className="bg-white text-[#B89B7A] hover:bg-gray-100 text-xl px-12 py-4 rounded-full font-bold transform hover:scale-105 transition-all">
+                  Quero Transformar Meu Estilo!
+                </Button>
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'testimonials-grid':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+            <div className="max-w-4xl mx-auto">
+              <h3 className="text-2xl font-bold text-[#432818] mb-8 text-center">
+                O que nossas clientes dizem
+              </h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                {(block.settings.testimonials || [
+                  {
+                    author: 'Cliente Satisfeita',
+                    role: 'Usuária do Quiz',
+                    text: 'Adorei descobrir meu estilo!',
+                    rating: 5,
+                    avatar: 'https://via.placeholder.com/60x60?text=👤'
+                  }
+                ]).map((testimonial: any, index: number) => (
+                  <div key={index} className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+                    <div className="flex items-center mb-4">
+                      <img
+                        src={testimonial.avatar}
+                        alt={testimonial.author}
+                        className="w-12 h-12 rounded-full mr-4"
+                      />
+                      <div>
+                        <p className="font-semibold text-[#432818]">{testimonial.author}</p>
+                        <p className="text-sm text-gray-600">{testimonial.role}</p>
+                      </div>
+                    </div>
+                    <div className="flex mb-3">
+                      {Array.from({ length: testimonial.rating || 5 }, (_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                      ))}
+                    </div>
+                    <blockquote className="text-[#432818] italic">
+                      "{testimonial.text}"
+                    </blockquote>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'guarantee-section':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+            <div className="max-w-2xl mx-auto">
+              <div className="bg-green-50 border-2 border-green-200 rounded-3xl p-8 text-center">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <CheckCircle className="w-8 h-8 text-green-600" />
+                </div>
+                
+                <h4 className="text-2xl font-bold text-green-800 mb-4">
+                  {block.settings.title || 'Garantia de Satisfação'}
+                </h4>
+                
+                <p className="text-green-700 text-lg mb-6">
+                  {block.settings.description || 'Sua satisfação é garantida'}
+                </p>
+                
+                {block.settings.features && (
+                  <div className="space-y-3">
+                    {block.settings.features.map((feature: string, index: number) => (
+                      <div key={index} className="flex items-center justify-center">
+                        <CheckCircle className="w-5 h-5 text-green-600 mr-3" />
+                        <span className="text-green-800 font-medium">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'strategic-question':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+            <div className="space-y-6 max-w-2xl mx-auto">
+              <div className="text-center">
+                <span className="inline-block bg-[#6B5B73] text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                  Pergunta Estratégica
+                </span>
+                <h3 className="text-xl md:text-2xl font-semibold text-[#432818] leading-relaxed">
+                  {block.settings.question || 'Pergunta estratégica sobre seus objetivos'}
+                </h3>
+              </div>
+              
+              <div className="space-y-3">
+                {(block.settings.options || [
+                  { id: 'a', text: 'Sim, definitivamente', value: 'high' },
+                  { id: 'b', text: 'Talvez, preciso saber mais', value: 'medium' },
+                  { id: 'c', text: 'Não, não me interessa', value: 'low' }
+                ]).map((option: any) => (
+                  <Button
+                    key={option.id}
+                    variant="outline"
+                    className="w-full p-6 h-auto text-center border-2 border-[#6B5B73]/30 hover:border-[#6B5B73] hover:bg-[#6B5B73]/10 rounded-xl transition-all duration-200 text-base group"
+                  >
+                    <span className="text-[#432818] group-hover:text-[#6B5B73] font-medium">
+                      {option.text}
+                    </span>
+                  </Button>
+                ))}
+              </div>
             </div>
           </div>
         );
