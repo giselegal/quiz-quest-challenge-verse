@@ -129,11 +129,23 @@ case 'guarantee-section':
 - Sistema de páginas
 - Configurações por bloco
 
+### **✅ IMPLEMENTADO (Advanced Editor Real):**
+- ✅ Renderizações reais dos componentes do funil
+- ✅ Blocos com styling idêntico ao funil real
+- ✅ QuizIntro, QuizQuestion, ResultPage renderizações
+- ✅ Sales Offer com preços e CTAs reais
+- ✅ Testimonials Grid com layout responsivo
+- ✅ Guarantee Section com ícones
+- ✅ Loading Animation e Transition Text
+- ✅ Strategic Questions com styling específico
+- ✅ Progress Bar com cores do CaktoQuiz
+- ✅ Style Result Display com imagens
+
 ### **🚧 A IMPLEMENTAR (Prioridade Alta):**
-- Renderização dos 7 blocos faltantes
-- Edição inline de texto
-- Preview mode completo
-- Copy/paste de blocos
+- Edição inline de texto (double-click)
+- Preview mode sem bordas de edição
+- Copy/paste de blocos entre páginas
+- Drag & drop para reordenar blocos
 
 ### **⭐ FUNCIONALIDADES AVANÇADAS (Prioridade Média):**
 - Undo/Redo system
