@@ -259,6 +259,71 @@ export class DatabaseStorage implements IStorage {
   async getUtmAnalytics(): Promise<UtmAnalytics[]> {
     return await db.select().from(utmAnalytics);
   }
+
+  // Funnel operations
+  async createFunnel(funnel: InsertFunnel): Promise<Funnel> {
+    const result = await db.insert(funnels).values(funnel).returning();
+    return result[0];
+  }
+
+  async getFunnelsByUserId(userId: number): Promise<Funnel[]> {
+    return await db.select().from(funnels).where(eq(funnels.userId, userId));
+  }
+
+  async getFunnelById(id: string): Promise<Funnel | undefined> {
+    const result = await db.select().from(funnels).where(eq(funnels.id, id)).limit(1);
+    return result[0];
+  }
+
+  async updateFunnel(id: string, updates: Partial<InsertFunnel>): Promise<Funnel | undefined> {
+    const result = await db.update(funnels)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(funnels.id, id))
+      .returning();
+    return result[0];
+  }
+
+  async deleteFunnel(id: string): Promise<boolean> {
+    const result = await db.delete(funnels).where(eq(funnels.id, id)).returning();
+    return result.length > 0;
+  }
+
+  // Funnel pages operations
+  async createFunnelPage(page: InsertFunnelPage): Promise<FunnelPage> {
+    const result = await db.insert(funnelPages).values(page).returning();
+    return result[0];
+  }
+
+  async getFunnelPages(funnelId: string): Promise<FunnelPage[]> {
+    return await db.select().from(funnelPages)
+      .where(eq(funnelPages.funnelId, funnelId))
+      .orderBy(funnelPages.pageOrder);
+  }
+
+  async updateFunnelPage(id: string, updates: Partial<InsertFunnelPage>): Promise<FunnelPage | undefined> {
+    const result = await db.update(funnelPages)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(funnelPages.id, id))
+      .returning();
+    return result[0];
+  }
+
+  async deleteFunnelPage(id: string): Promise<boolean> {
+    const result = await db.delete(funnelPages).where(eq(funnelPages.id, id)).returning();
+    return result.length > 0;
+  }
+
+  // Funnel versions operations
+  async createFunnelVersion(version: InsertFunnelVersion): Promise<FunnelVersion> {
+    const result = await db.insert(funnelVersions).values(version).returning();
+    return result[0];
+  }
+
+  async getFunnelVersions(funnelId: string): Promise<FunnelVersion[]> {
+    return await db.select().from(funnelVersions)
+      .where(eq(funnelVersions.funnelId, funnelId))
+      .orderBy(desc(funnelVersions.version));
+  }
 }
 
 // Use database storage in production, memory storage for development
