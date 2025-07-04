@@ -2830,4 +2830,44 @@ sName="flex-1 p-4">
                       .sort((a, b) => a.order - b.order)
                       .map(block => renderBlock(block))
                   ) : (
-                    <div className="text-center py-12 text-gray-500">continue</div>
+                    <div className="text-center py-12 text-gray-500">
+                      <Layout className="h-8 w-8 mx-auto mb-4 opacity-50" />
+                      <p className="font-medium mb-2">Esta página está vazia</p>
+                      <p className="text-sm">Adicione blocos da biblioteca para começar</p>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="text-center py-12 text-gray-500">
+                  <FileText className="h-8 w-8 mx-auto mb-4 opacity-50" />
+                  <p className="font-medium mb-2">Nenhuma página selecionada</p>
+                  <p className="text-sm">Selecione uma página para começar a editar</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* SIDEBAR DIREITA: Propriedades */}
+      <div className="w-80 border-l bg-white flex flex-col">
+        <div className="h-14 border-b flex items-center px-4">
+          <div className="flex items-center gap-2">
+            <Settings className="h-4 w-4" />
+            <h2 className="font-medium">Propriedades</h2>
+          </div>
+        </div>
+
+        <div className="flex-1 p-4">
+          <ScrollArea className="h-full">
+            {renderPropertiesPanel()}
+          </ScrollArea>
+        </div>
+      </div>
+
+      <Toaster />
+    </div>
+  );
+};
+
+export default CaktoQuizAdvancedEditor;
