@@ -36,6 +36,7 @@ import {
   Toaster 
 } from '@/components/ui/toaster';
 import { useToast } from '@/hooks/use-toast';
+import { funnelService, type FunnelData, type PageData, type BlockData } from '@/services/funnelService';
 import {
   Type,
   Image as ImageIcon,
@@ -71,25 +72,24 @@ import {
   AlignRight,
   Bold,
   Italic,
-  Underline
+  Underline,
+  Download,
+  Upload
 } from 'lucide-react';
 
-// Tipos principais
-interface FunnelBlock {
-  id: string;
-  type: string;
-  order: number;
-  settings: Record<string, any>;
+// Usando tipos do serviço + tipos adicionais para compatibilidade
+interface FunnelBlock extends BlockData {
+  order?: number;
+  settings?: Record<string, any>;
   style?: Record<string, any>;
 }
 
-interface FunnelPage {
-  id: string;
+interface FunnelPage extends Omit<PageData, 'blocks'> {
   name: string;
   title: string;
   type: 'intro' | 'question' | 'main-transition' | 'strategic' | 'final-transition' | 'result' | 'result-variant-b' | 'offer';
   blocks: FunnelBlock[];
-  settings: {
+  settings?: {
     backgroundColor?: string;
     textColor?: string;
     showProgress?: boolean;
@@ -106,25 +106,19 @@ interface FunnelConfig {
   theme: string;
 }
 
-interface Funnel {
-  id: string;
-  config: FunnelConfig;
-  pages: FunnelPage[];
-}
-
 // Dados iniciais do funil
-const createInitialFunnel = (): Funnel => ({
-  id: '1',
-  config: {
-    name: 'Quiz CaktoQuiz - Descubra Seu Estilo',
-    description: 'Funil completo para descoberta do estilo pessoal',
-    isPublished: false,
-    theme: 'caktoquiz'
-  },
+const createInitialFunnel = (): FunnelData => ({
+  id: crypto.randomUUID(),
+  name: 'Quiz CaktoQuiz - Descubra Seu Estilo',
+  description: 'Funil completo para descoberta do estilo pessoal',
   pages: [
     // 1. Página de Introdução
     {
       id: 'intro',
+      type: 'intro',
+      title: 'Introdução',
+      order: 1,
+      blocks: [],
       name: 'Introdução',
       title: 'Bem-vinda ao Quiz',
       type: 'intro',
@@ -902,12 +896,14 @@ const pageTemplates = [
 
 const CaktoQuizAdvancedEditor: React.FC = () => {
   // Estados principais
-  const [funnel, setFunnel] = useState<Funnel>(createInitialFunnel);
+  const [funnel, setFunnel] = useState<FunnelData>(createInitialFunnel);
   const [currentPageId, setCurrentPageId] = useState<string>('intro');
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'funnel' | 'blocks' | 'templates' | 'settings'>('funnel');
   const [deviceView, setDeviceView] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
   const [isAutoSaving, setIsAutoSaving] = useState<boolean>(false);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
@@ -1207,12 +1203,39 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
   }, [toast]);
 
   // Função para salvar o funil
-  const saveFunnel = useCallback(() => {
+  const saveFunnel = useCallback(async () => {
     try {
-      localStorage.setItem('caktoquiz-funnel', JSON.stringify(funnel));
-      // Aqui poderia fazer uma chamada para API para salvar no servidor
-      console.log('Funil salvo com sucesso!');
+      setIsSaving(true);
       
+      // Converter dados do editor para formato do serviço
+      const funnelData: FunnelData = {
+        ...funnel,
+        pages: funnel.pages.map((page, index) => ({
+          id: page.id,
+          type: page.type,
+          title: page.title,
+          order: index + 1,
+          blocks: page.blocks.map((block, blockIndex) => ({
+            id: block.id,
+            type: block.type,
+            content: block.settings || {},
+            styles: block.style,
+            position: { x: 0, y: blockIndex * 100 }
+          })),
+          metadata: page.settings
+        }))
+      };
+
+      // Tentar salvar no backend primeiro
+      try {
+        await funnelService.saveFunnelData(funnelData, 1); // TODO: usar userId real
+        console.log('Funil salvo no backend com sucesso!');
+      } catch (backendError) {
+        console.warn('Erro ao salvar no backend, salvando localmente:', backendError);
+        // Fallback para localStorage
+        localStorage.setItem('caktoquiz-funnel', JSON.stringify(funnelData));
+      }
+
       // Notificação de sucesso
       toast({
         title: "Funil salvo!",
@@ -1228,21 +1251,114 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         description: "Não foi possível salvar o funil. Tente novamente.",
         variant: "destructive",
       });
+    } finally {
+      setIsSaving(false);
     }
-  }, [funnel]);
+  }, [funnel, toast]);
 
   // Função para carregar funil salvo
-  const loadSavedFunnel = useCallback(() => {
+  const loadSavedFunnel = useCallback(async () => {
     try {
+      setIsLoading(true);
+      
+      // Tentar carregar do backend primeiro
+      try {
+        const funnelData = await funnelService.loadFunnelData(funnel.id);
+        if (funnelData) {
+          // Converter dados do serviço para formato do editor
+          const editorFunnel: FunnelData = {
+            ...funnelData,
+            pages: funnelData.pages.map(page => ({
+              id: page.id,
+              name: page.title || `Página ${page.order}`,
+              title: page.title || '',
+              type: page.type as any,
+              order: page.order,
+              blocks: page.blocks?.map((block, index) => ({
+                id: block.id,
+                type: block.type,
+                order: index + 1,
+                settings: block.content,
+                style: block.styles
+              })) || [],
+              settings: page.metadata as any || {}
+            }))
+          };
+          
+          setFunnel(editorFunnel);
+          console.log('Funil carregado do backend com sucesso!');
+          return;
+        }
+      } catch (backendError) {
+        console.warn('Erro ao carregar do backend, tentando localStorage:', backendError);
+      }
+      
+      // Fallback para localStorage
       const savedFunnel = localStorage.getItem('caktoquiz-funnel');
       if (savedFunnel) {
-        setFunnel(JSON.parse(savedFunnel));
-        console.log('Funil carregado com sucesso!');
+        const parsedFunnel = JSON.parse(savedFunnel);
+        setFunnel(parsedFunnel);
+        console.log('Funil carregado do localStorage!');
       }
     } catch (error) {
       console.error('Erro ao carregar funil salvo:', error);
+      toast({
+        title: "Erro ao carregar",
+        description: "Não foi possível carregar o funil salvo.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
     }
-  }, []);
+  }, [funnel.id, toast]);
+
+  // Função para carregar funil específico
+  const loadFunnelById = useCallback(async (funnelId: string) => {
+    try {
+      setIsLoading(true);
+      const funnelData = await funnelService.loadFunnelData(funnelId);
+      
+      if (funnelData) {
+        // Converter dados do serviço para formato do editor
+        const editorFunnel: FunnelData = {
+          ...funnelData,
+          pages: funnelData.pages.map(page => ({
+            id: page.id,
+            name: page.title || `Página ${page.order}`,
+            title: page.title || '',
+            type: page.type as any,
+            order: page.order,
+            blocks: page.blocks?.map((block, index) => ({
+              id: block.id,
+              type: block.type,
+              order: index + 1,
+              settings: block.content,
+              style: block.styles
+            })) || [],
+            settings: page.metadata as any || {}
+          }))
+        };
+        
+        setFunnel(editorFunnel);
+        setCurrentPageId(editorFunnel.pages[0]?.id || 'intro');
+        
+        toast({
+          title: "Funil carregado!",
+          description: `Funil "${funnelData.name}" carregado com sucesso.`,
+          variant: "default",
+        });
+      }
+    } catch (error) {
+      console.error('Erro ao carregar funil:', error);
+      toast({
+        title: "Erro ao carregar funil",
+        description: "Não foi possível carregar o funil selecionado.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [toast]);
 
   // Carregar funil salvo na inicialização
   React.useEffect(() => {
