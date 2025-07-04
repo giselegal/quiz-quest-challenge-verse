@@ -1145,14 +1145,28 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       case 'question':
         content = (
           <div style={blockStyle} onClick={handleBlockClick}>
-            <h2 style={{ 
-              fontSize: block.settings.style?.fontSize || '1.25rem',
-              fontWeight: block.settings.style?.fontWeight || '600',
-              textAlign: block.settings.style?.textAlign || 'center',
-              margin: '0'
-            }}>
-              {block.settings.content || 'Pergunta do Quiz'}
-            </h2>
+            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+              <h2 style={{ 
+                fontSize: block.settings.style?.fontSize || '1.5rem',
+                fontWeight: block.settings.style?.fontWeight || '700',
+                textAlign: block.settings.style?.textAlign || 'center',
+                margin: '0 0 1rem 0',
+                color: block.settings.style?.color || '#1f2937',
+                lineHeight: '1.3'
+              }}>
+                {block.settings.content || 'Pergunta do Quiz'}
+              </h2>
+              
+              {/* Subtítulo explicativo como no funil real */}
+              <p style={{
+                fontSize: '1rem',
+                color: '#6b7280',
+                margin: '0',
+                fontWeight: '400'
+              }}>
+                Escolha as opções que mais combinam com você:
+              </p>
+            </div>
           </div>
         );
         break;
@@ -1160,25 +1174,84 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       case 'options':
         content = (
           <div style={blockStyle} onClick={handleBlockClick}>
-            <div style={{ display: 'grid', gap: '0.75rem' }}>
+            <div style={{ display: 'grid', gap: '1rem', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))' }}>
               {block.settings.options?.map((option, index) => (
                 <div 
                   key={option.id}
                   style={{
-                    padding: '1rem',
+                    padding: '1.5rem',
                     border: '2px solid #e5e7eb',
-                    borderRadius: '0.5rem',
+                    borderRadius: '0.75rem',
                     cursor: 'pointer',
-                    transition: 'all 0.2s'
+                    transition: 'all 0.2s',
+                    backgroundColor: 'white',
+                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                    position: 'relative'
                   }}
+                  className="hover:border-blue-500 hover:shadow-lg group"
                 >
-                  {option.text}
+                  {/* Checkbox no canto */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '0.75rem',
+                    right: '0.75rem',
+                    width: '1.25rem',
+                    height: '1.25rem',
+                    border: '2px solid #d1d5db',
+                    borderRadius: block.settings.maxSelections === 1 ? '50%' : '0.25rem',
+                    backgroundColor: 'white'
+                  }} />
+                  
+                  {/* Imagem se houver */}
+                  {option.image && (
+                    <div style={{
+                      width: '100%',
+                      height: '120px',
+                      backgroundColor: '#f3f4f6',
+                      borderRadius: '0.5rem',
+                      marginBottom: '0.75rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      <span style={{ color: '#9ca3af' }}>📷</span>
+                    </div>
+                  )}
+                  
+                  {/* Texto da opção */}
+                  <p style={{
+                    fontSize: '0.875rem',
+                    color: '#374151',
+                    lineHeight: '1.4',
+                    margin: 0
+                  }}>
+                    {option.text}
+                  </p>
                 </div>
               )) || (
-                <div style={{ padding: '1rem', border: '2px dashed #d1d5db', borderRadius: '0.5rem' }}>
-                  Adicione opções...
+                <div style={{ 
+                  padding: '2rem', 
+                  border: '2px dashed #d1d5db', 
+                  borderRadius: '0.5rem',
+                  textAlign: 'center',
+                  color: '#9ca3af'
+                }}>
+                  Adicione opções de resposta...
                 </div>
               )}
+            </div>
+            
+            {/* Instruções de seleção */}
+            <div style={{
+              textAlign: 'center',
+              marginTop: '1rem',
+              fontSize: '0.875rem',
+              color: '#6b7280'
+            }}>
+              {(block.settings.maxSelections || 1) > 1 
+                ? `Escolha até ${block.settings.maxSelections || 1} opções`
+                : 'Escolha uma opção'
+              }
             </div>
           </div>
         );
@@ -1189,17 +1262,236 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           <div style={blockStyle} onClick={handleBlockClick}>
             <div style={{
               width: '100%',
-              height: '8px',
-              backgroundColor: '#e5e7eb',
-              borderRadius: '4px',
-              overflow: 'hidden'
+              marginBottom: '2rem'
             }}>
+              {/* Barra de progresso */}
               <div style={{
-                width: `${block.settings.progressValue || 0}%`,
-                height: '100%',
-                backgroundColor: '#3b82f6',
-                transition: 'width 0.3s ease'
-              }} />
+                width: '100%',
+                height: '8px',
+                backgroundColor: '#e5e7eb',
+                borderRadius: '9999px',
+                overflow: 'hidden',
+                marginBottom: '0.75rem'
+              }}>
+                <div style={{
+                  width: `${block.settings.progressValue || 0}%`,
+                  height: '100%',
+                  backgroundColor: '#3b82f6',
+                  borderRadius: '9999px',
+                  transition: 'width 0.5s ease'
+                }} />
+              </div>
+              
+              {/* Porcentagem e texto */}
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                fontSize: '0.875rem',
+                color: '#6b7280'
+              }}>
+                <span>{Math.round(block.settings.progressValue || 0)}% concluído</span>
+                <span>
+                  Questão {Math.ceil(((block.settings.progressValue || 0) / 100) * 17)} de 17
+                </span>
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      // BLOCOS ESPECÍFICOS DO FUNIL REAL
+      case 'loading-animation':
+        content = (
+          <div style={blockStyle} onClick={handleBlockClick}>
+            <div className="flex flex-col items-center justify-center py-8">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
+              <p className="text-gray-600">Carregando...</p>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'transition-text':
+        content = (
+          <div style={blockStyle} onClick={handleBlockClick}>
+            <div className="text-center py-4">
+              <p style={{
+                fontSize: block.settings.style?.fontSize || '1.125rem',
+                fontWeight: block.settings.style?.fontWeight || '500',
+                color: block.settings.style?.color || '#374151',
+                textAlign: 'center'
+              }}>
+                {block.settings.content || 'Texto de transição...'}
+              </p>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'strategic-question':
+        content = (
+          <div style={blockStyle} onClick={handleBlockClick}>
+            <div className="space-y-6 bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+              <div className="text-center space-y-4">
+                <h2 className="text-2xl font-bold text-gray-800">
+                  {block.settings.content || 'Pergunta estratégica'}
+                </h2>
+                <p className="text-gray-600">Selecione uma opção:</p>
+              </div>
+              <div className="space-y-3">
+                {block.settings.options?.map((option, index) => (
+                  <div 
+                    key={option.id}
+                    className="border-2 border-gray-200 rounded-lg p-4 hover:border-blue-500 hover:bg-blue-50 cursor-pointer transition-all duration-200"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="w-5 h-5 border-2 border-gray-300 rounded-full"></div>
+                      <span className="text-gray-700">{option.text}</span>
+                    </div>
+                  </div>
+                )) || (
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center text-gray-500">
+                    Adicione opções de resposta...
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'style-result-display':
+        content = (
+          <div style={blockStyle} onClick={handleBlockClick}>
+            <div className="text-center space-y-6 bg-gradient-to-br from-blue-50 to-purple-50 p-8 rounded-xl">
+              <div className="w-24 h-24 mx-auto bg-blue-500 rounded-full flex items-center justify-center mb-4">
+                <span className="text-2xl text-white font-bold">🎯</span>
+              </div>
+              <h2 className="text-3xl font-bold text-gray-800">
+                Seu Estilo: {block.settings.styleType || 'Elegante'}
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                Você tem um estilo sofisticado e refinado, que preza pela elegância em todas as ocasiões.
+              </p>
+              {block.settings.showImage && (
+                <div className="w-32 h-32 mx-auto bg-gray-200 rounded-lg flex items-center justify-center">
+                  <span className="text-gray-500">Imagem do Estilo</span>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+        break;
+
+      case 'sales-offer':
+        content = (
+          <div style={blockStyle} onClick={handleBlockClick}>
+            <div className="bg-gradient-to-br from-green-50 to-blue-50 border-2 border-green-200 rounded-xl p-8 relative overflow-hidden">
+              {block.settings.urgency && (
+                <div className="absolute top-0 right-0 bg-red-500 text-white px-4 py-2 text-sm font-bold transform rotate-12 translate-x-4 -translate-y-2">
+                  OFERTA ESPECIAL
+                </div>
+              )}
+              <div className="text-center">
+                <h3 className="text-3xl font-bold text-gray-800 mb-2">
+                  {block.settings.productName || 'Guias de Estilo Completo'}
+                </h3>
+                <p className="text-gray-600 mb-6">
+                  Descubra seu estilo completo com nossa consultoria personalizada
+                </p>
+                
+                <div className="mb-6">
+                  {block.settings.originalPrice && (
+                    <>
+                      <div className="text-sm text-gray-500 mb-2">DE:</div>
+                      <span className="text-2xl text-gray-500 line-through">
+                        {block.settings.originalPrice}
+                      </span>
+                      <div className="text-sm text-gray-500 mt-1 mb-4">POR APENAS:</div>
+                    </>
+                  )}
+                  <span className="text-5xl font-bold text-green-600">
+                    {block.settings.price || 'R$ 97,00'}
+                  </span>
+                  <div className="text-sm text-gray-600 mt-2">ou 12x de R$ 9,70</div>
+                </div>
+
+                <button 
+                  className="w-full bg-green-600 hover:bg-green-700 text-white text-lg py-4 rounded-lg font-bold transition-colors"
+                  style={{ cursor: 'pointer' }}
+                >
+                  {block.settings.ctaText || 'QUERO DESCOBRIR MEU ESTILO COMPLETO'}
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'testimonials-grid':
+        content = (
+          <div style={blockStyle} onClick={handleBlockClick}>
+            <div className="space-y-6">
+              <h3 className="text-2xl font-bold text-center text-gray-800">
+                O que nossas clientes dizem
+              </h3>
+              <div className={`grid gap-6 ${
+                block.settings.columns === 1 ? 'grid-cols-1' :
+                block.settings.columns === 3 ? 'grid-cols-1 md:grid-cols-3' :
+                'grid-cols-1 md:grid-cols-2'
+              }`}>
+                {block.settings.testimonials?.map((testimonial, index) => (
+                  <div key={index} className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-sm text-gray-600">👤</span>
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-gray-700 italic mb-3">"{testimonial.text}"</p>
+                        <div className="flex items-center">
+                          <span className="font-semibold text-gray-800">{testimonial.name}</span>
+                          <div className="flex ml-2">
+                            {[1,2,3,4,5].map(star => (
+                              <span key={star} className="text-yellow-400">⭐</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )) || (
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center text-gray-500">
+                    Adicione depoimentos...
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'guarantee-section':
+        content = (
+          <div style={blockStyle} onClick={handleBlockClick}>
+            <div 
+              className="p-6 rounded-lg text-center"
+              style={{
+                backgroundColor: block.settings.style?.backgroundColor || '#e8f5e8',
+                borderRadius: block.settings.style?.borderRadius || '0.5rem'
+              }}
+            >
+              {block.settings.showIcon && (
+                <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl text-white">🛡️</span>
+                </div>
+              )}
+              <h4 className="text-xl font-bold text-gray-800 mb-2">
+                {block.settings.guaranteeText || 'Garantia de 7 dias'}
+              </h4>
+              <p className="text-gray-600">
+                {block.settings.guaranteeDetails || 'Se não ficar satisfeita, devolvemos seu dinheiro'}
+              </p>
             </div>
           </div>
         );
