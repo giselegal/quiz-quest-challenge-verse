@@ -46,6 +46,7 @@ const EditorTestPage = lazy(
   () => import("./components/editor/EditorTestPage")
 );
 const EditorFixedPage = lazy(() => import("./pages/EditorFixedPage"));
+const CaktoQuizAdvancedPage = lazy(() => import("./pages/CaktoQuizAdvancedPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App = () => {
@@ -128,6 +129,11 @@ const App = () => {
                 <Route
                   path="/editor-fixed"
                   component={EditorFixedPage}
+                />
+                {/* CaktoQuiz Advanced Editor - editor mais completo similar ao CaktoQuiz */}
+                <Route
+                  path="/advanced-editor"
+                  component={CaktoQuizAdvancedPage}
                 />
                 {/* Admin - protegido com AdminAuthProvider */}
                 <Route path="/admin/:rest*">
