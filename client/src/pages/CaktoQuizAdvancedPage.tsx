@@ -1,5 +1,5 @@
 import React from 'react';
-import CaktoQuizAdvancedEditor from '@/components/visual-editor/CaktoQuizAdvancedEditor';
+import CaktoQuizAdvancedEditor from '@/components/visual-editor/CaktoQuizAdvancedEditorFixed';
 
 const CaktoQuizAdvancedPage: React.FC = () => {
   return (

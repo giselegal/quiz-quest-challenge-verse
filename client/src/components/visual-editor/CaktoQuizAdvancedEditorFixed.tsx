@@ -57,7 +57,7 @@ interface FunnelPage {
 
 interface FunnelBlock {
   id: string;
-  type: 'heading' | 'text' | 'image' | 'button' | 'input' | 'question' | 'options' | 'progress' | 'video' | 'divider' | 'loading-animation' | 'transition-text' | 'style-result-display' | 'sales-offer' | 'testimonials-grid' | 'guarantee-section' | 'strategic-question';
+  type: 'heading' | 'text' | 'image' | 'button' | 'input' | 'question' | 'options' | 'progress' | 'video' | 'divider' | 'loading-animation' | 'transition-text' | 'style-result-display' | 'sales-offer' | 'testimonials-grid' | 'guarantee-section' | 'strategic-question' | 'spacer';
   order: number;
   settings: {
     content?: string;
@@ -268,6 +268,19 @@ const BLOCK_LIBRARY = [
       }
     }
   },
+  {
+    id: 'spacer',
+    name: 'Espaçador',
+    icon: Layout,
+    category: 'UI',
+    description: 'Espaço em branco para separar elementos',
+    defaultSettings: {
+      style: {
+        margin: '1rem 0',
+        padding: '0.5rem'
+      }
+    }
+  },
   // NOVOS BLOCOS ESPECÍFICOS DO FUNIL
   {
     id: 'loading-animation',
@@ -387,6 +400,19 @@ const BLOCK_LIBRARY = [
         borderRadius: '0.5rem',
         textAlign: 'center' as const,
         margin: '1.5rem 0'
+      }
+    }
+  },
+  {
+    id: 'spacer',
+    name: 'Espaçador',
+    icon: Layout,
+    category: 'UI',
+    description: 'Espaço em branco para separar elementos',
+    defaultSettings: {
+      style: {
+        margin: '2rem 0',
+        padding: '1rem 0'
       }
     }
   }
@@ -683,25 +709,24 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     switch (block.type) {
       case 'heading':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick}>
-            <h1 
-              className="font-playfair text-center text-[#432818] font-semibold"
-              style={{
-                fontFamily: '"Playfair Display", serif',
-                fontSize: block.settings.style?.fontSize || '1.5rem',
-                fontWeight: block.settings.style?.fontWeight || '600',
-                textAlign: block.settings.style?.textAlign || 'center',
-                color: block.settings.style?.color || '#432818',
-                margin: block.settings.style?.margin || '0 0 1rem 0'
-              }}
-            >
-              {block.settings.content ? (
-                <span dangerouslySetInnerHTML={{ __html: highlightStrategicWords(block.settings.content) }} />
-              ) : (
-                'Título'
-              )}
-            </h1>
-          </div>
+          <h1 
+            className="min-w-full text-3xl font-bold text-center"
+            style={{
+              fontFamily: '"Playfair Display", serif',
+              fontSize: block.settings.style?.fontSize || '1.875rem',
+              fontWeight: block.settings.style?.fontWeight || 'bold',
+              textAlign: block.settings.style?.textAlign || 'center',
+              color: block.settings.style?.color || '#432818',
+              margin: '0'
+            }}
+            onClick={handleBlockClick}
+          >
+            {block.settings.content ? (
+              <span dangerouslySetInnerHTML={{ __html: highlightStrategicWords(block.settings.content) }} />
+            ) : (
+              'Título da Pergunta'
+            )}
+          </h1>
         );
         break;
         
@@ -761,32 +786,23 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         break;
         
       case 'button':
-        const isCtaButton = block.settings.buttonText?.includes('Descobrir') || block.settings.buttonText?.includes('Quero');
+        const isCtaButton = block.settings.buttonText?.includes('Descobrir') || block.settings.buttonText?.includes('Quero') || block.settings.buttonText?.includes('Continuar');
         content = (
-          <div style={{ ...baseStyle, textAlign: block.settings.style?.textAlign || 'center' }} onClick={handleBlockClick}>
-            <button 
-              className={`transition-all duration-300 hover:scale-[1.01] shadow-md font-semibold ${
-                isCtaButton 
-                  ? 'bg-[#B89B7A] hover:bg-[#A1835D] text-white rounded-full px-8 py-3' 
-                  : 'bg-[#B89B7A] hover:bg-[#A1835D] text-white rounded-md px-6 py-2'
-              }`}
-              style={{
-                backgroundColor: block.settings.style?.backgroundColor || '#B89B7A',
-                color: block.settings.style?.color || 'white',
-                padding: block.settings.style?.padding || (isCtaButton ? '0.75rem 2rem' : '0.5rem 1.5rem'),
-                borderRadius: block.settings.style?.borderRadius || (isCtaButton ? '9999px' : '0.375rem'),
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: isCtaButton ? '1.125rem' : '1rem',
-                fontWeight: '600'
-              }}
-            >
-              <span className="flex items-center justify-center gap-2">
-                {block.settings.buttonText || 'Botão'}
-                {isCtaButton && <ArrowRight className="w-4 h-4" />}
-              </span>
-            </button>
-          </div>
+          <button 
+            className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 min-w-full h-14"
+            style={{
+              backgroundColor: block.settings.style?.backgroundColor || '#B89B7A',
+              color: block.settings.style?.color || 'white',
+              borderRadius: block.settings.style?.borderRadius || '0.375rem',
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: '1rem',
+              fontWeight: '500'
+            }}
+            onClick={handleBlockClick}
+          >
+            {block.settings.buttonText || 'Continuar'}
+          </button>
         );
         break;
         
@@ -850,58 +866,60 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       case 'options':
         const hasImageOptions = block.settings.options?.some(opt => opt.image);
         content = (
-          <div style={baseStyle} onClick={handleBlockClick}>
-            <div className={`grid gap-3 ${hasImageOptions ? 'grid-cols-2' : 'grid-cols-1'}`}>
-              {block.settings.options?.map((option, index) => {
-                const optionProps = {
-                  id: option.id,
-                  text: option.text,
-                  image: option.image,
-                  value: option.value
-                };
-                
-                return (
-                  <div
-                    key={option.id}
-                    className={`relative cursor-pointer transition-all duration-200 ${
-                      hasImageOptions 
-                        ? 'aspect-square rounded-lg overflow-hidden border-2 border-transparent hover:border-[#B89B7A]' 
-                        : 'p-4 border-2 border-[#e5e7eb] rounded-lg hover:border-[#B89B7A] hover:shadow-md'
-                    }`}
-                    style={{
-                      backgroundColor: hasImageOptions ? 'transparent' : '#ffffff'
-                    }}
-                  >
-                    {hasImageOptions && option.image ? (
-                      <div className="w-full h-full relative">
-                        <img 
-                          src={option.image} 
-                          alt={option.text}
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                        <div className="absolute bottom-2 left-2 right-2">
-                          <p className="text-white text-sm font-medium text-center">
-                            {option.text}
-                          </p>
-                        </div>
+          <div 
+            className={`grid ${hasImageOptions ? 'grid-cols-2' : 'grid-cols-1'} gap-2`}
+            onClick={handleBlockClick}
+          >
+            {block.settings.options?.map((option, index) => (
+              <button
+                key={option.id}
+                className="option border-zinc-200 bg-background hover:bg-primary hover:text-foreground px-4 hover:shadow-2xl overflow-hidden min-w-full gap-2 flex h-auto py-2 flex-col items-center justify-start border drop-shadow-md option-button whitespace-nowrap rounded-md text-sm font-medium transition-colors"
+                style={{
+                  backgroundColor: hasImageOptions ? 'transparent' : '#ffffff'
+                }}
+              >
+                {hasImageOptions && option.image ? (
+                  <>
+                    <img 
+                      src={option.image} 
+                      alt={option.text}
+                      width="256" 
+                      height="256" 
+                      className="w-full rounded-t-md bg-white h-full"
+                    />
+                    <div className="py-2 px-4 w-full flex flex-row text-base items-center text-full-primary justify-between">
+                      <div className="break-words w-full custom-quill quill ql-editor quill-option text-centered mt-2">
+                        <p dangerouslySetInnerHTML={{ __html: option.text }} />
                       </div>
-                    ) : (
-                      <div className="flex items-center justify-center h-full">
-                        <span className="text-[#432818] font-medium text-center">
-                          {option.text}
-                        </span>
-                      </div>
-                    )}
+                    </div>
+                  </>
+                ) : (
+                  <div className="flex items-center justify-center h-full p-4">
+                    <span className="text-[#432818] font-medium text-center">
+                      {option.text}
+                    </span>
                   </div>
-                );
-              }) || (
-                <div className="p-4 border-2 dashed border-[#d1d5db] rounded-lg text-gray-500 text-center">
-                  Adicione opções...
-                </div>
-              )}
-            </div>
+                )}
+              </button>
+            )) || (
+              <div className="p-4 border-2 dashed border-[#d1d5db] rounded-lg text-gray-500 text-center">
+                Adicione opções...
+              </div>
+            )}
           </div>
+        );
+        break;
+
+      case 'spacer':
+        content = (
+          <div 
+            className="min-w-full py-2 border-dashed border-yellow-500 border rounded-lg"
+            onClick={handleBlockClick}
+            style={{
+              padding: block.settings.style?.padding || '0.5rem',
+              margin: block.settings.style?.margin || '1rem 0'
+            }}
+          />
         );
         break;
         
@@ -1151,6 +1169,23 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 <CheckCircle className="w-4 h-4 text-green-600 mr-2" />
                 <span className="text-xs text-green-600 font-medium">100% Garantido</span>
               </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'spacer':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick}>
+            <div 
+              className="min-w-full py-2 border-dashed border-yellow-500 border rounded-lg flex items-center justify-center text-gray-400 text-sm"
+              style={{
+                minHeight: '40px',
+                margin: block.settings.style?.margin || '2rem 0',
+                padding: block.settings.style?.padding || '1rem 0'
+              }}
+            >
+              Espaçador
             </div>
           </div>
         );
@@ -1709,8 +1744,36 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
             deviceView === 'tablet' ? 'max-w-2xl' :
             'max-w-4xl'
           }`}>
+            {/* Header da página com progress bar (similar ao exemplo) */}
+            {currentPage && currentPage.settings.showProgress && (
+              <div className="flex flex-col gap-4 p-5 border-b">
+                <div className="flex flex-row w-full h-auto justify-center relative">
+                  <div className="flex flex-col w-full justify-start items-center gap-4">
+                    <img 
+                      width="96" 
+                      height="96" 
+                      className="max-w-24 object-cover" 
+                      alt="Logo" 
+                      src="https://res.cloudinary.com/dqljyf76t/image/upload/f_webp,q_70,w_96,h_96,c_fit/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
+                    />
+                    <div 
+                      role="progressbar" 
+                      className="relative w-full overflow-hidden rounded-full bg-zinc-300 h-2"
+                    >
+                      <div 
+                        className="progress h-full w-full flex-1 bg-[#B89B7A] transition-all" 
+                        style={{ 
+                          transform: `translateX(-${100 - (currentPage.settings.progressValue || 0)}%)` 
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div 
-              className="min-h-[600px] p-6 space-y-4"
+              className="flex flex-col gap-4 md:gap-6 h-full justify-between p-3 md:p-5 pb-10"
               onClick={() => setSelectedBlockId(null)}
               style={{
                 backgroundColor: currentPage?.settings.backgroundColor || '#ffffff',
@@ -1719,28 +1782,43 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
             >
               {currentPage ? (
                 <>
-                  {/* Barra de progresso da página */}
-                  {currentPage.settings.showProgress && (
-                    <div className="w-full bg-gray-200 rounded-full h-2 mb-6">
-                      <div 
-                        className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] h-2 rounded-full transition-all duration-300" 
-                        style={{ width: `${currentPage.settings.progressValue}%` }}
-                      />
+                  {/* Container principal similar ao exemplo */}
+                  <div className="main-content w-full relative mx-auto h-full">
+                    <div className="flex flex-row flex-wrap pb-10">
+                      {currentPage.blocks.length > 0 ? (
+                        currentPage.blocks
+                          .sort((a, b) => a.order - b.order)
+                          .map(block => (
+                            <div 
+                              key={block.id}
+                              role="button" 
+                              tabindex="0" 
+                              className="group/canvas-item max-w-full canvas-item min-h-[1.25rem] relative self-auto mr-auto mb-4"
+                              style={{ flexBasis: '100%' }}
+                            >
+                              <div 
+                                className={`min-h-[1.25rem] min-w-full relative self-auto box-border ${
+                                  selectedBlockId === block.id 
+                                    ? 'border-2 border-blue-500 border-dashed' 
+                                    : 'group-hover/canvas-item:border-2 hover:border-2 border-dashed border-blue-500'
+                                } rounded-md`}
+                                style={{ opacity: 1 }}
+                              >
+                                {renderBlock(block)}
+                              </div>
+                            </div>
+                          ))
+                      ) : (
+                        <div className="text-center py-12 text-gray-500 w-full">
+                          <Layout className="h-8 w-8 mx-auto mb-4 opacity-50" />
+                          <p className="font-medium mb-2">Esta página está vazia</p>
+                          <p className="text-sm">Adicione blocos da biblioteca para começar</p>
+                        </div>
+                      )}
                     </div>
-                  )}
-
-                  {/* Blocos da página */}
-                  {currentPage.blocks.length > 0 ? (
-                    currentPage.blocks
-                      .sort((a, b) => a.order - b.order)
-                      .map(block => renderBlock(block))
-                  ) : (
-                    <div className="text-center py-12 text-gray-500">
-                      <Layout className="h-8 w-8 mx-auto mb-4 opacity-50" />
-                      <p className="font-medium mb-2">Esta página está vazia</p>
-                      <p className="text-sm">Adicione blocos da biblioteca para começar</p>
-                    </div>
-                  )}
+                  </div>
+                  
+                  <div className="pt-10 md:pt-24"></div>
                 </>
               ) : (
                 <div className="text-center py-12 text-gray-500">
