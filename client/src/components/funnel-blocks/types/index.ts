@@ -31,6 +31,13 @@ export interface BaseStyles {
   className?: string;
 }
 
+// Interface base para props de estilo dos componentes
+export interface StyleProps {
+  className?: string;
+  style?: React.CSSProperties;
+  customStyles?: string;
+}
+
 // Interface base para componentes que suportam diferentes visualizações
 export interface ResponsiveProps {
   deviceView?: DeviceView;

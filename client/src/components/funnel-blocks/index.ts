@@ -22,7 +22,16 @@ export { default as GuaranteeSection } from './GuaranteeSection';
 export { default as FAQSection } from './FAQSection';
 export { default as SocialProof } from './SocialProof';
 
-// Componentes adicionais que serão criados
+// Componentes adicionais 
+export { default as PrimaryStyleDisplay } from './PrimaryStyleDisplay';
+export { default as BonusSection } from './BonusSection';
+export { default as BeforeAfterSection } from './BeforeAfterSection';
+export { default as MentorSection } from './MentorSection';
+export { default as MotivationSection } from './MotivationSection';
+export { default as CountdownTimer } from './CountdownTimer';
+export { default as PriceComparison } from './PriceComparison';
+export { default as VideoSection } from './VideoSection';
+export { default as FeatureHighlight } from './FeatureHighlight';
 // export { default as BonusSection } from './BonusSection';
 // export { default as VideoSection } from './VideoSection';
 // export { default as CountdownTimer } from './CountdownTimer';
