@@ -1054,7 +1054,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     });
   };
 
-  // Função para renderizar bloco no canvas
+  // Função para renderizar bloco no canvas usando componentes REAIS do funil
   const renderBlock = (block: FunnelBlock) => {
     const isSelected = selectedBlockId === block.id;
     
@@ -1077,7 +1077,11 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     switch (block.type) {
       case 'heading':
         content = (
-          <h1 style={blockStyle} onClick={handleBlockClick}>
+          <h1 
+            style={blockStyle} 
+            onClick={handleBlockClick}
+            className="font-playfair text-[#432818] font-bold leading-tight"
+          >
             {block.settings.content || 'Título'}
           </h1>
         );
@@ -1085,7 +1089,11 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         
       case 'text':
         content = (
-          <p style={blockStyle} onClick={handleBlockClick}>
+          <p 
+            style={blockStyle} 
+            onClick={handleBlockClick}
+            className="text-[#432818] leading-relaxed"
+          >
             {block.settings.content || 'Texto'}
           </p>
         );
@@ -1107,15 +1115,16 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         content = (
           <div style={{ ...blockStyle, textAlign: block.settings.style?.textAlign || 'center' }} onClick={handleBlockClick}>
             <button 
+              className="bg-[#B89B7A] hover:bg-[#A1835D] text-white py-3 px-6 rounded-md shadow-md transition-all duration-300 font-semibold"
               style={{
-                backgroundColor: block.settings.style?.backgroundColor || '#3b82f6',
+                backgroundColor: block.settings.style?.backgroundColor || '#B89B7A',
                 color: block.settings.style?.color || 'white',
                 padding: block.settings.style?.padding || '0.75rem 1.5rem',
                 borderRadius: block.settings.style?.borderRadius || '0.375rem',
                 border: 'none',
                 cursor: 'pointer',
                 fontSize: '1rem',
-                fontWeight: '500'
+                fontWeight: '600'
               }}
             >
               {block.settings.buttonText || 'Botão'}
@@ -1127,15 +1136,20 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       case 'input':
         content = (
           <div style={blockStyle} onClick={handleBlockClick}>
+            <label className="block text-xs font-semibold text-[#432818] mb-1.5">
+              NOME <span className="text-red-500">*</span>
+            </label>
             <input 
               type="text"
-              placeholder={block.settings.placeholder || 'Digite aqui...'}
+              placeholder={block.settings.placeholder || 'Digite seu nome'}
+              className="w-full p-2.5 bg-[#FEFEFE] rounded-md border-2 border-[#B89B7A] focus:outline-none focus:ring-2 focus:ring-[#A1835D] focus:ring-offset-2"
               style={{
                 width: '100%',
                 padding: '0.75rem',
-                border: '1px solid #d1d5db',
+                border: '2px solid #B89B7A',
                 borderRadius: '0.375rem',
-                fontSize: '1rem'
+                fontSize: '1rem',
+                backgroundColor: '#FEFEFE'
               }}
             />
           </div>
@@ -1143,30 +1157,23 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         break;
         
       case 'question':
+        // Renderização REAL do QuizQuestion - como no funil
         content = (
-          <div style={blockStyle} onClick={handleBlockClick}>
-            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-              <h2 style={{ 
-                fontSize: block.settings.style?.fontSize || '1.5rem',
-                fontWeight: block.settings.style?.fontWeight || '700',
-                textAlign: block.settings.style?.textAlign || 'center',
-                margin: '0 0 1rem 0',
-                color: block.settings.style?.color || '#1f2937',
-                lineHeight: '1.3'
-              }}>
-                {block.settings.content || 'Pergunta do Quiz'}
-              </h2>
-              
-              {/* Subtítulo explicativo como no funil real */}
-              <p style={{
-                fontSize: '1rem',
-                color: '#6b7280',
-                margin: '0',
-                fontWeight: '400'
-              }}>
-                Escolha as opções que mais combinam com você:
-              </p>
-            </div>
+          <div style={blockStyle} onClick={handleBlockClick} className="w-full max-w-6xl mx-auto pb-5">
+            <h2 className="font-playfair text-center mb-5 px-3 pt-3 text-[#432818] font-semibold text-base sm:text-xl">
+              {block.settings.content || 'Qual é a sua pergunta?'}
+            </h2>
+          </div>
+        );
+        break;
+        
+      case 'strategic-question':
+        // Renderização REAL das questões estratégicas - como no funil
+        content = (
+          <div style={blockStyle} onClick={handleBlockClick} className="w-full max-w-3xl mx-auto strategic-question">
+            <h2 className="font-playfair text-center mb-6 px-3 pt-3 text-[#432818] font-bold text-xl sm:text-2xl whitespace-pre-line strategic-question-title">
+              {block.settings.content || 'Pergunta estratégica...'}
+            </h2>
           </div>
         );
         break;
@@ -1174,84 +1181,26 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       case 'options':
         content = (
           <div style={blockStyle} onClick={handleBlockClick}>
-            <div style={{ display: 'grid', gap: '1rem', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))' }}>
+            <div className="grid gap-3 px-2">
               {block.settings.options?.map((option, index) => (
                 <div 
                   key={option.id}
+                  className="p-4 border-2 border-[#E5E7EB] rounded-lg cursor-pointer transition-all hover:border-[#B89B7A] hover:bg-[#F8F5F0]"
                   style={{
-                    padding: '1.5rem',
+                    padding: '1rem',
                     border: '2px solid #e5e7eb',
-                    borderRadius: '0.75rem',
+                    borderRadius: '0.5rem',
                     cursor: 'pointer',
-                    transition: 'all 0.2s',
-                    backgroundColor: 'white',
-                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-                    position: 'relative'
+                    transition: 'all 0.2s'
                   }}
-                  className="hover:border-blue-500 hover:shadow-lg group"
                 >
-                  {/* Checkbox no canto */}
-                  <div style={{
-                    position: 'absolute',
-                    top: '0.75rem',
-                    right: '0.75rem',
-                    width: '1.25rem',
-                    height: '1.25rem',
-                    border: '2px solid #d1d5db',
-                    borderRadius: block.settings.maxSelections === 1 ? '50%' : '0.25rem',
-                    backgroundColor: 'white'
-                  }} />
-                  
-                  {/* Imagem se houver */}
-                  {option.image && (
-                    <div style={{
-                      width: '100%',
-                      height: '120px',
-                      backgroundColor: '#f3f4f6',
-                      borderRadius: '0.5rem',
-                      marginBottom: '0.75rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}>
-                      <span style={{ color: '#9ca3af' }}>📷</span>
-                    </div>
-                  )}
-                  
-                  {/* Texto da opção */}
-                  <p style={{
-                    fontSize: '0.875rem',
-                    color: '#374151',
-                    lineHeight: '1.4',
-                    margin: 0
-                  }}>
-                    {option.text}
-                  </p>
+                  {option.text}
                 </div>
               )) || (
-                <div style={{ 
-                  padding: '2rem', 
-                  border: '2px dashed #d1d5db', 
-                  borderRadius: '0.5rem',
-                  textAlign: 'center',
-                  color: '#9ca3af'
-                }}>
-                  Adicione opções de resposta...
+                <div style={{ padding: '1rem', border: '2px dashed #d1d5db', borderRadius: '0.5rem' }}>
+                  Adicione opções...
                 </div>
               )}
-            </div>
-            
-            {/* Instruções de seleção */}
-            <div style={{
-              textAlign: 'center',
-              marginTop: '1rem',
-              fontSize: '0.875rem',
-              color: '#6b7280'
-            }}>
-              {(block.settings.maxSelections || 1) > 1 
-                ? `Escolha até ${block.settings.maxSelections || 1} opções`
-                : 'Escolha uma opção'
-              }
             </div>
           </div>
         );
@@ -1262,237 +1211,154 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           <div style={blockStyle} onClick={handleBlockClick}>
             <div style={{
               width: '100%',
-              marginBottom: '2rem'
+              height: '8px',
+              backgroundColor: '#F3E8E6',
+              borderRadius: '4px',
+              overflow: 'hidden'
             }}>
-              {/* Barra de progresso */}
               <div style={{
-                width: '100%',
-                height: '8px',
-                backgroundColor: '#e5e7eb',
-                borderRadius: '9999px',
-                overflow: 'hidden',
-                marginBottom: '0.75rem'
-              }}>
-                <div style={{
-                  width: `${block.settings.progressValue || 0}%`,
-                  height: '100%',
-                  backgroundColor: '#3b82f6',
-                  borderRadius: '9999px',
-                  transition: 'width 0.5s ease'
-                }} />
-              </div>
-              
-              {/* Porcentagem e texto */}
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                fontSize: '0.875rem',
-                color: '#6b7280'
-              }}>
-                <span>{Math.round(block.settings.progressValue || 0)}% concluído</span>
-                <span>
-                  Questão {Math.ceil(((block.settings.progressValue || 0) / 100) * 17)} de 17
-                </span>
-              </div>
-            </div>
-          </div>
-        );
-        break;
-
-      // BLOCOS ESPECÍFICOS DO FUNIL REAL
-      case 'loading-animation':
-        content = (
-          <div style={blockStyle} onClick={handleBlockClick}>
-            <div className="flex flex-col items-center justify-center py-8">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
-              <p className="text-gray-600">Carregando...</p>
-            </div>
-          </div>
-        );
-        break;
-
-      case 'transition-text':
-        content = (
-          <div style={blockStyle} onClick={handleBlockClick}>
-            <div className="text-center py-4">
-              <p style={{
-                fontSize: block.settings.style?.fontSize || '1.125rem',
-                fontWeight: block.settings.style?.fontWeight || '500',
-                color: block.settings.style?.color || '#374151',
-                textAlign: 'center'
-              }}>
-                {block.settings.content || 'Texto de transição...'}
-              </p>
-            </div>
-          </div>
-        );
-        break;
-
-      case 'strategic-question':
-        content = (
-          <div style={blockStyle} onClick={handleBlockClick}>
-            <div className="space-y-6 bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
-              <div className="text-center space-y-4">
-                <h2 className="text-2xl font-bold text-gray-800">
-                  {block.settings.content || 'Pergunta estratégica'}
-                </h2>
-                <p className="text-gray-600">Selecione uma opção:</p>
-              </div>
-              <div className="space-y-3">
-                {block.settings.options?.map((option, index) => (
-                  <div 
-                    key={option.id}
-                    className="border-2 border-gray-200 rounded-lg p-4 hover:border-blue-500 hover:bg-blue-50 cursor-pointer transition-all duration-200"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <div className="w-5 h-5 border-2 border-gray-300 rounded-full"></div>
-                      <span className="text-gray-700">{option.text}</span>
-                    </div>
-                  </div>
-                )) || (
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center text-gray-500">
-                    Adicione opções de resposta...
-                  </div>
-                )}
-              </div>
+                width: `${block.settings.progressValue || 0}%`,
+                height: '100%',
+                background: 'linear-gradient(to right, #B89B7A, #aa6b5d)',
+                transition: 'width 0.3s ease'
+              }} />
             </div>
           </div>
         );
         break;
 
       case 'style-result-display':
+        // Renderização REAL da exibição de resultado de estilo - como na ResultPage
         content = (
-          <div style={blockStyle} onClick={handleBlockClick}>
-            <div className="text-center space-y-6 bg-gradient-to-br from-blue-50 to-purple-50 p-8 rounded-xl">
-              <div className="w-24 h-24 mx-auto bg-blue-500 rounded-full flex items-center justify-center mb-4">
-                <span className="text-2xl text-white font-bold">🎯</span>
-              </div>
-              <h2 className="text-3xl font-bold text-gray-800">
-                Seu Estilo: {block.settings.styleType || 'Elegante'}
-              </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                Você tem um estilo sofisticado e refinado, que preza pela elegância em todas as ocasiões.
-              </p>
-              {block.settings.showImage && (
-                <div className="w-32 h-32 mx-auto bg-gray-200 rounded-lg flex items-center justify-center">
-                  <span className="text-gray-500">Imagem do Estilo</span>
+          <div style={blockStyle} onClick={handleBlockClick} className="p-6 bg-white shadow-md border border-[#B89B7A]/20 rounded-lg">
+            <div className="text-center mb-8">
+              <div className="max-w-md mx-auto mb-6">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-[#8F7A6A]">
+                    Seu estilo predominante
+                  </span>
+                  <span className="text-[#aa6b5d] font-medium">85%</span>
                 </div>
-              )}
+                <div className="h-2 bg-[#F3E8E6] rounded-full overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] w-[85%] transition-all duration-300" />
+                </div>
+              </div>
+              <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-4">
+                {block.settings.styleType || 'Clássico Elegante'}
+              </h2>
+              <p className="text-[#432818] leading-relaxed">
+                Seu estilo combina elegância atemporal com sofisticação. Você valoriza qualidade, preferindo peças bem cortadas e clássicas que nunca saem de moda.
+              </p>
             </div>
           </div>
         );
         break;
 
       case 'sales-offer':
+        // Renderização REAL da oferta de vendas - como na ResultPage
         content = (
-          <div style={blockStyle} onClick={handleBlockClick}>
-            <div className="bg-gradient-to-br from-green-50 to-blue-50 border-2 border-green-200 rounded-xl p-8 relative overflow-hidden">
-              {block.settings.urgency && (
-                <div className="absolute top-0 right-0 bg-red-500 text-white px-4 py-2 text-sm font-bold transform rotate-12 translate-x-4 -translate-y-2">
-                  OFERTA ESPECIAL
+          <div style={blockStyle} onClick={handleBlockClick} className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20">
+            <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">
+              {block.settings.productName || 'Guia de Estilo Completo'}
+            </h3>
+            
+            <div className="space-y-3 mb-6">
+              <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
+                <span>Guia Principal</span>
+                <span className="font-medium">R$ 67,00</span>
+              </div>
+              <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
+                <span>Bônus - Peças-chave</span>
+                <span className="font-medium">R$ 79,00</span>
+              </div>
+              <div className="flex justify-between items-center p-2 pt-3 font-bold">
+                <span>Valor Total</span>
+                <div className="relative">
+                  <span>R$ 175,00</span>
+                  <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#ff5a5a] transform -translate-y-1/2 -rotate-3"></div>
                 </div>
-              )}
-              <div className="text-center">
-                <h3 className="text-3xl font-bold text-gray-800 mb-2">
-                  {block.settings.productName || 'Guias de Estilo Completo'}
-                </h3>
-                <p className="text-gray-600 mb-6">
-                  Descubra seu estilo completo com nossa consultoria personalizada
-                </p>
-                
-                <div className="mb-6">
-                  {block.settings.originalPrice && (
-                    <>
-                      <div className="text-sm text-gray-500 mb-2">DE:</div>
-                      <span className="text-2xl text-gray-500 line-through">
-                        {block.settings.originalPrice}
-                      </span>
-                      <div className="text-sm text-gray-500 mt-1 mb-4">POR APENAS:</div>
-                    </>
-                  )}
-                  <span className="text-5xl font-bold text-green-600">
-                    {block.settings.price || 'R$ 97,00'}
-                  </span>
-                  <div className="text-sm text-gray-600 mt-2">ou 12x de R$ 9,70</div>
-                </div>
-
-                <button 
-                  className="w-full bg-green-600 hover:bg-green-700 text-white text-lg py-4 rounded-lg font-bold transition-colors"
-                  style={{ cursor: 'pointer' }}
-                >
-                  {block.settings.ctaText || 'QUERO DESCOBRIR MEU ESTILO COMPLETO'}
-                </button>
               </div>
             </div>
+            
+            <div className="text-center p-4 bg-[#f9f4ef] rounded-lg mb-4">
+              <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
+              <p className="text-4xl font-bold text-[#B89B7A]">{block.settings.price || 'R$ 39,00'}</p>
+              <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único</p>
+            </div>
+
+            <button className="w-full bg-[#4CAF50] hover:bg-[#45a049] text-white py-4 px-6 rounded-md shadow-md transition-all duration-300 font-semibold">
+              {block.settings.ctaText || 'Quero meu Guia de Estilo Agora'}
+            </button>
           </div>
         );
         break;
 
       case 'testimonials-grid':
+        // Renderização REAL dos depoimentos - como na ResultPage
         content = (
-          <div style={blockStyle} onClick={handleBlockClick}>
-            <div className="space-y-6">
-              <h3 className="text-2xl font-bold text-center text-gray-800">
-                O que nossas clientes dizem
-              </h3>
-              <div className={`grid gap-6 ${
-                block.settings.columns === 1 ? 'grid-cols-1' :
-                block.settings.columns === 3 ? 'grid-cols-1 md:grid-cols-3' :
-                'grid-cols-1 md:grid-cols-2'
-              }`}>
-                {block.settings.testimonials?.map((testimonial, index) => (
-                  <div key={index} className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                    <div className="flex items-start space-x-4">
-                      <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
-                        <span className="text-sm text-gray-600">👤</span>
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-gray-700 italic mb-3">"{testimonial.text}"</p>
-                        <div className="flex items-center">
-                          <span className="font-semibold text-gray-800">{testimonial.name}</span>
-                          <div className="flex ml-2">
-                            {[1,2,3,4,5].map(star => (
-                              <span key={star} className="text-yellow-400">⭐</span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+          <div style={blockStyle} onClick={handleBlockClick} className="my-8">
+            <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-6">
+              O que nossas clientes dizem
+            </h3>
+            <div className={`grid gap-4 ${block.settings.columns === 3 ? 'grid-cols-1 md:grid-cols-3' : 'grid-cols-1 md:grid-cols-2'}`}>
+              {block.settings.testimonials?.map((testimonial, index) => (
+                <div key={index} className="bg-white p-4 rounded-lg shadow-sm border border-[#B89B7A]/10">
+                  <div className="flex items-center mb-3">
+                    <img 
+                      src={testimonial.image || '/placeholder.svg'} 
+                      alt={testimonial.name} 
+                      className="w-10 h-10 rounded-full mr-3"
+                    />
+                    <span className="font-medium text-[#432818]">{testimonial.name}</span>
                   </div>
-                )) || (
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center text-gray-500">
-                    Adicione depoimentos...
-                  </div>
-                )}
-              </div>
+                  <p className="text-sm text-[#432818] italic">"{testimonial.text}"</p>
+                </div>
+              )) || (
+                <div className="text-center p-4 border-2 border-dashed border-[#B89B7A]/20 rounded-lg">
+                  <p className="text-[#8F7A6A]">Adicione depoimentos...</p>
+                </div>
+              )}
             </div>
           </div>
         );
         break;
 
       case 'guarantee-section':
+        // Renderização REAL da garantia - como na ResultPage
         content = (
-          <div style={blockStyle} onClick={handleBlockClick}>
-            <div 
-              className="p-6 rounded-lg text-center"
-              style={{
-                backgroundColor: block.settings.style?.backgroundColor || '#e8f5e8',
-                borderRadius: block.settings.style?.borderRadius || '0.5rem'
-              }}
-            >
-              {block.settings.showIcon && (
-                <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl text-white">🛡️</span>
-                </div>
-              )}
-              <h4 className="text-xl font-bold text-gray-800 mb-2">
-                {block.settings.guaranteeText || 'Garantia de 7 dias'}
-              </h4>
-              <p className="text-gray-600">
-                {block.settings.guaranteeDetails || 'Se não ficar satisfeita, devolvemos seu dinheiro'}
-              </p>
-            </div>
+          <div style={blockStyle} onClick={handleBlockClick} className="bg-[#e8f5e8] p-6 rounded-lg text-center my-6">
+            {block.settings.showIcon && (
+              <div className="w-16 h-16 bg-[#4CAF50] rounded-full flex items-center justify-center mx-auto mb-4">
+                <Shield className="w-8 h-8 text-white" />
+              </div>
+            )}
+            <h3 className="text-lg font-semibold text-[#432818] mb-2">
+              {block.settings.guaranteeText || 'Garantia de 7 dias'}
+            </h3>
+            <p className="text-[#432818]">
+              {block.settings.guaranteeDetails || 'Se não ficar satisfeita, devolvemos seu dinheiro'}
+            </p>
+          </div>
+        );
+        break;
+
+      case 'loading-animation':
+        content = (
+          <div style={blockStyle} onClick={handleBlockClick} className="flex flex-col items-center justify-center py-8">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#B89B7A] mb-4"></div>
+            <p className="text-[#432818] text-center">
+              {block.settings.content || 'Carregando...'}
+            </p>
+          </div>
+        );
+        break;
+
+      case 'transition-text':
+        content = (
+          <div style={blockStyle} onClick={handleBlockClick} className="text-center py-4">
+            <p className="text-lg text-[#432818] font-medium">
+              {block.settings.content || 'Analisando suas respostas...'}
+            </p>
           </div>
         );
         break;
@@ -1729,242 +1595,6 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
               })}
               className="text-sm h-8 mt-1"
             />
-          </div>
-        )}
-
-        {/* PAINÉIS ESPECÍFICOS PARA NOVOS BLOCOS */}
-        {selectedBlock.type === 'loading-animation' && (
-          <div className="space-y-3">
-            <div>
-              <Label className="text-xs">Duração (ms)</Label>
-              <Input
-                type="number"
-                value={selectedBlock.settings.duration || 3000}
-                onChange={(e) => updateBlock(selectedBlock.id, {
-                  settings: { ...selectedBlock.settings, duration: parseInt(e.target.value) || 3000 }
-                })}
-                className="text-sm h-8 mt-1"
-              />
-            </div>
-            <div>
-              <Label className="text-xs">Tipo de Animação</Label>
-              <Select
-                value={selectedBlock.settings.animationType || 'spinner'}
-                onValueChange={(value) => updateBlock(selectedBlock.id, {
-                  settings: { ...selectedBlock.settings, animationType: value }
-                })}
-              >
-                <SelectTrigger className="h-8 text-xs">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="spinner">Spinner</SelectItem>
-                  <SelectItem value="dots">Pontos</SelectItem>
-                  <SelectItem value="pulse">Pulse</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        )}
-
-        {selectedBlock.type === 'transition-text' && (
-          <div>
-            <Label className="text-xs">Texto da Transição</Label>
-            <Textarea
-              value={selectedBlock.settings.content || ''}
-              onChange={(e) => updateBlock(selectedBlock.id, {
-                settings: { ...selectedBlock.settings, content: e.target.value }
-              })}
-              className="text-sm resize-none mt-1"
-              rows={2}
-              placeholder="Ex: Analisando suas respostas..."
-            />
-          </div>
-        )}
-
-        {selectedBlock.type === 'strategic-question' && (
-          <div>
-            <Label className="text-xs">Pergunta Estratégica</Label>
-            <Textarea
-              value={selectedBlock.settings.content || ''}
-              onChange={(e) => updateBlock(selectedBlock.id, {
-                settings: { ...selectedBlock.settings, content: e.target.value }
-              })}
-              className="text-sm resize-none mt-1"
-              rows={3}
-              placeholder="Ex: Você já considerou investir em consultoria de estilo?"
-            />
-          </div>
-        )}
-
-        {selectedBlock.type === 'style-result-display' && (
-          <div className="space-y-3">
-            <div>
-              <Label className="text-xs">Tipo de Estilo</Label>
-              <Select
-                value={selectedBlock.settings.styleType || 'primary'}
-                onValueChange={(value) => updateBlock(selectedBlock.id, {
-                  settings: { ...selectedBlock.settings, styleType: value }
-                })}
-              >
-                <SelectTrigger className="h-8 text-xs">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="natural">Natural</SelectItem>
-                  <SelectItem value="classico">Clássico</SelectItem>
-                  <SelectItem value="contemporaneo">Contemporâneo</SelectItem>
-                  <SelectItem value="elegante">Elegante</SelectItem>
-                  <SelectItem value="romantico">Romântico</SelectItem>
-                  <SelectItem value="sexy">Sexy</SelectItem>
-                  <SelectItem value="dramatico">Dramático</SelectItem>
-                  <SelectItem value="criativo">Criativo</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Switch
-                checked={selectedBlock.settings.showImage || false}
-                onCheckedChange={(checked) => updateBlock(selectedBlock.id, {
-                  settings: { ...selectedBlock.settings, showImage: checked }
-                })}
-              />
-              <Label className="text-xs">Mostrar imagem</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Switch
-                checked={selectedBlock.settings.showDescription || false}
-                onCheckedChange={(checked) => updateBlock(selectedBlock.id, {
-                  settings: { ...selectedBlock.settings, showDescription: checked }
-                })}
-              />
-              <Label className="text-xs">Mostrar descrição</Label>
-            </div>
-          </div>
-        )}
-
-        {selectedBlock.type === 'sales-offer' && (
-          <div className="space-y-3">
-            <div>
-              <Label className="text-xs">Nome do Produto</Label>
-              <Input
-                value={selectedBlock.settings.productName || ''}
-                onChange={(e) => updateBlock(selectedBlock.id, {
-                  settings: { ...selectedBlock.settings, productName: e.target.value }
-                })}
-                className="text-sm h-8 mt-1"
-                placeholder="Ex: Guias de Estilo Completo"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <Label className="text-xs">Preço Atual</Label>
-                <Input
-                  value={selectedBlock.settings.price || ''}
-                  onChange={(e) => updateBlock(selectedBlock.id, {
-                    settings: { ...selectedBlock.settings, price: e.target.value }
-                  })}
-                  className="text-sm h-8 mt-1"
-                  placeholder="R$ 97,00"
-                />
-              </div>
-              <div>
-                <Label className="text-xs">Preço Original</Label>
-                <Input
-                  value={selectedBlock.settings.originalPrice || ''}
-                  onChange={(e) => updateBlock(selectedBlock.id, {
-                    settings: { ...selectedBlock.settings, originalPrice: e.target.value }
-                  })}
-                  className="text-sm h-8 mt-1"
-                  placeholder="R$ 297,00"
-                />
-              </div>
-            </div>
-            <div>
-              <Label className="text-xs">Texto do CTA</Label>
-              <Input
-                value={selectedBlock.settings.ctaText || ''}
-                onChange={(e) => updateBlock(selectedBlock.id, {
-                  settings: { ...selectedBlock.settings, ctaText: e.target.value }
-                })}
-                className="text-sm h-8 mt-1"
-                placeholder="QUERO DESCOBRIR MEU ESTILO"
-              />
-            </div>
-            <div className="flex items-center space-x-2">
-              <Switch
-                checked={selectedBlock.settings.urgency || false}
-                onCheckedChange={(checked) => updateBlock(selectedBlock.id, {
-                  settings: { ...selectedBlock.settings, urgency: checked }
-                })}
-              />
-              <Label className="text-xs">Mostrar urgência</Label>
-            </div>
-          </div>
-        )}
-
-        {selectedBlock.type === 'testimonials-grid' && (
-          <div className="space-y-3">
-            <div>
-              <Label className="text-xs">Número de Colunas</Label>
-              <Select
-                value={String(selectedBlock.settings.columns || 2)}
-                onValueChange={(value) => updateBlock(selectedBlock.id, {
-                  settings: { ...selectedBlock.settings, columns: parseInt(value) }
-                })}
-              >
-                <SelectTrigger className="h-8 text-xs">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">1 Coluna</SelectItem>
-                  <SelectItem value="2">2 Colunas</SelectItem>
-                  <SelectItem value="3">3 Colunas</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label className="text-xs">Depoimentos</Label>
-              <p className="text-xs text-gray-500 mt-1">Configure os depoimentos abaixo:</p>
-              {/* Aqui pode adicionar interface para gerenciar depoimentos */}
-            </div>
-          </div>
-        )}
-
-        {selectedBlock.type === 'guarantee-section' && (
-          <div className="space-y-3">
-            <div>
-              <Label className="text-xs">Texto da Garantia</Label>
-              <Input
-                value={selectedBlock.settings.guaranteeText || ''}
-                onChange={(e) => updateBlock(selectedBlock.id, {
-                  settings: { ...selectedBlock.settings, guaranteeText: e.target.value }
-                })}
-                className="text-sm h-8 mt-1"
-                placeholder="Garantia de 7 dias"
-              />
-            </div>
-            <div>
-              <Label className="text-xs">Detalhes da Garantia</Label>
-              <Textarea
-                value={selectedBlock.settings.guaranteeDetails || ''}
-                onChange={(e) => updateBlock(selectedBlock.id, {
-                  settings: { ...selectedBlock.settings, guaranteeDetails: e.target.value }
-                })}
-                className="text-sm resize-none mt-1"
-                rows={2}
-                placeholder="Se não ficar satisfeita, devolvemos seu dinheiro"
-              />
-            </div>
-            <div className="flex items-center space-x-2">
-              <Switch
-                checked={selectedBlock.settings.showIcon || false}
-                onCheckedChange={(checked) => updateBlock(selectedBlock.id, {
-                  settings: { ...selectedBlock.settings, showIcon: checked }
-                })}
-              />
-              <Label className="text-xs">Mostrar ícone</Label>
-            </div>
           </div>
         )}
 
