@@ -1774,6 +1774,305 @@ export const blockDefinitions: BlockDefinition[] = [
     ]
   },
 
+  // Novos blocos adicionais
+  {
+    id: 'alert',
+    type: 'alert',
+    name: 'Alerta',
+    description: 'Caixa de mensagem de alerta com diferentes variantes.',
+    icon: 'TriangleAlert',
+    category: 'UI',
+    propertiesSchema: [
+      { key: 'title', label: 'Título do Alerta', type: 'text-input', placeholder: 'Atenção!' },
+      { key: 'message', label: 'Mensagem do Alerta', type: 'textarea', placeholder: 'Esta é uma mensagem importante.', rows: 2 },
+      {
+        key: 'variant',
+        label: 'Variante',
+        type: 'select',
+        options: [
+          { label: 'Info (Azul)', value: 'info' },
+          { label: 'Sucesso (Verde)', value: 'success' },
+          { label: 'Aviso (Amarelo)', value: 'warning' },
+          { label: 'Erro (Vermelho)', value: 'error' },
+        ],
+        defaultValue: 'info',
+      },
+    ],
+  },
+
+  {
+    id: 'arguments',
+    type: 'arguments',
+    name: 'Argumentos',
+    description: 'Lista de argumentos ou benefícios com ícones.',
+    icon: 'Book',
+    category: 'Social',
+    propertiesSchema: [
+      { key: 'title', label: 'Título', type: 'text-input', placeholder: 'Por que escolher nosso produto?' },
+      {
+        key: 'items',
+        label: 'Lista de Argumentos',
+        type: 'array-editor',
+        itemSchema: [
+          { key: 'text', label: 'Texto do Argumento', type: 'text-input', placeholder: 'Qualidade superior' },
+          { key: 'icon', label: 'Ícone (Lucide ou Emoji)', type: 'text-input', placeholder: 'CheckCircle ou ✅' },
+        ],
+        description: 'Adicione cada argumento com seu texto e um ícone (nome Lucide React ou emoji).'
+      },
+    ],
+  },
+
+  {
+    id: 'audio',
+    type: 'audio',
+    name: 'Áudio',
+    description: 'Player de áudio.',
+    icon: 'Mic',
+    category: 'Mídia',
+    propertiesSchema: [
+      { key: 'audioUrl', label: 'URL do Áudio', type: 'video-url', placeholder: 'https://example.com/audio.mp3', description: 'Insira a URL direta para o arquivo de áudio (.mp3, .wav, etc.).' },
+      { key: 'autoplay', label: 'Autoplay', type: 'boolean-switch', defaultValue: false },
+      { key: 'controls', label: 'Mostrar Controles', type: 'boolean-switch', defaultValue: true },
+    ],
+  },
+
+  {
+    id: 'carousel',
+    type: 'carousel',
+    name: 'Carrossel',
+    description: 'Galeria de imagens deslizante.',
+    icon: 'GalleryHorizontalEnd',
+    category: 'Mídia',
+    propertiesSchema: [
+      {
+        key: 'images',
+        label: 'Imagens do Carrossel',
+        type: 'array-editor',
+        itemSchema: [
+          { key: 'src', label: 'URL da Imagem', type: 'image-url', placeholder: 'https://example.com/img1.jpg' },
+          { key: 'alt', label: 'Texto Alternativo', type: 'text-input', placeholder: 'Imagem do carrossel' },
+        ],
+        description: 'Adicione URLs e textos alternativos para as imagens do carrossel.'
+      },
+      { key: 'autoplay', label: 'Autoplay', type: 'boolean-switch', defaultValue: true },
+      { key: 'interval', label: 'Intervalo (ms)', type: 'number-input', min: 1000, defaultValue: 5000, description: 'Tempo entre as transições de imagem.' },
+    ],
+  },
+
+  {
+    id: 'loader',
+    type: 'loader',
+    name: 'Carregando',
+    description: 'Indicador de carregamento animado.',
+    icon: 'LoaderCircle',
+    category: 'UI',
+    propertiesSchema: [
+      { key: 'message', label: 'Mensagem', type: 'text-input', placeholder: 'Carregando...' },
+      {
+        key: 'type',
+        label: 'Tipo de Animação',
+        type: 'select',
+        options: [
+          { label: 'Girando', value: 'spinning' },
+          { label: 'Pontos', value: 'dots' },
+          { label: 'Barras', value: 'bars' },
+          { label: 'Elegante', value: 'elegant' },
+        ],
+        defaultValue: 'spinning',
+      },
+      { key: 'duration', label: 'Duração (ms)', type: 'number-input', min: 100, defaultValue: 4000, description: 'Duração da animação (se aplicável).' },
+    ],
+  },
+
+  {
+    id: 'chart-compare',
+    type: 'chart-compare',
+    name: 'Comparação',
+    description: 'Gráfico de comparação de dois valores.',
+    icon: 'AlignHorizontalDistributeEnd',
+    category: 'Gráficos',
+    isNew: true,
+    propertiesSchema: [
+      { key: 'title', label: 'Título da Comparação', type: 'text-input', placeholder: 'Antes vs Depois' },
+      { key: 'value1', label: 'Valor 1', type: 'number-input', defaultValue: 30, min: 0, max: 100 },
+      { key: 'label1', label: 'Label 1', type: 'text-input', placeholder: 'Antes' },
+      { key: 'value2', label: 'Valor 2', type: 'number-input', defaultValue: 70, min: 0, max: 100 },
+      { key: 'label2', label: 'Label 2', type: 'text-input', placeholder: 'Depois' },
+      { key: 'color1', label: 'Cor 1', type: 'color-picker', defaultValue: '#B89B7A' },
+      { key: 'color2', label: 'Cor 2', type: 'color-picker', defaultValue: '#432818' },
+    ],
+  },
+
+  {
+    id: 'confetti',
+    type: 'confetti',
+    name: 'Confetti',
+    description: 'Efeito visual de confete.',
+    icon: 'Sparkles',
+    category: 'UI',
+    isNew: true,
+    propertiesSchema: [
+      { key: 'duration', label: 'Duração (ms)', type: 'number-input', defaultValue: 3000, min: 500, description: 'Tempo que o confete fica visível.' },
+      { key: 'particleCount', label: 'Contagem de Partículas', type: 'number-input', defaultValue: 100, min: 10, max: 500, description: 'Número de partículas de confete.' },
+    ],
+  },
+
+  {
+    id: 'quote',
+    type: 'quote',
+    name: 'Citação',
+    description: 'Um bloco de citação com autor.',
+    icon: 'Quote',
+    category: 'Texto',
+    propertiesSchema: [
+      { key: 'text', label: 'Texto da Citação', type: 'textarea', placeholder: 'A vida é o que acontece enquanto você está ocupado fazendo outros planos.', rows: 3 },
+      { key: 'author', label: 'Autor', type: 'text-input', placeholder: 'John Lennon' },
+    ],
+  },
+
+  {
+    id: 'form-input',
+    type: 'form-input',
+    name: 'Campo de Entrada',
+    description: 'Input de texto genérico para formulários.',
+    icon: 'TextCursorInput',
+    category: 'Formulário',
+    propertiesSchema: [
+      { key: 'label', label: 'Rótulo', type: 'text-input', placeholder: 'Nome Completo' },
+      { key: 'placeholder', label: 'Placeholder', type: 'text-input', placeholder: 'Digite seu nome aqui...' },
+      {
+        key: 'type',
+        label: 'Tipo de Input',
+        type: 'select',
+        options: [
+          { label: 'Texto', value: 'text' },
+          { label: 'Email', value: 'email' },
+          { label: 'Telefone', value: 'tel' },
+          { label: 'Número', value: 'number' },
+          { label: 'Senha', value: 'password' },
+        ],
+        defaultValue: 'text',
+      },
+      { key: 'required', label: 'Obrigatório', type: 'boolean-switch', defaultValue: false },
+    ],
+  },
+
+  {
+    id: 'chart-area',
+    type: 'chart-area',
+    name: 'Gráfico de Área',
+    description: 'Gráfico de área para visualizar dados.',
+    icon: 'ChartArea',
+    category: 'Gráficos',
+    propertiesSchema: [
+      { key: 'title', label: 'Título do Gráfico', type: 'text-input', placeholder: 'Gráfico de Área' },
+      { key: 'data', label: 'Dados (JSON)', type: 'json-editor', placeholder: '[{"x": 1, "y": 10}, {"x": 2, "y": 20}]', description: 'Array de objetos com dados para o gráfico.' },
+      { key: 'xAxisKey', label: 'Chave do Eixo X', type: 'text-input', placeholder: 'x', defaultValue: 'x' },
+      { key: 'yAxisKey', label: 'Chave do Eixo Y', type: 'text-input', placeholder: 'y', defaultValue: 'y' },
+    ],
+  },
+
+  {
+    id: 'chart-level',
+    type: 'chart-level',
+    name: 'Nível',
+    description: 'Indicador circular de nível ou progresso.',
+    icon: 'SlidersHorizontal',
+    category: 'Gráficos',
+    propertiesSchema: [
+      { key: 'value', label: 'Valor (%)', type: 'number-input', defaultValue: 75, min: 0, max: 100 },
+      { key: 'label', label: 'Rótulo', type: 'text-input', placeholder: 'Nível de Progresso' },
+      { key: 'color', label: 'Cor Principal', type: 'color-picker', defaultValue: '#3b82f6' },
+      { key: 'backgroundColor', label: 'Cor de Fundo', type: 'color-picker', defaultValue: '#e0e7ff' },
+    ],
+  },
+
+  {
+    id: 'list',
+    type: 'list',
+    name: 'Lista',
+    description: 'Lista de itens (ordenada ou não).',
+    icon: 'List',
+    category: 'Texto',
+    isNew: true,
+    propertiesSchema: [
+      { key: 'listType', label: 'Tipo de Lista', type: 'select', options: [{ label: 'Não Ordenada', value: 'ul' }, { label: 'Ordenada', value: 'ol' }], defaultValue: 'ul' },
+      {
+        key: 'items',
+        label: 'Itens da Lista',
+        type: 'array-editor',
+        itemSchema: [
+          { key: 'text', label: 'Texto do Item', type: 'text-input', placeholder: 'Novo item' },
+        ],
+      },
+    ],
+  },
+
+  {
+    id: 'marquee',
+    type: 'marquee',
+    name: 'Marquise',
+    description: 'Texto rolando horizontalmente.',
+    icon: 'ArrowRightLeft',
+    category: 'UI',
+    isNew: true,
+    propertiesSchema: [
+      { key: 'text', label: 'Texto da Marquise', type: 'text-input', placeholder: 'Texto que rola...' },
+      { key: 'speed', label: 'Velocidade', type: 'number-input', defaultValue: 50, min: 10, max: 200, description: 'Velocidade de rolagem (menor = mais rápido).' },
+      { key: 'direction', label: 'Direção', type: 'select', options: [{ label: 'Esquerda', value: 'left' }, { label: 'Direita', value: 'right' }], defaultValue: 'left' },
+      { key: 'textColor', label: 'Cor do Texto', type: 'color-picker', defaultValue: '#000000' },
+      { key: 'backgroundColor', label: 'Cor de Fundo', type: 'color-picker', defaultValue: '#f0f0f0' },
+    ],
+  },
+
+  {
+    id: 'options-grid',
+    type: 'options-grid',
+    name: 'Grid de Opções',
+    description: 'Exibe opções em um formato de grade, ideal para seleção visual.',
+    icon: 'Rows3',
+    category: 'UI',
+    propertiesSchema: [
+      { key: 'title', label: 'Título da Seção', type: 'text-input', placeholder: 'Escolha sua opção:' },
+      {
+        key: 'options',
+        label: 'Opções',
+        type: 'array-editor',
+        itemSchema: [
+          { key: 'text', label: 'Texto da Opção', type: 'text-input', placeholder: 'Opção 1' },
+          { key: 'imageUrl', label: 'URL da Imagem (Opcional)', type: 'image-url', placeholder: 'https://example.com/option1.jpg' },
+        ],
+      },
+      { key: 'columns', label: 'Colunas (Grade)', type: 'number-input', min: 1, max: 4, defaultValue: 2 },
+    ],
+  },
+
+  {
+    id: 'script',
+    type: 'script',
+    name: 'Script',
+    description: 'Insere código JavaScript customizado na página.',
+    icon: 'Code',
+    category: 'Outros',
+    propertiesSchema: [
+      { key: 'code', label: 'Código JavaScript', type: 'textarea', rows: 10, placeholder: 'console.log("Olá mundo!");', description: 'Insira o código JS que será injetado na página.' },
+      { key: 'placement', label: 'Posicionamento', type: 'select', options: [{ label: 'Head', value: 'head' }, { label: 'Body (Início)', value: 'body-start' }, { label: 'Body (Fim)', value: 'body-end' }], defaultValue: 'body-end' },
+    ],
+  },
+
+  {
+    id: 'terms',
+    type: 'terms',
+    name: 'Termos',
+    description: 'Bloco de termos e condições ou aviso legal.',
+    icon: 'Scale',
+    category: 'Vendas',
+    propertiesSchema: [
+      { key: 'title', label: 'Título', type: 'text-input', placeholder: 'Termos e Condições' },
+      { key: 'content', label: 'Conteúdo', type: 'textarea', placeholder: 'Leia nossos termos de uso...', rows: 5 },
+    ],
+  },
+
   // ...existing code...
 ];
 
