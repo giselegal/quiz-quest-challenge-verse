@@ -270,6 +270,14 @@ const SectionTitle: React.FC<{
 );
 
 const QuizOfferPage: React.FC = () => {
+    // Integração com o editor visual
+    const { 
+        config: pageConfig, 
+        isLoading: configLoading, 
+        getBlockProps,
+        applyStyles
+    } = usePageConfig('quiz-offer-page');
+
     useEffect(() => {
         // Inject custom styles
         const styleElement = document.createElement('style');
