@@ -1,28 +1,31 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 
 /**
- * QuizIntroBlock - Componente de introdução do quiz (Etapa 1)
+ * QuizIntroBlock - Componente de introdução do quiz 100% fiel ao original
  * 
  * Props editáveis via editor visual:
- * - title: string - Título principal 
- * - subtitle: string - Subtítulo/descrição
- * - namePlaceholder: string - Placeholder do input de nome
- * - buttonText: string - Texto do botão
- * - showLogo: boolean - Mostrar logo
+ * - title: string - Título principal (suporte a HTML/JSX)
+ * - subtitle: string - Texto descritivo 
  * - logoUrl: string - URL do logo
- * - backgroundColor: string - Cor de fundo
- * - textColor: string - Cor do texto
- * - onStart: function - Callback ao iniciar
+ * - logoAlt: string - Alt text do logo
+ * - introImageUrl: string - URL da imagem principal
+ * - introImageAlt: string - Alt text da imagem
+ * - namePlaceholder: string - Placeholder do input
+ * - buttonTextEmpty: string - Texto do botão quando vazio
+ * - buttonTextFilled: string - Texto do botão quando preenchido
+ * - privacyText: string - Texto da política de privacidade
+ * - footerText: string - Texto do rodapé
+ * - colors: object - Paleta de cores customizável
+ * - onStart: function - Callback ao iniciar quiz
  * 
  * @example
  * <QuizIntroBlock
- *   blockId="quiz-intro-1"
- *   title="Descubra Seu Estilo Pessoal"
- *   subtitle="Um quiz personalizado para descobrir seu estilo único"
- *   namePlaceholder="Digite seu nome aqui..."
- *   buttonText="Iniciar Quiz"
+ *   blockId="quiz-intro-main"
+ *   title="<span className='text-[#B89B7A]'>Chega</span> de um guarda-roupa lotado..."
+ *   subtitle="Em poucos minutos, descubra seu Estilo Predominante..."
+ *   logoUrl="https://example.com/logo.png"
  *   onStart={(nome) => console.log('Iniciando quiz para:', nome)}
  * />
  */
@@ -33,27 +36,44 @@ export interface QuizIntroBlockProps {
   className?: string;
   style?: React.CSSProperties;
 
-  // Conteúdo editável
+  // Conteúdo editável - Textos
   title?: string;
   subtitle?: string;
   namePlaceholder?: string;
-  buttonText?: string;
-  
-  // Visual
-  showLogo?: boolean;
+  buttonTextEmpty?: string;
+  buttonTextFilled?: string;
+  privacyText?: string;
+  footerText?: string;
+
+  // Conteúdo editável - Imagens
   logoUrl?: string;
-  backgroundColor?: string;
-  textColor?: string;
-  buttonColor?: string;
+  logoAlt?: string;
+  logoWidth?: number;
+  logoHeight?: number;
+  introImageUrl?: string;
+  introImageAlt?: string;
+  
+  // Configurações visuais
+  colors?: {
+    primary?: string;
+    primaryDark?: string;
+    secondary?: string;
+    background?: string;
+    backgroundAlt?: string;
+    text?: string;
+    textLight?: string;
+    border?: string;
+  };
   
   // Funcionalidade
   onStart?: (nome: string) => void;
   disabled?: boolean;
   required?: boolean;
+  maxLength?: number;
   
-  // Layout
-  alignment?: 'left' | 'center' | 'right';
-  spacing?: 'compact' | 'normal' | 'spacious';
+  // Layout e responsividade
+  maxWidth?: string;
+  backgroundGradient?: string;
 }
 
 const QuizIntroBlock: React.FC<QuizIntroBlockProps> = ({
@@ -61,23 +81,44 @@ const QuizIntroBlock: React.FC<QuizIntroBlockProps> = ({
   className = '',
   style = {},
   
-  title = 'Descubra Seu Estilo Pessoal',
-  subtitle = 'Um quiz personalizado para descobrir seu estilo único e transformar seu guarda-roupa',
-  namePlaceholder = 'Digite seu nome aqui...',
-  buttonText = 'Iniciar Quiz',
+  // Textos padrão idênticos ao original
+  title = '<span class="text-[#B89B7A]">Chega</span> de um guarda-roupa lotado e da sensação de que nada combina com <span class="text-[#B89B7A]">Você</span>.',
+  subtitle = 'Em poucos minutos, descubra seu <span class="font-semibold text-[#B89B7A]">Estilo Predominante</span> — e aprenda a montar looks que realmente refletem sua <span class="font-semibold text-[#432818]">essência</span>, com praticidade e <span class="font-semibold text-[#432818]">confiança</span>.',
+  namePlaceholder = 'Digite seu nome',
+  buttonTextEmpty = 'Digite seu nome para continuar',
+  buttonTextFilled = 'Quero Descobrir meu Estilo Agora!',
+  privacyText = 'Seu nome é necessário para personalizar sua experiência. Ao clicar, você concorda com nossa política de privacidade',
+  footerText = `© ${new Date().getFullYear()} Gisele Galvão - Todos os direitos reservados`,
+
+  // Imagens padrão idênticas ao original
+  logoUrl = 'https://res.cloudinary.com/dqljyf76t/image/upload/f_webp,q_70,w_120,h_50,c_fit/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+  logoAlt = 'Logo Gisele Galvão',
+  logoWidth = 120,
+  logoHeight = 50,
+  introImageUrl = 'https://res.cloudinary.com/dqljyf76t/image/upload/f_webp,q_85,w_300,c_limit/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp',
+  introImageAlt = 'Descubra seu estilo predominante e transforme seu guarda-roupa',
   
-  showLogo = true,
-  logoUrl = 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
-  backgroundColor = '#ffffff',
-  textColor = '#432818',
-  buttonColor = '#B89B7A',
+  // Cores padrão idênticas ao original
+  colors = {
+    primary: '#B89B7A',
+    primaryDark: '#A1835D',
+    secondary: '#432818',
+    background: '#FEFEFE',
+    backgroundAlt: '#F8F5F0',
+    text: '#432818',
+    textLight: '#6B7280',
+    border: '#E5E7EB',
+  },
   
+  // Funcionalidade
   onStart,
   disabled = false,
   required = true,
+  maxLength = 32,
   
-  alignment = 'center',
-  spacing = 'normal',
+  // Layout
+  maxWidth = 'max-w-xs sm:max-w-md md:max-w-lg',
+  backgroundGradient = 'bg-gradient-to-b from-white to-gray-50',
 }) => {
   const [nome, setNome] = useState('');
   const [error, setError] = useState('');
@@ -94,97 +135,235 @@ const QuizIntroBlock: React.FC<QuizIntroBlockProps> = ({
     if (onStart) {
       onStart(nome.trim());
     }
+    
+    // Web Vitals reporting
+    if (typeof window !== 'undefined' && 'performance' in window) {
+      window.performance.mark('user-interaction');
+    }
   };
 
-  const spacingClasses = {
-    compact: 'py-8 px-4 space-y-4',
-    normal: 'py-12 px-6 space-y-6',
-    spacious: 'py-16 px-8 space-y-8'
+  // Efeito de inicialização para Web Vitals
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'performance' in window) {
+      window.performance.mark('component-mounted');
+    }
+    
+    const reportLcpRendered = () => {
+      if (typeof window !== 'undefined' && (window as any).QUIZ_PERF) {
+        (window as any).QUIZ_PERF.mark('lcp_rendered');
+      }
+    };
+    
+    requestAnimationFrame(() => {
+      requestAnimationFrame(reportLcpRendered);
+    });
+  }, []);
+
+  // Função para renderizar HTML seguro (apenas para título e subtítulo)
+  const renderHTML = (htmlString: string) => {
+    return <span dangerouslySetInnerHTML={{ __html: htmlString }} />;
   };
 
   return (
-    <div 
-      className={`quiz-intro-block ${spacingClasses[spacing]} ${className}`}
+    <main
+      className={`flex flex-col items-center justify-start min-h-screen ${backgroundGradient} py-8 ${className}`}
+      data-section="intro"
       data-block-id={blockId}
-      style={{ 
-        backgroundColor,
-        color: textColor,
-        textAlign: alignment,
-        ...style 
-      }}
+      style={style}
     >
-      <div className="max-w-2xl mx-auto">
-        {/* Logo */}
-        {showLogo && logoUrl && (
-          <div className="mb-8">
-            <img 
-              src={logoUrl} 
-              alt="Logo" 
-              className="h-16 md:h-20 mx-auto object-contain"
+      {/* Skip link para acessibilidade */}
+      <a 
+        href="#quiz-form" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 bg-white px-4 py-2 rounded-md shadow-md"
+        style={{ color: colors.text }}
+      >
+        Pular para o formulário
+      </a>
+      
+      <header className={`w-full ${maxWidth} px-4 space-y-8 mx-auto`}>
+        {/* Logo centralizado - renderização imediata */}
+        <div className="flex flex-col items-center space-y-2">
+          <div className="relative">
+            <img
+              src={logoUrl}
+              alt={logoAlt}
+              className="h-auto mx-auto"
+              width={logoWidth}
+              height={logoHeight}
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+              style={{
+                objectFit: 'contain',
+                maxWidth: '100%',
+                aspectRatio: `${logoWidth} / ${logoHeight}`,
+              }}
               onError={(e) => {
                 const img = e.target as HTMLImageElement;
                 img.style.display = 'none';
               }}
             />
+            {/* Barra dourada */}
+            <div
+              className="h-[3px] rounded-full mt-1.5"
+              style={{
+                backgroundColor: colors.primary,
+                width: '300px',
+                maxWidth: '90%',
+                margin: '0 auto',
+              }}
+            />
           </div>
-        )}
+        </div>
 
-        {/* Título */}
-        <h1 
-          className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6"
-          style={{ 
-            fontFamily: 'Playfair Display, serif',
-            color: textColor 
+        {/* Título principal */}
+        <h1
+          className="text-2xl font-bold text-center leading-tight px-2 sm:text-3xl md:text-4xl playfair-display"
+          style={{
+            fontFamily: '"Playfair Display", serif',
+            fontWeight: 400,
+            color: colors.text,
           }}
         >
-          {title}
+          {renderHTML(title)}
         </h1>
+      </header>
 
-        {/* Subtítulo */}
-        {subtitle && (
-          <p className="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed">
-            {subtitle}
-          </p>
-        )}
-
-        {/* Formulário */}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="max-w-md mx-auto">
-            <Input
-              type="text"
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
-              placeholder={namePlaceholder}
-              className={`w-full px-4 py-3 text-lg rounded-lg border-2 focus:ring-2 focus:ring-opacity-50 ${
-                error ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-[#B89B7A] focus:ring-[#B89B7A]'
-              }`}
-              disabled={disabled}
-              autoFocus
-            />
-            {error && (
-              <p className="text-red-500 text-sm mt-2">{error}</p>
-            )}
-          </div>
-
-          <Button
-            type="submit"
-            disabled={disabled}
-            className="px-8 py-3 text-lg font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
-            style={{
-              backgroundColor: buttonColor,
-              color: '#ffffff'
-            }}
+      <section className={`w-full ${maxWidth} px-4 space-y-6 md:space-y-8 mx-auto`}>
+        {/* Imagem principal - renderização imediata e LCP */}
+        <div className="mt-2 w-full max-w-xs sm:max-w-md md:max-w-lg mx-auto">
+          <div
+            className="w-full overflow-hidden rounded-lg shadow-sm"
+            style={{ aspectRatio: '1.47', maxHeight: '204px' }}
           >
-            {buttonText}
-          </Button>
-        </form>
-
-        {/* Informações adicionais */}
-        <div className="mt-8 text-sm text-gray-500">
-          <p>✨ Leva apenas 3 minutos • 100% gratuito • Resultado instantâneo</p>
+            <div 
+              className="relative w-full h-full"
+              style={{ backgroundColor: colors.backgroundAlt }}
+            >
+              <img
+                src={introImageUrl}
+                alt={introImageAlt}
+                className="w-full h-full object-contain"
+                width={300}
+                height={204}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+                id="lcp-image"
+                onError={(e) => {
+                  const img = e.target as HTMLImageElement;
+                  img.style.display = 'none';
+                }}
+              />
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+
+        {/* Texto descritivo */}
+        <p 
+          className="text-sm text-center leading-relaxed px-2 sm:text-base"
+          style={{ color: colors.textLight }}
+        >
+          {renderHTML(subtitle)}
+        </p>
+
+        {/* Formulário - renderização imediata */}
+        <div id="quiz-form" className="mt-8">
+          <form
+            onSubmit={handleSubmit}
+            className="w-full space-y-6"
+            autoComplete="off"
+          >
+            <div>
+              <label
+                htmlFor="name"
+                className="block text-xs font-semibold mb-1.5"
+                style={{ color: colors.text }}
+              >
+                NOME <span className="text-red-500">*</span>
+              </label>
+              <Input
+                id="name"
+                placeholder={namePlaceholder}
+                value={nome}
+                onChange={(e) => {
+                  setNome(e.target.value);
+                  if (error) setError('');
+                }}
+                className={cn(
+                  "w-full p-2.5 rounded-md border-2 focus:outline-none focus-visible:outline-none focus:ring-2 focus:ring-offset-2 focus-visible:ring-offset-2",
+                  error 
+                    ? "border-red-500 focus:ring-red-500 focus-visible:ring-red-500" 
+                    : `focus:ring-[${colors.primaryDark}] focus-visible:ring-[${colors.primaryDark}]`
+                )}
+                style={{
+                  backgroundColor: colors.background,
+                  borderColor: error ? '#ef4444' : colors.primary,
+                  focusRingOffsetColor: colors.background,
+                }}
+                autoFocus
+                aria-required="true"
+                autoComplete="off"
+                inputMode="text"
+                maxLength={maxLength}
+                aria-invalid={!!error}
+                aria-describedby={error ? "name-error" : undefined}
+                required={required}
+                disabled={disabled}
+              />
+              {error && (
+                <p id="name-error" className="mt-1.5 text-sm text-red-500 font-medium">{error}</p>
+              )}
+            </div>
+            
+            <button
+              type="submit"
+              disabled={disabled}
+              className={cn(
+                'w-full py-2 px-3 text-sm font-semibold rounded-md shadow-md transition-all duration-300',
+                'focus:outline-none focus:ring-2 focus:ring-offset-2',
+                'sm:py-3 sm:px-4 sm:text-base',
+                'md:py-3.5 md:text-lg',
+                nome.trim() && !disabled
+                  ? 'text-white hover:shadow-lg transform hover:scale-[1.01]' 
+                  : 'text-white/90 cursor-not-allowed'
+              )}
+              style={{
+                backgroundColor: nome.trim() && !disabled ? colors.primary : `${colors.primary}80`,
+                focusRingColor: colors.primary,
+                focusRingOffsetColor: colors.background,
+              }}
+              onMouseEnter={(e) => {
+                if (nome.trim() && !disabled) {
+                  e.currentTarget.style.backgroundColor = colors.primaryDark;
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (nome.trim() && !disabled) {
+                  e.currentTarget.style.backgroundColor = colors.primary;
+                }
+              }}
+              aria-disabled={!nome.trim() || disabled}
+            >
+              <span className="flex items-center justify-center gap-2">
+                {nome.trim() ? buttonTextFilled : buttonTextEmpty}
+              </span>
+            </button>
+
+            <p className="text-xs text-center pt-1" style={{ color: colors.textLight }}>
+              {renderHTML(privacyText)}
+            </p>
+          </form>
+        </div>
+      </section>
+      
+      {/* Rodapé */}
+      <footer className={`w-full ${maxWidth} px-4 mt-auto pt-6 text-center mx-auto`}>
+        <p className="text-xs" style={{ color: colors.textLight }}>
+          {footerText}
+        </p>
+      </footer>
+    </main>
   );
 };
 
