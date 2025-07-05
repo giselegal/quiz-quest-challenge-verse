@@ -143,3 +143,67 @@ export const useDynamicEditorData = () => {
     }
   };
 };
+
+// Componente para exibir toggle entre dados estáticos e dinâmicos
+export const DynamicDataToggle: React.FC<{
+  useDynamicData: boolean;
+  onToggle: (enabled: boolean) => void;
+  dynamicDataAvailable: boolean;
+}> = ({ useDynamicData, onToggle, dynamicDataAvailable }) => {
+  return (
+    <div className="flex items-center gap-3 p-3 border rounded-lg bg-gray-50">
+      <div className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          id="dynamic-data-toggle"
+          checked={useDynamicData && dynamicDataAvailable}
+          onChange={(e) => onToggle(e.target.checked)}
+          disabled={!dynamicDataAvailable}
+          className="w-4 h-4"
+        />
+        <label htmlFor="dynamic-data-toggle" className="text-sm font-medium">
+          Usar dados reais do usuário
+        </label>
+      </div>
+      
+      <div className="text-xs text-gray-500">
+        {dynamicDataAvailable ? (
+          <span className="text-green-600">✓ Dados disponíveis</span>
+        ) : (
+          <span className="text-orange-600">⚠ Inicie o quiz para obter dados reais</span>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// Componente para exibir preview dos dados dinâmicos
+export const DynamicDataPreview: React.FC = () => {
+  const { getDynamicUserData, getDynamicImageData, isDataAvailable } = useDynamicEditorData();
+  
+  if (!isDataAvailable) {
+    return (
+      <div className="p-4 border rounded-lg bg-yellow-50 border-yellow-200">
+        <p className="text-sm text-yellow-800">
+          Nenhum dado dinâmico disponível. Inicie o quiz ou faça login para ver dados reais.
+        </p>
+      </div>
+    );
+  }
+
+  const userData = getDynamicUserData();
+  const imageData = getDynamicImageData();
+
+  return (
+    <div className="p-4 border rounded-lg bg-green-50 border-green-200">
+      <h4 className="font-medium text-green-800 mb-2">Dados Dinâmicos Disponíveis</h4>
+      <div className="text-sm text-green-700 space-y-1">
+        <div><strong>Usuário:</strong> {userData.userName}</div>
+        <div><strong>Estilo:</strong> {userData.primaryStyleName} ({userData.primaryStylePercentage}%)</div>
+        <div><strong>Questões respondidas:</strong> {userData.questionsAnswered}</div>
+        <div><strong>Sessão ativa:</strong> {userData.hasActiveSession ? 'Sim' : 'Não'}</div>
+        <div><strong>Quiz completo:</strong> {userData.hasCompletedQuiz ? 'Sim' : 'Não'}</div>
+      </div>
+    </div>
+  );
+};
