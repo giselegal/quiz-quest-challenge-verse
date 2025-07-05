@@ -50,6 +50,11 @@ import {
   QuizBenefitsBlock 
 } from '@/components/blocks/quiz';
 
+// Importar componentes schema-driven do quiz
+import QuizQuestionBlock from '@/components/editor/blocks/QuizQuestionBlock';
+import StrategicQuestionBlock from '@/components/editor/blocks/StrategicQuestionBlock';
+import QuizTransitionBlock from '@/components/editor/blocks/QuizTransitionBlock';
+
 // Importar componentes reais das páginas
 import { Header } from '@/components/result/Header';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
@@ -976,6 +981,31 @@ const blockLibrary = [
     name: 'Questão Estratégica', 
     description: 'Pergunta de qualificação de lead',
     icon: <Target className="w-4 h-4" />,
+    category: 'Quiz Avançado'
+  },
+  // NOVOS BLOCOS SCHEMA-DRIVEN
+  { 
+    id: 'quiz-question',
+    type: 'quiz-question', 
+    name: 'Questão Normal (Schema)', 
+    description: 'Questão com 3 seleções obrigatórias e auto-avanço',
+    icon: <CheckCircle className="w-4 h-4" />,
+    category: 'Quiz Avançado'
+  },
+  { 
+    id: 'strategic-question-schema',
+    type: 'strategic-question', 
+    name: 'Questão Estratégica (Schema)', 
+    description: 'Questão estratégica com 1 seleção e clique manual',
+    icon: <Target className="w-4 h-4" />,
+    category: 'Quiz Avançado'
+  },
+  { 
+    id: 'quiz-transition',
+    type: 'quiz-transition', 
+    name: 'Transição Quiz (Schema)', 
+    description: 'Transição com loading animado e cálculo de resultado',
+    icon: <Zap className="w-4 h-4" />,
     category: 'Quiz Avançado'
   },
   // UI
@@ -3937,7 +3967,170 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
               spacing={block?.settings?.spacing}
               colors={block?.settings?.colors}
               maxWidth={block?.settings?.maxWidth}
-              columns={block?.settings?.columns}
+            />
+          </div>
+        );
+        break;
+
+      // NOVOS COMPONENTES SCHEMA-DRIVEN DO QUIZ
+
+      case 'quiz-question':
+        content = (
+          <div className="w-full">
+            <QuizQuestionBlock
+              block={{
+                id: block.id,
+                type: 'quiz-question',
+                properties: {
+                  questionId: block.id,
+                  title: block?.settings?.question || 'Qual dessas opções mais combina com você?',
+                  description: block?.settings?.description || '',
+                  questionType: block?.settings?.questionType || 'both',
+                  multiSelect: true,
+                  maxSelections: 3, // QUESTÕES NORMAIS: 3 obrigatórias
+                  required: true,
+                  options: block?.settings?.options || [
+                    { id: 'opt1', text: 'Opção 1', value: 'option1', imageUrl: '' },
+                    { id: 'opt2', text: 'Opção 2', value: 'option2', imageUrl: '' },
+                    { id: 'opt3', text: 'Opção 3', value: 'option3', imageUrl: '' },
+                    { id: 'opt4', text: 'Opção 4', value: 'option4', imageUrl: '' }
+                  ],
+                  showProgress: true,
+                  progressPercent: block?.settings?.progressPercent || 10,
+                  isStrategicQuestion: false,
+                  backgroundColor: '#fffaf7',
+                  textColor: '#432818',
+                  primaryColor: '#B89B7A',
+                  secondaryColor: '#A38A69'
+                }
+              }}
+              isSelected={selectedBlock?.id === block.id}
+              onClick={() => setSelectedBlockId(block.id)}
+              onPropertyChange={(key, value) => {
+                if (selectedBlockId === block.id) {
+                  const settingsMap: Record<string, string> = {
+                    'title': 'question',
+                    'description': 'description',
+                    'questionType': 'questionType',
+                    'options': 'options',
+                    'progressPercent': 'progressPercent'
+                  };
+                  const settingKey = settingsMap[key] || key;
+                  updateBlockSetting(settingKey, value);
+                }
+              }}
+              onAnswer={(answers) => {
+                console.log('Question answered:', answers);
+              }}
+              onNext={() => {
+                console.log('Auto-advance to next question');
+              }}
+              onPrevious={() => {
+                console.log('Go to previous question');
+              }}
+            />
+          </div>
+        );
+        break;
+
+      case 'strategic-question':
+        content = (
+          <div className="w-full">
+            <StrategicQuestionBlock
+              block={{
+                id: block.id,
+                type: 'strategic-question',
+                properties: {
+                  questionId: block.id,
+                  title: block?.settings?.question || 'Questão Estratégica: Escolha UMA opção',
+                  description: block?.settings?.description || 'Esta questão é especial e define seu resultado.',
+                  questionType: block?.settings?.questionType || 'both',
+                  multiSelect: false,
+                  maxSelections: 1, // ESTRATÉGICAS: 1 obrigatória
+                  required: true,
+                  options: block?.settings?.options || [
+                    { id: 'str1', text: 'Estilo Clássico', value: 'classic', imageUrl: '' },
+                    { id: 'str2', text: 'Estilo Casual', value: 'casual', imageUrl: '' },
+                    { id: 'str3', text: 'Estilo Moderno', value: 'modern', imageUrl: '' }
+                  ],
+                  showProgress: true,
+                  progressPercent: block?.settings?.progressPercent || 85,
+                  isStrategicQuestion: true,
+                  backgroundColor: '#fffaf7',
+                  textColor: '#432818',
+                  primaryColor: '#B89B7A',
+                  secondaryColor: '#A38A69',
+                  strategicWeight: 2.0
+                }
+              }}
+              isSelected={selectedBlock?.id === block.id}
+              onClick={() => setSelectedBlockId(block.id)}
+              onPropertyChange={(key, value) => {
+                if (selectedBlockId === block.id) {
+                  const settingsMap: Record<string, string> = {
+                    'title': 'question',
+                    'description': 'description',
+                    'questionType': 'questionType',
+                    'options': 'options',
+                    'progressPercent': 'progressPercent'
+                  };
+                  const settingKey = settingsMap[key] || key;
+                  updateBlockSetting(settingKey, value);
+                }
+              }}
+              onAnswer={(answer) => {
+                console.log('Strategic question answered:', answer);
+              }}
+              onNext={() => {
+                console.log('Manual advance after strategic question');
+              }}
+              onPrevious={() => {
+                console.log('Go to previous question');
+              }}
+            />
+          </div>
+        );
+        break;
+
+      case 'quiz-transition':
+        content = (
+          <div className="w-full">
+            <QuizTransitionBlock
+              block={{
+                id: block.id,
+                type: 'quiz-transition',
+                properties: {
+                  title: block?.settings?.title || 'Calculando seu resultado...',
+                  description: block?.settings?.description || 'Estamos analisando suas respostas para descobrir seu estilo único.',
+                  loadingDuration: block?.settings?.loadingDuration || 3000,
+                  showProgress: true,
+                  progressSteps: [
+                    'Analisando suas preferências...',
+                    'Calculando compatibilidade...',
+                    'Preparando seu resultado...'
+                  ],
+                  backgroundColor: '#fffaf7',
+                  textColor: '#432818',
+                  primaryColor: '#B89B7A',
+                  animationType: 'pulse'
+                }
+              }}
+              isSelected={selectedBlock?.id === block.id}
+              onClick={() => setSelectedBlockId(block.id)}
+              onPropertyChange={(key, value) => {
+                if (selectedBlockId === block.id) {
+                  const settingsMap: Record<string, string> = {
+                    'title': 'title',
+                    'description': 'description',
+                    'loadingDuration': 'loadingDuration'
+                  };
+                  const settingKey = settingsMap[key] || key;
+                  updateBlockSetting(settingKey, value);
+                }
+              }}
+              onComplete={() => {
+                console.log('Transition completed, show results');
+              }}
             />
           </div>
         );
