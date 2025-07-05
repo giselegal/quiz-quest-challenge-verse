@@ -3191,24 +3191,73 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
   // Render principal
   return (
-    <div className="flex h-screen bg-gray-50 overflow-hidden">
+    <>
+      {/* CSS customizado para melhorar as barras de rolagem */}
+      <style>
+        {`
+          .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+          }
+          .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 3px;
+          }
+          .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+          }
+          .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+          }
+          .sidebar-shadow-top::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.05), transparent);
+            pointer-events: none;
+            z-index: 5;
+          }
+          .sidebar-shadow-bottom::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(to top, rgba(0,0,0,0.05), transparent);
+            pointer-events: none;
+            z-index: 5;
+          }
+        `}
+      </style>
+      
+      <div className="flex h-screen bg-gray-50 overflow-hidden">
       {/* SIDEBAR ESQUERDA */}
       <div 
         className="bg-white border-r shadow-lg flex flex-col transition-all duration-200 ease-in-out"
-        style={{ width: `${leftWidth}px`, minWidth: '200px', maxWidth: '600px' }}
+        style={{ 
+          width: `${leftWidth}px`, 
+          minWidth: '200px', 
+          maxWidth: '600px',
+          height: '100vh',
+          overflow: 'hidden'
+        }}
       >
-        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'funnel' | 'blocks' | 'templates' | 'settings')} className="flex-1 flex flex-col">
-          <TabsList className="grid w-full grid-cols-4 m-2">
+        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'funnel' | 'blocks' | 'templates' | 'settings')} className="flex-1 flex flex-col h-full">
+          <TabsList className="grid w-full grid-cols-4 m-2 flex-shrink-0">
             <TabsTrigger value="funnel" className="text-xs">Funil</TabsTrigger>
             <TabsTrigger value="blocks" className="text-xs">Blocos</TabsTrigger>
             <TabsTrigger value="templates" className="text-xs">Templates</TabsTrigger>
             <TabsTrigger value="settings" className="text-xs">Config</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="funnel" className="flex-1 p-2 overflow-hidden">
+          <TabsContent value="funnel" className="flex-1 p-2 overflow-hidden relative" style={{ height: 'calc(100vh - 120px)' }}>
             <ScrollArea className="h-full">
-              <div className="space-y-2 pr-2">
-                <div className="flex items-center justify-between mb-3">
+              <div className="space-y-2 pr-3">
+                <div className="flex items-center justify-between mb-3 sticky top-0 bg-white z-10 pb-2">
                   <h3 className="text-sm font-medium">Páginas do Funil</h3>
                   <Button 
                     size="sm" 
@@ -3220,35 +3269,37 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                     Nova
                   </Button>
                 </div>
-                {funnel.pages.map((page, index) => (
-                  <div
-                    key={page.id}
-                    className={`p-3 rounded-lg border cursor-pointer transition-all ${
-                      currentPageId === page.id 
-                        ? 'bg-blue-50 border-blue-200 shadow-sm' 
-                        : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
-                    }`}
-                    onClick={() => setCurrentPageId(page.id)}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">{page?.name || `Página ${index + 1}`}</p>
-                        <p className="text-xs text-gray-500">{page?.blocks?.length || 0} blocos</p>
+                <div className="space-y-2">
+                  {funnel.pages.map((page, index) => (
+                    <div
+                      key={page.id}
+                      className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                        currentPageId === page.id 
+                          ? 'bg-blue-50 border-blue-200 shadow-sm' 
+                          : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
+                      }`}
+                      onClick={() => setCurrentPageId(page.id)}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-gray-900 truncate">{page?.name || `Página ${index + 1}`}</p>
+                          <p className="text-xs text-gray-500">{page?.blocks?.length || 0} blocos</p>
+                        </div>
+                        <Badge variant="outline" className="text-xs ml-2 flex-shrink-0">
+                          {index + 1}
+                        </Badge>
                       </div>
-                      <Badge variant="outline" className="text-xs">
-                        {index + 1}
-                      </Badge>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </ScrollArea>
           </TabsContent>
 
-          <TabsContent value="blocks" className="flex-1 p-2 overflow-hidden">
+          <TabsContent value="blocks" className="flex-1 p-2 overflow-hidden relative" style={{ height: 'calc(100vh - 120px)' }}>
             <ScrollArea className="h-full">
-              <div className="space-y-3 pr-2">
-                <h3 className="text-sm font-medium mb-3">Biblioteca de Blocos</h3>
+              <div className="space-y-3 pr-3">
+                <h3 className="text-sm font-medium mb-3 sticky top-0 bg-white z-10 pb-2">Biblioteca de Blocos</h3>
                 
                 {/* Agrupar blocos por categoria */}
                 {['Texto', 'Mídia', 'Interação', 'Quiz', 'Quiz Avançado', 'Formulário', 'Vendas', 'Social', 'Urgência', 'Informação', 'UI'].map(category => {
@@ -3298,9 +3349,9 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
             </ScrollArea>
           </TabsContent>
 
-          <TabsContent value="templates" className="flex-1 p-2">
+          <TabsContent value="templates" className="flex-1 p-2 overflow-hidden" style={{ height: 'calc(100vh - 120px)' }}>
             <ScrollArea className="h-full">
-              <div className="space-y-3">
+              <div className="space-y-3 pr-3">
                 <h3 className="text-sm font-medium mb-3">Templates de Página</h3>
                 
                 {pageTemplates.map((template) => (
@@ -3369,9 +3420,9 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
             </ScrollArea>
           </TabsContent>
 
-          <TabsContent value="settings" className="flex-1 p-2">
+          <TabsContent value="settings" className="flex-1 p-2 overflow-hidden" style={{ height: 'calc(100vh - 120px)' }}>
             <ScrollArea className="h-full">
-              <div className="space-y-4">
+              <div className="space-y-4 pr-3">
                 <h3 className="text-sm font-medium mb-3">Configurações do Funil</h3>
                 
                 <div>
@@ -5097,6 +5148,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       <Toaster />
     </div>
+    </>
   );
 };
 
