@@ -2345,16 +2345,79 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     }
   }, []); // Remover dependência para evitar loops
 
-  // Função para renderizar blocos no canvas
+  // 🔥 HOOK PARA RESPONSIVIDADE
+  const useResponsive = () => {
+    const [isMobile, setIsMobile] = React.useState(false);
+    const [isTablet, setIsTablet] = React.useState(false);
+    
+    React.useEffect(() => {
+      const checkResponsive = () => {
+        const width = window.innerWidth;
+        setIsMobile(width < 768);
+        setIsTablet(width >= 768 && width < 1024);
+      };
+      
+      checkResponsive();
+      window.addEventListener('resize', checkResponsive);
+      return () => window.removeEventListener('resize', checkResponsive);
+    }, []);
+    
+    return { isMobile, isTablet, isDesktop: !isMobile && !isTablet };
+  };
+
+  const { isMobile, isTablet, isDesktop } = useResponsive();
+
+  // 🔥 COMPONENTE INTERNO PARA EDIÇÃO INLINE INDEPENDENTE COM RESPONSIVIDADE
+  const InlineEditableWrapper = ({ children, block, isSelected, onEdit }: {
+    children: React.ReactNode;
+    block: FunnelBlock;
+    isSelected: boolean;
+    onEdit: () => void;
+  }) => {
+    const [isHovered, setIsHovered] = React.useState(false);
+    
+    return (
+      <div 
+        className={`relative transition-all duration-200 ${
+          isSelected ? 'ring-2 ring-blue-500 ring-offset-2' : 
+          isHovered ? 'ring-1 ring-blue-300 ring-offset-1' : ''
+        } ${isMobile ? 'mx-2' : ''}`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onClick={(e) => {
+          e.stopPropagation();
+          onEdit();
+        }}
+      >
+        {/* Overlay de edição individual - responsivo */}
+        {(isSelected || isHovered) && (
+          <div className={`absolute ${isMobile ? 'top-2 right-2' : 'top-1 right-1'} z-20 flex gap-1`}>
+            <Badge 
+              variant="secondary" 
+              className={`${isMobile ? 'text-xs px-2 py-1' : 'text-xs px-2 py-1'} bg-blue-500 text-white cursor-pointer hover:bg-blue-600`}
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit();
+              }}
+            >
+              <Settings className={`${isMobile ? 'w-3 h-3 mr-1' : 'w-3 h-3 mr-1'}`} />
+              {isMobile ? 'Edit' : 'Editar'}
+            </Badge>
+          </div>
+        )}
+        
+        <div className={`w-full ${isMobile ? 'min-h-[60px]' : 'min-h-[80px]'}`}>
+          {children}
+        </div>
+      </div>
+    );
+  };
+
+  // Função para renderizar blocos no canvas COM EDIÇÃO INLINE INDEPENDENTE
   const renderBlock = (block: FunnelBlock) => {
     const isSelected = selectedBlockId === block.id;
-    const baseStyle = isSelected ? {
-      outline: '2px solid #3b82f6',
-      outlineOffset: '2px'
-    } : {};
 
-    const handleBlockClick = (e: React.MouseEvent) => {
-      e.stopPropagation();
+    const handleBlockEdit = () => {
       setSelectedBlockId(block.id);
     };
 
@@ -2363,68 +2426,64 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     switch (block.type) {
       case 'header':
         content = (
-          <div 
-            style={{
-              ...baseStyle,
-              textAlign: block?.settings?.alignment || 'center'
-            }} 
-            onClick={handleBlockClick} 
-            className="py-4"
-          >
-            <h1 className={`font-bold text-[#432818] mb-4 font-playfair ${
-              block?.settings?.titleSize === 'small' ? 'text-xl md:text-2xl' :
-              block?.settings?.titleSize === 'medium' ? 'text-2xl md:text-3xl' :
-              'text-3xl md:text-4xl'
-            }`}>
-              {block?.settings?.title || 'Título do Cabeçalho'}
-            </h1>
-            {block?.settings?.subtitle && (
-              <p className="text-lg text-[#6B5B73] mb-6">
-                {block?.settings?.subtitle}
-              </p>
-            )}
-          </div>
+          <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
+            <div 
+              className="py-4 px-6 bg-white rounded-lg shadow-sm border"
+              style={{
+                textAlign: block?.settings?.alignment || 'center'
+              }}
+            >
+              <h1 className={`font-bold text-[#432818] mb-4 font-playfair ${
+                block?.settings?.titleSize === 'small' ? 'text-xl md:text-2xl' :
+                block?.settings?.titleSize === 'medium' ? 'text-2xl md:text-3xl' :
+                'text-3xl md:text-4xl'
+              }`}>
+                {block?.settings?.title || 'Título do Cabeçalho'}
+              </h1>
+              {block?.settings?.subtitle && (
+                <p className="text-lg text-[#6B5B73] mb-6">
+                  {block?.settings?.subtitle}
+                </p>
+              )}
+            </div>
+          </InlineEditableWrapper>
         );
         break;
 
       case 'text':
         content = (
-          <div 
-            style={{
-              ...baseStyle,
-              textAlign: block?.settings?.alignment || 'left'
-            }} 
-            onClick={handleBlockClick}
-            className="py-2"
-          >
-            <p className={`text-[#432818] leading-relaxed ${
-              block?.settings?.fontSize === 'small' ? 'text-sm' :
-              block?.settings?.fontSize === 'large' ? 'text-lg' :
-              'text-base'
-            }`}>
-              {block?.settings?.content || 'Conteúdo do texto aqui...'}
-            </p>
-          </div>
+          <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
+            <div className="py-3 px-4 bg-white rounded border">
+              <p className={`text-[#432818] leading-relaxed ${
+                block?.settings?.fontSize === 'small' ? 'text-sm' :
+                block?.settings?.fontSize === 'large' ? 'text-lg' :
+                'text-base'
+              }`}
+              style={{
+                textAlign: block?.settings?.alignment || 'left'
+              }}>
+                {block?.settings?.content || 'Conteúdo do texto aqui...'}
+              </p>
+            </div>
+          </InlineEditableWrapper>
         );
         break;
 
       case 'image':
         content = (
-          <div 
-            style={{
-              ...baseStyle,
-              textAlign: block?.settings?.alignment || 'center'
-            }} 
-            onClick={handleBlockClick} 
-            className="py-4"
-          >
-            <img
-              src={block?.settings?.src || 'https://via.placeholder.com/600x400?text=Imagem'}
-              alt={block?.settings?.alt || 'Imagem'}
-              className="max-w-full h-auto rounded-lg shadow-md mx-auto"
-              style={{ width: block?.settings?.width || 'auto' }}
-            />
-          </div>
+          <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
+            <div className="py-4 text-center">
+              <img
+                src={block?.settings?.src || 'https://via.placeholder.com/600x400?text=Imagem'}
+                alt={block?.settings?.alt || 'Imagem'}
+                className="max-w-full h-auto rounded-lg shadow-md mx-auto"
+                style={{ 
+                  width: block?.settings?.width || 'auto',
+                  textAlign: block?.settings?.alignment || 'center'
+                }}
+              />
+            </div>
+          </InlineEditableWrapper>
         );
         break;
 
@@ -2437,19 +2496,21 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         };
 
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="text-center py-4">
-            <Button 
-              className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${buttonClasses[buttonStyle] || buttonClasses.primary} ${
-                block?.settings?.fullWidth ? 'w-full' : ''
-              } ${
-                block?.settings?.size === 'sm' ? 'px-6 py-2 text-sm' :
-                block?.settings?.size === 'lg' ? 'px-12 py-4 text-lg' :
-                'px-8 py-3'
-              }`}
-            >
-              {block?.settings?.text || 'Texto do Botão'}
-            </Button>
-          </div>
+          <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
+            <div className="text-center py-4">
+              <Button 
+                className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${buttonClasses[buttonStyle] || buttonClasses.primary} ${
+                  block?.settings?.fullWidth ? 'w-full' : ''
+                } ${
+                  block?.settings?.size === 'sm' ? 'px-6 py-2 text-sm' :
+                  block?.settings?.size === 'lg' ? 'px-12 py-4 text-lg' :
+                  'px-8 py-3'
+                }`}
+              >
+                {block?.settings?.text || 'Texto do Botão'}
+              </Button>
+            </div>
+          </InlineEditableWrapper>
         );
         break;
 
@@ -3850,95 +3911,28 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         );
         break;
 
-      // Componentes reais da ResultPage
+      // COMPONENTES REAIS DA RESULTPAGE.TSX - AGORA COM EDIÇÃO INLINE INDEPENDENTE
       case 'result-header-component':
         const headerData = getDynamicStyleData(block);
         
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
-            <div className="text-center py-6 md:py-8 px-4">
-              <div className="max-w-4xl mx-auto">
-                <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-[#432818] mb-4 md:mb-6">
-                  Olá, {headerData.userName}! 👋
-                </h1>
-                <p className="text-lg md:text-xl lg:text-2xl text-[#6B5B73] mb-2">
-                  Descobrimos seu estilo predominante:
-                </p>
-                <p className="text-xl md:text-2xl lg:text-3xl font-semibold text-[#B89B7A]">
-                  {headerData.styleName}
-                </p>
+          <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
+            <div className="py-4 px-6 bg-white rounded-lg shadow-sm border">
+              <div className="text-center py-6 md:py-8 px-4">
+                <div className="max-w-4xl mx-auto">
+                  <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-[#432818] mb-4 md:mb-6">
+                    Olá, {headerData.userName}! 👋
+                  </h1>
+                  <p className="text-lg md:text-xl lg:text-2xl text-[#6B5B73] mb-2">
+                    Descobrimos seu estilo predominante:
+                  </p>
+                  <p className="text-xl md:text-2xl lg:text-3xl font-semibold text-[#B89B7A]">
+                    {headerData.styleName}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        );
-        break;
-
-      case 'result-style-display':
-        content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
-            <div className="text-center space-y-4 bg-white p-6 rounded-xl shadow-lg">
-              <h2 className="text-2xl font-bold text-[#432818]">
-                {block?.settings?.styleName || 'Seu Estilo Predominante'}
-              </h2>
-              <div className="text-4xl font-bold text-[#B89B7A]">
-                {block?.settings?.percentage || 92}%
-              </div>
-              {block?.settings?.styleImage && (
-                <img 
-                  src={block?.settings?.styleImage} 
-                  alt="Estilo predominante"
-                  className="w-full max-w-md mx-auto rounded-lg"
-                />
-              )}
-              <p className="text-[#432818] leading-relaxed">
-                {block?.settings?.styleDescription || 'Sua personalidade refletida no seu estilo de vestir.'}
-              </p>
-            </div>
-          </div>
-        );
-        break;
-
-      case 'secondary-styles-component':
-        content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
-            <div className="bg-white rounded-lg p-6 shadow-sm border border-[#B89B7A]/10">
-              <h3 className="text-lg font-medium text-[#432818] mb-4 text-center">
-                Estilos que Também Influenciam Você
-              </h3>
-              
-              <div className="space-y-4">
-                {(userQuizData.styleResult?.secondaryStyles || block?.settings?.secondaryStyles || [
-                  { name: 'Natural Despojada', percentage: 78 },
-                  { name: 'Contemporânea Casual', percentage: 65 },
-                  { name: 'Romântica Feminina', percentage: 42 }
-                ]).map((style: any, index: number) => (
-                  <div key={index} className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-[#432818]">
-                        {style.name}
-                      </span>
-                      <span className="text-[#B89B7A] font-semibold text-sm">
-                        {style.percentage}%
-                      </span>
-                    </div>
-                    <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-gradient-to-r from-[#B89B7A] to-[#A1835D] transition-all duration-1000 ease-out"
-                        style={{ width: `${style.percentage}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="mt-6 p-4 bg-[#f9f4ef] rounded-lg border border-[#B89B7A]/20">
-                <p className="text-xs text-[#6B5B73] text-center">
-                  Estes estilos complementam seu estilo predominante e podem ser 
-                  incorporados em looks específicos para diferentes ocasiões.
-                </p>
-              </div>
-            </div>
-          </div>
+          </InlineEditableWrapper>
         );
         break;
 
@@ -3946,7 +3940,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         const dynamicData = getDynamicStyleData(block);
         
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+          <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
             <Card className="p-4 md:p-6 bg-white shadow-md border border-[#B89B7A]/20">
               <div className="text-center mb-6 md:mb-8">
                 <div className="max-w-md mx-auto mb-4 md:mb-6">
@@ -3975,33 +3969,6 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                   <p className="text-[#432818] leading-relaxed text-base md:text-lg">
                     {dynamicData.description}
                   </p>
-                  
-                  {/* Seção de estilos complementares integrada */}
-                  <div className="bg-white rounded-lg p-3 md:p-4 shadow-sm border border-[#B89B7A]/10 mt-4 md:mt-6">
-                    <h3 className="text-base md:text-lg font-medium text-[#432818] mb-3">
-                      Estilos que Também Influenciam Você
-                    </h3>
-                    <div className="space-y-3">
-                      {dynamicData.secondaryStyles.slice(0, 2).map((style: any, index: number) => (
-                        <div key={index} className="space-y-1">
-                          <div className="flex justify-between items-center">
-                            <span className="text-sm font-medium text-[#432818]">
-                              {style.name}
-                            </span>
-                            <span className="text-[#B89B7A] font-semibold text-sm">
-                              {style.percentage}%
-                            </span>
-                          </div>
-                          <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-                            <div 
-                              className="h-full bg-gradient-to-r from-[#B89B7A] to-[#A1835D]"
-                              style={{ width: `${style.percentage}%` }}
-                            ></div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
                 </div>
                 
                 <div className="max-w-[250px] md:max-w-[280px] mx-auto relative order-1 md:order-2">
@@ -4015,267 +3982,143 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                       }}
                     />
                   )}
-                  <div className="absolute -top-2 -right-2 w-6 h-6 md:w-8 md:h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
-                  <div className="absolute -bottom-2 -left-2 w-6 h-6 md:w-8 md:h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>
                 </div>
               </div>
-              
-              {dynamicData.guideImage && (
-                <div className="mt-6 md:mt-8 max-w-[450px] md:max-w-[540px] mx-auto relative">
-                  <img 
-                    src={dynamicData.guideImage} 
-                    alt="Guia de Estilo Personalizado"
-                    className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = 'none';
-                    }}
-                  />
-                  <div className="absolute -top-3 -right-3 md:-top-4 md:-right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-3 py-1 md:px-4 md:py-2 rounded-full shadow-lg text-xs md:text-sm font-medium transform rotate-12">
-                    Seu Guia Exclusivo
-                  </div>
-                </div>
-              )}
             </Card>
-          </div>
+          </InlineEditableWrapper>
+        );
+        break;
+
+      case 'secondary-styles-component':
+        content = (
+          <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
+            <div className="py-6 px-6 bg-white rounded-lg shadow-sm border">
+              <div className="bg-white rounded-lg p-6 shadow-sm border border-[#B89B7A]/10">
+                <h3 className="text-lg font-medium text-[#432818] mb-4 text-center">
+                  Estilos que Também Influenciam Você
+                </h3>
+                
+                <div className="space-y-4">
+                  {(userQuizData.styleResult?.secondaryStyles || block?.settings?.secondaryStyles || [
+                    { name: 'Natural Despojada', percentage: 78 },
+                    { name: 'Contemporânea Casual', percentage: 65 },
+                    { name: 'Romântica Feminina', percentage: 42 }
+                  ]).map((style: any, index: number) => (
+                    <div key={index} className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-medium text-[#432818]">
+                          {style.name}
+                        </span>
+                        <span className="text-[#B89B7A] font-semibold text-sm">
+                          {style.percentage}%
+                        </span>
+                      </div>
+                      <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-gradient-to-r from-[#B89B7A] to-[#A1835D] transition-all duration-1000 ease-out"
+                          style={{ width: `${style.percentage}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </InlineEditableWrapper>
         );
         break;
 
       case 'before-after-component':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
-            <BeforeAfterTransformation />
-          </div>
+          <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
+            <div className="py-4 px-6 bg-white rounded-lg shadow-sm border">
+              <BeforeAfterTransformation />
+            </div>
+          </InlineEditableWrapper>
         );
         break;
 
       case 'motivation-component':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
-            <MotivationSection />
-          </div>
+          <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
+            <div className="py-4 px-6 bg-white rounded-lg shadow-sm border">
+              <MotivationSection />
+            </div>
+          </InlineEditableWrapper>
         );
         break;
 
       case 'bonus-component':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
-            <BonusSection />
-          </div>
-        );
-        break;
-
-      case 'result-value-stack-component':
-        content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
-            <div className="max-w-4xl mx-auto">
-              <h3 className="text-3xl font-bold text-[#432818] text-center mb-8">
-                {block?.settings?.title || 'Ancoragem de Valor - Produtos Exclusivos'}
-              </h3>
-              
-              <div className="grid md:grid-cols-3 gap-6 mb-8">
-                {(block?.settings?.products || [
-                  {
-                    name: 'Guia de Estilo Digital',
-                    description: 'Guia completo personalizado para seu estilo',
-                    value: 'R$ 297,00',
-                    image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp'
-                  },
-                  {
-                    name: 'Consultoria Personal Stylist',
-                    description: 'Sessão individual de styling online',
-                    value: 'R$ 897,00',
-                    image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp'
-                  },
-                  {
-                    name: 'Kit Completo de Acessórios',
-                    description: 'Seleção exclusiva baseada no seu perfil',
-                    value: 'R$ 497,00',
-                    image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp'
-                  }
-                ]).map((product: any, index: number) => (
-                  <div key={index} className="bg-white rounded-xl shadow-lg p-6 border border-[#B89B7A]/20">
-                    <img 
-                      src={product.image} 
-                      alt={product.name}
-                      className="w-full h-48 object-cover rounded-lg mb-4"
-                    />
-                    <h4 className="text-lg font-semibold text-[#432818] mb-2">{product.name}</h4>
-                    <p className="text-[#6B5B73] text-sm mb-4">{product.description}</p>
-                    <div className="text-xl font-bold text-[#B89B7A]">{product.value}</div>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="text-center bg-gradient-to-r from-[#B89B7A] to-[#A1835D] text-white p-6 rounded-xl">
-                <div className="text-2xl font-bold mb-2">Valor Total Individual</div>
-                <div className="text-4xl font-bold mb-4">R$ 1.691,00</div>
-                <div className="text-lg opacity-90">Mas hoje você leva tudo por apenas:</div>
-                <div className="text-5xl font-bold text-yellow-300 mt-2">R$ 147,00</div>
-              </div>
+          <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
+            <div className="py-4 px-6 bg-white rounded-lg shadow-sm border">
+              <BonusSection />
             </div>
-          </div>
-        );
-        break;
-
-      case 'quiz-transition-main':
-        content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-16 text-center bg-gradient-to-br from-[#f9f4ef] to-[#fff7f3]">
-            <div className="max-w-2xl mx-auto space-y-6">
-              <div className="w-20 h-20 bg-gradient-to-r from-[#B89B7A] to-[#A1835D] rounded-full flex items-center justify-center mx-auto animate-pulse">
-                <Zap className="w-10 h-10 text-white" />
-              </div>
-              
-              <h2 className="text-3xl font-bold text-[#432818]">
-                {block?.settings?.title || 'Analisando suas Respostas...'}
-              </h2>
-              
-              <p className="text-lg text-[#6B5B73] leading-relaxed">
-                {block?.settings?.message || 'Agora vamos aprofundar sua análise com algumas perguntas estratégicas sobre seus objetivos.'}
-              </p>
-              
-              <div className="bg-white rounded-xl p-6 shadow-lg border border-[#B89B7A]/20">
-                <p className="text-[#432818] font-medium">
-                  {block?.settings?.submessage || 'As próximas perguntas vão nos ajudar a personalizar ainda mais suas recomendações.'}
-                </p>
-              </div>
-              
-              {block?.settings?.additionalMessage && (
-                <p className="text-sm text-[#8F7A6A] italic">
-                  {block.settings.additionalMessage}
-                </p>
-              )}
-              
-              <div className="pt-4">
-                <Button className="bg-[#B89B7A] hover:bg-[#A1835D] text-white px-8 py-3 rounded-full font-semibold transform hover:scale-105 transition-all">
-                  Continuar Análise
-                </Button>
-              </div>
-            </div>
-          </div>
-        );
-        break;
-
-      case 'quiz-final-transition':
-        content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-20 text-center bg-gradient-to-br from-[#432818] to-[#6B4F43] text-white">
-            <div className="max-w-2xl mx-auto space-y-8">
-              <div className="relative">
-                <div className="w-24 h-24 bg-gradient-to-r from-[#B89B7A] to-[#A1835D] rounded-full flex items-center justify-center mx-auto animate-spin">
-                  <Trophy className="w-12 h-12 text-white" />
-                </div>
-                <div className="absolute inset-0 w-24 h-24 border-4 border-white/30 rounded-full mx-auto animate-ping"></div>
-              </div>
-              
-              <h2 className="text-4xl font-bold">
-                {block?.settings?.title || 'Analisando Seu Perfil Completo...'}
-              </h2>
-              
-              <p className="text-xl text-white/90 leading-relaxed">
-                {block?.settings?.description || 'Estamos processando suas respostas e criando sua análise personalizada de estilo.'}
-              </p>
-              
-              {block?.settings?.showSteps && (
-                <div className="space-y-4 max-w-md mx-auto">
-                  <div className="flex items-center text-left space-x-3 bg-white/10 rounded-lg p-3">
-                    <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>Analisando suas preferências</span>
-                  </div>
-                  <div className="flex items-center text-left space-x-3 bg-white/10 rounded-lg p-3">
-                    <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>Calculando seu estilo predominante</span>
-                  </div>
-                  <div className="flex items-center text-left space-x-3 bg-white/20 rounded-lg p-3">
-                    <RotateCcw className="w-5 h-5 text-white animate-spin" />
-                    <span>Preparando suas recomendações</span>
-                  </div>
-                </div>
-              )}
-              
-              <div className="text-sm text-white/70">
-                {block?.settings?.waitMessage || 'Isso levará apenas alguns segundos...'}
-              </div>
-              
-              {/* Simular progresso */}
-              <div className="w-full max-w-md mx-auto">
-                <div className="bg-white/20 rounded-full h-2">
-                  <div className="bg-gradient-to-r from-[#B89B7A] to-[#A1835D] h-2 rounded-full animate-pulse" style={{ width: '87%' }}></div>
-                </div>
-                <div className="text-sm text-white/80 mt-2">87% concluído</div>
-              </div>
-            </div>
-          </div>
+          </InlineEditableWrapper>
         );
         break;
 
       case 'testimonials-component':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
-            <Testimonials />
-          </div>
+          <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
+            <div className="py-4 px-6 bg-white rounded-lg shadow-sm border">
+              <Testimonials />
+            </div>
+          </InlineEditableWrapper>
         );
         break;
 
       case 'secure-purchase-component':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
-            <div className="max-w-2xl mx-auto text-center space-y-6">
-              {/* CTA Principal Verde */}
-              <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-8 text-white shadow-xl">
-                <h3 className="text-2xl font-bold mb-4">
-                  {block?.settings?.ctaTitle || 'Quero Transformar Meu Estilo Agora!'}
-                </h3>
-                <p className="text-green-100 mb-6">
-                  {block?.settings?.ctaSubtitle || 'Acesso imediato + Garantia de 7 dias'}
-                </p>
-                
-                <Button className="bg-white text-green-600 hover:bg-green-50 px-12 py-4 text-lg font-bold rounded-full transform hover:scale-105 transition-all shadow-lg">
-                  <Shield className="w-5 h-5 mr-2" />
-                  GARANTIR MINHA TRANSFORMAÇÃO
-                </Button>
-                
-                <div className="mt-4 text-sm text-green-100">
-                  🔒 Pagamento 100% seguro | ⚡ Acesso instantâneo
+          <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
+            <div className="py-8 px-6 bg-white rounded-lg shadow-sm border">
+              <div className="max-w-2xl mx-auto text-center space-y-6">
+                {/* CTA Principal Verde */}
+                <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-8 text-white shadow-xl">
+                  <h3 className="text-2xl font-bold mb-4">
+                    {block?.settings?.ctaTitle || 'Quero Transformar Meu Estilo Agora!'}
+                  </h3>
+                  <p className="text-green-100 mb-6">
+                    {block?.settings?.ctaSubtitle || 'Acesso imediato + Garantia de 7 dias'}
+                  </p>
+                  
+                  <Button className="bg-white text-green-600 hover:bg-green-50 px-12 py-4 text-lg font-bold rounded-full transform hover:scale-105 transition-all shadow-lg">
+                    <Shield className="w-5 h-5 mr-2" />
+                    GARANTIR MINHA TRANSFORMAÇÃO
+                  </Button>
+                  
+                  <div className="mt-4 text-sm text-green-100">
+                    🔒 Pagamento 100% seguro | ⚡ Acesso instantâneo
+                  </div>
                 </div>
-              </div>
 
-              {/* Badges de Segurança */}
-              <div className="grid grid-cols-3 gap-4 py-4">
-                <div className="text-center">
-                  <Shield className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                  <div className="text-xs text-gray-600">Pagamento Seguro</div>
+                {/* Seção do componente real */}
+                <div className="border-t pt-6">
+                  <SecurePurchaseElement />
                 </div>
-                <div className="text-center">
-                  <CheckCircle className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                  <div className="text-xs text-gray-600">Garantia 7 dias</div>
-                </div>
-                <div className="text-center">
-                  <Zap className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                  <div className="text-xs text-gray-600">Acesso Imediato</div>
-                </div>
-              </div>
-
-              {/* Seção do componente real */}
-              <div className="border-t pt-6">
-                <SecurePurchaseElement />
               </div>
             </div>
-          </div>
+          </InlineEditableWrapper>
         );
         break;
 
       case 'guarantee-component':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
-            <GuaranteeSection />
-          </div>
+          <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
+            <div className="py-4 px-6 bg-white rounded-lg shadow-sm border">
+              <GuaranteeSection />
+            </div>
+          </InlineEditableWrapper>
         );
         break;
 
       case 'mentor-component':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
-            <MentorSection />
-          </div>
+          <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
+            <div className="py-4 px-6 bg-white rounded-lg shadow-sm border">
+              <MentorSection />
+            </div>
+          </InlineEditableWrapper>
         );
         break;
 
