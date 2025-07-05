@@ -36,6 +36,7 @@ import {
   Toaster 
 } from '@/components/ui/toaster';
 import { useToast } from '@/hooks/use-toast';
+import { useBrandKit } from '@/config/brandKit';
 import { funnelService, type FunnelData, type PageData, type BlockData } from '@/services/funnelService';
 import { REAL_QUIZ_QUESTIONS, STRATEGIC_QUESTIONS, TRANSITIONS } from './realQuizData';
 import {
@@ -1554,7 +1555,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
   const [funnel, setFunnel] = useState<FunnelData>(createInitialFunnel);
   const [currentPageId, setCurrentPageId] = useState<string>('etapa-1-intro');
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'funnel' | 'blocks' | 'templates' | 'settings'>('funnel');
+  const [activeTab, setActiveTab] = useState<'funnel' | 'blocks' | 'templates' | 'settings' | 'brand'>('funnel');
   const [deviceView, setDeviceView] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
   const [isAutoSaving, setIsAutoSaving] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -1564,6 +1565,9 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
   // Hook para toast
   const { toast } = useToast();
+  
+  // Hook para Brand Kit
+  const { brandConfig, updateBrandConfig, applyToDocument, generateCSS } = useBrandKit();
 
   // Garantir que o funnel tenha estrutura válida
   React.useEffect(() => {
@@ -3671,11 +3675,12 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           overflow: 'hidden'
         }}
       >
-        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'funnel' | 'blocks' | 'templates' | 'settings')} className="flex-1 flex flex-col h-full">
-          <TabsList className="grid w-full grid-cols-4 m-2 flex-shrink-0">
+        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'funnel' | 'blocks' | 'templates' | 'settings' | 'brand')} className="flex-1 flex flex-col h-full">
+          <TabsList className="grid w-full grid-cols-5 m-2 flex-shrink-0">
             <TabsTrigger value="funnel" className="text-xs">Funil</TabsTrigger>
             <TabsTrigger value="blocks" className="text-xs">Blocos</TabsTrigger>
             <TabsTrigger value="templates" className="text-xs">Templates</TabsTrigger>
+            <TabsTrigger value="brand" className="text-xs">Brand</TabsTrigger>
             <TabsTrigger value="settings" className="text-xs">Config</TabsTrigger>
           </TabsList>
 
