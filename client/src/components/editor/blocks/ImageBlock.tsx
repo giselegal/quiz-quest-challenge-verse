@@ -1,4 +1,5 @@
 import React from 'react';
+import { InlineEditableText } from './InlineEditableText';
 
 interface ImageBlockProps {
   properties: {
@@ -9,12 +10,14 @@ interface ImageBlockProps {
   };
   isSelected?: boolean;
   onClick?: () => void;
+  onSaveInline?: (key: string) => (newValue: string) => void;
 }
 
 export const ImageBlock: React.FC<ImageBlockProps> = ({ 
   properties, 
   isSelected = false,
-  onClick 
+  onClick,
+  onSaveInline
 }) => {
   const { 
     src = 'https://via.placeholder.com/600x400?text=Imagem', 
@@ -41,15 +44,26 @@ export const ImageBlock: React.FC<ImageBlockProps> = ({
       `}
       onClick={onClick}
     >
-      <img 
-        src={src} 
-        alt={alt}
-        style={{ width: width === 'auto' ? 'auto' : width }}
-        className="max-w-full h-auto rounded"
-        onError={(e) => {
-          e.currentTarget.src = 'https://via.placeholder.com/600x400?text=Erro+ao+carregar+imagem';
-        }}
-      />
+      <div className="flex flex-col items-center space-y-2">
+        <img 
+          src={src} 
+          alt={alt}
+          style={{ width: width === 'auto' ? 'auto' : width }}
+          className="max-w-full h-auto rounded"
+          onError={(e) => {
+            e.currentTarget.src = 'https://via.placeholder.com/600x400?text=Erro+ao+carregar+imagem';
+          }}
+        />
+        {onSaveInline && (
+          <InlineEditableText
+            tag="p"
+            value={alt}
+            onSave={onSaveInline('alt')}
+            className="text-sm text-gray-600 italic"
+            placeholder="Descrição da imagem (alt text)"
+          />
+        )}
+      </div>
     </div>
   );
 };

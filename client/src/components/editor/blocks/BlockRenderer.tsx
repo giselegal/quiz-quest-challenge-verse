@@ -8,6 +8,10 @@ import { ResultHeaderBlock } from './ResultHeaderBlock';
 import { ResultDescriptionBlock } from './ResultDescriptionBlock';
 import { ProductOfferBlock } from './ProductOfferBlock';
 import { UrgencyTimerBlock } from './UrgencyTimerBlock';
+import { FAQSectionBlock } from './FAQSectionBlock';
+import { TestimonialsBlock } from './TestimonialsBlock';
+import { GuaranteeBlock } from './GuaranteeBlock';
+import { VideoPlayerBlock } from './VideoPlayerBlock';
 import QuizIntroBlock from '@/components/blocks/quiz/QuizIntroBlock';
 
 export interface BlockData {
@@ -20,17 +24,20 @@ interface BlockRendererProps {
   block: BlockData;
   isSelected?: boolean;
   onClick?: () => void;
+  onSaveInline?: (key: string) => (newValue: string) => void;
 }
 
 export const BlockRenderer: React.FC<BlockRendererProps> = ({ 
   block, 
   isSelected = false, 
-  onClick 
+  onClick,
+  onSaveInline
 }) => {
   const commonProps = {
     properties: block.properties,
     isSelected,
-    onClick
+    onClick,
+    onSaveInline
   };
 
   switch (block.type) {
@@ -60,6 +67,18 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
     
     case 'urgency-timer':
       return <UrgencyTimerBlock {...commonProps} />;
+    
+    case 'faq-section':
+      return <FAQSectionBlock {...commonProps} />;
+    
+    case 'testimonials':
+      return <TestimonialsBlock {...commonProps} />;
+    
+    case 'guarantee':
+      return <GuaranteeBlock {...commonProps} />;
+    
+    case 'video-player':
+      return <VideoPlayerBlock {...commonProps} />;
     
     case 'QuizIntroBlock':
       // Para blocos complexos existentes, adaptar gradualmente
