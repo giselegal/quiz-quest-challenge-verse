@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { 
   Card, 
   CardContent, 
@@ -75,8 +75,68 @@ import {
   Italic,
   Underline,
   Download,
-  Upload
+  Upload,
+  GripVertical
 } from 'lucide-react';
+
+// Hook personalizado para redimensionamento de colunas
+const useResizableColumns = (initialLeftWidth = 320, initialRightWidth = 320) => {
+  const [leftWidth, setLeftWidth] = useState(initialLeftWidth);
+  const [rightWidth, setRightWidth] = useState(initialRightWidth);
+  const [isResizingLeft, setIsResizingLeft] = useState(false);
+  const [isResizingRight, setIsResizingRight] = useState(false);
+  
+  const startResizeLeft = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsResizingLeft(true);
+  }, []);
+  
+  const startResizeRight = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsResizingRight(true);
+  }, []);
+  
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isResizingLeft) {
+        const newWidth = Math.max(200, Math.min(600, e.clientX));
+        setLeftWidth(newWidth);
+      }
+      if (isResizingRight) {
+        const newWidth = Math.max(200, Math.min(600, window.innerWidth - e.clientX));
+        setRightWidth(newWidth);
+      }
+    };
+    
+    const handleMouseUp = () => {
+      setIsResizingLeft(false);
+      setIsResizingRight(false);
+    };
+    
+    if (isResizingLeft || isResizingRight) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    }
+    
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    };
+  }, [isResizingLeft, isResizingRight]);
+  
+  return {
+    leftWidth,
+    rightWidth,
+    startResizeLeft,
+    startResizeRight,
+    isResizingLeft,
+    isResizingRight
+  };
+};
 
 // Usando tipos do serviço + tipos adicionais para compatibilidade
 interface FunnelBlock extends BlockData {
@@ -1274,6 +1334,16 @@ const pageTemplates = [
 ];
 
 const CaktoQuizAdvancedEditor: React.FC = () => {
+  // Hook para colunas redimensionáveis
+  const {
+    leftWidth,
+    rightWidth,
+    startResizeLeft,
+    startResizeRight,
+    isResizingLeft,
+    isResizingRight
+  } = useResizableColumns(320, 320);
+
   // Estados principais
   const [funnel, setFunnel] = useState<FunnelData>(createInitialFunnel);
   const [currentPageId, setCurrentPageId] = useState<string>('etapa-1-intro');
@@ -2822,9 +2892,12 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
   // Render principal
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-50 overflow-hidden">
       {/* SIDEBAR ESQUERDA */}
-      <div className="w-80 bg-white border-r shadow-lg flex flex-col">
+      <div 
+        className="bg-white border-r shadow-lg flex flex-col transition-all duration-200 ease-in-out"
+        style={{ width: `${leftWidth}px`, minWidth: '200px', maxWidth: '600px' }}
+      >
         <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'funnel' | 'blocks' | 'templates' | 'settings')} className="flex-1 flex flex-col">
           <TabsList className="grid w-full grid-cols-4 m-2">
             <TabsTrigger value="funnel" className="text-xs">Funil</TabsTrigger>
@@ -2833,9 +2906,9 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
             <TabsTrigger value="settings" className="text-xs">Config</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="funnel" className="flex-1 p-2">
+          <TabsContent value="funnel" className="flex-1 p-2 overflow-hidden">
             <ScrollArea className="h-full">
-              <div className="space-y-2">
+              <div className="space-y-2 pr-2">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-sm font-medium">Páginas do Funil</h3>
                   <Button 
@@ -2873,9 +2946,9 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
             </ScrollArea>
           </TabsContent>
 
-          <TabsContent value="blocks" className="flex-1 p-2">
+          <TabsContent value="blocks" className="flex-1 p-2 overflow-hidden">
             <ScrollArea className="h-full">
-              <div className="space-y-3">
+              <div className="space-y-3 pr-2">
                 <h3 className="text-sm font-medium mb-3">Biblioteca de Blocos</h3>
                 
                 {/* Agrupar blocos por categoria */}
@@ -3113,8 +3186,24 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         </Tabs>
       </div>
 
+      {/* DIVISOR REDIMENSIONÁVEL ESQUERDO */}
+      <div
+        className={`w-1 bg-gray-200 hover:bg-blue-300 cursor-col-resize flex items-center justify-center transition-all duration-200 group relative ${
+          isResizingLeft ? 'bg-blue-400 w-2' : ''
+        }`}
+        onMouseDown={startResizeLeft}
+        title="Arraste para redimensionar a sidebar esquerda"
+      >
+        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          <GripVertical className="h-4 w-4 text-gray-500 group-hover:text-blue-600" />
+        </div>
+        {isResizingLeft && (
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 animate-pulse" />
+        )}
+      </div>
+
       {/* CANVAS PRINCIPAL */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-w-0">
         {/* Header do Canvas */}
         <div className="h-14 border-b bg-white flex items-center justify-between px-4">
           <div className="flex items-center gap-3">
@@ -3209,12 +3298,14 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         </div>
 
         {/* Canvas */}
-        <div className="flex-1 p-6 bg-gray-50 overflow-auto">
-          <div className={`mx-auto bg-white rounded-lg shadow-lg overflow-hidden ${
-            deviceView === 'mobile' ? 'max-w-sm' :
-            deviceView === 'tablet' ? 'max-w-2xl' :
-            'max-w-4xl'
-          }`}>
+        <div className="flex-1 bg-gray-50 overflow-auto">
+          <ScrollArea className="h-full">
+            <div className="p-6">
+              <div className={`mx-auto bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 ${
+                deviceView === 'mobile' ? 'max-w-sm' :
+                deviceView === 'tablet' ? 'max-w-2xl' :
+                'max-w-4xl'
+              }`}>
             {/* Header da página com progress bar */}
             {currentPage && currentPage.settings?.showProgress && (
               <div className="flex flex-col gap-4 p-5 border-b">
@@ -3345,13 +3436,34 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                   <p className="text-sm">Selecione uma página para começar a editar</p>
                 </div>
               )}
+              </div>
             </div>
           </div>
+        </ScrollArea>
+      </div>
+      </div>
+
+      {/* DIVISOR REDIMENSIONÁVEL DIREITO */}
+      <div
+        className={`w-1 bg-gray-200 hover:bg-blue-300 cursor-col-resize flex items-center justify-center transition-all duration-200 group relative ${
+          isResizingRight ? 'bg-blue-400 w-2' : ''
+        }`}
+        onMouseDown={startResizeRight}
+        title="Arraste para redimensionar a sidebar direita"
+      >
+        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          <GripVertical className="h-4 w-4 text-gray-500 group-hover:text-blue-600" />
         </div>
+        {isResizingRight && (
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 animate-pulse" />
+        )}
       </div>
 
       {/* SIDEBAR DIREITA: Propriedades */}
-      <div className="w-80 border-l bg-white flex flex-col">
+      <div 
+        className="border-l bg-white flex flex-col transition-all duration-200 ease-in-out"
+        style={{ width: `${rightWidth}px`, minWidth: '200px', maxWidth: '600px' }}
+      >
         <div className="h-14 border-b flex items-center px-4">
           <div className="flex items-center gap-2">
             <Settings className="h-4 w-4" />
@@ -3359,8 +3471,9 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           </div>
         </div>
         
-        <div className="flex-1 p-4">
+        <div className="flex-1 p-4 overflow-hidden">
           <ScrollArea className="h-full">
+            <div className="pr-2">
             {selectedBlock ? (
               <div className="space-y-4">
                 {/* Cabeçalho do bloco */}
@@ -4671,6 +4784,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 <p className="text-sm">Clique em um bloco para editar suas propriedades</p>
               </div>
             )}
+            </div>
           </ScrollArea>
         </div>
       </div>
