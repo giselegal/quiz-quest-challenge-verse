@@ -7649,6 +7649,355 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                   </div>
                 )}
 
+                {/* PAINÉIS DE PROPRIEDADES PARA COMPONENTES SCHEMA-DRIVEN */}
+                
+                {selectedBlock.type === 'quiz-question' && (
+                  <div className="space-y-4">
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                      <h4 className="text-xs font-medium text-blue-800 mb-2">⚙️ Questão Normal (Schema-driven)</h4>
+                      <p className="text-xs text-blue-600">3 seleções obrigatórias • Auto-avanço ativo</p>
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Título da Questão</Label>
+                      <Textarea
+                        value={selectedBlock.settings.question || ''}
+                        onChange={(e) => updateBlockSetting('question', e.target.value)}
+                        className="text-sm resize-none mt-1"
+                        rows={3}
+                        placeholder="Qual dessas opções mais combina com você?"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Descrição (Opcional)</Label>
+                      <Textarea
+                        value={selectedBlock.settings.description || ''}
+                        onChange={(e) => updateBlockSetting('description', e.target.value)}
+                        className="text-sm resize-none mt-1"
+                        rows={2}
+                        placeholder="Texto explicativo adicional..."
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Tipo de Questão</Label>
+                      <select 
+                        value={selectedBlock.settings.questionType || 'both'}
+                        onChange={(e) => updateBlockSetting('questionType', e.target.value)}
+                        className="w-full h-8 text-sm border border-gray-300 rounded mt-1 px-2"
+                      >
+                        <option value="both">Texto + Imagem</option>
+                        <option value="text">Apenas Texto</option>
+                        <option value="image">Apenas Imagem</option>
+                      </select>
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Progresso do Quiz (%)</Label>
+                      <Input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={selectedBlock.settings.progressPercent || 10}
+                        onChange={(e) => updateBlockSetting('progressPercent', parseInt(e.target.value))}
+                        className="text-sm h-8 mt-1"
+                        placeholder="10"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Opções da Questão</Label>
+                      <div className="space-y-3 mt-1">
+                        {(selectedBlock.settings.options || []).map((option: any, index: number) => (
+                          <div key={index} className="border rounded-lg p-3 space-y-2">
+                            <div className="flex gap-2">
+                              <Input
+                                value={option.text}
+                                onChange={(e) => updateQuestionOption(index, 'text', e.target.value)}
+                                className="text-sm h-8 flex-1"
+                                placeholder={`Opção ${String.fromCharCode(65 + index)}`}
+                              />
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => removeQuestionOption(index)}
+                                className="h-8 w-8 p-0"
+                              >
+                                <Trash2 className="h-3 w-3" />
+                              </Button>
+                            </div>
+                            
+                            <div>
+                              <Label className="text-xs text-gray-600">URL da Imagem (Opcional)</Label>
+                              <Input
+                                value={option.imageUrl || ''}
+                                onChange={(e) => updateQuestionOption(index, 'imageUrl', e.target.value)}
+                                className="text-sm h-8 mt-1"
+                                placeholder="https://example.com/image.jpg"
+                              />
+                            </div>
+                            
+                            <div>
+                              <Label className="text-xs text-gray-600">Valor para Cálculo</Label>
+                              <Input
+                                value={option.value || ''}
+                                onChange={(e) => updateQuestionOption(index, 'value', e.target.value)}
+                                className="text-sm h-8 mt-1"
+                                placeholder="classic, casual, modern..."
+                              />
+                            </div>
+                          </div>
+                        ))}
+                        
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={addQuestionOption}
+                          className="w-full h-8"
+                        >
+                          <Plus className="h-3 w-3 mr-1" />
+                          Adicionar Opção
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {selectedBlock.type === 'strategic-question' && (
+                  <div className="space-y-4">
+                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                      <h4 className="text-xs font-medium text-yellow-800 mb-2">🎯 Questão Estratégica (Schema-driven)</h4>
+                      <p className="text-xs text-yellow-600">1 seleção obrigatória • Clique manual para avançar</p>
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Título da Questão</Label>
+                      <Textarea
+                        value={selectedBlock.settings.question || ''}
+                        onChange={(e) => updateBlockSetting('question', e.target.value)}
+                        className="text-sm resize-none mt-1"
+                        rows={3}
+                        placeholder="Questão Estratégica: Escolha UMA opção"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Descrição</Label>
+                      <Textarea
+                        value={selectedBlock.settings.description || ''}
+                        onChange={(e) => updateBlockSetting('description', e.target.value)}
+                        className="text-sm resize-none mt-1"
+                        rows={2}
+                        placeholder="Esta questão é especial e define seu resultado."
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Peso Estratégico</Label>
+                      <Input
+                        type="number"
+                        min="1"
+                        max="5"
+                        step="0.1"
+                        value={selectedBlock.settings.strategicWeight || 2.0}
+                        onChange={(e) => updateBlockSetting('strategicWeight', parseFloat(e.target.value))}
+                        className="text-sm h-8 mt-1"
+                        placeholder="2.0"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Progresso do Quiz (%)</Label>
+                      <Input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={selectedBlock.settings.progressPercent || 85}
+                        onChange={(e) => updateBlockSetting('progressPercent', parseInt(e.target.value))}
+                        className="text-sm h-8 mt-1"
+                        placeholder="85"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Opções Estratégicas</Label>
+                      <div className="space-y-3 mt-1">
+                        {(selectedBlock.settings.options || []).map((option: any, index: number) => (
+                          <div key={index} className="border rounded-lg p-3 space-y-2 bg-yellow-50">
+                            <div className="flex gap-2">
+                              <Input
+                                value={option.text}
+                                onChange={(e) => updateQuestionOption(index, 'text', e.target.value)}
+                                className="text-sm h-8 flex-1"
+                                placeholder={`Estilo ${String.fromCharCode(65 + index)}`}
+                              />
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => removeQuestionOption(index)}
+                                className="h-8 w-8 p-0"
+                              >
+                                <Trash2 className="h-3 w-3" />
+                              </Button>
+                            </div>
+                            
+                            <div>
+                              <Label className="text-xs text-gray-600">URL da Imagem</Label>
+                              <Input
+                                value={option.imageUrl || ''}
+                                onChange={(e) => updateQuestionOption(index, 'imageUrl', e.target.value)}
+                                className="text-sm h-8 mt-1"
+                                placeholder="https://example.com/style-image.jpg"
+                              />
+                            </div>
+                            
+                            <div>
+                              <Label className="text-xs text-gray-600">Valor do Estilo</Label>
+                              <select 
+                                value={option.value || 'classic'}
+                                onChange={(e) => updateQuestionOption(index, 'value', e.target.value)}
+                                className="w-full h-8 text-sm border border-gray-300 rounded mt-1 px-2"
+                              >
+                                <option value="classic">Clássico</option>
+                                <option value="casual">Casual</option>
+                                <option value="modern">Moderno</option>
+                                <option value="elegant">Elegante</option>
+                                <option value="bold">Ousado</option>
+                              </select>
+                            </div>
+                          </div>
+                        ))}
+                        
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={addQuestionOption}
+                          className="w-full h-8"
+                        >
+                          <Plus className="h-3 w-3 mr-1" />
+                          Adicionar Opção Estratégica
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {selectedBlock.type === 'quiz-transition' && (
+                  <div className="space-y-4">
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                      <h4 className="text-xs font-medium text-green-800 mb-2">⚡ Transição Quiz (Schema-driven)</h4>
+                      <p className="text-xs text-green-600">Loading animado • Cálculo automático de resultado</p>
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Título da Transição</Label>
+                      <Input
+                        value={selectedBlock.settings.title || ''}
+                        onChange={(e) => updateBlockSetting('title', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Calculando seu resultado..."
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Descrição</Label>
+                      <Textarea
+                        value={selectedBlock.settings.description || ''}
+                        onChange={(e) => updateBlockSetting('description', e.target.value)}
+                        className="text-sm resize-none mt-1"
+                        rows={3}
+                        placeholder="Estamos analisando suas respostas para descobrir seu estilo único."
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Duração do Loading (ms)</Label>
+                      <Input
+                        type="number"
+                        min="1000"
+                        max="10000"
+                        step="500"
+                        value={selectedBlock.settings.loadingDuration || 3000}
+                        onChange={(e) => updateBlockSetting('loadingDuration', parseInt(e.target.value))}
+                        className="text-sm h-8 mt-1"
+                        placeholder="3000"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Tipo de Animação</Label>
+                      <select 
+                        value={selectedBlock.settings.animationType || 'pulse'}
+                        onChange={(e) => updateBlockSetting('animationType', e.target.value)}
+                        className="w-full h-8 text-sm border border-gray-300 rounded mt-1 px-2"
+                      >
+                        <option value="pulse">Pulso</option>
+                        <option value="spinning">Girando</option>
+                        <option value="dots">Pontos</option>
+                        <option value="bars">Barras</option>
+                        <option value="progress">Barra de Progresso</option>
+                      </select>
+                    </div>
+                    
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        checked={selectedBlock.settings.showProgress || true}
+                        onCheckedChange={(checked) => updateBlockSetting('showProgress', checked)}
+                      />
+                      <Label className="text-xs">Mostrar Progresso</Label>
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Etapas do Progresso</Label>
+                      <div className="space-y-2 mt-1">
+                        {(selectedBlock.settings.progressSteps || []).map((step: string, index: number) => (
+                          <div key={index} className="flex gap-2">
+                            <Input
+                              value={step}
+                              onChange={(e) => {
+                                const steps = [...(selectedBlock.settings.progressSteps || [])];
+                                steps[index] = e.target.value;
+                                updateBlockSetting('progressSteps', steps);
+                              }}
+                              className="text-sm h-8 flex-1"
+                              placeholder={`Etapa ${index + 1}`}
+                            />
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                const steps = [...(selectedBlock.settings.progressSteps || [])];
+                                steps.splice(index, 1);
+                                updateBlockSetting('progressSteps', steps);
+                              }}
+                              className="h-8 w-8 p-0"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        ))}
+                        
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            const steps = [...(selectedBlock.settings.progressSteps || [])];
+                            steps.push(`Nova etapa ${steps.length + 1}...`);
+                            updateBlockSetting('progressSteps', steps);
+                          }}
+                          className="w-full h-8"
+                        >
+                          <Plus className="h-3 w-3 mr-1" />
+                          Adicionar Etapa
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* FIM DOS PAINÉIS DE COMPONENTES SCHEMA-DRIVEN */}
+
                 {/* FIM DOS PAINÉIS DE COMPONENTES REAIS */}
 
                 {/* Configurações de estilo gerais */}
