@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { useQuizTracking } from '@/hooks/useQuizTracking';
 
 /**
  * QuizBenefitsBlock - Bloco de benefícios/instruções do quiz para uso no editor visual
@@ -115,6 +116,24 @@ const QuizBenefitsBlock: React.FC<QuizBenefitsBlockProps> = ({
     desktop: 2,
   },
 }) => {
+  const { trackUIInteraction } = useQuizTracking();
+
+  // Handler para clique em benefício
+  const handleBenefitClick = (benefitText: string, index: number) => {
+    trackUIInteraction('benefit_item', `benefit_${index}`, 'benefit_clicked', {
+      benefit_text: benefitText,
+      benefit_index: index,
+      total_benefits: benefits.length
+    });
+  };
+
+  // Handler para clique no título
+  const handleTitleClick = () => {
+    trackUIInteraction('benefits_title', 'benefits_section_title', 'title_clicked', {
+      title_text: title
+    });
+  };
+
   // Classes de espaçamento
   const spacingClasses = {
     tight: 'space-y-2',
@@ -179,7 +198,7 @@ const QuizBenefitsBlock: React.FC<QuizBenefitsBlockProps> = ({
       <div
         key={index}
         className={cn(
-          'flex items-start gap-3',
+          'flex items-start gap-3 cursor-pointer hover:opacity-80 transition-opacity',
           isCard ? 'p-4 rounded-lg border shadow-sm' : '',
           alignment === 'center' && !isCard ? 'justify-center' : '',
           alignment === 'right' && !isCard ? 'justify-end flex-row-reverse' : ''
@@ -188,6 +207,7 @@ const QuizBenefitsBlock: React.FC<QuizBenefitsBlockProps> = ({
           backgroundColor: isCard ? colors.backgroundAlt : 'transparent',
           borderColor: isCard ? colors.border : 'transparent',
         }}
+        onClick={() => handleBenefitClick(benefit.text, index)}
       >
         {showIcons && (
           <div 
@@ -240,11 +260,12 @@ const QuizBenefitsBlock: React.FC<QuizBenefitsBlockProps> = ({
         <div className={cn('mb-8', alignmentClasses[alignment])}>
           {title && (
             <h2 
-              className="text-2xl md:text-3xl font-bold mb-3"
+              className="text-2xl md:text-3xl font-bold mb-3 cursor-pointer hover:opacity-80 transition-opacity"
               style={{ 
                 color: colors.text,
                 fontFamily: '"Playfair Display", serif'
               }}
+              onClick={handleTitleClick}
             >
               {title}
             </h2>

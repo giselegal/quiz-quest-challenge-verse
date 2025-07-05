@@ -4,6 +4,7 @@ import { UserResponse } from '@/types/quiz';
 import { QuizHeader } from './QuizHeader';
 import { StrategicQuestions } from './StrategicQuestions';
 import { useQuizTracking, useAutoClickTracking } from '@/hooks/useQuizTracking';
+import { useScrollTracking } from '@/hooks/useScrollTracking';
 
 interface QuizContentWithTrackingProps {
   user: any;
@@ -42,6 +43,9 @@ export const QuizContentWithTracking: React.FC<QuizContentWithTrackingProps> = (
   // Auto-tracking de cliques (opcional)
   useAutoClickTracking(true);
 
+  // Scroll tracking
+  const { resetTrackedPercentages } = useScrollTracking(true);
+
   // Determinar seleções necessárias
   const requiredSelections = showingStrategicQuestions ? 1 : (currentQuestion?.multiSelect || 3);
   const canProceed = currentAnswers?.length === requiredSelections;
@@ -49,6 +53,9 @@ export const QuizContentWithTracking: React.FC<QuizContentWithTrackingProps> = (
   // Track mudança de questão
   useEffect(() => {
     if (currentQuestion) {
+      // Reset scroll tracking para nova questão
+      resetTrackedPercentages();
+      
       trackUIInteraction(
         'question_view',
         currentQuestion.id,
@@ -60,7 +67,7 @@ export const QuizContentWithTracking: React.FC<QuizContentWithTrackingProps> = (
         }
       );
     }
-  }, [currentQuestion, currentQuestionIndex, showingStrategicQuestions, trackUIInteraction]);
+  }, [currentQuestion, currentQuestionIndex, showingStrategicQuestions, trackUIInteraction, resetTrackedPercentages]);
 
   // Função modificada para rastrear cliques em opções
   const handleOptionClick = (optionId: string, optionText: string, event?: React.MouseEvent) => {

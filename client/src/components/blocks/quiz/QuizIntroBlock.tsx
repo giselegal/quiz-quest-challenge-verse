@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import { useQuizTracking } from '@/hooks/useQuizTracking';
 
 /**
  * QuizIntroBlock - Componente de introdução do quiz 100% fiel ao original
@@ -122,16 +123,25 @@ const QuizIntroBlock: React.FC<QuizIntroBlockProps> = ({
 }) => {
   const [nome, setNome] = useState('');
   const [error, setError] = useState('');
+  const { trackUIInteraction, trackCTAClick } = useQuizTracking();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
     if (required && !nome.trim()) {
       setError('Por favor, digite seu nome para continuar');
+      // Track erro de validação
+      trackUIInteraction('form_validation', 'name_input', 'validation_error', {
+        error: 'empty_name'
+      });
       return;
     }
     
     setError('');
+    
+    // Track início do quiz
+    trackCTAClick('quiz_start', `Iniciar Quiz - ${nome.trim()}`);
+    
     if (onStart) {
       onStart(nome.trim());
     }
@@ -140,6 +150,30 @@ const QuizIntroBlock: React.FC<QuizIntroBlockProps> = ({
     if (typeof window !== 'undefined' && 'performance' in window) {
       window.performance.mark('user-interaction');
     }
+  };
+
+  // Handler para mudanças no input
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setNome(value);
+    setError('');
+    
+    // Track interação com o input
+    if (value.length > 0 && nome.length === 0) {
+      trackUIInteraction('form_field', 'name_input', 'first_input', {
+        field: 'name'
+      });
+    }
+  };
+
+  // Handler para clique na imagem
+  const handleImageClick = () => {
+    trackUIInteraction('intro_image', 'intro_image_click', 'image_clicked');
+  };
+
+  // Handler para clique no logo
+  const handleLogoClick = () => {
+    trackUIInteraction('logo', 'logo_click', 'logo_clicked');
   };
 
   // Efeito de inicialização para Web Vitals
@@ -187,12 +221,13 @@ const QuizIntroBlock: React.FC<QuizIntroBlockProps> = ({
             <img
               src={logoUrl}
               alt={logoAlt}
-              className="h-auto mx-auto"
+              className="h-auto mx-auto cursor-pointer hover:opacity-80 transition-opacity"
               width={logoWidth}
               height={logoHeight}
               loading="eager"
               fetchPriority="high"
               decoding="async"
+              onClick={handleLogoClick}
               style={{
                 objectFit: 'contain',
                 maxWidth: '100%',
@@ -233,8 +268,9 @@ const QuizIntroBlock: React.FC<QuizIntroBlockProps> = ({
         {/* Imagem principal - renderização imediata e LCP */}
         <div className="mt-2 w-full max-w-xs sm:max-w-md md:max-w-lg mx-auto">
           <div
-            className="w-full overflow-hidden rounded-lg shadow-sm"
+            className="w-full overflow-hidden rounded-lg shadow-sm cursor-pointer hover:opacity-90 transition-opacity"
             style={{ aspectRatio: '1.47', maxHeight: '204px' }}
+            onClick={handleImageClick}
           >
             <div 
               className="relative w-full h-full"
@@ -286,10 +322,7 @@ const QuizIntroBlock: React.FC<QuizIntroBlockProps> = ({
                 id="name"
                 placeholder={namePlaceholder}
                 value={nome}
-                onChange={(e) => {
-                  setNome(e.target.value);
-                  if (error) setError('');
-                }}
+                onChange={handleInputChange}
                 className={cn(
                   "w-full p-2.5 rounded-md border-2 focus:outline-none focus-visible:outline-none focus:ring-2 focus:ring-offset-2 focus-visible:ring-offset-2",
                   error 

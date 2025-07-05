@@ -2,10 +2,11 @@ import { useEffect, useCallback, useRef } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { quizDataService, useQuizData } from '@/services/quizDataService';
 
-// Hook para auto-tracking de cliques em elementos do quiz
+// Hook para auto-tracking de cliques em elementos do quiz com integração completa
 export const useQuizTracking = (questionIndex?: number) => {
   const { user } = useAuth();
   const questionStartTime = useRef<number>(Date.now());
+  const hasTrackedPageView = useRef<boolean>(false);
   const {
     startSession,
     addAnswer,
@@ -14,11 +15,19 @@ export const useQuizTracking = (questionIndex?: number) => {
     getCurrentSession
   } = useQuizData();
 
-  // Inicializar sessão automaticamente
+  // Inicializar sessão automaticamente e tracking de página
   useEffect(() => {
     const currentSession = getCurrentSession();
     if (!currentSession && user?.userName) {
       startSession(user.userName, user.email);
+      // Track início do quiz
+      quizDataService.trackQuizStart(user.userName, user.email);
+    }
+
+    // Track page view apenas uma vez
+    if (!hasTrackedPageView.current) {
+      quizDataService.trackPageView();
+      hasTrackedPageView.current = true;
     }
   }, [user, startSession, getCurrentSession]);
 
@@ -66,6 +75,11 @@ export const useQuizTracking = (questionIndex?: number) => {
       responseTime
     );
 
+    // Track progresso se soubermos o número total de questões
+    if (questionIndex !== undefined) {
+      quizDataService.trackQuizProgress(questionIndex + 1, 19);
+    }
+
     // Track evento de submissão
     trackClick(
       'answer_submit',
@@ -107,6 +121,10 @@ export const useQuizTracking = (questionIndex?: number) => {
     ctaText: string,
     targetUrl?: string
   ) => {
+    // Track no serviço consolidado de CTA
+    quizDataService.trackCTAClick(ctaType, ctaText, targetUrl);
+    
+    // Track como clique regular também
     trackClick(
       'cta_button',
       `cta_${ctaType}`,
@@ -141,12 +159,46 @@ export const useQuizTracking = (questionIndex?: number) => {
     );
   }, [trackClick, questionIndex]);
 
+  // Função para rastrear finalização do quiz
+  const trackQuizFinish = useCallback((result: any) => {
+    if (result?.predominantStyle?.category) {
+      quizDataService.trackQuizComplete(result.predominantStyle.category);
+    }
+    finishSession(result);
+  }, [finishSession]);
+
+  // Função para rastrear progresso de scroll
+  const trackScrollProgress = useCallback((percentage: number) => {
+    quizDataService.trackScrollProgress(percentage);
+  }, []);
+
+  // Função para rastrear loading/transições
+  const trackLoadingState = useCallback((
+    loadingType: 'question_load' | 'result_load' | 'transition',
+    duration?: number
+  ) => {
+    trackClick(
+      'loading_state',
+      `loading_${loadingType}`,
+      `Loading: ${loadingType}`,
+      undefined,
+      questionIndex,
+      {
+        loadingType,
+        duration
+      }
+    );
+  }, [trackClick, questionIndex]);
+
   return {
     trackQuizOptionClick,
     trackAnswerSubmission,
     trackNavigation,
     trackCTAClick,
     trackUIInteraction,
+    trackQuizFinish,
+    trackScrollProgress,
+    trackLoadingState,
     finishSession,
     getCurrentSession
   };

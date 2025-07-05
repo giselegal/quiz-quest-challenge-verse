@@ -1,4 +1,5 @@
 import { QuizResult, StyleType, StyleScore } from '@/types/quiz';
+import { trackPixelEvent } from '../utils/facebookPixel';
 
 export interface QuizSession {
   sessionId: string;
@@ -51,10 +52,58 @@ export interface DeviceInfo {
   isDesktop: boolean;
 }
 
+// Interface para configuração de funil
+interface FunnelConfig {
+  pixelId: string;
+  token: string;
+  utmCampaign: string;
+  funnelName: string;
+  ctaUrl: string;
+  googleAnalyticsId?: string;
+}
+
+// Interface para parâmetros UTM
+interface UtmParameters {
+  source?: string;
+  medium?: string;
+  campaign?: string;
+  content?: string;
+  term?: string;
+  id?: string;
+  fbclid?: string;
+}
+
 class QuizDataService {
   private currentSession: QuizSession | null = null;
   private clickEventBuffer: ClickEvent[] = [];
   private isTrackingEnabled = true;
+  private funnelConfig: FunnelConfig | null = null;
+  private utmParameters: UtmParameters = {};
+
+  // Configurações de funil
+  private readonly FUNNEL_CONFIGS: Record<string, FunnelConfig> = {
+    "default": {
+      pixelId: "1311550759901086",
+      token: "EAAEJYWeJHLABOwGC1ZC1GxRfJBAAIBHFB4kYqIFrNyoyuRpnRLyNp7L2VZBop3sGuyzchC6XkD1EfBrlxmCoMxTZCBEWrP2DwZBOPu5fZBKZCZBybZBG9xAxaSFJJzk3VZB4i08EKFImWmsKhYXWK9RdtfR0eZCQaoNHFm4rGmby9LNjvZAcuVYEAX6M2e0vSfdB96vWQZDZD",
+      utmCampaign: "Teste Lovable - Por Fora",
+      funnelName: "quiz_isca",
+      ctaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
+    },
+    "quiz-descubra-seu-estilo": {
+      pixelId: "1038647624890676",
+      token: "EAAEJYWeJHLABOwGC1ZC1GxRfJBAAIBHFB4kYqIFrNyoyuRpnRLyNp7L2VZBop3sGuyzchC6XkD1EfBrlxmCoMxTZCBEWrP2DwZBOPu5fZBKZCZBybZBG9xAxaSFJJzk3VZB4i08EKFImWmsKhYXWK9RdtfR0eZCQaoNHFm4rGmby9LNjvZAcuVYEAX6M2e0vSfdB96vWQZDZD",
+      utmCampaign: "Teste Lovable - Por Dentro",
+      funnelName: "quiz_embutido",
+      ctaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
+    }
+  };
+
+  constructor() {
+    // Inicializar configuração do funil baseado na URL
+    this.initializeFunnelConfig();
+    // Capturar parâmetros UTM da URL
+    this.captureUtmParameters();
+  }
 
   // Inicializar nova sessão de quiz
   startSession(userName?: string, userEmail?: string): string {
@@ -349,27 +398,233 @@ class QuizDataService {
     return stylePoints;
   }
 
-  private trackEvent(eventName: string, data: any): void {
+  // Inicializar configuração do funil baseado na URL
+  private initializeFunnelConfig(): void {
+    if (typeof window === 'undefined') return;
+    
+    const path = window.location.pathname;
+    let funnelKey = 'default';
+    
+    if (path.includes('/quiz-descubra-seu-estilo')) {
+      funnelKey = 'quiz-descubra-seu-estilo';
+    }
+    
+    this.funnelConfig = this.FUNNEL_CONFIGS[funnelKey];
+    console.log('Initialized funnel config:', this.funnelConfig?.funnelName);
+  }
+
+  // Capturar parâmetros UTM da URL
+  private captureUtmParameters(): void {
+    if (typeof window === 'undefined') return;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    this.utmParameters = {
+      source: urlParams.get('utm_source') || undefined,
+      medium: urlParams.get('utm_medium') || undefined,
+      campaign: urlParams.get('utm_campaign') || undefined,
+      content: urlParams.get('utm_content') || undefined,
+      term: urlParams.get('utm_term') || undefined,
+      id: urlParams.get('utm_id') || undefined,
+      fbclid: urlParams.get('fbclid') || undefined,
+    };
+
+    // Remover parâmetros undefined
+    Object.keys(this.utmParameters).forEach(key => {
+      if (this.utmParameters[key as keyof UtmParameters] === undefined) {
+        delete this.utmParameters[key as keyof UtmParameters];
+      }
+    });
+
+    // Salvar UTM no localStorage
+    if (Object.keys(this.utmParameters).length > 0) {
+      localStorage.setItem('quiz_utm_parameters', JSON.stringify(this.utmParameters));
+      console.log('UTM parameters captured:', this.utmParameters);
+    }
+  }
+
+  // Tracking de eventos para Facebook Pixel
+  private trackFacebookPixelEvent(eventName: string, data?: Record<string, any>): void {
+    if (!this.funnelConfig || typeof window === 'undefined') return;
+
+    try {
+      trackPixelEvent(eventName, {
+        ...data,
+        funnel_name: this.funnelConfig.funnelName,
+        utm_campaign: this.funnelConfig.utmCampaign,
+        ...this.utmParameters
+      });
+    } catch (error) {
+      console.warn('Error tracking Facebook Pixel event:', error);
+    }
+  }
+
+  // Tracking de eventos para Google Analytics
+  private trackGoogleAnalyticsEvent(eventName: string, data?: Record<string, any>): void {
+    if (typeof window === 'undefined' || !window.gtag) return;
+
+    try {
+      window.gtag('event', eventName, {
+        event_category: 'quiz_engagement',
+        funnel_name: this.funnelConfig?.funnelName,
+        utm_campaign: this.funnelConfig?.utmCampaign,
+        ...this.utmParameters,
+        ...data
+      });
+    } catch (error) {
+      console.warn('Error tracking Google Analytics event:', error);
+    }
+  }
+
+  // Método trackEvent atualizado com integração completa
+  private trackEvent(eventName: string, data: Record<string, any>): void {
     try {
       // Salvar em localStorage para analytics
       const events = JSON.parse(localStorage.getItem('quiz_analytics_events') || '[]');
-      events.push({
-        event: eventName,
-        data,
+      const event = {
+        eventName,
+        data: {
+          ...data,
+          funnel_name: this.funnelConfig?.funnelName,
+          utm_parameters: this.utmParameters
+        },
         timestamp: new Date().toISOString(),
         sessionId: this.currentSession?.sessionId
-      });
+      };
       
-      // Manter apenas últimos 1000 eventos
-      const recentEvents = events.slice(-1000);
+      events.push(event);
+      
+      // Manter apenas os últimos 100 eventos
+      const recentEvents = events.slice(-100);
       localStorage.setItem('quiz_analytics_events', JSON.stringify(recentEvents));
-      
-      // Aqui poderia enviar para serviço de analytics externo
-      // analytics.track(eventName, data);
-      
+
+      // Enviar para Facebook Pixel e Google Analytics
+      this.trackFacebookPixelEvent(eventName, data);
+      this.trackGoogleAnalyticsEvent(eventName, data);
+
+      console.log(`[Analytics] Event tracked: ${eventName}`, data);
     } catch (error) {
-      console.error('Error tracking event:', error);
+      console.warn('Error tracking event:', error);
     }
+  }
+
+  // Métodos específicos para eventos do quiz
+  
+  // Iniciar quiz
+  trackQuizStart(userName?: string, userEmail?: string): void {
+    this.trackEvent('quiz_start', {
+      user_name: userName,
+      user_email: userEmail,
+      page_variant: this.funnelConfig?.funnelName === 'quiz_embutido' ? 'B' : 'A'
+    });
+
+    // Evento específico do Facebook Pixel
+    this.trackFacebookPixelEvent('InitiateCheckout', {
+      content_name: this.funnelConfig?.funnelName === 'quiz_embutido' 
+        ? 'Quiz Descubra Seu Estilo' 
+        : 'Quiz Manual de Estilo',
+      content_category: 'Quiz',
+      value: 0,
+      currency: 'BRL'
+    });
+  }
+
+  // Progresso do quiz
+  trackQuizProgress(questionNumber: number, totalQuestions: number): void {
+    const progress = Math.round((questionNumber / totalQuestions) * 100);
+    
+    this.trackEvent('quiz_progress', {
+      question_number: questionNumber,
+      total_questions: totalQuestions,
+      progress_percentage: progress,
+      page_variant: this.funnelConfig?.funnelName === 'quiz_embutido' ? 'B' : 'A'
+    });
+
+    // Eventos específicos do Facebook Pixel em marcos importantes
+    if (progress === 25 || progress === 50 || progress === 75) {
+      this.trackFacebookPixelEvent('AddToCart', {
+        content_name: `Quiz Progress ${progress}%`,
+        content_category: 'Quiz',
+        value: (progress / 100) * 47,
+        currency: 'BRL'
+      });
+    }
+  }
+
+  // Completar quiz
+  trackQuizComplete(result: string): void {
+    this.trackEvent('quiz_complete', {
+      quiz_result: result,
+      page_variant: this.funnelConfig?.funnelName === 'quiz_embutido' ? 'B' : 'A'
+    });
+
+    this.trackFacebookPixelEvent('CompleteRegistration', {
+      content_name: 'Quiz Completo - Descubra Seu Estilo',
+      content_category: 'Quiz',
+      value: 47,
+      currency: 'BRL',
+      status: 'completed'
+    });
+  }
+
+  // Clique em CTA
+  trackCTAClick(ctaPosition: string, ctaText?: string, targetUrl?: string): void {
+    this.trackEvent('cta_click', {
+      cta_position: ctaPosition,
+      cta_text: ctaText,
+      target_url: targetUrl,
+      page_variant: this.funnelConfig?.funnelName === 'quiz_embutido' ? 'B' : 'A'
+    });
+
+    this.trackFacebookPixelEvent('Purchase', {
+      content_name: 'Manual de Estilo Contemporâneo',
+      content_category: 'Digital Product',
+      value: 47,
+      currency: 'BRL',
+      content_ids: ['manual-estilo-contemporaneo'],
+      num_items: 1
+    });
+  }
+
+  // Visualização de página
+  trackPageView(pagePath?: string): void {
+    const path = pagePath || (typeof window !== 'undefined' ? window.location.pathname : '');
+    
+    this.trackEvent('page_view', {
+      page_path: path,
+      page_title: typeof document !== 'undefined' ? document.title : '',
+      page_url: typeof window !== 'undefined' ? window.location.href : ''
+    });
+
+    this.trackFacebookPixelEvent('ViewContent', {
+      content_name: this.funnelConfig?.funnelName === 'quiz_embutido' 
+        ? 'Quiz Descubra Seu Estilo - Página B'
+        : 'Quiz Manual de Estilo - Página A',
+      content_category: 'Quiz Landing Page',
+      content_type: 'product',
+      value: 47,
+      currency: 'BRL'
+    });
+  }
+
+  // Progresso de scroll
+  trackScrollProgress(percentage: number): void {
+    if (percentage === 25 || percentage === 50 || percentage === 75 || percentage === 90) {
+      this.trackEvent('scroll_progress', {
+        scroll_percentage: percentage,
+        page_variant: this.funnelConfig?.funnelName === 'quiz_embutido' ? 'B' : 'A'
+      });
+    }
+  }
+
+  // Obter configuração do funil atual
+  getCurrentFunnelConfig(): FunnelConfig | null {
+    return this.funnelConfig;
+  }
+
+  // Obter parâmetros UTM
+  getUtmParameters(): UtmParameters {
+    return { ...this.utmParameters };
   }
 }
 

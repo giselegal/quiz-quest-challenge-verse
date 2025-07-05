@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronRight, Sparkles, ArrowRight } from 'lucide-react';
+import { useQuizTracking } from '@/hooks/useQuizTracking';
 
 /**
  * QuizTransitionBlock - Componente de transição do quiz 100% reutilizável e editável
@@ -96,8 +97,12 @@ const QuizTransitionBlock: React.FC<QuizTransitionBlockProps> = ({
 }) => {
   const [animationActive, setAnimationActive] = useState(false);
   const [showContent, setShowContent] = useState(false);
+  const { trackUIInteraction, trackCTAClick, trackLoadingState } = useQuizTracking();
 
   useEffect(() => {
+    // Track visualização da transição
+    trackLoadingState('transition', animationDuration);
+    
     // Iniciar animação
     if (showAnimation) {
       setAnimationActive(true);
@@ -196,6 +201,9 @@ const QuizTransitionBlock: React.FC<QuizTransitionBlockProps> = ({
   };
 
   const handleContinue = () => {
+    // Track clique no botão continuar
+    trackCTAClick('transition_continue', continueButtonText);
+    
     if (onContinue && !loading) {
       onContinue();
     }
