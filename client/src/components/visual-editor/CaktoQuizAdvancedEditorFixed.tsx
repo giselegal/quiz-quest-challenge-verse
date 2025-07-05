@@ -1622,26 +1622,6 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     isResizingRight
   } = useResizableColumns(320, 320);
 
-  // Implementar debounce no auto-save usando o hook
-  const saveFunction = useCallback(async () => {
-    try {
-      // Converter dados do editor para formato do serviço
-      const funnelData: FunnelData = {
-        ...funnel,
-        pages: funnel.pages.map((page, index) => ({
-          id: page.id,
-          type: page.type,
-          title: page.title,
-          order: index + 1,
-          blocks: page.blocks.map((block, blockIndex) => ({
-            id: block.id,
-            type: block.type,
-            content: block.settings || {},
-            styles: block.style,
-            position: { x: 0, y: blockIndex * 100 }
-          })),
-          metadata: page.settings
-        }))
   // Estados principais
   const [funnel, setFunnel] = useState<FunnelData>(createInitialFunnel);
   const [currentPageId, setCurrentPageId] = useState<string>('etapa-1-intro');
@@ -4911,7 +4891,10 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
           <TabsContent value="layers" className="flex-1 p-2 overflow-hidden relative" style={{ height: 'calc(100vh - 120px)' }}>
             <LayersPanel
-              currentPage={currentPage}
+              currentPage={currentPage ? {
+                ...currentPage,
+                title: currentPage.title || currentPage.name || 'Página sem título'
+              } : undefined}
               selectedBlockId={selectedBlockId}
               onSelectBlock={setSelectedBlockId}
               onReorderBlocks={(newBlocks) => {
