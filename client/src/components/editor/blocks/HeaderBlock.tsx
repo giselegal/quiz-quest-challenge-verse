@@ -1,4 +1,5 @@
 import React from 'react';
+import { InlineEditableText } from './InlineEditableText';
 
 interface HeaderBlockProps {
   properties: {
@@ -9,6 +10,7 @@ interface HeaderBlockProps {
   };
   isSelected?: boolean;
   onClick?: () => void;
+  onSaveInline?: (key: string) => (newValue: string) => void;
 }
 
 export const HeaderBlock: React.FC<HeaderBlockProps> = ({ 
