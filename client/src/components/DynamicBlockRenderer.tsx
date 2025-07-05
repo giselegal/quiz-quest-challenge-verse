@@ -20,7 +20,9 @@ import {
   QuizQuestionBlock, 
   QuizProgressBlock, 
   QuizNavigationBlock, 
-  QuizTransitionBlock 
+  QuizTransitionBlock,
+  QuizIntroBlock,
+  StartButtonBlock 
 } from './blocks/quiz';
 
 // Componentes básicos
@@ -268,6 +270,59 @@ const DynamicBlockRenderer: React.FC<DynamicBlockRendererProps> = ({
         );
 
       // BLOCOS DE QUIZ REUTILIZÁVEIS
+      case 'QuizIntroBlock':
+        return (
+          <QuizIntroBlock
+            blockId={blockId}
+            title={dynamicProps.title}
+            subtitle={dynamicProps.subtitle}
+            namePlaceholder={dynamicProps.namePlaceholder}
+            buttonTextEmpty={dynamicProps.buttonTextEmpty}
+            buttonTextFilled={dynamicProps.buttonTextFilled}
+            privacyText={dynamicProps.privacyText}
+            footerText={dynamicProps.footerText}
+            logoUrl={dynamicProps.logoUrl}
+            logoAlt={dynamicProps.logoAlt}
+            logoWidth={dynamicProps.logoWidth}
+            logoHeight={dynamicProps.logoHeight}
+            introImageUrl={dynamicProps.introImageUrl}
+            introImageAlt={dynamicProps.introImageAlt}
+            colors={dynamicProps.colors}
+            onStart={dynamicProps.onStart}
+            disabled={dynamicProps.disabled}
+            required={dynamicProps.required}
+            maxLength={dynamicProps.maxLength}
+            maxWidth={dynamicProps.maxWidth}
+            backgroundGradient={dynamicProps.backgroundGradient}
+            className={dynamicProps.className}
+            style={dynamicProps.style}
+          />
+        );
+
+      case 'StartButtonBlock':
+        return (
+          <StartButtonBlock
+            blockId={blockId}
+            text={dynamicProps.text}
+            icon={dynamicProps.icon}
+            loadingText={dynamicProps.loadingText}
+            disabled={dynamicProps.disabled}
+            loading={dynamicProps.loading}
+            size={dynamicProps.size}
+            variant={dynamicProps.variant}
+            fullWidth={dynamicProps.fullWidth}
+            alignment={dynamicProps.alignment}
+            colors={dynamicProps.colors}
+            onClick={dynamicProps.onClick}
+            href={dynamicProps.href}
+            target={dynamicProps.target}
+            enableHoverEffect={dynamicProps.enableHoverEffect}
+            enablePulseEffect={dynamicProps.enablePulseEffect}
+            className={dynamicProps.className}
+            style={dynamicProps.style}
+          />
+        );
+
       case 'QuizQuestionBlock':
         return (
           <QuizQuestionBlock
