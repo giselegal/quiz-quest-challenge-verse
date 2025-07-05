@@ -35,7 +35,7 @@ interface BlockData {
 interface PageData {
   id: string;
   type: string;
-  title?: string; // Tornando opcional para compatibilidade
+  title: string;
   blocks: BlockData[];
   settings?: Record<string, any>;
 }

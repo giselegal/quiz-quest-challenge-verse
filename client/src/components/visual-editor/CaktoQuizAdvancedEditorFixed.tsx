@@ -1508,6 +1508,55 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
   } = useResizableColumns(320, 320);
 
   // Implementar debounce no auto-save usando o hook
+  const saveFunction = useCallback(async () => {
+    try {
+      // Converter dados do editor para formato do serviço
+      const funnelData: FunnelData = {
+        ...funnel,
+        pages: funnel.pages.map((page, index) => ({
+          id: page.id,
+          type: page.type,
+          title: page.title,
+          order: index + 1,
+          blocks: page.blocks.map((block, blockIndex) => ({
+            id: block.id,
+            type: block.type,
+            content: block.settings || {},
+            styles: block.style,
+            position: { x: 0, y: blockIndex * 100 }
+          })),
+          metadata: page.settings
+        }))
+      };
+
+      // Tentar salvar no backend
+      try {
+        await funnelService.saveFunnelData(funnelData, 1); // TODO: usar userId real
+        console.log('✅ Auto-save realizado no backend');
+        
+        // Sincronizar com configurações de página
+        const syncSuccess = await funnelService.syncFunnelToPageConfigs(funnelData);
+        if (syncSuccess) {
+          console.log('✅ Configurações de página sincronizadas');
+        }
+      } catch (backendError) {
+        console.warn('⚠️ Backend indisponível, salvando localmente:', backendError);
+        // Fallback para localStorage
+        localStorage.setItem('caktoquiz-funnel', JSON.stringify(funnelData));
+        console.log('💾 Auto-save realizado no localStorage');
+      }
+    } catch (error) {
+      console.error('❌ Erro crítico no auto-save:', error);
+      throw error;
+    }
+  }, [funnel]);
+
+  // Hook de debounce para auto-save otimizado
+  const { debouncedSave, saveNow, pauseAutoSave, resumeAutoSave, isActive: isAutoSaveActive } = useAutoSaveDebounce(
+    saveFunction,
+    3000, // 3 segundos de debounce
+    30000 // máximo 30 segundos entre saves
+  );
 
   // Estados principais
   const [funnel, setFunnel] = useState<FunnelData>(createInitialFunnel);
@@ -1528,61 +1577,6 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
   // Hook para toast
   const { toast } = useToast();
-
-  // Função para track de mudanças que aciona o auto-save
-  const trackChange = useCallback(() => {
-    lastChangeRef.current = Date.now();
-    changeCountRef.current += 1;
-    debouncedSave();
-  }, [debouncedSave]);
-
-  // Função de salvamento otimizada com fallback
-  const saveFunction = useCallback(async () => {
-    if (!funnel) return;
-    
-    console.log('🔄 Iniciando auto-save...');
-    setIsAutoSaving(true);
-    
-    const funnelData = {
-      ...funnel,
-      lastModified: new Date().toISOString()
-    };
-
-    try {
-      try {
-        // Tentar salvar no backend primeiro
-        await funnelService.updateFunnel(funnelData.id, funnelData);
-        console.log('✅ Auto-save realizado no backend com sucesso');
-
-        // Sincronizar configurações específicas de página se necessário
-        if (currentPageId) {
-          const currentPageData = funnel.pages.find(p => p.id === currentPageId);
-          if (currentPageData?.settings) {
-            // Usar método de atualização do funnel para sincronizar configurações
-            await funnelService.updateFunnel(funnelData.id, funnelData);
-            console.log('✅ Configurações de página sincronizadas');
-          }
-        }
-      } catch (backendError) {
-        console.warn('⚠️ Backend indisponível, salvando localmente:', backendError);
-        // Fallback para localStorage
-        localStorage.setItem('caktoquiz-funnel', JSON.stringify(funnelData));
-        console.log('💾 Auto-save realizado no localStorage');
-      }
-    } catch (error) {
-      console.error('❌ Erro crítico no auto-save:', error);
-      throw error;
-    } finally {
-      setIsAutoSaving(false);
-    }
-  }, [funnel, currentPageId]);
-
-  // Hook de debounce para auto-save otimizado
-  const { debouncedSave, saveNow, pauseAutoSave, resumeAutoSave, isActive: isAutoSaveActive } = useAutoSaveDebounce(
-    saveFunction,
-    3000, // 3 segundos de debounce
-    30000 // máximo 30 segundos entre saves
-  );
 
   // Computed values - Memoizados para performance
   const currentPage = useMemo(() => {
