@@ -1617,6 +1617,13 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     autoSaveActive: isAutoSaveActive
   }), [funnel?.pages, isAutoSaveActive]);
 
+  // Função para rastrear mudanças e acionar auto-save
+  const trackChange = useCallback(() => {
+    lastChangeRef.current = Date.now();
+    changeCountRef.current += 1;
+    debouncedSave(); // Acionar auto-save via debounce
+  }, [debouncedSave]);
+
   // Garantir que o funnel tenha estrutura válida
   React.useEffect(() => {
     if (!funnel || !funnel.pages || funnel.pages.length === 0) {
