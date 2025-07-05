@@ -406,7 +406,7 @@ const createInitialFunnel = (): FunnelData => ({
       ]
     },
 
-    // ETAPA 20: Resultado A (/resultado) - COMPONENTES REAIS DA ResultPage.tsx
+    // ETAPA 20: Resultado A (/resultado) - PÁGINA REAL RESULTPAGE.TSX
     {
       id: 'etapa-20-resultado-a',
       name: 'Etapa 20: Resultado A (/resultado)',
@@ -421,217 +421,186 @@ const createInitialFunnel = (): FunnelData => ({
         abTestVariant: 'A'
       },
       blocks: [
-        // 1. Header (componente Header real)
+        // 1. Header Real da ResultPage
         {
-          id: 'result-header-component',
-          type: 'header-component-real',
+          id: 'result-header-real',
+          type: 'header',
           order: 1,
           settings: {
-            componentName: 'Header',
-            props: {
-              primaryStyle: 'dynamic',
-              logoHeight: 'globalStyles.logoHeight',
-              logo: 'globalStyles.logo',
-              logoAlt: 'globalStyles.logoAlt',
-              userName: 'user?.userName'
-            }
+            title: 'Parabéns! Aqui está seu resultado:',
+            subtitle: 'Seu estilo predominante baseado no quiz',
+            titleSize: 'large',
+            alignment: 'center'
           }
         },
-        // 2. Card Principal com Progress (componente Card real)
+        // 2. Logo da marca (como na ResultPage real)
         {
-          id: 'result-main-card',
-          type: 'card-component-real',
+          id: 'result-logo',
+          type: 'image',
           order: 2,
           settings: {
-            componentName: 'Card',
-            className: 'p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 card-elegant',
-            children: [
+            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+            alt: 'Logo Gisele Galvão',
+            width: '200px',
+            alignment: 'center'
+          }
+        },
+        // 3. Card do Estilo Predominante (estrutura real)
+        {
+          id: 'result-style-card',
+          type: 'style-result-display',
+          order: 3,
+          settings: {
+            styleName: 'Estilo Predominante',
+            styleImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp',
+            styleDescription: 'Sua personalidade refletida no seu estilo de vestir. Aqui está como aplicar na prática.',
+            percentMatch: 92
+          }
+        },
+        // 4. Progress Bar do Estilo
+        {
+          id: 'result-progress',
+          type: 'text',
+          order: 4,
+          settings: {
+            content: 'Compatibilidade: 92% com seu estilo predominante',
+            fontSize: 'medium',
+            alignment: 'center'
+          }
+        },
+        // 5. Imagem do Guia Personalizado (como na ResultPage real)
+        {
+          id: 'result-guide-image',
+          type: 'image',
+          order: 5,
+          settings: {
+            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp',
+            alt: 'Guia de Estilo Personalizado',
+            width: '400px',
+            alignment: 'center'
+          }
+        },
+        // 6. Seção "Vista-se de Você na Prática" (texto exato da ResultPage)
+        {
+          id: 'result-vista-se-text',
+          type: 'header',
+          order: 6,
+          settings: {
+            title: 'Vista-se de Você — na Prática',
+            subtitle: 'Agora que você conhece seu estilo, é hora de aplicá-lo com clareza e intenção.',
+            titleSize: 'large',
+            alignment: 'center'
+          }
+        },
+        // 7. Descrição dos benefícios (texto exato da ResultPage)
+        {
+          id: 'result-benefits-description',
+          type: 'text',
+          order: 7,
+          settings: {
+            content: 'O Guia da Gisele Galvão foi criado para mulheres como você — que querem se vestir com autenticidade e transformar sua imagem em ferramenta de poder.',
+            fontSize: 'medium',
+            alignment: 'center'
+          }
+        },
+        // 8. Lista de benefícios (exatos da ResultPage)
+        {
+          id: 'result-benefits-list',
+          type: 'text',
+          order: 8,
+          settings: {
+            content: '✓ Looks com intenção e identidade\n✓ Cores, modelagens e tecidos a seu favor\n✓ Imagem alinhada aos seus objetivos\n✓ Guarda-roupa funcional, sem compras por impulso',
+            fontSize: 'medium',
+            alignment: 'left'
+          }
+        },
+        // 9. Value Stack (preços exatos da ResultPage)
+        {
+          id: 'result-value-stack',
+          type: 'text',
+          order: 9,
+          settings: {
+            content: 'O Que Você Recebe Hoje:\n\nGuia Principal - R$ 67,00\nBônus - Peças-chave - R$ 79,00\nBônus - Visagismo Facial - R$ 29,00\n\nValor Total: R$ 175,00\n\nHoje por apenas: R$ 39,00\nPagamento único',
+            fontSize: 'medium',
+            alignment: 'center'
+          }
+        },
+        // 10. CTA Principal Verde (exato da ResultPage)
+        {
+          id: 'result-main-cta',
+          type: 'button',
+          order: 10,
+          settings: {
+            text: 'Quero meu Guia de Estilo Agora',
+            style: 'primary',
+            size: 'lg',
+            fullWidth: true
+          }
+        },
+        // 11. Elementos de segurança (como na ResultPage)
+        {
+          id: 'result-security',
+          type: 'text',
+          order: 11,
+          settings: {
+            content: '🔒 Pagamento 100% Seguro\n✓ Garantia de 7 dias\n🛡️ Oferta exclusiva nesta página',
+            fontSize: 'small',
+            alignment: 'center'
+          }
+        },
+        // 12. Depoimentos (estrutura da ResultPage)
+        {
+          id: 'result-testimonials',
+          type: 'testimonials-grid',
+          order: 12,
+          settings: {
+            testimonials: [
               {
-                type: 'progress-component-real',
-                componentName: 'Progress',
-                props: {
-                  value: 'primaryStyle.percentage',
-                  className: 'h-2 bg-[#F3E8E6]',
-                  indicatorClassName: 'bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]'
-                }
+                author: 'Mariangela',
+                role: 'Engenheira',
+                text: 'Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me fez dar vida à mulher que sempre existiu em mim.',
+                rating: 5
+              },
+              {
+                author: 'Patrícia Paranhos',
+                role: 'Empresária',
+                text: 'O guia mudou completamente minha relação com o guarda-roupa. Agora sei exatamente o que comprar e como combinar.',
+                rating: 5
               }
             ]
           }
         },
-        // 3. SecondaryStylesSection (componente real)
+        // 13. Garantia (como na ResultPage)
         {
-          id: 'result-secondary-styles-component',
-          type: 'secondary-styles-component-real',
-          order: 3,
+          id: 'result-guarantee',
+          type: 'guarantee-section',
+          order: 13,
           settings: {
-            componentName: 'SecondaryStylesSection',
-            props: {
-              secondaryStyles: 'secondaryStyles'
-            }
-          }
-        },
-        // 4. BeforeAfterTransformation (componente real)
-        {
-          id: 'result-before-after-component',
-          type: 'before-after-component-real',
-          order: 4,
-          settings: {
-            componentName: 'BeforeAfterTransformation',
-            props: {}
-          }
-        },
-        // 5. MotivationSection (componente real)
-        {
-          id: 'result-motivation-component',
-          type: 'motivation-component-real',
-          order: 5,
-          settings: {
-            componentName: 'MotivationSection',
-            props: {}
-          }
-        },
-        // 6. BonusSection (componente real)
-        {
-          id: 'result-bonus-component',
-          type: 'bonus-component-real',
-          order: 6,
-          settings: {
-            componentName: 'BonusSection',
-            props: {}
-          }
-        },
-        // 7. Testimonials (componente real)
-        {
-          id: 'result-testimonials-component',
-          type: 'testimonials-component-real',
-          order: 7,
-          settings: {
-            componentName: 'Testimonials',
-            props: {}
-          }
-        },
-        // 8. CTA Verde Featured (componente Button real)
-        {
-          id: 'result-cta-featured',
-          type: 'button-component-real',
-          order: 8,
-          settings: {
-            componentName: 'Button',
-            onClick: 'handleCTAClick',
-            className: 'text-white py-4 px-6 rounded-md btn-cta-green',
-            style: {
-              background: 'linear-gradient(to right, #4CAF50, #45a049)',
-              boxShadow: '0 4px 14px rgba(76, 175, 80, 0.4)'
-            },
-            children: 'Quero meu Guia de Estilo Agora'
-          }
-        },
-        // 9. SecurePurchaseElement (componente real)
-        {
-          id: 'result-secure-purchase-component',
-          type: 'secure-purchase-component-real',
-          order: 9,
-          settings: {
-            componentName: 'SecurePurchaseElement',
-            props: {}
-          }
-        },
-        // 10. GuaranteeSection (componente real)
-        {
-          id: 'result-guarantee-component',
-          type: 'guarantee-component-real',
-          order: 10,
-          settings: {
-            componentName: 'GuaranteeSection',
-            props: {}
-          }
-        },
-        // 11. MentorSection (componente real)
-        {
-          id: 'result-mentor-component',
-          type: 'mentor-component-real',
-          order: 11,
-          settings: {
-            componentName: 'MentorSection',
-            props: {}
-          }
-        },
-        // 12. Seção "Vista-se de Você — na Prática" (estrutura real)
-        {
-          id: 'result-vista-se-section',
-          type: 'vista-se-section-real',
-          order: 12,
-          settings: {
-            title: 'Vista-se de Você — na Prática',
-            subtitle: 'Agora que você conhece seu estilo, é hora de aplicá-lo com clareza e intenção.',
-            description: 'O Guia da Gisele Galvão foi criado para mulheres como você — que querem se vestir com autenticidade e transformar sua imagem em ferramenta de poder.',
-            benefits: [
-              'Looks com intenção e identidade',
-              'Cores, modelagens e tecidos a seu favor',
-              'Imagem alinhada aos seus objetivos',
-              'Guarda-roupa funcional, sem compras por impulso'
+            title: 'Garantia de 7 Dias',
+            description: 'Se não ficar satisfeita, devolvemos 100% do seu dinheiro. Sem perguntas.',
+            features: [
+              'Garantia incondicional',
+              'Suporte personalizado',
+              'Acesso vitalício aos materiais'
             ]
           }
         },
-        // 13. Value Stack Real (estrutura exata da página)
+        // 14. CTA Final (exato da ResultPage)
         {
-          id: 'result-value-stack-real',
-          type: 'value-stack-component-real',
-          order: 13,
-          settings: {
-            title: 'O Que Você Recebe Hoje',
-            items: [
-              { name: 'Guia Principal', price: 'R$ 67,00' },
-              { name: 'Bônus - Peças-chave', price: 'R$ 79,00' },
-              { name: 'Bônus - Visagismo Facial', price: 'R$ 29,00' }
-            ],
-            totalValue: 'R$ 175,00',
-            currentPrice: 'R$ 39,00',
-            paymentInfo: 'Pagamento único',
-            className: 'bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto'
-          }
-        },
-        // 14. CTA Final Green (Button component real)
-        {
-          id: 'result-final-cta-component',
-          type: 'button-component-real',
+          id: 'result-final-cta',
+          type: 'button',
           order: 14,
           settings: {
-            componentName: 'Button',
-            onClick: 'handleCTAClick',
-            className: 'text-white py-5 px-8 rounded-md shadow-md transition-colors btn-3d mb-2',
-            style: {
-              background: 'linear-gradient(to right, #4CAF50, #45a049)',
-              boxShadow: '0 4px 14px rgba(76, 175, 80, 0.4)',
-              fontSize: '1rem'
-            },
-            children: 'Garantir Meu Guia + Bônus Especiais'
-          }
-        },
-        // 15. SecurePurchaseElement Final (componente real)
-        {
-          id: 'result-secure-purchase-final',
-          type: 'secure-purchase-component-real',
-          order: 15,
-          settings: {
-            componentName: 'SecurePurchaseElement',
-            props: {}
-          }
-        },
-        // 16. BuildInfo (componente real)
-        {
-          id: 'result-build-info-component',
-          type: 'build-info-component-real',
-          order: 16,
-          settings: {
-            componentName: 'BuildInfo',
-            props: {}
+            text: 'Garantir Meu Guia + Bônus Especiais',
+            style: 'primary',
+            size: 'lg',
+            fullWidth: true
           }
         }
       ]
     },
 
-    // ETAPA 21: Oferta B (/quiz-descubra-seu-estilo) - COMPONENTES REAIS DA QuizOfferPage.tsx
+    // ETAPA 21: Oferta B (/quiz-descubra-seu-estilo) - PÁGINA REAL QUIZ-DESCUBRA-SEU-ESTILO.TSX
     {
       id: 'etapa-21-oferta-b',
       name: 'Etapa 21: Oferta B (/quiz-descubra-seu-estilo)',
@@ -645,268 +614,257 @@ const createInitialFunnel = (): FunnelData => ({
         abTestVariant: 'B'
       },
       blocks: [
-        // 1. Estilos CSS customizados da página (injetados no head)
+        // 1. Banner de Urgência (exato da página real)
         {
-          id: 'offer-custom-styles',
-          type: 'custom-styles-component-real',
+          id: 'offer-urgency-banner',
+          type: 'text',
           order: 1,
           settings: {
-            componentName: 'CustomStyles',
-            styles: `
-              :root {
-                --primary: #B89B7A;
-                --secondary: #432818;
-                --accent: #aa6b5d;
-                --background: #FFFBF7;
-                --success: #22c55e;
-              }
-              .btn-primary-clean {
-                background: linear-gradient(135deg, var(--success) 0%, #16a34a 100%);
-                color: white;
-                font-weight: 700;
-                border-radius: 12px;
-                padding: 1rem 2rem;
-              }
-            `
+            content: '🔥 ÚLTIMAS HORAS: 77% OFF - Apenas R$ 39,90!',
+            fontSize: 'small',
+            alignment: 'center'
           }
         },
-        // 2. FixedIntroImage para hero (componente real)
+        // 2. Logo da marca (como na página real)
         {
-          id: 'offer-hero-fixed-image',
-          type: 'fixed-intro-image-component-real',
+          id: 'offer-logo',
+          type: 'image',
           order: 2,
           settings: {
-            componentName: 'FixedIntroImage',
-            props: {
-              src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
-              alt: 'Logo Gisele Galvão',
-              width: 200,
-              height: 80
-            }
+            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+            alt: 'Logo Gisele Galvão',
+            width: '200px',
+            alignment: 'center'
           }
         },
-        // 3. SectionTitle component real
+        // 3. Título principal (exato da página real)
         {
-          id: 'offer-section-title-hero',
-          type: 'section-title-component-real',
+          id: 'offer-main-title',
+          type: 'header',
           order: 3,
           settings: {
-            componentName: 'SectionTitle',
-            variant: 'primary',
             title: 'Descubra Seu Estilo Predominante em 5 Minutos',
-            subtitle: 'Tenha finalmente um guarda-roupa que funciona 100%, onde tudo combina e reflete sua personalidade'
+            subtitle: 'Tenha finalmente um guarda-roupa que funciona 100%, onde tudo combina e reflete sua personalidade',
+            titleSize: 'large',
+            alignment: 'center'
           }
         },
-        // 4. FixedIntroImage hero complementary
+        // 4. Imagem hero (da página real)
         {
-          id: 'offer-hero-complementary-image',
-          type: 'fixed-intro-image-component-real',
+          id: 'offer-hero-image',
+          type: 'image',
           order: 4,
           settings: {
-            componentName: 'FixedIntroImage',
-            props: {
-              src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.webp',
-              alt: 'Transformação de guarda-roupa',
-              width: 600,
-              height: 400
-            }
+            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.webp',
+            alt: 'Transformação de guarda-roupa',
+            width: '500px',
+            alignment: 'center'
           }
         },
-        // 5. Button com onClick real
+        // 5. CTA Principal (texto exato da página real)
         {
-          id: 'offer-hero-cta-button',
-          type: 'offer-button-component-real',
+          id: 'offer-main-cta',
+          type: 'button',
           order: 5,
           settings: {
-            componentName: 'OfferButton',
-            onClick: 'handleCtaClick("hero_cta", "Descobrir Estilo")',
-            href: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912',
-            className: 'btn-primary-clean',
-            children: 'Descobrir Meu Estilo Agora'
+            text: 'Descobrir Meu Estilo Agora',
+            style: 'primary',
+            size: 'lg',
+            fullWidth: true
           }
         },
-        // 6. ProblemSection real (seção "Você se identifica?")
+        // 6. Seção "Você se identifica?" (exato da página real)
         {
-          id: 'offer-problem-section-real',
-          type: 'problem-section-component-real',
+          id: 'offer-problem-section',
+          type: 'header',
           order: 6,
           settings: {
-            componentName: 'ProblemSection',
             title: 'Você se identifica com isso?',
-            problems: [
-              'Guarda-roupa cheio mas nunca tem o que vestir?',
-              'Compra peças que nunca combinam com nada?',
-              'Sente que "nada fica bom" em você?',
-              'Gasta dinheiro em roupas que ficam no armário?'
-            ],
-            insight: 'Isso acontece porque você ainda não descobriu seu estilo predominante.'
+            subtitle: '',
+            titleSize: 'medium',
+            alignment: 'center'
           }
         },
-        // 7. FixedIntroImage para problema
+        // 7. Lista de problemas (exatos da página real)
         {
-          id: 'offer-problem-image',
-          type: 'fixed-intro-image-component-real',
+          id: 'offer-problems-list',
+          type: 'text',
           order: 7,
           settings: {
-            componentName: 'FixedIntroImage',
-            props: {
-              src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.webp',
-              alt: 'Frustração com guarda-roupa',
-              width: 500,
-              height: 350
-            }
+            content: '• Guarda-roupa cheio mas nunca tem o que vestir?\n• Compra peças que nunca combinam com nada?\n• Sente que "nada fica bom" em você?\n• Gasta dinheiro em roupas que ficam no armário?',
+            fontSize: 'medium',
+            alignment: 'left'
           }
         },
-        // 8. SolutionSection real
+        // 8. Insight (texto exato da página real)
         {
-          id: 'offer-solution-section-real',
-          type: 'solution-section-component-real',
+          id: 'offer-insight',
+          type: 'text',
           order: 8,
           settings: {
-            componentName: 'SolutionSection',
-            title: 'A Solução: Quiz de Estilo',
-            subtitle: 'Método preciso para identificar seu estilo entre os 7 estilos universais + guia personalizado completo.'
+            content: 'Isso acontece porque você ainda não descobriu seu estilo predominante.',
+            fontSize: 'medium',
+            alignment: 'center'
           }
         },
-        // 9. FixedIntroImage para solução
+        // 9. Seção da Solução (exato da página real)
         {
-          id: 'offer-solution-image',
-          type: 'fixed-intro-image-component-real',
+          id: 'offer-solution-title',
+          type: 'header',
           order: 9,
           settings: {
-            componentName: 'FixedIntroImage',
-            props: {
-              src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746650306/oie_1_gcozz9.webp',
-              alt: 'Quiz de Estilo',
-              width: 400,
-              height: 300
-            }
+            title: 'A Solução: Quiz de Estilo',
+            subtitle: 'Método preciso para identificar seu estilo entre os 7 estilos universais + guia personalizado completo.',
+            titleSize: 'medium',
+            alignment: 'center'
           }
         },
-        // 10. CountdownTimer component real
+        // 10. Imagem da solução (da página real)
         {
-          id: 'offer-countdown-timer-real',
-          type: 'countdown-timer-component-real',
+          id: 'offer-solution-image',
+          type: 'image',
           order: 10,
           settings: {
-            componentName: 'CountdownTimer',
-            props: {}
+            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746650306/oie_1_gcozz9.webp',
+            alt: 'Quiz de Estilo',
+            width: '400px',
+            alignment: 'center'
           }
         },
-        // 11. GuidesBenefitsSection real
+        // 11. Countdown Timer (como na página real)
         {
-          id: 'offer-guides-benefits-section',
-          type: 'guides-benefits-section-real',
+          id: 'offer-countdown',
+          type: 'countdown',
           order: 11,
           settings: {
-            componentName: 'GuidesBenefitsSection',
-            title: 'Transformação Completa',
-            subtitle: 'Tudo que você precisa para descobrir e aplicar seu estilo'
+            title: 'OFERTA EXPIRA EM:',
+            hours: 24
           }
         },
-        // 12. FixedIntroImage para guias principal
+        // 12. Transformação Completa (título da página real)
         {
-          id: 'offer-guides-main-image',
-          type: 'fixed-intro-image-component-real',
+          id: 'offer-transformation-title',
+          type: 'header',
           order: 12,
           settings: {
-            componentName: 'FixedIntroImage',
-            props: {
-              src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp',
-              alt: 'Guia Principal',
-              width: 400,
-              height: 500
-            }
+            title: 'Transformação Completa',
+            subtitle: 'Tudo que você precisa para descobrir e aplicar seu estilo',
+            titleSize: 'medium',
+            alignment: 'center'
           }
         },
-        // 13. FixedIntroImage para guias complementar
+        // 13. Imagem do guia principal (da página real)
         {
-          id: 'offer-guides-complementary-image',
-          type: 'fixed-intro-image-component-real',
+          id: 'offer-guide-main-image',
+          type: 'image',
           order: 13,
           settings: {
-            componentName: 'FixedIntroImage',
-            props: {
-              src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp',
-              alt: 'Materiais Complementares',
-              width: 350,
-              height: 400
-            }
+            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp',
+            alt: 'Guia Principal',
+            width: '400px',
+            alignment: 'center'
           }
         },
-        // 14. BonusSection real - Peças-chave
+        // 14. Bônus 1 (exato da página real)
         {
-          id: 'offer-bonus-1-section',
-          type: 'bonus-section-component-real',
+          id: 'offer-bonus-1',
+          type: 'bonus',
           order: 14,
           settings: {
-            componentName: 'BonusSection',
-            bonusNumber: 1,
-            title: 'Bônus: Peças-Chave',
-            description: 'Guarda-roupa funcional',
-            imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp'
+            title: 'Bônus 1: Peças-Chave do Guarda-Roupa',
+            description: 'Um manual completo para construir um armário funcional, versátil e alinhado com sua identidade.',
+            value: 'Valor: R$ 79,00'
           }
         },
-        // 15. BonusSection real - Visagismo
+        // 15. Imagem bônus 1 (da página real)
         {
-          id: 'offer-bonus-2-section',
-          type: 'bonus-section-component-real',
+          id: 'offer-bonus-1-image',
+          type: 'image',
           order: 15,
           settings: {
-            componentName: 'BonusSection',
-            bonusNumber: 2,
-            title: 'Bônus: Visagismo',
-            description: 'Valorize seus traços',
-            imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp'
+            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp',
+            alt: 'Bônus Peças-chave',
+            width: '300px',
+            alignment: 'center'
           }
         },
-        // 16. PricingSection real (preço focado)
+        // 16. Bônus 2 (exato da página real)
         {
-          id: 'offer-pricing-section-real',
-          type: 'pricing-section-component-real',
+          id: 'offer-bonus-2',
+          type: 'bonus',
           order: 16,
           settings: {
-            componentName: 'PricingSection',
-            title: 'Oferta por tempo limitado',
-            installments: '5x de R$ 8,83',
-            fullPrice: 'R$ 39,90',
-            savings: '77% OFF - Economia de R$ 135,10',
-            className: 'bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-8 text-white text-center mb-8'
+            title: 'Bônus 2: Guia de Visagismo Facial',
+            description: 'Descubra qual formato de rosto você tem e como escolher cortes, acessórios e maquiagem que harmonizam.',
+            value: 'Valor: R$ 29,00'
           }
         },
-        // 17. Final CTA Button real
+        // 17. Imagem bônus 2 (da página real)
         {
-          id: 'offer-final-cta-button',
-          type: 'offer-button-component-real',
+          id: 'offer-bonus-2-image',
+          type: 'image',
           order: 17,
           settings: {
-            componentName: 'OfferButton',
-            onClick: 'handleCtaClick("final_cta", "Garantir Transformação")',
-            href: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912',
-            className: 'btn-primary-clean',
-            children: 'Garantir Minha Transformação'
+            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp',
+            alt: 'Bônus Visagismo',
+            width: '300px',
+            alignment: 'center'
           }
         },
-        // 18. GuaranteeSection real
+        // 18. Seção de preço (exata da página real)
         {
-          id: 'offer-guarantee-section-real',
-          type: 'guarantee-section-component-real',
+          id: 'offer-pricing-section',
+          type: 'price',
           order: 18,
           settings: {
-            componentName: 'GuaranteeSection',
-            title: '7 Dias de Garantia',
-            description: 'Se não ficar satisfeita, devolvemos 100% do seu dinheiro. Sem perguntas.',
-            imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916216/C%C3%B3pia_de_01._P%C3%A1gina_-_Produto_de_Entrada_2_hamaox.webp'
+            originalPrice: 'R$ 175,00',
+            currentPrice: 'R$ 39,90',
+            discount: '77% OFF',
+            urgency: 'Oferta por tempo limitado!'
           }
         },
-        // 19. FaqSectionNew component real
+        // 19. CTA Final (texto exato da página real)
         {
-          id: 'offer-faq-section-real',
-          type: 'faq-section-component-real',
+          id: 'offer-final-cta',
+          type: 'button',
           order: 19,
           settings: {
-            componentName: 'FaqSectionNew',
-            props: {}
+            text: 'Quero Descobrir Meu Estilo!',
+            style: 'primary',
+            size: 'lg',
+            fullWidth: true
+          }
+        },
+        // 20. Garantia (como na página real)
+        {
+          id: 'offer-guarantee',
+          type: 'guarantee',
+          order: 20,
+          settings: {
+            title: 'Garantia de 7 Dias',
+            description: 'Estou tão confiante de que estes materiais vão transformar sua relação com a sua imagem pessoal que ofereço uma garantia incondicional de 7 dias.'
+          }
+        },
+        // 21. FAQ (estrutura da página real)
+        {
+          id: 'offer-faq',
+          type: 'faq',
+          order: 21,
+          settings: {
+            questions: [
+              {
+                question: 'É realmente possível descobrir meu estilo em 5 minutos?',
+                answer: 'Sim! Nosso quiz foi desenvolvido com base em anos de experiência e metodologia científica. Em poucos minutos, você terá uma análise precisa do seu estilo predominante entre os 7 estilos universais.'
+              },
+              {
+                question: 'O que acontece se eu não gostar do resultado?',
+                answer: 'Oferecemos 7 dias de garantia total. Se não ficar satisfeita, devolvemos 100% do seu dinheiro sem perguntas. Sua satisfação é nossa prioridade.'
+              },
+              {
+                question: 'Quanto tempo terei acesso aos materiais?',
+                answer: 'O acesso é vitalício! Você poderá baixar todos os materiais e consultá-los sempre que precisar, sem prazo de expiração.'
+              }
+            ]
           }
         }
       ]
