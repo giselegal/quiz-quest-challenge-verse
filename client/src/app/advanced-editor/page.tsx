@@ -1,9 +1,9 @@
-import SchemaDrivenEditorLayout from '@/components/editor/SchemaDrivenEditorLayout';
+import SchemaDrivenEditorLayoutV2 from '@/components/editor/SchemaDrivenEditorLayoutV2';
 
 export default function AdvancedEditorPage() {
   return (
     <div className="min-h-screen bg-gray-100">
-      <SchemaDrivenEditorLayout />
+      <SchemaDrivenEditorLayoutV2 />
     </div>
   );
 }

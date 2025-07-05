@@ -48,6 +48,7 @@ export interface BlockDefinition {
   description: string;
   icon: string; // Nome do ícone Lucide como string
   category: string;
+  tags?: string[]; // Tags opcionais para melhor organização
   isNew?: boolean;
   propertiesSchema?: PropertySchema[];
 }
@@ -657,6 +658,1028 @@ export const blockDefinitions: BlockDefinition[] = [
         defaultValue: true 
       },
     ],
+  },
+
+  // CATEGORIA: QUIZ ESPECÍFICO - Schemas dos componentes principais do quiz
+  
+  // Quiz Intro - Tela inicial do quiz
+  {
+    id: 'quiz-intro',
+    type: 'quiz-intro',
+    name: 'Quiz Introdução',
+    description: 'Tela inicial do quiz com captura de nome e call-to-action',
+    icon: 'target',
+    category: 'quiz',
+    tags: ['quiz', 'intro', 'landing'],
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título Principal',
+        type: 'text-input',
+        placeholder: 'Ex: Descubra Seu Estilo Pessoal',
+        defaultValue: 'Descubra Seu Estilo Pessoal'
+      },
+      {
+        key: 'subtitle',
+        label: 'Subtítulo',
+        type: 'textarea',
+        placeholder: 'Descrição motivacional do quiz',
+        defaultValue: 'Um quiz personalizado para descobrir seu estilo único',
+        rows: 3
+      },
+      {
+        key: 'description',
+        label: 'Descrição Detalhada',
+        type: 'textarea',
+        placeholder: 'Texto explicativo adicional',
+        defaultValue: 'Responda algumas perguntas e descubra o estilo que combina perfeitamente com você.',
+        rows: 4
+      },
+      {
+        key: 'inputPlaceholder',
+        label: 'Placeholder do Campo Nome',
+        type: 'text-input',
+        defaultValue: 'Digite seu primeiro nome'
+      },
+      {
+        key: 'buttonText',
+        label: 'Texto do Botão',
+        type: 'text-input',
+        defaultValue: 'Iniciar Quiz'
+      },
+      {
+        key: 'backgroundColor',
+        label: 'Cor de Fundo',
+        type: 'color-picker',
+        defaultValue: '#faf8f5'
+      },
+      {
+        key: 'textColor',
+        label: 'Cor do Texto',
+        type: 'color-picker',
+        defaultValue: '#432818'
+      },
+      {
+        key: 'backgroundImage',
+        label: 'Imagem de Fundo',
+        type: 'image-url',
+        description: 'URL da imagem de fundo (opcional)'
+      },
+      {
+        key: 'showBenefits',
+        label: 'Mostrar Benefícios',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'benefits',
+        label: 'Lista de Benefícios',
+        type: 'array-editor',
+        defaultValue: [
+          'Descubra seu estilo único',
+          'Recomendações personalizadas',
+          'Resultado instantâneo'
+        ],
+        itemSchema: [
+          { key: 'text', label: 'Benefício', type: 'text-input' }
+        ]
+      }
+    ]
+  },
+
+  // Quiz Question - Pergunta do quiz com opções
+  {
+    id: 'quiz-question',
+    type: 'quiz-question',
+    name: 'Questão do Quiz',
+    description: 'Pergunta com opções de múltipla escolha',
+    icon: 'help-circle',
+    category: 'quiz',
+    tags: ['quiz', 'question', 'multiple-choice'],
+    propertiesSchema: [
+      {
+        key: 'questionId',
+        label: 'ID da Questão',
+        type: 'text-input',
+        description: 'Identificador único da questão',
+        defaultValue: 'question-1'
+      },
+      {
+        key: 'title',
+        label: 'Pergunta',
+        type: 'textarea',
+        placeholder: 'Ex: Qual seu estilo preferido?',
+        defaultValue: 'Qual dessas opções mais combina com você?',
+        rows: 3
+      },
+      {
+        key: 'description',
+        label: 'Descrição/Contexto',
+        type: 'textarea',
+        placeholder: 'Contexto adicional da pergunta (opcional)',
+        rows: 2
+      },
+      {
+        key: 'questionType',
+        label: 'Tipo de Exibição',
+        type: 'select',
+        defaultValue: 'both',
+        options: [
+          { label: 'Texto e Imagem', value: 'both' },
+          { label: 'Apenas Texto', value: 'text' },
+          { label: 'Apenas Imagem', value: 'image' }
+        ]
+      },
+      {
+        key: 'multiSelect',
+        label: 'Múltipla Escolha',
+        type: 'boolean-switch',
+        defaultValue: false,
+        description: 'Permite selecionar múltiplas opções'
+      },
+      {
+        key: 'required',
+        label: 'Resposta Obrigatória',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'options',
+        label: 'Opções de Resposta',
+        type: 'array-editor',
+        defaultValue: [
+          {
+            id: 'option-1',
+            text: 'Opção 1',
+            imageUrl: '',
+            styleCategory: 'casual',
+            points: 1
+          }
+        ],
+        itemSchema: [
+          { key: 'id', label: 'ID', type: 'text-input' },
+          { key: 'text', label: 'Texto', type: 'text-input' },
+          { key: 'imageUrl', label: 'URL da Imagem', type: 'image-url' },
+          { key: 'styleCategory', label: 'Categoria de Estilo', type: 'text-input' },
+          { key: 'points', label: 'Pontuação', type: 'number-input' }
+        ]
+      },
+      {
+        key: 'showProgress',
+        label: 'Mostrar Progresso',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'progressPercent',
+        label: 'Porcentagem do Progresso',
+        type: 'number-input',
+        min: 0,
+        max: 100,
+        defaultValue: 10
+      }
+    ]
+  },
+
+  // Strategic Question - Questão estratégica/demográfica
+  {
+    id: 'strategic-question',
+    type: 'strategic-question',
+    name: 'Questão Estratégica',
+    description: 'Pergunta para captura de dados demográficos/estratégicos',
+    icon: 'brain',
+    category: 'quiz',
+    tags: ['quiz', 'strategic', 'demographics'],
+    propertiesSchema: [
+      {
+        key: 'questionId',
+        label: 'ID da Questão',
+        type: 'text-input',
+        defaultValue: 'strategic-1'
+      },
+      {
+        key: 'title',
+        label: 'Pergunta',
+        type: 'textarea',
+        placeholder: 'Ex: Qual sua faixa etária?',
+        defaultValue: 'Para personalizar ainda mais, qual sua faixa etária?',
+        rows: 3
+      },
+      {
+        key: 'purpose',
+        label: 'Propósito',
+        type: 'select',
+        defaultValue: 'demographic',
+        options: [
+          { label: 'Dados Demográficos', value: 'demographic' },
+          { label: 'Preferências', value: 'preference' },
+          { label: 'Comportamento', value: 'behavior' },
+          { label: 'Segmentação', value: 'segmentation' }
+        ]
+      },
+      {
+        key: 'options',
+        label: 'Opções de Resposta',
+        type: 'array-editor',
+        defaultValue: [
+          { id: 'option-1', text: '18-25 anos', category: 'young' },
+          { id: 'option-2', text: '26-35 anos', category: 'adult' },
+          { id: 'option-3', text: '36-45 anos', category: 'mature' },
+          { id: 'option-4', text: '46+ anos', category: 'senior' }
+        ],
+        itemSchema: [
+          { key: 'id', label: 'ID', type: 'text-input' },
+          { key: 'text', label: 'Texto', type: 'text-input' },
+          { key: 'category', label: 'Categoria', type: 'text-input' }
+        ]
+      },
+      {
+        key: 'progressPercent',
+        label: 'Porcentagem do Progresso',
+        type: 'number-input',
+        min: 0,
+        max: 100,
+        defaultValue: 75
+      }
+    ]
+  },
+
+  // Quiz Transition - Página de transição/loading
+  {
+    id: 'quiz-transition',
+    type: 'quiz-transition',
+    name: 'Transição do Quiz',
+    description: 'Página de loading/transição entre etapas',
+    icon: 'loader',
+    category: 'quiz',
+    tags: ['quiz', 'transition', 'loading'],
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Analisando suas respostas...'
+      },
+      {
+        key: 'subtitle',
+        label: 'Subtítulo',
+        type: 'text-input',
+        defaultValue: 'Aguarde enquanto calculamos seu resultado'
+      },
+      {
+        key: 'loadingTexts',
+        label: 'Textos de Loading',
+        type: 'array-editor',
+        defaultValue: [
+          'Analisando suas preferências...',
+          'Calculando compatibilidade...',
+          'Preparando resultado personalizado...'
+        ],
+        itemSchema: [
+          { key: 'text', label: 'Texto', type: 'text-input' }
+        ]
+      },
+      {
+        key: 'duration',
+        label: 'Duração (segundos)',
+        type: 'number-input',
+        min: 2,
+        max: 10,
+        defaultValue: 5
+      },
+      {
+        key: 'animationType',
+        label: 'Tipo de Animação',
+        type: 'select',
+        defaultValue: 'spinner',
+        options: [
+          { label: 'Spinner', value: 'spinner' },
+          { label: 'Progress Bar', value: 'progress' },
+          { label: 'Dots', value: 'dots' },
+          { label: 'Fade', value: 'fade' }
+        ]
+      },
+      {
+        key: 'backgroundColor',
+        label: 'Cor de Fundo',
+        type: 'color-picker',
+        defaultValue: '#f8f9fa'
+      }
+    ]
+  },
+
+  // Quiz Progress Bar - Barra de progresso
+  {
+    id: 'quiz-progress',
+    type: 'quiz-progress',
+    name: 'Barra de Progresso',
+    description: 'Indicador visual do progresso do quiz',
+    icon: 'progress',
+    category: 'quiz',
+    tags: ['quiz', 'progress', 'ui'],
+    propertiesSchema: [
+      {
+        key: 'showPercentage',
+        label: 'Mostrar Porcentagem',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'showSteps',
+        label: 'Mostrar Etapas',
+        type: 'boolean-switch',
+        defaultValue: false
+      },
+      {
+        key: 'progressColor',
+        label: 'Cor do Progresso',
+        type: 'color-picker',
+        defaultValue: '#10b981'
+      },
+      {
+        key: 'backgroundColor',
+        label: 'Cor de Fundo',
+        type: 'color-picker',
+        defaultValue: '#e5e7eb'
+      },
+      {
+        key: 'height',
+        label: 'Altura (px)',
+        type: 'number-input',
+        min: 2,
+        max: 20,
+        defaultValue: 6
+      },
+      {
+        key: 'position',
+        label: 'Posição',
+        type: 'select',
+        defaultValue: 'top',
+        options: [
+          { label: 'Topo', value: 'top' },
+          { label: 'Baixo', value: 'bottom' },
+          { label: 'Inline', value: 'inline' }
+        ]
+      }
+    ]
+  },
+
+  // CATEGORIA: RESULTADO - Schemas para página de resultado personalizada
+
+  // Result Header - Cabeçalho da página de resultado
+  {
+    id: 'result-header',
+    type: 'result-header',
+    name: 'Cabeçalho do Resultado',
+    description: 'Cabeçalho principal da página de resultado',
+    icon: 'crown',
+    category: 'result',
+    tags: ['result', 'header', 'style'],
+    propertiesSchema: [
+      {
+        key: 'userName',
+        label: 'Nome do Usuário',
+        type: 'text-input',
+        defaultValue: '{{userName}}',
+        description: 'Use {{userName}} para substituição dinâmica'
+      },
+      {
+        key: 'styleResult',
+        label: 'Resultado do Estilo',
+        type: 'text-input',
+        defaultValue: '{{calculatedStyle}}',
+        description: 'Use {{calculatedStyle}} para resultado dinâmico'
+      },
+      {
+        key: 'title',
+        label: 'Título Personalizado',
+        type: 'textarea',
+        defaultValue: 'Parabéns, {{userName}}! Seu estilo é {{calculatedStyle}}',
+        rows: 2
+      },
+      {
+        key: 'subtitle',
+        label: 'Subtítulo',
+        type: 'textarea',
+        defaultValue: 'Baseado nas suas respostas, identificamos o estilo que mais combina com você.',
+        rows: 3
+      },
+      {
+        key: 'showStyleImage',
+        label: 'Mostrar Imagem do Estilo',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'styleImages',
+        label: 'Imagens por Estilo',
+        type: 'json-editor',
+        defaultValue: {
+          'casual': '/images/styles/casual.jpg',
+          'elegante': '/images/styles/elegante.jpg',
+          'boho': '/images/styles/boho.jpg',
+          'moderno': '/images/styles/moderno.jpg'
+        }
+      },
+      {
+        key: 'backgroundColor',
+        label: 'Cor de Fundo',
+        type: 'color-picker',
+        defaultValue: '#ffffff'
+      }
+    ]
+  },
+
+  // Result Card - Card com detalhes do resultado
+  {
+    id: 'result-card',
+    type: 'result-card',
+    name: 'Card do Resultado',
+    description: 'Card detalhado com características do estilo',
+    icon: 'card',
+    category: 'result',
+    tags: ['result', 'card', 'details'],
+    propertiesSchema: [
+      {
+        key: 'showCharacteristics',
+        label: 'Mostrar Características',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'characteristics',
+        label: 'Características por Estilo',
+        type: 'json-editor',
+        defaultValue: {
+          'casual': ['Confortável', 'Prático', 'Versátil'],
+          'elegante': ['Sofisticado', 'Clássico', 'Refinado'],
+          'boho': ['Livre', 'Criativo', 'Natural'],
+          'moderno': ['Minimalista', 'Clean', 'Contemporâneo']
+        }
+      },
+      {
+        key: 'showRecommendations',
+        label: 'Mostrar Recomendações',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'recommendations',
+        label: 'Recomendações por Estilo',
+        type: 'json-editor',
+        defaultValue: {
+          'casual': ['Jeans confortável', 'Camisetas básicas', 'Tênis'],
+          'elegante': ['Blazer estruturado', 'Calças sociais', 'Sapatos de couro'],
+          'boho': ['Vestidos fluidos', 'Acessórios naturais', 'Sandálias'],
+          'moderno': ['Peças geométricas', 'Cores neutras', 'Linhas clean']
+        }
+      }
+    ]
+  },
+
+  // Secondary Styles - Estilos secundários compatíveis
+  {
+    id: 'secondary-styles',
+    type: 'secondary-styles',
+    name: 'Estilos Secundários',
+    description: 'Outros estilos compatíveis com o usuário',
+    icon: 'layers',
+    category: 'result',
+    tags: ['result', 'secondary', 'compatibility'],
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título da Seção',
+        type: 'text-input',
+        defaultValue: 'Outros estilos que combinam com você'
+      },
+      {
+        key: 'showCompatibilityScore',
+        label: 'Mostrar Score de Compatibilidade',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'maxSecondaryStyles',
+        label: 'Máximo de Estilos Secundários',
+        type: 'number-input',
+        min: 1,
+        max: 5,
+        defaultValue: 3
+      },
+      {
+        key: 'layoutType',
+        label: 'Layout',
+        type: 'select',
+        defaultValue: 'grid',
+        options: [
+          { label: 'Grade', value: 'grid' },
+          { label: 'Lista', value: 'list' },
+          { label: 'Carrossel', value: 'carousel' }
+        ]
+      }
+    ]
+  },
+
+  // Before After - Transformação antes/depois
+  {
+    id: 'before-after',
+    type: 'before-after',
+    name: 'Antes e Depois',
+    description: 'Seção de transformação visual',
+    icon: 'refresh',
+    category: 'result',
+    tags: ['result', 'transformation', 'visual'],
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Veja sua transformação'
+      },
+      {
+        key: 'beforeTitle',
+        label: 'Título "Antes"',
+        type: 'text-input',
+        defaultValue: 'Antes'
+      },
+      {
+        key: 'afterTitle',
+        label: 'Título "Depois"',
+        type: 'text-input',
+        defaultValue: 'Depois'
+      },
+      {
+        key: 'beforeImages',
+        label: 'Imagens "Antes"',
+        type: 'array-editor',
+        defaultValue: ['/images/before/example1.jpg'],
+        itemSchema: [
+          { key: 'url', label: 'URL da Imagem', type: 'image-url' },
+          { key: 'alt', label: 'Texto Alternativo', type: 'text-input' }
+        ]
+      },
+      {
+        key: 'afterImages',
+        label: 'Imagens "Depois"',
+        type: 'array-editor',
+        defaultValue: ['/images/after/example1.jpg'],
+        itemSchema: [
+          { key: 'url', label: 'URL da Imagem', type: 'image-url' },
+          { key: 'alt', label: 'Texto Alternativo', type: 'text-input' }
+        ]
+      },
+      {
+        key: 'animationType',
+        label: 'Tipo de Animação',
+        type: 'select',
+        defaultValue: 'slide',
+        options: [
+          { label: 'Deslizar', value: 'slide' },
+          { label: 'Fade', value: 'fade' },
+          { label: 'Flip', value: 'flip' },
+          { label: 'Sem Animação', value: 'none' }
+        ]
+      }
+    ]
+  },
+
+  // Motivation Section - Seção motivacional
+  {
+    id: 'motivation-section',
+    type: 'motivation-section',
+    name: 'Seção Motivacional',
+    description: 'Texto motivacional personalizado baseado no resultado',
+    icon: 'heart',
+    category: 'result',
+    tags: ['result', 'motivation', 'personalized'],
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Sua jornada de transformação começa agora'
+      },
+      {
+        key: 'motivationTexts',
+        label: 'Textos Motivacionais por Estilo',
+        type: 'json-editor',
+        defaultValue: {
+          'casual': 'Seu estilo casual reflete sua autenticidade e praticidade. Continue investindo em peças que te fazem sentir confiante!',
+          'elegante': 'Sua elegância natural merece ser valorizada. Invista em peças atemporais que realcem sua sofisticação.',
+          'boho': 'Sua alma livre e criativa brilha através do seu estilo. Continue explorando sua individualidade!',
+          'moderno': 'Seu olhar contemporâneo está sempre um passo à frente. Continue inovando com seu estilo único!'
+        }
+      },
+      {
+        key: 'showCallToAction',
+        label: 'Mostrar Call-to-Action',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'ctaText',
+        label: 'Texto do CTA',
+        type: 'text-input',
+        defaultValue: 'Descubra como potencializar seu estilo'
+      },
+      {
+        key: 'ctaButtonText',
+        label: 'Texto do Botão CTA',
+        type: 'text-input',
+        defaultValue: 'Ver Recomendações Personalizadas'
+      }
+    ]
+  },
+
+  // CATEGORIA: VENDAS - Schemas para página de vendas e conversão
+
+  // Sales Offer - Oferta principal de vendas
+  {
+    id: 'sales-offer',
+    type: 'sales-offer',
+    name: 'Oferta de Vendas',
+    description: 'Apresentação da oferta principal com preços',
+    icon: 'shopping-cart',
+    category: 'sales',
+    tags: ['sales', 'offer', 'pricing'],
+    propertiesSchema: [
+      {
+        key: 'productName',
+        label: 'Nome do Produto/Serviço',
+        type: 'text-input',
+        defaultValue: 'Consultoria de Estilo Personalizada'
+      },
+      {
+        key: 'headline',
+        label: 'Título Principal',
+        type: 'textarea',
+        defaultValue: 'Transforme seu guarda-roupa com consultoria personalizada',
+        rows: 2
+      },
+      {
+        key: 'description',
+        label: 'Descrição da Oferta',
+        type: 'textarea',
+        defaultValue: 'Receba um plano completo e personalizado para potencializar seu estilo único',
+        rows: 4
+      },
+      {
+        key: 'originalPrice',
+        label: 'Preço Original',
+        type: 'number-input',
+        defaultValue: 497
+      },
+      {
+        key: 'currentPrice',
+        label: 'Preço Promocional',
+        type: 'number-input',
+        defaultValue: 197
+      },
+      {
+        key: 'currency',
+        label: 'Moeda',
+        type: 'text-input',
+        defaultValue: 'R$'
+      },
+      {
+        key: 'showDiscount',
+        label: 'Mostrar % de Desconto',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'features',
+        label: 'Características/Benefícios',
+        type: 'array-editor',
+        defaultValue: [
+          'Análise completa do seu estilo',
+          'Cartela de cores personalizada',
+          'Guia de compras direcionado',
+          'Suporte por 30 dias'
+        ],
+        itemSchema: [
+          { key: 'text', label: 'Benefício', type: 'text-input' },
+          { key: 'highlight', label: 'Destacar', type: 'boolean-switch' }
+        ]
+      },
+      {
+        key: 'ctaText',
+        label: 'Texto do Botão',
+        type: 'text-input',
+        defaultValue: 'Quero Transformar Meu Estilo Agora'
+      },
+      {
+        key: 'urgencyText',
+        label: 'Texto de Urgência',
+        type: 'text-input',
+        defaultValue: 'Oferta limitada por tempo!'
+      }
+    ]
+  },
+
+  // Value Stack - Pilha de valor
+  {
+    id: 'value-stack',
+    type: 'value-stack',
+    name: 'Pilha de Valor',
+    description: 'Demonstração do valor total da oferta',
+    icon: 'stack',
+    category: 'sales',
+    tags: ['sales', 'value', 'pricing'],
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título da Seção',
+        type: 'text-input',
+        defaultValue: 'O que você vai receber:'
+      },
+      {
+        key: 'items',
+        label: 'Itens de Valor',
+        type: 'array-editor',
+        defaultValue: [
+          {
+            name: 'Consultoria Individual',
+            description: 'Sessão personalizada de 2h',
+            value: 300,
+            isBonus: false
+          },
+          {
+            name: 'Cartela de Cores',
+            description: 'Guia exclusivo com suas cores',
+            value: 150,
+            isBonus: false
+          },
+          {
+            name: 'Guia de Compras',
+            description: 'Lista personalizada de itens',
+            value: 97,
+            isBonus: true
+          }
+        ],
+        itemSchema: [
+          { key: 'name', label: 'Nome do Item', type: 'text-input' },
+          { key: 'description', label: 'Descrição', type: 'textarea' },
+          { key: 'value', label: 'Valor (R$)', type: 'number-input' },
+          { key: 'isBonus', label: 'É Bônus?', type: 'boolean-switch' }
+        ]
+      },
+      {
+        key: 'totalValue',
+        label: 'Valor Total',
+        type: 'number-input',
+        defaultValue: 547
+      },
+      {
+        key: 'finalPrice',
+        label: 'Preço Final',
+        type: 'number-input',
+        defaultValue: 197
+      },
+      {
+        key: 'showSavings',
+        label: 'Mostrar Economia',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+
+  // Testimonials Grid - Grade de depoimentos
+  {
+    id: 'testimonials-grid',
+    type: 'testimonials-grid',
+    name: 'Grade de Depoimentos',
+    description: 'Seção com múltiplos depoimentos de clientes',
+    icon: 'users',
+    category: 'sales',
+    tags: ['sales', 'social-proof', 'testimonials'],
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título da Seção',
+        type: 'text-input',
+        defaultValue: 'O que nossos clientes dizem'
+      },
+      {
+        key: 'testimonials',
+        label: 'Depoimentos',
+        type: 'array-editor',
+        defaultValue: [
+          {
+            name: 'Maria Silva',
+            text: 'A consultoria mudou completamente minha relação com a moda!',
+            rating: 5,
+            image: '/images/testimonials/maria.jpg',
+            occupation: 'Empresária'
+          }
+        ],
+        itemSchema: [
+          { key: 'name', label: 'Nome', type: 'text-input' },
+          { key: 'text', label: 'Depoimento', type: 'textarea' },
+          { key: 'rating', label: 'Avaliação (1-5)', type: 'number-input', min: 1, max: 5 },
+          { key: 'image', label: 'Foto', type: 'image-url' },
+          { key: 'occupation', label: 'Profissão', type: 'text-input' }
+        ]
+      },
+      {
+        key: 'layout',
+        label: 'Layout',
+        type: 'select',
+        defaultValue: 'grid',
+        options: [
+          { label: 'Grade 2x2', value: 'grid' },
+          { label: 'Carrossel', value: 'carousel' },
+          { label: 'Lista Vertical', value: 'list' }
+        ]
+      },
+      {
+        key: 'showRating',
+        label: 'Mostrar Avaliações',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+
+  // Guarantee Section - Seção de garantia
+  {
+    id: 'guarantee-section',
+    type: 'guarantee-section',
+    name: 'Seção de Garantia',
+    description: 'Garantia para reduzir resistência à compra',
+    icon: 'shield',
+    category: 'sales',
+    tags: ['sales', 'guarantee', 'trust'],
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Garantia de 30 dias'
+      },
+      {
+        key: 'guaranteeText',
+        label: 'Texto da Garantia',
+        type: 'textarea',
+        defaultValue: 'Se você não ficar 100% satisfeita com sua transformação, devolvemos seu dinheiro.',
+        rows: 3
+      },
+      {
+        key: 'guaranteePeriod',
+        label: 'Período de Garantia',
+        type: 'text-input',
+        defaultValue: '30 dias'
+      },
+      {
+        key: 'guaranteeIcon',
+        label: 'Ícone da Garantia',
+        type: 'image-url',
+        description: 'URL do ícone/selo de garantia'
+      },
+      {
+        key: 'showMoney backBadge',
+        label: 'Mostrar Selo "Dinheiro de Volta"',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'additionalInfo',
+        label: 'Informações Adicionais',
+        type: 'textarea',
+        placeholder: 'Termos e condições adicionais',
+        rows: 2
+      }
+    ]
+  },
+
+  // Urgency Timer - Timer de urgência
+  {
+    id: 'urgency-timer',
+    type: 'urgency-timer',
+    name: 'Timer de Urgência',
+    description: 'Contador regressivo para criar urgência',
+    icon: 'clock',
+    category: 'sales',
+    tags: ['sales', 'urgency', 'conversion'],
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Oferta expira em:'
+      },
+      {
+        key: 'timerType',
+        label: 'Tipo de Timer',
+        type: 'select',
+        defaultValue: 'fixed',
+        options: [
+          { label: 'Tempo Fixo', value: 'fixed' },
+          { label: 'Evergreen (por usuário)', value: 'evergreen' },
+          { label: 'Data Específica', value: 'specific' }
+        ]
+      },
+      {
+        key: 'duration',
+        label: 'Duração (minutos)',
+        type: 'number-input',
+        defaultValue: 30,
+        description: 'Para timer evergreen'
+      },
+      {
+        key: 'endDate',
+        label: 'Data de Fim',
+        type: 'text-input',
+        placeholder: 'YYYY-MM-DD HH:MM',
+        description: 'Para timer de data específica'
+      },
+      {
+        key: 'expiredText',
+        label: 'Texto Quando Expira',
+        type: 'text-input',
+        defaultValue: 'Oferta Expirada'
+      },
+      {
+        key: 'showLabels',
+        label: 'Mostrar Labels (dias, horas, etc)',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'style',
+        label: 'Estilo Visual',
+        type: 'select',
+        defaultValue: 'digital',
+        options: [
+          { label: 'Digital', value: 'digital' },
+          { label: 'Flip Cards', value: 'flip' },
+          { label: 'Circular', value: 'circular' }
+        ]
+      }
+    ]
+  },
+
+  // Bonus Section - Seção de bônus
+  {
+    id: 'bonus-section',
+    type: 'bonus-section',
+    name: 'Seção de Bônus',
+    description: 'Bônus adicionais para aumentar o valor percebido',
+    icon: 'gift',
+    category: 'sales',
+    tags: ['sales', 'bonus', 'value'],
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Bônus Exclusivos'
+      },
+      {
+        key: 'subtitle',
+        label: 'Subtítulo',
+        type: 'text-input',
+        defaultValue: 'Além da consultoria, você também recebe:'
+      },
+      {
+        key: 'bonuses',
+        label: 'Lista de Bônus',
+        type: 'array-editor',
+        defaultValue: [
+          {
+            name: 'Guia de Maquiagem',
+            description: 'Técnicas para valorizar seu estilo',
+            value: 97,
+            image: '/images/bonus/makeup.jpg'
+          }
+        ],
+        itemSchema: [
+          { key: 'name', label: 'Nome do Bônus', type: 'text-input' },
+          { key: 'description', label: 'Descrição', type: 'textarea' },
+          { key: 'value', label: 'Valor (R$)', type: 'number-input' },
+          { key: 'image', label: 'Imagem', type: 'image-url' }
+        ]
+      },
+      {
+        key: 'showValues',
+        label: 'Mostrar Valores dos Bônus',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'layoutStyle',
+        label: 'Estilo do Layout',
+        type: 'select',
+        defaultValue: 'cards',
+        options: [
+          { label: 'Cards', value: 'cards' },
+          { label: 'Lista', value: 'list' },
+          { label: 'Grid', value: 'grid' }
+        ]
+      }
+    ]
   },
 
   // ...existing code...
