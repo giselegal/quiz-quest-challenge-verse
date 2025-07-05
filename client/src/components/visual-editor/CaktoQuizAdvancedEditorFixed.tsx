@@ -3266,6 +3266,13 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
             </Button>
 
             <div className="flex items-center gap-2">
+              {/* Layout info */}
+              {(isResizingLeft || isResizingRight) && (
+                <div className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                  {Math.round(leftWidth)}px | Canvas | {Math.round(rightWidth)}px
+                </div>
+              )}
+              
               {isAutoSaving && (
                 <div className="flex items-center text-xs text-gray-500">
                   <RotateCcw className="h-3 w-3 animate-spin mr-1" />
