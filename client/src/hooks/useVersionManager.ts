@@ -85,6 +85,23 @@ export const useVersionManager = (funnelId?: string) => {
     [versions, loadVersion]
   );
 
+  const clearHistory = useCallback(() => {
+    setVersions([]);
+    setCurrentVersion(null);
+  }, []);
+
+  const getVersionHistory = useCallback(() => {
+    return listVersions();
+  }, [listVersions]);
+
+  const getVersionMetadata = useCallback(() => {
+    return {
+      currentVersion,
+      totalVersions: versions.length,
+      lastModified: versions.length > 0 ? versions[versions.length - 1].createdAt : null
+    };
+  }, [currentVersion, versions]);
+
   return {
     versions: listVersions(),
     currentVersion,
@@ -94,5 +111,8 @@ export const useVersionManager = (funnelId?: string) => {
     createVersion,
     createBackup,
     restoreBackup,
+    clearHistory,
+    getVersionHistory,
+    getVersionMetadata,
   };
 };
