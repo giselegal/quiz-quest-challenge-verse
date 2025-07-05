@@ -2547,7 +2547,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
             <div className={`${isMobile ? 'py-4' : 'py-6'}`}>
               <div className="space-y-6 max-w-5xl mx-auto">
-              <h3 className="text-xl md:text-2xl font-semibold text-[#432818] text-center leading-relaxed mb-8">
+                <h3 className="text-xl md:text-2xl font-semibold text-[#432818] text-center leading-relaxed mb-8">
                 {block?.settings?.question || 'Qual é a sua pergunta?'}
               </h3>
               
@@ -2615,6 +2615,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                   </div>
                 </div>
               )}
+              </div>
             </div>
           </InlineEditableWrapper>
         );
@@ -2626,8 +2627,8 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         content = (
           <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
             <div className={`${isMobile ? 'py-4' : 'py-6'}`}>
-            <div className="space-y-6 max-w-4xl mx-auto">
-              <h3 className="text-xl md:text-2xl font-semibold text-[#432818] text-center leading-relaxed">
+              <div className="space-y-6 max-w-4xl mx-auto">
+                <h3 className="text-xl md:text-2xl font-semibold text-[#432818] text-center leading-relaxed">
                 {block?.settings?.question || 'Pergunta estratégica sobre seus objetivos'}
               </h3>
               {block?.settings?.subtitle && (
@@ -2686,14 +2687,15 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                   </div>
                 ))}
               </div>
+              </div>
             </div>
-          </div>
+          </InlineEditableWrapper>
         );
         break;
 
       case 'loader':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="text-center py-12">
+          <div  className="text-center py-12">
             <div className="inline-flex items-center space-x-3">
               <RotateCcw className="h-8 w-8 animate-spin text-[#B89B7A]" />
               <span className="text-[#432818] text-lg font-medium">
@@ -2706,7 +2708,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'price':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="text-center py-6">
+          <div  className="text-center py-6">
             <div className="bg-gradient-to-br from-[#B89B7A] to-[#A1835D] p-8 rounded-2xl text-white shadow-2xl max-w-md mx-auto">
               {block?.settings?.originalPrice && (
                 <div className="text-xl line-through opacity-75 mb-2">
@@ -2733,22 +2735,22 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'spacer':
         content = (
-          <div 
-            style={{
-              ...baseStyle,
-              height: block?.settings?.height || '50px'
-            }} 
-            onClick={handleBlockClick}
-            className="w-full bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-500 text-sm"
-          >
-            Espaçador ({block?.settings?.height || '50px'})
-          </div>
+          <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
+            <div 
+              style={{
+                height: block?.settings?.height || '50px'
+              }} 
+              className="w-full bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-500 text-sm"
+            >
+              Espaçador ({block?.settings?.height || '50px'})
+            </div>
+          </InlineEditableWrapper>
         );
         break;
 
       case 'testimonial':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+          <div  className="py-6">
             <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 max-w-lg mx-auto">
               <div className="flex items-center mb-4">
                 <img
@@ -2780,7 +2782,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'guarantee':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+          <div  className="py-6">
             <div className="flex items-center justify-center bg-green-50 border-2 border-green-200 rounded-2xl p-6 max-w-md mx-auto">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
@@ -2802,7 +2804,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'countdown':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+          <div  className="py-6">
             <div className="text-center bg-red-50 border-2 border-red-200 rounded-2xl p-6 max-w-md mx-auto">
               <h4 className="font-bold text-red-800 mb-4">
                 {block?.settings?.title || 'Oferta por tempo limitado!'}
@@ -2828,7 +2830,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'bonus':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+          <div  className="py-6">
             <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white p-6 rounded-2xl max-w-md mx-auto">
               <div className="flex items-center mb-3">
                 <Gift className="w-6 h-6 mr-2" />
@@ -2850,7 +2852,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'faq':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+          <div  className="py-6">
             <div className="max-w-2xl mx-auto">
               <h3 className="text-xl font-bold text-[#432818] mb-6 text-center">
                 Perguntas Frequentes
@@ -2877,7 +2879,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'social-proof':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+          <div  className="py-6">
             <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6 max-w-md mx-auto text-center">
               <div className="grid grid-cols-3 gap-4">
                 <div>
@@ -2912,7 +2914,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'video':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+          <div  className="py-6">
             <div className="max-w-2xl mx-auto">
               <div className="bg-gray-900 rounded-2xl overflow-hidden aspect-video relative">
                 {block?.settings?.videoUrl ? (
@@ -2945,7 +2947,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       // Novos blocos específicos
       case 'loading-animation':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="text-center py-12">
+          <div  className="text-center py-12">
             <div className="inline-flex flex-col items-center space-y-4">
               {block?.settings?.type === 'elegant' ? (
                 <div className="relative">
@@ -2970,7 +2972,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'style-result-display':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+          <div  className="py-8">
             <div className="max-w-2xl mx-auto text-center">
               <div className="mb-6">
                 <h2 className="text-3xl font-bold text-[#432818] mb-2">
@@ -3003,7 +3005,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'sales-offer':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+          <div  className="py-8">
             <div className="max-w-3xl mx-auto">
               <div className="bg-gradient-to-br from-[#B89B7A] to-[#A1835D] rounded-3xl p-8 text-white text-center shadow-2xl">
                 <h3 className="text-3xl font-bold mb-4">
@@ -3046,7 +3048,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'testimonials-grid':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+          <div  className="py-8">
             <div className="max-w-4xl mx-auto">
               <h3 className="text-2xl font-bold text-[#432818] mb-8 text-center">
                 O que nossas clientes dizem
@@ -3098,7 +3100,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'guarantee-section':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+          <div  className="py-8">
             <div className="max-w-2xl mx-auto">
               <div className="bg-green-50 border-2 border-green-200 rounded-3xl p-8 text-center">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -3131,7 +3133,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'email-input':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+          <div  className="py-4">
             <div className="space-y-2 max-w-md mx-auto">
               <Label className="text-sm font-medium text-[#432818]">
                 {block?.settings?.label || 'Email'}
@@ -3149,7 +3151,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'phone-input':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+          <div  className="py-4">
             <div className="space-y-2 max-w-md mx-auto">
               <Label className="text-sm font-medium text-[#432818]">
                 {block?.settings?.label || 'Telefone'}
@@ -3167,7 +3169,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'transition-text':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-8 text-center">
+          <div  className="py-8 text-center">
             <div className="max-w-2xl mx-auto space-y-4">
               <h3 className="text-2xl font-bold text-[#432818]">
                 {block?.settings?.title || 'Processando suas respostas...'}
@@ -3190,7 +3192,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'quiz-intro-section':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-12 text-center">
+          <div  className="py-12 text-center">
             <div className="max-w-3xl mx-auto space-y-8">
               <div className="space-y-4">
                 <h1 className="text-4xl md:text-5xl font-bold text-[#432818] font-playfair">
@@ -3244,7 +3246,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'quiz-progress-bar':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+          <div  className="py-4">
             <div className="max-w-2xl mx-auto">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium text-[#432818]">
@@ -3274,7 +3276,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'quiz-navigation-controls':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+          <div  className="py-6">
             <div className="flex justify-between items-center max-w-2xl mx-auto">
               <Button 
                 variant="outline" 
@@ -3305,7 +3307,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'quiz-transition-page':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-16 text-center">
+          <div  className="py-16 text-center">
             <div className="max-w-2xl mx-auto space-y-6">
               <div className="w-20 h-20 bg-gradient-to-r from-[#B89B7A] to-[#A1835D] rounded-full flex items-center justify-center mx-auto">
                 <Trophy className="w-10 h-10 text-white" />
@@ -3339,7 +3341,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       // COMPONENTES REAIS - RESULTPAGE.TSX
       case 'header-component-real':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+          <div  className="py-4">
             <div className="bg-white border-b border-gray-100 py-4">
               <div className="container mx-auto px-4 flex items-center justify-between">
                 <img 
@@ -3358,7 +3360,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'card-component-real':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+          <div  className="py-4">
             <div className={block?.settings?.className || "p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 rounded-lg"}>
               <div className="text-center mb-8">
                 <div className="max-w-md mx-auto mb-6">
@@ -3392,7 +3394,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'secondary-styles-component-real':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+          <div  className="py-4">
             <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10">
               <h3 className="text-lg font-medium text-[#432818] mb-2">Estilos que Também Influenciam Você</h3>
               <div className="space-y-2">
@@ -3412,7 +3414,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'before-after-component-real':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+          <div  className="py-6">
             <div className="bg-gradient-to-r from-[#f9f4ef] to-[#fff7f3] p-6 rounded-lg border border-[#B89B7A]/10">
               <h3 className="text-xl font-medium text-[#aa6b5d] text-center mb-4">Transformação de Estilo</h3>
               <div className="grid md:grid-cols-2 gap-6">
@@ -3432,7 +3434,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'motivation-component-real':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+          <div  className="py-6">
             <div className="text-center bg-[#f9f4ef] p-6 rounded-lg">
               <h3 className="text-xl font-medium text-[#aa6b5d] mb-4">Sua Jornada de Transformação</h3>
               <p className="text-[#432818] mb-4">
@@ -3449,7 +3451,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'bonus-component-real':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+          <div  className="py-6">
             <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white p-6 rounded-lg">
               <div className="flex items-center mb-3">
                 <Gift className="w-6 h-6 mr-2" />
@@ -3468,7 +3470,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'testimonials-component-real':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+          <div  className="py-6">
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-medium text-[#432818] text-center mb-6">O que as mulheres estão dizendo</h3>
               <div className="grid md:grid-cols-2 gap-6">
@@ -3502,7 +3504,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'button-component-real':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="text-center py-4">
+          <div  className="text-center py-4">
             <button 
               className={block?.settings?.className || "text-white py-4 px-6 rounded-md shadow-md transition-colors"}
               style={block?.settings?.style || {
@@ -3518,7 +3520,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'secure-purchase-component-real':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+          <div  className="py-4">
             <div className="flex items-center justify-center gap-4 text-sm text-gray-600">
               <div className="flex items-center gap-1">
                 <Lock className="w-4 h-4 text-green-600" />
@@ -3535,7 +3537,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'guarantee-component-real':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+          <div  className="py-6">
             <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CheckCircle className="w-8 h-8 text-green-600" />
@@ -3551,7 +3553,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'mentor-component-real':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+          <div  className="py-6">
             <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20">
               <div className="flex items-center gap-4 mb-4">
                 <img 
@@ -3574,7 +3576,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'vista-se-section-real':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+          <div  className="py-8">
             <div className="text-center">
               <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
                 {block?.settings?.title || 'Vista-se de Você — na Prática'}
@@ -3601,7 +3603,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'value-stack-component-real':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+          <div  className="py-6">
             <div className={block?.settings?.className || "bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 max-w-md mx-auto"}>
               <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">
                 {block?.settings?.title || 'O Que Você Recebe Hoje'}
@@ -3634,7 +3636,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       // COMPONENTES REAIS - QUIZOFFERPAGE.TSX
       case 'custom-styles-component-real':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-2">
+          <div  className="py-2">
             <div className="bg-gray-100 border border-dashed border-gray-300 p-3 rounded text-center text-sm text-gray-600">
               🎨 Estilos CSS Customizados da Página (Injetados no &lt;head&gt;)
             </div>
@@ -3644,7 +3646,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'fixed-intro-image-component-real':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4 text-center">
+          <div  className="py-4 text-center">
             <img
               src={block?.settings?.props?.src || 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'}
               alt={block?.settings?.props?.alt || 'Imagem'}
@@ -3658,7 +3660,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'section-title-component-real':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6 text-center">
+          <div  className="py-6 text-center">
             <div className="inline-flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full border border-green-200 mb-6">
               <Award className="w-4 h-4 text-green-600" />
               <span className="text-sm font-semibold text-green-700">3000+ mulheres transformadas</span>
@@ -3675,7 +3677,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'offer-button-component-real':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="text-center py-4">
+          <div  className="text-center py-4">
             <button className={block?.settings?.className || "btn-primary-clean"}>
               <ArrowRight className="w-5 h-5" />
               {block?.settings?.children || 'Descobrir Meu Estilo Agora'}
@@ -3686,7 +3688,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'problem-section-component-real':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+          <div  className="py-6">
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div>
                 <h2 className="text-2xl font-bold text-[#432818] mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
@@ -3719,7 +3721,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'solution-section-component-real':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6 text-center">
+          <div  className="py-6 text-center">
             <h2 className="text-2xl font-bold text-[#432818] mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
               {block?.settings?.title || 'A Solução: Quiz de Estilo'}
             </h2>
@@ -3732,7 +3734,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'countdown-timer-component-real':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6 text-center">
+          <div  className="py-6 text-center">
             <div className="flex flex-col items-center">
               <p className="text-[#432818] font-semibold mb-2 flex items-center">
                 <Clock className="w-4 h-4 mr-1 text-[#B89B7A]" />
@@ -3752,7 +3754,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'guides-benefits-section-real':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6 text-center">
+          <div  className="py-6 text-center">
             <h2 className="text-2xl font-bold text-[#432818] mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
               {block?.settings?.title || 'Transformação Completa'}
             </h2>
@@ -3800,7 +3802,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'pricing-section-component-real':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+          <div  className="py-6">
             <div className={block?.settings?.className || "bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-8 text-white text-center"}>
               <p className="text-sm opacity-90 mb-2">{block?.settings?.title || 'Oferta por tempo limitado'}</p>
               <div className="mb-4">
@@ -3816,7 +3818,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'faq-section-component-real':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+          <div  className="py-6">
             <h2 className="text-2xl font-bold text-[#432818] text-center mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>
               Perguntas Frequentes
             </h2>
@@ -3841,7 +3843,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       // NOVOS BLOCOS DE INTRODUÇÃO DO QUIZ
       case 'QuizIntroBlock':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="w-full">
+          <div  className="w-full">
             <QuizIntroBlock
               blockId={block.id}
               title={block?.settings?.title}
@@ -3877,7 +3879,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'StartButtonBlock':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="w-full">
+          <div  className="w-full">
             <StartButtonBlock
               blockId={block.id}
               text={block?.settings?.text}
@@ -3902,7 +3904,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'QuizBenefitsBlock':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="w-full">
+          <div  className="w-full">
             <QuizBenefitsBlock
               blockId={block.id}
               title={block?.settings?.title}
@@ -4164,7 +4166,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'build-info-component':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+          <div  className="py-4">
             <BuildInfo />
           </div>
         );
@@ -4172,7 +4174,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'result-cta-green-component':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+          <div  className="py-6">
             <div className="text-center space-y-4">
               <div className="bg-[#f9f4ef] p-6 rounded-lg border border-[#B89B7A]/10 mb-6">
                 <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">
@@ -4218,7 +4220,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'result-green-cta-component':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+          <div  className="py-4">
             <div className="text-center">
               <div className="bg-[#f9f4ef] p-6 rounded-lg border border-[#B89B7A]/10 mb-6">
                 <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">
@@ -4269,7 +4271,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       // Componentes da Etapa 21 (Oferta)
       case 'offer-urgency-banner-component':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-2">
+          <div  className="py-2">
             <div 
               className="text-center py-3 px-4 text-white font-semibold text-sm rounded-lg"
               style={{ 
@@ -4285,7 +4287,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'offer-logo-component':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+          <div  className="py-4">
             <div className="text-center">
               <img 
                 src={block?.settings?.src || '/logo-placeholder.png'} 
@@ -4300,7 +4302,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'offer-hero-section-component':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+          <div  className="py-8">
             <div className="text-center space-y-6">
               <h1 className="text-3xl md:text-4xl font-bold text-[#432818]">
                 {block?.settings?.title || 'Descubra Seu Estilo Predominante em 5 Minutos'}
@@ -4329,7 +4331,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'offer-problems-component':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+          <div  className="py-8">
             <div className="max-w-2xl mx-auto">
               <h2 className="text-2xl font-bold text-center text-[#432818] mb-6">
                 {block?.settings?.title || 'Você se identifica com isso?'}
@@ -4354,7 +4356,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'offer-solution-component':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+          <div  className="py-8">
             <div className="text-center space-y-6">
               <h2 className="text-3xl font-bold text-[#432818]">
                 {block?.settings?.title || 'A Solução: Quiz de Estilo'}
@@ -4378,7 +4380,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'offer-countdown-component':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+          <div  className="py-6">
             <div className="text-center bg-[#ff4444] text-white p-6 rounded-lg">
               <h3 className="text-xl font-bold mb-4">
                 {block?.settings?.title || 'OFERTA EXPIRA EM:'}
@@ -4404,7 +4406,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'offer-transformation-component':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+          <div  className="py-8">
             <div className="space-y-8">
               <div className="text-center">
                 <h2 className="text-3xl font-bold text-[#432818] mb-4">
@@ -4450,7 +4452,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'offer-pricing-component':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+          <div  className="py-8">
             <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg border border-[#B89B7A]/20">
               <div className="text-center space-y-4">
                 <div className="relative">
@@ -4478,7 +4480,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'offer-guarantee-component':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+          <div  className="py-6">
             <div className="max-w-2xl mx-auto text-center bg-[#f9f4ef] p-6 rounded-lg border border-[#B89B7A]/20">
               <div className="flex items-center justify-center mb-4">
                 <Shield className="w-12 h-12 text-[#B89B7A]" />
@@ -4496,7 +4498,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'offer-faq-component':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+          <div  className="py-8">
             <div className="max-w-3xl mx-auto">
               <h2 className="text-2xl font-bold text-center text-[#432818] mb-8">
                 Perguntas Frequentes
@@ -4516,7 +4518,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       default:
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="border-2 border-dashed border-gray-300 p-4 text-center text-gray-500">
+          <div  className="border-2 border-dashed border-gray-300 p-4 text-center text-gray-500">
             Bloco desconhecido: {block.type}
           </div>
         );
