@@ -515,107 +515,6 @@ const createInitialFunnel = (): FunnelData => ({
         }
       ]
     },
-            content: 'O Guia da Gisele Galvão foi criado para mulheres como você — que querem se vestir com autenticidade e transformar sua imagem em ferramenta de poder.',
-            fontSize: 'medium',
-            alignment: 'center'
-          }
-        },
-        // 8. Lista de benefícios (exatos da ResultPage)
-        {
-          id: 'result-benefits-list',
-          type: 'text',
-          order: 8,
-          settings: {
-            content: '✓ Looks com intenção e identidade\n✓ Cores, modelagens e tecidos a seu favor\n✓ Imagem alinhada aos seus objetivos\n✓ Guarda-roupa funcional, sem compras por impulso',
-            fontSize: 'medium',
-            alignment: 'left'
-          }
-        },
-        // 9. Value Stack (preços exatos da ResultPage)
-        {
-          id: 'result-value-stack',
-          type: 'text',
-          order: 9,
-          settings: {
-            content: 'O Que Você Recebe Hoje:\n\nGuia Principal - R$ 67,00\nBônus - Peças-chave - R$ 79,00\nBônus - Visagismo Facial - R$ 29,00\n\nValor Total: R$ 175,00\n\nHoje por apenas: R$ 39,00\nPagamento único',
-            fontSize: 'medium',
-            alignment: 'center'
-          }
-        },
-        // 10. CTA Principal Verde (exato da ResultPage)
-        {
-          id: 'result-main-cta',
-          type: 'button',
-          order: 10,
-          settings: {
-            text: 'Quero meu Guia de Estilo Agora',
-            style: 'primary',
-            size: 'lg',
-            fullWidth: true
-          }
-        },
-        // 11. Elementos de segurança (como na ResultPage)
-        {
-          id: 'result-security',
-          type: 'text',
-          order: 11,
-          settings: {
-            content: '🔒 Pagamento 100% Seguro\n✓ Garantia de 7 dias\n🛡️ Oferta exclusiva nesta página',
-            fontSize: 'small',
-            alignment: 'center'
-          }
-        },
-        // 12. Depoimentos (estrutura da ResultPage)
-        {
-          id: 'result-testimonials',
-          type: 'testimonials-grid',
-          order: 12,
-          settings: {
-            testimonials: [
-              {
-                author: 'Mariangela',
-                role: 'Engenheira',
-                text: 'Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me fez dar vida à mulher que sempre existiu em mim.',
-                rating: 5
-              },
-              {
-                author: 'Patrícia Paranhos',
-                role: 'Empresária',
-                text: 'O guia mudou completamente minha relação com o guarda-roupa. Agora sei exatamente o que comprar e como combinar.',
-                rating: 5
-              }
-            ]
-          }
-        },
-        // 13. Garantia (como na ResultPage)
-        {
-          id: 'result-guarantee',
-          type: 'guarantee-section',
-          order: 13,
-          settings: {
-            title: 'Garantia de 7 Dias',
-            description: 'Se não ficar satisfeita, devolvemos 100% do seu dinheiro. Sem perguntas.',
-            features: [
-              'Garantia incondicional',
-              'Suporte personalizado',
-              'Acesso vitalício aos materiais'
-            ]
-          }
-        },
-        // 14. CTA Final (exato da ResultPage)
-        {
-          id: 'result-final-cta',
-          type: 'button',
-          order: 14,
-          settings: {
-            text: 'Garantir Meu Guia + Bônus Especiais',
-            style: 'primary',
-            size: 'lg',
-            fullWidth: true
-          }
-        }
-      ]
-    },
 
     // ETAPA 21: Oferta B (/quiz-descubra-seu-estilo) - PÁGINA REAL QUIZ-DESCUBRA-SEU-ESTILO.TSX
     {
@@ -3682,6 +3581,117 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
               maxWidth={block?.settings?.maxWidth}
               columns={block?.settings?.columns}
             />
+          </div>
+        );
+        break;
+
+      // Componentes reais da ResultPage
+      case 'result-header-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+            <Header 
+              userName={block?.settings?.userName || 'Usuário'}
+              primaryStyle={block?.settings?.primaryStyle || 'Elegante Clássica'}
+            />
+          </div>
+        );
+        break;
+
+      case 'result-style-display':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+            <div className="text-center space-y-4 bg-white p-6 rounded-xl shadow-lg">
+              <h2 className="text-2xl font-bold text-[#432818]">
+                {block?.settings?.styleName || 'Seu Estilo Predominante'}
+              </h2>
+              <div className="text-4xl font-bold text-[#B89B7A]">
+                {block?.settings?.percentage || 92}%
+              </div>
+              {block?.settings?.styleImage && (
+                <img 
+                  src={block?.settings?.styleImage} 
+                  alt="Estilo predominante"
+                  className="w-full max-w-md mx-auto rounded-lg"
+                />
+              )}
+              <p className="text-[#432818] leading-relaxed">
+                {block?.settings?.styleDescription || 'Sua personalidade refletida no seu estilo de vestir.'}
+              </p>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'secondary-styles-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+            <SecondaryStylesSection 
+              secondaryStyles={block?.settings?.secondaryStyles || []}
+            />
+          </div>
+        );
+        break;
+
+      case 'before-after-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+            <BeforeAfterTransformation />
+          </div>
+        );
+        break;
+
+      case 'motivation-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+            <MotivationSection />
+          </div>
+        );
+        break;
+
+      case 'bonus-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+            <BonusSection />
+          </div>
+        );
+        break;
+
+      case 'testimonials-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+            <Testimonials />
+          </div>
+        );
+        break;
+
+      case 'secure-purchase-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+            <SecurePurchaseElement />
+          </div>
+        );
+        break;
+
+      case 'guarantee-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+            <GuaranteeSection />
+          </div>
+        );
+        break;
+
+      case 'mentor-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+            <MentorSection />
+          </div>
+        );
+        break;
+
+      case 'build-info-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+            <BuildInfo />
           </div>
         );
         break;
