@@ -22,7 +22,8 @@ import {
   QuizNavigationBlock, 
   QuizTransitionBlock,
   QuizIntroBlock,
-  StartButtonBlock 
+  StartButtonBlock,
+  QuizBenefitsBlock 
 } from './blocks/quiz';
 
 // Componentes básicos
@@ -318,6 +319,26 @@ const DynamicBlockRenderer: React.FC<DynamicBlockRendererProps> = ({
             target={dynamicProps.target}
             enableHoverEffect={dynamicProps.enableHoverEffect}
             enablePulseEffect={dynamicProps.enablePulseEffect}
+            className={dynamicProps.className}
+            style={dynamicProps.style}
+          />
+        );
+
+      case 'QuizBenefitsBlock':
+        return (
+          <QuizBenefitsBlock
+            blockId={blockId}
+            title={dynamicProps.title}
+            subtitle={dynamicProps.subtitle}
+            benefits={dynamicProps.benefits}
+            showIcons={dynamicProps.showIcons}
+            iconType={dynamicProps.iconType}
+            layout={dynamicProps.layout}
+            alignment={dynamicProps.alignment}
+            spacing={dynamicProps.spacing}
+            colors={dynamicProps.colors}
+            maxWidth={dynamicProps.maxWidth}
+            columns={dynamicProps.columns}
             className={dynamicProps.className}
             style={dynamicProps.style}
           />

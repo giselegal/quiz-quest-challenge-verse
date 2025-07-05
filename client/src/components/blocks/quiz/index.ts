@@ -22,6 +22,7 @@ export { default as QuizTransitionBlock } from './QuizTransitionBlock';
 // Blocos específicos para etapas especiais (implementados)
 export { default as QuizIntroBlock } from './QuizIntroBlock';
 export { default as StartButtonBlock } from './StartButtonBlock';
+export { default as QuizBenefitsBlock } from './QuizBenefitsBlock';
 export { default as StrategicQuestionBlock } from './StrategicQuestionBlock';
 export { default as LoadingTransitionBlock } from './LoadingTransitionBlock';
 
@@ -34,5 +35,6 @@ export type { QuizTransitionBlockProps } from './QuizTransitionBlock';
 // Types dos blocos específicos
 export type { QuizIntroBlockProps } from './QuizIntroBlock';
 export type { StartButtonBlockProps } from './StartButtonBlock';
+export type { QuizBenefitsBlockProps, BenefitItem } from './QuizBenefitsBlock';
 export type { StrategicQuestionBlockProps } from './StrategicQuestionBlock';
 export type { LoadingTransitionBlockProps } from './LoadingTransitionBlock';

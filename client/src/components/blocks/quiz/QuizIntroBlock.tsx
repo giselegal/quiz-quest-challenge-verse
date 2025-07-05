@@ -299,7 +299,7 @@ const QuizIntroBlock: React.FC<QuizIntroBlockProps> = ({
                 style={{
                   backgroundColor: colors.background,
                   borderColor: error ? '#ef4444' : colors.primary,
-                  focusRingOffsetColor: colors.background,
+                  // focusRingOffsetColor: colors.background, // Removido - não é uma propriedade CSS válida
                 }}
                 autoFocus
                 aria-required="true"
@@ -330,16 +330,16 @@ const QuizIntroBlock: React.FC<QuizIntroBlockProps> = ({
               )}
               style={{
                 backgroundColor: nome.trim() && !disabled ? colors.primary : `${colors.primary}80`,
-                focusRingColor: colors.primary,
-                focusRingOffsetColor: colors.background,
+                // focusRingColor: colors.primary, // Removido - não é uma propriedade CSS válida
+                // focusRingOffsetColor: colors.background, // Removido - não é uma propriedade CSS válida
               }}
               onMouseEnter={(e) => {
-                if (nome.trim() && !disabled) {
+                if (nome.trim() && !disabled && colors.primaryDark) {
                   e.currentTarget.style.backgroundColor = colors.primaryDark;
                 }
               }}
               onMouseLeave={(e) => {
-                if (nome.trim() && !disabled) {
+                if (nome.trim() && !disabled && colors.primary) {
                   e.currentTarget.style.backgroundColor = colors.primary;
                 }
               }}
