@@ -1,5 +1,4 @@
 import React from 'react';
-import { InlineEditableText } from './InlineEditableText';
 
 interface TextBlockProps {
   properties: {
@@ -9,14 +8,12 @@ interface TextBlockProps {
   };
   isSelected?: boolean;
   onClick?: () => void;
-  onSaveInline?: (key: string) => (newValue: string) => void;
 }
 
 export const TextBlock: React.FC<TextBlockProps> = ({ 
   properties, 
   isSelected = false,
-  onClick,
-  onSaveInline
+  onClick 
 }) => {
   const { content = 'Conteúdo do texto aqui...', fontSize = 'medium', alignment = 'left' } = properties;
 
@@ -44,21 +41,10 @@ export const TextBlock: React.FC<TextBlockProps> = ({
       `}
       onClick={onClick}
     >
-      {onSaveInline ? (
-        <InlineEditableText
-          tag="div"
-          isTextArea={true}
-          value={content}
-          onSave={onSaveInline('content')}
-          className={`text-[#432818] ${fontSizeClasses[fontSize]} whitespace-pre-wrap`}
-          placeholder="Digite o conteúdo do texto aqui..."
-        />
-      ) : (
-        <div 
-          className={`text-[#432818] ${fontSizeClasses[fontSize]} whitespace-pre-wrap`}
-          dangerouslySetInnerHTML={{ __html: content }}
-        />
-      )}
+      <div 
+        className={`text-[#432818] ${fontSizeClasses[fontSize]} whitespace-pre-wrap`}
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
     </div>
   );
 };
