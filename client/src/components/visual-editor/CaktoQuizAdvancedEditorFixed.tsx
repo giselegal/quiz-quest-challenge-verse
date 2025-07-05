@@ -769,12 +769,54 @@ const blockLibrary = [
     icon: <ArrowRight className="w-4 h-4" />,
     category: 'Interação'
   },
+  // Quiz Intro - BLOCOS ESPECÍFICOS DO FUNIL
+  { 
+    id: 'QuizIntroBlock',
+    type: 'QuizIntroBlock', 
+    name: 'Quiz Introdução Completa', 
+    description: 'Bloco completo de introdução do quiz com coleta de nome',
+    icon: <Play className="w-4 h-4" />,
+    category: 'Quiz'
+  },
+  { 
+    id: 'StartButtonBlock',
+    type: 'StartButtonBlock', 
+    name: 'Botão Iniciar Quiz', 
+    description: 'Botão específico para iniciar o quiz',
+    icon: <Play className="w-4 h-4" />,
+    category: 'Quiz'
+  },
+  { 
+    id: 'QuizBenefitsBlock',
+    type: 'QuizBenefitsBlock', 
+    name: 'Benefícios do Quiz', 
+    description: 'Seção de benefícios do quiz',
+    icon: <Star className="w-4 h-4" />,
+    category: 'Quiz'
+  },
+  // Quiz Progress e Navigation
+  { 
+    id: 'quiz-progress-bar',
+    type: 'quiz-progress-bar', 
+    name: 'Barra de Progresso Quiz', 
+    description: 'Barra de progresso específica do quiz',
+    icon: <RotateCcw className="w-4 h-4" />,
+    category: 'Quiz'
+  },
+  { 
+    id: 'quiz-navigation-controls',
+    type: 'quiz-navigation-controls', 
+    name: 'Controles de Navegação Quiz', 
+    description: 'Botões de navegação do quiz',
+    icon: <ArrowRight className="w-4 h-4" />,
+    category: 'Quiz'
+  },
   // Quiz
   { 
     id: 'question-multiple',
     type: 'question-multiple', 
     name: 'Pergunta Múltipla Escolha', 
-    description: 'Pergunta com opções',
+    description: 'Pergunta com opções e imagens',
     icon: <CheckCircle className="w-4 h-4" />,
     category: 'Quiz'
   },
@@ -786,6 +828,112 @@ const blockLibrary = [
     icon: <Target className="w-4 h-4" />,
     category: 'Quiz Avançado'
   },
+  // Transições Específicas
+  { 
+    id: 'quiz-transition-main',
+    type: 'quiz-transition-main', 
+    name: 'Transição Principal Quiz', 
+    description: 'Transição entre questões normais e estratégicas',
+    icon: <Zap className="w-4 h-4" />,
+    category: 'Quiz Avançado'
+  },
+  { 
+    id: 'quiz-final-transition',
+    type: 'quiz-final-transition', 
+    name: 'Transição Final Quiz', 
+    description: 'Transição final com loading e análise de resultados',
+    icon: <Trophy className="w-4 h-4" />,
+    category: 'Quiz Avançado'
+  },
+  // Resultado - COMPONENTES REAIS DA RESULTPAGE
+  { 
+    id: 'result-header-component',
+    type: 'result-header-component', 
+    name: 'Cabeçalho do Resultado', 
+    description: 'Header personalizado com nome do usuário',
+    icon: <Award className="w-4 h-4" />,
+    category: 'Resultado'
+  },
+  { 
+    id: 'result-style-card-component',
+    type: 'result-style-card-component', 
+    name: 'Card do Estilo Predominante', 
+    description: 'Card completo com porcentagem, imagem e descrição do estilo',
+    icon: <Sparkles className="w-4 h-4" />,
+    category: 'Resultado'
+  },
+  { 
+    id: 'secondary-styles-component',
+    type: 'secondary-styles-component', 
+    name: 'Estilos Complementares', 
+    description: 'Cards dos estilos secundários com porcentagens',
+    icon: <Palette className="w-4 h-4" />,
+    category: 'Resultado'
+  },
+  { 
+    id: 'before-after-component',
+    type: 'before-after-component', 
+    name: 'Antes e Depois', 
+    description: 'Seção de transformação antes/depois',
+    icon: <ArrowRight className="w-4 h-4" />,
+    category: 'Resultado'
+  },
+  { 
+    id: 'motivation-component',
+    type: 'motivation-component', 
+    name: 'Seção de Motivação', 
+    description: 'Motivação personalizada baseada no resultado',
+    icon: <Heart className="w-4 h-4" />,
+    category: 'Resultado'
+  },
+  { 
+    id: 'bonus-component',
+    type: 'bonus-component', 
+    name: 'Seção de Bônus', 
+    description: 'Bônus exclusivos baseados no estilo',
+    icon: <Gift className="w-4 h-4" />,
+    category: 'Resultado'
+  },
+  { 
+    id: 'result-value-stack-component',
+    type: 'result-value-stack-component', 
+    name: 'Value Stack Personalizado', 
+    description: 'Seção de ancoragem de valor com produtos',
+    icon: <CreditCard className="w-4 h-4" />,
+    category: 'Resultado'
+  },
+  { 
+    id: 'testimonials-component',
+    type: 'testimonials-component', 
+    name: 'Depoimentos Reais', 
+    description: 'Depoimentos de clientes reais',
+    icon: <MessageCircle className="w-4 h-4" />,
+    category: 'Social'
+  },
+  { 
+    id: 'secure-purchase-component',
+    type: 'secure-purchase-component', 
+    name: 'Compra Segura', 
+    description: 'Seção de compra segura com CTAs verdes',
+    icon: <Shield className="w-4 h-4" />,
+    category: 'Vendas'
+  },
+  { 
+    id: 'guarantee-component',
+    type: 'guarantee-component', 
+    name: 'Garantia', 
+    description: 'Seção de garantia completa',
+    icon: <CheckCircle className="w-4 h-4" />,
+    category: 'Vendas'
+  },
+  { 
+    id: 'mentor-component',
+    type: 'mentor-component', 
+    name: 'Seção da Mentora', 
+    description: 'Apresentação da mentora Gisele',
+    icon: <Users className="w-4 h-4" />,
+    category: 'Social'
+  },
   // Formulário
   { 
     id: 'form-input',
@@ -795,14 +943,14 @@ const blockLibrary = [
     icon: <Layout className="w-4 h-4" />,
     category: 'Formulário'
   },
-  // Transição
+  // Outros blocos genéricos
   { 
     id: 'loading-animation',
     type: 'loading-animation', 
     name: 'Loading Animado', 
     description: 'Animação de carregamento customizada',
     icon: <RotateCcw className="w-4 h-4" />,
-    category: 'Transição'
+    category: 'UI'
   },
   { 
     id: 'transition-text',
@@ -810,40 +958,7 @@ const blockLibrary = [
     name: 'Texto de Transição', 
     description: 'Texto personalizado durante loading',
     icon: <Type className="w-4 h-4" />,
-    category: 'Transição'
-  },
-  // Resultado Específico
-  { 
-    id: 'style-result-display',
-    type: 'style-result-display', 
-    name: 'Exibição de Estilo', 
-    description: 'Mostra estilo calculado com imagem',
-    icon: <Sparkles className="w-4 h-4" />,
-    category: 'Resultado'
-  },
-  { 
-    id: 'sales-offer',
-    type: 'sales-offer', 
-    name: 'Oferta de Venda', 
-    description: 'Seção de oferta com preço e CTA',
-    icon: <CreditCard className="w-4 h-4" />,
-    category: 'Vendas'
-  },
-  { 
-    id: 'testimonials-grid',
-    type: 'testimonials-grid', 
-    name: 'Grade de Depoimentos', 
-    description: 'Grid de depoimentos com fotos',
-    icon: <Users className="w-4 h-4" />,
-    category: 'Social'
-  },
-  { 
-    id: 'guarantee-section',
-    type: 'guarantee-section', 
-    name: 'Seção de Garantia', 
-    description: 'Garantia com ícones e detalhes',
-    icon: <CheckCircle className="w-4 h-4" />,
-    category: 'Vendas'
+    category: 'UI'
   },
   // Quiz Estratégico
   { 
