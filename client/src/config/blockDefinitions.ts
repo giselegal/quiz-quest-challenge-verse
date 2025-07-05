@@ -2073,6 +2073,90 @@ export const blockDefinitions: BlockDefinition[] = [
     ],
   },
 
+  // ETAPA 20: Página de Resultado Completa
+  {
+    id: 'result-page',
+    type: 'result-page',
+    name: 'Página de Resultado (Etapa 20)',
+    description: 'Página completa de resultado do quiz com edição inline.',
+    icon: 'Crown',
+    category: 'Resultado',
+    isNew: true,
+    propertiesSchema: [
+      { key: 'userName', label: 'Nome do Usuário', type: 'text-input', placeholder: 'Usuário', defaultValue: 'Usuário' },
+      { key: 'primaryStyle', label: 'Estilo Predominante', type: 'text-input', placeholder: 'Elegante Clássica', defaultValue: 'Elegante Clássica' },
+      { key: 'percentage', label: 'Porcentagem (%)', type: 'number-input', defaultValue: 92, min: 0, max: 100 },
+      { key: 'styleDescription', label: 'Descrição do Estilo', type: 'textarea', placeholder: 'Sua personalidade refletida...', rows: 3 },
+      { key: 'styleImage', label: 'Imagem do Estilo', type: 'image-url', placeholder: 'https://...' },
+      { key: 'guideImage', label: 'Imagem do Guia', type: 'image-url', placeholder: 'https://...' },
+      { key: 'logo', label: 'Logo', type: 'image-url', placeholder: 'https://...' },
+      { key: 'logoAlt', label: 'Alt da Logo', type: 'text-input', placeholder: 'Logo da marca' },
+      { key: 'valueStackTitle', label: 'Título da Oferta', type: 'text-input', placeholder: 'O Que Você Recebe Hoje' },
+      {
+        key: 'valueItems',
+        label: 'Itens da Oferta',
+        type: 'array-editor',
+        itemSchema: [
+          { key: 'name', label: 'Nome do Item', type: 'text-input', placeholder: 'Guia Principal' },
+          { key: 'price', label: 'Preço', type: 'text-input', placeholder: 'R$ 67,00' },
+        ],
+      },
+      { key: 'totalValue', label: 'Valor Total', type: 'text-input', placeholder: 'R$ 175,00' },
+      { key: 'finalPrice', label: 'Preço Final', type: 'text-input', placeholder: 'R$ 39,00' },
+      { key: 'ctaText', label: 'Texto do CTA', type: 'text-input', placeholder: 'Garantir Meu Guia...' },
+      { key: 'ctaSubtitle', label: 'Subtítulo do CTA', type: 'text-input', placeholder: 'Quero meu Guia...' },
+      { key: 'securityText', label: 'Texto de Segurança', type: 'textarea', placeholder: '🔒 Pagamento 100% Seguro...', rows: 3 },
+      { key: 'backgroundColor', label: 'Cor de Fundo', type: 'color-picker', defaultValue: '#fffaf7' },
+    ],
+  },
+
+  // ETAPA 21: Página de Oferta B
+  {
+    id: 'quiz-offer-page',
+    type: 'quiz-offer-page',
+    name: 'Quiz Oferta (Etapa 21)',
+    description: 'Página completa de oferta do quiz com edição inline.',
+    icon: 'Sparkles',
+    category: 'Oferta',
+    isNew: true,
+    propertiesSchema: [
+      { key: 'urgencyText', label: 'Texto de Urgência', type: 'text-input', placeholder: '🔥 ÚLTIMAS HORAS...' },
+      { key: 'logo', label: 'Logo', type: 'image-url', placeholder: 'https://...' },
+      { key: 'logoAlt', label: 'Alt da Logo', type: 'text-input', placeholder: 'Logo da marca' },
+      { key: 'mainTitle', label: 'Título Principal', type: 'text-input', placeholder: 'Descubra Seu Estilo...' },
+      { key: 'subtitle', label: 'Subtítulo', type: 'textarea', placeholder: 'Tenha finalmente um guarda-roupa...', rows: 2 },
+      { key: 'heroImage', label: 'Imagem Hero', type: 'image-url', placeholder: 'https://...' },
+      { key: 'problemsTitle', label: 'Título dos Problemas', type: 'text-input', placeholder: 'Você se identifica...' },
+      {
+        key: 'problems',
+        label: 'Lista de Problemas',
+        type: 'array-editor',
+        itemSchema: [
+          { key: 'text', label: 'Problema', type: 'text-input', placeholder: 'Guarda-roupa cheio mas...' },
+        ],
+      },
+      { key: 'problemInsight', label: 'Insight dos Problemas', type: 'text-input', placeholder: 'Isso acontece porque...' },
+      { key: 'solutionTitle', label: 'Título da Solução', type: 'text-input', placeholder: 'A Solução: Quiz...' },
+      { key: 'solutionDescription', label: 'Descrição da Solução', type: 'textarea', placeholder: 'Nosso quiz científico...', rows: 2 },
+      { key: 'benefitsTitle', label: 'Título dos Benefícios', type: 'text-input', placeholder: 'Com o seu Guia...' },
+      {
+        key: 'benefits',
+        label: 'Lista de Benefícios',
+        type: 'array-editor',
+        itemSchema: [
+          { key: 'text', label: 'Benefício', type: 'text-input', placeholder: 'Descobrir exatamente...' },
+        ],
+      },
+      { key: 'socialProofTitle', label: 'Título da Prova Social', type: 'text-input', placeholder: 'Mais de 15.000...' },
+      { key: 'guaranteeTitle', label: 'Título da Garantia', type: 'text-input', placeholder: 'Garantia Total...' },
+      { key: 'guaranteeText', label: 'Texto da Garantia', type: 'text-input', placeholder: 'Se não ficar satisfeita...' },
+      { key: 'ctaText', label: 'Texto do CTA', type: 'text-input', placeholder: 'Descobrir Meu Estilo...' },
+      { key: 'ctaSubtext', label: 'Subtexto do CTA', type: 'text-input', placeholder: 'Quiz + Guia...' },
+      { key: 'urgencyNote', label: 'Nota de Urgência', type: 'text-input', placeholder: 'Oferta válida apenas hoje!' },
+      { key: 'backgroundColor', label: 'Cor de Fundo', type: 'color-picker', defaultValue: '#FFFBF7' },
+    ],
+  },
+
   // ...existing code...
 ];
 

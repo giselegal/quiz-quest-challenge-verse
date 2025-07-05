@@ -17,6 +17,28 @@ import QuizQuestionBlock from './QuizQuestionBlock';
 import StrategicQuestionBlock from './StrategicQuestionBlock';
 import QuizTransitionBlock from './QuizTransitionBlock';
 
+// Novos blocos UI/Avançados
+import AlertBlock from './AlertBlock';
+import ArgumentsBlock from './ArgumentsBlock';
+import AudioBlock from './AudioBlock';
+import CarouselBlock from './CarouselBlock';
+import LoaderBlock from './LoaderBlock';
+import CompareBlock from './CompareBlock';
+import ConfettiBlock from './ConfettiBlock';
+import QuoteBlock from './QuoteBlock';
+import FormInputBlock from './FormInputBlock';
+import ChartAreaBlock from './ChartAreaBlock';
+import ChartLevelBlock from './ChartLevelBlock';
+import ListBlock from './ListBlock';
+import MarqueeBlock from './MarqueeBlock';
+import OptionsGridBlock from './OptionsGridBlock';
+import ScriptBlock from './ScriptBlock';
+import TermsBlock from './TermsBlock';
+
+// Blocos especiais das etapas 20 e 21
+import ResultPageBlock from './ResultPageBlock';
+import QuizOfferPageBlock from './QuizOfferPageBlock';
+
 export interface BlockData {
   id: string;
   type: string;
@@ -37,6 +59,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
   onSaveInline
 }) => {
   const commonProps = {
+    block,
     properties: block.properties,
     isSelected,
     onClick,
@@ -146,6 +169,64 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
           console.log('Transition completed');
         }}
       />;
+
+    // NOVOS BLOCOS UI/AVANÇADOS
+    
+    case 'alert':
+      return <AlertBlock {...commonProps} />;
+    
+    case 'arguments':
+      return <ArgumentsBlock {...commonProps} />;
+    
+    case 'audio':
+      return <AudioBlock {...commonProps} />;
+    
+    case 'carousel':
+      return <CarouselBlock {...commonProps} />;
+    
+    case 'loader':
+      return <LoaderBlock {...commonProps} />;
+    
+    case 'compare':
+      return <CompareBlock {...commonProps} />;
+    
+    case 'confetti':
+      return <ConfettiBlock {...commonProps} />;
+    
+    case 'quote':
+      return <QuoteBlock {...commonProps} />;
+    
+    case 'form-input':
+      return <FormInputBlock {...commonProps} />;
+    
+    case 'chart-area':
+      return <ChartAreaBlock {...commonProps} />;
+    
+    case 'chart-level':
+      return <ChartLevelBlock {...commonProps} />;
+    
+    case 'list':
+      return <ListBlock {...commonProps} />;
+    
+    case 'marquee':
+      return <MarqueeBlock {...commonProps} />;
+    
+    case 'options-grid':
+      return <OptionsGridBlock {...commonProps} />;
+    
+    case 'script':
+      return <ScriptBlock {...commonProps} />;
+    
+    case 'terms':
+      return <TermsBlock {...commonProps} />;
+    
+    // BLOCOS ESPECIAIS DAS ETAPAS 20 E 21
+    
+    case 'result-page':
+      return <ResultPageBlock {...commonProps} />;
+    
+    case 'quiz-offer-page':
+      return <QuizOfferPageBlock {...commonProps} />;
 
     default:
       return (

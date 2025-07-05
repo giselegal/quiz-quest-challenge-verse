@@ -1,4 +1,5 @@
 import React from 'react';
+import { InlineEditableText } from './InlineEditableText';
 import { TextCursorInput } from 'lucide-react';
 import type { BlockComponentProps } from '@/types/blocks';
 
@@ -17,6 +18,12 @@ const FormInputBlock: React.FC<BlockComponentProps> = ({
     required = false
   } = block.properties;
 
+  const handlePropertyChange = (key: string, value: any) => {
+    if (onPropertyChange) {
+      onPropertyChange(key, value);
+    }
+  };
+
   return (
     <div
       className={`
@@ -33,7 +40,13 @@ const FormInputBlock: React.FC<BlockComponentProps> = ({
     >
       <div className="space-y-2 max-w-md mx-auto">
         <label className="text-sm font-medium text-[#432818] block">
-          {label}
+          <InlineEditableText
+            value={label}
+            onSave={(value: string) => handlePropertyChange('label', value)}
+            className="inline-block"
+            placeholder="Rótulo do campo"
+            tag="span"
+          />
           {required && <span className="text-red-500 ml-1">*</span>}
         </label>
         <input
