@@ -4,6 +4,10 @@ import { TextBlock } from './TextBlock';
 import { ImageBlock } from './ImageBlock';
 import { ButtonBlock } from './ButtonBlock';
 import { SpacerBlock } from './SpacerBlock';
+import { ResultHeaderBlock } from './ResultHeaderBlock';
+import { ResultDescriptionBlock } from './ResultDescriptionBlock';
+import { ProductOfferBlock } from './ProductOfferBlock';
+import { UrgencyTimerBlock } from './UrgencyTimerBlock';
 import QuizIntroBlock from '@/components/blocks/quiz/QuizIntroBlock';
 
 export interface BlockData {
@@ -44,6 +48,18 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
     
     case 'spacer':
       return <SpacerBlock {...commonProps} />;
+    
+    case 'result-header':
+      return <ResultHeaderBlock {...commonProps} />;
+    
+    case 'result-description':
+      return <ResultDescriptionBlock {...commonProps} />;
+    
+    case 'product-offer':
+      return <ProductOfferBlock {...commonProps} />;
+    
+    case 'urgency-timer':
+      return <UrgencyTimerBlock {...commonProps} />;
     
     case 'QuizIntroBlock':
       // Para blocos complexos existentes, adaptar gradualmente

@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DynamicPropertiesPanel } from '../editor/panels/DynamicPropertiesPanel';
 import { BlockRenderer, BlockData } from '../editor/blocks';
 import { blockDefinitions, getCategories, getBlocksByCategory } from '@/config/blockDefinitions';
-import { Type, Image, ArrowRight, CheckCircle, Target, Play } from 'lucide-react';
+import { Type, Image, ArrowRight, CheckCircle, Target, Play, Star, FileText, ShoppingCart, Clock, MessageSquare, HelpCircle, Shield, Video } from 'lucide-react';
 
 // Mock de dados para demonstração
 const mockBlocks: BlockData[] = [
@@ -55,7 +55,15 @@ const iconMap: { [key: string]: React.ReactNode } = {
   'ArrowRight': <ArrowRight className="w-4 h-4" />,
   'CheckCircle': <CheckCircle className="w-4 h-4" />,
   'Target': <Target className="w-4 h-4" />,
-  'Play': <Play className="w-4 h-4" />
+  'Play': <Play className="w-4 h-4" />,
+  'Star': <Star className="w-4 h-4" />,
+  'FileText': <FileText className="w-4 h-4" />,
+  'ShoppingCart': <ShoppingCart className="w-4 h-4" />,
+  'Clock': <Clock className="w-4 h-4" />,
+  'MessageSquare': <MessageSquare className="w-4 h-4" />,
+  'HelpCircle': <HelpCircle className="w-4 h-4" />,
+  'Shield': <Shield className="w-4 h-4" />,
+  'Video': <Video className="w-4 h-4" />
 };
 
 export const SchemaDrivenDemo: React.FC = () => {

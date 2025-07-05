@@ -353,6 +353,313 @@ export const blockDefinitions: BlockDefinition[] = [
       },
     ],
   },
+
+  // BLOCOS DE RESULTADO
+  {
+    id: 'result-header',
+    type: 'result-header',
+    name: 'Cabeçalho de Resultado',
+    description: 'Título e descrição do resultado do quiz.',
+    icon: 'Star',
+    category: 'Resultados',
+    propertiesSchema: [
+      { 
+        key: 'title', 
+        label: 'Título do Resultado', 
+        type: 'text-input', 
+        placeholder: 'Seu resultado: Estilo Clássico',
+        defaultValue: 'Seu Resultado' 
+      },
+      { 
+        key: 'subtitle', 
+        label: 'Subtítulo', 
+        type: 'textarea', 
+        placeholder: 'Descrição do estilo...',
+        rows: 3 
+      },
+      { 
+        key: 'badgeText', 
+        label: 'Texto do Badge', 
+        type: 'text-input', 
+        placeholder: 'RESULTADO',
+        defaultValue: 'SEU ESTILO' 
+      },
+    ],
+  },
+
+  {
+    id: 'result-description',
+    type: 'result-description',
+    name: 'Descrição do Resultado',
+    description: 'Texto detalhado sobre o resultado.',
+    icon: 'FileText',
+    category: 'Resultados',
+    propertiesSchema: [
+      { 
+        key: 'content', 
+        label: 'Descrição', 
+        type: 'textarea', 
+        placeholder: 'Descrição detalhada do resultado...',
+        rows: 6,
+        defaultValue: 'Baseado nas suas respostas, identificamos que...' 
+      },
+      {
+        key: 'showIcon',
+        label: 'Mostrar Ícone',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+    ],
+  },
+
+  // BLOCOS DE OFERTA
+  {
+    id: 'product-offer',
+    type: 'product-offer',
+    name: 'Oferta de Produto',
+    description: 'Card de produto com preço e botão de compra.',
+    icon: 'ShoppingCart',
+    category: 'Ofertas',
+    propertiesSchema: [
+      { 
+        key: 'productName', 
+        label: 'Nome do Produto', 
+        type: 'text-input', 
+        placeholder: 'Consultoria de Estilo Personalizada',
+        defaultValue: 'Produto Incrível' 
+      },
+      { 
+        key: 'productImage', 
+        label: 'Imagem do Produto', 
+        type: 'image-url', 
+        placeholder: 'https://...' 
+      },
+      { 
+        key: 'originalPrice', 
+        label: 'Preço Original', 
+        type: 'text-input', 
+        placeholder: 'R$ 297,00',
+        defaultValue: 'R$ 297,00' 
+      },
+      { 
+        key: 'discountPrice', 
+        label: 'Preço com Desconto', 
+        type: 'text-input', 
+        placeholder: 'R$ 197,00',
+        defaultValue: 'R$ 197,00' 
+      },
+      { 
+        key: 'buttonText', 
+        label: 'Texto do Botão', 
+        type: 'text-input', 
+        placeholder: 'QUERO AGORA!',
+        defaultValue: 'ADQUIRIR AGORA' 
+      },
+      { 
+        key: 'buttonUrl', 
+        label: 'URL do Botão', 
+        type: 'text-input', 
+        placeholder: 'https://checkout.com/...' 
+      },
+      { 
+        key: 'features', 
+        label: 'Benefícios', 
+        type: 'array-editor',
+        itemSchema: [
+          { key: 'text', label: 'Benefício', type: 'text-input', placeholder: 'Análise completa do seu estilo' },
+        ],
+      },
+    ],
+  },
+
+  {
+    id: 'urgency-timer',
+    type: 'urgency-timer',
+    name: 'Timer de Urgência',
+    description: 'Contador regressivo para criar urgência.',
+    icon: 'Clock',
+    category: 'Ofertas',
+    propertiesSchema: [
+      { 
+        key: 'title', 
+        label: 'Título', 
+        type: 'text-input', 
+        placeholder: 'Oferta por tempo limitado!',
+        defaultValue: 'Oferta Expira em:' 
+      },
+      { 
+        key: 'duration', 
+        label: 'Duração (minutos)', 
+        type: 'number-input', 
+        defaultValue: 15,
+        min: 1,
+        max: 60 
+      },
+      {
+        key: 'showExpiredMessage',
+        label: 'Mostrar Mensagem ao Expirar',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      { 
+        key: 'expiredMessage', 
+        label: 'Mensagem de Expiração', 
+        type: 'text-input', 
+        placeholder: 'Oferta expirada! Entre em contato.',
+        defaultValue: 'Essa oferta especial expirou.' 
+      },
+    ],
+  },
+
+  // BLOCOS DE DEPOIMENTOS
+  {
+    id: 'testimonials',
+    type: 'testimonials',
+    name: 'Depoimentos',
+    description: 'Carousel de depoimentos de clientes.',
+    icon: 'MessageSquare',
+    category: 'Credibilidade',
+    propertiesSchema: [
+      { 
+        key: 'title', 
+        label: 'Título da Seção', 
+        type: 'text-input', 
+        placeholder: 'O que nossos clientes dizem',
+        defaultValue: 'Depoimentos' 
+      },
+      {
+        key: 'testimonials',
+        label: 'Depoimentos',
+        type: 'array-editor',
+        itemSchema: [
+          { key: 'name', label: 'Nome', type: 'text-input', placeholder: 'Maria Silva' },
+          { key: 'role', label: 'Profissão/Cargo', type: 'text-input', placeholder: 'Empresária' },
+          { key: 'avatar', label: 'Foto', type: 'image-url', placeholder: 'https://...' },
+          { key: 'text', label: 'Depoimento', type: 'textarea', placeholder: 'Excelente serviço...', rows: 3 },
+          { key: 'rating', label: 'Avaliação (1-5)', type: 'number-input', min: 1, max: 5, defaultValue: 5 },
+        ],
+      },
+      {
+        key: 'autoplay',
+        label: 'Autoplay',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+    ],
+  },
+
+  // BLOCOS DE FAQ
+  {
+    id: 'faq-section',
+    type: 'faq-section',
+    name: 'Perguntas Frequentes',
+    description: 'Seção de FAQ com perguntas e respostas.',
+    icon: 'HelpCircle',
+    category: 'Credibilidade',
+    propertiesSchema: [
+      { 
+        key: 'title', 
+        label: 'Título da Seção', 
+        type: 'text-input', 
+        placeholder: 'Perguntas Frequentes',
+        defaultValue: 'Dúvidas Frequentes' 
+      },
+      {
+        key: 'faqs',
+        label: 'Perguntas e Respostas',
+        type: 'array-editor',
+        itemSchema: [
+          { key: 'question', label: 'Pergunta', type: 'text-input', placeholder: 'Como funciona?' },
+          { key: 'answer', label: 'Resposta', type: 'textarea', placeholder: 'Resposta detalhada...', rows: 3 },
+        ],
+      },
+      {
+        key: 'allowMultiple',
+        label: 'Permitir Múltiplas Abertas',
+        type: 'boolean-switch',
+        defaultValue: false
+      },
+    ],
+  },
+
+  // BLOCOS DE GARANTIA
+  {
+    id: 'guarantee',
+    type: 'guarantee',
+    name: 'Garantia',
+    description: 'Selo de garantia para transmitir confiança.',
+    icon: 'Shield',
+    category: 'Credibilidade',
+    propertiesSchema: [
+      { 
+        key: 'title', 
+        label: 'Título', 
+        type: 'text-input', 
+        placeholder: 'Garantia de 30 dias',
+        defaultValue: 'Garantia Incondicional' 
+      },
+      { 
+        key: 'description', 
+        label: 'Descrição', 
+        type: 'textarea', 
+        placeholder: 'Se não ficar satisfeito...',
+        rows: 3,
+        defaultValue: 'Satisfação garantida ou seu dinheiro de volta.' 
+      },
+      { 
+        key: 'badgeImage', 
+        label: 'Imagem do Selo', 
+        type: 'image-url', 
+        placeholder: 'https://...' 
+      },
+      { 
+        key: 'period', 
+        label: 'Período (dias)', 
+        type: 'number-input', 
+        defaultValue: 30,
+        min: 1,
+        max: 365 
+      },
+    ],
+  },
+
+  // BLOCOS DE VÍDEO
+  {
+    id: 'video-player',
+    type: 'video-player',
+    name: 'Player de Vídeo',
+    description: 'Incorporação de vídeo YouTube/Vimeo.',
+    icon: 'Video',
+    category: 'Mídia',
+    propertiesSchema: [
+      { 
+        key: 'videoUrl', 
+        label: 'URL do Vídeo', 
+        type: 'video-url', 
+        placeholder: 'https://youtube.com/watch?v=...' 
+      },
+      { 
+        key: 'poster', 
+        label: 'Imagem de Capa', 
+        type: 'image-url', 
+        placeholder: 'https://...' 
+      },
+      { 
+        key: 'autoplay', 
+        label: 'Autoplay', 
+        type: 'boolean-switch', 
+        defaultValue: false 
+      },
+      { 
+        key: 'controls', 
+        label: 'Mostrar Controles', 
+        type: 'boolean-switch', 
+        defaultValue: true 
+      },
+    ],
+  },
+
+  // ...existing code...
 ];
 
 // Helper para encontrar definição de bloco
@@ -362,7 +669,8 @@ export const findBlockDefinition = (type: string): BlockDefinition | undefined =
 
 // Helper para obter categorias únicas
 export const getCategories = (): string[] => {
-  return [...new Set(blockDefinitions.map(def => def.category))];
+  const categoriesSet = new Set(blockDefinitions.map(def => def.category));
+  return Array.from(categoriesSet);
 };
 
 // Helper para obter blocos por categoria
