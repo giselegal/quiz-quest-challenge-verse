@@ -41,6 +41,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { funnelService, type FunnelData, type PageData, type BlockData } from '@/services/funnelService';
 import { REAL_QUIZ_QUESTIONS, STRATEGIC_QUESTIONS, TRANSITIONS } from './realQuizData';
+import { styleConfig } from '@/config/styleConfig';
 
 // Importar os novos blocos de introdução do quiz
 import { 
@@ -1511,6 +1512,11 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [showPerformanceInfo, setShowPerformanceInfo] = useState<boolean>(false);
   
+  // SISTEMA UNDO/REDO - Estados para histórico de mudanças
+  const [history, setHistory] = useState<FunnelData[]>([createInitialFunnel()]);
+  const [historyIndex, setHistoryIndex] = useState<number>(0);
+  const [isUndoRedoAction, setIsUndoRedoAction] = useState<boolean>(false);
+  
   // Estado para dados do usuário capturados no quiz
   const [userQuizData, setUserQuizData] = useState<{
     userName: string;
@@ -1584,6 +1590,33 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
   // Hook para toast
   const { toast } = useToast();
 
+  // FUNÇÃO HELPER PARA DADOS DINÂMICOS CORRETOS
+  const getDynamicStyleData = useCallback((block: FunnelBlock) => {
+    // Prioridade: dados do usuário > configurações do bloco > dados padrão
+    const styleName = userQuizData.styleResult?.primaryStyle || block?.settings?.styleName || 'Elegante';
+    
+    // Normalizar o nome do estilo para corresponder às chaves do styleConfig
+    const normalizedStyleName = Object.keys(styleConfig).find(key => 
+      key.toLowerCase().includes(styleName.toLowerCase()) ||
+      styleName.toLowerCase().includes(key.toLowerCase())
+    ) || 'Elegante';
+    
+    const styleData = styleConfig[normalizedStyleName as keyof typeof styleConfig];
+    
+    return {
+      styleName: normalizedStyleName,
+      userName: userQuizData.userName || block?.settings?.userName || 'Usuária',
+      percentage: userQuizData.styleResult?.percentage || block?.settings?.percentage || 92,
+      description: styleData?.description || block?.settings?.description || 'Sua personalidade refletida no seu estilo de vestir.',
+      styleImage: styleData?.image || block?.settings?.styleImage,
+      guideImage: styleData?.guideImage || block?.settings?.guideImage,
+      secondaryStyles: userQuizData.styleResult?.secondaryStyles || block?.settings?.secondaryStyles || [
+        { name: 'Natural Despojada', percentage: 78 },
+        { name: 'Contemporânea Casual', percentage: 65 }
+      ]
+    };
+  }, [userQuizData]);
+
   // Computed values - Memoizados para performance
   const currentPage = useMemo(() => {
     const page = funnel?.pages?.find(page => page.id === currentPageId);
@@ -1628,7 +1661,81 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     lastChangeRef.current = Date.now();
     changeCountRef.current += 1;
     debouncedSave(); // Acionar auto-save via debounce
-  }, [debouncedSave]);
+    
+    // Adicionar ao histórico apenas se não for uma ação de undo/redo
+    if (!isUndoRedoAction) {
+      setHistory(prev => {
+        const newHistory = prev.slice(0, historyIndex + 1); // Remove histórico futuro
+        newHistory.push(JSON.parse(JSON.stringify(funnel))); // Deep copy
+        
+        // Limitar histórico a 50 ações para performance
+        if (newHistory.length > 50) {
+          newHistory.shift();
+        } else {
+          setHistoryIndex(newHistory.length - 1);
+        }
+        
+        return newHistory;
+      });
+    }
+  }, [debouncedSave, isUndoRedoAction, historyIndex, funnel]);
+
+  // SISTEMA UNDO/REDO - Funções principais
+  const undo = useCallback(() => {
+    if (historyIndex > 0) {
+      setIsUndoRedoAction(true);
+      const previousState = history[historyIndex - 1];
+      setFunnel(previousState);
+      setHistoryIndex(historyIndex - 1);
+      
+      toast({
+        title: "Ação desfeita",
+        description: "Última alteração foi revertida",
+        duration: 2000,
+      });
+      
+      // Reset flag após um pequeno delay
+      setTimeout(() => setIsUndoRedoAction(false), 100);
+    }
+  }, [historyIndex, history, toast]);
+
+  const redo = useCallback(() => {
+    if (historyIndex < history.length - 1) {
+      setIsUndoRedoAction(true);
+      const nextState = history[historyIndex + 1];
+      setFunnel(nextState);
+      setHistoryIndex(historyIndex + 1);
+      
+      toast({
+        title: "Ação refeita",
+        description: "Alteração foi restaurada",
+        duration: 2000,
+      });
+      
+      // Reset flag após um pequeno delay
+      setTimeout(() => setIsUndoRedoAction(false), 100);
+    }
+  }, [historyIndex, history, toast]);
+
+  // Computed values para undo/redo
+  const canUndo = historyIndex > 0;
+  const canRedo = historyIndex < history.length - 1;
+
+  // Atalhos de teclado para undo/redo
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        undo();
+      } else if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) {
+        e.preventDefault();
+        redo();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [undo, redo]);
 
   // Garantir que o funnel tenha estrutura válida
   React.useEffect(() => {
@@ -2951,46 +3058,6 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         );
         break;
 
-      case 'strategic-question':
-        content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
-            <div className="space-y-6 max-w-2xl mx-auto">
-              <div className="text-center">
-                <span className="inline-block bg-[#6B5B73] text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
-                  Pergunta Estratégica
-                </span>
-                <h3 className="text-xl md:text-2xl font-semibold text-[#432818] leading-relaxed">
-                  {block?.settings?.question || 'Pergunta estratégica sobre seus objetivos'}
-                </h3>
-                {block?.settings?.subtitle && (
-                  <p className="text-center text-[#6B5B73] text-lg mt-4 italic">
-                    {block.settings.subtitle}
-                  </p>
-                )}
-              </div>
-              
-              <div className="space-y-3">
-                {(block?.settings?.options || [
-                  { id: 'a', text: 'Sim, definitivamente', value: 'high' },
-                  { id: 'b', text: 'Talvez, preciso saber mais', value: 'medium' },
-                  { id: 'c', text: 'Não, não me interessa', value: 'low' }
-                ]).map((option: any) => (
-                  <Button
-                    key={option.id}
-                    variant="outline"
-                    className="w-full p-6 h-auto text-center border-2 border-[#6B5B73]/30 hover:border-[#6B5B73] hover:bg-[#6B5B73]/10 rounded-xl transition-all duration-200 text-base group"
-                  >
-                    <span className="text-[#432818] group-hover:text-[#6B5B73] font-medium">
-                      {option.text}
-                    </span>
-                  </Button>
-                ))}
-              </div>
-            </div>
-          </div>
-        );
-        break;
-
       case 'email-input':
         content = (
           <div style={baseStyle} onClick={handleBlockClick} className="py-4">
@@ -3193,50 +3260,6 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
               <Button className="bg-[#B89B7A] hover:bg-[#A1835D] text-white px-8 py-3 rounded-full font-semibold mt-6">
                 {block?.settings?.ctaText || 'Continuar Quiz'}
               </Button>
-            </div>
-          </div>
-        );
-        break;
-
-      case 'quiz-final-transition':
-        content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-20 text-center">
-            <div className="max-w-2xl mx-auto space-y-8">
-              <div className="relative">
-                <div className="w-24 h-24 border-4 border-[#B89B7A] border-t-transparent rounded-full animate-spin mx-auto"></div>
-                <div className="absolute inset-0 w-24 h-24 border-4 border-transparent border-r-[#6B5B73] rounded-full animate-ping mx-auto"></div>
-              </div>
-              
-              <div className="space-y-4">
-                <h2 className="text-3xl font-bold text-[#432818]">
-                  {block?.settings?.title || 'Processando Suas Respostas...'}
-                </h2>
-                
-                <p className="text-lg text-[#6B5B73]">
-                  {block?.settings?.description || 'Estamos analisando suas preferências para criar seu perfil único de estilo.'}
-                </p>
-              </div>
-              
-              {block?.settings?.showSteps && (
-                <div className="space-y-3 max-w-md mx-auto">
-                  <div className="flex items-center text-left">
-                    <CheckCircle className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span className="text-sm text-[#432818]">Analisando suas cores favoritas</span>
-                  </div>
-                  <div className="flex items-center text-left">
-                    <CheckCircle className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span className="text-sm text-[#432818]">Identificando seu estilo de vida</span>
-                  </div>
-                  <div className="flex items-center text-left">
-                    <RotateCcw className="w-5 h-5 text-[#B89B7A] mr-3 flex-shrink-0 animate-spin" />
-                    <span className="text-sm text-[#6B5B73]">Criando seu perfil personalizado</span>
-                  </div>
-                </div>
-              )}
-              
-              <div className="text-sm text-[#6B5B73] italic">
-                {block?.settings?.waitMessage || 'Isso levará apenas alguns segundos...'}
-              </div>
             </div>
           </div>
         );
@@ -3829,12 +3852,23 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       // Componentes reais da ResultPage
       case 'result-header-component':
+        const headerData = getDynamicStyleData(block);
+        
         content = (
           <div style={baseStyle} onClick={handleBlockClick} className="py-4">
-            <Header 
-              userName={userQuizData.userName || block?.settings?.userName || 'Usuário'}
-              primaryStyle={userQuizData.styleResult?.primaryStyle || block?.settings?.primaryStyle || 'Elegante Clássica'}
-            />
+            <div className="text-center py-6 md:py-8 px-4">
+              <div className="max-w-4xl mx-auto">
+                <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-[#432818] mb-4 md:mb-6">
+                  Olá, {headerData.userName}! 👋
+                </h1>
+                <p className="text-lg md:text-xl lg:text-2xl text-[#6B5B73] mb-2">
+                  Descobrimos seu estilo predominante:
+                </p>
+                <p className="text-xl md:text-2xl lg:text-3xl font-semibold text-[#B89B7A]">
+                  {headerData.styleName}
+                </p>
+              </div>
+            </div>
           </div>
         );
         break;
@@ -3909,48 +3943,46 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         break;
 
       case 'result-style-card-component':
+        const dynamicData = getDynamicStyleData(block);
+        
         content = (
           <div style={baseStyle} onClick={handleBlockClick} className="py-4">
-            <Card className="p-6 bg-white shadow-md border border-[#B89B7A]/20">
-              <div className="text-center mb-8">
-                <div className="max-w-md mx-auto mb-6">
+            <Card className="p-4 md:p-6 bg-white shadow-md border border-[#B89B7A]/20">
+              <div className="text-center mb-6 md:mb-8">
+                <div className="max-w-md mx-auto mb-4 md:mb-6">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm text-[#8F7A6A]">
+                    <span className="text-xs md:text-sm text-[#8F7A6A]">
                       Seu estilo predominante
                     </span>
-                    <span className="text-[#aa6b5d] font-medium">
-                      {userQuizData.styleResult?.percentage || block?.settings?.percentage || 92}%
+                    <span className="text-[#aa6b5d] font-medium text-sm md:text-base">
+                      {dynamicData.percentage}%
                     </span>
                   </div>
                   <div className="w-full h-3 bg-[#F3E8E6] rounded-full overflow-hidden">
                     <div 
                       className="h-full bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] transition-all duration-1000 ease-out"
-                      style={{ width: `${userQuizData.styleResult?.percentage || block?.settings?.percentage || 92}%` }}
+                      style={{ width: `${dynamicData.percentage}%` }}
                     ></div>
                   </div>
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-8 items-center">
-                <div className="space-y-4">
-                  <h2 className="text-3xl font-bold text-[#432818] mb-4">
-                    {userQuizData.styleResult?.primaryStyle || block?.settings?.styleName || 'Elegante Clássica'}
+              <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-center">
+                <div className="space-y-4 order-2 md:order-1">
+                  <h2 className="text-2xl md:text-3xl font-bold text-[#432818] mb-4">
+                    {dynamicData.styleName}
                   </h2>
-                  <p className="text-[#432818] leading-relaxed text-lg">
-                    {block?.settings?.description || `Sua personalidade refletida no seu estilo de vestir. 
-                    Você possui uma elegância natural que se traduz em escolhas sofisticadas e atemporais. 
-                    Suas peças são bem estruturadas, com caimento impecável e uma paleta de cores 
-                    refinada que destaca sua presença de forma discreta, mas marcante.`}
+                  <p className="text-[#432818] leading-relaxed text-base md:text-lg">
+                    {dynamicData.description}
                   </p>
                   
                   {/* Seção de estilos complementares integrada */}
-                  <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10 mt-6">
-                    <h3 className="text-lg font-medium text-[#432818] mb-3">Estilos que Também Influenciam Você</h3>
+                  <div className="bg-white rounded-lg p-3 md:p-4 shadow-sm border border-[#B89B7A]/10 mt-4 md:mt-6">
+                    <h3 className="text-base md:text-lg font-medium text-[#432818] mb-3">
+                      Estilos que Também Influenciam Você
+                    </h3>
                     <div className="space-y-3">
-                      {(userQuizData.styleResult?.secondaryStyles || [
-                        { name: 'Natural Despojada', percentage: 78 },
-                        { name: 'Contemporânea Casual', percentage: 65 }
-                      ]).slice(0, 2).map((style: any, index: number) => (
+                      {dynamicData.secondaryStyles.slice(0, 2).map((style: any, index: number) => (
                         <div key={index} className="space-y-1">
                           <div className="flex justify-between items-center">
                             <span className="text-sm font-medium text-[#432818]">
@@ -3972,27 +4004,33 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                   </div>
                 </div>
                 
-                <div className="max-w-[280px] mx-auto relative">
-                  {block?.settings?.styleImage && (
+                <div className="max-w-[250px] md:max-w-[280px] mx-auto relative order-1 md:order-2">
+                  {dynamicData.styleImage && (
                     <img 
-                      src={block.settings.styleImage} 
-                      alt={`Estilo ${userQuizData.styleResult?.primaryStyle || block?.settings?.styleName}`}
+                      src={dynamicData.styleImage} 
+                      alt={`Estilo ${dynamicData.styleName}`}
                       className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = 'none';
+                      }}
                     />
                   )}
-                  <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
-                  <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>
+                  <div className="absolute -top-2 -right-2 w-6 h-6 md:w-8 md:h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
+                  <div className="absolute -bottom-2 -left-2 w-6 h-6 md:w-8 md:h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>
                 </div>
               </div>
               
-              {block?.settings?.guideImage && (
-                <div className="mt-8 max-w-[540px] mx-auto relative">
+              {dynamicData.guideImage && (
+                <div className="mt-6 md:mt-8 max-w-[450px] md:max-w-[540px] mx-auto relative">
                   <img 
-                    src={block.settings.guideImage} 
+                    src={dynamicData.guideImage} 
                     alt="Guia de Estilo Personalizado"
                     className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                    }}
                   />
-                  <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
+                  <div className="absolute -top-3 -right-3 md:-top-4 md:-right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-3 py-1 md:px-4 md:py-2 rounded-full shadow-lg text-xs md:text-sm font-medium transform rotate-12">
                     Seu Guia Exclusivo
                   </div>
                 </div>
@@ -4245,46 +4283,6 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         content = (
           <div style={baseStyle} onClick={handleBlockClick} className="py-4">
             <BuildInfo />
-          </div>
-        );
-        break;
-
-      case 'result-value-stack-component':
-        content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
-            <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 max-w-md mx-auto">
-              <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">
-                {block?.settings?.title || 'O Que Você Recebe Hoje'}
-              </h3>
-              
-              <div className="space-y-3 mb-6">
-                {(block?.settings?.items || []).map((item: any, index: number) => (
-                  <div key={index} className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
-                    <span>{item.name}</span>
-                    <span className="font-medium">{item.price}</span>
-                  </div>
-                ))}
-                <div className="flex justify-between items-center p-2 pt-3 font-bold">
-                  <span>{block?.settings?.totalLabel || 'Valor Total'}</span>
-                  <div className="relative">
-                    <span>{block?.settings?.totalPrice || 'R$ 175,00'}</span>
-                    <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#ff5a5a] transform -translate-y-1/2 -rotate-3"></div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
-                <p className="text-sm text-[#aa6b5d] uppercase font-medium">
-                  {block?.settings?.discountLabel || 'Hoje por apenas'}
-                </p>
-                <p className="text-4xl font-bold text-[#B89B7A]">
-                  {block?.settings?.finalPrice || 'R$ 39,00'}
-                </p>
-                <p className="text-xs text-[#3a3a3a]/60 mt-1">
-                  {block?.settings?.paymentNote || 'Pagamento único'}
-                </p>
-              </div>
-            </div>
           </div>
         );
         break;
@@ -5167,6 +5165,30 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
             )}
 
             <div className="flex items-center gap-2">
+              {/* UNDO/REDO BUTTONS */}
+              <div className="flex gap-1 mr-2 border-r pr-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={undo}
+                  disabled={!canUndo}
+                  className="h-8 w-8 p-0"
+                  title={`Desfazer (${canUndo ? 'Ctrl+Z' : 'Nenhuma ação para desfazer'})`}
+                >
+                  <RotateCcw className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={redo}
+                  disabled={!canRedo}
+                  className="h-8 w-8 p-0"
+                  title={`Refazer (${canRedo ? 'Ctrl+Y' : 'Nenhuma ação para refazer'})`}
+                >
+                  <RotateCcw className="h-4 w-4 scale-x-[-1]" />
+                </Button>
+              </div>
+
               {/* Device View */}
               <div className="flex gap-1">
                 <Button
