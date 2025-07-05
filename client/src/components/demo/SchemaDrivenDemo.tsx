@@ -163,47 +163,31 @@ export const SchemaDrivenDemo: React.FC = () => {
                   </h3>
                   <div className="space-y-2">
                     {getBlocksByCategory(category).map(block => (
-                      <Card 
+                      <Button
                         key={block.id}
-                        className="cursor-pointer hover:bg-gray-50 transition-colors"
-                        onClick={() => {
-                          // Simular seleção de novo bloco
-                          const newBlock = {
-                            id: Math.random().toString(),
-                            type: block.type,
-                            order: 1,
-                            settings: block.propertiesSchema?.reduce((acc, prop) => {
-                              acc[prop.key] = prop.defaultValue || '';
-                              return acc;
-                            }, {} as any) || {},
-                            style: {}
-                          };
-                          setSelectedBlock(newBlock);
-                        }}
+                        variant="ghost"
+                        className="w-full justify-start p-3 h-auto"
+                        onClick={() => addBlock(block.type)}
                       >
-                        <CardContent className="p-3">
-                          <div className="flex items-center space-x-3">
-                            <div className="text-gray-600">
-                              {iconMap[block.icon] || <Target className="w-4 h-4" />}
+                        <div className="flex items-center space-x-3">
+                          <div className="text-gray-600">
+                            {iconMap[block.icon] || <Type className="w-4 h-4" />}
+                          </div>
+                          <div className="text-left">
+                            <div className="font-medium text-sm">
+                              {block.name}
+                              {block.isNew && (
+                                <Badge variant="secondary" className="ml-2 text-xs">
+                                  Novo
+                                </Badge>
+                              )}
                             </div>
-                            <div className="flex-1">
-                              <div className="flex items-center space-x-2">
-                                <span className="text-sm font-medium">
-                                  {block.name}
-                                </span>
-                                {block.isNew && (
-                                  <Badge variant="secondary" className="text-xs">
-                                    Novo!
-                                  </Badge>
-                                )}
-                              </div>
-                              <p className="text-xs text-gray-500 mt-1">
-                                {block.description}
-                              </p>
+                            <div className="text-xs text-gray-500">
+                              {block.description}
                             </div>
                           </div>
-                        </CardContent>
-                      </Card>
+                        </div>
+                      </Button>
                     ))}
                   </div>
                 </div>
@@ -214,103 +198,31 @@ export const SchemaDrivenDemo: React.FC = () => {
       </div>
 
       {/* Canvas Central */}
-      <div className="flex-1 bg-gray-50 p-8">
-        <div className="max-w-4xl mx-auto">
-          <Card className="mb-4">
-            <CardHeader>
-              <CardTitle>Demonstração: Sistema Schema-Driven</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-gray-600 mb-4">
-                Esta é uma demonstração de como seria o sistema schema-driven. 
-                Clique nos blocos da sidebar esquerda para ver como o painel de propriedades 
-                se adapta automaticamente.
-              </p>
-              
-              {/* Bloco renderizado */}
-              <div 
-                className="border-2 border-dashed border-blue-300 p-6 rounded-lg bg-white cursor-pointer hover:border-blue-500 transition-colors"
-                onClick={() => console.log('Bloco selecionado:', selectedBlock)}
-              >
-                <div className="text-center">
-                  {selectedBlock.type === 'header' && (
-                    <div style={{ textAlign: selectedBlock.settings.alignment }}>
-                      <h1 className={`font-bold text-[#432818] mb-2 ${
-                        selectedBlock.settings.titleSize === 'small' ? 'text-lg' :
-                        selectedBlock.settings.titleSize === 'medium' ? 'text-xl' :
-                        'text-3xl'
-                      }`}>
-                        {selectedBlock.settings.title || 'Título do Cabeçalho'}
-                      </h1>
-                      {selectedBlock.settings.subtitle && (
-                        <p className="text-gray-600">
-                          {selectedBlock.settings.subtitle}
-                        </p>
-                      )}
-                    </div>
-                  )}
-                  
-                  {selectedBlock.type === 'text' && (
-                    <div style={{ textAlign: selectedBlock.settings.alignment }}>
-                      <p className={`text-gray-700 ${
-                        selectedBlock.settings.fontSize === 'small' ? 'text-sm' :
-                        selectedBlock.settings.fontSize === 'large' ? 'text-lg' :
-                        'text-base'
-                      }`}>
-                        {selectedBlock.settings.content || 'Conteúdo do texto aqui...'}
-                      </p>
-                    </div>
-                  )}
-                  
-                  {selectedBlock.type === 'image' && (
-                    <div style={{ textAlign: selectedBlock.settings.alignment }}>
-                      <img
-                        src={selectedBlock.settings.src || 'https://via.placeholder.com/400x200?text=Imagem'}
-                        alt={selectedBlock.settings.alt || 'Imagem'}
-                        style={{ 
-                          width: selectedBlock.settings.width || 'auto',
-                          maxWidth: '100%'
-                        }}
-                        className="rounded-lg"
-                      />
-                    </div>
-                  )}
-                  
-                  {selectedBlock.type === 'button' && (
-                    <div className="text-center">
-                      <Button
-                        className={`${
-                          selectedBlock.settings.style === 'primary' ? 'bg-[#B89B7A] hover:bg-[#A1835D] text-white' :
-                          selectedBlock.settings.style === 'secondary' ? 'bg-gray-200 hover:bg-gray-300 text-gray-800' :
-                          'bg-[#6B5B73] hover:bg-[#5A4A5F] text-white'
-                        } ${
-                          selectedBlock.settings.size === 'sm' ? 'px-4 py-2 text-sm' :
-                          selectedBlock.settings.size === 'lg' ? 'px-8 py-4 text-lg' :
-                          'px-6 py-3'
-                        } ${
-                          selectedBlock.settings.fullWidth ? 'w-full' : ''
-                        }`}
-                      >
-                        {selectedBlock.settings.text || 'Texto do Botão'}
-                      </Button>
-                    </div>
-                  )}
-                  
-                  {/* Outros tipos de bloco */}
-                  {!['header', 'text', 'image', 'button'].includes(selectedBlock.type) && (
-                    <div className="text-center py-8">
-                      <p className="text-gray-500">
-                        Bloco: {selectedBlock.type}
-                      </p>
-                      <p className="text-xs text-gray-400 mt-2">
-                        Renderização seria implementada aqui...
-                      </p>
-                    </div>
-                  )}
-                </div>
+      <div className="flex-1 bg-gray-50 overflow-auto">
+        <div className="p-8">
+          <div className="max-w-4xl mx-auto bg-white min-h-[800px] shadow-lg rounded-lg">
+            <div className="p-6 space-y-6">
+              <div className="border-b pb-4">
+                <h2 className="text-lg font-semibold text-gray-800">
+                  Preview do Funil: {funnelConfig.name}
+                </h2>
+                <p className="text-sm text-gray-600">
+                  {funnelConfig.description}
+                </p>
               </div>
-            </CardContent>
-          </Card>
+              
+              <div className="space-y-4">
+                {blocks.map((block) => (
+                  <BlockRenderer
+                    key={block.id}
+                    block={block}
+                    isSelected={block.id === selectedBlockId}
+                    onClick={() => setSelectedBlockId(block.id)}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -319,9 +231,9 @@ export const SchemaDrivenDemo: React.FC = () => {
         <DynamicPropertiesPanel
           selectedBlock={selectedBlock}
           funnelConfig={funnelConfig}
-          setFunnelConfig={setFunnelConfig}
-          updateBlockSetting={updateBlockSetting}
-          updateBlockStyle={updateBlockStyle}
+          onBlockPropertyChange={handleBlockPropertyChange}
+          onNestedPropertyChange={handleNestedPropertyChange}
+          onFunnelConfigChange={handleFunnelConfigChange}
         />
       </div>
     </div>
