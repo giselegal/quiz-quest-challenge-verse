@@ -1642,6 +1642,54 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           })),
           metadata: page.settings
         }))
+  // Estados principais
+  const [funnel, setFunnel] = useState<FunnelData>(createInitialFunnel);
+  const [currentPageId, setCurrentPageId] = useState<string>('etapa-1-intro');
+  const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'funnel' | 'blocks' | 'templates' | 'layers' | 'settings'>('funnel');
+  const [deviceView, setDeviceView] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+  const [isAutoSaving, setIsAutoSaving] = useState<boolean>(false);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [showPerformanceInfo, setShowPerformanceInfo] = useState<boolean>(false);
+  
+  // Estado para dados do usuário capturados no quiz
+  const [userQuizData, setUserQuizData] = useState<{
+    userName: string;
+    quizAnswers: Record<string, any>;
+    styleResult?: {
+      primaryStyle: string;
+      percentage: number;
+      secondaryStyles: Array<{ name: string; percentage: number }>;
+    };
+  }>({
+    userName: '',
+    quizAnswers: {},
+    styleResult: undefined
+  });
+
+  // Implementar debounce no auto-save usando o hook
+  const saveFunction = useCallback(async () => {
+    try {
+      // Converter dados do editor para formato do serviço
+      const funnelData: FunnelData = {
+        ...funnel,
+        pages: funnel.pages.map((page, index) => ({
+          id: page.id,
+          type: page.type,
+          title: page.title,
+          order: index + 1,
+          blocks: page.blocks.map((block, blockIndex) => ({
+            id: block.id,
+            type: block.type,
+            content: block.settings || {},
+            styles: block.style,
+            position: { x: 0, y: blockIndex * 100 }
+          })),
+          metadata: page.settings
+        }))
       };
 
       // Tentar salvar no backend
@@ -1672,19 +1720,6 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     3000, // 3 segundos de debounce
     30000 // máximo 30 segundos entre saves
   );
-
-  // Estados principais
-  const [funnel, setFunnel] = useState<FunnelData>(createInitialFunnel);
-  const [currentPageId, setCurrentPageId] = useState<string>('etapa-1-intro');
-  const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'funnel' | 'blocks' | 'templates' | 'layers' | 'settings'>('funnel');
-  const [deviceView, setDeviceView] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
-  const [isAutoSaving, setIsAutoSaving] = useState<boolean>(false);
-  const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
-  const [isDragging, setIsDragging] = useState<boolean>(false);
-  const [showPerformanceInfo, setShowPerformanceInfo] = useState<boolean>(false);
 
   // Ref para rastrear mudanças
   const lastChangeRef = useRef<number>(0);
@@ -2476,11 +2511,17 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       case 'question-multiple':
         content = (
           <div style={baseStyle} onClick={handleBlockClick} className="py-6">
-            <div className="space-y-6">
-              <h3 className="text-xl md:text-2xl font-semibold text-[#432818] text-center leading-relaxed">
+            <div className="space-y-6 max-w-4xl mx-auto">
+              <h3 className="text-xl md:text-2xl font-semibold text-[#432818] text-center leading-relaxed mb-8">
                 {block?.settings?.question || 'Qual é a sua pergunta?'}
               </h3>
-              <div className="grid gap-4 md:grid-cols-2">
+              
+              {/* Grid responsivo que se adapta ao número de opções */}
+              <div className={`grid gap-4 ${
+                (block?.settings?.options || []).length <= 4 
+                  ? 'md:grid-cols-2' 
+                  : 'md:grid-cols-2 lg:grid-cols-3'
+              }`}>
                 {(block?.settings?.options || [
                   { id: 'a', text: 'Opção A', value: 'a' },
                   { id: 'b', text: 'Opção B', value: 'b' },
@@ -2489,33 +2530,51 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 ]).map((option: any, index: number) => (
                   <div
                     key={option.id}
-                    className="border-2 border-[#B89B7A]/30 hover:border-[#B89B7A] hover:bg-[#f9f4ef] rounded-xl transition-all duration-200 cursor-pointer group"
+                    className="border-2 border-[#B89B7A]/30 hover:border-[#B89B7A] hover:bg-[#f9f4ef] hover:shadow-lg rounded-xl transition-all duration-300 cursor-pointer group overflow-hidden"
                   >
-                    {option.imageUrl && (
-                      <div className="aspect-[4/3] overflow-hidden rounded-t-xl">
-                        <img
-                          src={option.imageUrl}
-                          alt={option.text}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
+                    {option.imageUrl ? (
+                      // Layout com imagem
+                      <>
+                        <div className="aspect-[4/3] overflow-hidden relative">
+                          <img
+                            src={option.imageUrl}
+                            alt={option.text}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          />
+                          {/* Overlay com número da opção */}
+                          <div className="absolute top-3 left-3 w-8 h-8 bg-[#B89B7A] text-white rounded-full flex items-center justify-center font-bold text-sm group-hover:bg-[#A1835D] transition-colors">
+                            {String.fromCharCode(65 + index)}
+                          </div>
+                        </div>
+                        <div className="p-4">
+                          <span className="text-[#432818] group-hover:text-[#432818] text-sm leading-relaxed font-medium">
+                            {option.text}
+                          </span>
+                        </div>
+                      </>
+                    ) : (
+                      // Layout apenas texto
+                      <div className="p-6">
+                        <div className="flex items-start gap-3">
+                          <span className="font-bold text-[#B89B7A] text-lg min-w-[32px] h-8 w-8 bg-[#B89B7A]/10 rounded-full flex items-center justify-center group-hover:bg-[#B89B7A] group-hover:text-white transition-all">
+                            {String.fromCharCode(65 + index)}
+                          </span>
+                          <span className="text-[#432818] group-hover:text-[#432818] text-sm leading-relaxed font-medium flex-1">
+                            {option.text}
+                          </span>
+                        </div>
                       </div>
                     )}
-                    <div className="p-4">
-                      <div className="flex items-start gap-3">
-                        <span className="font-bold text-[#B89B7A] text-lg min-w-[24px] group-hover:scale-110 transition-transform">
-                          {String.fromCharCode(65 + index)}.
-                        </span>
-                        <span className="text-[#432818] group-hover:text-[#432818] text-sm leading-relaxed">
-                          {option.text}
-                        </span>
-                      </div>
-                    </div>
                   </div>
                 ))}
               </div>
+              
               {block?.settings?.multipleSelection && (
-                <div className="text-center text-sm text-[#6B5B73] italic">
-                  Selecione até {block?.settings?.maxSelections || 3} opções
+                <div className="text-center">
+                  <div className="inline-flex items-center gap-2 bg-[#B89B7A]/10 text-[#6B5B73] px-4 py-2 rounded-full text-sm font-medium">
+                    <CheckCircle className="w-4 h-4" />
+                    Selecione até {block?.settings?.maxSelections || 3} opções
+                  </div>
                 </div>
               )}
             </div>
@@ -3807,7 +3866,15 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
               privacyText={block?.settings?.privacyText}
               footerText={block?.settings?.footerText}
               colors={block?.settings?.colors}
-              onStart={(nome) => console.log('Quiz iniciado para:', nome)}
+              onStart={(nome) => {
+                console.log('Quiz iniciado para:', nome);
+                // Capturar nome do usuário
+                setUserQuizData(prev => ({
+                  ...prev,
+                  userName: nome
+                }));
+                trackChange();
+              }}
               disabled={block?.settings?.disabled}
               required={block?.settings?.required}
               maxLength={block?.settings?.maxLength}
@@ -3869,8 +3936,8 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         content = (
           <div style={baseStyle} onClick={handleBlockClick} className="py-4">
             <Header 
-              userName={block?.settings?.userName || 'Usuário'}
-              primaryStyle={block?.settings?.primaryStyle || 'Elegante Clássica'}
+              userName={userQuizData.userName || block?.settings?.userName || 'Usuário'}
+              primaryStyle={userQuizData.styleResult?.primaryStyle || block?.settings?.primaryStyle || 'Elegante Clássica'}
             />
           </div>
         );
@@ -3903,10 +3970,44 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'secondary-styles-component':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
-            <SecondaryStylesSection 
-              secondaryStyles={block?.settings?.secondaryStyles || []}
-            />
+          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+            <div className="bg-white rounded-lg p-6 shadow-sm border border-[#B89B7A]/10">
+              <h3 className="text-lg font-medium text-[#432818] mb-4 text-center">
+                Estilos que Também Influenciam Você
+              </h3>
+              
+              <div className="space-y-4">
+                {(userQuizData.styleResult?.secondaryStyles || block?.settings?.secondaryStyles || [
+                  { name: 'Natural Despojada', percentage: 78 },
+                  { name: 'Contemporânea Casual', percentage: 65 },
+                  { name: 'Romântica Feminina', percentage: 42 }
+                ]).map((style: any, index: number) => (
+                  <div key={index} className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-medium text-[#432818]">
+                        {style.name}
+                      </span>
+                      <span className="text-[#B89B7A] font-semibold text-sm">
+                        {style.percentage}%
+                      </span>
+                    </div>
+                    <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-gradient-to-r from-[#B89B7A] to-[#A1835D] transition-all duration-1000 ease-out"
+                        style={{ width: `${style.percentage}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="mt-6 p-4 bg-[#f9f4ef] rounded-lg border border-[#B89B7A]/20">
+                <p className="text-xs text-[#6B5B73] text-center">
+                  Estes estilos complementam seu estilo predominante e podem ser 
+                  incorporados em looks específicos para diferentes ocasiões.
+                </p>
+              </div>
+            </div>
           </div>
         );
         break;
@@ -3921,12 +4022,14 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                     <span className="text-sm text-[#8F7A6A]">
                       Seu estilo predominante
                     </span>
-                    <span className="text-[#aa6b5d] font-medium">{block?.settings?.percentage || 92}%</span>
+                    <span className="text-[#aa6b5d] font-medium">
+                      {userQuizData.styleResult?.percentage || block?.settings?.percentage || 92}%
+                    </span>
                   </div>
-                  <div className="w-full h-2 bg-[#F3E8E6] rounded-full overflow-hidden">
+                  <div className="w-full h-3 bg-[#F3E8E6] rounded-full overflow-hidden">
                     <div 
-                      className="h-full bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]"
-                      style={{ width: `${block?.settings?.percentage || 92}%` }}
+                      className="h-full bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] transition-all duration-1000 ease-out"
+                      style={{ width: `${userQuizData.styleResult?.percentage || block?.settings?.percentage || 92}%` }}
                     ></div>
                   </div>
                 </div>
@@ -3934,22 +4037,50 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 <div className="space-y-4">
-                  <h2 className="text-2xl font-bold text-[#432818] mb-4">
-                    {block?.settings?.styleName || 'Elegante Clássica'}
+                  <h2 className="text-3xl font-bold text-[#432818] mb-4">
+                    {userQuizData.styleResult?.primaryStyle || block?.settings?.styleName || 'Elegante Clássica'}
                   </h2>
-                  <p className="text-[#432818] leading-relaxed">
-                    {block?.settings?.description || 'Sua personalidade refletida no seu estilo de vestir.'}
+                  <p className="text-[#432818] leading-relaxed text-lg">
+                    {block?.settings?.description || `Sua personalidade refletida no seu estilo de vestir. 
+                    Você possui uma elegância natural que se traduz em escolhas sofisticadas e atemporais. 
+                    Suas peças são bem estruturadas, com caimento impecável e uma paleta de cores 
+                    refinada que destaca sua presença de forma discreta, mas marcante.`}
                   </p>
-                  <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10">
-                    <h3 className="text-lg font-medium text-[#432818] mb-2">Estilos que Também Influenciam Você</h3>
-                    <SecondaryStylesSection secondaryStyles={[]} />
+                  
+                  {/* Seção de estilos complementares integrada */}
+                  <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10 mt-6">
+                    <h3 className="text-lg font-medium text-[#432818] mb-3">Estilos que Também Influenciam Você</h3>
+                    <div className="space-y-3">
+                      {(userQuizData.styleResult?.secondaryStyles || [
+                        { name: 'Natural Despojada', percentage: 78 },
+                        { name: 'Contemporânea Casual', percentage: 65 }
+                      ]).slice(0, 2).map((style: any, index: number) => (
+                        <div key={index} className="space-y-1">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm font-medium text-[#432818]">
+                              {style.name}
+                            </span>
+                            <span className="text-[#B89B7A] font-semibold text-sm">
+                              {style.percentage}%
+                            </span>
+                          </div>
+                          <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <div 
+                              className="h-full bg-gradient-to-r from-[#B89B7A] to-[#A1835D]"
+                              style={{ width: `${style.percentage}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-                <div className="max-w-[238px] mx-auto relative">
+                
+                <div className="max-w-[280px] mx-auto relative">
                   {block?.settings?.styleImage && (
                     <img 
                       src={block.settings.styleImage} 
-                      alt={`Estilo ${block?.settings?.styleName}`}
+                      alt={`Estilo ${userQuizData.styleResult?.primaryStyle || block?.settings?.styleName}`}
                       className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
                     />
                   )}
@@ -3962,11 +4093,11 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 <div className="mt-8 max-w-[540px] mx-auto relative">
                   <img 
                     src={block.settings.guideImage} 
-                    alt="Guia de Estilo"
+                    alt="Guia de Estilo Personalizado"
                     className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
-                    Exclusivo
+                    Seu Guia Exclusivo
                   </div>
                 </div>
               )}
@@ -3999,6 +4130,149 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         );
         break;
 
+      case 'result-value-stack-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+            <div className="max-w-4xl mx-auto">
+              <h3 className="text-3xl font-bold text-[#432818] text-center mb-8">
+                {block?.settings?.title || 'Ancoragem de Valor - Produtos Exclusivos'}
+              </h3>
+              
+              <div className="grid md:grid-cols-3 gap-6 mb-8">
+                {(block?.settings?.products || [
+                  {
+                    name: 'Guia de Estilo Digital',
+                    description: 'Guia completo personalizado para seu estilo',
+                    value: 'R$ 297,00',
+                    image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp'
+                  },
+                  {
+                    name: 'Consultoria Personal Stylist',
+                    description: 'Sessão individual de styling online',
+                    value: 'R$ 897,00',
+                    image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp'
+                  },
+                  {
+                    name: 'Kit Completo de Acessórios',
+                    description: 'Seleção exclusiva baseada no seu perfil',
+                    value: 'R$ 497,00',
+                    image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp'
+                  }
+                ]).map((product: any, index: number) => (
+                  <div key={index} className="bg-white rounded-xl shadow-lg p-6 border border-[#B89B7A]/20">
+                    <img 
+                      src={product.image} 
+                      alt={product.name}
+                      className="w-full h-48 object-cover rounded-lg mb-4"
+                    />
+                    <h4 className="text-lg font-semibold text-[#432818] mb-2">{product.name}</h4>
+                    <p className="text-[#6B5B73] text-sm mb-4">{product.description}</p>
+                    <div className="text-xl font-bold text-[#B89B7A]">{product.value}</div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="text-center bg-gradient-to-r from-[#B89B7A] to-[#A1835D] text-white p-6 rounded-xl">
+                <div className="text-2xl font-bold mb-2">Valor Total Individual</div>
+                <div className="text-4xl font-bold mb-4">R$ 1.691,00</div>
+                <div className="text-lg opacity-90">Mas hoje você leva tudo por apenas:</div>
+                <div className="text-5xl font-bold text-yellow-300 mt-2">R$ 147,00</div>
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'quiz-transition-main':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-16 text-center bg-gradient-to-br from-[#f9f4ef] to-[#fff7f3]">
+            <div className="max-w-2xl mx-auto space-y-6">
+              <div className="w-20 h-20 bg-gradient-to-r from-[#B89B7A] to-[#A1835D] rounded-full flex items-center justify-center mx-auto animate-pulse">
+                <Zap className="w-10 h-10 text-white" />
+              </div>
+              
+              <h2 className="text-3xl font-bold text-[#432818]">
+                {block?.settings?.title || 'Analisando suas Respostas...'}
+              </h2>
+              
+              <p className="text-lg text-[#6B5B73] leading-relaxed">
+                {block?.settings?.message || 'Agora vamos aprofundar sua análise com algumas perguntas estratégicas sobre seus objetivos.'}
+              </p>
+              
+              <div className="bg-white rounded-xl p-6 shadow-lg border border-[#B89B7A]/20">
+                <p className="text-[#432818] font-medium">
+                  {block?.settings?.submessage || 'As próximas perguntas vão nos ajudar a personalizar ainda mais suas recomendações.'}
+                </p>
+              </div>
+              
+              {block?.settings?.additionalMessage && (
+                <p className="text-sm text-[#8F7A6A] italic">
+                  {block.settings.additionalMessage}
+                </p>
+              )}
+              
+              <div className="pt-4">
+                <Button className="bg-[#B89B7A] hover:bg-[#A1835D] text-white px-8 py-3 rounded-full font-semibold transform hover:scale-105 transition-all">
+                  Continuar Análise
+                </Button>
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'quiz-final-transition':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-20 text-center bg-gradient-to-br from-[#432818] to-[#6B4F43] text-white">
+            <div className="max-w-2xl mx-auto space-y-8">
+              <div className="relative">
+                <div className="w-24 h-24 bg-gradient-to-r from-[#B89B7A] to-[#A1835D] rounded-full flex items-center justify-center mx-auto animate-spin">
+                  <Trophy className="w-12 h-12 text-white" />
+                </div>
+                <div className="absolute inset-0 w-24 h-24 border-4 border-white/30 rounded-full mx-auto animate-ping"></div>
+              </div>
+              
+              <h2 className="text-4xl font-bold">
+                {block?.settings?.title || 'Analisando Seu Perfil Completo...'}
+              </h2>
+              
+              <p className="text-xl text-white/90 leading-relaxed">
+                {block?.settings?.description || 'Estamos processando suas respostas e criando sua análise personalizada de estilo.'}
+              </p>
+              
+              {block?.settings?.showSteps && (
+                <div className="space-y-4 max-w-md mx-auto">
+                  <div className="flex items-center text-left space-x-3 bg-white/10 rounded-lg p-3">
+                    <CheckCircle className="w-5 h-5 text-green-400" />
+                    <span>Analisando suas preferências</span>
+                  </div>
+                  <div className="flex items-center text-left space-x-3 bg-white/10 rounded-lg p-3">
+                    <CheckCircle className="w-5 h-5 text-green-400" />
+                    <span>Calculando seu estilo predominante</span>
+                  </div>
+                  <div className="flex items-center text-left space-x-3 bg-white/20 rounded-lg p-3">
+                    <RotateCcw className="w-5 h-5 text-white animate-spin" />
+                    <span>Preparando suas recomendações</span>
+                  </div>
+                </div>
+              )}
+              
+              <div className="text-sm text-white/70">
+                {block?.settings?.waitMessage || 'Isso levará apenas alguns segundos...'}
+              </div>
+              
+              {/* Simular progresso */}
+              <div className="w-full max-w-md mx-auto">
+                <div className="bg-white/20 rounded-full h-2">
+                  <div className="bg-gradient-to-r from-[#B89B7A] to-[#A1835D] h-2 rounded-full animate-pulse" style={{ width: '87%' }}></div>
+                </div>
+                <div className="text-sm text-white/80 mt-2">87% concluído</div>
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
       case 'testimonials-component':
         content = (
           <div style={baseStyle} onClick={handleBlockClick} className="py-4">
@@ -4009,8 +4283,48 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'secure-purchase-component':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
-            <SecurePurchaseElement />
+          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+            <div className="max-w-2xl mx-auto text-center space-y-6">
+              {/* CTA Principal Verde */}
+              <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-8 text-white shadow-xl">
+                <h3 className="text-2xl font-bold mb-4">
+                  {block?.settings?.ctaTitle || 'Quero Transformar Meu Estilo Agora!'}
+                </h3>
+                <p className="text-green-100 mb-6">
+                  {block?.settings?.ctaSubtitle || 'Acesso imediato + Garantia de 7 dias'}
+                </p>
+                
+                <Button className="bg-white text-green-600 hover:bg-green-50 px-12 py-4 text-lg font-bold rounded-full transform hover:scale-105 transition-all shadow-lg">
+                  <Shield className="w-5 h-5 mr-2" />
+                  GARANTIR MINHA TRANSFORMAÇÃO
+                </Button>
+                
+                <div className="mt-4 text-sm text-green-100">
+                  🔒 Pagamento 100% seguro | ⚡ Acesso instantâneo
+                </div>
+              </div>
+
+              {/* Badges de Segurança */}
+              <div className="grid grid-cols-3 gap-4 py-4">
+                <div className="text-center">
+                  <Shield className="w-8 h-8 text-green-600 mx-auto mb-2" />
+                  <div className="text-xs text-gray-600">Pagamento Seguro</div>
+                </div>
+                <div className="text-center">
+                  <CheckCircle className="w-8 h-8 text-green-600 mx-auto mb-2" />
+                  <div className="text-xs text-gray-600">Garantia 7 dias</div>
+                </div>
+                <div className="text-center">
+                  <Zap className="w-8 h-8 text-green-600 mx-auto mb-2" />
+                  <div className="text-xs text-gray-600">Acesso Imediato</div>
+                </div>
+              </div>
+
+              {/* Seção do componente real */}
+              <div className="border-t pt-6">
+                <SecurePurchaseElement />
+              </div>
+            </div>
           </div>
         );
         break;
