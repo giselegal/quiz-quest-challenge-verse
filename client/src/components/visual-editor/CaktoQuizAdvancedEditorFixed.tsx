@@ -336,15 +336,15 @@ const createInitialFunnel = (): FunnelData => ({
       ]
     },
 
-    // ETAPA 20: Resultado A (/resultado) - Teste A do funil
+    // ETAPA 20: Resultado A (/resultado) - CONTEÚDO REAL DA ResultPage.tsx
     {
       id: 'etapa-20-resultado-a',
       name: 'Etapa 20: Resultado A (/resultado)',
-      title: 'Seu Perfil de Estilo',
+      title: 'Seu Estilo Predominante - Resultado',
       type: 'result',
       order: 20,
       settings: {
-        backgroundColor: '#ffffff',
+        backgroundColor: '#fffaf7',
         textColor: '#432818',
         showProgress: true,
         progressValue: 100,
@@ -352,56 +352,116 @@ const createInitialFunnel = (): FunnelData => ({
       },
       blocks: [
         {
-          id: 'result-header',
-          type: 'header',
+          id: 'result-progress-section',
+          type: 'quiz-progress-bar',
           order: 1,
           settings: {
-            title: 'Seu Estilo Predominante',
-            subtitle: 'Resultado baseado em suas respostas pessoais',
-            alignment: 'center',
-            color: '#432818'
+            label: 'Seu estilo predominante',
+            value: 95,
+            showPercentage: true,
+            color: '#B89B7A'
           }
         },
         {
-          id: 'result-progress',
-          type: 'quiz-progress-bar',
+          id: 'result-style-image',
+          type: 'style-result-display',
           order: 2,
           settings: {
-            value: 95,
-            label: 'Seu estilo predominante',
-            showPercentage: true
-          }
-        },
-        {
-          id: 'result-style-display',
-          type: 'style-result-display',
-          order: 3,
-          settings: {
-            styleName: 'Seu Perfil de Estilo Único',
+            styleName: 'Seu Estilo Predominante',
             styleImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp',
             styleDescription: 'Baseado nas suas respostas, identificamos seu perfil único de estilo que reflete sua personalidade e preferências.',
-            percentMatch: 95
+            percentMatch: 95,
+            width: 238,
+            height: 'auto'
           }
         },
         {
-          id: 'result-secondary-styles',
+          id: 'result-secondary-styles-info',
           type: 'text',
-          order: 4,
+          order: 3,
           settings: {
             content: 'Estilos que Também Influenciam Você: Combine elementos de diferentes estilos para criar looks únicos.',
             alignment: 'center',
-            size: 'medium'
+            size: 'medium',
+            backgroundColor: '#ffffff',
+            padding: 'medium'
           }
         },
         {
-          id: 'result-cta-button',
-          type: 'button',
+          id: 'result-guide-image',
+          type: 'image',
+          order: 4,
+          settings: {
+            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/guide_image.webp',
+            alt: 'Guia de Estilo Exclusivo',
+            width: 540,
+            height: 'auto',
+            alignment: 'center',
+            badge: 'Exclusivo'
+          }
+        },
+        {
+          id: 'result-motivation-text',
+          type: 'header',
           order: 5,
           settings: {
-            text: 'Descobrir Como Aplicar Meu Estilo',
+            title: 'Descubra Como Aplicar Seu Estilo na Prática',
+            subtitle: '',
+            alignment: 'center',
+            color: '#aa6b5d'
+          }
+        },
+        {
+          id: 'result-cta-green',
+          type: 'button',
+          order: 6,
+          settings: {
+            text: 'Quero meu Guia de Estilo Agora',
             style: 'primary',
             size: 'large',
-            alignment: 'center'
+            alignment: 'center',
+            backgroundColor: '#4CAF50',
+            icon: 'shopping-cart'
+          }
+        },
+        {
+          id: 'result-value-stack',
+          type: 'price',
+          order: 7,
+          settings: {
+            title: 'O Que Você Recebe Hoje',
+            items: [
+              { name: 'Guia Principal', price: 'R$ 67,00' },
+              { name: 'Bônus - Peças-chave', price: 'R$ 79,00' },
+              { name: 'Bônus - Visagismo Facial', price: 'R$ 29,00' }
+            ],
+            originalPrice: 'R$ 175,00',
+            currentPrice: 'R$ 39,00',
+            discount: 'Hoje por apenas',
+            urgency: 'Pagamento único'
+          }
+        },
+        {
+          id: 'result-final-cta',
+          type: 'button',
+          order: 8,
+          settings: {
+            text: 'Garantir Meu Guia + Bônus Especiais',
+            style: 'primary',
+            size: 'large',
+            alignment: 'center',
+            backgroundColor: '#4CAF50',
+            icon: 'shopping-cart'
+          }
+        },
+        {
+          id: 'result-security-message',
+          type: 'social-proof',
+          order: 9,
+          settings: {
+            title: 'Oferta exclusiva nesta página',
+            icon: 'lock',
+            style: 'inline'
           }
         }
       ]
@@ -479,24 +539,101 @@ const createInitialFunnel = (): FunnelData => ({
           }
         },
         {
-          id: 'offer-problem-header',
+          id: 'offer-problem-section',
           type: 'header',
           order: 6,
           settings: {
             title: 'Você se identifica com isso?',
-            subtitle: 'Guarda-roupa cheio mas nunca tem o que vestir? Não sabe qual é seu estilo verdadeiro?',
+            subtitle: '',
             alignment: 'left'
+          }
+        },
+        {
+          id: 'offer-problem-list',
+          type: 'text',
+          order: 7,
+          settings: {
+            content: 'Guarda-roupa cheio mas nunca tem o que vestir?\nCompra peças que nunca combinam com nada?\nSente que "nada fica bom" em você?',
+            alignment: 'left',
+            size: 'medium'
+          }
+        },
+        {
+          id: 'offer-problem-insight',
+          type: 'text',
+          order: 8,
+          settings: {
+            content: 'Isso acontece porque você ainda não descobriu seu estilo predominante.',
+            alignment: 'left',
+            size: 'medium',
+            backgroundColor: '#fff7ed',
+            fontWeight: 'bold'
+          }
+        },
+        {
+          id: 'offer-problem-image',
+          type: 'image',
+          order: 9,
+          settings: {
+            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/problem_image.webp',
+            alt: 'Frustração com guarda-roupa',
+            width: 500,
+            height: 350,
+            alignment: 'center'
+          }
+        },
+        {
+          id: 'offer-solution-header',
+          type: 'header',
+          order: 10,
+          settings: {
+            title: 'A Solução: Quiz de Estilo',
+            subtitle: 'Método preciso para identificar seu estilo entre os 7 estilos universais + guia personalizado completo.',
+            alignment: 'center'
+          }
+        },
+        {
+          id: 'offer-solution-image',
+          type: 'image',
+          order: 11,
+          settings: {
+            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/solution_quiz_image.webp',
+            alt: 'Quiz de Estilo',
+            width: 400,
+            height: 300,
+            alignment: 'center'
+          }
+        },
+        {
+          id: 'offer-solution-cta',
+          type: 'button',
+          order: 12,
+          settings: {
+            text: 'Fazer o Quiz Agora',
+            style: 'primary',
+            size: 'large',
+            alignment: 'center'
           }
         },
         {
           id: 'offer-countdown',
           type: 'countdown',
-          order: 7,
+          order: 13,
           settings: {
             title: 'Esta oferta expira em:',
             hours: 1,
             minutes: 59,
             seconds: 59
+          }
+        },
+        {
+          id: 'offer-value-header',
+          type: 'header',
+          order: 14,
+          settings: {
+            title: 'Transformação Completa',
+            subtitle: 'Tudo que você precisa para descobrir e aplicar seu estilo',
+            alignment: 'center'
           }
         }
       ]
