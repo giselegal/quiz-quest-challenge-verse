@@ -2135,10 +2135,26 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         try {
           await funnelService.saveFunnelData(funnelData, 1); // TODO: usar userId real
           console.log('Auto-save realizado no backend');
+          
+          // Sincronizar com configurações de página
+          const syncSuccess = await funnelService.syncFunnelToPageConfigs(funnelData);
+          if (syncSuccess) {
+            console.log('Configurações de página sincronizadas');
+          } else {
+            console.warn('Falha ao sincronizar configurações de página');
+          }
         } catch (backendError) {
           // Fallback para localStorage
           localStorage.setItem('caktoquiz-funnel', JSON.stringify(funnelData));
           console.log('Auto-save realizado no localStorage');
+          
+          // Tentar sincronizar localmente
+          try {
+            await funnelService.syncFunnelToPageConfigs(funnelData);
+            console.log('Configurações de página sincronizadas localmente');
+          } catch (syncError) {
+            console.warn('Falha ao sincronizar configurações localmente:', syncError);
+          }
         }
       } catch (error) {
         console.error('Erro no auto-save:', error);

@@ -216,6 +216,108 @@ class FunnelService {
     return result.data;
   }
 
+  /**
+   * Salvar configuração de página específica
+   */
+  async savePageConfig(pageId: string, config: any): Promise<boolean> {
+    try {
+      const response = await fetch(`${this.baseUrl}/page-configs/${pageId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(config),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save page config');
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Error saving page config:', error);
+      
+      // Fallback para localStorage
+      try {
+        localStorage.setItem(`page-config-${pageId}`, JSON.stringify(config));
+        return true;
+      } catch (localError) {
+        console.error('Failed to save to localStorage:', localError);
+        return false;
+      }
+    }
+  }
+
+  /**
+   * Buscar configuração de página específica
+   */
+  async getPageConfig(pageId: string): Promise<any | null> {
+    try {
+      const response = await fetch(`${this.baseUrl}/page-configs/${pageId}`);
+      
+      if (!response.ok) {
+        if (response.status === 404) {
+          // Tentar localStorage como fallback
+          const localConfig = localStorage.getItem(`page-config-${pageId}`);
+          return localConfig ? JSON.parse(localConfig) : null;
+        }
+        throw new Error('Failed to fetch page config');
+      }
+
+      const result = await response.json();
+      return result.data;
+    } catch (error) {
+      console.error('Error fetching page config:', error);
+      
+      // Fallback para localStorage
+      try {
+        const localConfig = localStorage.getItem(`page-config-${pageId}`);
+        return localConfig ? JSON.parse(localConfig) : null;
+      } catch (localError) {
+        console.error('Failed to read from localStorage:', localError);
+        return null;
+      }
+    }
+  }
+
+  /**
+   * Sincronizar dados do funil com configurações de página
+   */
+  async syncFunnelToPageConfigs(funnelData: FunnelData): Promise<boolean> {
+    try {
+      const syncPromises = funnelData.pages.map(async (page) => {
+        const pageConfig = {
+          pageId: page.id,
+          pageName: page.name || page.title || 'Página sem nome',
+          blocks: page.blocks || [],
+          styles: {
+            backgroundColor: page.settings?.backgroundColor || '#ffffff',
+            textColor: page.settings?.textColor || '#000000',
+            fontFamily: page.settings?.fontFamily || 'Arial, sans-serif',
+            customCSS: page.settings?.customCSS || ''
+          },
+          metadata: {
+            title: page.title || '',
+            description: page.metadata?.description || '',
+            keywords: page.metadata?.keywords || [],
+            ogImage: page.metadata?.ogImage || ''
+          },
+          settings: page.settings || {},
+          lastModified: new Date().toISOString(),
+          version: 1
+        };
+
+        return this.savePageConfig(page.id, pageConfig);
+      });
+
+      const results = await Promise.all(syncPromises);
+      return results.every(result => result === true);
+    } catch (error) {
+      console.error('Error syncing funnel to page configs:', error);
+      return false;
+    }
+  }
+
   // High-level operations
   async saveFunnelData(funnelData: FunnelData, userId?: number): Promise<Funnel> {
     // Check if funnel exists

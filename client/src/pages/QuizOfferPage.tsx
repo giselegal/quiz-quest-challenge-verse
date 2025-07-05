@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { preloadCriticalImages } from '@/utils/images/preloading';
+import { usePageConfig } from '@/hooks/usePageConfig';
+import DynamicBlockRenderer from '@/components/DynamicBlockRenderer';
 import FixedIntroImage from '@/components/ui/FixedIntroImage';
 import { ChevronRight, Check, Clock, Star, ShoppingBag, Heart, Users, Award, Shield, ArrowRight, TrendingUp, BadgeCheck, Lock, Gift, ShoppingCart, CheckCircle, ArrowDown, Hourglass } from 'lucide-react';
 import { trackButtonClick } from '@/utils/analytics';

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
+import { usePageConfig } from '@/hooks/usePageConfig';
+import DynamicBlockRenderer from '@/components/DynamicBlockRenderer';
 import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
 import { Progress } from '@/components/ui/progress';
@@ -35,6 +37,15 @@ const ResultPage: React.FC = () => {
   const {
     user
   } = useAuth(); // Get user from auth context
+  
+  // Integração com o editor visual
+  const { 
+    config: pageConfig, 
+    isLoading: configLoading, 
+    getBlockProps,
+    applyStyles
+  } = usePageConfig('result-page');
+  
   const [imagesLoaded, setImagesLoaded] = useState({
     style: false,
     guide: false
@@ -50,6 +61,14 @@ const ResultPage: React.FC = () => {
 
   // Button hover state
   const [isButtonHovered, setIsButtonHovered] = useState(false);
+  
+  // Aplicar estilos do editor quando disponível
+  useEffect(() => {
+    if (pageConfig && !configLoading) {
+      applyStyles();
+    }
+  }, [pageConfig, configLoading, applyStyles]);
+
   useEffect(() => {
     if (!primaryStyle) return;
     window.scrollTo(0, 0);
@@ -100,6 +119,22 @@ const ResultPage: React.FC = () => {
     trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
     window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
   };
+
+  /**
+   * Renderiza um componente com configurações do editor se disponível,
+   * caso contrário renderiza o componente original
+   */
+  const renderConfigurableComponent = (blockId: string, originalComponent: React.ReactNode) => {
+    if (pageConfig && !configLoading) {
+      return <DynamicBlockRenderer 
+        pageId="result-page"
+        blockId={blockId}
+        fallback={originalComponent}
+      />;
+    }
+    return originalComponent;
+  };
+
   return <div className="min-h-screen relative overflow-hidden" style={{
     backgroundColor: globalStyles.backgroundColor || '#fffaf7',
     color: globalStyles.textColor || '#432818',
@@ -109,7 +144,9 @@ const ResultPage: React.FC = () => {
       <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#B89B7A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
       <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
       
-      <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={user?.userName} />
+      {renderConfigurableComponent('header-component-real', 
+        <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={user?.userName} />
+      )}
 
       <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
         {/* ATTENTION: Primary Style Card */}
@@ -162,22 +199,30 @@ const ResultPage: React.FC = () => {
 
         {/* INTEREST: Before/After Transformation Section */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={700}>
-          <BeforeAfterTransformation />
+          {renderConfigurableComponent('before-after-component-real', 
+            <BeforeAfterTransformation />
+          )}
         </AnimatedWrapper>
 
         {/* INTEREST: Motivation Section */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
-          <MotivationSection />
+          {renderConfigurableComponent('motivation-component-real', 
+            <MotivationSection />
+          )}
         </AnimatedWrapper>
 
         {/* INTEREST: Bonus Section */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={850}>
-          <BonusSection />
+          {renderConfigurableComponent('bonus-component-real', 
+            <BonusSection />
+          )}
         </AnimatedWrapper>
 
         {/* DESIRE: Testimonials */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={900}>
-          <Testimonials />
+          {renderConfigurableComponent('testimonials-component-real', 
+            <Testimonials />
+          )}
         </AnimatedWrapper>
 
         {/* DESIRE: Featured CTA (Green) */}
@@ -215,12 +260,16 @@ const ResultPage: React.FC = () => {
 
         {/* DESIRE: Guarantee Section */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1000}>
-          <GuaranteeSection />
+          {renderConfigurableComponent('guarantee-component-real', 
+            <GuaranteeSection />
+          )}
         </AnimatedWrapper>
 
         {/* DESIRE: Mentor and Trust Elements */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1050}>
-          <MentorSection />
+          {renderConfigurableComponent('mentor-component-real', 
+            <MentorSection />
+          )}
         </AnimatedWrapper>
 
         {/* ACTION: Final Value Proposition and CTA */}
