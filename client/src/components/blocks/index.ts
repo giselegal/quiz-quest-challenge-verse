@@ -5,8 +5,11 @@
  * podem ser usados no /advanced-editor
  */
 
-// Blocos de Quiz (Etapas 1-19) - IMPLEMENTADOS
+// Blocos de Quiz (Etapas 1-19) - IMPLEMENTADOS ✅
 export * from './quiz';
 
-// Blocos de Resultado (Etapa 20) - PARCIALMENTE IMPLEMENTADO
-export { default as HeaderBlock } from './result/HeaderBlock';
+// Blocos de Resultado (Etapa 20) - IMPLEMENTADOS ✅
+export * from './result';
+
+// Blocos de Oferta (Etapa 21) - IMPLEMENTADOS ✅
+export * from './offer';
