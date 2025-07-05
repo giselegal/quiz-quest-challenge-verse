@@ -30,10 +30,12 @@ const QuizTransitionBlock: React.FC<QuizTransitionBlockProps> = ({
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [progress, setProgress] = useState(0);
 
-  // Extrair propriedades do schema
+  // Extrair propriedades do schema - USANDO DADOS REAIS DO FUNIL
   const {
     title = '🕐 Enquanto calculamos o seu resultado...',
     subtitle = 'Queremos te fazer algumas perguntas que vão tornar sua experiência ainda mais completa.',
+    description = 'A ideia é simples: te ajudar a enxergar com mais clareza onde você está agora — e para onde pode ir com mais intenção, leveza e autenticidade.',
+    motivationalText = '💬 Responda com sinceridade. Isso é só entre você e a sua nova versão.',
     loadingTexts = [
       'Analisando suas preferências de estilo...',
       'Calculando compatibilidade com diferentes looks...',
