@@ -29,7 +29,7 @@ export interface HeaderBlockProps {
   blockId?: string;
   logo?: string;
   logoAlt?: string;
-  logoHeight?: string;
+  logoHeight?: number;
   showUserName?: boolean;
   userName?: string;
   backgroundColor?: string;
@@ -41,7 +41,7 @@ const HeaderBlock: React.FC<HeaderBlockProps> = ({
   blockId = 'header-block',
   logo = 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
   logoAlt = 'Logo Gisele Galvão',
-  logoHeight = '60px',
+  logoHeight = 60,
   showUserName = true,
   userName = '',
   backgroundColor = '#ffffff',
