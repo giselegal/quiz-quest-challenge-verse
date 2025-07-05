@@ -76,7 +76,10 @@ import {
   Underline,
   Download,
   Upload,
-  GripVertical
+  GripVertical,
+  Lock,
+  Shield,
+  Award
 } from 'lucide-react';
 
 // Hook personalizado para redimensionamento de colunas
@@ -3076,6 +3079,508 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
               
               <div className="text-sm text-[#6B5B73] italic">
                 {block?.settings?.waitMessage || 'Isso levará apenas alguns segundos...'}
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      // COMPONENTES REAIS - RESULTPAGE.TSX
+      case 'header-component-real':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+            <div className="bg-white border-b border-gray-100 py-4">
+              <div className="container mx-auto px-4 flex items-center justify-between">
+                <img 
+                  src={block?.settings?.props?.logo || 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'} 
+                  alt={block?.settings?.props?.logoAlt || 'Logo'} 
+                  className="h-12 object-contain"
+                />
+                <div className="text-sm text-gray-600">
+                  Olá, {block?.settings?.props?.userName || 'Usuária'}! 👋
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'card-component-real':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+            <div className={block?.settings?.className || "p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 rounded-lg"}>
+              <div className="text-center mb-8">
+                <div className="max-w-md mx-auto mb-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm text-[#8F7A6A]">Seu estilo predominante</span>
+                    <span className="text-[#aa6b5d] font-medium">92%</span>
+                  </div>
+                  <div className="w-full bg-[#F3E8E6] rounded-full h-2">
+                    <div className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] h-2 rounded-full" style={{width: '92%'}}></div>
+                  </div>
+                </div>
+              </div>
+              <div className="grid md:grid-cols-2 gap-8 items-center">
+                <div className="space-y-4">
+                  <p className="text-[#432818] leading-relaxed">
+                    Descoberta de estilo personalizada baseada nas suas respostas do quiz.
+                  </p>
+                </div>
+                <div className="max-w-[238px] mx-auto relative">
+                  <img 
+                    src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp" 
+                    alt="Estilo" 
+                    className="w-full h-auto rounded-lg shadow-md"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'secondary-styles-component-real':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+            <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10">
+              <h3 className="text-lg font-medium text-[#432818] mb-2">Estilos que Também Influenciam Você</h3>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-[#432818]">Estilo Secundário 1</span>
+                  <span className="text-[#aa6b5d] font-medium">25%</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-[#432818]">Estilo Secundário 2</span>
+                  <span className="text-[#aa6b5d] font-medium">18%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'before-after-component-real':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+            <div className="bg-gradient-to-r from-[#f9f4ef] to-[#fff7f3] p-6 rounded-lg border border-[#B89B7A]/10">
+              <h3 className="text-xl font-medium text-[#aa6b5d] text-center mb-4">Transformação de Estilo</h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="text-center">
+                  <h4 className="font-medium text-[#432818] mb-2">Antes</h4>
+                  <p className="text-sm text-[#6B5B73]">Guarda-roupa confuso, sem identidade</p>
+                </div>
+                <div className="text-center">
+                  <h4 className="font-medium text-[#432818] mb-2">Depois</h4>
+                  <p className="text-sm text-[#6B5B73]">Estilo autêntico e poderoso</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'motivation-component-real':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+            <div className="text-center bg-[#f9f4ef] p-6 rounded-lg">
+              <h3 className="text-xl font-medium text-[#aa6b5d] mb-4">Sua Jornada de Transformação</h3>
+              <p className="text-[#432818] mb-4">
+                Agora que você descobriu seu estilo, está na hora de aplicá-lo na prática.
+              </p>
+              <div className="flex items-center justify-center gap-2">
+                <CheckCircle className="w-5 h-5 text-green-600" />
+                <span className="text-sm text-[#432818]">Resultado personalizado entregue</span>
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'bonus-component-real':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+            <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white p-6 rounded-lg">
+              <div className="flex items-center mb-3">
+                <Gift className="w-6 h-6 mr-2" />
+                <span className="font-bold text-lg">BÔNUS EXCLUSIVOS</span>
+              </div>
+              <h4 className="font-bold text-xl mb-2">Materiais Complementares</h4>
+              <ul className="text-sm space-y-1">
+                <li>• Guia de Peças-Chave do seu Estilo</li>
+                <li>• Manual de Visagismo Facial</li>
+                <li>• Planner de Looks</li>
+              </ul>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'testimonials-component-real':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-xl font-medium text-[#432818] text-center mb-6">O que as mulheres estão dizendo</h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <div className="flex mb-3">
+                    {Array.from({ length: 5 }, (_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+                  <p className="text-sm text-[#432818] italic mb-2">
+                    "Finalmente descobri meu estilo! Mudou completamente minha relação com a moda."
+                  </p>
+                  <p className="text-xs text-gray-600">- Ana Carolina</p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <div className="flex mb-3">
+                    {Array.from({ length: 5 }, (_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+                  <p className="text-sm text-[#432818] italic mb-2">
+                    "Agora tudo no meu guarda-roupa combina. É incrível!"
+                  </p>
+                  <p className="text-xs text-gray-600">- Patricia Santos</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'button-component-real':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="text-center py-4">
+            <button 
+              className={block?.settings?.className || "text-white py-4 px-6 rounded-md shadow-md transition-colors"}
+              style={block?.settings?.style || {
+                background: 'linear-gradient(to right, #4CAF50, #45a049)',
+                boxShadow: '0 4px 14px rgba(76, 175, 80, 0.4)'
+              }}
+            >
+              {block?.settings?.children || 'Botão de Ação'}
+            </button>
+          </div>
+        );
+        break;
+
+      case 'secure-purchase-component-real':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+            <div className="flex items-center justify-center gap-4 text-sm text-gray-600">
+              <div className="flex items-center gap-1">
+                <Lock className="w-4 h-4 text-green-600" />
+                <span>Compra 100% Segura</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Shield className="w-4 h-4 text-green-600" />
+                <span>SSL Criptografado</span>
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'guarantee-component-real':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="w-8 h-8 text-green-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-green-800 mb-2">Garantia de 7 Dias</h3>
+              <p className="text-sm text-green-700">
+                Se não ficar satisfeita, devolvemos 100% do seu dinheiro. Sem perguntas.
+              </p>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'mentor-component-real':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+            <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20">
+              <div className="flex items-center gap-4 mb-4">
+                <img 
+                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp" 
+                  alt="Gisele Galvão" 
+                  className="w-16 h-16 rounded-full object-cover"
+                />
+                <div>
+                  <h3 className="font-semibold text-[#432818]">Gisele Galvão</h3>
+                  <p className="text-sm text-[#6B5B73]">Consultora de Imagem</p>
+                </div>
+              </div>
+              <p className="text-[#432818] text-sm">
+                "Minha missão é ajudar mulheres a descobrirem seu estilo autêntico e se vestirem com confiança."
+              </p>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'vista-se-section-real':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+            <div className="text-center">
+              <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
+                {block?.settings?.title || 'Vista-se de Você — na Prática'}
+              </h2>
+              <div className="elegant-divider mb-6"></div>
+              <p className="text-[#432818] mb-6 max-w-xl mx-auto">
+                {block?.settings?.description || 'Agora que você conhece seu estilo, é hora de aplicá-lo com clareza e intenção.'}
+              </p>
+              <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] p-6 rounded-lg mb-6 border border-[#B89B7A]/10">
+                <h3 className="text-xl font-medium text-[#aa6b5d] mb-4">O Guia de Estilo e Imagem + Bônus Exclusivos</h3>
+                <ul className="space-y-3 text-left max-w-xl mx-auto text-[#432818]">
+                  {(block?.settings?.benefits || []).map((benefit: string, index: number) => (
+                    <li key={index} className="flex items-start">
+                      <CheckCircle className="w-5 h-5 text-[#B89B7A] mr-2 mt-0.5 flex-shrink-0" />
+                      <span>{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'value-stack-component-real':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+            <div className={block?.settings?.className || "bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 max-w-md mx-auto"}>
+              <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">
+                {block?.settings?.title || 'O Que Você Recebe Hoje'}
+              </h3>
+              <div className="space-y-3 mb-6">
+                {(block?.settings?.items || []).map((item: any, index: number) => (
+                  <div key={index} className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
+                    <span>{item.name}</span>
+                    <span className="font-medium">{item.price}</span>
+                  </div>
+                ))}
+                <div className="flex justify-between items-center p-2 pt-3 font-bold">
+                  <span>Valor Total</span>
+                  <div className="relative">
+                    <span>{block?.settings?.totalValue || 'R$ 175,00'}</span>
+                    <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#ff5a5a] transform -translate-y-1/2 -rotate-3"></div>
+                  </div>
+                </div>
+              </div>
+              <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
+                <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
+                <p className="text-4xl font-bold text-[#B89B7A]">{block?.settings?.currentPrice || 'R$ 39,00'}</p>
+                <p className="text-xs text-[#3a3a3a]/60 mt-1">{block?.settings?.paymentInfo || 'Pagamento único'}</p>
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      // COMPONENTES REAIS - QUIZOFFERPAGE.TSX
+      case 'custom-styles-component-real':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-2">
+            <div className="bg-gray-100 border border-dashed border-gray-300 p-3 rounded text-center text-sm text-gray-600">
+              🎨 Estilos CSS Customizados da Página (Injetados no &lt;head&gt;)
+            </div>
+          </div>
+        );
+        break;
+
+      case 'fixed-intro-image-component-real':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-4 text-center">
+            <img
+              src={block?.settings?.props?.src || 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'}
+              alt={block?.settings?.props?.alt || 'Imagem'}
+              width={block?.settings?.props?.width || 200}
+              height={block?.settings?.props?.height || 80}
+              className="mx-auto h-auto object-contain"
+            />
+          </div>
+        );
+        break;
+
+      case 'section-title-component-real':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-6 text-center">
+            <div className="inline-flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full border border-green-200 mb-6">
+              <Award className="w-4 h-4 text-green-600" />
+              <span className="text-sm font-semibold text-green-700">3000+ mulheres transformadas</span>
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold text-[#432818] mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
+              {block?.settings?.title || 'Descubra Seu Estilo Predominante'}
+            </h1>
+            <p className="text-lg text-[#6B5B73] max-w-2xl mx-auto">
+              {block?.settings?.subtitle || 'Tenha finalmente um guarda-roupa que funciona 100%'}
+            </p>
+          </div>
+        );
+        break;
+
+      case 'offer-button-component-real':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="text-center py-4">
+            <button className={block?.settings?.className || "btn-primary-clean"}>
+              <ArrowRight className="w-5 h-5" />
+              {block?.settings?.children || 'Descobrir Meu Estilo Agora'}
+            </button>
+          </div>
+        );
+        break;
+
+      case 'problem-section-component-real':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div>
+                <h2 className="text-2xl font-bold text-[#432818] mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
+                  {block?.settings?.title || 'Você se identifica com isso?'}
+                </h2>
+                <div className="space-y-4 text-[#6B5B73]">
+                  {(block?.settings?.problems || []).map((problem: string, index: number) => (
+                    <p key={index}>
+                      <strong>{problem}</strong>
+                    </p>
+                  ))}
+                </div>
+                <div className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-400 mt-6">
+                  <p className="text-[#432818] font-semibold">
+                    {block?.settings?.insight || 'Isso acontece porque você ainda não descobriu seu estilo predominante.'}
+                  </p>
+                </div>
+              </div>
+              <div>
+                <img 
+                  src="https://via.placeholder.com/500x350?text=Problema" 
+                  alt="Frustração com guarda-roupa" 
+                  className="w-full h-auto rounded-lg"
+                />
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'solution-section-component-real':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-6 text-center">
+            <h2 className="text-2xl font-bold text-[#432818] mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
+              {block?.settings?.title || 'A Solução: Quiz de Estilo'}
+            </h2>
+            <p className="text-lg text-[#6B5B73] mb-8 max-w-2xl mx-auto">
+              {block?.settings?.subtitle || 'Método preciso para identificar seu estilo entre os 7 estilos universais + guia personalizado completo.'}
+            </p>
+          </div>
+        );
+        break;
+
+      case 'countdown-timer-component-real':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-6 text-center">
+            <div className="flex flex-col items-center">
+              <p className="text-[#432818] font-semibold mb-2 flex items-center">
+                <Clock className="w-4 h-4 mr-1 text-[#B89B7A]" />
+                Esta oferta expira em:
+              </p>
+              <div className="flex items-center justify-center gap-1">
+                <div className="bg-[#432818] text-white px-3 py-2 rounded-md text-lg font-mono font-bold shadow-sm">01</div>
+                <span className="text-[#B89B7A] font-bold text-xl">:</span>
+                <div className="bg-[#432818] text-white px-3 py-2 rounded-md text-lg font-mono font-bold shadow-sm">59</div>
+                <span className="text-[#B89B7A] font-bold text-xl">:</span>
+                <div className="bg-[#432818] text-white px-3 py-2 rounded-md text-lg font-mono font-bold shadow-sm">42</div>
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'guides-benefits-section-real':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-6 text-center">
+            <h2 className="text-2xl font-bold text-[#432818] mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+              {block?.settings?.title || 'Transformação Completa'}
+            </h2>
+            <p className="text-lg text-[#6B5B73] mb-8">
+              {block?.settings?.subtitle || 'Tudo que você precisa para descobrir e aplicar seu estilo'}
+            </p>
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="text-center">
+                <div className="aspect-[4/5] bg-white rounded-lg mb-3 flex items-center justify-center overflow-hidden shadow-sm border border-gray-100">
+                  <img 
+                    src="https://via.placeholder.com/250x312?text=Guia+Principal" 
+                    alt="Guia Principal" 
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <h3 className="text-lg font-semibold text-[#432818] mb-2">Guia Principal</h3>
+                <p className="text-sm text-[#6B5B73]">Descoberta completa do seu estilo</p>
+              </div>
+              <div className="text-center">
+                <div className="aspect-[4/5] bg-white rounded-lg mb-3 flex items-center justify-center overflow-hidden shadow-sm border border-gray-100">
+                  <img 
+                    src="https://via.placeholder.com/250x312?text=Bônus+Peças" 
+                    alt="Bônus Peças-Chave" 
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <h3 className="text-lg font-semibold text-[#432818] mb-2">Bônus: Peças-Chave</h3>
+                <p className="text-sm text-[#6B5B73]">Guarda-roupa funcional</p>
+              </div>
+              <div className="text-center">
+                <div className="aspect-[4/5] bg-white rounded-lg mb-3 flex items-center justify-center overflow-hidden shadow-sm border border-gray-100">
+                  <img 
+                    src="https://via.placeholder.com/250x312?text=Bônus+Visagismo" 
+                    alt="Bônus Visagismo" 
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <h3 className="text-lg font-semibold text-[#432818] mb-2">Bônus: Visagismo</h3>
+                <p className="text-sm text-[#6B5B73]">Valorize seus traços</p>
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'pricing-section-component-real':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+            <div className={block?.settings?.className || "bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-8 text-white text-center"}>
+              <p className="text-sm opacity-90 mb-2">{block?.settings?.title || 'Oferta por tempo limitado'}</p>
+              <div className="mb-4">
+                <span className="text-sm">5x de</span>
+                <span className="text-4xl font-bold mx-2">{block?.settings?.installments || 'R$ 8,83'}</span>
+              </div>
+              <p className="text-lg">ou à vista <strong>{block?.settings?.fullPrice || 'R$ 39,90'}</strong></p>
+              <p className="text-sm mt-2 opacity-75">{block?.settings?.savings || '77% OFF - Economia de R$ 135,10'}</p>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'faq-section-component-real':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+            <h2 className="text-2xl font-bold text-[#432818] text-center mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>
+              Perguntas Frequentes
+            </h2>
+            <div className="space-y-4 max-w-2xl mx-auto">
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h4 className="font-semibold text-[#432818] mb-2">Como funciona o quiz?</h4>
+                <p className="text-gray-700 text-sm">É muito simples! Você responde algumas perguntas sobre suas preferências e recebe seu resultado personalizado.</p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h4 className="font-semibold text-[#432818] mb-2">Quanto tempo demora?</h4>
+                <p className="text-gray-700 text-sm">O quiz leva apenas 5 minutos para ser concluído.</p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h4 className="font-semibold text-[#432818] mb-2">O material é digital?</h4>
+                <p className="text-gray-700 text-sm">Sim, você recebe tudo por email imediatamente após a compra.</p>
               </div>
             </div>
           </div>
