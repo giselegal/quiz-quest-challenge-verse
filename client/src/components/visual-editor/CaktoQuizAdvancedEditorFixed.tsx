@@ -5514,6 +5514,438 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                   </div>
                 )}
 
+                {/* PAINÉIS DE PROPRIEDADES PARA COMPONENTES REAIS */}
+                
+                {selectedBlock.type === 'header-component-real' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Logo URL</Label>
+                      <Input
+                        value={selectedBlock.settings?.props?.logo || ''}
+                        onChange={(e) => updateBlockSetting('props', { 
+                          ...selectedBlock.settings?.props, 
+                          logo: e.target.value 
+                        })}
+                        className="text-sm h-8 mt-1"
+                        placeholder="https://example.com/logo.png"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Alt do Logo</Label>
+                      <Input
+                        value={selectedBlock.settings?.props?.logoAlt || ''}
+                        onChange={(e) => updateBlockSetting('props', { 
+                          ...selectedBlock.settings?.props, 
+                          logoAlt: e.target.value 
+                        })}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Logo da empresa"
+                      />
+                    </div>
+
+                    <div>
+                      <Label className="text-xs">Altura do Logo</Label>
+                      <Input
+                        value={selectedBlock.settings?.props?.logoHeight || ''}
+                        onChange={(e) => updateBlockSetting('props', { 
+                          ...selectedBlock.settings?.props, 
+                          logoHeight: e.target.value 
+                        })}
+                        className="text-sm h-8 mt-1"
+                        placeholder="60px"
+                      />
+                    </div>
+
+                    <div>
+                      <Label className="text-xs">Nome do Usuário</Label>
+                      <Input
+                        value={selectedBlock.settings?.props?.userName || ''}
+                        onChange={(e) => updateBlockSetting('props', { 
+                          ...selectedBlock.settings?.props, 
+                          userName: e.target.value 
+                        })}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Nome dinâmico do usuário"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {selectedBlock.type === 'button-component-real' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Texto do Botão</Label>
+                      <Input
+                        value={selectedBlock.settings?.children || ''}
+                        onChange={(e) => updateBlockSetting('children', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Texto do botão"
+                      />
+                    </div>
+
+                    <div>
+                      <Label className="text-xs">Classes CSS</Label>
+                      <Input
+                        value={selectedBlock.settings?.className || ''}
+                        onChange={(e) => updateBlockSetting('className', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="btn-primary-clean"
+                      />
+                    </div>
+
+                    <div>
+                      <Label className="text-xs">Ação onClick</Label>
+                      <Input
+                        value={selectedBlock.settings?.onClick || ''}
+                        onChange={(e) => updateBlockSetting('onClick', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="handleClick"
+                      />
+                    </div>
+
+                    <div>
+                      <Label className="text-xs">Background Color</Label>
+                      <Input
+                        type="color"
+                        value={selectedBlock.settings?.style?.background || '#4CAF50'}
+                        onChange={(e) => updateBlockSetting('style', { 
+                          ...selectedBlock.settings?.style, 
+                          background: e.target.value 
+                        })}
+                        className="text-sm h-8 mt-1"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {selectedBlock.type === 'fixed-intro-image-component-real' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">URL da Imagem</Label>
+                      <Input
+                        value={selectedBlock.settings?.props?.src || ''}
+                        onChange={(e) => updateBlockSetting('props', { 
+                          ...selectedBlock.settings?.props, 
+                          src: e.target.value 
+                        })}
+                        className="text-sm h-8 mt-1"
+                        placeholder="https://example.com/image.jpg"
+                      />
+                    </div>
+
+                    <div>
+                      <Label className="text-xs">Texto Alternativo</Label>
+                      <Input
+                        value={selectedBlock.settings?.props?.alt || ''}
+                        onChange={(e) => updateBlockSetting('props', { 
+                          ...selectedBlock.settings?.props, 
+                          alt: e.target.value 
+                        })}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Descrição da imagem"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <Label className="text-xs">Largura</Label>
+                        <Input
+                          type="number"
+                          value={selectedBlock.settings?.props?.width || 200}
+                          onChange={(e) => updateBlockSetting('props', { 
+                            ...selectedBlock.settings?.props, 
+                            width: parseInt(e.target.value) 
+                          })}
+                          className="text-sm h-8 mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs">Altura</Label>
+                        <Input
+                          type="number"
+                          value={selectedBlock.settings?.props?.height || 100}
+                          onChange={(e) => updateBlockSetting('props', { 
+                            ...selectedBlock.settings?.props, 
+                            height: parseInt(e.target.value) 
+                          })}
+                          className="text-sm h-8 mt-1"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {selectedBlock.type === 'section-title-component-real' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Título Principal</Label>
+                      <Textarea
+                        value={selectedBlock.settings?.title || ''}
+                        onChange={(e) => updateBlockSetting('title', e.target.value)}
+                        className="text-sm resize-none mt-1"
+                        rows={2}
+                        placeholder="Descubra Seu Estilo Predominante"
+                      />
+                    </div>
+
+                    <div>
+                      <Label className="text-xs">Subtítulo</Label>
+                      <Textarea
+                        value={selectedBlock.settings?.subtitle || ''}
+                        onChange={(e) => updateBlockSetting('subtitle', e.target.value)}
+                        className="text-sm resize-none mt-1"
+                        rows={3}
+                        placeholder="Tenha finalmente um guarda-roupa que funciona 100%"
+                      />
+                    </div>
+
+                    <div>
+                      <Label className="text-xs">Variante do Título</Label>
+                      <select 
+                        value={selectedBlock.settings?.variant || 'primary'}
+                        onChange={(e) => updateBlockSetting('variant', e.target.value)}
+                        className="w-full h-8 text-sm border border-gray-300 rounded mt-1 px-2"
+                      >
+                        <option value="primary">Primário</option>
+                        <option value="secondary">Secundário</option>
+                        <option value="hero">Hero</option>
+                      </select>
+                    </div>
+                  </div>
+                )}
+
+                {selectedBlock.type === 'pricing-section-component-real' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Título da Oferta</Label>
+                      <Input
+                        value={selectedBlock.settings?.title || ''}
+                        onChange={(e) => updateBlockSetting('title', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Oferta por tempo limitado"
+                      />
+                    </div>
+
+                    <div>
+                      <Label className="text-xs">Parcelamento</Label>
+                      <Input
+                        value={selectedBlock.settings?.installments || ''}
+                        onChange={(e) => updateBlockSetting('installments', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="R$ 8,83"
+                      />
+                    </div>
+
+                    <div>
+                      <Label className="text-xs">Preço à Vista</Label>
+                      <Input
+                        value={selectedBlock.settings?.fullPrice || ''}
+                        onChange={(e) => updateBlockSetting('fullPrice', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="R$ 39,90"
+                      />
+                    </div>
+
+                    <div>
+                      <Label className="text-xs">Economia/Desconto</Label>
+                      <Input
+                        value={selectedBlock.settings?.savings || ''}
+                        onChange={(e) => updateBlockSetting('savings', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="77% OFF - Economia de R$ 135,10"
+                      />
+                    </div>
+
+                    <div>
+                      <Label className="text-xs">Classes CSS</Label>
+                      <Input
+                        value={selectedBlock.settings?.className || ''}
+                        onChange={(e) => updateBlockSetting('className', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="bg-gradient-to-r from-green-500 to-green-600"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {selectedBlock.type === 'problem-section-component-real' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Título da Seção</Label>
+                      <Input
+                        value={selectedBlock.settings?.title || ''}
+                        onChange={(e) => updateBlockSetting('title', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Você se identifica com isso?"
+                      />
+                    </div>
+
+                    <div>
+                      <Label className="text-xs">Problemas/Dores</Label>
+                      <div className="space-y-2 mt-1">
+                        {(selectedBlock.settings?.problems || []).map((problem: string, index: number) => (
+                          <div key={index} className="flex gap-2">
+                            <Input
+                              value={problem}
+                              onChange={(e) => {
+                                const problems = [...(selectedBlock.settings?.problems || [])];
+                                problems[index] = e.target.value;
+                                updateBlockSetting('problems', problems);
+                              }}
+                              className="text-sm h-8 flex-1"
+                              placeholder="Problema/dor do cliente"
+                            />
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                const problems = [...(selectedBlock.settings?.problems || [])];
+                                problems.splice(index, 1);
+                                updateBlockSetting('problems', problems);
+                              }}
+                              className="h-8 w-8 p-0"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        ))}
+                        
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            const problems = [...(selectedBlock.settings?.problems || [])];
+                            problems.push('Novo problema');
+                            updateBlockSetting('problems', problems);
+                          }}
+                          className="w-full h-8"
+                        >
+                          <Plus className="h-3 w-3 mr-1" />
+                          Adicionar Problema
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label className="text-xs">Insight/Revelação</Label>
+                      <Textarea
+                        value={selectedBlock.settings?.insight || ''}
+                        onChange={(e) => updateBlockSetting('insight', e.target.value)}
+                        className="text-sm resize-none mt-1"
+                        rows={2}
+                        placeholder="Isso acontece porque você ainda não descobriu seu estilo predominante."
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {selectedBlock.type === 'value-stack-component-real' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Título da Seção</Label>
+                      <Input
+                        value={selectedBlock.settings?.title || ''}
+                        onChange={(e) => updateBlockSetting('title', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="O Que Você Recebe Hoje"
+                      />
+                    </div>
+
+                    <div>
+                      <Label className="text-xs">Itens do Value Stack</Label>
+                      <div className="space-y-2 mt-1">
+                        {(selectedBlock.settings?.items || []).map((item: any, index: number) => (
+                          <div key={index} className="border border-gray-200 rounded p-2 space-y-2">
+                            <div className="grid grid-cols-2 gap-2">
+                              <Input
+                                value={item.name || ''}
+                                onChange={(e) => {
+                                  const items = [...(selectedBlock.settings?.items || [])];
+                                  items[index] = { ...items[index], name: e.target.value };
+                                  updateBlockSetting('items', items);
+                                }}
+                                className="text-sm h-8"
+                                placeholder="Nome do item"
+                              />
+                              <Input
+                                value={item.price || ''}
+                                onChange={(e) => {
+                                  const items = [...(selectedBlock.settings?.items || [])];
+                                  items[index] = { ...items[index], price: e.target.value };
+                                  updateBlockSetting('items', items);
+                                }}
+                                className="text-sm h-8"
+                                placeholder="R$ 67,00"
+                              />
+                            </div>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                const items = [...(selectedBlock.settings?.items || [])];
+                                items.splice(index, 1);
+                                updateBlockSetting('items', items);
+                              }}
+                              className="h-6 text-xs w-full"
+                            >
+                              <Trash2 className="h-3 w-3 mr-1" />
+                              Remover Item
+                            </Button>
+                          </div>
+                        ))}
+                        
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            const items = [...(selectedBlock.settings?.items || [])];
+                            items.push({ name: 'Novo item', price: 'R$ 0,00' });
+                            updateBlockSetting('items', items);
+                          }}
+                          className="w-full h-8"
+                        >
+                          <Plus className="h-3 w-3 mr-1" />
+                          Adicionar Item
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <Label className="text-xs">Valor Total</Label>
+                        <Input
+                          value={selectedBlock.settings?.totalValue || ''}
+                          onChange={(e) => updateBlockSetting('totalValue', e.target.value)}
+                          className="text-sm h-8 mt-1"
+                          placeholder="R$ 175,00"
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs">Preço Atual</Label>
+                        <Input
+                          value={selectedBlock.settings?.currentPrice || ''}
+                          onChange={(e) => updateBlockSetting('currentPrice', e.target.value)}
+                          className="text-sm h-8 mt-1"
+                          placeholder="R$ 39,00"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label className="text-xs">Info de Pagamento</Label>
+                      <Input
+                        value={selectedBlock.settings?.paymentInfo || ''}
+                        onChange={(e) => updateBlockSetting('paymentInfo', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Pagamento único"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* FIM DOS PAINÉIS DE COMPONENTES REAIS */}
+
                 {/* Configurações de estilo gerais */}
                 <div className="pt-4 border-t">
                   <h4 className="text-xs font-medium mb-3">Estilos</h4>
