@@ -1,22 +1,22 @@
 import React from 'react';
-import { useDynamicComponent } from '../hooks/usePageConfig';
+import { useDynamicComponent } from '@/hooks/usePageConfig';
 
 // Importar componentes reais
-import { Header } from '../result/Header';
-import { Card } from '../ui/card';
-import { Button } from '../ui/button';
-import Testimonials from '../quiz-result/sales/Testimonials';
-import SecondaryStylesSection from '../quiz-result/SecondaryStylesSection';
-import MotivationSection from '../result/MotivationSection';
-import BonusSection from '../result/BonusSection';
-import GuaranteeSection from '../result/GuaranteeSection';
-import MentorSection from '../result/MentorSection';
-import SecurePurchaseElement from '../result/SecurePurchaseElement';
-import BeforeAfterTransformation from '../result/BeforeAfterTransformation';
-import FixedIntroImage from '../ui/FixedIntroImage';
+import { Header } from '@/components/result/Header';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import Testimonials from '@/components/quiz-result/sales/Testimonials';
+import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
+import MotivationSection from '@/components/result/MotivationSection';
+import BonusSection from '@/components/result/BonusSection';
+import GuaranteeSection from '@/components/result/GuaranteeSection';
+import MentorSection from '@/components/result/MentorSection';
+import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
+import BeforeAfterTransformation from '@/components/result/BeforeAfterTransformation';
+import FixedIntroImage from '@/components/ui/FixedIntroImage';
 
 // Componentes básicos
-import { Progress } from '../ui/progress';
+import { Progress } from '@/components/ui/progress';
 import { CheckCircle, Star, Gift, Lock, Shield, Award, Clock, ArrowRight } from 'lucide-react';
 
 interface DynamicBlockRendererProps {
