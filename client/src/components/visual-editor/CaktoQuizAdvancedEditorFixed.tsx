@@ -1,4 +1,7 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
+import { useAutoSaveDebounce } from '@/hooks/useAutoSaveDebounce';
+import { LayersPanel } from './LayersPanel';
+import { AdvancedTemplateSelector } from './AdvancedTemplateSelector';
 import { 
   Card, 
   CardContent, 
