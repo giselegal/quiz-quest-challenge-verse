@@ -4,3 +4,7 @@
  */
 
 // Placeholder - serão criados conforme necessário
+// Os arquivos existem mas estão vazios, implementar quando necessário
+
+// Export vazio para evitar erro de módulo
+export {};

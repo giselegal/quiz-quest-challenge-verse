@@ -53,10 +53,7 @@ const HeaderBlock: React.FC<HeaderBlockProps> = ({
       logo={logo}
       logoAlt={logoAlt}
       logoHeight={logoHeight}
-      showUserName={showUserName}
       userName={userName}
-      backgroundColor={backgroundColor}
-      sticky={sticky}
       className={className}
     />
   );
