@@ -1,4 +1,5 @@
 import React from 'react';
+import { InlineEditableText } from './InlineEditableText';
 
 interface ButtonBlockProps {
   properties: {
@@ -9,12 +10,14 @@ interface ButtonBlockProps {
   };
   isSelected?: boolean;
   onClick?: () => void;
+  onSaveInline?: (key: string) => (newValue: string) => void;
 }
 
 export const ButtonBlock: React.FC<ButtonBlockProps> = ({ 
   properties, 
   isSelected = false,
-  onClick 
+  onClick,
+  onSaveInline
 }) => {
   const { 
     text = 'Texto do Botão', 
@@ -46,16 +49,33 @@ export const ButtonBlock: React.FC<ButtonBlockProps> = ({
       `}
       onClick={onClick}
     >
-      <button 
-        className={`
-          rounded-lg font-medium transition-colors duration-200
+      {onSaveInline ? (
+        <div className={`
+          rounded-lg font-medium transition-colors duration-200 flex items-center justify-center
           ${styleClasses[style]}
           ${sizeClasses[size]}
-          ${fullWidth ? 'w-full' : 'w-auto'}
-        `}
-      >
-        {text}
-      </button>
+          ${fullWidth ? 'w-full' : 'w-auto min-w-[100px]'}
+        `}>
+          <InlineEditableText
+            tag="span"
+            value={text}
+            onSave={onSaveInline('text')}
+            className="text-center"
+            placeholder="Texto do botão"
+          />
+        </div>
+      ) : (
+        <button 
+          className={`
+            rounded-lg font-medium transition-colors duration-200
+            ${styleClasses[style]}
+            ${sizeClasses[size]}
+            ${fullWidth ? 'w-full' : 'w-auto'}
+          `}
+        >
+          {text}
+        </button>
+      )}
     </div>
   );
 };

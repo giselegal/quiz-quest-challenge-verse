@@ -1,4 +1,5 @@
 import React from 'react';
+import { InlineEditableText } from './InlineEditableText';
 import { ShoppingCart, Check } from 'lucide-react';
 
 interface ProductOfferBlockProps {
@@ -13,12 +14,14 @@ interface ProductOfferBlockProps {
   };
   isSelected?: boolean;
   onClick?: () => void;
+  onSaveInline?: (key: string) => (newValue: string) => void;
 }
 
 export const ProductOfferBlock: React.FC<ProductOfferBlockProps> = ({ 
   properties, 
   isSelected = false,
-  onClick 
+  onClick,
+  onSaveInline
 }) => {
   const { 
     productName = 'Produto Incrível',
@@ -49,24 +52,58 @@ export const ProductOfferBlock: React.FC<ProductOfferBlockProps> = ({
               src={productImage} 
               alt={productName}
               className="w-full h-full object-cover"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
             />
           </div>
         )}
         
         <div className="p-6">
           {/* Nome do Produto */}
-          <h3 className="text-xl font-bold text-[#432818] mb-4">
-            {productName}
-          </h3>
+          {onSaveInline ? (
+            <InlineEditableText
+              tag="h3"
+              value={productName}
+              onSave={onSaveInline('productName')}
+              className="text-xl font-bold text-[#432818] mb-4"
+              placeholder="Nome do produto"
+            />
+          ) : (
+            <h3 className="text-xl font-bold text-[#432818] mb-4">
+              {productName}
+            </h3>
+          )}
           
           {/* Preços */}
           <div className="flex items-center space-x-3 mb-4">
-            <span className="text-sm text-gray-500 line-through">
-              {originalPrice}
-            </span>
-            <span className="text-2xl font-bold text-[#B89B7A]">
-              {discountPrice}
-            </span>
+            {onSaveInline ? (
+              <>
+                <InlineEditableText
+                  tag="span"
+                  value={originalPrice}
+                  onSave={onSaveInline('originalPrice')}
+                  className="text-sm text-gray-500 line-through"
+                  placeholder="Preço original"
+                />
+                <InlineEditableText
+                  tag="span"
+                  value={discountPrice}
+                  onSave={onSaveInline('discountPrice')}
+                  className="text-2xl font-bold text-[#B89B7A]"
+                  placeholder="Preço com desconto"
+                />
+              </>
+            ) : (
+              <>
+                <span className="text-sm text-gray-500 line-through">
+                  {originalPrice}
+                </span>
+                <span className="text-2xl font-bold text-[#B89B7A]">
+                  {discountPrice}
+                </span>
+              </>
+            )}
           </div>
           
           {/* Benefícios */}
@@ -82,13 +119,30 @@ export const ProductOfferBlock: React.FC<ProductOfferBlockProps> = ({
           )}
           
           {/* Botão */}
-          <button 
-            className="w-full bg-[#B89B7A] hover:bg-[#a08965] text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
-          >
+          <div className="w-full bg-[#B89B7A] hover:bg-[#a08965] text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
             <ShoppingCart className="w-5 h-5" />
-            <span>{buttonText}</span>
-          </button>
+            {onSaveInline ? (
+              <InlineEditableText
+                tag="span"
+                value={buttonText}
+                onSave={onSaveInline('buttonText')}
+                className="text-center text-white"
+                placeholder="Texto do botão"
+              />
+            ) : (
+              <span>{buttonText}</span>
+            )}
+          </div>
         </div>
+
+        {/* Nota sobre edição via painel */}
+        {isSelected && (
+          <div className="p-3 bg-blue-50 border-t border-blue-200">
+            <p className="text-xs text-blue-700">
+              💡 Para editar os benefícios e URL, use o painel de propriedades à direita
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
