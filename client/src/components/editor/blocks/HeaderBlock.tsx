@@ -16,7 +16,8 @@ interface HeaderBlockProps {
 export const HeaderBlock: React.FC<HeaderBlockProps> = ({ 
   properties, 
   isSelected = false,
-  onClick 
+  onClick,
+  onSaveInline
 }) => {
   const { title = 'Título Principal', subtitle, titleSize = 'large', alignment = 'center' } = properties;
 
@@ -44,13 +45,34 @@ export const HeaderBlock: React.FC<HeaderBlockProps> = ({
       `}
       onClick={onClick}
     >
-      <h1 className={`font-bold text-[#aa6b5d] ${titleSizeClasses[titleSize]}`}>
-        {title}
-      </h1>
+      {onSaveInline ? (
+        <InlineEditableText
+          tag="h1"
+          value={title}
+          onSave={onSaveInline('title')}
+          className={`font-bold text-[#aa6b5d] ${titleSizeClasses[titleSize]}`}
+          placeholder="Título do cabeçalho"
+        />
+      ) : (
+        <h1 className={`font-bold text-[#aa6b5d] ${titleSizeClasses[titleSize]}`}>
+          {title}
+        </h1>
+      )}
+      
       {subtitle && (
-        <p className="text-lg mt-4 text-[#432818] max-w-2xl mx-auto">
-          {subtitle}
-        </p>
+        onSaveInline ? (
+          <InlineEditableText
+            tag="p"
+            value={subtitle}
+            onSave={onSaveInline('subtitle')}
+            className="text-lg mt-4 text-[#432818] max-w-2xl mx-auto"
+            placeholder="Subtítulo opcional"
+          />
+        ) : (
+          <p className="text-lg mt-4 text-[#432818] max-w-2xl mx-auto">
+            {subtitle}
+          </p>
+        )
       )}
     </div>
   );
