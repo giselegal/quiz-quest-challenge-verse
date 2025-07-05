@@ -148,13 +148,43 @@ const StrategicQuestionBlock: React.FC<StrategicQuestionBlockProps> = ({
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
-                    <p className="font-medium text-[#432818]">
-                      {option.text}
-                    </p>
-                    {option.description && (
-                      <p className="text-sm text-[#8F7A6A] mt-1">
-                        {option.description}
+                    {isEditing ? (
+                      <InlineEditableText
+                        value={option.text}
+                        onSave={(value: string) => {
+                          const updatedOptions = options.map((opt: any, i: number) => 
+                            i === index ? { ...opt, text: value } : opt
+                          );
+                          handlePropertyChange('options', updatedOptions);
+                        }}
+                        className="font-medium text-[#432818]"
+                        placeholder="Texto da opção estratégica"
+                        tag="p"
+                      />
+                    ) : (
+                      <p className="font-medium text-[#432818]">
+                        {option.text}
                       </p>
+                    )}
+                    {option.description && (
+                      isEditing ? (
+                        <InlineEditableText
+                          value={option.description}
+                          onSave={(value: string) => {
+                            const updatedOptions = options.map((opt: any, i: number) => 
+                              i === index ? { ...opt, description: value } : opt
+                            );
+                            handlePropertyChange('options', updatedOptions);
+                          }}
+                          className="text-sm text-[#8F7A6A] mt-1"
+                          placeholder="Descrição da opção estratégica"
+                          tag="p"
+                        />
+                      ) : (
+                        <p className="text-sm text-[#8F7A6A] mt-1">
+                          {option.description}
+                        </p>
+                      )
                     )}
                   </div>
                   

@@ -1,21 +1,26 @@
 import React from 'react';
 import { FileText } from 'lucide-react';
+import { InlineEditableText } from './InlineEditableText';
+import type { BlockComponentProps } from '@/types/blocks';
 
-interface ResultDescriptionBlockProps {
-  properties: {
-    content?: string;
-    showIcon?: boolean;
-  };
-  isSelected?: boolean;
-  onClick?: () => void;
-}
-
-export const ResultDescriptionBlock: React.FC<ResultDescriptionBlockProps> = ({ 
-  properties, 
+const ResultDescriptionBlock: React.FC<BlockComponentProps> = ({ 
+  block,
   isSelected = false,
-  onClick 
+  isEditing = false,
+  onClick,
+  onPropertyChange,
+  className = ''
 }) => {
-  const { content = 'Baseado nas suas respostas, identificamos que...', showIcon = true } = properties;
+  const { 
+    content = 'Baseado nas suas respostas, identificamos que...', 
+    showIcon = true 
+  } = block.properties;
+
+  const handlePropertyChange = (key: string, value: any) => {
+    if (onPropertyChange) {
+      onPropertyChange(key, value);
+    }
+  };
 
   return (
     <div 
@@ -25,8 +30,11 @@ export const ResultDescriptionBlock: React.FC<ResultDescriptionBlockProps> = ({
           ? 'border-2 border-blue-500 bg-blue-50' 
           : 'border-2 border-dashed border-[#B89B7A]/40 hover:bg-[#FAF9F7]'
         }
+        ${className}
       `}
       onClick={onClick}
+      data-block-id={block.id}
+      data-block-type={block.type}
     >
       <div className="flex items-start space-x-4">
         {showIcon && (
@@ -36,12 +44,17 @@ export const ResultDescriptionBlock: React.FC<ResultDescriptionBlockProps> = ({
         )}
         
         <div className="flex-1">
-          <div 
-            className="text-gray-700 leading-relaxed whitespace-pre-wrap"
-            dangerouslySetInnerHTML={{ __html: content }}
+          <InlineEditableText
+            value={content}
+            onSave={(value: string) => handlePropertyChange('content', value)}
+            className="text-gray-700 leading-relaxed"
+            placeholder="Descrição detalhada do resultado baseado nas respostas do quiz"
+            tag="div"
           />
         </div>
       </div>
     </div>
   );
 };
+
+export default ResultDescriptionBlock;

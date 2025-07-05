@@ -223,19 +223,55 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
                 {/* Option Text */}
                 {showText && (
                   <div className="text-center space-y-1">
-                    <p className={cn(
-                      'font-medium text-base',
-                      isSelected ? 'text-[#432818]' : 'text-[#432818]' // brand-coffee
-                    )}>
-                      {option.text}
-                    </p>
-                    {option.description && (
+                    {isEditing ? (
+                      <InlineEditableText
+                        value={option.text}
+                        onSave={(value: string) => {
+                          const updatedOptions = options.map((opt: any, i: number) => 
+                            i === index ? { ...opt, text: value } : opt
+                          );
+                          handlePropertyChange('options', updatedOptions);
+                        }}
+                        className={cn(
+                          'font-medium text-base',
+                          isSelected ? 'text-[#432818]' : 'text-[#432818]' // brand-coffee
+                        )}
+                        placeholder="Texto da opção"
+                        tag="p"
+                      />
+                    ) : (
                       <p className={cn(
-                        'text-sm',
-                        isSelected ? 'text-[#8F7A6A]' : 'text-[#8F7A6A]' // brand-light-coffee
+                        'font-medium text-base',
+                        isSelected ? 'text-[#432818]' : 'text-[#432818]' // brand-coffee
                       )}>
-                        {option.description}
+                        {option.text}
                       </p>
+                    )}
+                    {option.description && (
+                      isEditing ? (
+                        <InlineEditableText
+                          value={option.description}
+                          onSave={(value: string) => {
+                            const updatedOptions = options.map((opt: any, i: number) => 
+                              i === index ? { ...opt, description: value } : opt
+                            );
+                            handlePropertyChange('options', updatedOptions);
+                          }}
+                          className={cn(
+                            'text-sm',
+                            isSelected ? 'text-[#8F7A6A]' : 'text-[#8F7A6A]' // brand-light-coffee
+                          )}
+                          placeholder="Descrição da opção"
+                          tag="p"
+                        />
+                      ) : (
+                        <p className={cn(
+                          'text-sm',
+                          isSelected ? 'text-[#8F7A6A]' : 'text-[#8F7A6A]' // brand-light-coffee
+                        )}>
+                          {option.description}
+                        </p>
+                      )
                     )}
                   </div>
                 )}

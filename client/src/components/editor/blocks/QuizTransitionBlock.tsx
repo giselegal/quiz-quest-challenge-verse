@@ -165,11 +165,19 @@ const QuizTransitionBlock: React.FC<QuizTransitionBlockProps> = ({
           {renderAnimation()}
         </div>
 
-        {/* Texto rotativo */}
+        {/* Texto rotativo - EDITÁVEL INLINE */}
         <div className="min-h-[2.5rem] flex items-center justify-center">
-          <p className="text-base text-[#8F7A6A] animate-fade-in">
-            {loadingTexts[currentTextIndex]}
-          </p>
+          <InlineEditableText
+            value={loadingTexts[currentTextIndex]}
+            onSave={(value: string) => {
+              const newTexts = [...loadingTexts];
+              newTexts[currentTextIndex] = value;
+              handlePropertyChange('loadingTexts', newTexts);
+            }}
+            className="text-base text-[#8F7A6A] animate-fade-in"
+            placeholder="Texto de loading..."
+            tag="p"
+          />
         </div>
 
         {/* Barra de progresso global */}
@@ -187,14 +195,22 @@ const QuizTransitionBlock: React.FC<QuizTransitionBlockProps> = ({
           </div>
         )}
 
-        {/* Mensagem adicional */}
+        {/* Mensagem adicional - EDITÁVEL INLINE */}
         <div className="space-y-3 pt-4">
-          <p className="text-[#8F7A6A]">
-            A ideia é simples: te ajudar a enxergar com mais clareza onde você está agora — e para onde pode ir com mais intenção, leveza e autenticidade.
-          </p>
-          <p className="text-sm font-medium text-[#432818]">
-            💬 Responda com sinceridade. Isso é só entre você e a sua nova versão.
-          </p>
+          <InlineEditableText
+            value="A ideia é simples: te ajudar a enxergar com mais clareza onde você está agora — e para onde pode ir com mais intenção, leveza e autenticidade."
+            onSave={(value: string) => handlePropertyChange('description', value)}
+            className="text-[#8F7A6A]"
+            placeholder="Descrição adicional..."
+            tag="p"
+          />
+          <InlineEditableText
+            value="💬 Responda com sinceridade. Isso é só entre você e a sua nova versão."
+            onSave={(value: string) => handlePropertyChange('motivationalText', value)}
+            className="text-sm font-medium text-[#432818]"
+            placeholder="Texto motivacional..."
+            tag="p"
+          />
         </div>
       </div>
     </div>
