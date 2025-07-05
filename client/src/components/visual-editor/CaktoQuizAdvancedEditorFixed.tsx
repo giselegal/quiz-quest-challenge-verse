@@ -58,7 +58,7 @@ import GuaranteeSection from '@/components/result/GuaranteeSection';
 import MentorSection from '@/components/result/MentorSection';
 import BuildInfo from '@/components/BuildInfo';
 import FixedIntroImage from '@/components/ui/FixedIntroImage';
-import {
+import { 
   Type,
   Image as ImageIcon,
   Star,
@@ -98,6 +98,8 @@ import {
   Upload,
   GripVertical,
   Lock,
+  ShoppingCart,
+  ArrowDown,
   Shield,
   Award
 } from 'lucide-react';
@@ -436,16 +438,17 @@ const createInitialFunnel = (): FunnelData => ({
             primaryStyle: 'Elegante Clássica'
           }
         },
-        // 2. Card do Estilo Predominante 
+        // 2. Card do Estilo Predominante (exato da ResultPage)
         {
-          id: 'result-style-card',
-          type: 'result-style-display',
+          id: 'result-style-card-detailed',
+          type: 'result-style-card-component',
           order: 2,
           settings: {
-            styleName: 'Estilo Predominante',
+            styleName: 'Elegante Clássica',
             percentage: 92,
+            description: 'Sua personalidade refletida no seu estilo de vestir. Aqui está como aplicar na prática.',
             styleImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp',
-            styleDescription: 'Sua personalidade refletida no seu estilo de vestir. Aqui está como aplicar na prática.'
+            guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp'
           }
         },
         // 3. SecondaryStylesSection Real
@@ -506,12 +509,61 @@ const createInitialFunnel = (): FunnelData => ({
           order: 10,
           settings: {}
         },
-        // 11. BuildInfo Real
+        // 12. Value Stack Section (editável)
         {
-          id: 'result-build-info',
-          type: 'build-info-component',
-          order: 11,
-          settings: {}
+          id: 'result-value-stack-section',
+          type: 'result-value-stack-component',
+          order: 12,
+          settings: {
+            title: 'O Que Você Recebe Hoje',
+            items: [
+              { name: 'Guia Principal', price: 'R$ 67,00' },
+              { name: 'Bônus - Peças-chave', price: 'R$ 79,00' },
+              { name: 'Bônus - Visagismo Facial', price: 'R$ 29,00' }
+            ],
+            totalLabel: 'Valor Total',
+            totalPrice: 'R$ 175,00',
+            discountLabel: 'Hoje por apenas',
+            finalPrice: 'R$ 39,00',
+            paymentNote: 'Pagamento único'
+          }
+        },
+        // 13. CTA Verde Principal (editável)
+        {
+          id: 'result-main-cta-green',
+          type: 'result-cta-green-component',
+          order: 13,
+          settings: {
+            text: 'Garantir Meu Guia + Bônus Especiais',
+            subtitle: 'Quero meu Guia de Estilo Agora',
+            securityText: '🔒 Pagamento 100% Seguro\n✓ Garantia de 7 dias\n🛡️ Oferta exclusiva nesta página'
+          }
+        },
+        // 12. Value Stack da ResultPage (específico)
+        {
+          id: 'result-value-stack-detailed',
+          type: 'result-value-stack-component',
+          order: 12,
+          settings: {
+            items: [
+              { name: 'Guia Principal', value: 'R$ 67,00' },
+              { name: 'Bônus - Peças-chave', value: 'R$ 79,00' },
+              { name: 'Bônus - Visagismo Facial', value: 'R$ 29,00' }
+            ],
+            totalValue: 'R$ 175,00',
+            currentPrice: 'R$ 39,00',
+            description: 'Pagamento único'
+          }
+        },
+        // 13. CTA Verde da ResultPage
+        {
+          id: 'result-green-cta',
+          type: 'result-green-cta-component',
+          order: 13,
+          settings: {
+            text: 'Garantir Meu Guia + Bônus Especiais',
+            description: 'Quero meu Guia de Estilo Agora'
+          }
         }
       ]
     },
@@ -530,242 +582,131 @@ const createInitialFunnel = (): FunnelData => ({
         abTestVariant: 'B'
       },
       blocks: [
-        // 1. Banner de Urgência (exato da página real)
+        // 1. Banner de Urgência (editável)
         {
           id: 'offer-urgency-banner',
-          type: 'text',
+          type: 'offer-urgency-banner-component',
           order: 1,
           settings: {
-            content: '🔥 ÚLTIMAS HORAS: 77% OFF - Apenas R$ 39,90!',
-            fontSize: 'small',
-            alignment: 'center'
+            text: '🔥 ÚLTIMAS HORAS: 77% OFF - Apenas R$ 39,90!',
+            backgroundColor: '#ff4444',
+            textColor: '#ffffff'
           }
         },
-        // 2. Logo da marca (como na página real)
+        // 2. Logo da marca (editável)
         {
           id: 'offer-logo',
-          type: 'image',
+          type: 'offer-logo-component',
           order: 2,
           settings: {
             src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
             alt: 'Logo Gisele Galvão',
-            width: '200px',
-            alignment: 'center'
+            width: '200px'
           }
         },
-        // 3. Título principal (exato da página real)
+        // 3. Título principal (editável)
         {
           id: 'offer-main-title',
-          type: 'header',
+          type: 'offer-hero-section-component',
           order: 3,
           settings: {
             title: 'Descubra Seu Estilo Predominante em 5 Minutos',
             subtitle: 'Tenha finalmente um guarda-roupa que funciona 100%, onde tudo combina e reflete sua personalidade',
-            titleSize: 'large',
-            alignment: 'center'
+            heroImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.webp',
+            ctaText: 'Descobrir Meu Estilo Agora'
           }
         },
-        // 4. Imagem hero (da página real)
+        // 4. Seção de Problemas (editável)
         {
-          id: 'offer-hero-image',
-          type: 'image',
+          id: 'offer-problems-section',
+          type: 'offer-problems-component',
           order: 4,
           settings: {
-            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.webp',
-            alt: 'Transformação de guarda-roupa',
-            width: '500px',
-            alignment: 'center'
-          }
-        },
-        // 5. CTA Principal (texto exato da página real)
-        {
-          id: 'offer-main-cta',
-          type: 'button',
-          order: 5,
-          settings: {
-            text: 'Descobrir Meu Estilo Agora',
-            style: 'primary',
-            size: 'lg',
-            fullWidth: true
-          }
-        },
-        // 6. Seção "Você se identifica?" (exato da página real)
-        {
-          id: 'offer-problem-section',
-          type: 'header',
-          order: 6,
-          settings: {
             title: 'Você se identifica com isso?',
-            subtitle: '',
-            titleSize: 'medium',
-            alignment: 'center'
+            problems: [
+              'Guarda-roupa cheio mas nunca tem o que vestir?',
+              'Compra peças que nunca combinam com nada?',
+              'Sente que "nada fica bom" em você?',
+              'Gasta dinheiro em roupas que ficam no armário?'
+            ],
+            insight: 'Isso acontece porque você ainda não descobriu seu estilo predominante.'
           }
         },
-        // 7. Lista de problemas (exatos da página real)
+        // 5. Seção da Solução (editável)
         {
-          id: 'offer-problems-list',
-          type: 'text',
-          order: 7,
-          settings: {
-            content: '• Guarda-roupa cheio mas nunca tem o que vestir?\n• Compra peças que nunca combinam com nada?\n• Sente que "nada fica bom" em você?\n• Gasta dinheiro em roupas que ficam no armário?',
-            fontSize: 'medium',
-            alignment: 'left'
-          }
-        },
-        // 8. Insight (texto exato da página real)
-        {
-          id: 'offer-insight',
-          type: 'text',
-          order: 8,
-          settings: {
-            content: 'Isso acontece porque você ainda não descobriu seu estilo predominante.',
-            fontSize: 'medium',
-            alignment: 'center'
-          }
-        },
-        // 9. Seção da Solução (exato da página real)
-        {
-          id: 'offer-solution-title',
-          type: 'header',
-          order: 9,
+          id: 'offer-solution-section',
+          type: 'offer-solution-component',
+          order: 5,
           settings: {
             title: 'A Solução: Quiz de Estilo',
             subtitle: 'Método preciso para identificar seu estilo entre os 7 estilos universais + guia personalizado completo.',
-            titleSize: 'medium',
-            alignment: 'center'
+            solutionImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746650306/oie_1_gcozz9.webp'
           }
         },
-        // 10. Imagem da solução (da página real)
-        {
-          id: 'offer-solution-image',
-          type: 'image',
-          order: 10,
-          settings: {
-            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746650306/oie_1_gcozz9.webp',
-            alt: 'Quiz de Estilo',
-            width: '400px',
-            alignment: 'center'
-          }
-        },
-        // 11. Countdown Timer (como na página real)
+        // 6. Countdown Timer (editável)
         {
           id: 'offer-countdown',
-          type: 'countdown',
-          order: 11,
+          type: 'offer-countdown-component',
+          order: 6,
           settings: {
             title: 'OFERTA EXPIRA EM:',
-            hours: 24
+            hours: 24,
+            urgencyText: 'Não perca esta oportunidade única!'
           }
         },
-        // 12. Transformação Completa (título da página real)
+        // 7. Seção de Transformação (editável)
         {
-          id: 'offer-transformation-title',
-          type: 'header',
-          order: 12,
+          id: 'offer-transformation-section',
+          type: 'offer-transformation-component',
+          order: 7,
           settings: {
             title: 'Transformação Completa',
             subtitle: 'Tudo que você precisa para descobrir e aplicar seu estilo',
-            titleSize: 'medium',
-            alignment: 'center'
+            mainGuideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp',
+            bonuses: [
+              {
+                title: 'Bônus 1: Peças-Chave do Guarda-Roupa',
+                description: 'Um manual completo para construir um armário funcional, versátil e alinhado com sua identidade.',
+                value: 'R$ 79,00',
+                image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp'
+              },
+              {
+                title: 'Bônus 2: Guia de Visagismo Facial',
+                description: 'Descubra qual formato de rosto você tem e como escolher cortes, acessórios e maquiagem que harmonizam.',
+                value: 'R$ 29,00',
+                image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp'
+              }
+            ]
           }
         },
-        // 13. Imagem do guia principal (da página real)
-        {
-          id: 'offer-guide-main-image',
-          type: 'image',
-          order: 13,
-          settings: {
-            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp',
-            alt: 'Guia Principal',
-            width: '400px',
-            alignment: 'center'
-          }
-        },
-        // 14. Bônus 1 (exato da página real)
-        {
-          id: 'offer-bonus-1',
-          type: 'bonus',
-          order: 14,
-          settings: {
-            title: 'Bônus 1: Peças-Chave do Guarda-Roupa',
-            description: 'Um manual completo para construir um armário funcional, versátil e alinhado com sua identidade.',
-            value: 'Valor: R$ 79,00'
-          }
-        },
-        // 15. Imagem bônus 1 (da página real)
-        {
-          id: 'offer-bonus-1-image',
-          type: 'image',
-          order: 15,
-          settings: {
-            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp',
-            alt: 'Bônus Peças-chave',
-            width: '300px',
-            alignment: 'center'
-          }
-        },
-        // 16. Bônus 2 (exato da página real)
-        {
-          id: 'offer-bonus-2',
-          type: 'bonus',
-          order: 16,
-          settings: {
-            title: 'Bônus 2: Guia de Visagismo Facial',
-            description: 'Descubra qual formato de rosto você tem e como escolher cortes, acessórios e maquiagem que harmonizam.',
-            value: 'Valor: R$ 29,00'
-          }
-        },
-        // 17. Imagem bônus 2 (da página real)
-        {
-          id: 'offer-bonus-2-image',
-          type: 'image',
-          order: 17,
-          settings: {
-            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp',
-            alt: 'Bônus Visagismo',
-            width: '300px',
-            alignment: 'center'
-          }
-        },
-        // 18. Seção de preço (exata da página real)
+        // 8. Seção de Preço (editável)
         {
           id: 'offer-pricing-section',
-          type: 'price',
-          order: 18,
+          type: 'offer-pricing-component',
+          order: 8,
           settings: {
             originalPrice: 'R$ 175,00',
             currentPrice: 'R$ 39,90',
             discount: '77% OFF',
-            urgency: 'Oferta por tempo limitado!'
+            urgency: 'Oferta por tempo limitado!',
+            ctaText: 'Quero Descobrir Meu Estilo!'
           }
         },
-        // 19. CTA Final (texto exato da página real)
-        {
-          id: 'offer-final-cta',
-          type: 'button',
-          order: 19,
-          settings: {
-            text: 'Quero Descobrir Meu Estilo!',
-            style: 'primary',
-            size: 'lg',
-            fullWidth: true
-          }
-        },
-        // 20. Garantia (como na página real)
+        // 9. Garantia (editável)
         {
           id: 'offer-guarantee',
-          type: 'guarantee',
-          order: 20,
+          type: 'offer-guarantee-component',
+          order: 9,
           settings: {
             title: 'Garantia de 7 Dias',
             description: 'Estou tão confiante de que estes materiais vão transformar sua relação com a sua imagem pessoal que ofereço uma garantia incondicional de 7 dias.'
           }
         },
-        // 21. FAQ (estrutura da página real)
+        // 10. FAQ (editável)
         {
           id: 'offer-faq',
-          type: 'faq',
-          order: 21,
+          type: 'offer-faq-component',
+          order: 10,
           settings: {
             questions: [
               {
@@ -1075,6 +1016,31 @@ const blockLibrary = [
     description: 'Lista de benefícios/instruções com layouts flexíveis',
     icon: <CheckCircle className="w-4 h-4" />,
     category: 'Quiz Introdução'
+  },
+  // Componentes específicos da Etapa 20 (Resultado)
+  { 
+    id: 'result-value-stack-component',
+    type: 'result-value-stack-component', 
+    name: 'Value Stack Resultado', 
+    description: 'Seção de valor com preços editáveis',
+    icon: <CreditCard className="w-4 h-4" />,
+    category: 'Resultado'
+  },
+  { 
+    id: 'result-cta-green-component',
+    type: 'result-cta-green-component', 
+    name: 'CTA Verde Principal', 
+    description: 'Botão de ação verde com segurança',
+    icon: <ShoppingCart className="w-4 h-4" />,
+    category: 'Resultado'
+  },
+  { 
+    id: 'result-style-card-component',
+    type: 'result-style-card-component', 
+    name: 'Card Estilo Predominante', 
+    description: 'Card completo do resultado do estilo',
+    icon: <Sparkles className="w-4 h-4" />,
+    category: 'Resultado'
   }
 ];
 
@@ -2733,6 +2699,11 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 <h3 className="text-xl md:text-2xl font-semibold text-[#432818] leading-relaxed">
                   {block?.settings?.question || 'Pergunta estratégica sobre seus objetivos'}
                 </h3>
+                {block?.settings?.subtitle && (
+                  <p className="text-center text-[#6B5B73] text-lg mt-4 italic">
+                    {block.settings.subtitle}
+                  </p>
+                )}
               </div>
               
               <div className="space-y-3">
@@ -3632,6 +3603,70 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         );
         break;
 
+      case 'result-style-card-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+            <Card className="p-6 bg-white shadow-md border border-[#B89B7A]/20">
+              <div className="text-center mb-8">
+                <div className="max-w-md mx-auto mb-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm text-[#8F7A6A]">
+                      Seu estilo predominante
+                    </span>
+                    <span className="text-[#aa6b5d] font-medium">{block?.settings?.percentage || 92}%</span>
+                  </div>
+                  <div className="w-full h-2 bg-[#F3E8E6] rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]"
+                      style={{ width: `${block?.settings?.percentage || 92}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-8 items-center">
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-[#432818] mb-4">
+                    {block?.settings?.styleName || 'Elegante Clássica'}
+                  </h2>
+                  <p className="text-[#432818] leading-relaxed">
+                    {block?.settings?.description || 'Sua personalidade refletida no seu estilo de vestir.'}
+                  </p>
+                  <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10">
+                    <h3 className="text-lg font-medium text-[#432818] mb-2">Estilos que Também Influenciam Você</h3>
+                    <SecondaryStylesSection secondaryStyles={[]} />
+                  </div>
+                </div>
+                <div className="max-w-[238px] mx-auto relative">
+                  {block?.settings?.styleImage && (
+                    <img 
+                      src={block.settings.styleImage} 
+                      alt={`Estilo ${block?.settings?.styleName}`}
+                      className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+                    />
+                  )}
+                  <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
+                  <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>
+                </div>
+              </div>
+              
+              {block?.settings?.guideImage && (
+                <div className="mt-8 max-w-[540px] mx-auto relative">
+                  <img 
+                    src={block.settings.guideImage} 
+                    alt="Guia de Estilo"
+                    className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
+                    Exclusivo
+                  </div>
+                </div>
+              )}
+            </Card>
+          </div>
+        );
+        break;
+
       case 'before-after-component':
         content = (
           <div style={baseStyle} onClick={handleBlockClick} className="py-4">
@@ -3692,6 +3727,176 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         content = (
           <div style={baseStyle} onClick={handleBlockClick} className="py-4">
             <BuildInfo />
+          </div>
+        );
+        break;
+
+      case 'result-value-stack-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+            <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 max-w-md mx-auto">
+              <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">
+                {block?.settings?.title || 'O Que Você Recebe Hoje'}
+              </h3>
+              
+              <div className="space-y-3 mb-6">
+                {(block?.settings?.items || []).map((item: any, index: number) => (
+                  <div key={index} className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
+                    <span>{item.name}</span>
+                    <span className="font-medium">{item.price}</span>
+                  </div>
+                ))}
+                <div className="flex justify-between items-center p-2 pt-3 font-bold">
+                  <span>{block?.settings?.totalLabel || 'Valor Total'}</span>
+                  <div className="relative">
+                    <span>{block?.settings?.totalPrice || 'R$ 175,00'}</span>
+                    <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#ff5a5a] transform -translate-y-1/2 -rotate-3"></div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
+                <p className="text-sm text-[#aa6b5d] uppercase font-medium">
+                  {block?.settings?.discountLabel || 'Hoje por apenas'}
+                </p>
+                <p className="text-4xl font-bold text-[#B89B7A]">
+                  {block?.settings?.finalPrice || 'R$ 39,00'}
+                </p>
+                <p className="text-xs text-[#3a3a3a]/60 mt-1">
+                  {block?.settings?.paymentNote || 'Pagamento único'}
+                </p>
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'result-cta-green-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+            <div className="text-center space-y-4">
+              <div className="bg-[#f9f4ef] p-6 rounded-lg border border-[#B89B7A]/10 mb-6">
+                <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">
+                  Descubra Como Aplicar Seu Estilo na Prática
+                </h3>
+                <div className="flex justify-center">
+                  <ArrowDown className="w-8 h-8 text-[#B89B7A] animate-bounce" />
+                </div>
+              </div>
+              
+              <Button 
+                className="text-white py-5 px-8 rounded-md shadow-md transition-colors mb-2"
+                style={{
+                  background: "linear-gradient(to right, #4CAF50, #45a049)",
+                  boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
+                  fontSize: "1rem"
+                }}
+              >
+                <span className="flex items-center justify-center gap-2">
+                  <ShoppingCart className="w-4 h-4" />
+                  <span>{block?.settings?.text || 'Garantir Meu Guia + Bônus Especiais'}</span>
+                </span>
+              </Button>
+
+              <SecurePurchaseElement />
+
+              {block?.settings?.securityText && (
+                <div className="text-sm text-[#aa6b5d] space-y-1">
+                  {block.settings.securityText.split('\n').map((line: string, index: number) => (
+                    <p key={index} className="flex items-center justify-center gap-1">
+                      {line.includes('🔒') && <Lock className="w-3 h-3" />}
+                      <span>{line.replace('🔒', '').replace('✓', '').replace('🛡️', '').trim()}</span>
+                    </p>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        );
+        break;
+
+      case 'result-value-stack-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+            <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 max-w-md mx-auto">
+              <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">O Que Você Recebe Hoje</h3>
+              
+              <div className="space-y-3 mb-6">
+                {(block?.settings?.items || [
+                  { name: 'Guia Principal', value: 'R$ 67,00' },
+                  { name: 'Bônus - Peças-chave', value: 'R$ 79,00' },
+                  { name: 'Bônus - Visagismo Facial', value: 'R$ 29,00' }
+                ]).map((item: any, index: number) => (
+                  <div key={index} className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
+                    <span>{item.name}</span>
+                    <span className="font-medium">{item.value}</span>
+                  </div>
+                ))}
+                <div className="flex justify-between items-center p-2 pt-3 font-bold">
+                  <span>Valor Total</span>
+                  <div className="relative">
+                    <span>{block?.settings?.totalValue || 'R$ 175,00'}</span>
+                    <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#ff5a5a] transform -translate-y-1/2 -rotate-3"></div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
+                <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
+                <p className="text-4xl font-bold text-[#B89B7A]">{block?.settings?.currentPrice || 'R$ 39,00'}</p>
+                <p className="text-xs text-[#3a3a3a]/60 mt-1">{block?.settings?.description || 'Pagamento único'}</p>
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'result-green-cta-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+            <div className="text-center">
+              <div className="bg-[#f9f4ef] p-6 rounded-lg border border-[#B89B7A]/10 mb-6">
+                <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">
+                  Descubra Como Aplicar Seu Estilo na Prática
+                </h3>
+                <div className="flex justify-center">
+                  <ArrowDown className="w-8 h-8 text-[#B89B7A] animate-bounce" />
+                </div>
+              </div>
+              
+              <Button 
+                className="text-white py-4 px-6 rounded-md mb-4"
+                style={{
+                  background: "linear-gradient(to right, #4CAF50, #45a049)",
+                  boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
+                }}
+              >
+                <span className="flex items-center justify-center gap-2">
+                  <ShoppingCart className="w-5 h-5" />
+                  {block?.settings?.description || 'Quero meu Guia de Estilo Agora'}
+                </span>
+              </Button>
+              
+              <Button 
+                className="text-white py-5 px-8 rounded-md shadow-md"
+                style={{
+                  background: "linear-gradient(to right, #4CAF50, #45a049)",
+                  boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
+                }}
+              >
+                <span className="flex items-center justify-center gap-2">
+                  <ShoppingCart className="w-4 h-4" />
+                  {block?.settings?.text || 'Garantir Meu Guia + Bônus Especiais'}
+                </span>
+              </Button>
+              
+              <SecurePurchaseElement />
+              
+              <p className="text-sm text-[#aa6b5d] mt-2 flex items-center justify-center gap-1">
+                <Lock className="w-3 h-3" />
+                <span>Oferta exclusiva nesta página</span>
+              </p>
+            </div>
           </div>
         );
         break;
