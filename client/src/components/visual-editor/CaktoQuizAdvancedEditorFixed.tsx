@@ -769,138 +769,146 @@ const blockLibrary = [
     icon: <ArrowRight className="w-4 h-4" />,
     category: 'Interação'
   },
-  // Quiz Intro - BLOCOS ESPECÍFICOS DO FUNIL
+  // FUNIL - BLOCOS ESPECÍFICOS SEMPRE VISÍVEIS
   { 
     id: 'QuizIntroBlock',
     type: 'QuizIntroBlock', 
     name: 'Quiz Introdução Completa', 
-    description: 'Bloco completo de introdução do quiz com coleta de nome',
+    description: 'Bloco completo de introdução do quiz com coleta de nome (editável independente)',
     icon: <Play className="w-4 h-4" />,
-    category: 'Quiz'
+    category: 'Funil'
   },
   { 
     id: 'StartButtonBlock',
     type: 'StartButtonBlock', 
     name: 'Botão Iniciar Quiz', 
-    description: 'Botão específico para iniciar o quiz',
+    description: 'Botão específico para iniciar o quiz (editável independente)',
     icon: <Play className="w-4 h-4" />,
-    category: 'Quiz'
+    category: 'Funil'
   },
   { 
     id: 'QuizBenefitsBlock',
     type: 'QuizBenefitsBlock', 
     name: 'Benefícios do Quiz', 
-    description: 'Seção de benefícios do quiz',
+    description: 'Seção de benefícios do quiz (editável independente)',
     icon: <Star className="w-4 h-4" />,
-    category: 'Quiz'
+    category: 'Funil'
   },
-  // Quiz Progress e Navigation
+  // Quiz Progress e Navigation - SEMPRE VISÍVEIS NO FUNIL
   { 
     id: 'quiz-progress-bar',
     type: 'quiz-progress-bar', 
     name: 'Barra de Progresso Quiz', 
-    description: 'Barra de progresso específica do quiz',
+    description: 'Barra de progresso específica do quiz (editável)',
     icon: <RotateCcw className="w-4 h-4" />,
-    category: 'Quiz'
+    category: 'Funil'
   },
   { 
     id: 'quiz-navigation-controls',
     type: 'quiz-navigation-controls', 
     name: 'Controles de Navegação Quiz', 
-    description: 'Botões de navegação do quiz',
+    description: 'Botões de navegação do quiz (editável)',
     icon: <ArrowRight className="w-4 h-4" />,
-    category: 'Quiz'
+    category: 'Funil'
   },
-  // Quiz
+  // Quiz - QUESTÕES PRINCIPAIS DO FUNIL
   { 
     id: 'question-multiple',
     type: 'question-multiple', 
     name: 'Pergunta Múltipla Escolha', 
-    description: 'Pergunta com opções e imagens',
+    description: 'Pergunta com opções, imagens melhoradas (2 cols c/ img, 1 col texto)',
     icon: <CheckCircle className="w-4 h-4" />,
-    category: 'Quiz'
+    category: 'Funil'
   },
   { 
-    id: 'question-strategic',
-    type: 'question-strategic', 
+    id: 'strategic-question',
+    type: 'strategic-question', 
     name: 'Pergunta Estratégica', 
-    description: 'Pergunta para qualificação',
+    description: 'Pergunta para qualificação com suporte a imagens',
     icon: <Target className="w-4 h-4" />,
-    category: 'Quiz Avançado'
+    category: 'Funil'
   },
-  // Transições Específicas
+  // Transições Específicas - SEMPRE VISÍVEIS NO FUNIL
   { 
     id: 'quiz-transition-main',
     type: 'quiz-transition-main', 
     name: 'Transição Principal Quiz', 
-    description: 'Transição entre questões normais e estratégicas',
+    description: 'Transição entre questões normais e estratégicas (editável)',
     icon: <Zap className="w-4 h-4" />,
-    category: 'Quiz Avançado'
+    category: 'Funil'
   },
   { 
     id: 'quiz-final-transition',
     type: 'quiz-final-transition', 
     name: 'Transição Final Quiz', 
-    description: 'Transição final com loading e análise de resultados',
+    description: 'Transição final com loading e análise de resultados (editável)',
     icon: <Trophy className="w-4 h-4" />,
-    category: 'Quiz Avançado'
+    category: 'Funil'
   },
-  // Resultado - COMPONENTES REAIS DA RESULTPAGE
+  // Resultado - COMPONENTES REAIS DA RESULTPAGE - SEMPRE VISÍVEIS
   { 
     id: 'result-header-component',
     type: 'result-header-component', 
     name: 'Cabeçalho do Resultado', 
-    description: 'Header personalizado com nome do usuário',
+    description: 'Header personalizado com nome do usuário (editável inline)',
     icon: <Award className="w-4 h-4" />,
-    category: 'Resultado'
+    category: 'Funil'
   },
   { 
     id: 'result-style-card-component',
     type: 'result-style-card-component', 
     name: 'Card do Estilo Predominante', 
-    description: 'Card completo com porcentagem, imagem e descrição do estilo',
+    description: 'Card completo com porcentagem, imagem e descrição do estilo (editável)',
     icon: <Sparkles className="w-4 h-4" />,
-    category: 'Resultado'
+    category: 'Funil'
   },
   { 
     id: 'secondary-styles-component',
     type: 'secondary-styles-component', 
     name: 'Estilos Complementares', 
-    description: 'Cards dos estilos secundários com porcentagens',
+    description: 'Cards dos estilos secundários com porcentagens (editável)',
     icon: <Palette className="w-4 h-4" />,
-    category: 'Resultado'
+    category: 'Funil'
   },
   { 
     id: 'before-after-component',
     type: 'before-after-component', 
     name: 'Antes e Depois', 
-    description: 'Seção de transformação antes/depois',
+    description: 'Seção de transformação antes/depois (editável)',
     icon: <ArrowRight className="w-4 h-4" />,
-    category: 'Resultado'
+    category: 'Funil'
   },
   { 
     id: 'motivation-component',
     type: 'motivation-component', 
     name: 'Seção de Motivação', 
-    description: 'Motivação personalizada baseada no resultado',
+    description: 'Motivação personalizada baseada no resultado (editável)',
     icon: <Heart className="w-4 h-4" />,
-    category: 'Resultado'
+    category: 'Funil'
   },
   { 
     id: 'bonus-component',
     type: 'bonus-component', 
     name: 'Seção de Bônus', 
-    description: 'Bônus exclusivos baseados no estilo',
+    description: 'Bônus exclusivos baseados no estilo (editável)',
     icon: <Gift className="w-4 h-4" />,
-    category: 'Resultado'
+    category: 'Funil'
   },
   { 
     id: 'result-value-stack-component',
     type: 'result-value-stack-component', 
     name: 'Value Stack Personalizado', 
-    description: 'Seção de ancoragem de valor com produtos',
+    description: 'Seção de ancoragem de valor com produtos (editável inline)',
     icon: <CreditCard className="w-4 h-4" />,
-    category: 'Resultado'
+    category: 'Funil'
+  },
+  { 
+    id: 'result-cta-green-component',
+    type: 'result-cta-green-component', 
+    name: 'CTA Verde Principal', 
+    description: 'Botão de ação verde com segurança (editável inline)',
+    icon: <ShoppingCart className="w-4 h-4" />,
+    category: 'Funil'
   },
   { 
     id: 'testimonials-component',
@@ -1109,138 +1117,6 @@ const blockLibrary = [
     icon: <Trophy className="w-4 h-4" />,
     category: 'Quiz'
   },
-  
-  // BLOCOS DE INTRODUÇÃO DO QUIZ - NOVOS BLOCOS EDITÁVEIS
-  { 
-    id: 'quiz-intro-block',
-    type: 'QuizIntroBlock', 
-    name: 'Introdução Completa do Quiz', 
-    description: 'Bloco completo de introdução com logo, título, imagem, formulário e CTA',
-    icon: <Sparkles className="w-4 h-4" />,
-    category: 'Quiz Introdução'
-  },
-  { 
-    id: 'start-button-block',
-    type: 'StartButtonBlock', 
-    name: 'Botão de Início', 
-    description: 'Botão isolado para iniciar quiz com múltiplas variantes',
-    icon: <ArrowRight className="w-4 h-4" />,
-    category: 'Quiz Introdução'
-  },
-  { 
-    id: 'quiz-benefits-block',
-    type: 'QuizBenefitsBlock', 
-    name: 'Benefícios do Quiz', 
-    description: 'Lista de benefícios/instruções com layouts flexíveis',
-    icon: <CheckCircle className="w-4 h-4" />,
-    category: 'Quiz Introdução'
-  },
-  // Componentes específicos da Etapa 20 (Resultado)
-  { 
-    id: 'result-value-stack-component',
-    type: 'result-value-stack-component', 
-    name: 'Value Stack Resultado', 
-    description: 'Seção de valor com preços editáveis',
-    icon: <CreditCard className="w-4 h-4" />,
-    category: 'Resultado'
-  },
-  { 
-    id: 'result-cta-green-component',
-    type: 'result-cta-green-component', 
-    name: 'CTA Verde Principal', 
-    description: 'Botão de ação verde com segurança',
-    icon: <ShoppingCart className="w-4 h-4" />,
-    category: 'Resultado'
-  },
-  { 
-    id: 'result-style-card-component',
-    type: 'result-style-card-component', 
-    name: 'Card Estilo Predominante', 
-    description: 'Card completo do resultado do estilo',
-    icon: <Sparkles className="w-4 h-4" />,
-    category: 'Resultado'
-  },
-  // Componentes específicos da Etapa 21 (Oferta)
-  { 
-    id: 'offer-urgency-banner-component',
-    type: 'offer-urgency-banner-component', 
-    name: 'Banner de Urgência', 
-    description: 'Banner de urgência editável',
-    icon: <Zap className="w-4 h-4" />,
-    category: 'Oferta'
-  },
-  { 
-    id: 'offer-logo-component',
-    type: 'offer-logo-component', 
-    name: 'Logo da Oferta', 
-    description: 'Logo editável da marca',
-    icon: <ImageIcon className="w-4 h-4" />,
-    category: 'Oferta'
-  },
-  { 
-    id: 'offer-hero-section-component',
-    type: 'offer-hero-section-component', 
-    name: 'Seção Hero Oferta', 
-    description: 'Seção hero completa com CTA',
-    icon: <Star className="w-4 h-4" />,
-    category: 'Oferta'
-  },
-  { 
-    id: 'offer-problems-component',
-    type: 'offer-problems-component', 
-    name: 'Seção de Problemas', 
-    description: 'Lista de problemas editável',
-    icon: <MessageCircle className="w-4 h-4" />,
-    category: 'Oferta'
-  },
-  { 
-    id: 'offer-solution-component',
-    type: 'offer-solution-component', 
-    name: 'Seção de Solução', 
-    description: 'Apresentação da solução',
-    icon: <Target className="w-4 h-4" />,
-    category: 'Oferta'
-  },
-  { 
-    id: 'offer-countdown-component',
-    type: 'offer-countdown-component', 
-    name: 'Countdown Timer', 
-    description: 'Timer de urgência editável',
-    icon: <Clock className="w-4 h-4" />,
-    category: 'Oferta'
-  },
-  { 
-    id: 'offer-transformation-component',
-    type: 'offer-transformation-component', 
-    name: 'Seção Transformação', 
-    description: 'Transformação com bônus',
-    icon: <Gift className="w-4 h-4" />,
-    category: 'Oferta'
-  },
-  { 
-    id: 'offer-pricing-component',
-    type: 'offer-pricing-component', 
-    name: 'Seção de Preços', 
-    description: 'Preços com desconto',
-    icon: <CreditCard className="w-4 h-4" />,
-    category: 'Oferta'
-  },
-  { 
-    id: 'offer-guarantee-component',
-    type: 'offer-guarantee-component', 
-    name: 'Garantia', 
-    description: 'Seção de garantia editável',
-    icon: <Shield className="w-4 h-4" />,
-    category: 'Oferta'
-  },
-  { 
-    id: 'offer-faq-component',
-    type: 'offer-faq-component', 
-    name: 'FAQ', 
-    description: 'Perguntas frequentes editáveis',
-    icon: <MessageCircle className="w-4 h-4" />,
-    category: 'Oferta'
-  }
 ];
 
 // Templates pré-configurados
@@ -2489,18 +2365,20 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         break;
 
       case 'question-multiple':
+        const hasImagesInOptions = (block?.settings?.options || []).some((opt: any) => opt.imageUrl);
+        
         content = (
           <div style={baseStyle} onClick={handleBlockClick} className="py-6">
-            <div className="space-y-6 max-w-4xl mx-auto">
+            <div className="space-y-6 max-w-5xl mx-auto">
               <h3 className="text-xl md:text-2xl font-semibold text-[#432818] text-center leading-relaxed mb-8">
                 {block?.settings?.question || 'Qual é a sua pergunta?'}
               </h3>
               
-              {/* Grid responsivo que se adapta ao número de opções */}
-              <div className={`grid gap-4 ${
-                (block?.settings?.options || []).length <= 4 
-                  ? 'md:grid-cols-2' 
-                  : 'md:grid-cols-2 lg:grid-cols-3'
+              {/* Grid adaptativo: 2 colunas para opções com imagem, 1 coluna para apenas texto */}
+              <div className={`grid gap-6 ${
+                hasImagesInOptions 
+                  ? 'md:grid-cols-2' // 2 colunas para opções com imagem
+                  : 'max-w-2xl mx-auto grid-cols-1' // 1 coluna centralizada para apenas texto
               }`}>
                 {(block?.settings?.options || [
                   { id: 'a', text: 'Opção A', value: 'a' },
@@ -2513,33 +2391,36 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                     className="border-2 border-[#B89B7A]/30 hover:border-[#B89B7A] hover:bg-[#f9f4ef] hover:shadow-lg rounded-xl transition-all duration-300 cursor-pointer group overflow-hidden"
                   >
                     {option.imageUrl ? (
-                      // Layout com imagem
+                      // Layout com imagem - IMAGENS MAIORES
                       <>
-                        <div className="aspect-[4/3] overflow-hidden relative">
+                        <div className="aspect-[4/3] overflow-hidden relative bg-gray-100">
                           <img
                             src={option.imageUrl}
                             alt={option.text}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).style.display = 'none';
+                            }}
                           />
                           {/* Overlay com número da opção */}
-                          <div className="absolute top-3 left-3 w-8 h-8 bg-[#B89B7A] text-white rounded-full flex items-center justify-center font-bold text-sm group-hover:bg-[#A1835D] transition-colors">
+                          <div className="absolute top-4 left-4 w-10 h-10 bg-[#B89B7A] text-white rounded-full flex items-center justify-center font-bold text-base group-hover:bg-[#A1835D] transition-colors shadow-lg">
                             {String.fromCharCode(65 + index)}
                           </div>
                         </div>
-                        <div className="p-4">
-                          <span className="text-[#432818] group-hover:text-[#432818] text-sm leading-relaxed font-medium">
+                        <div className="p-5">
+                          <span className="text-[#432818] group-hover:text-[#432818] text-base leading-relaxed font-medium block">
                             {option.text}
                           </span>
                         </div>
                       </>
                     ) : (
-                      // Layout apenas texto
+                      // Layout apenas texto - TEXTO MESMO TAMANHO
                       <div className="p-6">
-                        <div className="flex items-start gap-3">
-                          <span className="font-bold text-[#B89B7A] text-lg min-w-[32px] h-8 w-8 bg-[#B89B7A]/10 rounded-full flex items-center justify-center group-hover:bg-[#B89B7A] group-hover:text-white transition-all">
+                        <div className="flex items-start gap-4">
+                          <span className="font-bold text-[#B89B7A] min-w-[40px] h-10 w-10 bg-[#B89B7A]/10 rounded-full flex items-center justify-center group-hover:bg-[#B89B7A] group-hover:text-white transition-all text-base">
                             {String.fromCharCode(65 + index)}
                           </span>
-                          <span className="text-[#432818] group-hover:text-[#432818] text-sm leading-relaxed font-medium flex-1">
+                          <span className="text-[#432818] group-hover:text-[#432818] text-base leading-relaxed font-medium flex-1">
                             {option.text}
                           </span>
                         </div>
@@ -2562,19 +2443,27 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         );
         break;
 
-      case 'question-strategic':
+      case 'strategic-question':
+        const hasImagesInStrategicOptions = (block?.settings?.options || []).some((opt: any) => opt.imageUrl);
+        
         content = (
           <div style={baseStyle} onClick={handleBlockClick} className="py-6">
-            <div className="space-y-6">
+            <div className="space-y-6 max-w-4xl mx-auto">
               <h3 className="text-xl md:text-2xl font-semibold text-[#432818] text-center leading-relaxed">
                 {block?.settings?.question || 'Pergunta estratégica sobre seus objetivos'}
               </h3>
               {block?.settings?.subtitle && (
-                <p className="text-center text-[#6B5B73] text-lg">
+                <p className="text-center text-[#6B5B73] text-lg mb-8">
                   {block?.settings?.subtitle}
                 </p>
               )}
-              <div className="space-y-3 max-w-2xl mx-auto">
+              
+              {/* Grid adaptativo para questões estratégicas */}
+              <div className={`${
+                hasImagesInStrategicOptions 
+                  ? 'grid md:grid-cols-2 gap-6' // 2 colunas para opções com imagem
+                  : 'space-y-4 max-w-2xl mx-auto' // Layout vertical para apenas texto
+              }`}>
                 {(block?.settings?.options || [
                   { id: 'a', text: 'Sim, definitivamente', value: 'high' },
                   { id: 'b', text: 'Talvez, preciso saber mais', value: 'medium' },
@@ -2582,13 +2471,40 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 ]).map((option: any, index: number) => (
                   <div
                     key={option.id}
-                    className="border-2 border-[#6B5B73]/30 hover:border-[#6B5B73] hover:bg-[#6B5B73]/10 rounded-xl transition-all duration-200 cursor-pointer group p-4"
+                    className="border-2 border-[#6B5B73]/30 hover:border-[#6B5B73] hover:bg-[#6B5B73]/10 rounded-xl transition-all duration-200 cursor-pointer group overflow-hidden"
                   >
-                    <div className="flex items-center justify-center text-center">
-                      <span className="text-[#432818] group-hover:text-[#6B5B73] font-medium">
-                        {option.text}
-                      </span>
-                    </div>
+                    {option.imageUrl ? (
+                      // Layout com imagem para questões estratégicas
+                      <>
+                        <div className="aspect-[4/3] overflow-hidden relative bg-gray-100">
+                          <img
+                            src={option.imageUrl}
+                            alt={option.text}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).style.display = 'none';
+                            }}
+                          />
+                          <div className="absolute top-4 left-4 w-10 h-10 bg-[#6B5B73] text-white rounded-full flex items-center justify-center font-bold text-base group-hover:bg-[#5A4A62] transition-colors shadow-lg">
+                            {String.fromCharCode(65 + index)}
+                          </div>
+                        </div>
+                        <div className="p-5">
+                          <span className="text-[#432818] group-hover:text-[#6B5B73] font-medium text-base block text-center">
+                            {option.text}
+                          </span>
+                        </div>
+                      </>
+                    ) : (
+                      // Layout apenas texto para questões estratégicas
+                      <div className="p-5">
+                        <div className="flex items-center justify-center text-center">
+                          <span className="text-[#432818] group-hover:text-[#6B5B73] font-medium text-base">
+                            {option.text}
+                          </span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -4841,8 +4757,8 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
               <div className="space-y-3 pr-3">
                 <h3 className="text-sm font-medium mb-3 sticky top-0 bg-white z-10 pb-2">Biblioteca de Blocos</h3>
                 
-                {/* Agrupar blocos por categoria */}
-                {['Texto', 'Mídia', 'Interação', 'Quiz', 'Quiz Avançado', 'Formulário', 'Vendas', 'Social', 'Urgência', 'Informação', 'UI'].map(category => {
+                {/* Agrupar blocos por categoria - FUNIL SEMPRE PRIMEIRO */}
+                {['Funil', 'Texto', 'Mídia', 'Interação', 'Quiz', 'Quiz Avançado', 'Resultado', 'Oferta', 'Formulário', 'Vendas', 'Social', 'Urgência', 'Informação', 'UI'].map(category => {
                   const categoryBlocks = blockLibrary.filter(block => block.category === category);
                   if (categoryBlocks.length === 0) return null;
                   
@@ -5990,7 +5906,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                   </div>
                 )}
 
-                {(selectedBlock.type === 'question-multiple' || selectedBlock.type === 'question-strategic') && (
+                {(selectedBlock.type === 'question-multiple' || selectedBlock.type === 'strategic-question') && (
                   <div className="space-y-4">
                     <div>
                       <Label className="text-xs">Pergunta</Label>
@@ -6003,25 +5919,65 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                       />
                     </div>
                     
+                    {selectedBlock.type === 'strategic-question' && (
+                      <div>
+                        <Label className="text-xs">Subtítulo (Opcional)</Label>
+                        <Textarea
+                          value={selectedBlock.settings.subtitle || ''}
+                          onChange={(e) => updateBlockSetting('subtitle', e.target.value)}
+                          className="text-sm resize-none mt-1"
+                          rows={2}
+                          placeholder="Subtítulo explicativo..."
+                        />
+                      </div>
+                    )}
+                    
                     <div>
                       <Label className="text-xs">Opções</Label>
-                      <div className="space-y-2 mt-1">
+                      <div className="space-y-3 mt-1">
                         {(selectedBlock.settings.options || []).map((option: any, index: number) => (
-                          <div key={index} className="flex gap-2">
-                            <Input
-                              value={option.text}
-                              onChange={(e) => updateQuestionOption(index, 'text', e.target.value)}
-                              className="text-sm h-8 flex-1"
-                              placeholder={`Opção ${String.fromCharCode(65 + index)}`}
-                            />
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => removeQuestionOption(index)}
-                              className="h-8 w-8 p-0"
-                            >
-                              <Trash2 className="h-3 w-3" />
-                            </Button>
+                          <div key={index} className="border rounded-lg p-3 space-y-2">
+                            <div className="flex gap-2">
+                              <Input
+                                value={option.text}
+                                onChange={(e) => updateQuestionOption(index, 'text', e.target.value)}
+                                className="text-sm h-8 flex-1"
+                                placeholder={`Opção ${String.fromCharCode(65 + index)}`}
+                              />
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => removeQuestionOption(index)}
+                                className="h-8 w-8 p-0"
+                              >
+                                <Trash2 className="h-3 w-3" />
+                              </Button>
+                            </div>
+                            
+                            {/* Campo para URL da imagem */}
+                            <div>
+                              <Label className="text-xs text-gray-600">URL da Imagem (Opcional)</Label>
+                              <Input
+                                value={option.imageUrl || ''}
+                                onChange={(e) => updateQuestionOption(index, 'imageUrl', e.target.value)}
+                                className="text-sm h-8 mt-1"
+                                placeholder="https://example.com/image.jpg"
+                              />
+                            </div>
+                            
+                            {/* Preview da imagem se houver URL */}
+                            {option.imageUrl && (
+                              <div className="mt-2">
+                                <img 
+                                  src={option.imageUrl} 
+                                  alt={option.text} 
+                                  className="w-16 h-12 object-cover rounded border"
+                                  onError={(e) => {
+                                    (e.target as HTMLImageElement).style.display = 'none';
+                                  }}
+                                />
+                              </div>
+                            )}
                           </div>
                         ))}
                         
@@ -6036,6 +5992,32 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                         </Button>
                       </div>
                     </div>
+                    
+                    {selectedBlock.type === 'question-multiple' && (
+                      <>
+                        <div className="flex items-center space-x-2">
+                          <Switch
+                            checked={selectedBlock.settings.multipleSelection || false}
+                            onCheckedChange={(checked) => updateBlockSetting('multipleSelection', checked)}
+                          />
+                          <Label className="text-xs">Múltipla Seleção</Label>
+                        </div>
+                        
+                        {selectedBlock.settings.multipleSelection && (
+                          <div>
+                            <Label className="text-xs">Máximo de Seleções</Label>
+                            <Input
+                              type="number"
+                              value={selectedBlock.settings.maxSelections || 3}
+                              onChange={(e) => updateBlockSetting('maxSelections', parseInt(e.target.value))}
+                              className="text-sm h-8 mt-1"
+                              min="1"
+                              max="10"
+                            />
+                          </div>
+                        )}
+                      </>
+                    )}
                     
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -7154,6 +7136,395 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                         rows={6}
                         placeholder='[{"text": "Rápido e fácil", "icon": "⏰"}]'
                       />
+                    </div>
+                  </div>
+                )}
+
+                {/* PAINÉIS DE PROPRIEDADES PARA TODOS OS COMPONENTES REAIS DO FUNIL */}
+                
+                {/* COMPONENTES DE RESULTADO (ETAPA 20) */}
+                
+                {selectedBlock.type === 'result-header-component' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Nome do Usuário</Label>
+                      <Input
+                        value={selectedBlock.settings?.userName || ''}
+                        onChange={(e) => updateBlockSetting('userName', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Nome dinâmico do usuário"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Estilo Predominante</Label>
+                      <Input
+                        value={selectedBlock.settings?.primaryStyle || ''}
+                        onChange={(e) => updateBlockSetting('primaryStyle', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Elegante Clássica"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {selectedBlock.type === 'result-style-card-component' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Nome do Estilo</Label>
+                      <Input
+                        value={selectedBlock.settings?.styleName || ''}
+                        onChange={(e) => updateBlockSetting('styleName', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Elegante Clássica"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Porcentagem de Compatibilidade</Label>
+                      <Input
+                        type="number"
+                        min="1"
+                        max="100"
+                        value={selectedBlock.settings?.percentage || 92}
+                        onChange={(e) => updateBlockSetting('percentage', parseInt(e.target.value))}
+                        className="text-sm h-8 mt-1"
+                        placeholder="92"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Descrição</Label>
+                      <Textarea
+                        value={selectedBlock.settings?.description || ''}
+                        onChange={(e) => updateBlockSetting('description', e.target.value)}
+                        className="text-sm resize-none mt-1"
+                        rows={3}
+                        placeholder="Sua personalidade refletida no seu estilo de vestir..."
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">URL da Imagem do Estilo</Label>
+                      <Input
+                        value={selectedBlock.settings?.styleImage || ''}
+                        onChange={(e) => updateBlockSetting('styleImage', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="https://exemplo.com/estilo.jpg"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">URL da Imagem do Guia</Label>
+                      <Input
+                        value={selectedBlock.settings?.guideImage || ''}
+                        onChange={(e) => updateBlockSetting('guideImage', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="https://exemplo.com/guia.jpg"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {selectedBlock.type === 'result-value-stack-component' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Título</Label>
+                      <Input
+                        value={selectedBlock.settings?.title || ''}
+                        onChange={(e) => updateBlockSetting('title', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="O Que Você Recebe Hoje"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Valor Total</Label>
+                      <Input
+                        value={selectedBlock.settings?.totalValue || ''}
+                        onChange={(e) => updateBlockSetting('totalValue', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="R$ 175,00"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Preço Atual</Label>
+                      <Input
+                        value={selectedBlock.settings?.currentPrice || ''}
+                        onChange={(e) => updateBlockSetting('currentPrice', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="R$ 39,00"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Descrição do Pagamento</Label>
+                      <Input
+                        value={selectedBlock.settings?.description || ''}
+                        onChange={(e) => updateBlockSetting('description', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Pagamento único"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Itens do Value Stack (JSON)</Label>
+                      <Textarea
+                        value={JSON.stringify(selectedBlock.settings?.items || [], null, 2)}
+                        onChange={(e) => {
+                          try {
+                            const items = JSON.parse(e.target.value);
+                            updateBlockSetting('items', items);
+                          } catch (error) {
+                            // Ignore invalid JSON during typing
+                          }
+                        }}
+                        className="text-xs font-mono resize-none mt-1"
+                        rows={6}
+                        placeholder='[{"name": "Guia Principal", "value": "R$ 67,00"}]'
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {selectedBlock.type === 'result-cta-green-component' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Texto Principal</Label>
+                      <Input
+                        value={selectedBlock.settings?.text || ''}
+                        onChange={(e) => updateBlockSetting('text', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Garantir Meu Guia + Bônus Especiais"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Descrição</Label>
+                      <Input
+                        value={selectedBlock.settings?.description || ''}
+                        onChange={(e) => updateBlockSetting('description', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Quero meu Guia de Estilo Agora"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Texto de Segurança</Label>
+                      <Textarea
+                        value={selectedBlock.settings?.securityText || ''}
+                        onChange={(e) => updateBlockSetting('securityText', e.target.value)}
+                        className="text-sm resize-none mt-1"
+                        rows={3}
+                        placeholder="🔒 Pagamento 100% Seguro\n✓ Garantia de 7 dias\n🛡️ Oferta exclusiva nesta página"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* COMPONENTES BÁSICOS EDITÁVEIS */}
+                
+                {selectedBlock.type === 'secondary-styles-component' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Estilos Secundários (JSON)</Label>
+                      <Textarea
+                        value={JSON.stringify(selectedBlock.settings?.secondaryStyles || [], null, 2)}
+                        onChange={(e) => {
+                          try {
+                            const styles = JSON.parse(e.target.value);
+                            updateBlockSetting('secondaryStyles', styles);
+                          } catch (error) {
+                            // Ignore invalid JSON during typing
+                          }
+                        }}
+                        className="text-xs font-mono resize-none mt-1"
+                        rows={6}
+                        placeholder='[{"name": "Romântico", "percentage": 23}]'
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {(selectedBlock.type === 'before-after-component' || 
+                  selectedBlock.type === 'motivation-component' || 
+                  selectedBlock.type === 'bonus-component' ||
+                  selectedBlock.type === 'testimonials-component' ||
+                  selectedBlock.type === 'secure-purchase-component' ||
+                  selectedBlock.type === 'guarantee-component' ||
+                  selectedBlock.type === 'mentor-component') && (
+                  <div className="space-y-4">
+                    <div className="p-4 bg-blue-50 rounded-lg">
+                      <p className="text-sm text-blue-700">
+                        <strong>Componente Real:</strong> {selectedBlock.type}
+                      </p>
+                      <p className="text-xs text-blue-600 mt-2">
+                        Este é um componente real da página de resultado. Suas configurações são gerenciadas automaticamente com base nos dados do usuário.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* COMPONENTES DE TRANSIÇÃO */}
+                
+                {selectedBlock.type === 'quiz-transition-main' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Título</Label>
+                      <Input
+                        value={selectedBlock.settings?.title || ''}
+                        onChange={(e) => updateBlockSetting('title', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Ótimo! Agora vou fazer algumas perguntas..."
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Mensagem</Label>
+                      <Textarea
+                        value={selectedBlock.settings?.message || ''}
+                        onChange={(e) => updateBlockSetting('message', e.target.value)}
+                        className="text-sm resize-none mt-1"
+                        rows={3}
+                        placeholder="Para identificar com precisão seu estilo..."
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Duração (ms)</Label>
+                      <Input
+                        type="number"
+                        value={selectedBlock.settings?.duration || 4000}
+                        onChange={(e) => updateBlockSetting('duration', parseInt(e.target.value))}
+                        className="text-sm h-8 mt-1"
+                        placeholder="4000"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {selectedBlock.type === 'quiz-final-transition' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Título</Label>
+                      <Input
+                        value={selectedBlock.settings?.title || ''}
+                        onChange={(e) => updateBlockSetting('title', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Analisando suas respostas..."
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Descrição</Label>
+                      <Textarea
+                        value={selectedBlock.settings?.description || ''}
+                        onChange={(e) => updateBlockSetting('description', e.target.value)}
+                        className="text-sm resize-none mt-1"
+                        rows={2}
+                        placeholder="Isso levará apenas alguns segundos..."
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Mensagem de Espera</Label>
+                      <Input
+                        value={selectedBlock.settings?.waitMessage || ''}
+                        onChange={(e) => updateBlockSetting('waitMessage', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Isso levará apenas alguns segundos..."
+                      />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        checked={selectedBlock.settings?.showSteps !== false}
+                        onCheckedChange={(checked) => updateBlockSetting('showSteps', checked)}
+                      />
+                      <Label className="text-xs">Mostrar Etapas</Label>
+                    </div>
+                  </div>
+                )}
+
+                {/* COMPONENTES DE NAVEGAÇÃO E PROGRESSO */}
+                
+                {selectedBlock.type === 'quiz-progress-bar' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Etapa Atual</Label>
+                      <Input
+                        type="number"
+                        value={selectedBlock.settings?.currentStep || 1}
+                        onChange={(e) => updateBlockSetting('currentStep', parseInt(e.target.value))}
+                        className="text-sm h-8 mt-1"
+                        min="1"
+                        max="18"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Total de Etapas</Label>
+                      <Input
+                        type="number"
+                        value={selectedBlock.settings?.totalSteps || 18}
+                        onChange={(e) => updateBlockSetting('totalSteps', parseInt(e.target.value))}
+                        className="text-sm h-8 mt-1"
+                        min="1"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Porcentagem de Progresso</Label>
+                      <Input
+                        type="number"
+                        value={selectedBlock.settings?.progressPercent || 0}
+                        onChange={(e) => updateBlockSetting('progressPercent', parseInt(e.target.value))}
+                        className="text-sm h-8 mt-1"
+                        min="0"
+                        max="100"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Nome da Etapa</Label>
+                      <Input
+                        value={selectedBlock.settings?.stepName || ''}
+                        onChange={(e) => updateBlockSetting('stepName', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Questão 1 de 10"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {selectedBlock.type === 'quiz-navigation-controls' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Questão Atual</Label>
+                      <Input
+                        type="number"
+                        value={selectedBlock.settings?.currentQuestion || 1}
+                        onChange={(e) => updateBlockSetting('currentQuestion', parseInt(e.target.value))}
+                        className="text-sm h-8 mt-1"
+                        min="1"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Total de Questões</Label>
+                      <Input
+                        type="number"
+                        value={selectedBlock.settings?.totalQuestions || 10}
+                        onChange={(e) => updateBlockSetting('totalQuestions', parseInt(e.target.value))}
+                        className="text-sm h-8 mt-1"
+                        min="1"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Texto do Botão Voltar</Label>
+                      <Input
+                        value={selectedBlock.settings?.backButtonText || ''}
+                        onChange={(e) => updateBlockSetting('backButtonText', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Voltar"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Texto do Botão Próxima</Label>
+                      <Input
+                        value={selectedBlock.settings?.nextButtonText || ''}
+                        onChange={(e) => updateBlockSetting('nextButtonText', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Próxima"
+                      />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        checked={selectedBlock.settings?.hideBackButton || false}
+                        onCheckedChange={(checked) => updateBlockSetting('hideBackButton', checked)}
+                      />
+                      <Label className="text-xs">Esconder Botão Voltar</Label>
                     </div>
                   </div>
                 )}
