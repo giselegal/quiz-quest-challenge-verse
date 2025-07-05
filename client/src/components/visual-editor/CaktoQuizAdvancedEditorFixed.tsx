@@ -1507,30 +1507,78 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     isResizingRight
   } = useResizableColumns(320, 320);
 
+  // Implementar debounce no auto-save usando o hook
+  const saveFunction = useCallback(async () => {
+    try {
+      // Converter dados do editor para formato do serviço
+      const funnelData: FunnelData = {
+        ...funnel,
+        pages: funnel.pages.map((page, index) => ({
+          id: page.id,
+          type: page.type,
+          title: page.title,
+          order: index + 1,
+          blocks: page.blocks.map((block, blockIndex) => ({
+            id: block.id,
+            type: block.type,
+            content: block.settings || {},
+            styles: block.style,
+            position: { x: 0, y: blockIndex * 100 }
+          })),
+          metadata: page.settings
+        }))
+      };
+
+      // Tentar salvar no backend
+      try {
+        await funnelService.saveFunnelData(funnelData, 1); // TODO: usar userId real
+        console.log('✅ Auto-save realizado no backend');
+        
+        // Sincronizar com configurações de página
+        const syncSuccess = await funnelService.syncFunnelToPageConfigs(funnelData);
+        if (syncSuccess) {
+          console.log('✅ Configurações de página sincronizadas');
+        }
+      } catch (backendError) {
+        console.warn('⚠️ Backend indisponível, salvando localmente:', backendError);
+        // Fallback para localStorage
+        localStorage.setItem('caktoquiz-funnel', JSON.stringify(funnelData));
+        console.log('💾 Auto-save realizado no localStorage');
+      }
+    } catch (error) {
+      console.error('❌ Erro crítico no auto-save:', error);
+      throw error;
+    }
+  }, [funnel]);
+
+  // Hook de debounce para auto-save otimizado
+  const { debouncedSave, saveNow, pauseAutoSave, resumeAutoSave, isActive: isAutoSaveActive } = useAutoSaveDebounce(
+    saveFunction,
+    3000, // 3 segundos de debounce
+    30000 // máximo 30 segundos entre saves
+  );
+
   // Estados principais
   const [funnel, setFunnel] = useState<FunnelData>(createInitialFunnel);
   const [currentPageId, setCurrentPageId] = useState<string>('etapa-1-intro');
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'funnel' | 'blocks' | 'templates' | 'settings'>('funnel');
+  const [activeTab, setActiveTab] = useState<'funnel' | 'blocks' | 'templates' | 'layers' | 'settings'>('funnel');
   const [deviceView, setDeviceView] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
   const [isAutoSaving, setIsAutoSaving] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [showPerformanceInfo, setShowPerformanceInfo] = useState<boolean>(false);
+
+  // Ref para rastrear mudanças
+  const lastChangeRef = useRef<number>(0);
+  const changeCountRef = useRef<number>(0);
 
   // Hook para toast
   const { toast } = useToast();
 
-  // Garantir que o funnel tenha estrutura válida
-  React.useEffect(() => {
-    if (!funnel || !funnel.pages || funnel.pages.length === 0) {
-      console.log('Inicializando funnel com dados padrão...');
-      setFunnel(createInitialFunnel());
-    }
-  }, [funnel]);
-
-  // Computed values
+  // Computed values - Memoizados para performance
   const currentPage = useMemo(() => {
     const page = funnel?.pages?.find(page => page.id === currentPageId);
     
@@ -1560,7 +1608,24 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     [currentPage?.blocks, selectedBlockId]
   );
 
-  // Função para adicionar bloco
+  // Performance info
+  const performanceInfo = useMemo(() => ({
+    totalPages: funnel?.pages?.length || 0,
+    totalBlocks: funnel?.pages?.reduce((sum, page) => sum + (page.blocks?.length || 0), 0) || 0,
+    changeCount: changeCountRef.current,
+    lastChange: lastChangeRef.current,
+    autoSaveActive: isAutoSaveActive
+  }), [funnel?.pages, isAutoSaveActive]);
+
+  // Garantir que o funnel tenha estrutura válida
+  React.useEffect(() => {
+    if (!funnel || !funnel.pages || funnel.pages.length === 0) {
+      console.log('Inicializando funnel com dados padrão...');
+      setFunnel(createInitialFunnel());
+    }
+  }, [funnel]);
+
+  // Função para adicionar bloco COM tracking de mudanças
   const addBlock = useCallback((blockType: string) => {
     if (!currentPage) return;
 
@@ -1582,9 +1647,10 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     }));
 
     setSelectedBlockId(newBlock.id);
-  }, [currentPage, currentPageId]);
+    trackChange(); // ✅ Trigger auto-save
+  }, [currentPage, currentPageId, trackChange]);
 
-  // Função para atualizar configurações do bloco
+  // Função para atualizar configurações do bloco COM tracking
   const updateBlockSetting = useCallback((key: string, value: any) => {
     if (!selectedBlockId) return;
 
@@ -1603,9 +1669,11 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           : page
       )
     }));
-  }, [selectedBlockId, currentPageId]);
+    
+    trackChange(); // ✅ Trigger auto-save
+  }, [selectedBlockId, currentPageId, trackChange]);
 
-  // Função para atualizar estilos do bloco
+  // Função para atualizar estilos do bloco COM tracking
   const updateBlockStyle = useCallback((key: string, value: any) => {
     if (!selectedBlockId) return;
 
@@ -1624,9 +1692,11 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           : page
       )
     }));
-  }, [selectedBlockId, currentPageId]);
+    
+    trackChange(); // ✅ Trigger auto-save
+  }, [selectedBlockId, currentPageId, trackChange]);
 
-  // Função para atualizar opções de pergunta
+  // Função para atualizar opções de pergunta COM tracking
   const updateQuestionOption = useCallback((optionIndex: number, key: string, value: any) => {
     if (!selectedBlockId || !selectedBlock) return;
 
@@ -1634,9 +1704,10 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     options[optionIndex] = { ...options[optionIndex], [key]: value };
 
     updateBlockSetting('options', options);
+    // updateBlockSetting já chama trackChange, não precisamos chamar aqui
   }, [selectedBlockId, selectedBlock, updateBlockSetting]);
 
-  // Função para adicionar opção de pergunta
+  // Função para adicionar opção de pergunta COM tracking
   const addQuestionOption = useCallback(() => {
     if (!selectedBlockId || !selectedBlock) return;
 
@@ -1652,7 +1723,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     updateBlockSetting('options', options);
   }, [selectedBlockId, selectedBlock, updateBlockSetting]);
 
-  // Função para remover opção de pergunta
+  // Função para remover opção de pergunta COM tracking
   const removeQuestionOption = useCallback((optionIndex: number) => {
     if (!selectedBlockId || !selectedBlock) return;
 
@@ -1662,7 +1733,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     updateBlockSetting('options', options);
   }, [selectedBlockId, selectedBlock, updateBlockSetting]);
 
-  // Funções para gerenciar FAQ
+  // Funções para gerenciar FAQ COM tracking
   const updateFAQ = useCallback((faqIndex: number, key: string, value: any) => {
     if (!selectedBlockId || !selectedBlock) return;
 
@@ -1693,7 +1764,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     updateBlockSetting('questions', questions);
   }, [selectedBlockId, selectedBlock, updateBlockSetting]);
 
-  // Funções de Drag & Drop modernas
+  // Funções de Drag & Drop MELHORADAS com indicadores visuais
   const handleDragStart = useCallback((e: React.DragEvent, blockId: string, sourceIndex: number) => {
     setIsDragging(true);
     e.dataTransfer.setData('application/json', JSON.stringify({
@@ -1702,6 +1773,13 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       sourceIndex
     }));
     e.dataTransfer.effectAllowed = 'move';
+    
+    // Adicionar classe visual ao elemento sendo arrastado
+    const dragImage = e.currentTarget.cloneNode(true) as HTMLElement;
+    dragImage.style.opacity = '0.8';
+    dragImage.style.transform = 'rotate(5deg)';
+    dragImage.style.border = '2px solid #3b82f6';
+    e.dataTransfer.setDragImage(dragImage, 50, 20);
   }, []);
 
   const handleDragOver = useCallback((e: React.DragEvent, targetIndex: number) => {
@@ -1746,6 +1824,14 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 : page
             )
           }));
+          
+          trackChange(); // ✅ Trigger auto-save
+          
+          toast({
+            title: "Bloco reordenado!",
+            description: "A ordem dos blocos foi atualizada.",
+            variant: "default",
+          });
         }
       }
     } catch (error) {
@@ -1778,9 +1864,16 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         }));
 
         setSelectedBlockId(newBlock.id);
+        trackChange(); // ✅ Trigger auto-save
+        
+        toast({
+          title: "Bloco adicionado!",
+          description: `Novo bloco ${blockType} foi adicionado.`,
+          variant: "default",
+        });
       }
     }
-  }, [currentPage, currentPageId]);
+  }, [currentPage, currentPageId, trackChange, toast]);
 
   const handleDragEnd = useCallback(() => {
     setIsDragging(false);
@@ -1795,15 +1888,21 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     const blockType = e.dataTransfer.getData('text/plain');
     if (blockType && currentPage) {
       addBlock(blockType);
+      
+      toast({
+        title: "Bloco adicionado!",
+        description: `Novo bloco ${blockType} foi adicionado ao final.`,
+        variant: "default",
+      });
     }
-  }, [currentPage, addBlock]);
+  }, [currentPage, addBlock, toast]);
 
   const handleCanvasDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'copy';
   }, []);
 
-  // Função para adicionar nova página
+  // Função para adicionar nova página COM tracking
   const addNewPage = useCallback((template?: any) => {
     const newPageId = `page-${Date.now()}`;
     const newPage: FunnelPage = {
@@ -1830,49 +1929,21 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     }));
 
     setCurrentPageId(newPageId);
+    trackChange(); // ✅ Trigger auto-save
 
     toast({
       title: "Nova página criada!",
       description: template ? `Página criada com template "${template.name}"` : "Nova página criada com sucesso",
       variant: "default",
     });
-  }, [toast]);
+  }, [toast, trackChange]);
 
-  // Função para salvar o funil
+  // Função para salvar o funil (save manual)
   const saveFunnel = useCallback(async () => {
     try {
       setIsSaving(true);
+      await saveNow(); // Usar save imediato do hook
       
-      // Converter dados do editor para formato do serviço
-      const funnelData: FunnelData = {
-        ...funnel,
-        pages: funnel.pages.map((page, index) => ({
-          id: page.id,
-          type: page.type,
-          title: page.title,
-          order: index + 1,
-          blocks: page.blocks.map((block, blockIndex) => ({
-            id: block.id,
-            type: block.type,
-            content: block.settings || {},
-            styles: block.style,
-            position: { x: 0, y: blockIndex * 100 }
-          })),
-          metadata: page.settings
-        }))
-      };
-
-      // Tentar salvar no backend primeiro
-      try {
-        await funnelService.saveFunnelData(funnelData, 1); // TODO: usar userId real
-        console.log('Funil salvo no backend com sucesso!');
-      } catch (backendError) {
-        console.warn('Erro ao salvar no backend, salvando localmente:', backendError);
-        // Fallback para localStorage
-        localStorage.setItem('caktoquiz-funnel', JSON.stringify(funnelData));
-      }
-
-      // Notificação de sucesso
       toast({
         title: "Funil salvo!",
         description: "Suas alterações foram salvas com sucesso.",
@@ -1881,7 +1952,6 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     } catch (error) {
       console.error('Erro ao salvar funil:', error);
       
-      // Notificação de erro
       toast({
         title: "Erro ao salvar",
         description: "Não foi possível salvar o funil. Tente novamente.",
@@ -1890,7 +1960,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     } finally {
       setIsSaving(false);
     }
-  }, [funnel, toast]);
+  }, [saveNow, toast]);
 
   // Função para carregar funil salvo
   const loadSavedFunnel = useCallback(async () => {
@@ -2026,7 +2096,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
     }
   }, []); // Remover dependência para evitar loops
 
-  // Atalhos de teclado
+  // Atalhos de teclado APRIMORADOS
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Ctrl+S ou Cmd+S para salvar
@@ -2052,76 +2122,108 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         }));
         
         setSelectedBlockId(null);
+        trackChange(); // ✅ Trigger auto-save
+        
+        toast({
+          title: "Bloco removido!",
+          description: "O bloco foi removido com sucesso.",
+          variant: "default",
+        });
       }
       
       // Escape para deselecionar bloco
       if (e.key === 'Escape') {
         setSelectedBlockId(null);
       }
+      
+      // Ctrl+Z para undo (placeholder - implementação futura)
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        // TODO: Implementar undo
+        toast({
+          title: "Undo/Redo",
+          description: "Funcionalidade em desenvolvimento",
+          variant: "default",
+        });
+      }
+      
+      // Ctrl+Shift+Z para redo (placeholder - implementação futura)
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && e.shiftKey) {
+        e.preventDefault();
+        // TODO: Implementar redo
+        toast({
+          title: "Undo/Redo",
+          description: "Funcionalidade em desenvolvimento",
+          variant: "default",
+        });
+      }
+      
+      // Ctrl+D para duplicar bloco selecionado
+      if ((e.ctrlKey || e.metaKey) && e.key === 'd' && selectedBlock) {
+        e.preventDefault();
+        
+        const newBlock: FunnelBlock = {
+          ...selectedBlock,
+          id: `${selectedBlock.type}-${Date.now()}`,
+          order: (selectedBlock?.order || 0) + 1
+        };
+        
+        setFunnel(prev => ({
+          ...prev,
+          pages: prev.pages.map(page => 
+            page.id === currentPageId 
+              ? { 
+                  ...page, 
+                  blocks: [
+                    ...page.blocks.map(b => 
+                      (b?.order || 0) > (selectedBlock?.order || 0)
+                        ? { ...b, order: (b?.order || 0) + 1 }
+                        : b
+                    ),
+                    newBlock
+                  ].sort((a, b) => (a?.order || 0) - (b?.order || 0))
+                }
+              : page
+          )
+        }));
+        
+        setSelectedBlockId(newBlock.id);
+        trackChange(); // ✅ Trigger auto-save
+        
+        toast({
+          title: "Bloco duplicado!",
+          description: "O bloco foi duplicado com sucesso.",
+          variant: "default",
+        });
+      }
+      
+      // F12 para toggle performance info
+      if (e.key === 'F12') {
+        e.preventDefault();
+        setShowPerformanceInfo(prev => !prev);
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [saveFunnel, selectedBlockId, selectedBlock, currentPageId, setFunnel]);
+  }, [saveFunnel, selectedBlockId, selectedBlock, currentPageId, setFunnel, trackChange, toast]);
 
-  // Auto-save a cada 30 segundos
+  // Auto-save removido - agora usando debounce hook
+  // O auto-save acontece automaticamente via trackChange() + debouncedSave
+
+  // Carregar funil salvo na inicialização
   React.useEffect(() => {
-    const autoSaveInterval = setInterval(async () => {
-      setIsAutoSaving(true);
-      try {
-        // Converter dados do editor para formato do serviço
-        const funnelData: FunnelData = {
-          ...funnel,
-          pages: funnel.pages.map((page, index) => ({
-            id: page.id,
-            type: page.type,
-            title: page.title,
-            order: index + 1,
-            blocks: page.blocks.map((block, blockIndex) => ({
-              id: block.id,
-              type: block.type,
-              content: block.settings || {},
-              styles: block.style,
-              position: { x: 0, y: blockIndex * 100 }
-            })),
-            metadata: page.settings
-          }))
-        };
-
-        // Tentar salvar no backend
-        try {
-          await funnelService.saveFunnelData(funnelData, 1); // TODO: usar userId real
-          console.log('Auto-save realizado no backend');
-          
-          // Sincronizar com configurações de página
-          const syncSuccess = await funnelService.syncFunnelToPageConfigs(funnelData);
-          if (syncSuccess) {
-            console.log('Configurações de página sincronizadas');
-          } else {
-            console.warn('Falha ao sincronizar configurações de página');
-          }
-        } catch (backendError) {
-          // Fallback para localStorage
-          localStorage.setItem('caktoquiz-funnel', JSON.stringify(funnelData));
-          console.log('Auto-save realizado no localStorage');
-          
-          // Tentar sincronizar localmente
-          try {
-            await funnelService.syncFunnelToPageConfigs(funnelData);
-            console.log('Configurações de página sincronizadas localmente');
-          } catch (syncError) {
-            console.warn('Falha ao sincronizar configurações localmente:', syncError);
-          }
-        }
-      } catch (error) {
-        console.error('Erro no auto-save:', error);
-      } finally {
-        setTimeout(() => setIsAutoSaving(false), 1000);
-      }
-    }, 30000); // 30 segundos
-
-    return () => clearInterval(autoSaveInterval);
-  }, [funnel]);
+    // Verificar se o funil atual tem estrutura válida
+    if (!funnel?.pages || funnel.pages.length === 0) {
+      console.log('Inicializando funil padrão...');
+      return;
+    }
+    
+    // Só carregar funil salvo se não for o inicial
+    if (funnel.pages.length > 0 && funnel.pages[0]?.id === 'intro') {
+      loadSavedFunnel();
+    }
+  }, []); // Remover dependência para evitar loops
 
   // Função para renderizar blocos no canvas
   const renderBlock = (block: FunnelBlock) => {
@@ -4267,11 +4369,12 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           overflow: 'hidden'
         }}
       >
-        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'funnel' | 'blocks' | 'templates' | 'settings')} className="flex-1 flex flex-col h-full">
-          <TabsList className="grid w-full grid-cols-4 m-2 flex-shrink-0">
+        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'funnel' | 'blocks' | 'templates' | 'layers' | 'settings')} className="flex-1 flex flex-col h-full">
+          <TabsList className="grid w-full grid-cols-5 m-2 flex-shrink-0">
             <TabsTrigger value="funnel" className="text-xs">Funil</TabsTrigger>
             <TabsTrigger value="blocks" className="text-xs">Blocos</TabsTrigger>
             <TabsTrigger value="templates" className="text-xs">Templates</TabsTrigger>
+            <TabsTrigger value="layers" className="text-xs">Layers</TabsTrigger>
             <TabsTrigger value="settings" className="text-xs">Config</TabsTrigger>
           </TabsList>
 
@@ -4370,6 +4473,128 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
             </ScrollArea>
           </TabsContent>
 
+          <TabsContent value="layers" className="flex-1 p-2 overflow-hidden relative" style={{ height: 'calc(100vh - 120px)' }}>
+            <LayersPanel
+              currentPage={currentPage}
+              selectedBlockId={selectedBlockId}
+              onSelectBlock={setSelectedBlockId}
+              onReorderBlocks={(newBlocks) => {
+                setFunnel(prev => ({
+                  ...prev,
+                  pages: prev.pages.map(page => 
+                    page.id === currentPageId 
+                      ? { ...page, blocks: newBlocks }
+                      : page
+                  )
+                }));
+                trackChange();
+              }}
+              onDeleteBlock={(blockId) => {
+                setFunnel(prev => ({
+                  ...prev,
+                  pages: prev.pages.map(page => 
+                    page.id === currentPageId 
+                      ? { 
+                          ...page, 
+                          blocks: page.blocks
+                            .filter(b => b.id !== blockId)
+                            .map((b, index) => ({ ...b, order: index + 1 }))
+                        }
+                      : page
+                  )
+                }));
+                
+                if (selectedBlockId === blockId) {
+                  setSelectedBlockId(null);
+                }
+                trackChange();
+                
+                toast({
+                  title: "Bloco removido!",
+                  description: "O bloco foi removido com sucesso.",
+                  variant: "default",
+                });
+              }}
+              onDuplicateBlock={(blockId) => {
+                const blockToDuplicate = currentPage?.blocks.find(b => b.id === blockId);
+                if (blockToDuplicate) {
+                  const newBlock: FunnelBlock = {
+                    ...blockToDuplicate,
+                    id: `${blockToDuplicate.type}-${Date.now()}`,
+                    order: (blockToDuplicate?.order || 0) + 1
+                  };
+                  
+                  setFunnel(prev => ({
+                    ...prev,
+                    pages: prev.pages.map(page => 
+                      page.id === currentPageId 
+                        ? { 
+                            ...page, 
+                            blocks: [
+                              ...page.blocks.map(b => 
+                                (b?.order || 0) > (blockToDuplicate?.order || 0)
+                                  ? { ...b, order: (b?.order || 0) + 1 }
+                                  : b
+                              ),
+                              newBlock
+                            ].sort((a, b) => (a?.order || 0) - (b?.order || 0))
+                          }
+                        : page
+                    )
+                  }));
+                  
+                  setSelectedBlockId(newBlock.id);
+                  trackChange();
+                  
+                  toast({
+                    title: "Bloco duplicado!",
+                    description: "O bloco foi duplicado com sucesso.",
+                    variant: "default",
+                  });
+                }
+              }}
+              blockLibrary={blockLibrary}
+            />
+          </TabsContent>
+
+          <TabsContent value="templates" className="flex-1 p-2 overflow-hidden" style={{ height: 'calc(100vh - 120px)' }}>
+            <AdvancedTemplateSelector
+              templates={pageTemplates}
+              onApplyTemplate={(template) => {
+                // Aplicar template à página atual
+                if (currentPage) {
+                  const newBlocks = template.blocks.map((block, index) => ({
+                    ...block,
+                    id: `${block.type}-${Date.now()}-${index}`,
+                    order: index + 1
+                  }));
+                  
+                  setFunnel(prev => ({
+                    ...prev,
+                    pages: prev.pages.map(page => 
+                      page.id === currentPageId 
+                        ? { ...page, blocks: newBlocks }
+                        : page
+                    )
+                  }));
+
+                  trackChange();
+
+                  // Notificação de sucesso
+                  toast({
+                    title: "Template aplicado!",
+                    description: `Template "${template.name}" foi aplicado à página atual.`,
+                    variant: "default",
+                  });
+                }
+              }}
+              onCreatePage={(template) => {
+                addNewPage(template);
+              }}
+              currentPageType={currentPage?.type}
+            />
+          </TabsContent>
+
           <TabsContent value="templates" className="flex-1 p-2 overflow-hidden" style={{ height: 'calc(100vh - 120px)' }}>
             <ScrollArea className="h-full custom-scrollbar">
               <div className="space-y-3 pr-3">
@@ -4396,6 +4621,8 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                               : page
                           )
                         }));
+
+                        trackChange();
 
                         // Notificação de sucesso
                         toast({
@@ -4592,87 +4819,117 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 {currentPage.blocks.length} bloco{currentPage.blocks.length !== 1 ? 's' : ''}
               </Badge>
             )}
-          </div>
-
-          <div className="flex items-center gap-2">
-            {/* Device View */}
-            <div className="flex gap-1">
-              <Button
-                variant={deviceView === 'mobile' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setDeviceView('mobile')}
-                className="h-8 w-8 p-0"
-              >
-                <Smartphone className="h-3 w-3" />
-              </Button>
-              <Button
-                variant={deviceView === 'tablet' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setDeviceView('tablet')}
-                className="h-8 w-8 p-0"
-              >
-                <Tablet className="h-3 w-3" />
-              </Button>
-              <Button
-                variant={deviceView === 'desktop' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setDeviceView('desktop')}
-                className="h-8 w-8 p-0"
-              >
-                <Monitor className="h-3 w-3" />
-              </Button>
-            </div>
-
-            <Button 
-              size="sm" 
-              variant="outline"
-              onClick={() => {
-                // Preview do funil - abrir em nova aba
-                window.open('/quiz', '_blank');
-              }}
-              className="h-8"
-            >
-              <Eye className="h-3 w-3 mr-1" />
-              Preview
-            </Button>
+          </div>            {/* Performance info */}
+            {showPerformanceInfo && (
+              <div className="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-lg border">
+                <div className="grid grid-cols-2 gap-3 min-w-max">
+                  <span>📊 {performanceInfo.totalPages}p/{performanceInfo.totalBlocks}b</span>
+                  <span>🔄 {performanceInfo.changeCount} mudanças</span>
+                  <span>💾 Auto-save: {isAutoSaveActive ? '✅' : '❌'}</span>
+                  <span>⏱️ {changeCountRef.current > 0 ? 'Ativo' : 'Parado'}</span>
+                </div>
+              </div>
+            )}
 
             <div className="flex items-center gap-2">
-              {/* Layout info */}
-              {(isResizingLeft || isResizingRight) && (
-                <div className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                  {Math.round(leftWidth)}px | Canvas | {Math.round(rightWidth)}px
-                </div>
-              )}
-              
-              {isAutoSaving && (
-                <div className="flex items-center text-xs text-gray-500">
-                  <RotateCcw className="h-3 w-3 animate-spin mr-1" />
-                  Salvando...
-                </div>
-              )}
-              
+              {/* Device View */}
+              <div className="flex gap-1">
+                <Button
+                  variant={deviceView === 'mobile' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setDeviceView('mobile')}
+                  className="h-8 w-8 p-0"
+                  title="Visualização Mobile"
+                >
+                  <Smartphone className="h-3 w-3" />
+                </Button>
+                <Button
+                  variant={deviceView === 'tablet' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setDeviceView('tablet')}
+                  className="h-8 w-8 p-0"
+                  title="Visualização Tablet"
+                >
+                  <Tablet className="h-3 w-3" />
+                </Button>
+                <Button
+                  variant={deviceView === 'desktop' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setDeviceView('desktop')}
+                  className="h-8 w-8 p-0"
+                  title="Visualização Desktop"
+                >
+                  <Monitor className="h-3 w-3" />
+                </Button>
+              </div>
+
               <Button 
                 size="sm" 
-                variant="outline" 
-                className="h-8" 
-                onClick={loadSavedFunnel}
-                disabled={isLoading}
+                variant="outline"
+                onClick={() => {
+                  // Preview do funil - abrir em nova aba
+                  window.open('/quiz', '_blank');
+                }}
+                className="h-8"
+                title="Abrir preview em nova aba"
               >
-                <Download className="h-3 w-3 mr-1" />
-                {isLoading ? 'Carregando...' : 'Carregar'}
+                <Eye className="h-3 w-3 mr-1" />
+                Preview
               </Button>
-              
-              <Button 
-                size="sm" 
-                className="h-8 bg-[#B89B7A] hover:bg-[#A1835D]" 
-                onClick={saveFunnel}
-                disabled={isSaving}
-              >
-                <Save className="h-3 w-3 mr-1" />
-                {isSaving ? 'Salvando...' : 'Salvar'}
-              </Button>
+
+              <div className="flex items-center gap-2">
+                {/* Layout info */}
+                {(isResizingLeft || isResizingRight) && (
+                  <div className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                    {Math.round(leftWidth)}px | Canvas | {Math.round(rightWidth)}px
+                  </div>
+                )}
+                
+                {/* Auto-save status */}
+                {changeCountRef.current > 0 && (
+                  <div className="flex items-center text-xs text-gray-500">
+                    <div className={`w-2 h-2 rounded-full mr-1 ${isAutoSaveActive ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                    <span className="hidden sm:inline">
+                      {isAutoSaveActive ? 'Auto-save ativo' : 'Auto-save pausado'}
+                    </span>
+                  </div>
+                )}
+                
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  className="h-8" 
+                  onClick={loadSavedFunnel}
+                  disabled={isLoading}
+                  title="Carregar funil salvo"
+                >
+                  <Download className="h-3 w-3 mr-1" />
+                  {isLoading ? 'Carregando...' : 'Carregar'}
+                </Button>
+                
+                <Button 
+                  size="sm" 
+                  className="h-8 bg-[#B89B7A] hover:bg-[#A1835D]" 
+                  onClick={saveFunnel}
+                  disabled={isSaving}
+                  title="Salvar funil manualmente (Ctrl+S)"
+                >
+                  <Save className="h-3 w-3 mr-1" />
+                  {isSaving ? 'Salvando...' : 'Salvar'}
+                </Button>
+                
+                {/* Toggle performance info */}
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setShowPerformanceInfo(prev => !prev)}
+                  className="h-8 w-8 p-0"
+                  title="Toggle performance info (F12)"
+                >
+                  <Settings className="h-3 w-3" />
+                </Button>
+              </div>
             </div>
-          </div>
         </div>
 
         {/* Canvas */}
@@ -4740,49 +4997,79 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                                 onDrop={(e) => handleDrop(e, index)}
                                 onDragEnd={handleDragEnd}
                               >
-                                {/* Indicador visual de drop zone */}
+                                {/* Indicador visual de drop zone MELHORADO */}
                                 {dragOverIndex === index && isDragging && (
-                                  <div className="absolute -top-1 left-0 right-0 h-0.5 bg-blue-500 rounded-full z-10" />
+                                  <div className="absolute -top-2 left-0 right-0 h-1 z-20">
+                                    <div className="w-full h-full bg-gradient-to-r from-transparent via-blue-500 to-transparent rounded-full animate-pulse" />
+                                    <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-blue-500 border-2 border-white rounded-full shadow-lg animate-bounce" />
+                                  </div>
                                 )}
                                 
                                 <div 
                                   className={`min-h-[1.25rem] min-w-full relative self-auto box-border ${
                                     selectedBlockId === block.id 
-                                      ? 'border-2 border-blue-500 border-dashed' 
+                                      ? 'border-2 border-blue-500 border-dashed shadow-lg' 
                                       : 'group-hover/canvas-item:border-2 hover:border-2 border-dashed border-blue-500'
                                   } rounded-md transition-all duration-200 ${
                                     isDragging && dragOverIndex === index 
-                                      ? 'bg-blue-50 border-blue-300' 
+                                      ? 'bg-blue-50 border-blue-300 shadow-xl transform scale-105' 
                                       : ''
+                                  } ${
+                                    isDragging && selectedBlockId === block.id 
+                                      ? 'opacity-50 transform rotate-1 scale-95' 
+                                      : 'hover:shadow-md'
                                   }`}
-                                  style={{ 
-                                    opacity: isDragging && selectedBlockId === block.id ? 0.5 : 1 
-                                  }}
                                 >
-                                  {/* Controles de drag handle - visível no hover */}
-                                  <div className="absolute -left-6 top-1/2 transform -translate-y-1/2 opacity-0 group-hover/canvas-item:opacity-100 transition-opacity">
-                                    <div className="w-4 h-8 bg-gray-200 rounded border border-gray-300 flex flex-col justify-center items-center cursor-grab hover:bg-gray-300 active:cursor-grabbing">
-                                      <div className="w-0.5 h-0.5 bg-gray-500 rounded-full mb-0.5"></div>
-                                      <div className="w-0.5 h-0.5 bg-gray-500 rounded-full mb-0.5"></div>
-                                      <div className="w-0.5 h-0.5 bg-gray-500 rounded-full"></div>
+                                  {/* Controles de drag handle MELHORADOS */}
+                                  <div className="absolute -left-8 top-1/2 transform -translate-y-1/2 opacity-0 group-hover/canvas-item:opacity-100 transition-all duration-200">
+                                    <div className="w-6 h-10 bg-gradient-to-b from-gray-200 to-gray-300 rounded-l-lg border border-gray-300 flex flex-col justify-center items-center cursor-grab hover:from-blue-200 hover:to-blue-300 hover:border-blue-400 active:cursor-grabbing shadow-lg">
+                                      <div className="flex flex-col space-y-0.5">
+                                        <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
+                                        <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
+                                        <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
+                                        <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
+                                        <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
+                                      </div>
                                     </div>
                                   </div>
+                                  
+                                  {/* Badge do tipo de bloco */}
+                                  {selectedBlockId === block.id && (
+                                    <div className="absolute -top-2 -right-2 z-10">
+                                      <Badge variant="default" className="text-xs bg-blue-500 text-white shadow-lg">
+                                        {blockLibrary.find(b => b.type === block.type)?.name || block.type}
+                                      </Badge>
+                                    </div>
+                                  )}
                                   
                                   {renderBlock(block)}
                                 </div>
                               </div>
                             ))}
                           
-                          {/* Drop zone no final para adicionar novos blocos */}
+                          {/* Drop zone no final MELHORADA */}
                           <div 
-                            className={`w-full h-16 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-gray-500 text-sm transition-all ${
-                              isDragging ? 'border-blue-400 bg-blue-50 text-blue-600' : 'hover:border-gray-400 hover:bg-gray-50'
+                            className={`w-full h-20 border-2 border-dashed rounded-lg flex items-center justify-center text-sm transition-all duration-300 ${
+                              isDragging 
+                                ? 'border-blue-400 bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 shadow-lg scale-105' 
+                                : 'border-gray-300 bg-gray-50 text-gray-500 hover:border-gray-400 hover:bg-gray-100'
                             }`}
                             onDragOver={handleCanvasDragOver}
                             onDrop={handleCanvasDrop}
                           >
-                            <Plus className="h-4 w-4 mr-2" />
-                            {isDragging ? 'Solte aqui para adicionar' : 'Arraste um bloco aqui ou clique na biblioteca'}
+                            <div className="flex flex-col items-center space-y-2">
+                              <div className={`p-2 rounded-full ${isDragging ? 'bg-blue-200' : 'bg-gray-200'}`}>
+                                <Plus className={`h-4 w-4 ${isDragging ? 'text-blue-600' : 'text-gray-400'}`} />
+                              </div>
+                              <span className="font-medium">
+                                {isDragging ? 'Solte aqui para adicionar' : 'Arraste um bloco ou use a biblioteca'}
+                              </span>
+                              {!isDragging && (
+                                <span className="text-xs opacity-75">
+                                  Ou clique em "Blocos" na sidebar esquerda
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </>
                       ) : (
