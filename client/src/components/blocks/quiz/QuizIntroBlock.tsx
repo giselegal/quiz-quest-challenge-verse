@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { useQuizTracking } from '@/hooks/useQuizTracking';
-import { InlineEditableText } from '../InlineEditableText';
+import { InlineEditableText } from '../../editor/blocks/InlineEditableText';
 import type { BlockComponentProps } from '@/types/blocks';
 
 /**

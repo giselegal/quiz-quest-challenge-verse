@@ -83,6 +83,72 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
     case 'video-player':
       return <VideoPlayerBlock {...commonProps} />;
     
+    // NOVOS COMPONENTES SCHEMA-DRIVEN DO QUIZ
+    
+    case 'quiz-intro':
+      return <QuizIntroBlock 
+        block={block}
+        isSelected={isSelected}
+        onClick={onClick}
+        onPropertyChange={(key, value) => {
+          // Callback para mudanças de propriedade
+          console.log('Property changed:', key, value);
+        }}
+      />;
+    
+    case 'quiz-question':
+      return <QuizQuestionBlock 
+        block={block}
+        isSelected={isSelected}
+        onClick={onClick}
+        onPropertyChange={(key, value) => {
+          console.log('Property changed:', key, value);
+        }}
+        onAnswer={(answers) => {
+          console.log('Question answered:', answers);
+        }}
+        onNext={() => {
+          console.log('Next question');
+        }}
+        onPrevious={() => {
+          console.log('Previous question');
+        }}
+      />;
+    
+    case 'strategic-question':
+      return <StrategicQuestionBlock 
+        block={block}
+        isSelected={isSelected}
+        onClick={onClick}
+        onPropertyChange={(key, value) => {
+          console.log('Property changed:', key, value);
+        }}
+        onAnswer={(answer) => {
+          console.log('Strategic question answered:', answer);
+        }}
+        onNext={() => {
+          console.log('Next strategic question');
+        }}
+        onPrevious={() => {
+          console.log('Previous question');
+        }}
+      />;
+    
+    case 'quiz-transition':
+      return <QuizTransitionBlock 
+        block={block}
+        isSelected={isSelected}
+        onClick={onClick}
+        onPropertyChange={(key, value) => {
+          console.log('Property changed:', key, value);
+        }}
+        onComplete={() => {
+          console.log('Transition completed');
+        }}
+      />;
+
+    // COMPONENTES LEGADOS (manter para compatibilidade)
+    
     case 'QuizIntroBlock':
       // Para blocos complexos existentes, adaptar gradualmente
       return (
@@ -97,16 +163,20 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
           onClick={onClick}
         >
           <QuizIntroBlock 
-            blockId={block.id}
-            title={block.properties.title || 'Título do Quiz'}
-            subtitle={block.properties.subtitle || 'Subtítulo'}
-            logoUrl={block.properties.logoUrl}
-            namePlaceholder={block.properties.namePlaceholder || 'Digite seu nome...'}
-            buttonTextFilled={block.properties.buttonTextFilled || 'Começar Quiz!'}
-            colors={{
-              primary: block.properties.colors?.primary || '#B89B7A',
-              secondary: block.properties.colors?.secondary || '#432818'
+            block={{
+              id: block.id,
+              type: 'quiz-intro',
+              properties: {
+                title: block.properties.title || 'Título do Quiz',
+                subtitle: block.properties.subtitle || 'Subtítulo',
+                buttonText: block.properties.buttonTextFilled || 'Começar Quiz!',
+                inputPlaceholder: block.properties.namePlaceholder || 'Digite seu nome...',
+                backgroundColor: block.properties.colors?.primary || '#fffaf7',
+                textColor: block.properties.colors?.secondary || '#432818'
+              }
             }}
+            isSelected={isSelected}
+            onClick={onClick}
           />
         </div>
       );
