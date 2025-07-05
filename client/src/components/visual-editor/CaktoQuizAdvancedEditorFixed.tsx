@@ -1041,6 +1041,87 @@ const blockLibrary = [
     description: 'Card completo do resultado do estilo',
     icon: <Sparkles className="w-4 h-4" />,
     category: 'Resultado'
+  },
+  // Componentes específicos da Etapa 21 (Oferta)
+  { 
+    id: 'offer-urgency-banner-component',
+    type: 'offer-urgency-banner-component', 
+    name: 'Banner de Urgência', 
+    description: 'Banner de urgência editável',
+    icon: <Zap className="w-4 h-4" />,
+    category: 'Oferta'
+  },
+  { 
+    id: 'offer-logo-component',
+    type: 'offer-logo-component', 
+    name: 'Logo da Oferta', 
+    description: 'Logo editável da marca',
+    icon: <ImageIcon className="w-4 h-4" />,
+    category: 'Oferta'
+  },
+  { 
+    id: 'offer-hero-section-component',
+    type: 'offer-hero-section-component', 
+    name: 'Seção Hero Oferta', 
+    description: 'Seção hero completa com CTA',
+    icon: <Star className="w-4 h-4" />,
+    category: 'Oferta'
+  },
+  { 
+    id: 'offer-problems-component',
+    type: 'offer-problems-component', 
+    name: 'Seção de Problemas', 
+    description: 'Lista de problemas editável',
+    icon: <MessageCircle className="w-4 h-4" />,
+    category: 'Oferta'
+  },
+  { 
+    id: 'offer-solution-component',
+    type: 'offer-solution-component', 
+    name: 'Seção de Solução', 
+    description: 'Apresentação da solução',
+    icon: <Target className="w-4 h-4" />,
+    category: 'Oferta'
+  },
+  { 
+    id: 'offer-countdown-component',
+    type: 'offer-countdown-component', 
+    name: 'Countdown Timer', 
+    description: 'Timer de urgência editável',
+    icon: <Clock className="w-4 h-4" />,
+    category: 'Oferta'
+  },
+  { 
+    id: 'offer-transformation-component',
+    type: 'offer-transformation-component', 
+    name: 'Seção Transformação', 
+    description: 'Transformação com bônus',
+    icon: <Gift className="w-4 h-4" />,
+    category: 'Oferta'
+  },
+  { 
+    id: 'offer-pricing-component',
+    type: 'offer-pricing-component', 
+    name: 'Seção de Preços', 
+    description: 'Preços com desconto',
+    icon: <CreditCard className="w-4 h-4" />,
+    category: 'Oferta'
+  },
+  { 
+    id: 'offer-guarantee-component',
+    type: 'offer-guarantee-component', 
+    name: 'Garantia', 
+    description: 'Seção de garantia editável',
+    icon: <Shield className="w-4 h-4" />,
+    category: 'Oferta'
+  },
+  { 
+    id: 'offer-faq-component',
+    type: 'offer-faq-component', 
+    name: 'FAQ', 
+    description: 'Perguntas frequentes editáveis',
+    icon: <MessageCircle className="w-4 h-4" />,
+    category: 'Oferta'
   }
 ];
 
@@ -3815,41 +3896,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         );
         break;
 
-      case 'result-value-stack-component':
-        content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
-            <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 max-w-md mx-auto">
-              <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">O Que Você Recebe Hoje</h3>
-              
-              <div className="space-y-3 mb-6">
-                {(block?.settings?.items || [
-                  { name: 'Guia Principal', value: 'R$ 67,00' },
-                  { name: 'Bônus - Peças-chave', value: 'R$ 79,00' },
-                  { name: 'Bônus - Visagismo Facial', value: 'R$ 29,00' }
-                ]).map((item: any, index: number) => (
-                  <div key={index} className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
-                    <span>{item.name}</span>
-                    <span className="font-medium">{item.value}</span>
-                  </div>
-                ))}
-                <div className="flex justify-between items-center p-2 pt-3 font-bold">
-                  <span>Valor Total</span>
-                  <div className="relative">
-                    <span>{block?.settings?.totalValue || 'R$ 175,00'}</span>
-                    <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#ff5a5a] transform -translate-y-1/2 -rotate-3"></div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
-                <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
-                <p className="text-4xl font-bold text-[#B89B7A]">{block?.settings?.currentPrice || 'R$ 39,00'}</p>
-                <p className="text-xs text-[#3a3a3a]/60 mt-1">{block?.settings?.description || 'Pagamento único'}</p>
-              </div>
-            </div>
-          </div>
-        );
-        break;
+
 
       case 'result-green-cta-component':
         content = (
@@ -3896,6 +3943,254 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 <Lock className="w-3 h-3" />
                 <span>Oferta exclusiva nesta página</span>
               </p>
+            </div>
+          </div>
+        );
+        break;
+
+      // Componentes da Etapa 21 (Oferta)
+      case 'offer-urgency-banner-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-2">
+            <div 
+              className="text-center py-3 px-4 text-white font-semibold text-sm rounded-lg"
+              style={{ 
+                backgroundColor: block?.settings?.backgroundColor || '#ff4444',
+                color: block?.settings?.textColor || '#ffffff'
+              }}
+            >
+              {block?.settings?.text || '🔥 ÚLTIMAS HORAS: 77% OFF - Apenas R$ 39,90!'}
+            </div>
+          </div>
+        );
+        break;
+
+      case 'offer-logo-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
+            <div className="text-center">
+              <img 
+                src={block?.settings?.src || '/logo-placeholder.png'} 
+                alt={block?.settings?.alt || 'Logo'}
+                style={{ width: block?.settings?.width || '200px' }}
+                className="mx-auto"
+              />
+            </div>
+          </div>
+        );
+        break;
+
+      case 'offer-hero-section-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+            <div className="text-center space-y-6">
+              <h1 className="text-3xl md:text-4xl font-bold text-[#432818]">
+                {block?.settings?.title || 'Descubra Seu Estilo Predominante em 5 Minutos'}
+              </h1>
+              <p className="text-lg text-[#6B4F43] max-w-2xl mx-auto">
+                {block?.settings?.subtitle || 'Tenha finalmente um guarda-roupa que funciona 100%'}
+              </p>
+              {block?.settings?.heroImage && (
+                <div className="max-w-lg mx-auto">
+                  <img 
+                    src={block.settings.heroImage} 
+                    alt="Hero"
+                    className="w-full rounded-lg shadow-lg"
+                  />
+                </div>
+              )}
+              <Button 
+                className="bg-[#B89B7A] hover:bg-[#aa6b5d] text-white px-8 py-3 rounded-lg text-lg"
+              >
+                {block?.settings?.ctaText || 'Descobrir Meu Estilo Agora'}
+              </Button>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'offer-problems-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+            <div className="max-w-2xl mx-auto">
+              <h2 className="text-2xl font-bold text-center text-[#432818] mb-6">
+                {block?.settings?.title || 'Você se identifica com isso?'}
+              </h2>
+              <div className="space-y-3">
+                {(block?.settings?.problems || []).map((problem: string, index: number) => (
+                  <div key={index} className="flex items-start gap-3 p-3 bg-[#f9f4ef] rounded-lg">
+                    <span className="text-[#B89B7A] font-bold">•</span>
+                    <span className="text-[#432818]">{problem}</span>
+                  </div>
+                ))}
+              </div>
+              {block?.settings?.insight && (
+                <div className="mt-6 text-center p-4 bg-[#432818] text-white rounded-lg">
+                  <p className="font-medium">{block.settings.insight}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+        break;
+
+      case 'offer-solution-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+            <div className="text-center space-y-6">
+              <h2 className="text-3xl font-bold text-[#432818]">
+                {block?.settings?.title || 'A Solução: Quiz de Estilo'}
+              </h2>
+              <p className="text-lg text-[#6B4F43] max-w-2xl mx-auto">
+                {block?.settings?.subtitle || 'Método preciso para identificar seu estilo'}
+              </p>
+              {block?.settings?.solutionImage && (
+                <div className="max-w-md mx-auto">
+                  <img 
+                    src={block.settings.solutionImage} 
+                    alt="Solução"
+                    className="w-full rounded-lg shadow-lg"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        );
+        break;
+
+      case 'offer-countdown-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+            <div className="text-center bg-[#ff4444] text-white p-6 rounded-lg">
+              <h3 className="text-xl font-bold mb-4">
+                {block?.settings?.title || 'OFERTA EXPIRA EM:'}
+              </h3>
+              <div className="flex justify-center gap-4 text-2xl font-bold">
+                <div className="bg-white text-[#ff4444] px-4 py-2 rounded">
+                  {block?.settings?.hours || 24}h
+                </div>
+                <div className="bg-white text-[#ff4444] px-4 py-2 rounded">
+                  00m
+                </div>
+                <div className="bg-white text-[#ff4444] px-4 py-2 rounded">
+                  00s
+                </div>
+              </div>
+              {block?.settings?.urgencyText && (
+                <p className="mt-4 text-sm">{block.settings.urgencyText}</p>
+              )}
+            </div>
+          </div>
+        );
+        break;
+
+      case 'offer-transformation-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+            <div className="space-y-8">
+              <div className="text-center">
+                <h2 className="text-3xl font-bold text-[#432818] mb-4">
+                  {block?.settings?.title || 'Transformação Completa'}
+                </h2>
+                <p className="text-lg text-[#6B4F43]">
+                  {block?.settings?.subtitle || 'Tudo que você precisa para descobrir e aplicar seu estilo'}
+                </p>
+              </div>
+              
+              {block?.settings?.mainGuideImage && (
+                <div className="text-center">
+                  <img 
+                    src={block.settings.mainGuideImage} 
+                    alt="Guia Principal"
+                    className="max-w-md mx-auto rounded-lg shadow-lg"
+                  />
+                </div>
+              )}
+
+              <div className="grid md:grid-cols-2 gap-6">
+                {(block?.settings?.bonuses || []).map((bonus: any, index: number) => (
+                  <div key={index} className="bg-white p-6 rounded-lg shadow-lg border border-[#B89B7A]/20">
+                    <div className="text-center space-y-4">
+                      <h3 className="text-xl font-bold text-[#432818]">{bonus.title}</h3>
+                      <p className="text-[#6B4F43]">{bonus.description}</p>
+                      <p className="text-lg font-bold text-[#B89B7A]">{bonus.value}</p>
+                      {bonus.image && (
+                        <img 
+                          src={bonus.image} 
+                          alt={bonus.title}
+                          className="w-full max-w-xs mx-auto rounded-lg"
+                        />
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'offer-pricing-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+            <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg border border-[#B89B7A]/20">
+              <div className="text-center space-y-4">
+                <div className="relative">
+                  <p className="text-2xl text-gray-500 line-through">
+                    {block?.settings?.originalPrice || 'R$ 175,00'}
+                  </p>
+                  <span className="absolute -top-2 -right-2 bg-[#ff4444] text-white px-2 py-1 rounded text-sm">
+                    {block?.settings?.discount || '77% OFF'}
+                  </span>
+                </div>
+                <p className="text-4xl font-bold text-[#B89B7A]">
+                  {block?.settings?.currentPrice || 'R$ 39,90'}
+                </p>
+                <p className="text-sm text-[#ff4444] font-medium">
+                  {block?.settings?.urgency || 'Oferta por tempo limitado!'}
+                </p>
+                <Button className="w-full bg-[#B89B7A] hover:bg-[#aa6b5d] text-white py-3 text-lg">
+                  {block?.settings?.ctaText || 'Quero Descobrir Meu Estilo!'}
+                </Button>
+              </div>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'offer-guarantee-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+            <div className="max-w-2xl mx-auto text-center bg-[#f9f4ef] p-6 rounded-lg border border-[#B89B7A]/20">
+              <div className="flex items-center justify-center mb-4">
+                <Shield className="w-12 h-12 text-[#B89B7A]" />
+              </div>
+              <h3 className="text-xl font-bold text-[#432818] mb-3">
+                {block?.settings?.title || 'Garantia de 7 Dias'}
+              </h3>
+              <p className="text-[#6B4F43]">
+                {block?.settings?.description || 'Garantia incondicional de 7 dias'}
+              </p>
+            </div>
+          </div>
+        );
+        break;
+
+      case 'offer-faq-component':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="py-8">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-2xl font-bold text-center text-[#432818] mb-8">
+                Perguntas Frequentes
+              </h2>
+              <div className="space-y-4">
+                {(block?.settings?.questions || []).map((faq: any, index: number) => (
+                  <div key={index} className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20">
+                    <h3 className="font-bold text-[#432818] mb-2">{faq.question}</h3>
+                    <p className="text-[#6B4F43]">{faq.answer}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         );
