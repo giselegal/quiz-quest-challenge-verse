@@ -2522,19 +2522,21 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
       case 'form-input':
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-4">
-            <div className="space-y-2">
-              <Label className="text-sm font-medium text-[#432818]">
-                {block?.settings?.label || 'Campo de entrada'}
-                {block?.settings?.required && <span className="text-red-500 ml-1">*</span>}
-              </Label>
-              <Input
-                type={block?.settings?.type || 'text'}
-                placeholder={block?.settings?.placeholder || 'Digite aqui...'}
-                className="w-full h-12 text-base border-2 border-[#B89B7A]/30 focus:border-[#B89B7A] rounded-xl bg-white focus:ring-2 focus:ring-[#B89B7A]/20"
-              />
+          <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
+            <div className={`${isMobile ? 'py-3' : 'py-4'}`}>
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-[#432818]">
+                  {block?.settings?.label || 'Campo de entrada'}
+                  {block?.settings?.required && <span className="text-red-500 ml-1">*</span>}
+                </Label>
+                <Input
+                  type={block?.settings?.type || 'text'}
+                  placeholder={block?.settings?.placeholder || 'Digite aqui...'}
+                  className="w-full h-12 text-base border-2 border-[#B89B7A]/30 focus:border-[#B89B7A] rounded-xl bg-white focus:ring-2 focus:ring-[#B89B7A]/20"
+                />
+              </div>
             </div>
-          </div>
+          </InlineEditableWrapper>
         );
         break;
 
@@ -2542,8 +2544,9 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         const hasImagesInOptions = (block?.settings?.options || []).some((opt: any) => opt.imageUrl);
         
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
-            <div className="space-y-6 max-w-5xl mx-auto">
+          <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
+            <div className={`${isMobile ? 'py-4' : 'py-6'}`}>
+              <div className="space-y-6 max-w-5xl mx-auto">
               <h3 className="text-xl md:text-2xl font-semibold text-[#432818] text-center leading-relaxed mb-8">
                 {block?.settings?.question || 'Qual é a sua pergunta?'}
               </h3>
@@ -2613,7 +2616,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 </div>
               )}
             </div>
-          </div>
+          </InlineEditableWrapper>
         );
         break;
 
@@ -2621,7 +2624,8 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         const hasImagesInStrategicOptions = (block?.settings?.options || []).some((opt: any) => opt.imageUrl);
         
         content = (
-          <div style={baseStyle} onClick={handleBlockClick} className="py-6">
+          <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
+            <div className={`${isMobile ? 'py-4' : 'py-6'}`}>
             <div className="space-y-6 max-w-4xl mx-auto">
               <h3 className="text-xl md:text-2xl font-semibold text-[#432818] text-center leading-relaxed">
                 {block?.settings?.question || 'Pergunta estratégica sobre seus objetivos'}
@@ -4087,8 +4091,10 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       case 'testimonials-component':
         content = (
           <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
-            <div className="py-4 px-6 bg-white rounded-lg shadow-sm border">
-              <Testimonials />
+            <div className={`${isMobile ? 'py-3 px-4' : 'py-4 px-6'} bg-white rounded-lg shadow-sm border`}>
+              <div className={isMobile ? 'text-sm' : ''}>
+                <Testimonials />
+              </div>
             </div>
           </InlineEditableWrapper>
         );
@@ -4097,23 +4103,27 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       case 'secure-purchase-component':
         content = (
           <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
-            <div className="py-8 px-6 bg-white rounded-lg shadow-sm border">
-              <div className="max-w-2xl mx-auto text-center space-y-6">
-                {/* CTA Principal Verde */}
-                <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-8 text-white shadow-xl">
-                  <h3 className="text-2xl font-bold mb-4">
+            <div className={`${isMobile ? 'py-6 px-4' : 'py-8 px-6'} bg-white rounded-lg shadow-sm border`}>
+              <div className={`${isMobile ? 'max-w-full' : 'max-w-2xl'} mx-auto text-center space-y-6`}>
+                {/* CTA Principal Verde - Responsivo */}
+                <div className={`bg-gradient-to-r from-green-500 to-green-600 rounded-xl ${
+                  isMobile ? 'p-6' : 'p-8'
+                } text-white shadow-xl`}>
+                  <h3 className={`font-bold mb-4 ${isMobile ? 'text-lg' : 'text-2xl'}`}>
                     {block?.settings?.ctaTitle || 'Quero Transformar Meu Estilo Agora!'}
                   </h3>
-                  <p className="text-green-100 mb-6">
+                  <p className={`text-green-100 mb-6 ${isMobile ? 'text-sm' : 'text-base'}`}>
                     {block?.settings?.ctaSubtitle || 'Acesso imediato + Garantia de 7 dias'}
                   </p>
                   
-                  <Button className="bg-white text-green-600 hover:bg-green-50 px-12 py-4 text-lg font-bold rounded-full transform hover:scale-105 transition-all shadow-lg">
-                    <Shield className="w-5 h-5 mr-2" />
-                    GARANTIR MINHA TRANSFORMAÇÃO
+                  <Button className={`bg-white text-green-600 hover:bg-green-50 ${
+                    isMobile ? 'px-8 py-3 text-base' : 'px-12 py-4 text-lg'
+                  } font-bold rounded-full transform hover:scale-105 transition-all shadow-lg`}>
+                    <Shield className={`${isMobile ? 'w-4 h-4' : 'w-5 h-5'} mr-2`} />
+                    {isMobile ? 'GARANTIR TRANSFORMAÇÃO' : 'GARANTIR MINHA TRANSFORMAÇÃO'}
                   </Button>
                   
-                  <div className="mt-4 text-sm text-green-100">
+                  <div className={`mt-4 text-green-100 ${isMobile ? 'text-xs' : 'text-sm'}`}>
                     🔒 Pagamento 100% seguro | ⚡ Acesso instantâneo
                   </div>
                 </div>
@@ -4131,8 +4141,10 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       case 'guarantee-component':
         content = (
           <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
-            <div className="py-4 px-6 bg-white rounded-lg shadow-sm border">
-              <GuaranteeSection />
+            <div className={`${isMobile ? 'py-3 px-4' : 'py-4 px-6'} bg-white rounded-lg shadow-sm border`}>
+              <div className={isMobile ? 'text-sm' : ''}>
+                <GuaranteeSection />
+              </div>
             </div>
           </InlineEditableWrapper>
         );
@@ -4141,8 +4153,10 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       case 'mentor-component':
         content = (
           <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
-            <div className="py-4 px-6 bg-white rounded-lg shadow-sm border">
-              <MentorSection />
+            <div className={`${isMobile ? 'py-3 px-4' : 'py-4 px-6'} bg-white rounded-lg shadow-sm border`}>
+              <div className={isMobile ? 'text-sm' : ''}>
+                <MentorSection />
+              </div>
             </div>
           </InlineEditableWrapper>
         );
