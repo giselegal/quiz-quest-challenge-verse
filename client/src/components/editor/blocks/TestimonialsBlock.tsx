@@ -12,18 +12,30 @@ const TestimonialsBlock: React.FC<BlockComponentProps> = ({
   className = ''
 }) => {
   const { 
-    title = 'O que nossos clientes dizem',
+    title = 'O que nossas clientes dizem',
     testimonials = [
       { 
-        name: 'Maria Silva', 
-        text: 'O quiz me ajudou a entender melhor meu estilo! Agora me visto com muito mais confiança.',
-        image: 'https://via.placeholder.com/80x80?text=MS',
+        name: 'Juliana Santos', 
+        text: 'Depois do quiz, descobri que meu estilo é Romântico! Agora sei exatamente que peças escolher e me sinto muito mais feminina e confiante.',
+        image: 'https://via.placeholder.com/80x80/F8BBD9/FFFFFF?text=JS',
         rating: 5
       },
       { 
-        name: 'Ana Costa', 
-        text: 'Incrível! Descobri cores e estilos que nunca imaginei que ficassem bem em mim.',
-        image: 'https://via.placeholder.com/80x80?text=AC',
+        name: 'Camila Rodrigues', 
+        text: 'O resultado foi perfeito! Sou Contemporânea e finalmente entendi como misturar praticidade com estilo. Meu guarda-roupa faz muito mais sentido agora.',
+        image: 'https://via.placeholder.com/80x80/B89B7A/FFFFFF?text=CR',
+        rating: 5
+      },
+      { 
+        name: 'Marina Oliveira', 
+        text: 'Sempre me achei sem estilo, mas descobri que sou Natural! O quiz me mostrou como valorizar minha beleza de forma autêntica e sem esforço.',
+        image: 'https://via.placeholder.com/80x80/87CEEB/FFFFFF?text=MO',
+        rating: 5
+      },
+      { 
+        name: 'Beatriz Costa', 
+        text: 'Eu tinha medo de ousar, mas descobri que meu estilo é Dramático! Agora uso peças mais marcantes e me sinto poderosa em cada look.',
+        image: 'https://via.placeholder.com/80x80/8B4513/FFFFFF?text=BC',
         rating: 5
       }
     ],

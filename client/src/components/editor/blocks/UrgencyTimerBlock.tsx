@@ -1,31 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { Clock } from 'lucide-react';
+import { InlineEditableText } from './InlineEditableText';
+import type { BlockComponentProps } from '@/types/blocks';
 
-interface UrgencyTimerBlockProps {
-  properties: {
-    title?: string;
-    duration?: number;
-    showExpiredMessage?: boolean;
-    expiredMessage?: string;
-  };
-  isSelected?: boolean;
-  onClick?: () => void;
-}
-
-export const UrgencyTimerBlock: React.FC<UrgencyTimerBlockProps> = ({ 
-  properties, 
+const UrgencyTimerBlock: React.FC<BlockComponentProps> = ({ 
+  block,
   isSelected = false,
-  onClick 
+  isEditing = false,
+  onClick,
+  onPropertyChange,
+  className = ''
 }) => {
   const { 
-    title = 'Oferta Expira em:',
-    duration = 15,
+    title = '🚨 Oferta Limitada - Expira em:',
+    duration = 15, // em minutos
     showExpiredMessage = true,
-    expiredMessage = 'Essa oferta especial expirou.'
-  } = properties;
+    expiredMessage = '⏰ Esta oferta especial expirou! Mas não se preocupe, ainda temos outras oportunidades para você.',
+    timerColor = 'red'
+  } = block.properties;
 
   const [timeLeft, setTimeLeft] = useState(duration * 60); // Convert to seconds
   const [isExpired, setIsExpired] = useState(false);
+
+  const handlePropertyChange = (key: string, value: any) => {
+    if (onPropertyChange) {
+      onPropertyChange(key, value);
+    }
+  };
 
   useEffect(() => {
     if (timeLeft <= 0) {
@@ -52,6 +53,13 @@ export const UrgencyTimerBlock: React.FC<UrgencyTimerBlockProps> = ({
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const colorClasses = {
+    red: 'bg-red-500 text-white',
+    orange: 'bg-orange-500 text-white',
+    yellow: 'bg-yellow-500 text-black',
+    green: 'bg-green-500 text-white'
+  };
+
   return (
     <div 
       className={`
@@ -60,24 +68,31 @@ export const UrgencyTimerBlock: React.FC<UrgencyTimerBlockProps> = ({
           ? 'border-2 border-blue-500 bg-blue-50' 
           : 'border-2 border-dashed border-[#B89B7A]/40 hover:bg-[#FAF9F7]'
         }
+        ${className}
       `}
       onClick={onClick}
+      data-block-id={block.id}
+      data-block-type={block.type}
     >
       <div className="text-center">
         {!isExpired ? (
           <>
             <div className="flex items-center justify-center space-x-2 mb-4">
-              <Clock className="w-5 h-5 text-red-500" />
-              <h3 className="text-lg font-semibold text-[#432818]">
-                {title}
-              </h3>
+              <Clock className="w-5 h-5 text-red-500 animate-pulse" />
+              <InlineEditableText
+                value={title}
+                onSave={(value: string) => handlePropertyChange('title', value)}
+                className="text-lg font-semibold text-[#432818]"
+                placeholder="Título do timer de urgência"
+                tag="h3"
+              />
             </div>
             
-            <div className="bg-red-500 text-white rounded-lg py-4 px-6 inline-block">
+            <div className={`${colorClasses[timerColor as keyof typeof colorClasses] || colorClasses.red} rounded-lg py-4 px-6 inline-block shadow-lg`}>
               <div className="text-3xl font-bold font-mono">
                 {formatTime(timeLeft)}
               </div>
-              <div className="text-sm mt-1">
+              <div className="text-sm mt-1 opacity-90">
                 minutos restantes
               </div>
             </div>
@@ -85,9 +100,13 @@ export const UrgencyTimerBlock: React.FC<UrgencyTimerBlockProps> = ({
         ) : (
           showExpiredMessage && (
             <div className="bg-gray-100 rounded-lg py-4 px-6">
-              <div className="text-gray-600 font-medium">
-                {expiredMessage}
-              </div>
+              <InlineEditableText
+                value={expiredMessage}
+                onSave={(value: string) => handlePropertyChange('expiredMessage', value)}
+                className="text-gray-600 font-medium"
+                placeholder="Mensagem quando o timer expira"
+                tag="div"
+              />
             </div>
           )
         )}
@@ -95,3 +114,5 @@ export const UrgencyTimerBlock: React.FC<UrgencyTimerBlockProps> = ({
     </div>
   );
 };
+
+export default UrgencyTimerBlock;

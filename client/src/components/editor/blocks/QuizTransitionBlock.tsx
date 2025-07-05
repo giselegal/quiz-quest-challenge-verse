@@ -200,14 +200,14 @@ const QuizTransitionBlock: React.FC<QuizTransitionBlockProps> = ({
         {/* Mensagem adicional - EDITÁVEL INLINE */}
         <div className="space-y-3 pt-4">
           <InlineEditableText
-            value="A ideia é simples: te ajudar a enxergar com mais clareza onde você está agora — e para onde pode ir com mais intenção, leveza e autenticidade."
+            value={description}
             onSave={(value: string) => handlePropertyChange('description', value)}
             className="text-[#8F7A6A]"
             placeholder="Descrição adicional..."
             tag="p"
           />
           <InlineEditableText
-            value="💬 Responda com sinceridade. Isso é só entre você e a sua nova versão."
+            value={motivationalText}
             onSave={(value: string) => handlePropertyChange('motivationalText', value)}
             className="text-sm font-medium text-[#432818]"
             placeholder="Texto motivacional..."
