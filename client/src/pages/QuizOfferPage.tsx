@@ -319,6 +319,28 @@ const QuizOfferPage: React.FC = () => {
         );
     };
 
+    /**
+     * Renderiza um componente com configurações do editor se disponível,
+     * caso contrário renderiza o componente original
+     */
+    const renderConfigurableComponent = (blockId: string, originalComponent: React.ReactNode) => {
+        if (pageConfig && !configLoading) {
+            return <DynamicBlockRenderer 
+                pageId="quiz-offer-page"
+                blockId={blockId}
+                fallback={originalComponent}
+            />;
+        }
+        return originalComponent;
+    };
+
+    // Aplicar estilos do editor quando disponível
+    useEffect(() => {
+        if (pageConfig && !configLoading) {
+            applyStyles();
+        }
+    }, [pageConfig, configLoading, applyStyles]);
+
     return (
         <div className="min-h-screen bg-[var(--background)]" style={{ fontFamily: 'Inter, sans-serif' }}>
             {/* Header limpo */}
