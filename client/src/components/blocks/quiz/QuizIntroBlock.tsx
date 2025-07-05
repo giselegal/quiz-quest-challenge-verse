@@ -2,79 +2,36 @@ import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { useQuizTracking } from '@/hooks/useQuizTracking';
+import { InlineEditableText } from '../InlineEditableText';
+import type { BlockComponentProps } from '@/types/blocks';
 
 /**
- * QuizIntroBlock - Componente de introdução do quiz 100% fiel ao original
+ * QuizIntroBlock - Schema-driven compatible version
  * 
- * Props editáveis via editor visual:
- * - title: string - Título principal (suporte a HTML/JSX)
- * - subtitle: string - Texto descritivo 
- * - logoUrl: string - URL do logo
- * - logoAlt: string - Alt text do logo
- * - introImageUrl: string - URL da imagem principal
- * - introImageAlt: string - Alt text da imagem
- * - namePlaceholder: string - Placeholder do input
- * - buttonTextEmpty: string - Texto do botão quando vazio
- * - buttonTextFilled: string - Texto do botão quando preenchido
- * - privacyText: string - Texto da política de privacidade
- * - footerText: string - Texto do rodapé
- * - colors: object - Paleta de cores customizável
- * - onStart: function - Callback ao iniciar quiz
+ * Integrado com o sistema de edição visual schema-driven
+ * Suporta edição inline e propriedades dinâmicas
  * 
  * @example
  * <QuizIntroBlock
- *   blockId="quiz-intro-main"
- *   title="<span className='text-[#B89B7A]'>Chega</span> de um guarda-roupa lotado..."
- *   subtitle="Em poucos minutos, descubra seu Estilo Predominante..."
- *   logoUrl="https://example.com/logo.png"
- *   onStart={(nome) => console.log('Iniciando quiz para:', nome)}
+ *   block={{
+ *     id: 'quiz-intro-1',
+ *     type: 'quiz-intro',
+ *     properties: {
+ *       title: 'Descubra Seu Estilo Pessoal',
+ *       subtitle: 'Um quiz personalizado...',
+ *       buttonText: 'Iniciar Quiz'
+ *     }
+ *   }}
+ *   isSelected={false}
+ *   onClick={() => {}}
+ *   onPropertyChange={(key, value) => {}}
  * />
  */
 
-export interface QuizIntroBlockProps {
-  // Identificação
-  blockId: string;
-  className?: string;
-  style?: React.CSSProperties;
-
-  // Conteúdo editável - Textos
-  title?: string;
-  subtitle?: string;
-  namePlaceholder?: string;
-  buttonTextEmpty?: string;
-  buttonTextFilled?: string;
-  privacyText?: string;
-  footerText?: string;
-
-  // Conteúdo editável - Imagens
-  logoUrl?: string;
-  logoAlt?: string;
-  logoWidth?: number;
-  logoHeight?: number;
-  introImageUrl?: string;
-  introImageAlt?: string;
-  
-  // Configurações visuais
-  colors?: {
-    primary?: string;
-    primaryDark?: string;
-    secondary?: string;
-    background?: string;
-    backgroundAlt?: string;
-    text?: string;
-    textLight?: string;
-    border?: string;
-  };
-  
-  // Funcionalidade
+// Interface compatível com schema-driven system
+export interface QuizIntroBlockProps extends BlockComponentProps {
+  // Props específicas do quiz intro (opcional - fallback para compatibilidade)
   onStart?: (nome: string) => void;
-  disabled?: boolean;
-  required?: boolean;
-  maxLength?: number;
-  
-  // Layout e responsividade
-  maxWidth?: string;
-  backgroundGradient?: string;
 }
 
 const QuizIntroBlock: React.FC<QuizIntroBlockProps> = ({
