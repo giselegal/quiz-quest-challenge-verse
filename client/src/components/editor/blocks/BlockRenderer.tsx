@@ -90,7 +90,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
         block={block}
         isSelected={isSelected}
         onClick={onClick}
-        onPropertyChange={(key, value) => {
+        onPropertyChange={(key: string, value: any) => {
           // Callback para mudanças de propriedade
           console.log('Property changed:', key, value);
         }}
@@ -101,10 +101,10 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
         block={block}
         isSelected={isSelected}
         onClick={onClick}
-        onPropertyChange={(key, value) => {
+        onPropertyChange={(key: string, value: any) => {
           console.log('Property changed:', key, value);
         }}
-        onAnswer={(answers) => {
+        onAnswer={(answers: any) => {
           console.log('Question answered:', answers);
         }}
         onNext={() => {
@@ -120,10 +120,10 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
         block={block}
         isSelected={isSelected}
         onClick={onClick}
-        onPropertyChange={(key, value) => {
+        onPropertyChange={(key: string, value: any) => {
           console.log('Property changed:', key, value);
         }}
-        onAnswer={(answer) => {
+        onAnswer={(answer: any) => {
           console.log('Strategic question answered:', answer);
         }}
         onNext={() => {

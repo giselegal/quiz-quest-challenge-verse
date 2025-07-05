@@ -102,7 +102,7 @@ const QuizIntroBlock: React.FC<QuizIntroBlockProps> = ({
     }
   };
 
-  const handlePropertyChange = (key: string, value: any) => {
+  const handlePropertyChange = (key: string, value: string) => {
     if (onPropertyChange) {
       onPropertyChange(key, value);
     }
@@ -140,29 +140,27 @@ const QuizIntroBlock: React.FC<QuizIntroBlockProps> = ({
         <div className="space-y-4">
           <InlineEditableText
             value={title}
-            onChange={(value) => handlePropertyChange('title', value)}
+            onSave={(value) => handlePropertyChange('title', value)}
             className="text-4xl md:text-5xl font-bold leading-tight"
             style={{ color: textColor }}
-            isEditing={isEditing}
             placeholder="Título do quiz"
           />
           
           <InlineEditableText
             value={subtitle}
-            onChange={(value) => handlePropertyChange('subtitle', value)}
+            onSave={(value) => handlePropertyChange('subtitle', value)}
             className="text-xl md:text-2xl text-opacity-80"
             style={{ color: textColor }}
-            isEditing={isEditing}
             placeholder="Subtítulo explicativo"
           />
           
           <InlineEditableText
             value={description}
-            onChange={(value) => handlePropertyChange('description', value)}
+            onSave={(value) => handlePropertyChange('description', value)}
             className="text-lg text-opacity-70"
             style={{ color: textColor }}
-            isEditing={isEditing}
             placeholder="Descrição detalhada"
+            isTextArea={true}
           />
         </div>
 
@@ -171,7 +169,7 @@ const QuizIntroBlock: React.FC<QuizIntroBlockProps> = ({
           <div className="space-y-4">
             <h3 className="text-xl font-semibold">O que você vai descobrir:</h3>
             <div className="grid gap-2 text-left max-w-md mx-auto">
-              {benefits.map((benefit, index) => (
+              {benefits.map((benefit: string, index: number) => (
                 <div key={index} className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-current rounded-full opacity-60" />
                   <span>{benefit}</span>
@@ -217,9 +215,9 @@ const QuizIntroBlock: React.FC<QuizIntroBlockProps> = ({
           >
             <InlineEditableText
               value={buttonText}
-              onChange={(value) => handlePropertyChange('buttonText', value)}
-              isEditing={isEditing}
+              onSave={(value) => handlePropertyChange('buttonText', value)}
               placeholder="Texto do botão"
+              disabled={!isEditing}
             />
           </button>
         </form>

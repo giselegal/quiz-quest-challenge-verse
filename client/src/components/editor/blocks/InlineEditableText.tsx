@@ -8,6 +8,7 @@ interface InlineEditableTextProps {
   tag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' | 'div';
   isTextArea?: boolean;
   className?: string;
+  style?: React.CSSProperties;
   placeholder?: string;
   disabled?: boolean;
 }
@@ -18,6 +19,7 @@ export const InlineEditableText: React.FC<InlineEditableTextProps> = ({
   tag = 'div',
   isTextArea = false,
   className = '',
+  style,
   placeholder = 'Clique para editar...',
   disabled = false
 }) => {
@@ -101,6 +103,7 @@ export const InlineEditableText: React.FC<InlineEditableTextProps> = ({
   return (
     <Tag
       className={`${className} ${isPlaceholder ? 'text-gray-400 italic' : ''} cursor-text hover:bg-gray-50 transition-colors duration-200 ${disabled ? 'cursor-not-allowed opacity-60' : ''}`}
+      style={style}
       onClick={handleClick}
       title={disabled ? 'Edição desabilitada' : 'Clique para editar'}
     >

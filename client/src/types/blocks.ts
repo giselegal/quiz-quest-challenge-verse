@@ -15,5 +15,20 @@ export interface BlockComponentProps {
   className?: string;
 }
 
+// Tipos específicos para quiz
+export interface QuizAnswer {
+  id: string;
+  text: string;
+  value: string;
+  weight?: number;
+}
+
+export interface QuizOption {
+  id: string;
+  text: string;
+  value: string;
+  weight?: number;
+}
+
 // Re-export tipos existentes para compatibilidade
-export type { BlockData as Block } from '@/services/funnelService';
+// export type { BlockData as Block } from '@/services/funnelService';
