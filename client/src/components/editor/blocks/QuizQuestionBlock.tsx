@@ -54,27 +54,35 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
   const handleOptionSelect = (optionId: string) => {
     let newAnswers: string[];
     
-    if (multiSelect) {
-      // Múltipla escolha com limite
+    if (isStrategicQuestion) {
+      // QUESTÕES ESTRATÉGICAS: apenas 1 seleção
+      newAnswers = [optionId];
+    } else {
+      // QUESTÕES NORMAIS: múltipla escolha (3 obrigatórias)
       if (selectedAnswers.includes(optionId)) {
         // Remover seleção
         newAnswers = selectedAnswers.filter(id => id !== optionId);
       } else {
-        // Adicionar seleção (respeitando limite)
+        // Adicionar seleção (respeitando limite de 3)
         if (selectedAnswers.length < maxSelections) {
           newAnswers = [...selectedAnswers, optionId];
         } else {
-          // Substitui a primeira seleção
-          newAnswers = [...selectedAnswers.slice(1), optionId];
+          return; // Não permite mais de 3 seleções
         }
       }
-    } else {
-      // Escolha única
-      newAnswers = [optionId];
     }
     
     setSelectedAnswers(newAnswers);
     setHasAnswered(newAnswers.length > 0);
+    
+    // AUTO-AVANÇO para questões normais após 3ª seleção
+    if (!isStrategicQuestion && newAnswers.length === maxSelections && autoAdvance) {
+      setTimeout(() => {
+        if (onNext) {
+          onNext();
+        }
+      }, 500); // Pequeno delay para feedback visual
+    }
     
     if (onAnswer) {
       onAnswer(newAnswers);
@@ -107,7 +115,9 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
     }
   };
 
-  const canProceed = !required || hasAnswered;
+  const canProceed = isStrategicQuestion 
+    ? hasAnswered // Estratégicas: 1 seleção
+    : selectedAnswers.length === maxSelections; // Normais: 3 seleções obrigatórias
 
   return (
     <div
@@ -154,9 +164,15 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
             />
           )}
           
-          {multiSelect && (
+          {!isStrategicQuestion && (
             <p className="text-sm text-[#8F7A6A]">
-              Selecione até {maxSelections} opções que mais combinam com você ({selectedAnswers.length}/{maxSelections})
+              Selecione exatamente 3 opções ({selectedAnswers.length}/3)
+            </p>
+          )}
+          
+          {isStrategicQuestion && (
+            <p className="text-sm text-[#8F7A6A]">
+              Selecione uma opção para continuar
             </p>
           )}
         </div>
@@ -238,9 +254,17 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
           </button>
           
           <div className="text-center">
-            {required && !hasAnswered && (
-              <p className="text-sm text-[#8F7A6A]"> {/* brand-light-coffee */}
-                Selecione uma opção para continuar
+            {!canProceed && (
+              <p className="text-sm text-[#8F7A6A]">
+                {isStrategicQuestion 
+                  ? 'Selecione uma opção para continuar'
+                  : `Selecione ${maxSelections - selectedAnswers.length} opção(ões) para prosseguir`
+                }
+              </p>
+            )}
+            {!isStrategicQuestion && canProceed && autoAdvance && (
+              <p className="text-sm text-[#10b981]">
+                Avançando automaticamente...
               </p>
             )}
           </div>
@@ -256,7 +280,7 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
             )}
           >
-            Próximo →
+            {isStrategicQuestion ? 'Continuar' : 'Próximo'} →
           </button>
         </div>
       </div>

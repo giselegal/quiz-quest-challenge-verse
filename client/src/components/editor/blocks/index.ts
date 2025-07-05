@@ -13,4 +13,11 @@ export { GuaranteeBlock } from './GuaranteeBlock';
 export { VideoPlayerBlock } from './VideoPlayerBlock';
 export { InlineEditableText } from './InlineEditableText';
 export { BlockRenderer } from './BlockRenderer';
+
+// Quiz-specific blocks
+export { default as QuizIntroBlock } from '../../blocks/quiz/QuizIntroBlock';
+export { default as QuizQuestionBlock } from './QuizQuestionBlock';
+export { default as StrategicQuestionBlock } from './StrategicQuestionBlock';
+export { default as QuizTransitionBlock } from './QuizTransitionBlock';
+
 export type { BlockData } from './BlockRenderer';

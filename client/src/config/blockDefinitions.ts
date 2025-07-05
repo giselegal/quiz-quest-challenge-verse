@@ -791,11 +791,27 @@ export const blockDefinitions: BlockDefinition[] = [
         ]
       },
       {
-        key: 'multiSelect',
-        label: 'Múltipla Escolha',
+        key: 'maxSelections',
+        label: 'Máximo de Seleções',
+        type: 'number-input',
+        min: 1,
+        max: 8,
+        defaultValue: 3,
+        description: 'Questões normais: 3 obrigatórias | Estratégicas: 1'
+      },
+      {
+        key: 'isStrategicQuestion',
+        label: 'É Questão Estratégica?',
         type: 'boolean-switch',
         defaultValue: false,
-        description: 'Permite selecionar múltiplas opções'
+        description: 'Estratégicas não pontuam e não têm auto-avanço'
+      },
+      {
+        key: 'autoAdvance',
+        label: 'Auto-avanço',
+        type: 'boolean-switch',
+        defaultValue: true,
+        description: 'Para questões normais: avança automaticamente após 3ª seleção'
       },
       {
         key: 'required',
