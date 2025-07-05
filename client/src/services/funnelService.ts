@@ -318,6 +318,137 @@ class FunnelService {
     }
   }
 
+  /**
+   * Sincronizar blocos de quiz específicos
+   */
+  async syncQuizBlocks(funnelData: FunnelData): Promise<boolean> {
+    try {
+      // Encontrar páginas de quiz (etapas 1-19)
+      const quizPages = funnelData.pages.filter(page => 
+        page.type === 'question' || 
+        page.type === 'intro' || 
+        page.type === 'main-transition' || 
+        page.type === 'strategic'
+      );
+
+      const syncPromises = quizPages.map(async (page) => {
+        // Configuração específica para páginas de quiz
+        const quizPageConfig = {
+          pageId: page.id,
+          pageName: page.title || `Etapa ${page.order || 1}`,
+          blocks: page.blocks.map(block => ({
+            ...block,
+            // Mapear tipos específicos para componentes reutilizáveis
+            componentType: this.mapBlockTypeToComponent(block.type),
+            props: this.extractBlockProps(block),
+            editable: true
+          })),
+          styles: {
+            backgroundColor: page.settings?.backgroundColor || '#FFFBF7',
+            textColor: page.settings?.textColor || '#432818',
+            fontFamily: page.settings?.fontFamily || 'Inter, sans-serif',
+            customCSS: page.settings?.customCSS || ''
+          },
+          metadata: {
+            title: page.title || '',
+            description: `Etapa ${page.order || 1} do quiz`,
+            type: 'quiz-step',
+            stepNumber: page.order || 1,
+            totalSteps: quizPages.length
+          },
+          settings: {
+            ...page.settings,
+            isQuizPage: true,
+            allowNavigation: true,
+            showProgress: true
+          },
+          lastModified: new Date().toISOString(),
+          version: 1
+        };
+
+        return this.savePageConfig(page.id, quizPageConfig);
+      });
+
+      const results = await Promise.all(syncPromises);
+      return results.every(result => result === true);
+    } catch (error) {
+      console.error('Error syncing quiz blocks:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Mapear tipos de bloco para componentes reutilizáveis
+   */
+  private mapBlockTypeToComponent(blockType: string): string {
+    const mapping: Record<string, string> = {
+      'question-multiple': 'QuizQuestionBlock',
+      'question-strategic': 'QuizQuestionBlock',
+      'progress-indicator': 'QuizProgressBlock',
+      'navigation': 'QuizNavigationBlock',
+      'main-transition': 'QuizTransitionBlock',
+      'final-transition': 'QuizTransitionBlock',
+      'loading-animation': 'QuizTransitionBlock',
+      'header': 'HeaderBlock',
+      'text': 'TextBlock',
+      'image': 'ImageBlock',
+      'button': 'ButtonBlock'
+    };
+
+    return mapping[blockType] || blockType;
+  }
+
+  /**
+   * Extrair props editáveis de um bloco
+   */
+  private extractBlockProps(block: BlockData): Record<string, any> {
+    const baseProps = {
+      ...block.settings,
+      ...block.content,
+      blockId: block.id,
+      blockType: block.type
+    };
+
+    // Props específicas por tipo de bloco
+    switch (block.type) {
+      case 'question-multiple':
+      case 'question-strategic':
+        return {
+          ...baseProps,
+          question: block.settings?.question || 'Pergunta não definida',
+          options: block.settings?.options || [],
+          multipleSelection: block.settings?.multipleSelection || false,
+          maxSelections: block.settings?.maxSelections || 1,
+          required: block.settings?.required || false,
+          showImages: block.settings?.showImages !== false
+        };
+
+      case 'progress-indicator':
+        return {
+          ...baseProps,
+          currentQuestion: block.settings?.currentQuestion || 1,
+          totalQuestions: block.settings?.totalQuestions || 10,
+          showPercentage: block.settings?.showPercentage !== false,
+          showNumbers: block.settings?.showNumbers !== false,
+          progressBarStyle: block.settings?.progressBarStyle || 'linear'
+        };
+
+      case 'main-transition':
+      case 'final-transition':
+        return {
+          ...baseProps,
+          title: block.settings?.title || 'Transição',
+          message: block.settings?.message || 'Processando...',
+          showAnimation: block.settings?.showAnimation !== false,
+          animationType: block.settings?.animationType || 'celebration',
+          autoAdvance: block.settings?.autoAdvance || false
+        };
+
+      default:
+        return baseProps;
+    }
+  }
+
   // High-level operations
   async saveFunnelData(funnelData: FunnelData, userId?: number): Promise<Funnel> {
     // Check if funnel exists
