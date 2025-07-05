@@ -13,6 +13,9 @@ import { TestimonialsBlock } from './TestimonialsBlock';
 import { GuaranteeBlock } from './GuaranteeBlock';
 import { VideoPlayerBlock } from './VideoPlayerBlock';
 import QuizIntroBlock from '@/components/blocks/quiz/QuizIntroBlock';
+import QuizQuestionBlock from './QuizQuestionBlock';
+import StrategicQuestionBlock from './StrategicQuestionBlock';
+import QuizTransitionBlock from './QuizTransitionBlock';
 
 export interface BlockData {
   id: string;
@@ -146,6 +149,71 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
               ))}
             </div>
           </div>
+        </div>
+      );
+    
+    case 'quiz-question':
+      return (
+        <div 
+          className={`
+            p-4 rounded-lg cursor-pointer transition-all duration-200
+            ${isSelected 
+              ? 'border-2 border-blue-500 bg-blue-50' 
+              : 'border-2 border-dashed border-[#B89B7A]/40 hover:bg-[#FAF9F7]'
+            }
+          `}
+          onClick={onClick}
+        >
+          <QuizQuestionBlock 
+            question={block.properties.question}
+            options={block.properties.options}
+            onChange={onSaveInline?.('answer')}
+            value={block.properties.answer}
+            isSelected={isSelected}
+          />
+        </div>
+      );
+    
+    case 'strategic-question':
+      return (
+        <div 
+          className={`
+            p-4 rounded-lg cursor-pointer transition-all duration-200
+            ${isSelected 
+              ? 'border-2 border-blue-500 bg-blue-50' 
+              : 'border-2 border-dashed border-[#B89B7A]/40 hover:bg-[#FAF9F7]'
+            }
+          `}
+          onClick={onClick}
+        >
+          <StrategicQuestionBlock 
+            question={block.properties.question}
+            options={block.properties.options}
+            onChange={onSaveInline?.('strategicAnswer')}
+            value={block.properties.strategicAnswer}
+            isSelected={isSelected}
+          />
+        </div>
+      );
+    
+    case 'quiz-transition':
+      return (
+        <div 
+          className={`
+            p-4 rounded-lg cursor-pointer transition-all duration-200
+            ${isSelected 
+              ? 'border-2 border-blue-500 bg-blue-50' 
+              : 'border-2 border-dashed border-[#B89B7A]/40 hover:bg-[#FAF9F7]'
+            }
+          `}
+          onClick={onClick}
+        >
+          <QuizTransitionBlock 
+            title={block.properties.title}
+            description={block.properties.description}
+            onNext={onClick}
+            isSelected={isSelected}
+          />
         </div>
       );
     
