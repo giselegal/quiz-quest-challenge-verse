@@ -804,23 +804,99 @@ export const blockDefinitions: BlockDefinition[] = [
         defaultValue: true
       },
       {
+        key: 'maxSelections',
+        label: 'Máximo de Seleções',
+        type: 'number-input',
+        min: 1,
+        max: 8,
+        defaultValue: 3,
+        description: 'Número máximo de opções que podem ser selecionadas'
+      },
+      {
         key: 'options',
         label: 'Opções de Resposta',
         type: 'array-editor',
         defaultValue: [
           {
-            id: 'option-1',
-            text: 'Opção 1',
+            id: 'natural',
+            text: 'Natural',
             imageUrl: '',
-            styleCategory: 'casual',
+            styleCategory: 'natural',
+            description: 'Descrição da opção',
+            points: 1
+          },
+          {
+            id: 'classico',
+            text: 'Clássico', 
+            imageUrl: '',
+            styleCategory: 'classico',
+            description: 'Descrição da opção',
+            points: 1
+          },
+          {
+            id: 'contemporaneo',
+            text: 'Contemporâneo',
+            imageUrl: '',
+            styleCategory: 'contemporaneo', 
+            description: 'Descrição da opção',
+            points: 1
+          },
+          {
+            id: 'elegante',
+            text: 'Elegante',
+            imageUrl: '',
+            styleCategory: 'elegante',
+            description: 'Descrição da opção', 
+            points: 1
+          },
+          {
+            id: 'romantico',
+            text: 'Romântico',
+            imageUrl: '',
+            styleCategory: 'romantico',
+            description: 'Descrição da opção',
+            points: 1
+          },
+          {
+            id: 'sexy',
+            text: 'Sexy',
+            imageUrl: '',
+            styleCategory: 'sexy',
+            description: 'Descrição da opção',
+            points: 1
+          },
+          {
+            id: 'dramatico',
+            text: 'Dramático',
+            imageUrl: '',
+            styleCategory: 'dramatico',
+            description: 'Descrição da opção',
+            points: 1
+          },
+          {
+            id: 'criativo',
+            text: 'Criativo',
+            imageUrl: '',
+            styleCategory: 'criativo',
+            description: 'Descrição da opção',
             points: 1
           }
         ],
         itemSchema: [
           { key: 'id', label: 'ID', type: 'text-input' },
           { key: 'text', label: 'Texto', type: 'text-input' },
+          { key: 'description', label: 'Descrição', type: 'textarea' },
           { key: 'imageUrl', label: 'URL da Imagem', type: 'image-url' },
-          { key: 'styleCategory', label: 'Categoria de Estilo', type: 'text-input' },
+          { key: 'styleCategory', label: 'Categoria de Estilo', type: 'select', options: [
+            { label: 'Natural', value: 'natural' },
+            { label: 'Clássico', value: 'classico' },
+            { label: 'Contemporâneo', value: 'contemporaneo' },
+            { label: 'Elegante', value: 'elegante' },
+            { label: 'Romântico', value: 'romantico' },
+            { label: 'Sexy', value: 'sexy' },
+            { label: 'Dramático', value: 'dramatico' },
+            { label: 'Criativo', value: 'criativo' }
+          ]},
           { key: 'points', label: 'Pontuação', type: 'number-input' }
         ]
       },

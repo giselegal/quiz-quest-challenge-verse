@@ -41,22 +41,32 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
     title = 'Qual dessas opções mais combina com você?',
     description = '',
     questionType = 'both', // 'both', 'text', 'image'
-    multiSelect = false,
+    multiSelect = true,
+    maxSelections = 3, // QUESTÕES NORMAIS: 3 obrigatórias | ESTRATÉGICAS: 1 obrigatória
     required = true,
     options = [],
     showProgress = true,
-    progressPercent = 10
+    progressPercent = 10,
+    isStrategicQuestion = false, // Diferencia questões normais das estratégicas
+    autoAdvance = false // Auto-avanço para questões normais
   } = block.properties;
 
   const handleOptionSelect = (optionId: string) => {
     let newAnswers: string[];
     
     if (multiSelect) {
-      // Múltipla escolha
+      // Múltipla escolha com limite
       if (selectedAnswers.includes(optionId)) {
+        // Remover seleção
         newAnswers = selectedAnswers.filter(id => id !== optionId);
       } else {
-        newAnswers = [...selectedAnswers, optionId];
+        // Adicionar seleção (respeitando limite)
+        if (selectedAnswers.length < maxSelections) {
+          newAnswers = [...selectedAnswers, optionId];
+        } else {
+          // Substitui a primeira seleção
+          newAnswers = [...selectedAnswers.slice(1), optionId];
+        }
       }
     } else {
       // Escolha única
@@ -128,25 +138,25 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
         <div className="text-center space-y-4">
           <InlineEditableText
             value={title}
-            onChange={(value) => handlePropertyChange('title', value)}
+            onSave={(value: string) => handlePropertyChange('title', value)}
             className="text-2xl md:text-3xl font-bold text-gray-900"
-            isEditing={isEditing}
             placeholder="Digite sua pergunta aqui"
+            tag="h2"
           />
           
           {description && (
             <InlineEditableText
               value={description}
-              onChange={(value) => handlePropertyChange('description', value)}
+              onSave={(value: string) => handlePropertyChange('description', value)}
               className="text-lg text-[#8F7A6A]" // brand-light-coffee
-              isEditing={isEditing}
               placeholder="Contexto adicional da pergunta"
+              tag="p"
             />
           )}
           
           {multiSelect && (
             <p className="text-sm text-[#8F7A6A]">
-              Você pode selecionar múltiplas opções
+              Selecione até {maxSelections} opções que mais combinam com você ({selectedAnswers.length}/{maxSelections})
             </p>
           )}
         </div>
@@ -196,13 +206,21 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
                 
                 {/* Option Text */}
                 {showText && (
-                  <div className="text-center">
+                  <div className="text-center space-y-1">
                     <p className={cn(
-                      'font-medium',
+                      'font-medium text-base',
                       isSelected ? 'text-[#432818]' : 'text-[#432818]' // brand-coffee
                     )}>
                       {option.text}
                     </p>
+                    {option.description && (
+                      <p className={cn(
+                        'text-sm',
+                        isSelected ? 'text-[#8F7A6A]' : 'text-[#8F7A6A]' // brand-light-coffee
+                      )}>
+                        {option.description}
+                      </p>
+                    )}
                   </div>
                 )}
               </button>
