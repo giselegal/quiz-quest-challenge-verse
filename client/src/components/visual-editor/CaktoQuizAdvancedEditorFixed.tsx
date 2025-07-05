@@ -45,6 +45,19 @@ import {
   StartButtonBlock, 
   QuizBenefitsBlock 
 } from '@/components/blocks/quiz';
+
+// Importar componentes reais das páginas
+import { Header } from '@/components/result/Header';
+import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
+import BeforeAfterTransformation from '@/components/result/BeforeAfterTransformation';
+import MotivationSection from '@/components/result/MotivationSection';
+import BonusSection from '@/components/result/BonusSection';
+import Testimonials from '@/components/quiz-result/sales/Testimonials';
+import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
+import GuaranteeSection from '@/components/result/GuaranteeSection';
+import MentorSection from '@/components/result/MentorSection';
+import BuildInfo from '@/components/BuildInfo';
+import FixedIntroImage from '@/components/ui/FixedIntroImage';
 import {
   Type,
   Image as ImageIcon,
@@ -189,7 +202,7 @@ const createInitialFunnel = (): FunnelData => ({
     theme: 'caktoquiz'
   },
   pages: [
-    // ETAPA 1: QuizIntrodução → Coleta do nome
+    // ETAPA 1: QuizIntrodução → Usando QuizIntroBlock real
     {
       id: 'etapa-1-intro',
       type: 'intro',
@@ -203,38 +216,30 @@ const createInitialFunnel = (): FunnelData => ({
       },
       blocks: [
         {
-          id: 'intro-header',
-          type: 'header',
+          id: 'quiz-intro-block',
+          type: 'QuizIntroBlock',
           order: 1,
           settings: {
-            title: 'Chega de um guarda-roupa lotado e da sensação de que nada combina com Você.',
+            title: '<span class="text-[#B89B7A]">Chega</span> de um guarda-roupa lotado e da sensação de que nada combina com você.',
             subtitle: 'Em poucos minutos, descubra seu Estilo Predominante — e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.',
-            titleSize: 'large',
-            alignment: 'center',
-            color: '#432818'
-          }
-        },
-        {
-          id: 'intro-image',
-          type: 'image',
-          order: 2,
-          settings: {
-            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp',
-            alt: 'Descubra seu estilo predominante e transforme seu guarda-roupa',
-            width: 300,
-            height: 204,
-            alignment: 'center'
-          }
-        },
-        {
-          id: 'name-input',
-          type: 'form-input',
-          order: 2,
-          settings: {
-            label: 'Como você gostaria de ser chamada?',
-            placeholder: 'Digite seu nome aqui...',
+            logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+            logoAlt: 'Logo Gisele Galvão',
+            introImageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp',
+            introImageAlt: 'Descubra seu estilo predominante e transforme seu guarda-roupa',
+            namePlaceholder: 'Digite seu nome aqui...',
+            buttonTextEmpty: 'Preencha seu nome primeiro',
+            buttonTextFilled: 'Quero Descobrir meu Estilo Agora!',
+            privacyText: 'Seus dados estão seguros conosco.',
+            footerText: 'Quiz desenvolvido por especialistas em styling',
             required: true,
-            type: 'text'
+            maxLength: 50,
+            colors: {
+              primary: '#B89B7A',
+              secondary: '#432818',
+              accent: '#6B4F43',
+              background: '#ffffff',
+              text: '#432818'
+            }
           }
         }
       ]
@@ -406,7 +411,7 @@ const createInitialFunnel = (): FunnelData => ({
       ]
     },
 
-    // ETAPA 20: Resultado A (/resultado) - PÁGINA REAL RESULTPAGE.TSX
+    // ETAPA 20: Resultado A (/resultado) - USANDO COMPONENTES REAIS DA RESULTPAGE.TSX
     {
       id: 'etapa-20-resultado-a',
       name: 'Etapa 20: Resultado A (/resultado)',
@@ -424,80 +429,92 @@ const createInitialFunnel = (): FunnelData => ({
         // 1. Header Real da ResultPage
         {
           id: 'result-header-real',
-          type: 'header',
+          type: 'result-header-component',
           order: 1,
           settings: {
-            title: 'Parabéns! Aqui está seu resultado:',
-            subtitle: 'Seu estilo predominante baseado no quiz',
-            titleSize: 'large',
-            alignment: 'center'
+            userName: 'Usuário',
+            primaryStyle: 'Elegante Clássica'
           }
         },
-        // 2. Logo da marca (como na ResultPage real)
-        {
-          id: 'result-logo',
-          type: 'image',
-          order: 2,
-          settings: {
-            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
-            alt: 'Logo Gisele Galvão',
-            width: '200px',
-            alignment: 'center'
-          }
-        },
-        // 3. Card do Estilo Predominante (estrutura real)
+        // 2. Card do Estilo Predominante 
         {
           id: 'result-style-card',
-          type: 'style-result-display',
-          order: 3,
+          type: 'result-style-display',
+          order: 2,
           settings: {
             styleName: 'Estilo Predominante',
+            percentage: 92,
             styleImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp',
-            styleDescription: 'Sua personalidade refletida no seu estilo de vestir. Aqui está como aplicar na prática.',
-            percentMatch: 92
+            styleDescription: 'Sua personalidade refletida no seu estilo de vestir. Aqui está como aplicar na prática.'
           }
         },
-        // 4. Progress Bar do Estilo
+        // 3. SecondaryStylesSection Real
         {
-          id: 'result-progress',
-          type: 'text',
+          id: 'result-secondary-styles',
+          type: 'secondary-styles-component',
+          order: 3,
+          settings: {
+            secondaryStyles: []
+          }
+        },
+        // 4. BeforeAfterTransformation Real
+        {
+          id: 'result-before-after',
+          type: 'before-after-component',
           order: 4,
-          settings: {
-            content: 'Compatibilidade: 92% com seu estilo predominante',
-            fontSize: 'medium',
-            alignment: 'center'
-          }
+          settings: {}
         },
-        // 5. Imagem do Guia Personalizado (como na ResultPage real)
+        // 5. MotivationSection Real
         {
-          id: 'result-guide-image',
-          type: 'image',
+          id: 'result-motivation',
+          type: 'motivation-component',
           order: 5,
-          settings: {
-            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp',
-            alt: 'Guia de Estilo Personalizado',
-            width: '400px',
-            alignment: 'center'
-          }
+          settings: {}
         },
-        // 6. Seção "Vista-se de Você na Prática" (texto exato da ResultPage)
+        // 6. BonusSection Real
         {
-          id: 'result-vista-se-text',
-          type: 'header',
+          id: 'result-bonus',
+          type: 'bonus-component',
           order: 6,
-          settings: {
-            title: 'Vista-se de Você — na Prática',
-            subtitle: 'Agora que você conhece seu estilo, é hora de aplicá-lo com clareza e intenção.',
-            titleSize: 'large',
-            alignment: 'center'
-          }
+          settings: {}
         },
-        // 7. Descrição dos benefícios (texto exato da ResultPage)
+        // 7. Testimonials Real
         {
-          id: 'result-benefits-description',
-          type: 'text',
+          id: 'result-testimonials',
+          type: 'testimonials-component',
           order: 7,
-          settings: {
+          settings: {}
+        },
+        // 8. SecurePurchaseElement Real
+        {
+          id: 'result-secure-purchase',
+          type: 'secure-purchase-component',
+          order: 8,
+          settings: {}
+        },
+        // 9. GuaranteeSection Real
+        {
+          id: 'result-guarantee',
+          type: 'guarantee-component',
+          order: 9,
+          settings: {}
+        },
+        // 10. MentorSection Real
+        {
+          id: 'result-mentor',
+          type: 'mentor-component',
+          order: 10,
+          settings: {}
+        },
+        // 11. BuildInfo Real
+        {
+          id: 'result-build-info',
+          type: 'build-info-component',
+          order: 11,
+          settings: {}
+        }
+      ]
+    },
             content: 'O Guia da Gisele Galvão foi criado para mulheres como você — que querem se vestir com autenticidade e transformar sua imagem em ferramenta de poder.',
             fontSize: 'medium',
             alignment: 'center'
