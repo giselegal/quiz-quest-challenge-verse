@@ -3843,21 +3843,46 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       // NOVOS BLOCOS DE INTRODUÇÃO DO QUIZ
       case 'QuizIntroBlock':
         content = (
-          <div  className="w-full">
+          <div className="w-full">
             <QuizIntroBlock
-              blockId={block.id}
-              title={block?.settings?.title}
-              subtitle={block?.settings?.subtitle}
-              logoUrl={block?.settings?.logoUrl}
-              logoAlt={block?.settings?.logoAlt}
-              introImageUrl={block?.settings?.introImageUrl}
-              introImageAlt={block?.settings?.introImageAlt}
-              namePlaceholder={block?.settings?.namePlaceholder}
-              buttonTextEmpty={block?.settings?.buttonTextEmpty}
-              buttonTextFilled={block?.settings?.buttonTextFilled}
-              privacyText={block?.settings?.privacyText}
-              footerText={block?.settings?.footerText}
-              colors={block?.settings?.colors}
+              block={{
+                id: block.id,
+                type: 'quiz-intro',
+                properties: {
+                  title: block?.settings?.title || 'Descubra Seu Estilo Pessoal',
+                  subtitle: block?.settings?.subtitle || 'Um quiz personalizado para você',
+                  description: 'Responda algumas perguntas e descubra o estilo que combina perfeitamente com você.',
+                  inputPlaceholder: block?.settings?.namePlaceholder || 'Digite seu primeiro nome',
+                  buttonText: block?.settings?.buttonTextFilled || 'Iniciar Quiz',
+                  backgroundColor: block?.settings?.colors?.primary || '#fffaf7',
+                  textColor: block?.settings?.colors?.secondary || '#432818',
+                  backgroundImage: block?.settings?.introImageUrl,
+                  showBenefits: true,
+                  benefits: [
+                    'Descubra seu estilo único',
+                    'Recomendações personalizadas', 
+                    'Resultado instantâneo'
+                  ]
+                }
+              }}
+              isSelected={selectedBlock?.id === block.id}
+              onClick={() => setSelectedBlockId(block.id)}
+              onPropertyChange={(key, value) => {
+                // Só atualizar se este bloco estiver selecionado
+                if (selectedBlockId === block.id) {
+                  // Mapear mudanças de volta para o formato do editor
+                  const settingsMap: Record<string, string> = {
+                    'title': 'title',
+                    'subtitle': 'subtitle',
+                    'description': 'description',
+                    'buttonText': 'buttonTextFilled',
+                    'inputPlaceholder': 'namePlaceholder'
+                  };
+                  
+                  const settingKey = settingsMap[key] || key;
+                  updateBlockSetting(settingKey, value);
+                }
+              }}
               onStart={(nome) => {
                 console.log('Quiz iniciado para:', nome);
                 // Capturar nome do usuário
@@ -3867,11 +3892,6 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 }));
                 trackChange();
               }}
-              disabled={block?.settings?.disabled}
-              required={block?.settings?.required}
-              maxLength={block?.settings?.maxLength}
-              maxWidth={block?.settings?.maxWidth}
-              backgroundGradient={block?.settings?.backgroundGradient}
             />
           </div>
         );

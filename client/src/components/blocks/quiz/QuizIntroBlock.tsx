@@ -47,6 +47,19 @@ const QuizIntroBlock: React.FC<QuizIntroBlockProps> = ({
   const [error, setError] = useState('');
   const { trackUIInteraction, trackCTAClick } = useQuizTracking();
 
+  // Validação defensiva para evitar erro quando block ou properties não existem
+  if (!block || !block.properties) {
+    console.warn('QuizIntroBlock: block ou block.properties não foi fornecido', { block });
+    return (
+      <div className="p-4 border-2 border-red-300 bg-red-50 rounded-lg">
+        <p className="text-red-600 font-medium">Erro: Configuração do bloco inválida</p>
+        <p className="text-sm text-red-500 mt-1">
+          O componente QuizIntroBlock precisa de um objeto 'block' com 'properties' válidas.
+        </p>
+      </div>
+    );
+  }
+
   // Extrair propriedades do schema com valores padrão (usando cores da marca)
   const {
     title = 'Descubra Seu Estilo Pessoal',

@@ -274,29 +274,28 @@ const DynamicBlockRenderer: React.FC<DynamicBlockRendererProps> = ({
       case 'QuizIntroBlock':
         return (
           <QuizIntroBlock
-            blockId={blockId}
-            title={dynamicProps.title}
-            subtitle={dynamicProps.subtitle}
-            namePlaceholder={dynamicProps.namePlaceholder}
-            buttonTextEmpty={dynamicProps.buttonTextEmpty}
-            buttonTextFilled={dynamicProps.buttonTextFilled}
-            privacyText={dynamicProps.privacyText}
-            footerText={dynamicProps.footerText}
-            logoUrl={dynamicProps.logoUrl}
-            logoAlt={dynamicProps.logoAlt}
-            logoWidth={dynamicProps.logoWidth}
-            logoHeight={dynamicProps.logoHeight}
-            introImageUrl={dynamicProps.introImageUrl}
-            introImageAlt={dynamicProps.introImageAlt}
-            colors={dynamicProps.colors}
+            block={{
+              id: blockId,
+              type: 'quiz-intro',
+              properties: {
+                title: dynamicProps.title || 'Descubra Seu Estilo Pessoal',
+                subtitle: dynamicProps.subtitle || 'Um quiz personalizado para você',
+                description: 'Responda algumas perguntas e descubra o estilo que combina perfeitamente com você.',
+                inputPlaceholder: dynamicProps.namePlaceholder || 'Digite seu primeiro nome',
+                buttonText: dynamicProps.buttonTextFilled || 'Iniciar Quiz',
+                backgroundColor: dynamicProps.colors?.primary || '#fffaf7',
+                textColor: dynamicProps.colors?.secondary || '#432818',
+                backgroundImage: dynamicProps.introImageUrl,
+                showBenefits: true,
+                benefits: [
+                  'Descubra seu estilo único',
+                  'Recomendações personalizadas', 
+                  'Resultado instantâneo'
+                ]
+              }
+            }}
             onStart={dynamicProps.onStart}
-            disabled={dynamicProps.disabled}
-            required={dynamicProps.required}
-            maxLength={dynamicProps.maxLength}
-            maxWidth={dynamicProps.maxWidth}
-            backgroundGradient={dynamicProps.backgroundGradient}
             className={dynamicProps.className}
-            style={dynamicProps.style}
           />
         );
 
