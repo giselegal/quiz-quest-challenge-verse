@@ -3255,7 +3255,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           </TabsList>
 
           <TabsContent value="funnel" className="flex-1 p-2 overflow-hidden relative" style={{ height: 'calc(100vh - 120px)' }}>
-            <ScrollArea className="h-full">
+            <ScrollArea className="h-full custom-scrollbar">
               <div className="space-y-2 pr-3">
                 <div className="flex items-center justify-between mb-3 sticky top-0 bg-white z-10 pb-2">
                   <h3 className="text-sm font-medium">Páginas do Funil</h3>
@@ -3297,7 +3297,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           </TabsContent>
 
           <TabsContent value="blocks" className="flex-1 p-2 overflow-hidden relative" style={{ height: 'calc(100vh - 120px)' }}>
-            <ScrollArea className="h-full">
+            <ScrollArea className="h-full custom-scrollbar">
               <div className="space-y-3 pr-3">
                 <h3 className="text-sm font-medium mb-3 sticky top-0 bg-white z-10 pb-2">Biblioteca de Blocos</h3>
                 
@@ -3350,7 +3350,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           </TabsContent>
 
           <TabsContent value="templates" className="flex-1 p-2 overflow-hidden" style={{ height: 'calc(100vh - 120px)' }}>
-            <ScrollArea className="h-full">
+            <ScrollArea className="h-full custom-scrollbar">
               <div className="space-y-3 pr-3">
                 <h3 className="text-sm font-medium mb-3">Templates de Página</h3>
                 
@@ -3421,7 +3421,7 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
           </TabsContent>
 
           <TabsContent value="settings" className="flex-1 p-2 overflow-hidden" style={{ height: 'calc(100vh - 120px)' }}>
-            <ScrollArea className="h-full">
+            <ScrollArea className="h-full custom-scrollbar">
               <div className="space-y-4 pr-3">
                 <h3 className="text-sm font-medium mb-3">Configurações do Funil</h3>
                 
