@@ -38,6 +38,13 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { funnelService, type FunnelData, type PageData, type BlockData } from '@/services/funnelService';
 import { REAL_QUIZ_QUESTIONS, STRATEGIC_QUESTIONS, TRANSITIONS } from './realQuizData';
+
+// Importar os novos blocos de introdução do quiz
+import { 
+  QuizIntroBlock, 
+  StartButtonBlock, 
+  QuizBenefitsBlock 
+} from '@/components/blocks/quiz';
 import {
   Type,
   Image as ImageIcon,
@@ -1168,6 +1175,32 @@ const blockLibrary = [
     description: 'Página de loading antes do resultado',
     icon: <Trophy className="w-4 h-4" />,
     category: 'Quiz'
+  },
+  
+  // BLOCOS DE INTRODUÇÃO DO QUIZ - NOVOS BLOCOS EDITÁVEIS
+  { 
+    id: 'quiz-intro-block',
+    type: 'QuizIntroBlock', 
+    name: 'Introdução Completa do Quiz', 
+    description: 'Bloco completo de introdução com logo, título, imagem, formulário e CTA',
+    icon: <Sparkles className="w-4 h-4" />,
+    category: 'Quiz Introdução'
+  },
+  { 
+    id: 'start-button-block',
+    type: 'StartButtonBlock', 
+    name: 'Botão de Início', 
+    description: 'Botão isolado para iniciar quiz com múltiplas variantes',
+    icon: <ArrowRight className="w-4 h-4" />,
+    category: 'Quiz Introdução'
+  },
+  { 
+    id: 'quiz-benefits-block',
+    type: 'QuizBenefitsBlock', 
+    name: 'Benefícios do Quiz', 
+    description: 'Lista de benefícios/instruções com layouts flexíveis',
+    icon: <CheckCircle className="w-4 h-4" />,
+    category: 'Quiz Introdução'
   }
 ];
 
@@ -3603,6 +3636,81 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         );
         break;
 
+      // NOVOS BLOCOS DE INTRODUÇÃO DO QUIZ
+      case 'QuizIntroBlock':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="w-full">
+            <QuizIntroBlock
+              blockId={block.id}
+              title={block?.settings?.title}
+              subtitle={block?.settings?.subtitle}
+              logoUrl={block?.settings?.logoUrl}
+              logoAlt={block?.settings?.logoAlt}
+              introImageUrl={block?.settings?.introImageUrl}
+              introImageAlt={block?.settings?.introImageAlt}
+              namePlaceholder={block?.settings?.namePlaceholder}
+              buttonTextEmpty={block?.settings?.buttonTextEmpty}
+              buttonTextFilled={block?.settings?.buttonTextFilled}
+              privacyText={block?.settings?.privacyText}
+              footerText={block?.settings?.footerText}
+              colors={block?.settings?.colors}
+              onStart={(nome) => console.log('Quiz iniciado para:', nome)}
+              disabled={block?.settings?.disabled}
+              required={block?.settings?.required}
+              maxLength={block?.settings?.maxLength}
+              maxWidth={block?.settings?.maxWidth}
+              backgroundGradient={block?.settings?.backgroundGradient}
+            />
+          </div>
+        );
+        break;
+
+      case 'StartButtonBlock':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="w-full">
+            <StartButtonBlock
+              blockId={block.id}
+              text={block?.settings?.text}
+              icon={block?.settings?.icon}
+              loadingText={block?.settings?.loadingText}
+              disabled={block?.settings?.disabled}
+              loading={block?.settings?.loading}
+              size={block?.settings?.size}
+              variant={block?.settings?.variant}
+              fullWidth={block?.settings?.fullWidth}
+              alignment={block?.settings?.alignment}
+              colors={block?.settings?.colors}
+              onClick={() => console.log('Botão clicado')}
+              href={block?.settings?.href}
+              target={block?.settings?.target}
+              enableHoverEffect={block?.settings?.enableHoverEffect}
+              enablePulseEffect={block?.settings?.enablePulseEffect}
+            />
+          </div>
+        );
+        break;
+
+      case 'QuizBenefitsBlock':
+        content = (
+          <div style={baseStyle} onClick={handleBlockClick} className="w-full">
+            <QuizBenefitsBlock
+              blockId={block.id}
+              title={block?.settings?.title}
+              subtitle={block?.settings?.subtitle}
+              benefits={block?.settings?.benefits}
+              showIcons={block?.settings?.showIcons}
+              iconType={block?.settings?.iconType}
+              layout={block?.settings?.layout}
+              alignment={block?.settings?.alignment}
+              spacing={block?.settings?.spacing}
+              colors={block?.settings?.colors}
+              maxWidth={block?.settings?.maxWidth}
+              columns={block?.settings?.columns}
+            />
+          </div>
+        );
+        break;
+
       default:
         content = (
           <div style={baseStyle} onClick={handleBlockClick} className="border-2 border-dashed border-gray-300 p-4 text-center text-gray-500">
@@ -5627,6 +5735,230 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                           background: e.target.value 
                         })}
                         className="text-sm h-8 mt-1"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* NOVOS BLOCOS DE INTRODUÇÃO DO QUIZ */}
+                
+                {selectedBlock.type === 'QuizIntroBlock' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Título</Label>
+                      <Textarea
+                        value={selectedBlock.settings.title || ''}
+                        onChange={(e) => updateBlockSetting('title', e.target.value)}
+                        className="text-sm resize-none mt-1"
+                        rows={2}
+                        placeholder="<span class='text-[#B89B7A]'>Chega</span> de um guarda-roupa lotado..."
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Subtítulo</Label>
+                      <Textarea
+                        value={selectedBlock.settings.subtitle || ''}
+                        onChange={(e) => updateBlockSetting('subtitle', e.target.value)}
+                        className="text-sm resize-none mt-1"
+                        rows={2}
+                        placeholder="Em poucos minutos, descubra seu estilo..."
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">URL do Logo</Label>
+                      <Input
+                        value={selectedBlock.settings.logoUrl || ''}
+                        onChange={(e) => updateBlockSetting('logoUrl', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="https://example.com/logo.png"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">URL da Imagem Principal</Label>
+                      <Input
+                        value={selectedBlock.settings.introImageUrl || ''}
+                        onChange={(e) => updateBlockSetting('introImageUrl', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="https://example.com/intro.jpg"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Placeholder do Nome</Label>
+                      <Input
+                        value={selectedBlock.settings.namePlaceholder || ''}
+                        onChange={(e) => updateBlockSetting('namePlaceholder', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Digite seu nome"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Texto do Botão (Preenchido)</Label>
+                      <Input
+                        value={selectedBlock.settings.buttonTextFilled || ''}
+                        onChange={(e) => updateBlockSetting('buttonTextFilled', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Quero Descobrir meu Estilo Agora!"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {selectedBlock.type === 'StartButtonBlock' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Texto do Botão</Label>
+                      <Input
+                        value={selectedBlock.settings.text || ''}
+                        onChange={(e) => updateBlockSetting('text', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Começar Quiz"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Tamanho</Label>
+                      <select 
+                        value={selectedBlock.settings.size || 'md'}
+                        onChange={(e) => updateBlockSetting('size', e.target.value)}
+                        className="w-full h-8 text-sm border border-gray-300 rounded mt-1 px-2"
+                      >
+                        <option value="sm">Pequeno</option>
+                        <option value="md">Médio</option>
+                        <option value="lg">Grande</option>
+                      </select>
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Variante</Label>
+                      <select 
+                        value={selectedBlock.settings.variant || 'primary'}
+                        onChange={(e) => updateBlockSetting('variant', e.target.value)}
+                        className="w-full h-8 text-sm border border-gray-300 rounded mt-1 px-2"
+                      >
+                        <option value="primary">Primário</option>
+                        <option value="secondary">Secundário</option>
+                        <option value="outline">Contorno</option>
+                      </select>
+                    </div>
+                    
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        checked={selectedBlock.settings.fullWidth || false}
+                        onCheckedChange={(checked) => updateBlockSetting('fullWidth', checked)}
+                      />
+                      <Label className="text-xs">Largura Total</Label>
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Alinhamento</Label>
+                      <div className="flex gap-1 mt-1">
+                        <Button
+                          size="sm"
+                          variant={selectedBlock.settings.alignment === 'left' ? 'default' : 'outline'}
+                          onClick={() => updateBlockSetting('alignment', 'left')}
+                          className="h-7 w-7 p-0"
+                        >
+                          <AlignLeft className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant={selectedBlock.settings.alignment === 'center' ? 'default' : 'outline'}
+                          onClick={() => updateBlockSetting('alignment', 'center')}
+                          className="h-7 w-7 p-0"
+                        >
+                          <AlignCenter className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant={selectedBlock.settings.alignment === 'right' ? 'default' : 'outline'}
+                          onClick={() => updateBlockSetting('alignment', 'right')}
+                          className="h-7 w-7 p-0"
+                        >
+                          <AlignRight className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {selectedBlock.type === 'QuizBenefitsBlock' && (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs">Título</Label>
+                      <Input
+                        value={selectedBlock.settings.title || ''}
+                        onChange={(e) => updateBlockSetting('title', e.target.value)}
+                        className="text-sm h-8 mt-1"
+                        placeholder="Benefícios do Quiz"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Subtítulo</Label>
+                      <Textarea
+                        value={selectedBlock.settings.subtitle || ''}
+                        onChange={(e) => updateBlockSetting('subtitle', e.target.value)}
+                        className="text-sm resize-none mt-1"
+                        rows={2}
+                        placeholder="Descubra as vantagens..."
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Layout</Label>
+                      <select 
+                        value={selectedBlock.settings.layout || 'list'}
+                        onChange={(e) => updateBlockSetting('layout', e.target.value)}
+                        className="w-full h-8 text-sm border border-gray-300 rounded mt-1 px-2"
+                      >
+                        <option value="list">Lista</option>
+                        <option value="grid">Grade</option>
+                        <option value="cards">Cards</option>
+                      </select>
+                    </div>
+                    
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        checked={selectedBlock.settings.showIcons !== false}
+                        onCheckedChange={(checked) => updateBlockSetting('showIcons', checked)}
+                      />
+                      <Label className="text-xs">Mostrar Ícones</Label>
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Tipo de Ícone</Label>
+                      <select 
+                        value={selectedBlock.settings.iconType || 'custom'}
+                        onChange={(e) => updateBlockSetting('iconType', e.target.value)}
+                        className="w-full h-8 text-sm border border-gray-300 rounded mt-1 px-2"
+                      >
+                        <option value="custom">Personalizado</option>
+                        <option value="checkmark">Checkmark</option>
+                        <option value="star">Estrela</option>
+                        <option value="arrow">Seta</option>
+                      </select>
+                    </div>
+                    
+                    <div>
+                      <Label className="text-xs">Benefícios (JSON)</Label>
+                      <Textarea
+                        value={JSON.stringify(selectedBlock.settings.benefits || [], null, 2)}
+                        onChange={(e) => {
+                          try {
+                            const benefits = JSON.parse(e.target.value);
+                            updateBlockSetting('benefits', benefits);
+                          } catch (error) {
+                            // Ignore invalid JSON during typing
+                          }
+                        }}
+                        className="text-xs font-mono resize-none mt-1"
+                        rows={6}
+                        placeholder='[{"text": "Rápido e fácil", "icon": "⏰"}]'
                       />
                     </div>
                   </div>
