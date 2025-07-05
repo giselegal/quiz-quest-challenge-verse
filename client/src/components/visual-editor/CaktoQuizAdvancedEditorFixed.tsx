@@ -2428,20 +2428,23 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         content = (
           <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
             <div 
-              className="py-4 px-6 bg-white rounded-lg shadow-sm border"
+              className={`${isMobile ? 'py-3 px-4' : 'py-4 px-6'} bg-white rounded-lg shadow-sm border`}
               style={{
                 textAlign: block?.settings?.alignment || 'center'
               }}
             >
               <h1 className={`font-bold text-[#432818] mb-4 font-playfair ${
-                block?.settings?.titleSize === 'small' ? 'text-xl md:text-2xl' :
-                block?.settings?.titleSize === 'medium' ? 'text-2xl md:text-3xl' :
-                'text-3xl md:text-4xl'
+                isMobile ? 
+                  (block?.settings?.titleSize === 'small' ? 'text-lg' :
+                   block?.settings?.titleSize === 'medium' ? 'text-xl' : 'text-2xl') :
+                  (block?.settings?.titleSize === 'small' ? 'text-xl md:text-2xl' :
+                   block?.settings?.titleSize === 'medium' ? 'text-2xl md:text-3xl' :
+                   'text-3xl md:text-4xl')
               }`}>
                 {block?.settings?.title || 'Título do Cabeçalho'}
               </h1>
               {block?.settings?.subtitle && (
-                <p className="text-lg text-[#6B5B73] mb-6">
+                <p className={`text-[#6B5B73] ${isMobile ? 'text-base mb-4' : 'text-lg mb-6'}`}>
                   {block?.settings?.subtitle}
                 </p>
               )}
@@ -2453,11 +2456,13 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       case 'text':
         content = (
           <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
-            <div className="py-3 px-4 bg-white rounded border">
+            <div className={`${isMobile ? 'py-2 px-3' : 'py-3 px-4'} bg-white rounded border`}>
               <p className={`text-[#432818] leading-relaxed ${
-                block?.settings?.fontSize === 'small' ? 'text-sm' :
-                block?.settings?.fontSize === 'large' ? 'text-lg' :
-                'text-base'
+                isMobile ?
+                  (block?.settings?.fontSize === 'small' ? 'text-xs' :
+                   block?.settings?.fontSize === 'large' ? 'text-base' : 'text-sm') :
+                  (block?.settings?.fontSize === 'small' ? 'text-sm' :
+                   block?.settings?.fontSize === 'large' ? 'text-lg' : 'text-base')
               }`}
               style={{
                 textAlign: block?.settings?.alignment || 'left'
@@ -2472,13 +2477,14 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       case 'image':
         content = (
           <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
-            <div className="py-4 text-center">
+            <div className={`${isMobile ? 'py-3' : 'py-4'} text-center`}>
               <img
                 src={block?.settings?.src || 'https://via.placeholder.com/600x400?text=Imagem'}
                 alt={block?.settings?.alt || 'Imagem'}
-                className="max-w-full h-auto rounded-lg shadow-md mx-auto"
+                className={`${isMobile ? 'max-w-full h-auto rounded-md shadow-sm' : 'max-w-full h-auto rounded-lg shadow-md'} mx-auto`}
                 style={{ 
-                  width: block?.settings?.width || 'auto',
+                  width: isMobile ? 'auto' : (block?.settings?.width || 'auto'),
+                  maxWidth: isMobile ? '100%' : (block?.settings?.maxWidth || '100%'),
                   textAlign: block?.settings?.alignment || 'center'
                 }}
               />
@@ -2497,14 +2503,14 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
 
         content = (
           <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
-            <div className="text-center py-4">
+            <div className={`text-center ${isMobile ? 'py-3' : 'py-4'}`}>
               <Button 
-                className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${buttonClasses[buttonStyle] || buttonClasses.primary} ${
+                className={`${isMobile ? 'px-6 py-2 text-sm' : 'px-8 py-3'} rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${buttonClasses[buttonStyle] || buttonClasses.primary} ${
                   block?.settings?.fullWidth ? 'w-full' : ''
                 } ${
-                  block?.settings?.size === 'sm' ? 'px-6 py-2 text-sm' :
-                  block?.settings?.size === 'lg' ? 'px-12 py-4 text-lg' :
-                  'px-8 py-3'
+                  !isMobile && block?.settings?.size === 'sm' ? 'px-6 py-2 text-sm' :
+                  !isMobile && block?.settings?.size === 'lg' ? 'px-12 py-4 text-lg' :
+                  !isMobile ? 'px-8 py-3' : ''
                 }`}
               >
                 {block?.settings?.text || 'Texto do Botão'}
@@ -3911,22 +3917,28 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         );
         break;
 
-      // COMPONENTES REAIS DA RESULTPAGE.TSX - AGORA COM EDIÇÃO INLINE INDEPENDENTE
+      // COMPONENTES REAIS DA RESULTPAGE.TSX - AGORA COM EDIÇÃO INLINE INDEPENDENTE E RESPONSIVIDADE
       case 'result-header-component':
         const headerData = getDynamicStyleData(block);
         
         content = (
           <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
-            <div className="py-4 px-6 bg-white rounded-lg shadow-sm border">
-              <div className="text-center py-6 md:py-8 px-4">
+            <div className={`${isMobile ? 'py-3 px-4' : 'py-4 px-6'} bg-white rounded-lg shadow-sm border`}>
+              <div className={`text-center ${isMobile ? 'py-4 px-2' : 'py-6 md:py-8 px-4'}`}>
                 <div className="max-w-4xl mx-auto">
-                  <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-[#432818] mb-4 md:mb-6">
+                  <h1 className={`font-bold text-[#432818] mb-4 ${
+                    isMobile ? 'text-xl mb-3' : 'text-2xl md:text-4xl lg:text-5xl md:mb-6'
+                  }`}>
                     Olá, {headerData.userName}! 👋
                   </h1>
-                  <p className="text-lg md:text-xl lg:text-2xl text-[#6B5B73] mb-2">
+                  <p className={`text-[#6B5B73] mb-2 ${
+                    isMobile ? 'text-base' : 'text-lg md:text-xl lg:text-2xl'
+                  }`}>
                     Descobrimos seu estilo predominante:
                   </p>
-                  <p className="text-xl md:text-2xl lg:text-3xl font-semibold text-[#B89B7A]">
+                  <p className={`font-semibold text-[#B89B7A] ${
+                    isMobile ? 'text-lg' : 'text-xl md:text-2xl lg:text-3xl'
+                  }`}>
                     {headerData.styleName}
                   </p>
                 </div>
@@ -3941,18 +3953,18 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
         
         content = (
           <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
-            <Card className="p-4 md:p-6 bg-white shadow-md border border-[#B89B7A]/20">
-              <div className="text-center mb-6 md:mb-8">
-                <div className="max-w-md mx-auto mb-4 md:mb-6">
+            <Card className={`${isMobile ? 'p-3 md:p-4' : 'p-4 md:p-6'} bg-white shadow-md border border-[#B89B7A]/20`}>
+              <div className={`text-center ${isMobile ? 'mb-4' : 'mb-6 md:mb-8'}`}>
+                <div className={`mx-auto ${isMobile ? 'mb-3' : 'max-w-md mb-4 md:mb-6'}`}>
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-xs md:text-sm text-[#8F7A6A]">
+                    <span className={`text-[#8F7A6A] ${isMobile ? 'text-xs' : 'text-xs md:text-sm'}`}>
                       Seu estilo predominante
                     </span>
-                    <span className="text-[#aa6b5d] font-medium text-sm md:text-base">
+                    <span className={`text-[#aa6b5d] font-medium ${isMobile ? 'text-sm' : 'text-sm md:text-base'}`}>
                       {dynamicData.percentage}%
                     </span>
                   </div>
-                  <div className="w-full h-3 bg-[#F3E8E6] rounded-full overflow-hidden">
+                  <div className={`w-full bg-[#F3E8E6] rounded-full overflow-hidden ${isMobile ? 'h-2' : 'h-3'}`}>
                     <div 
                       className="h-full bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] transition-all duration-1000 ease-out"
                       style={{ width: `${dynamicData.percentage}%` }}
@@ -3961,17 +3973,23 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-center">
-                <div className="space-y-4 order-2 md:order-1">
-                  <h2 className="text-2xl md:text-3xl font-bold text-[#432818] mb-4">
+              <div className={`grid ${isMobile ? 'grid-cols-1 gap-4' : 'md:grid-cols-2 gap-6 md:gap-8'} items-center`}>
+                <div className={`space-y-4 ${isMobile ? 'order-2' : 'order-2 md:order-1'}`}>
+                  <h2 className={`font-bold text-[#432818] mb-4 ${
+                    isMobile ? 'text-xl' : 'text-2xl md:text-3xl'
+                  }`}>
                     {dynamicData.styleName}
                   </h2>
-                  <p className="text-[#432818] leading-relaxed text-base md:text-lg">
+                  <p className={`text-[#432818] leading-relaxed ${
+                    isMobile ? 'text-sm' : 'text-base md:text-lg'
+                  }`}>
                     {dynamicData.description}
                   </p>
                 </div>
                 
-                <div className="max-w-[250px] md:max-w-[280px] mx-auto relative order-1 md:order-2">
+                <div className={`mx-auto relative ${
+                  isMobile ? 'max-w-[200px] order-1' : 'max-w-[250px] md:max-w-[280px] order-1 md:order-2'
+                }`}>
                   {dynamicData.styleImage && (
                     <img 
                       src={dynamicData.styleImage} 
@@ -3992,13 +4010,15 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       case 'secondary-styles-component':
         content = (
           <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
-            <div className="py-6 px-6 bg-white rounded-lg shadow-sm border">
-              <div className="bg-white rounded-lg p-6 shadow-sm border border-[#B89B7A]/10">
-                <h3 className="text-lg font-medium text-[#432818] mb-4 text-center">
+            <div className={`${isMobile ? 'py-4 px-4' : 'py-6 px-6'} bg-white rounded-lg shadow-sm border`}>
+              <div className={`bg-white rounded-lg ${isMobile ? 'p-4' : 'p-6'} shadow-sm border border-[#B89B7A]/10`}>
+                <h3 className={`font-medium text-[#432818] text-center ${
+                  isMobile ? 'text-base mb-3' : 'text-lg mb-4'
+                }`}>
                   Estilos que Também Influenciam Você
                 </h3>
                 
-                <div className="space-y-4">
+                <div className={`space-y-${isMobile ? '3' : '4'}`}>
                   {(userQuizData.styleResult?.secondaryStyles || block?.settings?.secondaryStyles || [
                     { name: 'Natural Despojada', percentage: 78 },
                     { name: 'Contemporânea Casual', percentage: 65 },
@@ -4006,14 +4026,14 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
                   ]).map((style: any, index: number) => (
                     <div key={index} className="space-y-2">
                       <div className="flex justify-between items-center">
-                        <span className="text-sm font-medium text-[#432818]">
+                        <span className={`font-medium text-[#432818] ${isMobile ? 'text-xs' : 'text-sm'}`}>
                           {style.name}
                         </span>
-                        <span className="text-[#B89B7A] font-semibold text-sm">
+                        <span className={`text-[#B89B7A] font-semibold ${isMobile ? 'text-xs' : 'text-sm'}`}>
                           {style.percentage}%
                         </span>
                       </div>
-                      <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div className={`w-full bg-gray-200 rounded-full overflow-hidden ${isMobile ? 'h-1.5' : 'h-2'}`}>
                         <div 
                           className="h-full bg-gradient-to-r from-[#B89B7A] to-[#A1835D] transition-all duration-1000 ease-out"
                           style={{ width: `${style.percentage}%` }}
@@ -4031,8 +4051,10 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       case 'before-after-component':
         content = (
           <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
-            <div className="py-4 px-6 bg-white rounded-lg shadow-sm border">
-              <BeforeAfterTransformation />
+            <div className={`${isMobile ? 'py-3 px-4' : 'py-4 px-6'} bg-white rounded-lg shadow-sm border`}>
+              <div className={isMobile ? 'text-sm' : ''}>
+                <BeforeAfterTransformation />
+              </div>
             </div>
           </InlineEditableWrapper>
         );
@@ -4041,8 +4063,10 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       case 'motivation-component':
         content = (
           <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
-            <div className="py-4 px-6 bg-white rounded-lg shadow-sm border">
-              <MotivationSection />
+            <div className={`${isMobile ? 'py-3 px-4' : 'py-4 px-6'} bg-white rounded-lg shadow-sm border`}>
+              <div className={isMobile ? 'text-sm' : ''}>
+                <MotivationSection />
+              </div>
             </div>
           </InlineEditableWrapper>
         );
@@ -4051,8 +4075,10 @@ const CaktoQuizAdvancedEditor: React.FC = () => {
       case 'bonus-component':
         content = (
           <InlineEditableWrapper block={block} isSelected={isSelected} onEdit={handleBlockEdit}>
-            <div className="py-4 px-6 bg-white rounded-lg shadow-sm border">
-              <BonusSection />
+            <div className={`${isMobile ? 'py-3 px-4' : 'py-4 px-6'} bg-white rounded-lg shadow-sm border`}>
+              <div className={isMobile ? 'text-sm' : ''}>
+                <BonusSection />
+              </div>
             </div>
           </InlineEditableWrapper>
         );
