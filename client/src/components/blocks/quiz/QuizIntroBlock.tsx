@@ -119,7 +119,7 @@ const QuizIntroBlock: React.FC<QuizIntroBlockProps> = ({
       className={cn(
         'min-h-screen flex flex-col items-center justify-center p-8',
         'transition-all duration-200',
-        isSelected && 'ring-2 ring-blue-500 ring-offset-2',
+        isSelected && 'ring-2 ring-[#B89B7A] ring-offset-2',
         className
       )}
       style={{ backgroundColor, color: textColor }}
@@ -193,7 +193,7 @@ const QuizIntroBlock: React.FC<QuizIntroBlockProps> = ({
                 "w-full p-4 text-lg rounded-lg border-2 bg-white/90",
                 error 
                   ? "border-red-500 focus:ring-red-500" 
-                  : "border-gray-300 focus:border-blue-500"
+                  : "border-[#B89B7A]/30 focus:border-[#B89B7A] focus:ring-[#B89B7A]/20"
               )}
               autoFocus
               required

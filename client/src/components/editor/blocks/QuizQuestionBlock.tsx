@@ -102,9 +102,9 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
   return (
     <div
       className={cn(
-        'min-h-screen flex flex-col justify-center p-6',
+        'min-h-screen flex flex-col justify-center p-6 bg-[#fffaf7] text-[#432818]', // brand colors
         'transition-all duration-200',
-        isSelected && 'ring-2 ring-blue-500 ring-offset-2',
+        isSelected && 'ring-2 ring-[#B89B7A] ring-offset-2',
         className
       )}
       onClick={handleClick}
@@ -114,9 +114,9 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
       {/* Progress Bar */}
       {showProgress && (
         <div className="fixed top-0 left-0 w-full z-50">
-          <div className="h-2 bg-gray-200">
+          <div className="h-2 bg-[#F9F6F2]"> {/* brand-light-cream */}
             <div
-              className="h-full bg-blue-600 transition-all duration-300"
+              className="h-full bg-[#B89B7A] transition-all duration-300" // brand-gold
               style={{ width: `${progressPercent}%` }}
             />
           </div>
@@ -138,14 +138,14 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
             <InlineEditableText
               value={description}
               onChange={(value) => handlePropertyChange('description', value)}
-              className="text-lg text-gray-600"
+              className="text-lg text-[#8F7A6A]" // brand-light-coffee
               isEditing={isEditing}
               placeholder="Contexto adicional da pergunta"
             />
           )}
           
           {multiSelect && (
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-[#8F7A6A]">
               Você pode selecionar múltiplas opções
             </p>
           )}
@@ -169,15 +169,16 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
                 onClick={() => handleOptionSelect(option.id)}
                 className={cn(
                   'relative p-4 rounded-lg border-2 transition-all duration-200',
-                  'hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500',
+                  'hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#B89B7A]/20',
+                  'hover:scale-105 hover:border-[#B89B7A]/40',
                   isSelected 
-                    ? 'border-blue-500 bg-blue-50 shadow-md' 
-                    : 'border-gray-200 hover:border-gray-300 bg-white'
+                    ? 'border-[#B89B7A] bg-[#B89B7A]/10 shadow-md' // brand-gold
+                    : 'border-[#B89B7A]/20 hover:border-[#B89B7A]/40 bg-white'
                 )}
               >
                 {/* Selection Indicator */}
                 {isSelected && (
-                  <div className="absolute top-2 right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                  <div className="absolute top-2 right-2 w-6 h-6 bg-[#B89B7A] rounded-full flex items-center justify-center"> {/* brand-gold */}
                     <Check className="w-4 h-4 text-white" />
                   </div>
                 )}
@@ -198,7 +199,7 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
                   <div className="text-center">
                     <p className={cn(
                       'font-medium',
-                      isSelected ? 'text-blue-900' : 'text-gray-900'
+                      isSelected ? 'text-[#432818]' : 'text-[#432818]' // brand-coffee
                     )}>
                       {option.text}
                     </p>
@@ -213,14 +214,14 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
         <div className="flex justify-between items-center pt-8">
           <button
             onClick={handlePrevious}
-            className="px-6 py-3 text-gray-600 hover:text-gray-900 transition-colors"
+            className="px-6 py-3 text-[#8F7A6A] hover:text-[#432818] transition-colors" // brand colors
           >
             ← Anterior
           </button>
           
           <div className="text-center">
             {required && !hasAnswered && (
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-[#8F7A6A]"> {/* brand-light-coffee */}
                 Selecione uma opção para continuar
               </p>
             )}
@@ -231,8 +232,9 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
             disabled={!canProceed}
             className={cn(
               'px-6 py-3 rounded-lg font-medium transition-all',
+              'focus:outline-none focus:ring-4 focus:ring-[#B89B7A]/20',
               canProceed
-                ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-md hover:shadow-lg'
+                ? 'bg-[#B89B7A] text-white hover:bg-[#A38A69] shadow-md hover:shadow-lg hover:scale-105' // brand-gold
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
             )}
           >

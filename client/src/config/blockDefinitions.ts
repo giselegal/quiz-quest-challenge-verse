@@ -711,13 +711,13 @@ export const blockDefinitions: BlockDefinition[] = [
         key: 'backgroundColor',
         label: 'Cor de Fundo',
         type: 'color-picker',
-        defaultValue: '#faf8f5'
+        defaultValue: '#fffaf7' // brand-cream
       },
       {
         key: 'textColor',
         label: 'Cor do Texto',
         type: 'color-picker',
-        defaultValue: '#432818'
+        defaultValue: '#432818' // brand-coffee
       },
       {
         key: 'backgroundImage',
