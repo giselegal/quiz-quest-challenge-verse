@@ -2401,6 +2401,161 @@ export const blockDefinitions: BlockDefinition[] = [
     ],
   },
 
+  // BLOCOS ESPECÍFICOS DO QUIZ INTRO - LAYOUT ESTRUTURADO
+  {
+    id: 'quiz-intro-header',
+    type: 'quiz-intro-header',
+    name: 'Header Quiz Intro',
+    description: 'Header com logo, progress bar e botão voltar',
+    icon: 'Layout',
+    category: 'Quiz Intro',
+    propertiesSchema: [
+      { 
+        key: 'logoUrl', 
+        label: 'URL da Logo', 
+        type: 'image-url', 
+        placeholder: 'https://...',
+        defaultValue: 'https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png'
+      },
+      { 
+        key: 'logoAlt', 
+        label: 'Alt da Logo', 
+        type: 'text-input', 
+        placeholder: 'Logo',
+        defaultValue: 'Logo' 
+      },
+      { 
+        key: 'progressValue', 
+        label: 'Progresso (%)', 
+        type: 'number-input', 
+        min: 0,
+        max: 100,
+        defaultValue: 7.14 
+      },
+      { 
+        key: 'showBackButton', 
+        label: 'Mostrar Botão Voltar', 
+        type: 'boolean-switch', 
+        defaultValue: true 
+      },
+      { 
+        key: 'logoWidth', 
+        label: 'Largura da Logo', 
+        type: 'number-input', 
+        min: 50,
+        max: 200,
+        defaultValue: 96 
+      }
+    ]
+  },
+
+  {
+    id: 'quiz-title',
+    type: 'quiz-title',
+    name: 'Título do Quiz',
+    description: 'Título editável com configurações de tipografia',
+    icon: 'Type',
+    category: 'Quiz Intro',
+    propertiesSchema: [
+      { 
+        key: 'title', 
+        label: 'Título', 
+        type: 'text-input', 
+        placeholder: 'Título do quiz...',
+        defaultValue: 'Teste de Estilo Pessoal' 
+      },
+      { 
+        key: 'fontSize', 
+        label: 'Tamanho da Fonte', 
+        type: 'select', 
+        options: [
+          { label: 'Grande (lg)', value: 'lg' },
+          { label: 'Extra Grande (xl)', value: 'xl' },
+          { label: '2XL', value: '2xl' },
+          { label: '3XL', value: '3xl' },
+          { label: '4XL', value: '4xl' },
+          { label: '5XL', value: '5xl' }
+        ],
+        defaultValue: '3xl' 
+      },
+      { 
+        key: 'fontWeight', 
+        label: 'Peso da Fonte', 
+        type: 'select', 
+        options: [
+          { label: 'Normal', value: 'normal' },
+          { label: 'Medium', value: 'medium' },
+          { label: 'Semibold', value: 'semibold' },
+          { label: 'Bold', value: 'bold' },
+          { label: 'Extra Bold', value: 'extrabold' }
+        ],
+        defaultValue: 'bold' 
+      },
+      { 
+        key: 'textAlign', 
+        label: 'Alinhamento', 
+        type: 'select', 
+        options: [
+          { label: 'Esquerda', value: 'left' },
+          { label: 'Centro', value: 'center' },
+          { label: 'Direita', value: 'right' },
+          { label: 'Justificado', value: 'justify' }
+        ],
+        defaultValue: 'center' 
+      }
+    ]
+  },
+
+  {
+    id: 'quiz-name-input',
+    type: 'quiz-name-input',
+    name: 'Campo Nome Quiz',
+    description: 'Campo de input para nome com validação',
+    icon: 'User',
+    category: 'Quiz Intro',
+    propertiesSchema: [
+      { 
+        key: 'label', 
+        label: 'Label do Campo', 
+        type: 'text-input', 
+        placeholder: 'Label...',
+        defaultValue: 'NOME' 
+      },
+      { 
+        key: 'placeholder', 
+        label: 'Placeholder', 
+        type: 'text-input', 
+        placeholder: 'Digite aqui...',
+        defaultValue: 'Digite seu nome aqui...' 
+      },
+      { 
+        key: 'required', 
+        label: 'Campo Obrigatório', 
+        type: 'boolean-switch', 
+        defaultValue: true 
+      },
+      { 
+        key: 'inputType', 
+        label: 'Tipo de Input', 
+        type: 'select', 
+        options: [
+          { label: 'Texto', value: 'text' },
+          { label: 'Email', value: 'email' },
+          { label: 'Telefone', value: 'tel' },
+          { label: 'Número', value: 'number' }
+        ],
+        defaultValue: 'text' 
+      },
+      { 
+        key: 'helperText', 
+        label: 'Texto de Ajuda', 
+        type: 'text-input', 
+        placeholder: 'Texto opcional...',
+        defaultValue: '' 
+      }
+    ]
+  },
+
   // ...existing code...
 ];
 
