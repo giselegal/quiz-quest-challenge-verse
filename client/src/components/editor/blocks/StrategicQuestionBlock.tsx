@@ -3,27 +3,11 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
+import { InlineEditText } from './InlineEditText';
+import type { BlockComponentProps } from '@/types/blocks';
 
-interface StrategicQuestionBlockProps {
-  block: {
-    id: string;
-    type: string;
-    properties: {
-      question?: string;
-      options?: Array<{
-        id: string;
-        text: string;
-        value?: string;
-        category?: string;
-      }>;
-      progressLabel?: string;
-      progressValue?: number;
-      backgroundColor?: string;
-      textColor?: string;
-    };
-  };
-  isSelected?: boolean;
-  onClick?: () => void;
+interface StrategicQuestionBlockProps extends BlockComponentProps {
+  onPropertyChange?: (key: string, value: any) => void;
   disabled?: boolean;
   className?: string;
 }
@@ -32,17 +16,35 @@ const StrategicQuestionBlock: React.FC<StrategicQuestionBlockProps> = ({
   block,
   isSelected = false,
   onClick,
+  onPropertyChange,
   disabled = false,
   className
 }) => {
   const {
-    question = 'Questão estratégica',
-    options = [],
+    question = 'Como você se vê hoje?',
+    options = [
+      { id: '1', text: 'Alguém que já tem um estilo bem definido', value: 'defined', category: 'confiante' },
+      { id: '2', text: 'Alguém em busca do seu estilo pessoal', value: 'searching', category: 'explorando' },
+      { id: '3', text: 'Alguém que quer renovar completamente', value: 'renovating', category: 'transformação' }
+    ],
     progressLabel = 'Questão Estratégica',
     progressValue = 80,
     backgroundColor = '#ffffff',
     textColor = '#432818'
   } = block.properties;
+
+  const handlePropertyChange = (key: string, value: any) => {
+    if (onPropertyChange) {
+      onPropertyChange(key, value);
+    }
+  };
+
+  const handleOptionChange = (optionIndex: number, field: string, value: any) => {
+    const updatedOptions = options.map((option: any, index: number) => 
+      index === optionIndex ? { ...option, [field]: value } : option
+    );
+    handlePropertyChange('options', updatedOptions);
+  };
 
   return (
     <div
@@ -58,8 +60,27 @@ const StrategicQuestionBlock: React.FC<StrategicQuestionBlockProps> = ({
       {/* Progress Bar */}
       <div className="mb-8">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm font-medium opacity-70">{progressLabel}</span>
-          <span className="text-sm font-medium opacity-70">{progressValue}%</span>
+          <InlineEditText
+            value={progressLabel}
+            onSave={(value) => handlePropertyChange('progressLabel', value)}
+            placeholder="Label do progresso"
+            className="text-sm font-medium opacity-70"
+            disabled={disabled}
+            as="span"
+          />
+          <InlineEditText
+            value={`${progressValue}%`}
+            onSave={(value) => {
+              const numValue = parseInt(value.replace('%', ''));
+              if (!isNaN(numValue)) {
+                handlePropertyChange('progressValue', numValue);
+              }
+            }}
+            placeholder="0%"
+            className="text-sm font-medium opacity-70"
+            disabled={disabled}
+            as="span"
+          />
         </div>
         <Progress value={progressValue} className="h-2" />
       </div>
@@ -69,25 +90,46 @@ const StrategicQuestionBlock: React.FC<StrategicQuestionBlockProps> = ({
         <Badge variant="outline" className="mb-4">
           Questão Estratégica
         </Badge>
-        <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: textColor }}>
-          {question}
-        </h2>
+        <InlineEditText
+          value={question}
+          onSave={(value) => handlePropertyChange('question', value)}
+          placeholder="Digite a questão estratégica..."
+          className="text-2xl md:text-3xl font-bold mb-4"
+          style={{ color: textColor }}
+          disabled={disabled}
+          as="h2"
+          multiline={true}
+        />
       </div>
 
       {/* Options */}
       <div className="grid gap-4 max-w-2xl mx-auto">
-        {options.map((option) => (
+        {options.map((option: any, index: number) => (
           <div
-            key={option.id}
+            key={option.id || index}
             className="p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-colors cursor-pointer text-center"
           >
-            <p className="text-lg font-medium" style={{ color: textColor }}>
-              {option.text}
-            </p>
+            <InlineEditText
+              value={option.text}
+              onSave={(value) => handleOptionChange(index, 'text', value)}
+              placeholder="Texto da opção"
+              className="text-lg font-medium"
+              style={{ color: textColor }}
+              disabled={disabled}
+              as="p"
+              multiline={true}
+            />
             {option.category && (
-              <Badge variant="secondary" className="text-xs mt-2">
-                {option.category}
-              </Badge>
+              <div className="mt-2">
+                <InlineEditText
+                  value={option.category}
+                  onSave={(value) => handleOptionChange(index, 'category', value)}
+                  placeholder="Categoria"
+                  className="text-xs"
+                  disabled={disabled}
+                  as="span"
+                />
+              </div>
             )}
           </div>
         ))}

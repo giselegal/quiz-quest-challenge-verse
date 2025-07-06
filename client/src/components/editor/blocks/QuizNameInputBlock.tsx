@@ -1,22 +1,10 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { InlineEditText } from './InlineEditText';
+import type { BlockComponentProps } from '@/types/blocks';
 
-interface QuizNameInputBlockProps {
-  block: {
-    id: string;
-    type: string;
-    properties: {
-      label?: string;
-      placeholder?: string;
-      required?: boolean;
-      inputType?: string;
-      value?: string;
-      helperText?: string;
-    };
-  };
-  isSelected?: boolean;
-  onClick?: () => void;
-  onSaveInline?: (blockId: string, key: string, newValue: string) => void;
+interface QuizNameInputBlockProps extends BlockComponentProps {
+  onPropertyChange?: (key: string, value: any) => void;
   disabled?: boolean;
   className?: string;
 }
@@ -25,6 +13,7 @@ const QuizNameInputBlock: React.FC<QuizNameInputBlockProps> = ({
   block,
   isSelected = false,
   onClick,
+  onPropertyChange,
   disabled = false,
   className
 }) => {
@@ -36,6 +25,12 @@ const QuizNameInputBlock: React.FC<QuizNameInputBlockProps> = ({
     value = '',
     helperText = ''
   } = block.properties;
+
+  const handlePropertyChange = (key: string, value: any) => {
+    if (onPropertyChange) {
+      onPropertyChange(key, value);
+    }
+  };
 
   return (
     <div

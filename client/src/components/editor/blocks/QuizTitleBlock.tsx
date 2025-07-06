@@ -1,27 +1,10 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { InlineEditText } from './InlineEditText';
+import type { BlockComponentProps } from '@/types/blocks';
 
-interface QuizTitleBlockProps {
-  block: {
-    id: string;
-    type: string;
-    properties: {
-      title?: string;
-      fontSize?: string | number;
-      fontWeight?: string;
-      textAlign?: string;
-      colors?: {
-        text?: string;
-        background?: string;
-      };
-      textStyle?: string;
-      spacing?: number;
-      margin?: string;
-    };
-  };
-  isSelected?: boolean;
-  onClick?: () => void;
-  onSaveInline?: (blockId: string, key: string, newValue: string) => void;
+interface QuizTitleBlockProps extends BlockComponentProps {
+  onPropertyChange?: (key: string, value: any) => void;
   disabled?: boolean;
   className?: string;
 }
@@ -30,6 +13,7 @@ const QuizTitleBlock: React.FC<QuizTitleBlockProps> = ({
   block,
   isSelected = false,
   onClick,
+  onPropertyChange,
   disabled = false,
   className
 }) => {
@@ -43,6 +27,12 @@ const QuizTitleBlock: React.FC<QuizTitleBlockProps> = ({
     spacing = 16,
     margin = 'mb-6'
   } = block.properties;
+
+  const handlePropertyChange = (key: string, value: any) => {
+    if (onPropertyChange) {
+      onPropertyChange(key, value);
+    }
+  };
 
   // Convert fontSize to CSS
   const fontSizeClass = typeof fontSize === 'number' ? `${fontSize}px` : fontSize;
@@ -68,7 +58,10 @@ const QuizTitleBlock: React.FC<QuizTitleBlockProps> = ({
       )}
       onClick={onClick}
     >
-      <h1 
+      <InlineEditText
+        value={title}
+        onSave={(value) => handlePropertyChange('title', value)}
+        placeholder="Título do quiz"
         className={cn(
           textAlignClass,
           fontWeightClass,
@@ -83,9 +76,10 @@ const QuizTitleBlock: React.FC<QuizTitleBlockProps> = ({
           marginBottom: `${spacing}px`,
           textDecoration: textStyle?.includes('underline') ? 'underline' : 'none'
         }}
-      >
-        {title}
-      </h1>
+        disabled={disabled}
+        as="h1"
+        multiline={false}
+      />
     </div>
   );
 };
