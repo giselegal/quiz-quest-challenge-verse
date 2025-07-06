@@ -19,7 +19,13 @@ export type PropertyInputType =
   | 'image-url'
   | 'video-url'
   | 'array-editor'
-  | 'json-editor';
+  | 'json-editor'
+  | 'font-size-slider'
+  | 'font-weight-buttons'
+  | 'text-style-buttons'
+  | 'text-align-buttons'
+  | 'content-type-buttons'
+  | 'color-palette';
 
 export interface PropertyOption {
   label: string;
@@ -2457,6 +2463,12 @@ export const blockDefinitions: BlockDefinition[] = [
     icon: 'Type',
     category: 'Quiz Intro',
     propertiesSchema: [
+      {
+        key: 'contentType',
+        label: 'Configurar Opção',
+        type: 'content-type-buttons',
+        defaultValue: 'text'
+      },
       { 
         key: 'title', 
         label: 'Título', 
@@ -2464,44 +2476,48 @@ export const blockDefinitions: BlockDefinition[] = [
         placeholder: 'Título do quiz...',
         defaultValue: 'Teste de Estilo Pessoal' 
       },
-      { 
-        key: 'fontSize', 
-        label: 'Tamanho da Fonte', 
-        type: 'select', 
-        options: [
-          { label: 'Grande (lg)', value: 'lg' },
-          { label: 'Extra Grande (xl)', value: 'xl' },
-          { label: '2XL', value: '2xl' },
-          { label: '3XL', value: '3xl' },
-          { label: '4XL', value: '4xl' },
-          { label: '5XL', value: '5xl' }
-        ],
-        defaultValue: '3xl' 
+      {
+        key: 'fontSize',
+        label: 'Tamanho da Fonte',
+        type: 'font-size-slider',
+        min: 12,
+        max: 48,
+        defaultValue: 24
       },
-      { 
-        key: 'fontWeight', 
-        label: 'Peso da Fonte', 
-        type: 'select', 
-        options: [
-          { label: 'Normal', value: 'normal' },
-          { label: 'Medium', value: 'medium' },
-          { label: 'Semibold', value: 'semibold' },
-          { label: 'Bold', value: 'bold' },
-          { label: 'Extra Bold', value: 'extrabold' }
-        ],
-        defaultValue: 'bold' 
+      {
+        key: 'fontWeight',
+        label: 'Peso da Fonte',
+        type: 'font-weight-buttons',
+        defaultValue: '700'
       },
-      { 
-        key: 'textAlign', 
-        label: 'Alinhamento', 
-        type: 'select', 
-        options: [
-          { label: 'Esquerda', value: 'left' },
-          { label: 'Centro', value: 'center' },
-          { label: 'Direita', value: 'right' },
-          { label: 'Justificado', value: 'justify' }
-        ],
-        defaultValue: 'center' 
+      {
+        key: 'textStyle',
+        label: 'Estilo do Texto',
+        type: 'text-style-buttons',
+        defaultValue: ''
+      },
+      {
+        key: 'textAlign',
+        label: 'Alinhamento',
+        type: 'text-align-buttons',
+        defaultValue: 'center'
+      },
+      {
+        key: 'colors',
+        label: 'Cores',
+        type: 'color-palette',
+        defaultValue: {
+          text: '#f29c68',
+          background: 'transparent'
+        }
+      },
+      {
+        key: 'spacing',
+        label: 'Espaçamento',
+        type: 'font-size-slider',
+        min: 0,
+        max: 40,
+        defaultValue: 16
       }
     ]
   },

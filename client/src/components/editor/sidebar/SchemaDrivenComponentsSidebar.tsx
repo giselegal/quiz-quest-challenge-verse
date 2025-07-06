@@ -49,9 +49,9 @@ const iconMap: { [key: string]: React.ReactNode } = {
   'Gift': <Gift className="w-4 h-4" />
 };
 
-export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSidebarProps> = ({ 
+export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSidebarProps> = ({
   onComponentSelect,
-  activeTab = 'blocks',
+  activeTab = 'pages',
   onTabChange,
   funnelPages = [],
   currentPageId,
@@ -62,22 +62,23 @@ export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSideb
 
   return (
     <div className="h-full flex flex-col">
-      <div className="p-4 border-b">
+      <div className="p-4 border-b border-gray-200">
         <h2 className="font-playfair text-lg text-[#432818]">Biblioteca</h2>
         <p className="text-xs text-gray-600">
-          {allBlocks.length} blocos disponíveis
+          {funnelPages.length} páginas • {allBlocks.length} blocos disponíveis
         </p>
       </div>
-      <Tabs value={activeTab} onValueChange={onTabChange} className="flex-1 flex flex-col">
-        <div className="border-b px-4 py-2">
+      <Tabs value={activeTab} onValueChange={onTabChange} className="flex-1 flex flex-col min-h-0">
+        <div className="border-b border-gray-200 px-4 py-2 flex-shrink-0">
           <TabsList className="w-full">
             <TabsTrigger value="pages" className="flex-1">Páginas</TabsTrigger>
             <TabsTrigger value="blocks" className="flex-1">Blocos</TabsTrigger>
           </TabsList>
         </div>
-        <TabsContent value="pages" className="flex-1 p-0 overflow-hidden">
-          <ScrollArea className="h-full">
-            <div className="p-2 space-y-1">
+        
+        <TabsContent value="pages" className="flex-1 p-0 m-0 data-[state=active]:flex data-[state=active]:flex-col overflow-hidden">
+          <ScrollArea className="flex-1">
+            <div className="p-3 space-y-2">
               {funnelPages.length === 0 ? (
                 <div className="text-center text-gray-500 py-8">
                   <Target className="w-12 h-12 mx-auto mb-4 opacity-50" />
@@ -86,17 +87,27 @@ export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSideb
               ) : (
                 funnelPages
                   .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-                  .map((page) => (
+                  .map((page, index) => (
                     <Button
                       key={page.id}
-                      variant={page.id === currentPageId ? 'default' : 'ghost'}
-                      className={`w-full justify-start px-3 py-2 h-auto text-left rounded-md ${page.id === currentPageId ? 'bg-[#B89B7A]/10 text-[#432818]' : ''}`}
+                      variant="ghost"
+                      className={`w-full justify-start px-3 py-2.5 h-auto text-left rounded-md hover:bg-gray-50 transition-colors ${
+                        page.id === currentPageId 
+                          ? 'bg-[#B89B7A]/10 border border-[#B89B7A]/20 text-[#432818]' 
+                          : 'hover:bg-gray-50'
+                      }`}
                       onClick={() => setCurrentPage && setCurrentPage(page.id)}
                     >
-                      <span className="font-medium text-sm truncate">{page.name || page.title || `Página ${page.order}`}</span>
-                      {page.title && (
-                        <span className="block text-xs text-gray-500 truncate">{page.title}</span>
-                      )}
+                      <div className="flex flex-col items-start w-full">
+                        <span className="font-medium text-sm text-[#432818] truncate w-full">
+                          {page.name || page.title || `Página ${page.order || index + 1}`}
+                        </span>
+                        {page.title && page.name !== page.title && (
+                          <span className="text-xs text-gray-500 truncate w-full mt-0.5">
+                            {page.title}
+                          </span>
+                        )}
+                      </div>
                     </Button>
                   ))
               )}
@@ -104,19 +115,11 @@ export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSideb
           </ScrollArea>
         </TabsContent>
         
-        <TabsContent value="blocks" className="flex-1 overflow-hidden">
-          <div className="h-full flex flex-col">
-            <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-              <div className="p-4 space-y-4">
+        <TabsContent value="blocks" className="flex-1 p-0 m-0 data-[state=active]:flex data-[state=active]:flex-col overflow-hidden">
+          <ScrollArea className="flex-1">
+            <div className="p-4 space-y-4">
               {categories.map(category => {
                 const categoryBlocks = getBlocksByCategory(category);
-                
-                // Debug: verificar duplicatas
-                const blockIds = categoryBlocks.map(b => b.id);
-                const duplicateIds = blockIds.filter((id, index) => blockIds.indexOf(id) !== index);
-                if (duplicateIds.length > 0) {
-                  console.error('🔴 DUPLICATE IDs found in category', category, ':', duplicateIds);
-                }
                 
                 return (
                   <div key={category}>
@@ -157,9 +160,8 @@ export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSideb
                   </div>
                 );
               })}
-              </div>
             </div>
-          </div>
+          </ScrollArea>
         </TabsContent>
       </Tabs>
     </div>

@@ -4,7 +4,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Plus, Trash2 } from 'lucide-react';
+import { Slider } from '@/components/ui/slider';
+import { Plus, Trash2, Type, Image, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
 import { PropertySchema } from '@/config/blockDefinitions';
 
 interface PropertyInputProps {
@@ -135,6 +136,189 @@ export const PropertyInput: React.FC<PropertyInputProps> = ({
           {schema.description && (
             <p className="text-xs text-gray-500">{schema.description}</p>
           )}
+        </div>
+      );
+
+    case 'font-size-slider':
+      return (
+        <div className="space-y-2">
+          <div className="flex justify-between items-center">
+            <Label>{schema.label}</Label>
+            <span className="text-sm text-gray-500">{currentValue || 14}px</span>
+          </div>
+          <Slider
+            value={[currentValue || 14]}
+            onValueChange={(value) => handleInputChange(value[0])}
+            max={schema.max || 72}
+            min={schema.min || 8}
+            step={1}
+            className="w-full"
+          />
+        </div>
+      );
+
+    case 'font-weight-buttons':
+      return (
+        <div className="space-y-2">
+          <Label>{schema.label}</Label>
+          <div className="flex gap-1">
+            {['Normal', 'Médio', 'Semi', 'Negrito'].map((weight, index) => {
+              const weights = ['400', '500', '600', '700'];
+              const isActive = currentValue === weights[index];
+              return (
+                <Button
+                  key={weight}
+                  variant={isActive ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => handleInputChange(weights[index])}
+                  className={`flex-1 ${isActive ? 'bg-[#B89B7A] hover:bg-[#a08965]' : ''}`}
+                >
+                  {weight}
+                </Button>
+              );
+            })}
+          </div>
+        </div>
+      );
+
+    case 'text-style-buttons':
+      return (
+        <div className="space-y-2">
+          <Label>{schema.label}</Label>
+          <div className="flex gap-1">
+            <Button
+              variant={currentValue?.includes('italic') ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => {
+                const styles = currentValue ? currentValue.split(' ') : [];
+                const hasItalic = styles.includes('italic');
+                const newStyles = hasItalic 
+                  ? styles.filter(s => s !== 'italic')
+                  : [...styles, 'italic'];
+                handleInputChange(newStyles.join(' '));
+              }}
+            >
+              <Italic className="w-4 h-4" />
+            </Button>
+            <Button
+              variant={currentValue?.includes('underline') ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => {
+                const styles = currentValue ? currentValue.split(' ') : [];
+                const hasUnderline = styles.includes('underline');
+                const newStyles = hasUnderline 
+                  ? styles.filter(s => s !== 'underline')
+                  : [...styles, 'underline'];
+                handleInputChange(newStyles.join(' '));
+              }}
+            >
+              <Underline className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+      );
+
+    case 'text-align-buttons':
+      return (
+        <div className="space-y-2">
+          <Label>{schema.label}</Label>
+          <div className="flex gap-1">
+            {[
+              { value: 'left', icon: AlignLeft },
+              { value: 'center', icon: AlignCenter },
+              { value: 'right', icon: AlignRight }
+            ].map(({ value, icon: Icon }) => (
+              <Button
+                key={value}
+                variant={currentValue === value ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => handleInputChange(value)}
+                className={`flex-1 ${currentValue === value ? 'bg-[#B89B7A] hover:bg-[#a08965]' : ''}`}
+              >
+                <Icon className="w-4 h-4" />
+              </Button>
+            ))}
+          </div>
+        </div>
+      );
+
+    case 'content-type-buttons':
+      return (
+        <div className="space-y-2">
+          <Label>{schema.label}</Label>
+          <div className="flex gap-1">
+            <Button
+              variant={currentValue === 'text' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => handleInputChange('text')}
+              className={`flex-1 ${currentValue === 'text' ? 'bg-[#B89B7A] hover:bg-[#a08965]' : ''}`}
+            >
+              <Type className="w-4 h-4 mr-1" />
+              Texto
+            </Button>
+            <Button
+              variant={currentValue === 'image' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => handleInputChange('image')}
+              className={`flex-1 ${currentValue === 'image' ? 'bg-[#B89B7A] hover:bg-[#a08965]' : ''}`}
+            >
+              <Image className="w-4 h-4 mr-1" />
+              Imagem
+            </Button>
+          </div>
+        </div>
+      );
+
+    case 'color-palette':
+      return (
+        <div className="space-y-2">
+          <Label>{schema.label}</Label>
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <Label className="text-xs text-gray-500">Cor do Texto</Label>
+              <div className="flex items-center space-x-2 mt-1">
+                <div 
+                  className="w-8 h-8 rounded border cursor-pointer"
+                  style={{ backgroundColor: currentValue?.text || '#000000' }}
+                  onClick={() => {
+                    const input = document.createElement('input');
+                    input.type = 'color';
+                    input.value = currentValue?.text || '#000000';
+                    input.onchange = (e) => {
+                      handleInputChange({
+                        ...currentValue,
+                        text: (e.target as HTMLInputElement).value
+                      });
+                    };
+                    input.click();
+                  }}
+                />
+                <span className="text-xs">{currentValue?.text || '#f29c'}</span>
+              </div>
+            </div>
+            <div>
+              <Label className="text-xs text-gray-500">Cor de Fundo</Label>
+              <div className="flex items-center space-x-2 mt-1">
+                <div 
+                  className="w-8 h-8 rounded border cursor-pointer"
+                  style={{ backgroundColor: currentValue?.background || 'transparent' }}
+                  onClick={() => {
+                    const input = document.createElement('input');
+                    input.type = 'color';
+                    input.value = currentValue?.background || '#ffffff';
+                    input.onchange = (e) => {
+                      handleInputChange({
+                        ...currentValue,
+                        background: (e.target as HTMLInputElement).value
+                      });
+                    };
+                    input.click();
+                  }}
+                />
+                <span className="text-xs">{currentValue?.background || 'transp'}</span>
+              </div>
+            </div>
+          </div>
         </div>
       );
 
