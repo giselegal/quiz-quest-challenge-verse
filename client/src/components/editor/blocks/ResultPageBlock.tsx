@@ -2,6 +2,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { InlineEditText } from './InlineEditText';
 
 interface ResultPageBlockProps {
   block: {
@@ -20,6 +21,7 @@ interface ResultPageBlockProps {
   };
   isSelected?: boolean;
   onClick?: () => void;
+  onPropertyChange?: (key: string, value: any) => void;
   disabled?: boolean;
   className?: string;
 }
@@ -28,6 +30,7 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
   block,
   isSelected = false,
   onClick,
+  onPropertyChange,
   disabled = false,
   className
 }) => {
@@ -41,6 +44,12 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
     backgroundColor = '#ffffff',
     textColor = '#432818'
   } = block.properties;
+
+  const handlePropertyChange = (key: string, value: any) => {
+    if (onPropertyChange) {
+      onPropertyChange(key, value);
+    }
+  };
 
   return (
     <div

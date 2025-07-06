@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { InlineEditableText } from './InlineEditableText';
+import { InlineEditText } from './InlineEditText';
 import type { BlockComponentProps } from '@/types/blocks';
 import { Check } from 'lucide-react';
 
@@ -146,21 +146,23 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
       <div className="max-w-4xl mx-auto w-full space-y-8">
         {/* Question Header */}
         <div className="text-center space-y-4">
-          <InlineEditableText
+          <InlineEditText
             value={title}
             onSave={(value: string) => handlePropertyChange('title', value)}
             className="text-2xl md:text-3xl font-bold text-gray-900"
             placeholder="Digite sua pergunta aqui"
-            tag="h2"
+            as="h2"
+            disabled={!isEditing}
           />
           
           {description && (
-            <InlineEditableText
+            <InlineEditText
               value={description}
               onSave={(value: string) => handlePropertyChange('description', value)}
               className="text-lg text-[#8F7A6A]" // brand-light-coffee
               placeholder="Contexto adicional da pergunta"
-              tag="p"
+              as="p"
+              disabled={!isEditing}
             />
           )}
           
@@ -224,7 +226,7 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
                 {showText && (
                   <div className="text-center space-y-1">
                     {isEditing ? (
-                      <InlineEditableText
+                      <InlineEditText
                         value={option.text}
                         onSave={(value: string) => {
                           const updatedOptions = options.map((opt: any, i: number) => 
@@ -237,7 +239,7 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
                           isSelected ? 'text-[#432818]' : 'text-[#432818]' // brand-coffee
                         )}
                         placeholder="Texto da opção"
-                        tag="p"
+                        as="p"
                       />
                     ) : (
                       <p className={cn(
@@ -249,7 +251,7 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
                     )}
                     {option.description && (
                       isEditing ? (
-                        <InlineEditableText
+                        <InlineEditText
                           value={option.description}
                           onSave={(value: string) => {
                             const updatedOptions = options.map((opt: any, i: number) => 
@@ -262,7 +264,7 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
                             isSelected ? 'text-[#8F7A6A]' : 'text-[#8F7A6A]' // brand-light-coffee
                           )}
                           placeholder="Descrição da opção"
-                          tag="p"
+                          as="p"
                         />
                       ) : (
                         <p className={cn(
