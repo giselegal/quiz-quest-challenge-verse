@@ -17,6 +17,11 @@ import TestimonialsBlock from './TestimonialsBlock';
 import { GuaranteeBlock } from './GuaranteeBlock';
 import { VideoPlayerBlock } from './VideoPlayerBlock';
 
+// Blocos específicos do Quiz Intro
+import QuizIntroHeaderBlock from './QuizIntroHeaderBlock';
+import QuizNameInputBlock from './QuizNameInputBlock';
+import QuizTitleBlock from './QuizTitleBlock';
+
 // Blocos UI/Avançados
 import AlertBlock from './AlertBlock';
 import ArgumentsBlock from './ArgumentsBlock';
@@ -172,6 +177,14 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <ResultPageBlock {...commonProps} />;
       case 'QuizOfferPageBlock':
         return <QuizOfferPageBlock {...commonProps} />;
+
+      // BLOCOS ESPECÍFICOS DO QUIZ INTRO - LAYOUT ESTRUTURADO
+      case 'quiz-intro-header':
+        return <QuizIntroHeaderBlock {...commonProps} />;
+      case 'quiz-name-input':
+        return <QuizNameInputBlock {...commonProps} />;
+      case 'quiz-title':
+        return <QuizTitleBlock {...commonProps} />;
 
       // Fallback para tipos não reconhecidos
       default:
