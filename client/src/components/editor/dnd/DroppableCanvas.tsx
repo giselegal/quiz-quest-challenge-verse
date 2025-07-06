@@ -3,7 +3,7 @@ import { useDroppable } from '@dnd-kit/core';
 import { cn } from '@/lib/utils';
 import { SortableBlockItem } from './SortableBlockItem';
 import { Plus } from 'lucide-react';
-import type { BlockData } from '../blocks/types';
+import type { BlockData } from '@/types/blocks';
 
 interface DroppableCanvasProps {
   blocks: BlockData[];

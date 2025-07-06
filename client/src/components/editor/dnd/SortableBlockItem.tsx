@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { UniversalBlockRenderer } from '../blocks/UniversalBlockRenderer';
 import { GripVertical, Trash2, Copy, Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import type { BlockData } from '../blocks/types';
+import type { BlockData } from '@/types/blocks';
 
 interface SortableBlockItemProps {
   block: BlockData;
