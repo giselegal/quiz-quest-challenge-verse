@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { SchemaDrivenComponentsSidebar } from './sidebar/SchemaDrivenComponentsSidebar';
 import { SimpleSidebar } from './sidebar/SimpleSidebar';
 import { DynamicPropertiesPanel } from './panels/DynamicPropertiesPanel';
-import { BlockRenderer, BlockData } from './blocks';
 import { SyncStatus } from './status/SyncStatus';
 import { VersionManager } from './version/VersionManager';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
@@ -331,12 +330,8 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                       ) : (
                         currentPage.blocks.map((block) => (
                           <div key={block.id} className="group relative">
-                            <BlockRenderer
-                              block={block}
-                              isSelected={block.id === selectedBlockId}
-                              onClick={() => setSelectedBlock(block.id)}
-                              onSaveInline={handleInlineEdit}
-                            />
+                            {/* Substitua por um componente de bloco real, ex: <HeaderBlock ... /> */}
+                            <div className="border p-4 bg-gray-100 rounded">Bloco: {block.type}</div>
                             
                             {/* Delete button */}
                             <button
