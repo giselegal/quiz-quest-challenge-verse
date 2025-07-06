@@ -49,6 +49,9 @@ import QuestionMultipleBlock from './QuestionMultipleBlock';
 import StrategicQuestionBlock from './StrategicQuestionBlock';
 import QuizTransitionBlock from './QuizTransitionBlock';
 
+// Blocos unificados do funil
+import UnifiedFunnelBlock from './UnifiedFunnelBlock';
+
 export interface BlockRendererProps {
   block: BlockData;
   isSelected?: boolean;
@@ -189,6 +192,11 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <QuizNameInputBlock {...commonProps} />;
       case 'quiz-title':
         return <QuizTitleBlock {...commonProps} />;
+
+      // BLOCOS UNIFICADOS DO FUNIL - Componentes reutilizáveis que garantem fidelidade visual
+      case 'FunnelHeroBlock':
+      case 'FunnelPainBlock':
+        return <UnifiedFunnelBlock {...commonProps} />;
 
       // Fallback para tipos não reconhecidos
       default:

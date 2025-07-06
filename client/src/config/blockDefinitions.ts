@@ -2572,6 +2572,229 @@ export const blockDefinitions: BlockDefinition[] = [
     ]
   },
 
+  // 🚀 BLOCOS UNIFICADOS DO FUNIL - Componentes reutilizáveis que garantem fidelidade visual
+  {
+    id: 'FunnelHeroBlock',
+    type: 'FunnelHeroBlock',
+    name: 'Hero Section Unificado',
+    description: 'Seção hero que usa exatamente o mesmo componente do funil real. Edição apenas via painel de propriedades.',
+    icon: 'Star',
+    category: 'Funil Unificado',
+    isNew: true,
+    propertiesSchema: [
+      { 
+        key: 'title', 
+        label: 'Título Principal', 
+        type: 'textarea', 
+        placeholder: 'Seu título principal aqui...',
+        rows: 2,
+        defaultValue: 'Chega de um guarda-roupa lotado e da sensação de que nada combina com você.' 
+      },
+      { 
+        key: 'description', 
+        label: 'Descrição', 
+        type: 'textarea', 
+        placeholder: 'Descrição persuasiva...',
+        rows: 3,
+        defaultValue: 'Descubra seu Estilo e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.' 
+      },
+      { 
+        key: 'ctaText', 
+        label: 'Texto do Botão', 
+        type: 'text-input', 
+        placeholder: 'Call to Action',
+        defaultValue: 'Descobrir Meu Estilo - 5x R$ 8,83' 
+      },
+      { 
+        key: 'ctaSubtext', 
+        label: 'Subtexto do Botão (Opcional)', 
+        type: 'text-input', 
+        placeholder: 'Texto adicional abaixo do botão',
+        defaultValue: '' 
+      },
+      { 
+        key: 'logoUrl', 
+        label: 'URL do Logo', 
+        type: 'image-url', 
+        placeholder: 'https://exemplo.com/logo.png',
+        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp' 
+      },
+      { 
+        key: 'logoAlt', 
+        label: 'Alt do Logo', 
+        type: 'text-input', 
+        placeholder: 'Descrição do logo',
+        defaultValue: 'Gisele Galvão - Logo da Marca' 
+      },
+      { 
+        key: 'heroImageUrl', 
+        label: 'URL da Imagem Hero', 
+        type: 'image-url', 
+        placeholder: 'https://exemplo.com/hero.jpg',
+        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.jpg' 
+      },
+      { 
+        key: 'heroImageAlt', 
+        label: 'Alt da Imagem Hero', 
+        type: 'text-input', 
+        placeholder: 'Descrição da imagem',
+        defaultValue: 'Mulher descobrindo seu estilo autêntico' 
+      },
+      { 
+        key: 'layout', 
+        label: 'Layout', 
+        type: 'select', 
+        options: [
+          { label: 'Lado a Lado', value: 'side-by-side' },
+          { label: 'Empilhado', value: 'stacked' },
+          { label: 'Hero Centralizado', value: 'hero-centered' }
+        ],
+        defaultValue: 'side-by-side' 
+      },
+      { 
+        key: 'imagePosition', 
+        label: 'Posição da Imagem', 
+        type: 'select', 
+        options: [
+          { label: 'Direita', value: 'right' },
+          { label: 'Esquerda', value: 'left' },
+          { label: 'Fundo', value: 'background' }
+        ],
+        defaultValue: 'right' 
+      },
+      { 
+        key: 'backgroundColor', 
+        label: 'Cor de Fundo', 
+        type: 'color-picker', 
+        defaultValue: '#FAF9F7' 
+      },
+      { 
+        key: 'textColor', 
+        label: 'Cor do Texto', 
+        type: 'color-picker', 
+        defaultValue: '#432818' 
+      },
+      { 
+        key: 'primaryColor', 
+        label: 'Cor Primária', 
+        type: 'color-picker', 
+        defaultValue: '#B89B7A' 
+      }
+    ]
+  },
+
+  {
+    id: 'FunnelPainBlock',
+    type: 'FunnelPainBlock',
+    name: 'Seção de Problemas Unificada',
+    description: 'Seção de pain points que usa exatamente o mesmo componente do funil real. Edição apenas via painel de propriedades.',
+    icon: 'Target',
+    category: 'Funil Unificado',
+    isNew: true,
+    propertiesSchema: [
+      { 
+        key: 'title', 
+        label: 'Título da Seção', 
+        type: 'text-input', 
+        placeholder: 'Título principal...',
+        defaultValue: 'Você Reconhece Esses Problemas?' 
+      },
+      { 
+        key: 'subtitle', 
+        label: 'Subtítulo (Opcional)', 
+        type: 'textarea', 
+        placeholder: 'Subtítulo explicativo...',
+        rows: 2,
+        defaultValue: 'Armário cheio, mas nada para vestir? Você não está sozinha.' 
+      },
+      { 
+        key: 'description', 
+        label: 'Descrição (Opcional)', 
+        type: 'textarea', 
+        placeholder: 'Descrição adicional...',
+        rows: 2,
+        defaultValue: '' 
+      },
+      { 
+        key: 'conclusion', 
+        label: 'Conclusão (Opcional)', 
+        type: 'textarea', 
+        placeholder: 'Texto conclusivo persuasivo...',
+        rows: 3,
+        defaultValue: 'A solução está em descobrir seu estilo autêntico. Com essa clareza, você criará um guarda-roupa harmonioso que expressa verdadeiramente quem você é.' 
+      },
+      {
+        key: 'painPoints',
+        label: 'Pontos de Dor',
+        type: 'array-editor',
+        itemSchema: [
+          { key: 'title', label: 'Título do Problema', type: 'text-input', placeholder: 'Ex: Não sei o que usar' },
+          { key: 'description', label: 'Descrição', type: 'textarea', placeholder: 'Descrição do problema...', rows: 2 },
+          { key: 'icon', label: 'Ícone', type: 'text-input', placeholder: 'Nome do ícone Lucide', defaultValue: 'AlertCircle' }
+        ],
+        defaultValue: [
+          {
+            title: 'Problemas de autoestima',
+            description: 'Você se sente insegura com sua imagem e não sabe como melhorar',
+            icon: 'Heart'
+          },
+          {
+            title: 'Compras sem direção',
+            description: 'Gasta dinheiro em roupas que não combinam com você',
+            icon: 'ShoppingBag'
+          },
+          {
+            title: 'Perda de tempo',
+            description: 'Demora horas para se arrumar e ainda não fica satisfeita',
+            icon: 'Clock'
+          },
+          {
+            title: 'Falta de estilo próprio',
+            description: 'Copia looks dos outros mas nunca fica do mesmo jeito',
+            icon: 'Users'
+          }
+        ],
+        description: 'Configure os problemas que sua solução resolve.'
+      },
+      { 
+        key: 'columns', 
+        label: 'Colunas', 
+        type: 'select', 
+        options: [
+          { label: '1 Coluna', value: '1' },
+          { label: '2 Colunas', value: '2' },
+          { label: '3 Colunas', value: '3' },
+          { label: '4 Colunas', value: '4' }
+        ],
+        defaultValue: '4' 
+      },
+      { 
+        key: 'backgroundColor', 
+        label: 'Cor de Fundo', 
+        type: 'color-picker', 
+        defaultValue: '#ffffff' 
+      },
+      { 
+        key: 'textColor', 
+        label: 'Cor do Texto', 
+        type: 'color-picker', 
+        defaultValue: '#432818' 
+      },
+      { 
+        key: 'primaryColor', 
+        label: 'Cor Primária', 
+        type: 'color-picker', 
+        defaultValue: '#B89B7A' 
+      },
+      { 
+        key: 'cardBorderColor', 
+        label: 'Cor da Borda dos Cards', 
+        type: 'color-picker', 
+        defaultValue: 'rgba(184, 155, 122, 0.2)' 
+      }
+    ]
+  },
+
   // ...existing code...
 ];
 

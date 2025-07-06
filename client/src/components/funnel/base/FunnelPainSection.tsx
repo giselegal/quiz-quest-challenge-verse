@@ -89,7 +89,7 @@ const FunnelPainSection: React.FC<FunnelPainSectionProps> = ({
       return (
         <InlineEditText
           value={value}
-          onChange={(newValue) => handlePropertyChange(key, newValue)}
+          onSave={(newValue: string) => handlePropertyChange(key, newValue)}
           className={className}
           placeholder={placeholder}
           as={as}
@@ -180,14 +180,14 @@ const FunnelPainSection: React.FC<FunnelPainSectionProps> = ({
                   <div className="space-y-2 w-full">
                     <InlineEditText
                       value={point.title}
-                      onChange={(value) => handlePainPointChange(index, 'title', value)}
+                      onSave={(value: string) => handlePainPointChange(index, 'title', value)}
                       className="text-base md:text-lg font-semibold mb-2 mt-4"
                       placeholder="Título do problema"
                       as="h3"
                     />
                     <InlineEditText
                       value={point.description}
-                      onChange={(value) => handlePainPointChange(index, 'description', value)}
+                      onSave={(value: string) => handlePainPointChange(index, 'description', value)}
                       className="text-sm opacity-80"
                       placeholder="Descrição do problema"
                       multiline

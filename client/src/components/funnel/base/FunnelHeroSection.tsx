@@ -2,7 +2,6 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
-import { InlineEditText } from '@/components/editor/blocks/InlineEditText';
 
 export interface FunnelHeroSectionProps {
   // Content props
@@ -26,8 +25,6 @@ export interface FunnelHeroSectionProps {
   
   // Behavior props
   onCTAClick?: () => void;
-  isEditable?: boolean;
-  onPropertyChange?: (key: string, value: any) => void;
   
   // Editor props
   isSelected?: boolean;
@@ -38,15 +35,15 @@ export interface FunnelHeroSectionProps {
 /**
  * FunnelHeroSection - Componente reutilizável para seções hero de funis
  * 
- * Este componente é usado tanto no editor (com edição inline) quanto
- * no funil real, garantindo fidelidade visual e funcional.
+ * Este componente é usado tanto no editor quanto no funil real,
+ * garantindo fidelidade visual e funcional.
  * 
  * Features:
  * - Totalmente responsivo
- * - Suporte a edição inline (quando isEditable=true)
+ * - Visualização apenas (edição via painel de propriedades)
  * - Múltiplos layouts flexíveis
  * - Paleta de cores da marca por padrão
- * - Otimizado para conversão
+ * - Selecionável no canvas do editor
  */
 const FunnelHeroSection: React.FC<FunnelHeroSectionProps> = ({
   logoUrl,
@@ -63,186 +60,36 @@ const FunnelHeroSection: React.FC<FunnelHeroSectionProps> = ({
   layout = 'side-by-side',
   imagePosition = 'right',
   onCTAClick,
-  isEditable = false,
-  onPropertyChange,
   isSelected = false,
   onClick,
   className = '',
 }) => {
-  const handlePropertyChange = (key: string, value: any) => {
-    if (onPropertyChange) {
-      onPropertyChange(key, value);
+  const handleCTAClick = () => {
+    if (onCTAClick) {
+      onCTAClick();
     }
-  };
-
-  const renderEditableText = (value: string, key: string, className: string, placeholder: string, as?: any) => {
-    if (isEditable) {
-      return (
-        <InlineEditText
-          value={value}
-          onChange={(newValue) => handlePropertyChange(key, newValue)}
-          className={className}
-          placeholder={placeholder}
-          as={as}
-        />
-      );
-    }
-    
-    if (as === 'h1') {
-      return <h1 className={className}>{value}</h1>;
-    }
-    if (as === 'p') {
-      return <p className={className}>{value}</p>;
-    }
-    return <div className={className}>{value}</div>;
-  };
-
-  const renderLogo = () => {
-    if (!logoUrl) return null;
-    
-    return (
-      <div className="text-center md:text-left mb-6">
-        {isEditable ? (
-          <div className="space-y-2">
-            <img
-              src={logoUrl}
-              alt={logoAlt}
-              className="h-12 md:h-16 mx-auto md:mx-0 mb-4"
-            />
-            <InlineEditText
-              value={logoUrl}
-              onChange={(value) => handlePropertyChange('logoUrl', value)}
-              className="text-sm text-gray-500"
-              placeholder="URL do logo"
-            />
-            <InlineEditText
-              value={logoAlt}
-              onChange={(value) => handlePropertyChange('logoAlt', value)}
-              className="text-sm text-gray-500"
-              placeholder="Alt text do logo"
-            />
-          </div>
-        ) : (
-          <img
-            src={logoUrl}
-            alt={logoAlt}
-            className="h-12 md:h-16 mx-auto md:mx-0 mb-4"
-          />
-        )}
-      </div>
-    );
-  };
-
-  const renderContent = () => (
-    <div className="order-1 md:order-1 space-y-6">
-      {renderLogo()}
-
-      {renderEditableText(
-        title,
-        'title',
-        'text-3xl md:text-4xl lg:text-5xl font-playfair text-center md:text-left leading-tight',
-        'Título principal...',
-        'h1'
-      )}
-
-      {renderEditableText(
-        description,
-        'description',
-        'text-lg md:text-xl text-center md:text-left opacity-80',
-        'Descrição envolvente...',
-        'p'
-      )}
-
-      <div className="flex justify-center md:justify-start">
-        <Button
-          onClick={onCTAClick}
-          size="lg"
-          className={cn(
-            'px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300',
-            'transform hover:scale-105'
-          )}
-          style={{ 
-            backgroundColor: primaryColor,
-            color: 'white'
-          }}
-        >
-          {isEditable ? (
-            <InlineEditText
-              value={ctaText}
-              onChange={(value) => handlePropertyChange('ctaText', value)}
-              placeholder="Texto do botão"
-            />
-          ) : (
-            <>
-              <span className="hidden md:inline">
-                {ctaSubtext || ctaText}
-              </span>
-              <span className="md:hidden">{ctaText}</span>
-            </>
-          )}
-          <ArrowRight className="ml-2 h-5 w-5" />
-        </Button>
-      </div>
-
-      {ctaSubtext && isEditable && (
-        <InlineEditText
-          value={ctaSubtext}
-          onChange={(value) => handlePropertyChange('ctaSubtext', value)}
-          className="text-sm text-center md:text-left opacity-70"
-          placeholder="Subtexto do botão (opcional)"
-        />
-      )}
-    </div>
-  );
-
-  const renderImage = () => {
-    if (!heroImageUrl) return null;
-
-    return (
-      <div className="order-2 md:order-2 relative">
-        <div className="relative rounded-lg overflow-hidden shadow-2xl">
-          {isEditable ? (
-            <div className="space-y-2">
-              <img
-                src={heroImageUrl}
-                alt={heroImageAlt}
-                className="w-full h-auto object-cover"
-              />
-              <InlineEditText
-                value={heroImageUrl}
-                onChange={(value) => handlePropertyChange('heroImageUrl', value)}
-                className="text-sm text-gray-500"
-                placeholder="URL da imagem hero"
-              />
-              <InlineEditText
-                value={heroImageAlt}
-                onChange={(value) => handlePropertyChange('heroImageAlt', value)}
-                className="text-sm text-gray-500"
-                placeholder="Alt text da imagem"
-              />
-            </div>
-          ) : (
-            <img
-              src={heroImageUrl}
-              alt={heroImageAlt}
-              className="w-full h-auto object-cover"
-            />
-          )}
-        </div>
-      </div>
-    );
   };
 
   const getLayoutClasses = () => {
     switch (layout) {
       case 'stacked':
-        return 'flex flex-col gap-8 items-center text-center';
+        return 'flex flex-col space-y-8';
       case 'hero-centered':
-        return 'flex flex-col gap-8 items-center text-center max-w-4xl mx-auto';
+        return 'flex flex-col items-center text-center space-y-8';
       case 'side-by-side':
       default:
         return 'grid md:grid-cols-2 gap-8 items-center';
     }
+  };
+
+  const getTextOrder = () => {
+    if (layout !== 'side-by-side') return '';
+    return imagePosition === 'right' ? 'order-1 md:order-1' : 'order-1 md:order-2';
+  };
+
+  const getImageOrder = () => {
+    if (layout !== 'side-by-side') return '';
+    return imagePosition === 'right' ? 'order-2 md:order-2' : 'order-2 md:order-1';
   };
 
   return (
@@ -254,27 +101,98 @@ const FunnelHeroSection: React.FC<FunnelHeroSectionProps> = ({
       )}
       style={{ 
         backgroundColor,
-        color: textColor
+        color: textColor,
+        ...(imagePosition === 'background' && heroImageUrl && {
+          backgroundImage: `url(${heroImageUrl})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        })
       }}
       onClick={onClick}
     >
       <div className="max-w-7xl mx-auto">
         <div className={getLayoutClasses()}>
-          {imagePosition === 'left' ? (
-            <>
-              {renderImage()}
-              {renderContent()}
-            </>
-          ) : layout === 'stacked' || layout === 'hero-centered' ? (
-            <>
-              {renderContent()}
-              {renderImage()}
-            </>
-          ) : (
-            <>
-              {renderContent()}
-              {renderImage()}
-            </>
+          {/* Text Content */}
+          <div className={cn(
+            'space-y-6',
+            getTextOrder(),
+            layout === 'hero-centered' ? 'text-center' : 'text-center md:text-left'
+          )}>
+            {/* Logo */}
+            {logoUrl && (
+              <div className={cn(
+                'mb-6',
+                layout === 'hero-centered' ? 'text-center' : 'text-center md:text-left'
+              )}>
+                <img
+                  src={logoUrl}
+                  alt={logoAlt}
+                  className={cn(
+                    'h-12 md:h-16 mb-4',
+                    layout === 'hero-centered' ? 'mx-auto' : 'mx-auto md:mx-0'
+                  )}
+                />
+              </div>
+            )}
+
+            {/* Title */}
+            <h1 className={cn(
+              'text-3xl md:text-4xl lg:text-5xl font-playfair leading-tight',
+              layout === 'hero-centered' ? 'text-center' : 'text-center md:text-left'
+            )}>
+              {title}
+            </h1>
+
+            {/* Description */}
+            <p className={cn(
+              'text-lg md:text-xl opacity-80',
+              layout === 'hero-centered' ? 'text-center' : 'text-center md:text-left'
+            )}>
+              {description}
+            </p>
+
+            {/* CTA Button */}
+            <div className={cn(
+              'flex',
+              layout === 'hero-centered' ? 'justify-center' : 'justify-center md:justify-start'
+            )}>
+              <Button
+                onClick={handleCTAClick}
+                size="lg"
+                className="px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+                style={{
+                  backgroundColor: primaryColor,
+                  color: 'white',
+                }}
+              >
+                {ctaText}
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </div>
+
+            {/* CTA Subtext */}
+            {ctaSubtext && (
+              <p className={cn(
+                'text-sm opacity-70',
+                layout === 'hero-centered' ? 'text-center' : 'text-center md:text-left'
+              )}>
+                {ctaSubtext}
+              </p>
+            )}
+          </div>
+
+          {/* Hero Image */}
+          {heroImageUrl && imagePosition !== 'background' && (
+            <div className={cn('relative', getImageOrder())}>
+              <div className="relative rounded-lg overflow-hidden shadow-2xl">
+                <img
+                  src={heroImageUrl}
+                  alt={heroImageAlt}
+                  className="w-full h-auto object-cover"
+                />
+              </div>
+            </div>
           )}
         </div>
       </div>
