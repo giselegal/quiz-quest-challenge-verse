@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { SchemaDrivenComponentsSidebar } from './sidebar/SchemaDrivenComponentsSidebar';
+// import { SchemaDrivenComponentsSidebar } from './sidebar/SchemaDrivenComponentsSidebar'; // Removido: não deve ser importado aqui
 import { SimpleSidebar } from './sidebar/SimpleSidebar'; // Mantenha se ainda usar
 import { DynamicPropertiesPanel } from './panels/DynamicPropertiesPanel';
 import { BlockRenderer, BlockData } from './blocks/BlockRenderer'; // Importe BlockRenderer
