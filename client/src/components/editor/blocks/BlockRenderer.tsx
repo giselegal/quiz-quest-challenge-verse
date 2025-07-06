@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { SimpleSidebar } from './sidebar/SimpleSidebar'; // Mantenha se ainda usar
 import { DynamicPropertiesPanel } from '../panels/DynamicPropertiesPanel';
 import { BlockRenderer, BlockData } from './blocks/BlockRenderer'; // Importe BlockRenderer
-import { SyncStatus } from './status/SyncStatus';
+import { SyncStatus } from '../status/SyncStatus';
 import { VersionManager } from './version/VersionManager';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { Button } from '@/components/ui/button';
