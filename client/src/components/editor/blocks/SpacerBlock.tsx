@@ -1,17 +1,21 @@
 import React from 'react';
 
 interface SpacerBlockProps {
-  properties: {
+  properties?: {
     height?: string;
   };
   isSelected?: boolean;
   onClick?: () => void;
+  onSaveInline?: (blockId: string, field: string, value: any) => void;
+  disabled?: boolean;
+  block?: any;
 }
 
 export const SpacerBlock: React.FC<SpacerBlockProps> = ({ 
-  properties, 
+  properties = {}, 
   isSelected = false,
-  onClick 
+  onClick,
+  disabled = false
 }) => {
   const { height = '50px' } = properties;
 

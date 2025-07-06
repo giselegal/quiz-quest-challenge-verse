@@ -58,7 +58,7 @@ export const ImageBlock: React.FC<ImageBlockProps> = ({
           <InlineEditableText
             tag="p"
             value={alt}
-            onSave={onSaveInline('alt')}
+            onSave={(newValue) => onSaveInline?.(block.id, 'alt', newValue)}
             className="text-sm text-gray-600 italic"
             placeholder="Descrição da imagem (alt text)"
           />

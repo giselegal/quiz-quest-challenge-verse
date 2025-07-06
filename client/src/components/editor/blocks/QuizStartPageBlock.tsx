@@ -21,7 +21,7 @@ interface QuizStartPageBlockProps {
   };
   isSelected?: boolean;
   onClick?: () => void;
-  onSaveInline: (key: string) => (newValue: string) => void;
+  onSaveInline?: (blockId: string, key: string, newValue: string) => void;
   disabled?: boolean;
   className?: string;
   style?: React.CSSProperties;
@@ -69,7 +69,7 @@ const QuizStartPageBlock: React.FC<QuizStartPageBlockProps> = ({
         <InlineEditableText
           tag="h1"
           value={title}
-          onSave={onSaveInline('title')}
+          onSave={(newValue) => onSaveInline?.(block.id, 'title', newValue)}
           placeholder="Título do quiz..."
           disabled={disabled}
           className="text-3xl md:text-4xl font-bold mb-4"
@@ -80,7 +80,7 @@ const QuizStartPageBlock: React.FC<QuizStartPageBlockProps> = ({
         <InlineEditableText
           tag="p"
           value={subtitle}
-          onSave={onSaveInline('subtitle')}
+          onSave={(newValue) => onSaveInline?.(block.id, 'subtitle', newValue)}
           placeholder="Subtítulo do quiz..."
           disabled={disabled}
           className="text-xl mb-6 opacity-80"
@@ -91,7 +91,7 @@ const QuizStartPageBlock: React.FC<QuizStartPageBlockProps> = ({
         <InlineEditableText
           tag="p"
           value={description}
-          onSave={onSaveInline('description')}
+          onSave={(newValue) => onSaveInline?.(block.id, 'description', newValue)}
           placeholder="Descrição do quiz..."
           disabled={disabled}
           isTextArea={true}
@@ -136,7 +136,7 @@ const QuizStartPageBlock: React.FC<QuizStartPageBlockProps> = ({
           <InlineEditableText
             tag="span"
             value={buttonText}
-            onSave={onSaveInline('buttonText')}
+            onSave={(newValue) => onSaveInline?.(block.id, 'buttonText', newValue)}
             placeholder="Texto do botão..."
             disabled={disabled}
             className="inline-block"
