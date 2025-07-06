@@ -12,7 +12,6 @@ export { default as TestimonialsBlock } from './TestimonialsBlock';
 export { GuaranteeBlock } from './GuaranteeBlock';
 export { VideoPlayerBlock } from './VideoPlayerBlock';
 export { InlineEditableText } from './InlineEditableText';
-export { BlockRenderer } from './BlockRenderer';
 
 // Novos blocos UI/Avançados - usando export default
 export { default as AlertBlock } from './AlertBlock';
@@ -44,4 +43,3 @@ export { default as StrategicQuestionBlock } from './StrategicQuestionBlock';
 export { default as QuizTransitionBlock } from './QuizTransitionBlock';
 export { default as QuestionMultipleBlock } from './QuestionMultipleBlock';
 
-export type { BlockData } from './BlockRenderer';
