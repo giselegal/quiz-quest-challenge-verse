@@ -42,6 +42,9 @@ import QuizOfferPageBlock from './QuizOfferPageBlock';
 // Bloco da etapa 1 do funil real
 import QuizStartPageBlock from './QuizStartPageBlock';
 
+// Bloco de pergunta múltipla escolha completo
+import QuestionMultipleBlock from './QuestionMultipleBlock';
+
 export interface BlockData {
   id: string;
   type: string;
@@ -172,6 +175,9 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
           console.log('Transition completed');
         }}
       />;
+
+    case 'question-multiple':
+      return <QuestionMultipleBlock {...commonProps} />;
 
     // NOVOS BLOCOS UI/AVANÇADOS
     

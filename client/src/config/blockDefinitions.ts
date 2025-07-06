@@ -320,12 +320,12 @@ export const blockDefinitions: BlockDefinition[] = [
     ],
   },
 
-  // Placeholder para outros blocos complexos
+  // Pergunta Múltipla Escolha - Versão Completa com Layout, Validações e Estilização
   {
     id: 'question-multiple',
     type: 'question-multiple',
     name: 'Pergunta Múltipla Escolha',
-    description: 'Pergunta do quiz com opções múltiplas.',
+    description: 'Pergunta com múltiplas opções de resposta, com ou sem imagens, e validações avançadas.',
     icon: 'CheckCircle',
     category: 'Quiz',
     propertiesSchema: [
@@ -333,25 +333,152 @@ export const blockDefinitions: BlockDefinition[] = [
         key: 'question', 
         label: 'Pergunta', 
         type: 'textarea', 
-        placeholder: 'Qual é a sua pergunta?',
-        rows: 2 
+        placeholder: 'Qual é a sua pergunta?', 
+        rows: 3,
+        defaultValue: 'Qual é a sua pergunta?'
+      },
+      {
+        key: 'options',
+        label: 'Opções de Resposta',
+        type: 'array-editor',
+        itemSchema: [
+          { key: 'text', label: 'Texto da Opção', type: 'textarea', placeholder: 'Texto da opção', rows: 1 },
+          { key: 'value', label: 'Valor da Opção', type: 'text-input', placeholder: 'Valor interno' },
+          { key: 'imageUrl', label: 'URL da Imagem (Opcional)', type: 'image-url', placeholder: 'URL da imagem da opção' },
+        ],
+        description: 'Configure as opções de resposta, incluindo texto e imagem.'
+      },
+      
+      // --- Seção Layout ---
+      {
+        key: 'columns',
+        label: 'Colunas',
+        type: 'select',
+        options: [
+          { label: '1 Coluna', value: '1' },
+          { label: '2 Colunas', value: '2' },
+          { label: '3 Colunas', value: '3' },
+          { label: '4 Colunas', value: '4' },
+        ],
+        defaultValue: '2',
+        description: 'Número de colunas para exibir as opções em layout de grade.'
+      },
+      {
+        key: 'direction',
+        label: 'Direção',
+        type: 'select',
+        options: [
+          { label: 'Vertical', value: 'vertical' },
+          { label: 'Horizontal', value: 'horizontal' },
+        ],
+        defaultValue: 'vertical',
+        description: 'Orientação do layout das opções.'
+      },
+      {
+        key: 'contentLayout',
+        label: 'Disposição do Conteúdo',
+        type: 'select',
+        options: [
+          { label: 'Texto + Imagem', value: 'text-image' },
+          { label: 'Somente Texto', value: 'text-only' },
+          { label: 'Somente Imagem', value: 'image-only' },
+        ],
+        defaultValue: 'text-image',
+        description: 'Como o texto e a imagem são dispostos em cada opção.'
+      },
+      
+      // --- Seção Validações ---
+      { 
+        key: 'multipleSelection', 
+        label: 'Múltipla Escolha', 
+        type: 'boolean-switch', 
+        defaultValue: false, 
+        description: 'Permite que o usuário selecione múltiplas opções.' 
       },
       { 
         key: 'required', 
         label: 'Obrigatório', 
         type: 'boolean-switch', 
-        defaultValue: true 
+        defaultValue: true, 
+        description: 'O usuário é obrigado a selecionar alguma opção para avançar.' 
+      },
+      { 
+        key: 'autoProceed', 
+        label: 'Auto-avançar', 
+        type: 'boolean-switch', 
+        defaultValue: false, 
+        description: 'O funil avançará para a próxima etapa automaticamente.' 
+      },
+      
+      // --- Seção Estilização ---
+      {
+        key: 'borderStyle',
+        label: 'Bordas',
+        type: 'select',
+        options: [
+          { label: 'Nenhuma', value: 'none' },
+          { label: 'Pequena', value: 'sm' },
+          { label: 'Média', value: 'md' },
+          { label: 'Grande', value: 'lg' },
+        ],
+        defaultValue: 'sm',
       },
       {
-        key: 'options',
-        label: 'Opções',
-        type: 'array-editor',
-        itemSchema: [
-          { key: 'text', label: 'Texto da Opção', type: 'text-input', placeholder: 'Opção A' },
-          { key: 'value', label: 'Valor', type: 'text-input', placeholder: 'a' },
-          { key: 'imageUrl', label: 'URL da Imagem (opcional)', type: 'image-url', placeholder: 'https://...' },
+        key: 'shadowStyle',
+        label: 'Sombras',
+        type: 'select',
+        options: [
+          { label: 'Sem Sombras', value: 'none' },
+          { label: 'Pequena', value: 'sm' },
+          { label: 'Média', value: 'md' },
+          { label: 'Grande', value: 'lg' },
         ],
+        defaultValue: 'none',
       },
+      {
+        key: 'spacing',
+        label: 'Espaçamento',
+        type: 'select',
+        options: [
+          { label: 'Pequeno', value: 'sm' },
+          { label: 'Médio', value: 'md' },
+          { label: 'Grande', value: 'lg' },
+        ],
+        defaultValue: 'md',
+      },
+      {
+        key: 'detailStyle',
+        label: 'Detalhe Visual',
+        type: 'select',
+        options: [
+          { label: 'Nenhum', value: 'none' },
+          { label: 'Simples', value: 'simple' },
+          { label: 'Completo', value: 'full' },
+        ],
+        defaultValue: 'none',
+      },
+      {
+        key: 'optionVisualStyle',
+        label: 'Estilo da Opção',
+        type: 'select',
+        options: [
+          { label: 'Simples', value: 'simple' },
+          { label: 'Card', value: 'card' },
+        ],
+        defaultValue: 'simple',
+      },
+      
+      // --- Seção Personalização (Cores) ---
+      { key: 'primaryColor', label: 'Cor Principal', type: 'color-picker', defaultValue: '#B89B7A' },
+      { key: 'textColor', label: 'Cor do Texto', type: 'color-picker', defaultValue: '#432818' },
+      { key: 'borderColor', label: 'Cor da Borda', type: 'color-picker', defaultValue: '#B89B7A' },
+      
+      // --- Seção Avançado ---
+      { key: 'componentId', label: 'ID do Componente', type: 'text-input', placeholder: 'ID único para referência' },
+      
+      // --- Seção Geral ---
+      { key: 'maxWidth', label: 'Tamanho Máximo (%)', type: 'number-input', min: 10, max: 100, defaultValue: 100, description: 'Largura máxima do componente em porcentagem.' },
+      { key: 'alignment', label: 'Alinhamento', type: 'select', options: [{ label: 'Esquerda', value: 'left' }, { label: 'Centro', value: 'center' }, { label: 'Direita', value: 'right' }], defaultValue: 'center' },
     ],
   },
 
