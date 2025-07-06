@@ -68,26 +68,52 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
         </Badge>
 
         {/* Main Title */}
-        <h1 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: textColor }}>
-          {title}
-        </h1>
+        <InlineEditText
+          as="h1"
+          value={title}
+          onSave={(value) => handlePropertyChange('title', value)}
+          placeholder="Título do resultado..."
+          disabled={disabled}
+          className="text-3xl md:text-4xl font-bold mb-4"
+          style={{ color: textColor }}
+        />
 
         {/* Description */}
-        <p className="text-lg mb-8 opacity-80" style={{ color: textColor }}>
-          {description}
-        </p>
+        <InlineEditText
+          as="p"
+          value={description}
+          onSave={(value) => handlePropertyChange('description', value)}
+          placeholder="Descrição do resultado..."
+          disabled={disabled}
+          multiline={true}
+          className="text-lg mb-8 opacity-80"
+          style={{ color: textColor }}
+        />
 
         {/* Result Card */}
         <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg p-8 mb-8">
           <div className="text-6xl mb-4">✨</div>
           
-          <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: textColor }}>
-            {resultTitle}
-          </h2>
+          <InlineEditText
+            as="h2"
+            value={resultTitle}
+            onSave={(value) => handlePropertyChange('resultTitle', value)}
+            placeholder="Título do tipo de resultado..."
+            disabled={disabled}
+            className="text-2xl md:text-3xl font-bold mb-4"
+            style={{ color: textColor }}
+          />
           
-          <p className="text-lg mb-6 opacity-90" style={{ color: textColor }}>
-            {resultDescription}
-          </p>
+          <InlineEditText
+            as="p"
+            value={resultDescription}
+            onSave={(value) => handlePropertyChange('resultDescription', value)}
+            placeholder="Descrição detalhada do resultado..."
+            disabled={disabled}
+            multiline={true}
+            className="text-lg mb-6 opacity-90"
+            style={{ color: textColor }}
+          />
 
           {/* Recommendations */}
           {recommendations.length > 0 && (
@@ -113,7 +139,15 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
           className="text-lg px-8 py-3 bg-primary hover:bg-primary/90"
           disabled={disabled}
         >
-          {ctaText}
+          <InlineEditText
+            as="span"
+            value={ctaText}
+            onSave={(value) => handlePropertyChange('ctaText', value)}
+            placeholder="Texto do botão de ação..."
+            disabled={disabled}
+            className="inline-block"
+            style={{ color: 'white' }}
+          />
         </Button>
       </div>
 

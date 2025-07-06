@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-import type { BlockData } from './types';
+import type { BlockData } from '@/types/blocks';
 
 // Importar todos os componentes dos blocos
 import HeaderBlock from './HeaderBlock';
@@ -42,6 +42,7 @@ import TermsBlock from './TermsBlock';
 
 // Blocos especiais do quiz
 import QuizStartPageBlock from './QuizStartPageBlock';
+import QuizQuestionBlock from './QuizQuestionBlock';
 import ResultPageBlock from './ResultPageBlock';
 import QuizOfferPageBlock from './QuizOfferPageBlock';
 import QuestionMultipleBlock from './QuestionMultipleBlock';
@@ -168,6 +169,8 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       // BLOCOS ESPECÍFICOS DO QUIZ - DADOS REAIS
       case 'QuizStartPageBlock':
         return <QuizStartPageBlock {...commonProps} />;
+      case 'QuizQuestionBlock':
+        return <QuizQuestionBlock {...commonProps} />;
       case 'QuestionMultipleBlock':
         return <QuestionMultipleBlock {...commonProps} />;
       case 'StrategicQuestionBlock':
