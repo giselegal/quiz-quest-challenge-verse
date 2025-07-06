@@ -43,3 +43,7 @@ export { default as StrategicQuestionBlock } from './StrategicQuestionBlock';
 export { default as QuizTransitionBlock } from './QuizTransitionBlock';
 export { default as QuestionMultipleBlock } from './QuestionMultipleBlock';
 
+// Novos blocos avançados baseados no modelo
+export { default as RichTextBlock } from './RichTextBlock';
+export { default as QuizStepBlock } from './QuizStepBlock';
+
