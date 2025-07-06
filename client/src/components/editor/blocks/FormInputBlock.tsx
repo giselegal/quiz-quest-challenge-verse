@@ -1,36 +1,28 @@
 import React from 'react';
-import { InlineEditableText } from './InlineEditableText';
 import { TextCursorInput } from 'lucide-react';
 import type { BlockComponentProps } from '@/types/blocks';
 
-const FormInputBlock: React.FC<BlockComponentProps> = ({
+const FormInputBlock: React.FC<BlockComponentProps> = ({ 
   block,
   isSelected = false,
-  isEditing = false,
   onClick,
-  onPropertyChange,
   className = ''
 }) => {
-  const {
-    label = 'Campo de entrada',
+  const { 
+    label = 'Campo de Input',
     placeholder = 'Digite aqui...',
-    type = 'text',
-    required = false
+    inputType = 'text',
+    required = false,
+    fullWidth = true
   } = block.properties;
 
-  const handlePropertyChange = (key: string, value: any) => {
-    if (onPropertyChange) {
-      onPropertyChange(key, value);
-    }
-  };
-
   return (
-    <div
+    <div 
       className={`
-        py-4 cursor-pointer transition-all duration-200
+        p-4 rounded-lg cursor-pointer transition-all duration-200
         ${isSelected 
-          ? 'outline-2 outline-blue-500 outline-offset-2' 
-          : 'hover:shadow-sm'
+          ? 'border-2 border-blue-500 bg-blue-50' 
+          : 'border-2 border-dashed border-[#B89B7A]/40 hover:bg-[#FAF9F7]'
         }
         ${className}
       `}
@@ -38,22 +30,19 @@ const FormInputBlock: React.FC<BlockComponentProps> = ({
       data-block-id={block.id}
       data-block-type={block.type}
     >
-      <div className="space-y-2 max-w-md mx-auto">
-        <label className="text-sm font-medium text-[#432818] block">
-          <InlineEditableText
-            value={label}
-            onSave={(value: string) => handlePropertyChange('label', value)}
-            className="inline-block"
-            placeholder="Rótulo do campo"
-            tag="span"
-          />
-          {required && <span className="text-red-500 ml-1">*</span>}
-        </label>
+      <div className={`space-y-2 ${fullWidth ? 'w-full' : 'w-auto'}`}>
+        <div className="flex items-center gap-2">
+          <TextCursorInput className="w-4 h-4 text-[#B89B7A]" />
+          <label className="text-sm font-medium text-[#432818]">
+            {label}
+            {required && <span className="text-red-500 ml-1">*</span>}
+          </label>
+        </div>
+        
         <input
-          type={type || 'text'}
-          placeholder={placeholder || 'Digite aqui...'}
-          className="w-full h-12 text-base border-2 border-[#B89B7A]/30 focus:border-[#B89B7A] rounded-xl bg-white focus:ring-2 focus:ring-[#B89B7A]/20 px-4"
-          disabled // Desabilitado no editor para evitar interação real
+          type={inputType}
+          placeholder={placeholder}
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#B89B7A] focus:border-transparent transition-all"
           readOnly
         />
       </div>

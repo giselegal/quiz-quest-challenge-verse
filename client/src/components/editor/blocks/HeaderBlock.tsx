@@ -1,13 +1,10 @@
 import React from 'react';
-import { InlineEditableText } from './InlineEditableText';
 import type { BlockComponentProps } from '@/types/blocks';
 
 const HeaderBlock: React.FC<BlockComponentProps> = ({ 
   block,
   isSelected = false,
-  isEditing = false,
   onClick,
-  onPropertyChange,
   className = ''
 }) => {
   const { 
@@ -16,12 +13,6 @@ const HeaderBlock: React.FC<BlockComponentProps> = ({
     titleSize = 'large', 
     alignment = 'center' 
   } = block.properties;
-
-  const handlePropertyChange = (key: string, value: any) => {
-    if (onPropertyChange) {
-      onPropertyChange(key, value);
-    }
-  };
 
   const titleSizeClasses: Record<string, string> = {
     small: 'text-2xl md:text-3xl',
@@ -43,28 +34,22 @@ const HeaderBlock: React.FC<BlockComponentProps> = ({
           ? 'border-2 border-blue-500 bg-blue-50' 
           : 'border-2 border-dashed border-[#B89B7A]/40 hover:bg-[#FAF9F7]'
         }
-        ${alignmentClasses[alignment]}
         ${className}
       `}
       onClick={onClick}
       data-block-id={block.id}
       data-block-type={block.type}
     >
-      <InlineEditableText
-        tag="h1"
-        value={title}
-        onSave={(value: string) => handlePropertyChange('title', value)}
-        className={`font-bold text-[#aa6b5d] ${titleSizeClasses[titleSize]}`}
-        placeholder="Título do cabeçalho"
-      />
-      
-      <InlineEditableText
-        tag="p"
-        value={subtitle}
-        onSave={(value: string) => handlePropertyChange('subtitle', value)}
-        className="text-lg mt-4 text-[#432818] max-w-2xl mx-auto"
-        placeholder="Subtítulo opcional"
-      />
+      <div className={`${alignmentClasses[alignment]} space-y-2`}>
+        <h1 className={`${titleSizeClasses[titleSize]} font-bold text-[#432818] leading-tight`}>
+          {title}
+        </h1>
+        {subtitle && (
+          <h2 className="text-lg md:text-xl text-[#6B5B73] font-medium">
+            {subtitle}
+          </h2>
+        )}
+      </div>
     </div>
   );
 };

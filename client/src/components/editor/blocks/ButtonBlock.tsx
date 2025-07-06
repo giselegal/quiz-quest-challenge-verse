@@ -1,5 +1,4 @@
 import React from 'react';
-import { InlineEditableText } from './InlineEditableText';
 import type { BlockComponentProps } from '@/types/blocks';
 
 const ButtonBlock: React.FC<BlockComponentProps> = ({ 
@@ -59,13 +58,9 @@ const ButtonBlock: React.FC<BlockComponentProps> = ({
           ${fullWidth ? 'w-full' : 'w-auto'}
         `}
       >
-        <InlineEditableText
-          tag="span"
-          value={text}
-          onSave={(value: string) => handlePropertyChange('text', value)}
-          className="text-inherit"
-          placeholder="Texto do botão"
-        />
+        <span className="text-inherit">
+          {text}
+        </span>
       </div>
     </div>
   );

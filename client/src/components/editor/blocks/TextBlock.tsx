@@ -1,37 +1,32 @@
 import React from 'react';
-import { InlineEditableText } from './InlineEditableText';
 import type { BlockComponentProps } from '@/types/blocks';
 
 const TextBlock: React.FC<BlockComponentProps> = ({ 
   block,
   isSelected = false,
-  isEditing = false,
   onClick,
-  onPropertyChange,
   className = ''
 }) => {
   const { 
-    content = 'Conteúdo do texto aqui...', 
-    fontSize = 'medium', 
-    alignment = 'left' 
+    content = 'Este é um bloco de texto. Clique para editar.',
+    fontSize = 'base',
+    alignment = 'left',
+    color = 'text-gray-800'
   } = block.properties;
 
-  const handlePropertyChange = (key: string, value: any) => {
-    if (onPropertyChange) {
-      onPropertyChange(key, value);
-    }
-  };
-
   const fontSizeClasses: Record<string, string> = {
-    small: 'text-sm',
-    medium: 'text-base',
-    large: 'text-lg'
+    sm: 'text-sm',
+    base: 'text-base',
+    lg: 'text-lg',
+    xl: 'text-xl',
+    '2xl': 'text-2xl'
   };
 
   const alignmentClasses: Record<string, string> = {
     left: 'text-left',
     center: 'text-center',
-    right: 'text-right'
+    right: 'text-right',
+    justify: 'text-justify'
   };
 
   return (
@@ -42,20 +37,22 @@ const TextBlock: React.FC<BlockComponentProps> = ({
           ? 'border-2 border-blue-500 bg-blue-50' 
           : 'border-2 border-dashed border-[#B89B7A]/40 hover:bg-[#FAF9F7]'
         }
-        ${alignmentClasses[alignment]}
         ${className}
       `}
       onClick={onClick}
       data-block-id={block.id}
       data-block-type={block.type}
     >
-      <InlineEditableText
-        tag="div"
-        value={content}
-        onSave={(value: string) => handlePropertyChange('content', value)}
-        className={`text-[#432818] ${fontSizeClasses[fontSize]} whitespace-pre-wrap`}
-        placeholder="Digite seu conteúdo aqui..."
-      />
+      <div 
+        className={`
+          ${fontSizeClasses[fontSize]} 
+          ${alignmentClasses[alignment]} 
+          ${color}
+          leading-relaxed whitespace-pre-wrap
+        `}
+      >
+        {content}
+      </div>
     </div>
   );
 };

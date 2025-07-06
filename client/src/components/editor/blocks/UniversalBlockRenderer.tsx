@@ -14,7 +14,7 @@ import ProductOfferBlock from './ProductOfferBlock';
 import UrgencyTimerBlock from './UrgencyTimerBlock';
 import FAQSectionBlock from './FAQSectionBlock';
 import TestimonialsBlock from './TestimonialsBlock';
-import { GuaranteeBlock } from './GuaranteeBlock';
+import GuaranteeBlock from './GuaranteeBlock';
 import { VideoPlayerBlock } from './VideoPlayerBlock';
 
 // Blocos específicos do Quiz Intro
