@@ -256,6 +256,19 @@ const DynamicBlockRenderer: React.FC<DynamicBlockRendererProps> = ({
           </div>
         );
 
+      case 'ProgressBlock':
+        return (
+          <div className="py-4">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm text-[#8F7A6A]">{props.label || 'Progresso'}</span>
+              {props.showPercentage && (
+                <span className="text-[#aa6b5d] font-medium">{props.value || 0}%</span>
+              )}
+            </div>
+            <Progress value={props.value || 0} className="h-2 bg-[#F3E8E6]" />
+          </div>
+        );
+
       case 'QuestionBlock':
         return (
           <div className="py-6">
@@ -266,9 +279,18 @@ const DynamicBlockRenderer: React.FC<DynamicBlockRendererProps> = ({
               <div className="grid gap-4 md:grid-cols-2">
                 {(props.options || []).map((option: any, index: number) => (
                   <div
-                    key={index}
+                    key={option.id || index}
                     className="border-2 border-[#B89B7A]/30 hover:border-[#B89B7A] hover:bg-[#f9f4ef] rounded-xl transition-all duration-200 cursor-pointer group p-4"
                   >
+                    {option.imageUrl && (
+                      <div className="mb-3">
+                        <img 
+                          src={option.imageUrl} 
+                          alt={option.text}
+                          className="w-full h-32 object-cover rounded-lg"
+                        />
+                      </div>
+                    )}
                     <div className="flex items-start gap-3">
                       <span className="font-bold text-[#B89B7A] text-lg min-w-[24px]">
                         {String.fromCharCode(65 + index)}.

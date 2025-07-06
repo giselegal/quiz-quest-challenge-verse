@@ -1,4 +1,5 @@
 import type { BlockData } from '@/components/editor/blocks';
+import { REAL_QUIZ_QUESTIONS, STRATEGIC_QUESTIONS, TRANSITIONS } from '@/components/visual-editor/realQuizData';
 
 // Tipos para o sistema schema-driven
 export interface SchemaDrivenFunnelData {
@@ -408,21 +409,376 @@ class SchemaDrivenFunnelService {
     const now = new Date();
     return {
       id: `funnel-${Date.now()}`,
-      name: 'Novo Funil',
-      description: 'Descrição do funil',
+      name: 'Quiz CaktoQuiz - Descubra Seu Estilo',
+      description: 'Funil completo para descoberta do estilo pessoal - 21 etapas',
       theme: 'caktoquiz',
       isPublished: false,
       pages: [
+        // ETAPA 1: Introdução com coleta de nome
         {
-          id: 'page-intro',
+          id: 'etapa-1-intro',
           name: 'Introdução',
-          title: 'Página de Introdução',
+          title: 'Etapa 1: Introdução (Coleta do Nome)',
           type: 'intro',
           order: 1,
-          blocks: [],
+          blocks: [
+            {
+              id: 'quiz-intro-header',
+              type: 'HeaderBlock',
+              properties: {
+                title: '<span style="color: #B89B7A">Chega</span> de um guarda-roupa lotado e da sensação de que nada combina com você.',
+                subtitle: 'Em poucos minutos, descubra seu Estilo Predominante — e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.',
+                alignment: 'center',
+                titleSize: 'large'
+              }
+            },
+            {
+              id: 'quiz-intro-logo',
+              type: 'ImageBlock',
+              properties: {
+                src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+                alt: 'Logo Gisele Galvão',
+                width: '200px',
+                alignment: 'center'
+              }
+            },
+            {
+              id: 'quiz-intro-image',
+              type: 'ImageBlock',
+              properties: {
+                src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp',
+                alt: 'Descubra seu estilo predominante e transforme seu guarda-roupa',
+                width: '100%',
+                alignment: 'center'
+              }
+            },
+            {
+              id: 'quiz-intro-input',
+              type: 'TextBlock',
+              properties: {
+                content: 'Digite seu nome para começar:',
+                alignment: 'center',
+                fontSize: 'large'
+              }
+            },
+            {
+              id: 'quiz-intro-button',
+              type: 'ButtonBlock',
+              properties: {
+                text: 'Quero Descobrir meu Estilo Agora!',
+                size: 'lg',
+                fullWidth: true,
+                style: 'primary'
+              }
+            }
+          ],
+          settings: {
+            showProgress: false,
+            progressValue: 0,
+            backgroundColor: '#ffffff',
+            textColor: '#432818',
+            maxWidth: 'max-w-4xl'
+          }
+        },
+
+        // ETAPAS 2-11: 10 questões principais com dados reais
+        ...REAL_QUIZ_QUESTIONS.map((questionData, i) => ({
+          id: `etapa-${i + 2}-questao-${i + 1}`,
+          name: `Questão ${i + 1}`,
+          title: `Etapa ${i + 2}: ${questionData.question}`,
+          type: 'question' as const,
+          order: i + 2,
+          blocks: [
+            {
+              id: `progress-q${i + 1}`,
+              type: 'ProgressBlock',
+              properties: {
+                value: 5 + (i + 1) * 5,
+                label: `Questão ${i + 1} de 10`,
+                showPercentage: true
+              }
+            },
+            {
+              id: `question-${i + 1}`,
+              type: 'QuestionBlock',
+              properties: {
+                question: questionData.question,
+                options: questionData.options.map(opt => ({
+                  id: opt.id,
+                  text: opt.text,
+                  value: opt.value,
+                  imageUrl: (opt as any).imageUrl || undefined
+                })),
+                required: true,
+                multipleSelection: questionData.multipleSelection || false,
+                maxSelections: questionData.maxSelections || 1
+              }
+            }
+          ],
           settings: {
             showProgress: true,
-            progressValue: 0,
+            progressValue: 5 + (i + 1) * 5,
+            backgroundColor: '#ffffff',
+            textColor: '#432818',
+            maxWidth: 'max-w-4xl'
+          }
+        })),
+
+        // ETAPA 12: Transição principal
+        {
+          id: 'etapa-12-transicao-1',
+          name: 'Transição Principal',
+          title: 'Etapa 12: Transição - Agora vamos conhecer você melhor',
+          type: 'custom',
+          order: 12,
+          blocks: [
+            {
+              id: 'main-transition-header',
+              type: 'HeaderBlock',
+              properties: {
+                title: TRANSITIONS.mainTransition.title,
+                subtitle: TRANSITIONS.mainTransition.message,
+                alignment: 'center',
+                titleSize: 'large'
+              }
+            },
+            {
+              id: 'main-transition-description',
+              type: 'TextBlock',
+              properties: {
+                content: TRANSITIONS.mainTransition.submessage,
+                fontSize: 'medium',
+                alignment: 'center'
+              }
+            }
+          ],
+          settings: {
+            showProgress: true,
+            progressValue: 60,
+            backgroundColor: '#f9f4ef',
+            textColor: '#432818',
+            maxWidth: 'max-w-4xl'
+          }
+        },
+
+        // ETAPAS 13-18: 6 questões estratégicas
+        ...STRATEGIC_QUESTIONS.map((questionData, i) => ({
+          id: `etapa-${i + 13}-estrategica-${i + 1}`,
+          name: `Questão Estratégica ${i + 1}`,
+          title: `Etapa ${i + 13}: ${questionData.question}`,
+          type: 'question' as const,
+          order: i + 13,
+          blocks: [
+            {
+              id: `progress-strategic-${i + 1}`,
+              type: 'ProgressBlock',
+              properties: {
+                value: 65 + (i + 1) * 5,
+                label: `Questão estratégica ${i + 1} de 6`,
+                showPercentage: true
+              }
+            },
+            {
+              id: `strategic-question-${i + 1}`,
+              type: 'QuestionBlock',
+              properties: {
+                question: questionData.question,
+                options: questionData.options.map(opt => ({
+                  id: opt.id,
+                  text: opt.text,
+                  value: opt.value
+                })),
+                required: true,
+                multipleSelection: false,
+                maxSelections: 1
+              }
+            }
+          ],
+          settings: {
+            showProgress: true,
+            progressValue: 65 + (i + 1) * 5,
+            backgroundColor: '#ffffff',
+            textColor: '#432818',
+            maxWidth: 'max-w-4xl'
+          }
+        })),
+
+        // ETAPA 19: Transição final
+        {
+          id: 'etapa-19-transicao-final',
+          name: 'Transição Final',
+          title: 'Etapa 19: Preparando seu resultado',
+          type: 'custom',
+          order: 19,
+          blocks: [
+            {
+              id: 'final-transition-header',
+              type: 'HeaderBlock',
+              properties: {
+                title: TRANSITIONS.finalTransition.title,
+                subtitle: TRANSITIONS.finalTransition.message,
+                alignment: 'center',
+                titleSize: 'large'
+              }
+            },
+            {
+              id: 'final-transition-loading',
+              type: 'TextBlock',
+              properties: {
+                content: '⏳ Analisando suas respostas...',
+                fontSize: 'medium',
+                alignment: 'center'
+              }
+            }
+          ],
+          settings: {
+            showProgress: true,
+            progressValue: 95,
+            backgroundColor: '#f9f4ef',
+            textColor: '#432818',
+            maxWidth: 'max-w-4xl'
+          }
+        },
+
+        // ETAPA 20: Resultado (/resultado)
+        {
+          id: 'etapa-20-resultado',
+          name: 'Resultado',
+          title: 'Etapa 20: Seu Estilo Predominante',
+          type: 'result',
+          order: 20,
+          blocks: [
+            {
+              id: 'result-header',
+              type: 'header-component-real',
+              properties: {
+                primaryStyle: 'elegante',
+                logoHeight: '60px',
+                logo: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+                logoAlt: 'Logo Gisele Galvão',
+                userName: 'Seu Nome'
+              }
+            },
+            {
+              id: 'result-card',
+              type: 'card-component-real',
+              properties: {
+                className: 'result-card-main'
+              }
+            },
+            {
+              id: 'secondary-styles',
+              type: 'secondary-styles-component-real',
+              properties: {
+                secondaryStyles: []
+              }
+            },
+            {
+              id: 'before-after',
+              type: 'before-after-component-real',
+              properties: {}
+            },
+            {
+              id: 'motivation',
+              type: 'motivation-component-real',
+              properties: {}
+            },
+            {
+              id: 'bonus',
+              type: 'bonus-component-real',
+              properties: {}
+            },
+            {
+              id: 'testimonials',
+              type: 'testimonials-component-real',
+              properties: {}
+            },
+            {
+              id: 'guarantee',
+              type: 'guarantee-component-real',
+              properties: {}
+            },
+            {
+              id: 'mentor',
+              type: 'mentor-component-real',
+              properties: {}
+            },
+            {
+              id: 'secure-purchase',
+              type: 'secure-purchase-component-real',
+              properties: {}
+            }
+          ],
+          settings: {
+            showProgress: true,
+            progressValue: 100,
+            backgroundColor: '#ffffff',
+            textColor: '#432818',
+            maxWidth: 'max-w-6xl'
+          }
+        },
+
+        // ETAPA 21: Oferta (/quiz-descubra-seu-estilo)
+        {
+          id: 'etapa-21-oferta',
+          name: 'Oferta Especial',
+          title: 'Etapa 21: Oferta Exclusiva',
+          type: 'offer',
+          order: 21,
+          blocks: [
+            {
+              id: 'offer-header',
+              type: 'section-title-component-real',
+              properties: {
+                title: 'Descubra Seu Estilo Predominante',
+                subtitle: 'Tenha finalmente um guarda-roupa que funciona 100%'
+              }
+            },
+            {
+              id: 'offer-intro-image',
+              type: 'fixed-intro-image-component-real',
+              properties: {
+                src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp',
+                alt: 'Transforme seu guarda-roupa',
+                width: '100%',
+                height: 'auto',
+                className: 'offer-intro-image'
+              }
+            },
+            {
+              id: 'offer-countdown',
+              type: 'countdown-timer-component-real',
+              properties: {}
+            },
+            {
+              id: 'offer-pricing',
+              type: 'pricing-section-component-real',
+              properties: {
+                title: 'Oferta por tempo limitado',
+                installments: 'R$ 8,83',
+                fullPrice: 'R$ 39,90',
+                savings: '77% OFF - Economia de R$ 135,10'
+              }
+            },
+            {
+              id: 'offer-faq',
+              type: 'faq-section-component-real',
+              properties: {}
+            },
+            {
+              id: 'offer-cta',
+              type: 'button-component-real',
+              properties: {
+                children: 'QUERO DESCOBRIR MEU ESTILO AGORA',
+                className: 'btn-cta-offer',
+                style: { backgroundColor: '#4CAF50', color: 'white' },
+                onClick: null
+              }
+            }
+          ],
+          settings: {
+            showProgress: false,
+            progressValue: 100,
             backgroundColor: '#ffffff',
             textColor: '#432818',
             maxWidth: 'max-w-4xl'
@@ -430,13 +786,13 @@ class SchemaDrivenFunnelService {
         }
       ],
       config: {
-        name: 'Novo Funil',
-        description: 'Descrição do funil',
+        name: 'Quiz CaktoQuiz - Descubra Seu Estilo',
+        description: 'Funil completo para descoberta do estilo pessoal - 21 etapas',
         isPublished: false,
         theme: 'caktoquiz',
         primaryColor: '#B89B7A',
         secondaryColor: '#432818',
-        fontFamily: 'Inter',
+        fontFamily: 'Playfair Display',
         analytics: {
           events: [],
           conversionGoals: []
