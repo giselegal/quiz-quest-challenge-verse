@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { SchemaDrivenComponentsSidebar } from './sidebar/SchemaDrivenComponentsSidebar';
 import { SimpleSidebar } from './sidebar/SimpleSidebar';
-import { DynamicPropertiesPanel } from './panels/DynamicPropertiesPanel';
+import { ModernPropertyPanel } from './ModernPropertyPanel';
 import { SyncStatus } from './status/SyncStatus';
 import { VersionManager } from './version/VersionManager';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
@@ -411,12 +411,13 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
         {/* Right Properties Panel */}
         <ResizablePanel defaultSize={25} minSize={20} maxSize={35}>
           <div className="h-full border-l border-gray-200 bg-white">
-            <DynamicPropertiesPanel
+            <ModernPropertyPanel
               selectedBlock={selectedBlock}
-              funnelConfig={funnel.config}
-              onBlockPropertyChange={handleBlockPropertyChange}
-              onNestedPropertyChange={handleNestedPropertyChange}
-              onFunnelConfigChange={updateFunnelConfig}
+              onUpdate={(updates) => {
+                if (selectedBlockId && updates) {
+                  updateBlock(selectedBlockId, updates);
+                }
+              }}
             />
           </div>
         </ResizablePanel>

@@ -4,7 +4,7 @@
  * Integra React Hook Form com Zod para validação tipada
  */
 
-import { useForm, UseFormReturn } from 'react-hook-form';
+import { useForm, UseFormReturn, FieldValues, Path } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback, useEffect } from 'react';
 import { z } from 'zod';
@@ -29,10 +29,10 @@ interface UseBlockFormOptions {
   validateOnChange?: boolean;
 }
 
-interface UseBlockFormReturn<T = Record<string, any>> {
-  form: UseFormReturn<T>;
+interface UseBlockFormReturn {
+  form: UseFormReturn<any>;
   updateProperty: (key: string, value: any) => void;
-  updateProperties: (updates: Partial<T>) => void;
+  updateProperties: (updates: Record<string, any>) => void;
   validateBlock: () => boolean;
   errors: Record<string, string>;
   isValid: boolean;
@@ -43,10 +43,10 @@ interface UseBlockFormReturn<T = Record<string, any>> {
 /**
  * Hook principal para gerenciar formulários de blocos
  */
-export function useBlockForm<T extends Record<string, any> = Record<string, any>>(
+export function useBlockForm(
   block: Block | null,
   options: UseBlockFormOptions = {}
-): UseBlockFormReturn<T> {
+): UseBlockFormReturn {
   const {
     onUpdate,
     debounceMs = 300,
@@ -59,9 +59,9 @@ export function useBlockForm<T extends Record<string, any> = Record<string, any>
     : z.record(z.unknown());
 
   // Configura o formulário com React Hook Form
-  const form = useForm<T>({
-    resolver: zodResolver(schema as z.ZodSchema<T>),
-    defaultValues: (block?.properties as T) || ({} as T),
+  const form = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: block?.properties || {},
     mode: validateOnChange ? 'onChange' : 'onBlur',
   });
 
@@ -71,7 +71,7 @@ export function useBlockForm<T extends Record<string, any> = Record<string, any>
   // Reseta o formulário quando o bloco muda
   useEffect(() => {
     if (block?.properties) {
-      reset(block.properties as T);
+      reset(block.properties);
     }
   }, [block?.id, reset]);
 
@@ -96,16 +96,16 @@ export function useBlockForm<T extends Record<string, any> = Record<string, any>
 
   // Função para atualizar uma propriedade específica
   const updateProperty = useCallback((key: string, value: any) => {
-    setValue(key as keyof T, value, {
+    setValue(key, value, {
       shouldValidate: validateOnChange,
       shouldDirty: true
     });
   }, [setValue, validateOnChange]);
 
   // Função para atualizar múltiplas propriedades
-  const updateProperties = useCallback((updates: Partial<T>) => {
+  const updateProperties = useCallback((updates: Record<string, any>) => {
     Object.entries(updates).forEach(([key, value]) => {
-      setValue(key as keyof T, value, {
+      setValue(key, value, {
         shouldValidate: validateOnChange,
         shouldDirty: true
       });
@@ -126,8 +126,8 @@ export function useBlockForm<T extends Record<string, any> = Record<string, any>
 
   // Converte erros do formulário para formato simples
   const flatErrors = Object.entries(errors).reduce((acc, [key, error]) => {
-    if (error?.message) {
-      acc[key] = error.message;
+    if (error && typeof error === 'object' && 'message' in error && error.message) {
+      acc[key] = error.message as string;
     }
     return acc;
   }, {} as Record<string, string>);
@@ -150,7 +150,7 @@ export function useBlockForm<T extends Record<string, any> = Record<string, any>
 export function useArrayFieldForm<T extends Record<string, any>>(
   initialItems: T[] = [],
   itemSchema: z.ZodSchema<T>,
-  options: UseBlockFormOptions = {}
+  options: { onUpdate?: (updates: { items: T[] }) => void; debounceMs?: number } = {}
 ) {
   const {
     onUpdate,
@@ -175,7 +175,9 @@ export function useArrayFieldForm<T extends Record<string, any>>(
 
     const subscription = watch((values) => {
       const timer = setTimeout(() => {
-        onUpdate({ items: values.items });
+        if (values.items) {
+          onUpdate({ items: values.items as T[] });
+        }
       }, debounceMs);
 
       return () => clearTimeout(timer);
@@ -248,9 +250,10 @@ export function useBlockValidation(block: Block | null) {
     if (result.success) {
       return { isValid: true, errors: [] };
     } else {
+      const errors = 'errors' in result.error ? result.error.errors : [{ message: result.error.message }];
       return {
         isValid: false,
-        errors: result.error.errors || []
+        errors
       };
     }
   }, [block]);

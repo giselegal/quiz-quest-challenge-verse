@@ -183,20 +183,28 @@ export const blockSchemas = {
 
 ## 🎯 Próximos Passos Imediatos
 
-### 1. **Agora (hoje)**
-- [ ] Criar hook `useBlockForm`
-- [ ] Atualizar componente `Input` com validação
-- [ ] Testar integração com bloco existente
+### ✅ **CONCLUÍDO - FASE 1.1**
+- [x] Criar hook `useBlockForm` - ✅ Implementado com TypeScript e Zod
+- [x] Criar schemas de validação Zod - ✅ Todos os tipos de bloco cobertos
+- [x] Componente `ColorPicker` modernizado - ✅ Com Shadcn UI e presets
+- [x] Componente `ImageUploader` - ✅ Drag & drop, URL e upload
+- [x] Componente `PropertyGroup` - ✅ Cards colapsáveis organizados
+- [x] `ModernPropertyPanel` - ✅ Painel completo com React Hook Form
+
+### 1. **Próximos passos (hoje)**
+- [ ] Integrar ModernPropertyPanel no editor principal
+- [ ] Testar validação em tempo real
+- [ ] Corrigir componentes com erros de compilação
 
 ### 2. **Esta semana**
-- [ ] Implementar todos os controles do painel
 - [ ] Migrar RichTextBlock para novo sistema
-- [ ] Adicionar validação Zod
+- [ ] Implementar array editor para quiz options
+- [ ] Adicionar componente de preview responsivo
 
 ### 3. **Próxima semana**
-- [ ] Melhorar drag & drop
-- [ ] Implementar preview responsivo
-- [ ] Adicionar animações
+- [ ] Melhorar drag & drop com animações
+- [ ] Sistema de templates
+- [ ] Histórico e undo/redo
 
 ## 💡 Dicas de Implementação
 
