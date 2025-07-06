@@ -25,7 +25,9 @@ import {
   Gift,
   Target,
   Users,
-  Timer
+  Timer,
+  Settings,
+  Monitor
 } from 'lucide-react';
 
 // =====================================================================
@@ -1117,6 +1119,263 @@ export const funnelBlockDefinitions = [
       },
     ],
   },
+
+  {
+    type: 'quiz-step',
+    label: 'Etapa de Quiz Avançada',
+    icon: LayoutGrid,
+    category: 'quiz',
+    description: 'Etapa completa de quiz com todas as configurações avançadas baseadas no modelo',
+    propertiesSchema: [
+      // Header Properties (Integradas)
+      { 
+        key: 'headerEnabled', 
+        label: 'Habilitar Cabeçalho', 
+        type: 'boolean', 
+        defaultValue: true,
+        group: 'header'
+      },
+      { 
+        key: 'logoUrl', 
+        label: 'URL do Logotipo', 
+        type: 'image', 
+        defaultValue: 'https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png',
+        group: 'header'
+      },
+      { 
+        key: 'showProgressBar', 
+        label: 'Mostrar Barra de Progresso', 
+        type: 'boolean', 
+        defaultValue: true,
+        group: 'header'
+      },
+      { 
+        key: 'showBackButton', 
+        label: 'Mostrar Botão Voltar', 
+        type: 'boolean', 
+        defaultValue: true,
+        group: 'header'
+      },
+
+      // Question Properties
+      { 
+        key: 'questionText', 
+        label: 'Texto da Pergunta', 
+        type: 'text', 
+        defaultValue: '2- Qual é o seu tipo de roupa favorita?',
+        group: 'question'
+      },
+      { 
+        key: 'questionTextColor', 
+        label: 'Cor do Texto da Pergunta', 
+        type: 'color', 
+        defaultValue: '#000000',
+        group: 'question'
+      },
+      { 
+        key: 'questionTextSize', 
+        label: 'Tamanho da Fonte da Pergunta', 
+        type: 'number', 
+        defaultValue: 28,
+        group: 'question'
+      },
+      { 
+        key: 'questionTextAlign', 
+        label: 'Alinhamento do Texto da Pergunta', 
+        type: 'select', 
+        defaultValue: 'center',
+        options: [
+          { label: 'Esquerda', value: 'left' },
+          { label: 'Centro', value: 'center' },
+          { label: 'Direita', value: 'right' },
+        ],
+        group: 'question'
+      },
+
+      // Options Layout & Content
+      { 
+        key: 'layout', 
+        label: 'Layout das Opções', 
+        type: 'select', 
+        defaultValue: '2-columns',
+        options: [
+          { label: '1 Coluna', value: '1-column' },
+          { label: '2 Colunas', value: '2-columns' },
+          { label: '3 Colunas', value: '3-columns' },
+        ],
+        group: 'layout'
+      },
+      { 
+        key: 'direction', 
+        label: 'Direção das Opções', 
+        type: 'select', 
+        defaultValue: 'vertical',
+        options: [
+          { label: 'Vertical', value: 'vertical' },
+          { label: 'Horizontal', value: 'horizontal' },
+        ],
+        group: 'layout'
+      },
+      { 
+        key: 'disposition', 
+        label: 'Disposição da Opção', 
+        type: 'select', 
+        defaultValue: 'image-text',
+        options: [
+          { label: 'Imagem | Texto', value: 'image-text' },
+          { label: 'Texto | Imagem', value: 'text-image' },
+          { label: 'Somente Texto', value: 'text-only' },
+          { label: 'Somente Imagem', value: 'image-only' },
+        ],
+        group: 'layout'
+      },
+      { 
+        key: 'options', 
+        label: 'Opções de Resposta', 
+        type: 'array-of-objects', 
+        defaultValue: [],
+        itemSchema: [
+          { key: 'id', label: 'ID da Opção', type: 'text', defaultValue: '', hidden: true },
+          { key: 'text', label: 'Texto da Opção', type: 'text', defaultValue: 'Nova Opção' },
+          { key: 'imageUrl', label: 'URL da Imagem', type: 'image', defaultValue: '' },
+          { key: 'nextStepId', label: 'Ir para Etapa', type: 'text', defaultValue: '' },
+        ],
+        group: 'options'
+      },
+
+      // Validations
+      { 
+        key: 'isMultipleChoice', 
+        label: 'Múltipla Escolha', 
+        type: 'boolean', 
+        defaultValue: false,
+        description: 'O usuário poderá selecionar múltiplas opções.',
+        group: 'validation'
+      },
+      { 
+        key: 'isRequired', 
+        label: 'Obrigatório', 
+        type: 'boolean', 
+        defaultValue: true,
+        description: 'O usuário é obrigado a selecionar alguma opção.',
+        group: 'validation'
+      },
+      { 
+        key: 'autoProceed', 
+        label: 'Auto-avançar', 
+        type: 'boolean', 
+        defaultValue: false,
+        description: 'Avança para a próxima etapa automaticamente após seleção (se não for múltipla escolha).',
+        group: 'validation'
+      },
+
+      // Styling
+      { 
+        key: 'borderRadius', 
+        label: 'Bordas', 
+        type: 'select', 
+        defaultValue: 'small',
+        options: [
+          { label: 'Nenhuma', value: 'none' },
+          { label: 'Pequena', value: 'small' },
+          { label: 'Média', value: 'medium' },
+          { label: 'Grande', value: 'large' },
+        ],
+        group: 'style'
+      },
+      { 
+        key: 'boxShadow', 
+        label: 'Sombras', 
+        type: 'select', 
+        defaultValue: 'medium',
+        options: [
+          { label: 'Nenhuma', value: 'none' },
+          { label: 'Pequena', value: 'small' },
+          { label: 'Média', value: 'medium' },
+          { label: 'Grande', value: 'large' },
+        ],
+        group: 'style'
+      },
+      { 
+        key: 'spacing', 
+        label: 'Espaçamento', 
+        type: 'select', 
+        defaultValue: 'small',
+        options: [
+          { label: 'Pequeno', value: 'small' },
+          { label: 'Médio', value: 'medium' },
+          { label: 'Grande', value: 'large' },
+        ],
+        group: 'style'
+      },
+      { 
+        key: 'detail', 
+        label: 'Detalhe', 
+        type: 'select', 
+        defaultValue: 'none',
+        options: [
+          { label: 'Nenhum', value: 'none' },
+          { label: 'Linha', value: 'line' },
+          { label: 'Ponto', value: 'dot' },
+        ],
+        group: 'style'
+      },
+      { 
+        key: 'optionStyle', 
+        label: 'Estilo da Opção', 
+        type: 'select', 
+        defaultValue: 'simple',
+        options: [
+          { label: 'Simples', value: 'simple' },
+          { label: 'Card', value: 'card' },
+        ],
+        group: 'style'
+      },
+
+      // Customization (Colors)
+      { 
+        key: 'primaryColor', 
+        label: 'Cor Primária (Fundo da Opção)', 
+        type: 'color', 
+        defaultValue: '#B89B7A',
+        group: 'colors'
+      },
+      { 
+        key: 'secondaryColor', 
+        label: 'Cor Secundária (Texto da Opção)', 
+        type: 'color', 
+        defaultValue: '#ffffff',
+        group: 'colors'
+      },
+      { 
+        key: 'borderColor', 
+        label: 'Cor da Borda', 
+        type: 'color', 
+        defaultValue: '#e5e7eb',
+        group: 'colors'
+      },
+
+      // Advanced
+      { 
+        key: 'componentId', 
+        label: 'ID do Componente', 
+        type: 'text', 
+        defaultValue: '',
+        group: 'advanced'
+      },
+      { 
+        key: 'maxWidth', 
+        label: 'Tamanho Máximo do Conteúdo (%)', 
+        type: 'slider', 
+        defaultValue: 100, 
+        min: 10, 
+        max: 100,
+        group: 'advanced'
+      },
+    ],
+  },
+
+  // Fim das definições de blocos
 ];
 
 // =====================================================================
@@ -1132,7 +1391,7 @@ export const BLOCK_CATEGORIES = {
   quiz: {
     label: 'Quiz',
     description: 'Componentes específicos para quiz',
-    blocks: ['quiz-intro', 'quiz-question', 'quiz-progress']
+    blocks: ['quiz-intro', 'quiz-question', 'quiz-step', 'quiz-progress']
   },
   result: {
     label: 'Resultado',

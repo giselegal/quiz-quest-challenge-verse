@@ -405,7 +405,7 @@ export const QuizStepBlock: React.FC<QuizStepBlockProps> = ({
       </div>
 
       {/* Custom styles for option hover effects */}
-      <style jsx>{`
+      <style>{`
         .rich-text-content h1, .rich-text-content h2, .rich-text-content h3 {
           margin: 0;
           font-weight: 600;
