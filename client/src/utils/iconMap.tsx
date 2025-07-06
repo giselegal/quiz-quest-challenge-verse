@@ -57,7 +57,7 @@ export const renderLucideIcon = (
   fallback: LucideIcon = AlertCircle
 ): React.ReactElement => {
   const IconComponent = iconMap[iconName] || fallback;
-  return <IconComponent className={className} />;
+  return React.createElement(IconComponent, { className });
 };
 
 /**
