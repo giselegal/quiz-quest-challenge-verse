@@ -178,6 +178,153 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Page Configs API Routes (para suporte ao editor schema-driven)
+  app.get("/api/page-configs/:pageId", async (req, res) => {
+    try {
+      const { pageId } = req.params;
+      
+      // Mock das configurações de página para o editor schema-driven
+      if (pageId === 'funnel-quiz') {
+        const pageConfig = {
+          pageId: 'funnel-quiz',
+          title: 'Quiz Descubra Seu Estilo - 21 Etapas',
+          description: 'Funil completo com 21 etapas reais migradas',
+          layout: 'single-column',
+          backgroundColor: '#ffffff',
+          blocks: [
+            // Etapa 1: Quiz Introdução
+            {
+              id: 'etapa-1-intro',
+              type: 'quiz-intro-etapa-1',
+              order: 1,
+              settings: {
+                title: 'Chega de um guarda-roupa lotado e da sensação de que nada combina com você.',
+                subtitle: 'Em poucos minutos, descubra seu Estilo Predominante — e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.',
+                logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+                imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp'
+              }
+            },
+            // Etapas 2-11: Questões principais
+            {
+              id: 'etapa-2-questao-1',
+              type: 'quiz-questao-principal',
+              order: 2,
+              settings: {
+                question: 'Qual o seu tipo de roupa favorita?',
+                progressLabel: 'Questão 1 de 10',
+                progressValue: 10,
+                options: [
+                  {
+                    id: 'q1-a',
+                    text: 'Peças básicas e clássicas',
+                    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/1_rnqyul.webp',
+                    value: 'classico'
+                  },
+                  {
+                    id: 'q1-b',
+                    text: 'Roupas confortáveis e casuais',
+                    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/2_pu2naf.webp',
+                    value: 'casual'
+                  },
+                  {
+                    id: 'q1-c',
+                    text: 'Looks elegantes e sofisticados',
+                    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/3_ywg9mn.webp',
+                    value: 'elegante'
+                  }
+                ]
+              }
+            },
+            // Etapa 12: Transição Principal
+            {
+              id: 'etapa-12-transicao',
+              type: 'quiz-transicao-principal',
+              order: 12,
+              settings: {
+                title: 'Ótimo! Agora vamos conhecer você melhor',
+                message: 'As próximas perguntas vão nos ajudar a personalizar ainda mais seu resultado.',
+                progressValue: 60
+              }
+            },
+            // Etapas 13-18: Questões estratégicas
+            {
+              id: 'etapa-13-estrategica-1',
+              type: 'quiz-questao-estrategica',
+              order: 13,
+              settings: {
+                question: 'Qual é sua faixa etária?',
+                progressLabel: 'Questão estratégica 1 de 6',
+                progressValue: 65,
+                options: [
+                  { id: 'age-1', text: '18-25 anos', value: '18-25' },
+                  { id: 'age-2', text: '26-35 anos', value: '26-35' },
+                  { id: 'age-3', text: '36-45 anos', value: '36-45' },
+                  { id: 'age-4', text: '46+ anos', value: '46+' }
+                ]
+              }
+            },
+            // Etapa 19: Transição Final
+            {
+              id: 'etapa-19-transicao-final',
+              type: 'quiz-transicao-final',
+              order: 19,
+              settings: {
+                title: 'Preparando seu resultado personalizado...',
+                message: 'Estamos analisando suas respostas e criando um guia exclusivo para você.',
+                progressValue: 95
+              }
+            },
+            // Etapa 20: Resultado Completo
+            {
+              id: 'etapa-20-resultado',
+              type: 'quiz-resultado-completo',
+              order: 20,
+              settings: {
+                userName: 'Seu Nome',
+                styleName: 'Estilo Elegante',
+                styleImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp',
+                compatibility: 92
+              }
+            },
+            // Etapa 21: Oferta Especial
+            {
+              id: 'etapa-21-oferta',
+              type: 'quiz-oferta-especial',
+              order: 21,
+              settings: {
+                title: 'Descubra Seu Estilo Predominante',
+                subtitle: 'Tenha finalmente um guarda-roupa que funciona 100%',
+                imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp',
+                pricing: {
+                  installments: 'R$ 8,83',
+                  fullPrice: 'R$ 39,90',
+                  savings: '77% OFF - Economia de R$ 135,10'
+                }
+              }
+            }
+          ]
+        };
+        
+        res.json({ success: true, data: pageConfig });
+      } else {
+        res.status(404).json({ success: false, error: "Page config not found" });
+      }
+    } catch (error) {
+      console.error("Error fetching page config:", error);
+      res.status(500).json({ success: false, error: "Failed to fetch page config" });
+    }
+  });
+
+  app.put("/api/page-configs/:pageId", async (req, res) => {
+    try {
+      // Mock de atualização para desenvolvimento
+      res.json({ success: true, message: "Page config updated successfully" });
+    } catch (error) {
+      console.error("Error updating page config:", error);
+      res.status(500).json({ success: false, error: "Failed to update page config" });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;
