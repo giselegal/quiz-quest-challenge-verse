@@ -2,9 +2,11 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 // import { SchemaDrivenComponentsSidebar } from './sidebar/SchemaDrivenComponentsSidebar'; // Removido: não deve ser importado aqui
 import { SimpleSidebar } from './sidebar/SimpleSidebar'; // Mantenha se ainda usar
 import { DynamicPropertiesPanel } from '../panels/DynamicPropertiesPanel';
-import { BlockRenderer, BlockData } from './blocks/BlockRenderer'; // Importe BlockRenderer
+import { BlockRenderer } from '@/components/editor/blocks';
+import type { BlockData } from '@/components/editor/blocks';
 import { SyncStatus } from '../status/SyncStatus';
-import { VersionManager } from './version/VersionManager';
+import { VersionManager } from '../version/VersionManager';
+import { SchemaDrivenComponentsSidebar } from '../sidebar/SchemaDrivenComponentsSidebar';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -315,13 +317,6 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
               funnelPages={funnel.pages}
               currentPageId={currentPageId ?? undefined}
               setCurrentPage={setCurrentPage}
-              blockDefinitions={blockDefinitions} // Passa blockDefinitions
-              onAddPage={addPage} // Passa a função addPage
-              onDeletePage={deletePage} // Passa a função deletePage
-              onUpdatePage={updatePage} // Passa a função updatePage
-              onReorderBlocks={reorderBlocks} // Passa a função reorderBlocks
-              onSelectBlock={setSelectedBlock} // Passa a função setSelectedBlock
-              selectedBlockId={selectedBlockId} // Passa o selectedBlockId
             />
           </div>
         </ResizablePanel>
