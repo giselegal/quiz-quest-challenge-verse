@@ -414,7 +414,7 @@ class SchemaDrivenFunnelService {
       theme: 'caktoquiz',
       isPublished: false,
       pages: [
-        // ETAPA 1: Introdução com coleta de nome
+        // ETAPA 1: Introdução (componente real)
         {
           id: 'etapa-1-intro',
           name: 'Introdução',
@@ -423,52 +423,16 @@ class SchemaDrivenFunnelService {
           order: 1,
           blocks: [
             {
-              id: 'quiz-intro-header',
-              type: 'HeaderBlock',
+              id: 'quiz-intro-etapa-1',
+              type: 'quiz-intro-etapa-1',
               properties: {
+                // Todos os campos editáveis inline
                 title: '<span style="color: #B89B7A">Chega</span> de um guarda-roupa lotado e da sensação de que nada combina com você.',
                 subtitle: 'Em poucos minutos, descubra seu Estilo Predominante — e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.',
-                alignment: 'center',
-                titleSize: 'large'
-              }
-            },
-            {
-              id: 'quiz-intro-logo',
-              type: 'ImageBlock',
-              properties: {
-                src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
-                alt: 'Logo Gisele Galvão',
-                width: '200px',
-                alignment: 'center'
-              }
-            },
-            {
-              id: 'quiz-intro-image',
-              type: 'ImageBlock',
-              properties: {
-                src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp',
-                alt: 'Descubra seu estilo predominante e transforme seu guarda-roupa',
-                width: '100%',
-                alignment: 'center'
-              }
-            },
-            {
-              id: 'quiz-intro-input',
-              type: 'TextBlock',
-              properties: {
-                content: 'Digite seu nome para começar:',
-                alignment: 'center',
-                fontSize: 'large'
-              }
-            },
-            {
-              id: 'quiz-intro-button',
-              type: 'ButtonBlock',
-              properties: {
-                text: 'Quero Descobrir meu Estilo Agora!',
-                size: 'lg',
-                fullWidth: true,
-                style: 'primary'
+                logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+                imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp',
+                inputPlaceholder: 'Digite seu nome aqui...',
+                buttonText: 'Quero Descobrir meu Estilo Agora!'
               }
             }
           ],
@@ -481,7 +445,7 @@ class SchemaDrivenFunnelService {
           }
         },
 
-        // ETAPAS 2-11: 10 questões principais com dados reais
+        // ETAPAS 2-11: Questões principais (componente real)
         ...REAL_QUIZ_QUESTIONS.map((questionData, i) => ({
           id: `etapa-${i + 2}-questao-${i + 1}`,
           name: `Questão ${i + 1}`,
@@ -490,17 +454,8 @@ class SchemaDrivenFunnelService {
           order: i + 2,
           blocks: [
             {
-              id: `progress-q${i + 1}`,
-              type: 'ProgressBlock',
-              properties: {
-                value: 5 + (i + 1) * 5,
-                label: `Questão ${i + 1} de 10`,
-                showPercentage: true
-              }
-            },
-            {
-              id: `question-${i + 1}`,
-              type: 'QuestionBlock',
+              id: `quiz-questao-principal-${i + 1}`,
+              type: 'quiz-questao-principal',
               properties: {
                 question: questionData.question,
                 options: questionData.options.map(opt => ({
@@ -509,7 +464,8 @@ class SchemaDrivenFunnelService {
                   value: opt.value,
                   imageUrl: (opt as any).imageUrl || undefined
                 })),
-                required: true,
+                progressLabel: `Questão ${i + 1} de 10`,
+                progressValue: 5 + (i + 1) * 5,
                 multipleSelection: questionData.multipleSelection || false,
                 maxSelections: questionData.maxSelections || 1
               }
@@ -524,7 +480,7 @@ class SchemaDrivenFunnelService {
           }
         })),
 
-        // ETAPA 12: Transição principal
+        // ETAPA 12: Transição principal (componente real)
         {
           id: 'etapa-12-transicao-1',
           name: 'Transição Principal',
@@ -533,22 +489,12 @@ class SchemaDrivenFunnelService {
           order: 12,
           blocks: [
             {
-              id: 'main-transition-header',
-              type: 'HeaderBlock',
+              id: 'quiz-transicao-principal',
+              type: 'quiz-transicao-principal',
               properties: {
                 title: TRANSITIONS.mainTransition.title,
-                subtitle: TRANSITIONS.mainTransition.message,
-                alignment: 'center',
-                titleSize: 'large'
-              }
-            },
-            {
-              id: 'main-transition-description',
-              type: 'TextBlock',
-              properties: {
-                content: TRANSITIONS.mainTransition.submessage,
-                fontSize: 'medium',
-                alignment: 'center'
+                message: TRANSITIONS.mainTransition.message,
+                progressValue: 60
               }
             }
           ],
@@ -561,7 +507,7 @@ class SchemaDrivenFunnelService {
           }
         },
 
-        // ETAPAS 13-18: 6 questões estratégicas
+        // ETAPAS 13-18: Questões estratégicas (componente real)
         ...STRATEGIC_QUESTIONS.map((questionData, i) => ({
           id: `etapa-${i + 13}-estrategica-${i + 1}`,
           name: `Questão Estratégica ${i + 1}`,
@@ -570,17 +516,8 @@ class SchemaDrivenFunnelService {
           order: i + 13,
           blocks: [
             {
-              id: `progress-strategic-${i + 1}`,
-              type: 'ProgressBlock',
-              properties: {
-                value: 65 + (i + 1) * 5,
-                label: `Questão estratégica ${i + 1} de 6`,
-                showPercentage: true
-              }
-            },
-            {
-              id: `strategic-question-${i + 1}`,
-              type: 'QuestionBlock',
+              id: `quiz-questao-estrategica-${i + 1}`,
+              type: 'quiz-questao-estrategica',
               properties: {
                 question: questionData.question,
                 options: questionData.options.map(opt => ({
@@ -588,9 +525,8 @@ class SchemaDrivenFunnelService {
                   text: opt.text,
                   value: opt.value
                 })),
-                required: true,
-                multipleSelection: false,
-                maxSelections: 1
+                progressLabel: `Questão estratégica ${i + 1} de 6`,
+                progressValue: 65 + (i + 1) * 5
               }
             }
           ],
@@ -603,7 +539,7 @@ class SchemaDrivenFunnelService {
           }
         })),
 
-        // ETAPA 19: Transição final
+        // ETAPA 19: Transição final (componente real)
         {
           id: 'etapa-19-transicao-final',
           name: 'Transição Final',
@@ -612,22 +548,12 @@ class SchemaDrivenFunnelService {
           order: 19,
           blocks: [
             {
-              id: 'final-transition-header',
-              type: 'HeaderBlock',
+              id: 'quiz-transicao-final',
+              type: 'quiz-transicao-final',
               properties: {
                 title: TRANSITIONS.finalTransition.title,
-                subtitle: TRANSITIONS.finalTransition.message,
-                alignment: 'center',
-                titleSize: 'large'
-              }
-            },
-            {
-              id: 'final-transition-loading',
-              type: 'TextBlock',
-              properties: {
-                content: '⏳ Analisando suas respostas...',
-                fontSize: 'medium',
-                alignment: 'center'
+                message: TRANSITIONS.finalTransition.message,
+                progressValue: 95
               }
             }
           ],

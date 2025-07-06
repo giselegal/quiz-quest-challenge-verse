@@ -370,12 +370,14 @@ export const useSchemaEditor = (initialFunnelId?: string): UseSchemaEditorReturn
     if (initialFunnelId) {
       loadFunnel(initialFunnelId);
     } else {
-      // Tentar carregar funil local
-      const localFunnel = schemaDrivenFunnelService.getLocalFunnel();
-      if (localFunnel) {
-        setFunnel(localFunnel);
-        setCurrentPageId(localFunnel.pages[0]?.id || null);
-      }
+      // SEMPRE criar o funil com as 21 etapas reais para garantir que apareça no editor
+      const defaultFunnel = schemaDrivenFunnelService.createDefaultFunnel();
+      setFunnel(defaultFunnel);
+      setCurrentPageId(defaultFunnel.pages[0]?.id || null);
+      // Salvar localmente para próximas sessões
+      schemaDrivenFunnelService.saveLocalFunnel(defaultFunnel);
+      
+      console.log('🎯 Funil carregado com', defaultFunnel.pages.length, 'etapas:', defaultFunnel.pages.map(p => p.name));
     }
   }, [initialFunnelId, loadFunnel]);
 
