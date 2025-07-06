@@ -1,15 +1,15 @@
 import React from 'react';
-import { HeaderBlock } from './HeaderBlock';
-import { TextBlock } from './TextBlock';
+import HeaderBlock from './HeaderBlock';
+import TextBlock from './TextBlock';
 import { ImageBlock } from './ImageBlock';
-import { ButtonBlock } from './ButtonBlock';
+import ButtonBlock from './ButtonBlock';
 import { SpacerBlock } from './SpacerBlock';
-import { ResultHeaderBlock } from './ResultHeaderBlock';
-import { ResultDescriptionBlock } from './ResultDescriptionBlock';
-import { ProductOfferBlock } from './ProductOfferBlock';
-import { UrgencyTimerBlock } from './UrgencyTimerBlock';
-import { FAQSectionBlock } from './FAQSectionBlock';
-import { TestimonialsBlock } from './TestimonialsBlock';
+import ResultHeaderBlock from './ResultHeaderBlock';
+import ResultDescriptionBlock from './ResultDescriptionBlock';
+import ProductOfferBlock from './ProductOfferBlock';
+import UrgencyTimerBlock from './UrgencyTimerBlock';
+import FAQSectionBlock from './FAQSectionBlock';
+import TestimonialsBlock from './TestimonialsBlock';
 import { GuaranteeBlock } from './GuaranteeBlock';
 import { VideoPlayerBlock } from './VideoPlayerBlock';
 import QuizIntroBlock from '@/components/blocks/quiz/QuizIntroBlock';
@@ -38,6 +38,9 @@ import TermsBlock from './TermsBlock';
 // Blocos especiais das etapas 20 e 21
 import ResultPageBlock from './ResultPageBlock';
 import QuizOfferPageBlock from './QuizOfferPageBlock';
+
+// Bloco da etapa 1 do funil real
+import QuizStartPageBlock from './QuizStartPageBlock';
 
 export interface BlockData {
   id: string;
@@ -220,7 +223,10 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
     case 'terms':
       return <TermsBlock {...commonProps} />;
     
-    // BLOCOS ESPECIAIS DAS ETAPAS 20 E 21
+    // BLOCOS ESPECIAIS DAS ETAPAS DO FUNIL
+    
+    case 'quiz-start-page':
+      return <QuizStartPageBlock {...commonProps} />;
     
     case 'result-page':
       return <ResultPageBlock {...commonProps} />;

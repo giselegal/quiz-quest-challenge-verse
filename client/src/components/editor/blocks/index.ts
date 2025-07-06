@@ -1,14 +1,14 @@
-export { HeaderBlock } from './HeaderBlock';
-export { TextBlock } from './TextBlock';
+export { default as HeaderBlock } from './HeaderBlock';
+export { default as TextBlock } from './TextBlock';
 export { ImageBlock } from './ImageBlock';
-export { ButtonBlock } from './ButtonBlock';
+export { default as ButtonBlock } from './ButtonBlock';
 export { SpacerBlock } from './SpacerBlock';
-export { ResultHeaderBlock } from './ResultHeaderBlock';
-export { ResultDescriptionBlock } from './ResultDescriptionBlock';
-export { ProductOfferBlock } from './ProductOfferBlock';
-export { UrgencyTimerBlock } from './UrgencyTimerBlock';
-export { FAQSectionBlock } from './FAQSectionBlock';
-export { TestimonialsBlock } from './TestimonialsBlock';
+export { default as ResultHeaderBlock } from './ResultHeaderBlock';
+export { default as ResultDescriptionBlock } from './ResultDescriptionBlock';
+export { default as ProductOfferBlock } from './ProductOfferBlock';
+export { default as UrgencyTimerBlock } from './UrgencyTimerBlock';
+export { default as FAQSectionBlock } from './FAQSectionBlock';
+export { default as TestimonialsBlock } from './TestimonialsBlock';
 export { GuaranteeBlock } from './GuaranteeBlock';
 export { VideoPlayerBlock } from './VideoPlayerBlock';
 export { InlineEditableText } from './InlineEditableText';
@@ -32,7 +32,8 @@ export { default as OptionsGridBlock } from './OptionsGridBlock';
 export { default as ScriptBlock } from './ScriptBlock';
 export { default as TermsBlock } from './TermsBlock';
 
-// Blocos especiais das etapas 20 e 21
+// Blocos especiais das etapas do funil
+export { default as QuizStartPageBlock } from './QuizStartPageBlock';
 export { default as ResultPageBlock } from './ResultPageBlock';
 export { default as QuizOfferPageBlock } from './QuizOfferPageBlock';
 

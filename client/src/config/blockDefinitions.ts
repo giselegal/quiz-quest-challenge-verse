@@ -2157,6 +2157,41 @@ export const blockDefinitions: BlockDefinition[] = [
     ],
   },
 
+  // ETAPA 1 DO FUNIL - Página inicial do quiz real
+  {
+    id: 'quiz-start-page',
+    type: 'quiz-start-page',
+    name: 'Quiz Início (Etapa 1)',
+    description: 'Página inicial real do funil de quiz com todos os elementos visuais',
+    icon: 'Play',
+    category: 'Quiz',
+    isNew: true,
+    propertiesSchema: [
+      // Logo e branding
+      { key: 'logoUrl', label: 'URL da Logo', type: 'image-url', placeholder: 'https://...', defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp' },
+      { key: 'logoAlt', label: 'Alt da Logo', type: 'text-input', placeholder: 'Descrição da logo', defaultValue: 'Gisele Galvão - Logo da Marca' },
+      
+      // Conteúdo principal
+      { key: 'mainTitle', label: 'Título Principal', type: 'textarea', placeholder: 'Título impactante...', rows: 3, defaultValue: 'Chega de um guarda-roupa lotado e da sensação de que nada combina com você.' },
+      { key: 'subtitle', label: 'Subtítulo', type: 'textarea', placeholder: 'Subtítulo explicativo...', rows: 2, defaultValue: 'Descubra seu Estilo e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.' },
+      
+      // CTA
+      { key: 'ctaText', label: 'Texto do CTA', type: 'text-input', placeholder: 'Descobrir Meu Estilo', defaultValue: 'Descobrir Meu Estilo' },
+      { key: 'ctaSubtext', label: 'Subtexto do CTA', type: 'text-input', placeholder: '5x R$ 8,83', defaultValue: '5x R$ 8,83' },
+      
+      // Imagem hero
+      { key: 'heroImage', label: 'Imagem Hero', type: 'image-url', placeholder: 'https://...', defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.jpg' },
+      { key: 'heroImageAlt', label: 'Alt da Imagem Hero', type: 'text-input', placeholder: 'Descrição da imagem', defaultValue: 'Mulher descobrindo seu estilo autêntico' },
+      
+      // Cores e styling
+      { key: 'backgroundColor', label: 'Cor de Fundo', type: 'color-picker', defaultValue: '#FAF9F7' },
+      { key: 'primaryColor', label: 'Cor Primária', type: 'color-picker', defaultValue: '#B89B7A' },
+      { key: 'hoverColor', label: 'Cor de Hover', type: 'color-picker', defaultValue: '#A68A6A' },
+      { key: 'textDark', label: 'Texto Escuro', type: 'color-picker', defaultValue: '#432818' },
+      { key: 'textMedium', label: 'Texto Médio', type: 'color-picker', defaultValue: '#8F7A6A' },
+    ],
+  },
+
   // ...existing code...
 ];
 
