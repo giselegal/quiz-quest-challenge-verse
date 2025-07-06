@@ -130,6 +130,21 @@ const App = () => {
                   path="/editor-fixed"
                   component={EditorFixedPage}
                 />
+                {/* Schema-Driven Editor V2 - nova rota principal */}
+                <Route
+                  path="/editor"
+                  component={lazy(() => import("./pages/SchemaDrivenEditorPage"))}
+                />
+                {/* Schema-Driven Editor - rota específica */}
+                <Route
+                  path="/schema-editor"
+                  component={lazy(() => import("./pages/SchemaDrivenEditorPage"))}
+                />
+                {/* Schema-Driven Editor dinâmico - edição de funis específicos */}
+                <Route
+                  path="/editor/:id"
+                  component={lazy(() => import("./pages/SchemaDrivenEditorPage"))}
+                />
                 {/* CaktoQuiz Advanced Editor - editor mais completo similar ao CaktoQuiz */}
                 <Route
                   path="/advanced-editor"
