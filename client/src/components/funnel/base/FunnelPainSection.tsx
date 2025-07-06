@@ -3,9 +3,10 @@ import { cn } from '@/lib/utils';
 import { Card, CardContent } from '@/components/ui/card';
 import { InlineEditText } from '@/components/editor/blocks/InlineEditText';
 import { LucideIcon } from 'lucide-react';
+import { getLucideIcon } from '@/utils/iconMap';
 
 export interface PainPoint {
-  icon: LucideIcon;
+  icon: LucideIcon | string; // Suporte para ícone como componente ou string
   title: string;
   description: string;
 }
@@ -171,10 +172,19 @@ const FunnelPainSection: React.FC<FunnelPainSectionProps> = ({
               style={{ borderColor: cardBorderColor }}
             >
               <CardContent className="p-6 text-center flex flex-col items-center">
-                <point.icon 
-                  className="w-8 h-8 mb-4" 
-                  style={{ color: primaryColor }}
-                />
+                {typeof point.icon === 'string' ? (
+                  // Renderiza o ícone usando o sistema de iconMap
+                  React.createElement(getLucideIcon(point.icon), {
+                    className: 'w-8 h-8 mb-4',
+                    style: { color: primaryColor }
+                  })
+                ) : (
+                  // Suporte para ícone como componente
+                  <point.icon 
+                    className="w-8 h-8 mb-4" 
+                    style={{ color: primaryColor }}
+                  />
+                )}
                 
                 {isEditable ? (
                   <div className="space-y-2 w-full">
