@@ -46,7 +46,7 @@ const DynamicBlockRenderer: React.FC<DynamicBlockRendererProps> = ({
   const renderComponent = () => {
     switch (componentType) {
       // COMPONENTES REAIS - RESULTPAGE
-      case 'Header':
+      case 'header-component-real':
         return (
           <Header 
             primaryStyle={props.primaryStyle}
@@ -57,7 +57,7 @@ const DynamicBlockRenderer: React.FC<DynamicBlockRendererProps> = ({
           />
         );
 
-      case 'Card':
+      case 'card-component-real':
         return (
           <Card className={props.className}>
             {rawBlock?.settings?.children?.map((child: any, index: number) => (
@@ -84,32 +84,32 @@ const DynamicBlockRenderer: React.FC<DynamicBlockRendererProps> = ({
           </Card>
         );
 
-      case 'SecondaryStylesSection':
+      case 'secondary-styles-component-real':
         return <SecondaryStylesSection secondaryStyles={props.secondaryStyles || []} />;
 
-      case 'BeforeAfterTransformation':
+      case 'before-after-component-real':
         return <BeforeAfterTransformation />;
 
-      case 'MotivationSection':
+      case 'motivation-component-real':
         return <MotivationSection />;
 
-      case 'BonusSection':
+      case 'bonus-component-real':
         return <BonusSection />;
 
-      case 'Testimonials':
+      case 'testimonials-component-real':
         return <Testimonials />;
 
-      case 'GuaranteeSection':
+      case 'guarantee-component-real':
         return <GuaranteeSection />;
 
-      case 'MentorSection':
+      case 'mentor-component-real':
         return <MentorSection />;
 
-      case 'SecurePurchaseElement':
+      case 'secure-purchase-component-real':
         return <SecurePurchaseElement />;
 
       // COMPONENTES REAIS - QUIZOFFERPAGE
-      case 'FixedIntroImage':
+      case 'fixed-intro-image-component-real':
         return (
           <FixedIntroImage
             src={props.src}
@@ -120,7 +120,7 @@ const DynamicBlockRenderer: React.FC<DynamicBlockRendererProps> = ({
           />
         );
 
-      case 'Button':
+      case 'button-component-real':
         return (
           <Button
             className={props.className}
@@ -132,7 +132,7 @@ const DynamicBlockRenderer: React.FC<DynamicBlockRendererProps> = ({
         );
 
       // COMPONENTES CUSTOMIZADOS BASEADOS NOS TIPOS REAIS
-      case 'CountdownTimer':
+      case 'countdown-timer-component-real':
         return (
           <div className="flex flex-col items-center py-6">
             <p className="text-[#432818] font-semibold mb-2 flex items-center">
@@ -149,7 +149,7 @@ const DynamicBlockRenderer: React.FC<DynamicBlockRendererProps> = ({
           </div>
         );
 
-      case 'PricingSection':
+      case 'pricing-section-component-real':
         return (
           <div className={props.className || "bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-8 text-white text-center"}>
             <p className="text-sm opacity-90 mb-2">{props.title || 'Oferta por tempo limitado'}</p>
@@ -162,7 +162,7 @@ const DynamicBlockRenderer: React.FC<DynamicBlockRendererProps> = ({
           </div>
         );
 
-      case 'SectionTitle':
+      case 'section-title-component-real':
         return (
           <div className="py-6 text-center">
             <div className="inline-flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full border border-green-200 mb-6">
@@ -178,7 +178,7 @@ const DynamicBlockRenderer: React.FC<DynamicBlockRendererProps> = ({
           </div>
         );
 
-      case 'FaqSectionNew':
+      case 'faq-section-component-real':
         return (
           <div className="py-6">
             <h2 className="text-2xl font-bold text-[#432818] text-center mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>

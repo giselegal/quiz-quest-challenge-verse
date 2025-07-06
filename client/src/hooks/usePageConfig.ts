@@ -197,7 +197,7 @@ export const useDynamicComponent = (pageId: string, blockId: string) => {
   const { block, props, isConfigured } = useBlockConfig(pageId, blockId);
   
   return {
-    componentType: block?.componentType || 'div',
+    componentType: block?.type || 'div',
     props: {
       ...props,
       // Props adicionais baseadas no tipo
