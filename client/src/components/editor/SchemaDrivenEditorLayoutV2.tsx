@@ -303,15 +303,17 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
       <ResizablePanelGroup direction="horizontal" className="flex-1">
         {/* Left Sidebar */}
         <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-          <div className="h-full border-r border-gray-200 bg-white">
-            <SchemaDrivenComponentsSidebar 
-              onComponentSelect={handleComponentSelect}
-              activeTab={activeTab}
-              onTabChange={setActiveTab}
-              funnelPages={funnel.pages}
-              currentPageId={currentPageId ?? undefined}
-              setCurrentPage={setCurrentPage}
-            />
+          <div className="h-full border-r border-gray-200 bg-white flex flex-col">
+            <div className="flex-1 overflow-hidden">
+              <SchemaDrivenComponentsSidebar 
+                onComponentSelect={handleComponentSelect}
+                activeTab={activeTab}
+                onTabChange={setActiveTab}
+                funnelPages={funnel.pages}
+                currentPageId={currentPageId ?? undefined}
+                setCurrentPage={setCurrentPage}
+              />
+            </div>
           </div>
         </ResizablePanel>
         

@@ -2,29 +2,51 @@ import React from 'react';
 import { InlineEditableText } from './InlineEditableText';
 
 interface ImageBlockProps {
-  properties: {
+  block?: {
+    id: string;
+    type: string;
+    properties: {
+      src?: string;
+      alt?: string;
+      width?: string | number;
+      height?: string | number;
+      className?: string;
+      alignment?: 'left' | 'center' | 'right';
+    };
+  };
+  properties?: {
     src?: string;
     alt?: string;
-    width?: string;
+    width?: string | number;
+    height?: string | number;
+    className?: string;
     alignment?: 'left' | 'center' | 'right';
   };
   isSelected?: boolean;
   onClick?: () => void;
-  onSaveInline?: (key: string) => (newValue: string) => void;
+  onSaveInline?: (blockId: string, key: string, newValue: string) => void;
+  disabled?: boolean;
 }
 
 export const ImageBlock: React.FC<ImageBlockProps> = ({ 
-  properties, 
+  block,
+  properties = {}, 
   isSelected = false,
   onClick,
-  onSaveInline
+  onSaveInline,
+  disabled = false
 }) => {
+  // Use block.properties first, then fallback to properties
+  const blockProps = block?.properties || properties;
+  
   const { 
     src = 'https://via.placeholder.com/600x400?text=Imagem', 
     alt = 'Imagem', 
     width = 'auto',
+    height = 'auto',
+    className = '',
     alignment = 'center' 
-  } = properties;
+  } = blockProps;
 
   const alignmentClasses = {
     left: 'flex justify-start',
@@ -58,7 +80,7 @@ export const ImageBlock: React.FC<ImageBlockProps> = ({
           <InlineEditableText
             tag="p"
             value={alt}
-            onSave={(newValue) => onSaveInline?.(block.id, 'alt', newValue)}
+            onSave={(newValue) => onSaveInline?.(block?.id || 'unknown', 'alt', newValue)}
             className="text-sm text-gray-600 italic"
             placeholder="Descrição da imagem (alt text)"
           />

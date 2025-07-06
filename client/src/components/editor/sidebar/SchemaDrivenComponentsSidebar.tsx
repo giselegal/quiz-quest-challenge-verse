@@ -105,8 +105,9 @@ export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSideb
         </TabsContent>
         
         <TabsContent value="blocks" className="flex-1 overflow-hidden">
-          <ScrollArea className="h-full">
-            <div className="p-4 space-y-4">
+          <div className="h-full flex flex-col">
+            <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+              <div className="p-4 space-y-4">
               {categories.map(category => {
                 const categoryBlocks = getBlocksByCategory(category);
                 
@@ -156,8 +157,9 @@ export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSideb
                   </div>
                 );
               })}
+              </div>
             </div>
-          </ScrollArea>
+          </div>
         </TabsContent>
       </Tabs>
     </div>

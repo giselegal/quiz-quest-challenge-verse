@@ -60,23 +60,66 @@ export class QuizDataAdapter {
       type: 'intro',
       order: 1,
       blocks: [
+        // 1. Header com Logo + Progress Bar (agrupado conforme HTML)
         {
-          id: 'intro-block-1',
-          type: 'QuizStartPageBlock',
+          id: 'intro-header',
+          type: 'quiz-intro-header',
           properties: {
-            title: 'Chega de um guarda-roupa lotado e da sensação de que nada combina com você.',
-            subtitle: 'Em poucos minutos, descubra seu Estilo Predominante — e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.',
-            logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
-            imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp',
-            inputPlaceholder: 'Digite seu nome aqui...',
-            buttonText: 'Quero Descobrir meu Estilo Agora!',
-            showNameInput: true,
-            showBenefits: true,
-            benefits: [
-              'Descubra seu estilo único',
-              'Tenha mais confiança ao se vestir',
-              'Economize tempo na escolha de looks'
-            ]
+            logoUrl: 'https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png',
+            logoAlt: 'Logo',
+            progressValue: 7.14,
+            progressMax: 100,
+            showBackButton: true,
+            logoWidth: 96,
+            logoHeight: 96
+          }
+        },
+        // 2. Título Principal (componente independente)
+        {
+          id: 'intro-title',
+          type: 'quiz-title',
+          properties: {
+            title: 'Teste de Estilo Pessoal',
+            fontSize: '3xl',
+            fontWeight: 'bold',
+            textAlign: 'center',
+            color: 'text-foreground'
+          }
+        },
+        // 3. Imagem (componente independente)
+        {
+          id: 'intro-image',
+          type: 'image',
+          properties: {
+            src: 'https://cakto-quiz-br01.b-cdn.net/uploads/ecbe689b-1c0a-4071-98d3-4d391b6dd98f.png',
+            alt: 'Imagem',
+            width: 640,
+            height: 480,
+            className: 'object-cover w-full h-auto rounded-lg max-w-96'
+          }
+        },
+        // 4. Campo de Nome (componente independente)
+        {
+          id: 'intro-name-input',
+          type: 'quiz-name-input',
+          properties: {
+            label: 'NOME',
+            placeholder: 'Digite seu nome aqui...',
+            required: true,
+            inputType: 'text',
+            value: '',
+            helperText: ''
+          }
+        },
+        // 5. Botão (componente independente)
+        {
+          id: 'intro-button',
+          type: 'button',
+          properties: {
+            text: 'Continuar',
+            variant: 'primary',
+            size: 'lg',
+            fullWidth: true
           }
         }
       ],
