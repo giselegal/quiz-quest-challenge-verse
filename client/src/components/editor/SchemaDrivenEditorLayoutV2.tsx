@@ -32,7 +32,8 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
   funnelId,
   className = ''
 }) => {
-  const [activeTab, setActiveTab] = useState('blocks');
+  // Troca o valor inicial da aba para 'pages' para forçar a visualização das etapas
+  const [activeTab, setActiveTab] = useState('pages');
   const [deviceView, setDeviceView] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
