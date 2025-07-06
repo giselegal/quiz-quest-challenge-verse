@@ -133,4 +133,3 @@ export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSideb
     </div>
   );
 };
-};
