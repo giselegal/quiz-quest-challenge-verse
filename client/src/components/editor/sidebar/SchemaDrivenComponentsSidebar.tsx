@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { blockDefinitions, getCategories, getBlocksByCategory } from '@/config/blockDefinitions';
-import { Type, Image, ArrowRight, CheckCircle, Target, Play, Star, FileText, ShoppingCart, Clock, MessageSquare, HelpCircle, Shield, Video } from 'lucide-react';
+import { Type, Image, ArrowRight, CheckCircle, Target, Play, Star, FileText, ShoppingCart, Clock, MessageSquare, HelpCircle, Shield, Video, AlertTriangle, Zap, Volume2, RotateCcw, Loader, BarChart3, Quote, FormInput, List, TrendingUp, Grid, FileCode, BookOpen, Palette, Sparkles, Gift } from 'lucide-react';
 
 interface SchemaDrivenComponentsSidebarProps {
   onComponentSelect: (type: string) => void;
@@ -27,7 +27,23 @@ const iconMap: { [key: string]: React.ReactNode } = {
   'MessageSquare': <MessageSquare className="w-4 h-4" />,
   'HelpCircle': <HelpCircle className="w-4 h-4" />,
   'Shield': <Shield className="w-4 h-4" />,
-  'Video': <Video className="w-4 h-4" />
+  'Video': <Video className="w-4 h-4" />,
+  'AlertTriangle': <AlertTriangle className="w-4 h-4" />,
+  'Zap': <Zap className="w-4 h-4" />,
+  'Volume2': <Volume2 className="w-4 h-4" />,
+  'RotateCcw': <RotateCcw className="w-4 h-4" />,
+  'Loader': <Loader className="w-4 h-4" />,
+  'BarChart3': <BarChart3 className="w-4 h-4" />,
+  'Quote': <Quote className="w-4 h-4" />,
+  'FormInput': <FormInput className="w-4 h-4" />,
+  'List': <List className="w-4 h-4" />,
+  'TrendingUp': <TrendingUp className="w-4 h-4" />,
+  'Grid': <Grid className="w-4 h-4" />,
+  'FileCode': <FileCode className="w-4 h-4" />,
+  'BookOpen': <BookOpen className="w-4 h-4" />,
+  'Palette': <Palette className="w-4 h-4" />,
+  'Sparkles': <Sparkles className="w-4 h-4" />,
+  'Gift': <Gift className="w-4 h-4" />
 };
 
 export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSidebarProps> = ({ 
