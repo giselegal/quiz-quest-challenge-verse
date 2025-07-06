@@ -1,262 +1,439 @@
-import React from 'react';
-import HeaderBlock from './HeaderBlock';
-import TextBlock from './TextBlock';
-import { ImageBlock } from './ImageBlock';
-import ButtonBlock from './ButtonBlock';
-import { SpacerBlock } from './SpacerBlock';
-import ResultHeaderBlock from './ResultHeaderBlock';
-import ResultDescriptionBlock from './ResultDescriptionBlock';
-import ProductOfferBlock from './ProductOfferBlock';
-import UrgencyTimerBlock from './UrgencyTimerBlock';
-import FAQSectionBlock from './FAQSectionBlock';
-import TestimonialsBlock from './TestimonialsBlock';
-import { GuaranteeBlock } from './GuaranteeBlock';
-import { VideoPlayerBlock } from './VideoPlayerBlock';
-import QuizIntroBlock from '@/components/blocks/quiz/QuizIntroBlock';
-import QuizQuestionBlock from './QuizQuestionBlock';
-import StrategicQuestionBlock from './StrategicQuestionBlock';
-import QuizTransitionBlock from './QuizTransitionBlock';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { SchemaDrivenComponentsSidebar } from './sidebar/SchemaDrivenComponentsSidebar';
+import { SimpleSidebar } from './sidebar/SimpleSidebar'; // Mantenha se ainda usar
+import { DynamicPropertiesPanel } from './panels/DynamicPropertiesPanel';
+import { BlockRenderer, BlockData } from './blocks/BlockRenderer'; // Importe BlockRenderer
+import { SyncStatus } from './status/SyncStatus';
+import { VersionManager } from './version/VersionManager';
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { useSchemaEditor } from '@/hooks/useSchemaEditor';
+import { blockDefinitions } from '@/config/blockDefinitions'; // Importe blockDefinitions para uso no hook e sidebar
+import { 
+  Save, 
+  Eye, 
+  Settings, 
+  Plus,
+  Monitor,
+  Tablet,
+  Smartphone,
+  FileText,
+  Users,
+  BarChart3,
+  Layout // Adicionado para o placeholder de página vazia
+} from 'lucide-react';
 
-// Novos blocos UI/Avançados
-import AlertBlock from './AlertBlock';
-import ArgumentsBlock from './ArgumentsBlock';
-import AudioBlock from './AudioBlock';
-import CarouselBlock from './CarouselBlock';
-import LoaderBlock from './LoaderBlock';
-import CompareBlock from './CompareBlock';
-import ConfettiBlock from './ConfettiBlock';
-import QuoteBlock from './QuoteBlock';
-import FormInputBlock from './FormInputBlock';
-import ChartAreaBlock from './ChartAreaBlock';
-import ChartLevelBlock from './ChartLevelBlock';
-import ListBlock from './ListBlock';
-import MarqueeBlock from './MarqueeBlock';
-import OptionsGridBlock from './OptionsGridBlock';
-import ScriptBlock from './ScriptBlock';
-import TermsBlock from './TermsBlock';
-
-// Blocos especiais das etapas 20 e 21
-import ResultPageBlock from './ResultPageBlock';
-import QuizOfferPageBlock from './QuizOfferPageBlock';
-
-// Bloco da etapa 1 do funil real
-import QuizStartPageBlock from './QuizStartPageBlock';
-
-// Bloco de pergunta múltipla escolha completo
-import QuestionMultipleBlock from './QuestionMultipleBlock';
-
-export interface BlockData {
-  id: string;
-  type: string;
-  properties: Record<string, any>;
+interface SchemaDrivenEditorLayoutV2Props {
+  funnelId?: string;
+  className?: string;
 }
 
-interface BlockRendererProps {
-  block: BlockData;
-  isSelected?: boolean;
-  onClick?: () => void;
-  onSaveInline?: (key: string) => (newValue: string) => void;
-}
-
-export const BlockRenderer: React.FC<BlockRendererProps> = ({ 
-  block, 
-  isSelected = false, 
-  onClick,
-  onSaveInline
+const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({ 
+  funnelId,
+  className = ''
 }) => {
-  const commonProps = {
-    block,
-    properties: block.properties,
-    isSelected,
-    onClick,
-    onSaveInline
-  };
+  const [activeTab, setActiveTab] = useState('blocks');
+  const [deviceView, setDeviceView] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
 
-  switch (block.type) {
-    case 'header':
-      return <HeaderBlock {...commonProps} />;
-    
-    case 'text':
-      return <TextBlock {...commonProps} />;
-    
-    case 'image':
-      return <ImageBlock {...commonProps} />;
-    
-    case 'button':
-      return <ButtonBlock {...commonProps} />;
-    
-    case 'spacer':
-      return <SpacerBlock {...commonProps} />;
-    
-    case 'result-header':
-      return <ResultHeaderBlock {...commonProps} />;
-    
-    case 'result-description':
-      return <ResultDescriptionBlock {...commonProps} />;
-    
-    case 'product-offer':
-      return <ProductOfferBlock {...commonProps} />;
-    
-    case 'urgency-timer':
-      return <UrgencyTimerBlock {...commonProps} />;
-    
-    case 'faq-section':
-      return <FAQSectionBlock {...commonProps} />;
-    
-    case 'testimonials':
-      return <TestimonialsBlock {...commonProps} />;
-    
-    case 'guarantee':
-      return <GuaranteeBlock {...commonProps} />;
-    
-    case 'video-player':
-      return <VideoPlayerBlock {...commonProps} />;
-    
-    // NOVOS COMPONENTES SCHEMA-DRIVEN DO QUIZ
-    
-    case 'quiz-intro':
-      return <QuizIntroBlock 
-        block={block}
-        isSelected={isSelected}
-        onClick={onClick}
-        onPropertyChange={(key: string, value: any) => {
-          // Callback para mudanças de propriedade
-          console.log('Property changed:', key, value);
-        }}
-      />;
-    
-    case 'quiz-question':
-      return <QuizQuestionBlock 
-        block={block}
-        isSelected={isSelected}
-        onClick={onClick}
-        onPropertyChange={(key: string, value: any) => {
-          console.log('Property changed:', key, value);
-        }}
-        onAnswer={(answers: any) => {
-          console.log('Question answered:', answers);
-        }}
-        onNext={() => {
-          console.log('Next question');
-        }}
-        onPrevious={() => {
-          console.log('Previous question');
-        }}
-      />;
-    
-    case 'strategic-question':
-      return <StrategicQuestionBlock 
-        block={block}
-        isSelected={isSelected}
-        onClick={onClick}
-        onPropertyChange={(key: string, value: any) => {
-          console.log('Property changed:', key, value);
-        }}
-        onAnswer={(answer: any) => {
-          console.log('Strategic question answered:', answer);
-        }}
-        onNext={() => {
-          console.log('Next strategic question');
-        }}
-        onPrevious={() => {
-          console.log('Previous question');
-        }}
-      />;
-    
-    case 'quiz-transition':
-      return <QuizTransitionBlock 
-        block={block}
-        isSelected={isSelected}
-        onClick={onClick}
-        onPropertyChange={(key: string, value: any) => {
-          console.log('Property changed:', key, value);
-        }}
-        onComplete={() => {
-          console.log('Transition completed');
-        }}
-      />;
+  // Hook principal do editor com backend
+  const {
+    funnel,
+    currentPage,
+    selectedBlock,
+    isLoading,
+    isSaving,
+    autoSaveState,
+    currentPageId,
+    selectedBlockId,
+    createNewFunnel,
+    loadFunnel,
+    saveFunnel,
+    syncWithBackend,
+    addPage,
+    updatePage,
+    deletePage,
+    setCurrentPage,
+    addBlock,
+    updateBlock,
+    deleteBlock,
+    reorderBlocks,
+    setSelectedBlock,
+    updateFunnelConfig,
+    updatePageSettings,
+    getVersionHistory,
+    restoreVersion,
+    enableAutoSave,
+    disableAutoSave
+  } = useSchemaEditor(funnelId); // Certifique-se que useSchemaEditor está retornando todas as funções esperadas
 
-    case 'question-multiple':
-      return <QuestionMultipleBlock {...commonProps} />;
+  // Monitorar status de conexão
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
 
-    // NOVOS BLOCOS UI/AVANÇADOS
-    
-    case 'alert':
-      return <AlertBlock {...commonProps} />;
-    
-    case 'arguments':
-      return <ArgumentsBlock {...commonProps} />;
-    
-    case 'audio':
-      return <AudioBlock {...commonProps} />;
-    
-    case 'carousel':
-      return <CarouselBlock {...commonProps} />;
-    
-    case 'loader':
-      return <LoaderBlock {...commonProps} />;
-    
-    case 'compare':
-      return <CompareBlock {...commonProps} />;
-    
-    case 'confetti':
-      return <ConfettiBlock {...commonProps} />;
-    
-    case 'quote':
-      return <QuoteBlock {...commonProps} />;
-    
-    case 'form-input':
-      return <FormInputBlock {...commonProps} />;
-    
-    case 'chart-area':
-      return <ChartAreaBlock {...commonProps} />;
-    
-    case 'chart-level':
-      return <ChartLevelBlock {...commonProps} />;
-    
-    case 'list':
-      return <ListBlock {...commonProps} />;
-    
-    case 'marquee':
-      return <MarqueeBlock {...commonProps} />;
-    
-    case 'options-grid':
-      return <OptionsGridBlock {...commonProps} />;
-    
-    case 'script':
-      return <ScriptBlock {...commonProps} />;
-    
-    case 'terms':
-      return <TermsBlock {...commonProps} />;
-    
-    // BLOCOS ESPECIAIS DAS ETAPAS DO FUNIL
-    
-    case 'quiz-start-page':
-      return <QuizStartPageBlock {...commonProps} />;
-    
-    case 'result-page':
-      return <ResultPageBlock {...commonProps} />;
-    
-    case 'quiz-offer-page':
-      return <QuizOfferPageBlock {...commonProps} />;
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
 
-    default:
-      return (
-        <div 
-          className={`
-            p-4 rounded-lg cursor-pointer transition-all duration-200 bg-gray-100
-            ${isSelected 
-              ? 'border-2 border-blue-500 bg-blue-50' 
-              : 'border-2 border-dashed border-gray-300 hover:bg-gray-200'
-            }
-          `}
-          onClick={onClick}
-        >
-          <div className="text-center text-gray-500">
-            <p className="font-medium">Bloco Desconhecido</p>
-            <p className="text-sm">Tipo: {block.type}</p>
-          </div>
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  // Handler para adicionar novo bloco
+  const handleComponentSelect = useCallback((blockType: string) => {
+    const definition = blockDefinitions.find(def => def.type === blockType);
+    if (!definition) {
+      console.warn(`Definição de bloco para tipo "${blockType}" não encontrada.`);
+      return;
+    }
+
+    // Gerar propriedades padrão baseadas no schema
+    const defaultProperties: Record<string, any> = {};
+    definition.propertiesSchema?.forEach(prop => {
+      if (prop.defaultValue !== undefined) {
+        if (prop.nestedPath) {
+          // Lidar com nestedPath para valores padrão
+          const keys = prop.nestedPath.split('.');
+          let target: any = defaultProperties;
+          for (let i = 0; i < keys.length - 1; i++) {
+            if (!target[keys[i]]) target[keys[i]] = {};
+            target = target[keys[i]];
+          }
+          target[keys[keys.length - 1]] = prop.defaultValue;
+        } else {
+          defaultProperties[prop.key] = prop.defaultValue;
+        }
+      }
+    });
+
+    addBlock({
+      type: blockType,
+      properties: defaultProperties, // Passa as propriedades padrão geradas
+      style: {} // Inicializa estilos vazios
+    });
+    setSelectedBlock(null); // Desseleciona o bloco anterior
+  }, [addBlock, setSelectedBlock]); // Adicionado setSelectedBlock às dependências
+
+  // Handler para mudanças nas propriedades dos blocos (agora mais genérico para aninhados)
+  const handleBlockPropertyChange = useCallback((key: string | null, value: any) => {
+    if (!selectedBlockId || !selectedBlock) return;
+
+    let updatedProperties = { ...selectedBlock.properties };
+
+    if (key === null) { // Se key é null, value é o objeto de propriedades já atualizado (para nested)
+      updatedProperties = value;
+    } else {
+      updatedProperties[key] = value;
+    }
+
+    updateBlock(selectedBlockId, { properties: updatedProperties });
+  }, [selectedBlockId, selectedBlock, updateBlock]);
+
+  // Handler para propriedades aninhadas (chamado pelo DynamicPropertiesPanel)
+  const handleNestedPropertyChange = useCallback((path: string, value: any) => {
+    if (!selectedBlockId || !selectedBlock) return;
+
+    const newProperties = { ...selectedBlock.properties };
+    let target = newProperties;
+    
+    const keys = path.split('.');
+    for (let i = 0; i < keys.length - 1; i++) {
+      if (!target[keys[i]] || typeof target[keys[i]] !== 'object') {
+        target[keys[i]] = {};
+      }
+      target = target[keys[i]];
+    }
+    target[keys[keys.length - 1]] = value;
+
+    updateBlock(selectedBlockId, { properties: newProperties });
+  }, [selectedBlockId, selectedBlock, updateBlock]);
+
+
+  // Handler para edição inline (chama handleBlockPropertyChange)
+  const handleInlineEdit = useCallback((key: string) => (newValue: string) => {
+    handleBlockPropertyChange(key, newValue);
+  }, [handleBlockPropertyChange]);
+
+  // Controles de auto-save
+  const handleToggleAutoSave = useCallback(() => {
+    if (autoSaveState.isEnabled) {
+      disableAutoSave();
+    } else {
+      enableAutoSave();
+    }
+  }, [autoSaveState.isEnabled, disableAutoSave, enableAutoSave]);
+
+  // Se não há funil e não está carregando, criar novo
+  useEffect(() => {
+    // OBSERVAÇÃO: A lógica de inicialização do funil foi movida para useSchemaEditor.
+    // Este useEffect agora apenas garante que se o funnelId mudar, ele tente carregar.
+    // E se não houver funnel, o useSchemaEditor já o cria por padrão.
+    if (funnelId && !funnel) {
+      loadFunnel(funnelId);
+    }
+  }, [funnelId, funnel, loadFunnel]);
+
+
+  if (isLoading) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#B89B7A] mx-auto mb-4"></div>
+          <h2 className="text-xl font-semibold text-gray-700">Carregando Editor...</h2>
+          <p className="text-gray-500">Aguarde enquanto configuramos seu workspace</p>
         </div>
-      );
+      </div>
+    );
   }
+
+  if (!funnel) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-gray-700 mb-4">Nenhum funil encontrado</h2>
+          <Button onClick={createNewFunnel}>
+            <Plus className="w-4 h-4 mr-2" />
+            Criar Novo Funil
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`h-screen flex flex-col overflow-hidden bg-gray-50 ${className}`}>
+      {/* Header */}
+      <div className="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4">
+        <div className="flex items-center space-x-4">
+          {/* Info do funil */}
+          <div className="flex items-center space-x-2">
+            <FileText className="w-5 h-5 text-gray-500" />
+            <span className="font-medium text-gray-800">{funnel.name}</span>
+            <Badge variant={funnel.config.isPublished ? 'default' : 'secondary'}>
+              {funnel.config.isPublished ? 'Publicado' : 'Rascunho'}
+            </Badge>
+          </div>
+
+          {/* Info da página atual */}
+          {currentPage && (
+            <div className="flex items-center space-x-2 text-sm text-gray-600">
+              <span>•</span>
+              <span>{currentPage.title}</span>
+              <Badge variant="outline" className="text-xs">
+                {currentPage.blocks.length} bloco{currentPage.blocks.length !== 1 ? 's' : ''}
+              </Badge>
+            </div>
+          )}
+        </div>
+
+        <div className="flex items-center space-x-2">
+          {/* Status de sincronização compacto */}
+          <SyncStatus
+            autoSaveState={autoSaveState}
+            isSaving={isSaving}
+            isOnline={isOnline}
+            onManualSave={() => saveFunnel(true)}
+            onSync={syncWithBackend}
+            onToggleAutoSave={handleToggleAutoSave}
+            compact
+          />
+
+          {/* Device view controls */}
+          <div className="flex border rounded-md">
+            <Button
+              variant={deviceView === 'mobile' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setDeviceView('mobile')}
+              className="rounded-r-none px-2"
+            >
+              <Smartphone className="w-4 h-4" />
+            </Button>
+            <Button
+              variant={deviceView === 'tablet' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setDeviceView('tablet')}
+              className="rounded-none px-2"
+            >
+              <Tablet className="w-4 h-4" />
+            </Button>
+            <Button
+              variant={deviceView === 'desktop' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setDeviceView('desktop')}
+              className="rounded-l-none px-2"
+            >
+              <Monitor className="w-4 h-4" />
+            </Button>
+          </div>
+
+          {/* Ações principais */}
+          {/* OBSERVAÇÃO: VersionManager precisa de um array de versões.
+              Assumindo que getVersionHistory() retorna esse array. */}
+          <VersionManager
+            versions={getVersionHistory()}
+            currentVersion={funnel.version} // Assumindo que funnel.version existe
+            onRestoreVersion={restoreVersion}
+            trigger={
+              <Button variant="outline" size="sm">
+                <BarChart3 className="w-4 h-4 mr-1" />
+                Versões
+              </Button>
+            }
+          />
+
+          <Button variant="outline" size="sm" onClick={() => window.open('/quiz', '_blank')}>
+            <Eye className="w-4 h-4 mr-1" />
+            Preview
+          </Button>
+
+          <Button 
+            size="sm" 
+            onClick={() => saveFunnel(true)}
+            disabled={isSaving}
+            className="bg-[#B89B7A] hover:bg-[#a08965]"
+          >
+            <Save className="w-4 h-4 mr-1" />
+            {isSaving ? 'Salvando...' : 'Salvar'}
+          </Button>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <ResizablePanelGroup direction="horizontal" className="flex-1">
+        {/* Left Sidebar */}
+        <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+          <div className="h-full border-r border-gray-200 bg-white">
+            {/* OBSERVAÇÃO: SchemaDrivenComponentsSidebar precisa de `blockDefinitions`
+                e funções para manipular páginas e blocos. */}
+            <SchemaDrivenComponentsSidebar 
+              onComponentSelect={handleComponentSelect}
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+              funnelPages={funnel.pages}
+              currentPageId={currentPageId ?? undefined}
+              setCurrentPage={setCurrentPage}
+              blockDefinitions={blockDefinitions} // Passa blockDefinitions
+              onAddPage={addPage} // Passa a função addPage
+              onDeletePage={deletePage} // Passa a função deletePage
+              onUpdatePage={updatePage} // Passa a função updatePage
+              onReorderBlocks={reorderBlocks} // Passa a função reorderBlocks
+              onSelectBlock={setSelectedBlock} // Passa a função setSelectedBlock
+              selectedBlockId={selectedBlockId} // Passa o selectedBlockId
+            />
+          </div>
+        </ResizablePanel>
+        
+        <ResizableHandle withHandle />
+        
+        {/* Central Canvas */}
+        <ResizablePanel defaultSize={55}>
+          <div className="h-full overflow-auto bg-gray-50">
+            <div className="p-8">
+              <div className={`mx-auto bg-white min-h-[800px] shadow-lg rounded-lg transition-all duration-300 ${
+                deviceView === 'mobile' ? 'max-w-sm' :
+                deviceView === 'tablet' ? 'max-w-2xl' :
+                'max-w-4xl'
+              }`}>
+                <div className="p-6">
+                  {/* Canvas Content */}
+                  {currentPage ? (
+                    <div className="space-y-4">
+                      {currentPage.blocks.length === 0 ? (
+                        <div className="text-center py-16 text-gray-500">
+                          <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                            <Plus className="w-8 h-8" />
+                          </div>
+                          <h3 className="text-lg font-medium mb-2">Página vazia</h3>
+                          <p className="text-sm mb-4">
+                            Adicione blocos da biblioteca à esquerda para começar.
+                          </p>
+                          <Button 
+                            variant="outline" 
+                            onClick={() => setActiveTab('blocks')}
+                          >
+                            <Plus className="w-4 h-4 mr-2" />
+                            Adicionar Primeiro Bloco
+                          </Button>
+                        </div>
+                      ) : (
+                        currentPage.blocks.map((block) => (
+                          <div key={block.id} className="group relative">
+                            {/* Renderiza o bloco usando o BlockRenderer */}
+                            <BlockRenderer
+                              block={block}
+                              isSelected={block.id === selectedBlockId}
+                              onClick={() => setSelectedBlock(block.id)}
+                              onSaveInline={handleInlineEdit} // Passa o handler para edição inline
+                              disabled={false} // Interações desabilitadas no editor
+                            />
+                            
+                            {/* Botão de exclusão do bloco */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                deleteBlock(block.id);
+                              }}
+                              className="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center text-xs hover:bg-red-600"
+                            >
+                              ×
+                            </button>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  ) : (
+                    <div className="text-center py-16 text-gray-500">
+                      <FileText className="h-8 w-8 mx-auto mb-4 opacity-50" />
+                      <h3 className="text-lg font-medium mb-2">Nenhuma página selecionada</h3>
+                      <p className="text-sm">Selecione uma página para começar a editar.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </ResizablePanel>
+        
+        <ResizableHandle withHandle />
+        
+        {/* Right Properties Panel */}
+        <ResizablePanel defaultSize={25} minSize={20} maxSize={35}>
+          <div className="h-full border-l border-gray-200 bg-white">
+            {/* OBSERVAÇÃO: DynamicPropertiesPanel precisa de todas as funções de atualização */}
+            <DynamicPropertiesPanel
+              selectedBlock={selectedBlock}
+              funnelConfig={funnel.config}
+              setFunnelConfig={updateFunnelConfig} // Passa updateFunnelConfig
+              updateBlockSetting={handleBlockPropertyChange} // Passa o handler genérico
+              updateBlockStyle={(key, value) => updateBlock(selectedBlockId!, { style: { ...selectedBlock?.style, [key]: value }})} // Handler para estilos
+              blockLibrary={blockDefinitions} // Passa blockDefinitions
+              // Passa as funções de manipulação de arrays para o DynamicPropertiesPanel
+              updateQuestionOption={(idx, k, val) => updateBlock(selectedBlockId!, { properties: { ...selectedBlock?.properties, options: selectedBlock?.properties?.options.map((opt: any, i: number) => i === idx ? { ...opt, [k]: val } : opt) }})}
+              addQuestionOption={() => {
+                const newOption = { id: `opt-${Date.now()}`, text: 'Nova Opção', value: 'new_option' };
+                updateBlock(selectedBlockId!, { properties: { ...selectedBlock?.properties, options: [...(selectedBlock?.properties?.options || []), newOption] }});
+              }}
+              removeQuestionOption={(idx) => {
+                updateBlock(selectedBlockId!, { properties: { ...selectedBlock?.properties, options: selectedBlock?.properties?.options.filter((_: any, i: number) => i !== idx) }});
+              }}
+              updateFAQ={(idx, k, val) => updateBlock(selectedBlockId!, { properties: { ...selectedBlock?.properties, faqQuestions: selectedBlock?.properties?.faqQuestions.map((faq: any, i: number) => i === idx ? { ...faq, [k]: val } : faq) }})}
+              addFAQ={() => {
+                const newFaq = { question: 'Nova Pergunta', answer: 'Nova Resposta' };
+                updateBlock(selectedBlockId!, { properties: { ...selectedBlock?.properties, faqQuestions: [...(selectedBlock?.properties?.faqQuestions || []), newFaq] }});
+              }}
+              removeFAQ={(idx) => {
+                updateBlock(selectedBlockId!, { properties: { ...selectedBlock?.properties, faqQuestions: selectedBlock?.properties?.faqQuestions.filter((_: any, i: number) => i !== idx) }});
+              }}
+              // Adicione aqui handlers para outros array-editors/json-editors se existirem em blockDefinitions
+            />
+          </div>
+        </ResizablePanel>
+      </ResizablePanelGroup>
+    </div>
+  );
 };
+
+export default SchemaDrivenEditorLayoutV2;
