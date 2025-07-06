@@ -9,7 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useSchemaEditor } from '@/hooks/useSchemaEditor';
 import { blockDefinitions } from '@/config/blockDefinitions';
-import { UniversalBlockRenderer } from './blocks/UniversalBlockRenderer';
+import { DndProvider } from './dnd/DndProvider';
+import { DroppableCanvas } from './dnd/DroppableCanvas';
 import { 
   Save, 
   Eye, 
@@ -187,6 +188,22 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
   }
 
   return (
+    <DndProvider
+      blocks={currentPage?.blocks || []}
+      onBlocksReorder={(newBlocks) => {
+        if (currentPage) {
+          updatePage(currentPage.id, { blocks: newBlocks });
+        }
+      }}
+      onBlockAdd={(blockType, position) => {
+        if (currentPage) {
+          addBlock(blockType, position);
+        }
+      }}
+      onBlockSelect={setSelectedBlock}
+      selectedBlockId={selectedBlockId}
+      onBlockUpdate={handleInlineEdit}
+    >
     <div className={`h-screen flex flex-col overflow-hidden bg-gray-50 ${className}`}>
       {/* Header */}
       <div className="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4">
@@ -310,53 +327,46 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                 'max-w-4xl'
               }`}>
                 <div className="p-6">
-                  {/* Canvas Content */}
-                  {currentPage ? (
-                    <div className="space-y-4">
-                      {currentPage.blocks.length === 0 ? (
-                        <div className="text-center py-16 text-gray-500">
-                          <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-                            <Plus className="w-8 h-8" />
-                          </div>
-                          <h3 className="text-lg font-medium mb-2">Página vazia</h3>
-                          <p className="text-sm mb-4">
-                            Adicione blocos da biblioteca à esquerda para começar.
-                          </p>
-                          <Button 
-                            variant="outline" 
-                            onClick={() => setActiveTab('blocks')}
-                          >
-                            <Plus className="w-4 h-4 mr-2" />
-                            Adicionar Primeiro Bloco
-                          </Button>
-                        </div>
-                      ) : (
-                        currentPage.blocks.map((block) => (
-                          <div key={block.id} className="group relative">
-                            {/* Renderiza o bloco usando o UniversalBlockRenderer */}
-                            <UniversalBlockRenderer
-                              block={block}
-                              isSelected={block.id === selectedBlockId}
-                              onClick={() => setSelectedBlock(block.id)}
-                              onSaveInline={handleInlineEdit}
-                              disabled={false}
-                            />
-                            
-                            {/* Botão de exclusão do bloco */}
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                deleteBlock(block.id);
-                              }}
-                              className="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center text-xs hover:bg-red-600 z-10"
-                            >
-                              ×
-                            </button>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  ) : (
+                  {/* Canvas Content com Drag & Drop */}
+                  <DroppableCanvas
+                    blocks={currentPage?.blocks || []}
+                    selectedBlockId={selectedBlockId}
+                    onBlockSelect={(blockId) => setSelectedBlock(blockId)}
+                    onBlockDelete={deleteBlock}
+                    onBlockDuplicate={(blockId) => {
+                      const block = currentPage?.blocks.find(b => b.id === blockId);
+                      if (block && currentPage) {
+                        const newBlock = {
+                          ...block,
+                          id: `${block.type}-${Date.now()}`
+                        };
+                        const blockIndex = currentPage.blocks.findIndex(b => b.id === blockId);
+                        const newBlocks = [...currentPage.blocks];
+                        newBlocks.splice(blockIndex + 1, 0, newBlock);
+                        updatePage(currentPage.id, { blocks: newBlocks });
+                      }
+                    }}
+                    onBlockToggleVisibility={(blockId) => {
+                      const block = currentPage?.blocks.find(b => b.id === blockId);
+                      if (block && currentPage) {
+                        const updatedBlock = {
+                          ...block,
+                          properties: {
+                            ...block.properties,
+                            hidden: !block.properties?.hidden
+                          }
+                        };
+                        const newBlocks = currentPage.blocks.map(b => 
+                          b.id === blockId ? updatedBlock : b
+                        );
+                        updatePage(currentPage.id, { blocks: newBlocks });
+                      }
+                    }}
+                    onSaveInline={handleInlineEdit}
+                    onAddBlock={(blockType) => addBlock(blockType)}
+                  />
+                  
+                  {!currentPage && (
                     <div className="text-center py-16 text-gray-500">
                       <h3 className="text-lg font-medium mb-2">Nenhuma página selecionada</h3>
                       <p className="text-sm">Selecione uma página para começar a editar.</p>
@@ -384,6 +394,7 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
+    </DndProvider>
   );
 };
 
