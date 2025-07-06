@@ -71,18 +71,19 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
 }) => {
   // Props comuns para todos os blocos
   const commonProps = {
-    block: block, // Passa o bloco completo
+    block: block,
     isSelected,
     onClick,
-    onSaveInline: onSaveInline ? (key: string) => (newValue: string) => {
-      const updatedBlock = {
-        ...block,
-        properties: { ...block.properties, [key]: newValue }
-      };
-      onSaveInline(block.id, updatedBlock);
-    } : () => () => {},
+    onPropertyChange: (key: string, value: any) => {
+      if (onSaveInline) {
+        const updatedBlock = {
+          ...block,
+          properties: { ...block.properties, [key]: value }
+        };
+        onSaveInline(block.id, updatedBlock);
+      }
+    },
     disabled,
-    style: {},
     className: cn(
       'block-renderer-item transition-all duration-200',
       isSelected && 'ring-2 ring-blue-500 bg-blue-50',

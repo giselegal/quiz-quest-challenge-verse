@@ -44,22 +44,65 @@ const QuizNameInputBlock: React.FC<QuizNameInputBlockProps> = ({
     >
       {/* Input Field - Visual Only */}
       <div className="grid w-full items-center gap-1.5">
-        <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-          {label}
+        <div className="flex items-center">
+          <InlineEditText
+            value={label}
+            onSave={(value) => handlePropertyChange('label', value)}
+            placeholder="Label do campo"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            disabled={disabled}
+            as="span"
+          />
           {required && <span className="text-red-500 ml-1">*</span>}
-        </label>
+        </div>
         
-        <input 
-          className="flex h-10 w-full rounded-md border border-input bg-background ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-inherit placeholder:opacity-50 text-base text-left p-4" 
-          placeholder={placeholder}
-          type={inputType}
-          value={value}
-          disabled={disabled}
-          readOnly
-        />
+        <div className="relative group">
+          <input 
+            className="flex h-10 w-full rounded-md border border-input bg-background ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 text-base text-left p-4" 
+            placeholder={placeholder}
+            type={inputType}
+            value={value}
+            disabled={disabled}
+            readOnly
+          />
+          {!disabled && (
+            <div 
+              className="absolute inset-0 bg-transparent cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={(e) => {
+                e.stopPropagation();
+                // Focus na edição do placeholder via modal ou overlay
+              }}
+              title="Clique para editar o placeholder"
+            >
+              <div className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white text-xs px-2 py-1 rounded">
+                Editar placeholder
+              </div>
+            </div>
+          )}
+        </div>
+        
+        {/* Placeholder Editor - Separado */}
+        <div className="text-xs text-gray-500">
+          <span className="font-medium">Placeholder: </span>
+          <InlineEditText
+            value={placeholder}
+            onSave={(value) => handlePropertyChange('placeholder', value)}
+            placeholder="Digite o placeholder..."
+            className="inline"
+            disabled={disabled}
+            as="span"
+          />
+        </div>
         
         {helperText && (
-          <p className="text-xs text-gray-500 mt-1">{helperText}</p>
+          <InlineEditText
+            value={helperText}
+            onSave={(value) => handlePropertyChange('helperText', value)}
+            placeholder="Texto de ajuda"
+            className="text-xs text-gray-500 mt-1"
+            disabled={disabled}
+            as="p"
+          />
         )}
       </div>
     </div>

@@ -1,24 +1,11 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { ArrowLeft } from 'lucide-react';
+import { InlineEditText } from './InlineEditText';
+import type { BlockComponentProps } from '@/types/blocks';
 
-interface QuizIntroHeaderBlockProps {
-  block: {
-    id: string;
-    type: string;
-    properties: {
-      logoUrl?: string;
-      logoAlt?: string;
-      progressValue?: number;
-      progressMax?: number;
-      showBackButton?: boolean;
-      logoWidth?: number;
-      logoHeight?: number;
-    };
-  };
-  isSelected?: boolean;
-  onClick?: () => void;
-  onSaveInline?: (blockId: string, key: string, newValue: string) => void;
+interface QuizIntroHeaderBlockProps extends BlockComponentProps {
+  onPropertyChange?: (key: string, value: any) => void;
   disabled?: boolean;
   className?: string;
 }
@@ -27,6 +14,7 @@ const QuizIntroHeaderBlock: React.FC<QuizIntroHeaderBlockProps> = ({
   block,
   isSelected = false,
   onClick,
+  onPropertyChange,
   disabled = false,
   className
 }) => {
@@ -39,6 +27,12 @@ const QuizIntroHeaderBlock: React.FC<QuizIntroHeaderBlockProps> = ({
     logoWidth = 96,
     logoHeight = 96
   } = block.properties;
+
+  const handlePropertyChange = (key: string, value: any) => {
+    if (onPropertyChange) {
+      onPropertyChange(key, value);
+    }
+  };
 
   return (
     <div
@@ -60,7 +54,7 @@ const QuizIntroHeaderBlock: React.FC<QuizIntroHeaderBlockProps> = ({
         )}
 
         {/* Logo */}
-        <div className="flex-1 flex justify-center">
+        <div className="flex-1 flex justify-center relative group">
           <img 
             src={logoUrl}
             alt={logoAlt}
@@ -73,6 +67,26 @@ const QuizIntroHeaderBlock: React.FC<QuizIntroHeaderBlockProps> = ({
               e.currentTarget.src = 'https://via.placeholder.com/96x96?text=Logo';
             }}
           />
+          {!disabled && (
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-50 rounded flex flex-col items-center justify-center text-white text-xs">
+              <InlineEditText
+                value={logoUrl}
+                onSave={(value) => handlePropertyChange('logoUrl', value)}
+                placeholder="URL da logo"
+                className="text-center text-white bg-transparent w-full px-2"
+                disabled={disabled}
+                as="div"
+              />
+              <InlineEditText
+                value={logoAlt}
+                onSave={(value) => handlePropertyChange('logoAlt', value)}
+                placeholder="Alt da logo"
+                className="text-center text-white bg-transparent w-full px-2 mt-1"
+                disabled={disabled}
+                as="div"
+              />
+            </div>
+          )}
         </div>
 
         {/* Spacer for alignment */}
@@ -89,9 +103,22 @@ const QuizIntroHeaderBlock: React.FC<QuizIntroHeaderBlockProps> = ({
       
       {/* Progress Text */}
       <div className="text-center mt-2">
-        <span className="text-sm text-gray-600">
-          {Math.round(progressValue)}% completo
-        </span>
+        <InlineEditText
+          value={`${Math.round(progressValue)}% completo`}
+          onSave={(value) => {
+            const match = value.match(/(\d+)%/);
+            if (match) {
+              const numValue = parseInt(match[1]);
+              if (!isNaN(numValue)) {
+                handlePropertyChange('progressValue', numValue);
+              }
+            }
+          }}
+          placeholder="0% completo"
+          className="text-sm text-gray-600"
+          disabled={disabled}
+          as="span"
+        />
       </div>
     </div>
   );
