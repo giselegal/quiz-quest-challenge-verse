@@ -23,6 +23,20 @@ import {
   Users,
   BarChart3
 } from 'lucide-react';
+import { BlockData } from '@/types/blocks';
+import { Block } from '@/hooks/useBlockForm';
+
+// Helper para converter BlockData para Block
+const adaptBlockDataToBlock = (blockData: BlockData | null): Block | null => {
+  if (!blockData) return null;
+  return {
+    id: blockData.id,
+    type: blockData.type,
+    properties: blockData.properties,
+    hidden: blockData.properties?.hidden || false,
+    locked: blockData.properties?.locked || false,
+  };
+};
 
 interface SchemaDrivenEditorLayoutV2Props {
   funnelId?: string;
@@ -412,10 +426,10 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
         <ResizablePanel defaultSize={25} minSize={20} maxSize={35}>
           <div className="h-full border-l border-gray-200 bg-white">
             <ModernPropertyPanel
-              selectedBlock={selectedBlock}
+              selectedBlock={adaptBlockDataToBlock(selectedBlock)}
               onUpdate={(updates) => {
-                if (selectedBlockId && updates) {
-                  updateBlock(selectedBlockId, updates);
+                if (selectedBlockId && updates?.properties) {
+                  updateBlock(selectedBlockId, { properties: updates.properties });
                 }
               }}
             />
