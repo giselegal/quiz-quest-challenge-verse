@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 // import { SchemaDrivenComponentsSidebar } from './sidebar/SchemaDrivenComponentsSidebar'; // Removido: não deve ser importado aqui
 import { SimpleSidebar } from './sidebar/SimpleSidebar'; // Mantenha se ainda usar
-import { DynamicPropertiesPanel } from './panels/DynamicPropertiesPanel';
+import { DynamicPropertiesPanel } from '../panels/DynamicPropertiesPanel';
 import { BlockRenderer, BlockData } from './blocks/BlockRenderer'; // Importe BlockRenderer
 import { SyncStatus } from './status/SyncStatus';
 import { VersionManager } from './version/VersionManager';
@@ -406,28 +406,9 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
             <DynamicPropertiesPanel
               selectedBlock={selectedBlock}
               funnelConfig={funnel.config}
-              setFunnelConfig={updateFunnelConfig} // Passa updateFunnelConfig
-              updateBlockSetting={handleBlockPropertyChange} // Passa o handler genérico
-              updateBlockStyle={(key, value) => updateBlock(selectedBlockId!, { style: { ...selectedBlock?.style, [key]: value }})} // Handler para estilos
-              blockLibrary={blockDefinitions} // Passa blockDefinitions
-              // Passa as funções de manipulação de arrays para o DynamicPropertiesPanel
-              updateQuestionOption={(idx, k, val) => updateBlock(selectedBlockId!, { properties: { ...selectedBlock?.properties, options: selectedBlock?.properties?.options.map((opt: any, i: number) => i === idx ? { ...opt, [k]: val } : opt) }})}
-              addQuestionOption={() => {
-                const newOption = { id: `opt-${Date.now()}`, text: 'Nova Opção', value: 'new_option' };
-                updateBlock(selectedBlockId!, { properties: { ...selectedBlock?.properties, options: [...(selectedBlock?.properties?.options || []), newOption] }});
-              }}
-              removeQuestionOption={(idx) => {
-                updateBlock(selectedBlockId!, { properties: { ...selectedBlock?.properties, options: selectedBlock?.properties?.options.filter((_: any, i: number) => i !== idx) }});
-              }}
-              updateFAQ={(idx, k, val) => updateBlock(selectedBlockId!, { properties: { ...selectedBlock?.properties, faqQuestions: selectedBlock?.properties?.faqQuestions.map((faq: any, i: number) => i === idx ? { ...faq, [k]: val } : faq) }})}
-              addFAQ={() => {
-                const newFaq = { question: 'Nova Pergunta', answer: 'Nova Resposta' };
-                updateBlock(selectedBlockId!, { properties: { ...selectedBlock?.properties, faqQuestions: [...(selectedBlock?.properties?.faqQuestions || []), newFaq] }});
-              }}
-              removeFAQ={(idx) => {
-                updateBlock(selectedBlockId!, { properties: { ...selectedBlock?.properties, faqQuestions: selectedBlock?.properties?.faqQuestions.filter((_: any, i: number) => i !== idx) }});
-              }}
-              // Adicione aqui handlers para outros array-editors/json-editors se existirem em blockDefinitions
+              onBlockPropertyChange={handleBlockPropertyChange}
+              onNestedPropertyChange={handleNestedPropertyChange}
+              onFunnelConfigChange={updateFunnelConfig}
             />
           </div>
         </ResizablePanel>
