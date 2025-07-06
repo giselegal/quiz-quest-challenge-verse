@@ -1,73 +1,70 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import { cn } from '@/lib/utils';
 
 interface InlineEditableTextProps {
+  tag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' | 'div';
   value: string;
   onSave: (newValue: string) => void;
-  tag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' | 'div';
   isTextArea?: boolean;
+  placeholder?: string;
   className?: string;
   style?: React.CSSProperties;
-  placeholder?: string;
   disabled?: boolean;
 }
 
 export const InlineEditableText: React.FC<InlineEditableTextProps> = ({
+  tag: Tag = 'span',
   value,
   onSave,
-  tag = 'div',
   isTextArea = false,
+  placeholder = 'Clique para editar...',
   className = '',
   style,
-  placeholder = 'Clique para editar...',
   disabled = false
 }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [tempValue, setTempValue] = useState(value);
+  const [editValue, setEditValue] = useState(value);
+  const [mounted, setMounted] = useState(false);
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    setTempValue(value);
+    setMounted(true);
+    setEditValue(value);
   }, [value]);
 
   useEffect(() => {
     if (isEditing && inputRef.current) {
       inputRef.current.focus();
-      if (inputRef.current instanceof HTMLInputElement || inputRef.current instanceof HTMLTextAreaElement) {
+      
+      // Select all text for easy replacement
+      if ('select' in inputRef.current) {
         inputRef.current.select();
       }
     }
   }, [isEditing]);
 
-  const handleClick = () => {
-    if (!disabled) {
-      setIsEditing(true);
-    }
-  };
-
   const handleSave = () => {
-    setIsEditing(false);
-    if (tempValue !== value) {
-      onSave(tempValue);
+    if (editValue !== value) {
+      onSave(editValue);
     }
+    setIsEditing(false);
   };
 
   const handleCancel = () => {
+    setEditValue(value);
     setIsEditing(false);
-    setTempValue(value);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !isTextArea) {
       e.preventDefault();
       handleSave();
-    } else if (e.key === 'Escape') {
-      e.preventDefault();
-      handleCancel();
     } else if (e.key === 'Enter' && e.ctrlKey && isTextArea) {
       e.preventDefault();
       handleSave();
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      handleCancel();
     }
   };
 
@@ -75,39 +72,96 @@ export const InlineEditableText: React.FC<InlineEditableTextProps> = ({
     handleSave();
   };
 
-  if (isEditing) {
-    const commonProps = {
-      ref: inputRef as any,
-      value: tempValue,
-      onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setTempValue(e.target.value),
-      onKeyDown: handleKeyDown,
-      onBlur: handleBlur,
-      className: `${className} border-2 border-blue-500 focus:outline-none`,
-      placeholder
-    };
+  const handleClick = (e: React.MouseEvent) => {
+    if (disabled) return;
+    e.preventDefault();
+    e.stopPropagation();
+    setIsEditing(true);
+  };
 
-    return isTextArea ? (
-      <Textarea
-        {...commonProps}
-        rows={Math.max(3, tempValue.split('\n').length)}
-      />
-    ) : (
-      <Input {...commonProps} />
+  if (!mounted) {
+    return (
+      <Tag className={className} style={style}>
+        {value || placeholder}
+      </Tag>
     );
   }
 
-  const Tag = tag as keyof JSX.IntrinsicElements;
-  const displayValue = value || placeholder;
-  const isPlaceholder = !value;
+  if (disabled) {
+    return (
+      <Tag 
+        className={className} 
+        style={style}
+        dangerouslySetInnerHTML={{ __html: value || placeholder }}
+      />
+    );
+  }
+
+  if (isEditing) {
+    if (isTextArea) {
+      return (
+        <textarea
+          ref={inputRef as React.RefObject<HTMLTextAreaElement>}
+          value={editValue}
+          onChange={(e) => setEditValue(e.target.value)}
+          onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
+          placeholder={placeholder}
+          className={cn(
+            'w-full resize-none border-2 border-blue-500 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white',
+            className
+          )}
+          style={{
+            ...style,
+            minHeight: '80px',
+            fontFamily: 'inherit',
+            fontSize: 'inherit',
+            fontWeight: 'inherit',
+            lineHeight: 'inherit'
+          }}
+          rows={3}
+        />
+      );
+    } else {
+      return (
+        <input
+          ref={inputRef as React.RefObject<HTMLInputElement>}
+          type="text"
+          value={editValue}
+          onChange={(e) => setEditValue(e.target.value)}
+          onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
+          placeholder={placeholder}
+          className={cn(
+            'w-full border-2 border-blue-500 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white',
+            className
+          )}
+          style={{
+            ...style,
+            fontFamily: 'inherit',
+            fontSize: 'inherit',
+            fontWeight: 'inherit',
+            lineHeight: 'inherit',
+            backgroundColor: 'white',
+            color: '#000'
+          }}
+        />
+      );
+    }
+  }
 
   return (
     <Tag
-      className={`${className} ${isPlaceholder ? 'text-gray-400 italic' : ''} cursor-text hover:bg-gray-50 transition-colors duration-200 ${disabled ? 'cursor-not-allowed opacity-60' : ''}`}
+      className={cn(
+        'cursor-pointer hover:bg-blue-50 hover:ring-1 hover:ring-blue-200 rounded px-1 py-0.5 transition-all duration-200 min-h-[1.5em] inline-block',
+        className
+      )}
       style={style}
       onClick={handleClick}
-      title={disabled ? 'Edição desabilitada' : 'Clique para editar'}
-    >
-      {displayValue}
-    </Tag>
+      title="Clique para editar"
+      dangerouslySetInnerHTML={{ 
+        __html: value || `<span class="text-gray-400 italic">${placeholder}</span>` 
+      }}
+    />
   );
 };

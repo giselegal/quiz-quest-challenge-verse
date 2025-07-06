@@ -2,7 +2,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { InlineEditText } from './InlineEditText';
+import { InlineEditableText } from './InlineEditableText';
 
 interface QuizStartPageBlockProps {
   block: {
@@ -21,18 +21,20 @@ interface QuizStartPageBlockProps {
   };
   isSelected?: boolean;
   onClick?: () => void;
-  onPropertyChange?: (key: string, value: any) => void;
+  onSaveInline: (key: string) => (newValue: string) => void;
   disabled?: boolean;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 const QuizStartPageBlock: React.FC<QuizStartPageBlockProps> = ({
   block,
   isSelected = false,
   onClick,
-  onPropertyChange,
+  onSaveInline,
   disabled = false,
-  className
+  className,
+  style
 }) => {
   const {
     title = 'Descubra Seu Estilo Pessoal',
@@ -64,35 +66,35 @@ const QuizStartPageBlock: React.FC<QuizStartPageBlockProps> = ({
         </Badge>
 
         {/* Title */}
-        <InlineEditText
+        <InlineEditableText
+          tag="h1"
           value={title}
-          onSave={(newValue) => onPropertyChange?.('title', newValue)}
+          onSave={onSaveInline('title')}
           placeholder="Título do quiz..."
           disabled={disabled}
-          as="h1"
           className="text-3xl md:text-4xl font-bold mb-4"
           style={{ color: textColor }}
         />
 
         {/* Subtitle */}
-        <InlineEditText
+        <InlineEditableText
+          tag="p"
           value={subtitle}
-          onSave={(newValue) => onPropertyChange?.('subtitle', newValue)}
+          onSave={onSaveInline('subtitle')}
           placeholder="Subtítulo do quiz..."
           disabled={disabled}
-          as="p"
           className="text-xl mb-6 opacity-80"
           style={{ color: textColor }}
         />
 
         {/* Description */}
-        <InlineEditText
+        <InlineEditableText
+          tag="p"
           value={description}
-          onSave={(newValue) => onPropertyChange?.('description', newValue)}
+          onSave={onSaveInline('description')}
           placeholder="Descrição do quiz..."
           disabled={disabled}
-          multiline={true}
-          as="p"
+          isTextArea={true}
           className="text-lg mb-8 opacity-70"
           style={{ color: textColor }}
         />
@@ -126,16 +128,21 @@ const QuizStartPageBlock: React.FC<QuizStartPageBlockProps> = ({
         )}
 
         {/* CTA Button */}
-        <div className="inline-block">
-          <InlineEditText
+        <Button
+          size="lg"
+          className="text-lg px-8 py-3 bg-primary hover:bg-primary/90"
+          disabled={disabled}
+        >
+          <InlineEditableText
+            tag="span"
             value={buttonText}
-            onSave={(newValue) => onPropertyChange?.('buttonText', newValue)}
+            onSave={onSaveInline('buttonText')}
             placeholder="Texto do botão..."
             disabled={disabled}
-            as="span"
             className="inline-block"
+            style={{ color: 'white' }}
           />
-        </div>
+        </Button>
       </div>
 
       {/* Selected indicator */}
