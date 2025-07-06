@@ -676,6 +676,417 @@ export const blockDefinitions: BlockDefinition[] = [
     ],
   },
 
+  // BLOCOS ESPECÍFICOS DO QUIZ - DADOS REAIS
+  {
+    id: 'quiz-start-page',
+    type: 'QuizStartPageBlock',
+    name: 'Página Inicial do Quiz',
+    description: 'Etapa 1 - Introdução e coleta do nome (dados reais)',
+    icon: 'Play',
+    category: 'Quiz Real',
+    propertiesSchema: [
+      { 
+        key: 'title', 
+        label: 'Título Principal', 
+        type: 'text-input', 
+        defaultValue: 'Chega de um guarda-roupa lotado e da sensação de que nada combina com você.' 
+      },
+      { 
+        key: 'subtitle', 
+        label: 'Subtítulo', 
+        type: 'textarea', 
+        rows: 3,
+        defaultValue: 'Em poucos minutos, descubra seu Estilo Predominante — e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.' 
+      },
+      { 
+        key: 'logoUrl', 
+        label: 'URL do Logo', 
+        type: 'image-url', 
+        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp' 
+      },
+      { 
+        key: 'imageUrl', 
+        label: 'Imagem Principal', 
+        type: 'image-url', 
+        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp' 
+      },
+      { 
+        key: 'inputPlaceholder', 
+        label: 'Placeholder do Input', 
+        type: 'text-input', 
+        defaultValue: 'Digite seu nome aqui...' 
+      },
+      { 
+        key: 'buttonText', 
+        label: 'Texto do Botão', 
+        type: 'text-input', 
+        defaultValue: 'Quero Descobrir meu Estilo Agora!' 
+      },
+      {
+        key: 'showNameInput',
+        label: 'Mostrar Campo de Nome',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'showBenefits',
+        label: 'Mostrar Benefícios',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'benefits',
+        label: 'Lista de Benefícios',
+        type: 'array-editor',
+        itemSchema: [
+          { key: 'text', label: 'Benefício', type: 'text-input', placeholder: 'Descubra seu estilo único' }
+        ],
+        defaultValue: [
+          { text: 'Descubra seu estilo único' },
+          { text: 'Tenha mais confiança ao se vestir' },
+          { text: 'Economize tempo na escolha de looks' }
+        ]
+      }
+    ]
+  },
+
+  {
+    id: 'question-multiple',
+    type: 'QuestionMultipleBlock',
+    name: 'Questão Múltipla Escolha',
+    description: 'Questões do quiz com múltiplas seleções (dados reais)',
+    icon: 'CheckSquare',
+    category: 'Quiz Real',
+    propertiesSchema: [
+      { 
+        key: 'question', 
+        label: 'Pergunta', 
+        type: 'textarea', 
+        rows: 2,
+        defaultValue: 'Qual o seu tipo de roupa favorita?' 
+      },
+      {
+        key: 'options',
+        label: 'Opções de Resposta',
+        type: 'array-editor',
+        itemSchema: [
+          { key: 'id', label: 'ID', type: 'text-input', placeholder: 'natural' },
+          { key: 'text', label: 'Texto', type: 'textarea', rows: 2, placeholder: 'Conforto, leveza e praticidade no vestir' },
+          { key: 'value', label: 'Valor', type: 'text-input', placeholder: 'natural' },
+          { key: 'imageUrl', label: 'Imagem', type: 'image-url', placeholder: 'https://...' },
+          { key: 'category', label: 'Categoria', type: 'text-input', placeholder: 'natural' }
+        ]
+      },
+      {
+        key: 'multipleSelection',
+        label: 'Seleção Múltipla',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'maxSelections',
+        label: 'Máximo de Seleções',
+        type: 'number-input',
+        min: 1,
+        max: 8,
+        defaultValue: 3
+      },
+      {
+        key: 'showImages',
+        label: 'Mostrar Imagens',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      { 
+        key: 'progressLabel', 
+        label: 'Label do Progresso', 
+        type: 'text-input', 
+        defaultValue: 'Questão 1 de 10' 
+      },
+      {
+        key: 'progressValue',
+        label: 'Valor do Progresso',
+        type: 'number-input',
+        min: 0,
+        max: 100,
+        defaultValue: 10
+      }
+    ]
+  },
+
+  {
+    id: 'strategic-question',
+    type: 'StrategicQuestionBlock',
+    name: 'Questão Estratégica',
+    description: 'Questões estratégicas para segmentação (dados reais)',
+    icon: 'Target',
+    category: 'Quiz Real',
+    propertiesSchema: [
+      { 
+        key: 'question', 
+        label: 'Pergunta', 
+        type: 'textarea', 
+        rows: 2,
+        defaultValue: 'Como você se vê hoje?' 
+      },
+      {
+        key: 'options',
+        label: 'Opções de Resposta',
+        type: 'array-editor',
+        itemSchema: [
+          { key: 'id', label: 'ID', type: 'text-input', placeholder: 'option1' },
+          { key: 'text', label: 'Texto', type: 'textarea', rows: 2, placeholder: 'Texto da opção' },
+          { key: 'value', label: 'Valor', type: 'text-input', placeholder: 'option1' },
+          { key: 'category', label: 'Categoria', type: 'text-input', placeholder: 'categoria' }
+        ]
+      },
+      {
+        key: 'isStrategic',
+        label: 'É Questão Estratégica',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      { 
+        key: 'progressLabel', 
+        label: 'Label do Progresso', 
+        type: 'text-input', 
+        defaultValue: 'Questão estratégica 1 de 6' 
+      },
+      {
+        key: 'progressValue',
+        label: 'Valor do Progresso',
+        type: 'number-input',
+        min: 0,
+        max: 100,
+        defaultValue: 65
+      }
+    ]
+  },
+
+  {
+    id: 'quiz-transition',
+    type: 'QuizTransitionBlock',
+    name: 'Transição do Quiz',
+    description: 'Páginas de transição entre etapas (dados reais)',
+    icon: 'ArrowRight',
+    category: 'Quiz Real',
+    propertiesSchema: [
+      { 
+        key: 'title', 
+        label: 'Título', 
+        type: 'text-input', 
+        defaultValue: 'Agora vamos conhecer você melhor' 
+      },
+      { 
+        key: 'message', 
+        label: 'Mensagem', 
+        type: 'textarea', 
+        rows: 3,
+        defaultValue: 'Baseado nas suas respostas anteriores, agora queremos entender melhor seu perfil e necessidades.' 
+      },
+      {
+        key: 'progressValue',
+        label: 'Valor do Progresso',
+        type: 'number-input',
+        min: 0,
+        max: 100,
+        defaultValue: 60
+      },
+      {
+        key: 'showAnimation',
+        label: 'Mostrar Animação',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'animationType',
+        label: 'Tipo de Animação',
+        type: 'select',
+        options: [
+          { label: 'Pulse', value: 'pulse' },
+          { label: 'Spin', value: 'spin' },
+          { label: 'Bounce', value: 'bounce' }
+        ],
+        defaultValue: 'pulse'
+      }
+    ]
+  },
+
+  {
+    id: 'result-page',
+    type: 'ResultPageBlock',
+    name: 'Página de Resultado',
+    description: 'Etapa 20 - Resultado do estilo predominante (dados reais)',
+    icon: 'Award',
+    category: 'Quiz Real',
+    propertiesSchema: [
+      { 
+        key: 'primaryStyle', 
+        label: 'Estilo Predominante', 
+        type: 'select',
+        options: [
+          { label: 'Natural', value: 'natural' },
+          { label: 'Clássico', value: 'classico' },
+          { label: 'Contemporâneo', value: 'contemporaneo' },
+          { label: 'Elegante', value: 'elegante' },
+          { label: 'Romântico', value: 'romantico' },
+          { label: 'Sexy', value: 'sexy' },
+          { label: 'Dramático', value: 'dramatico' },
+          { label: 'Criativo', value: 'criativo' }
+        ],
+        defaultValue: 'elegante' 
+      },
+      {
+        key: 'secondaryStyles',
+        label: 'Estilos Secundários',
+        type: 'array-editor',
+        itemSchema: [
+          { key: 'style', label: 'Estilo', type: 'text-input', placeholder: 'natural' }
+        ],
+        defaultValue: [
+          { style: 'natural' },
+          { style: 'contemporaneo' }
+        ]
+      },
+      {
+        key: 'showHeader',
+        label: 'Mostrar Cabeçalho',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'showDescription',
+        label: 'Mostrar Descrição',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'showSecondaryStyles',
+        label: 'Mostrar Estilos Secundários',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'showTransformation',
+        label: 'Mostrar Transformação',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'showMotivation',
+        label: 'Mostrar Motivação',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      { 
+        key: 'logoUrl', 
+        label: 'URL do Logo', 
+        type: 'image-url', 
+        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp' 
+      },
+      { 
+        key: 'userName', 
+        label: 'Nome do Usuário', 
+        type: 'text-input', 
+        defaultValue: 'Visitante' 
+      }
+    ]
+  },
+
+  {
+    id: 'quiz-offer-page',
+    type: 'QuizOfferPageBlock',
+    name: 'Página de Oferta',
+    description: 'Etapa 21 - Oferta do produto (dados reais)',
+    icon: 'ShoppingBag',
+    category: 'Quiz Real',
+    propertiesSchema: [
+      { 
+        key: 'title', 
+        label: 'Título da Oferta', 
+        type: 'text-input', 
+        defaultValue: 'Guia Completo do Seu Estilo' 
+      },
+      { 
+        key: 'subtitle', 
+        label: 'Subtítulo', 
+        type: 'textarea', 
+        rows: 2,
+        defaultValue: 'Tudo que você precisa para se vestir com confiança' 
+      },
+      { 
+        key: 'price', 
+        label: 'Preço', 
+        type: 'text-input', 
+        defaultValue: 'R$ 97,00' 
+      },
+      { 
+        key: 'originalPrice', 
+        label: 'Preço Original', 
+        type: 'text-input', 
+        defaultValue: 'R$ 297,00' 
+      },
+      { 
+        key: 'discount', 
+        label: 'Desconto', 
+        type: 'text-input', 
+        defaultValue: '67% OFF' 
+      },
+      { 
+        key: 'ctaText', 
+        label: 'Texto do Botão', 
+        type: 'text-input', 
+        defaultValue: 'Quero Transformar Meu Estilo Agora' 
+      },
+      { 
+        key: 'ctaUrl', 
+        label: 'URL do Botão', 
+        type: 'text-input', 
+        defaultValue: 'https://pay.hotmart.com/seu-link-de-pagamento' 
+      },
+      {
+        key: 'showGuarantee',
+        label: 'Mostrar Garantia',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'guaranteeDays',
+        label: 'Dias de Garantia',
+        type: 'number-input',
+        min: 1,
+        max: 365,
+        defaultValue: 7
+      },
+      {
+        key: 'showTestimonials',
+        label: 'Mostrar Depoimentos',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'showBonus',
+        label: 'Mostrar Bônus',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'showTimer',
+        label: 'Mostrar Timer',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'timerMinutes',
+        label: 'Minutos do Timer',
+        type: 'number-input',
+        min: 1,
+        max: 60,
+        defaultValue: 15
+      }
+    ]
+  },
+
   // BLOCOS DE FAQ
   {
     id: 'faq-section',

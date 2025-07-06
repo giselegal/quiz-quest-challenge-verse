@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useSchemaEditor } from '@/hooks/useSchemaEditor';
 import { blockDefinitions } from '@/config/blockDefinitions';
+import { UniversalBlockRenderer } from './blocks/UniversalBlockRenderer';
 import { 
   Save, 
   Eye, 
@@ -137,8 +138,10 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
   };
 
   // Handler para edição inline
-  const handleInlineEdit = (key: string) => (newValue: string) => {
-    handleBlockPropertyChange(key, newValue);
+  const handleInlineEdit = (blockId: string, updates: Partial<any>) => {
+    if (updates.properties) {
+      updateBlock(blockId, updates);
+    }
   };
 
   // Controles de auto-save
@@ -330,16 +333,22 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                       ) : (
                         currentPage.blocks.map((block) => (
                           <div key={block.id} className="group relative">
-                            {/* Substitua por um componente de bloco real, ex: <HeaderBlock ... /> */}
-                            <div className="border p-4 bg-gray-100 rounded">Bloco: {block.type}</div>
+                            {/* Renderiza o bloco usando o UniversalBlockRenderer */}
+                            <UniversalBlockRenderer
+                              block={block}
+                              isSelected={block.id === selectedBlockId}
+                              onClick={() => setSelectedBlock(block.id)}
+                              onSaveInline={handleInlineEdit}
+                              disabled={false}
+                            />
                             
-                            {/* Delete button */}
+                            {/* Botão de exclusão do bloco */}
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 deleteBlock(block.id);
                               }}
-                              className="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center text-xs hover:bg-red-600"
+                              className="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center text-xs hover:bg-red-600 z-10"
                             >
                               ×
                             </button>

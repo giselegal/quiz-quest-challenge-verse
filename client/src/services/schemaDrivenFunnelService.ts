@@ -1,5 +1,6 @@
 import type { BlockData } from '@/components/editor/blocks';
 import { REAL_QUIZ_QUESTIONS, STRATEGIC_QUESTIONS, TRANSITIONS } from '@/components/visual-editor/realQuizData';
+import { QuizDataAdapter } from './quizDataAdapter';
 
 // Tipos para o sistema schema-driven
 export interface SchemaDrivenFunnelData {
@@ -406,6 +407,22 @@ class SchemaDrivenFunnelService {
 
   // Utility methods
   createDefaultFunnel(): SchemaDrivenFunnelData {
+    // Usar o adaptador para criar funil com dados reais
+    const realFunnel = QuizDataAdapter.createSchemaFunnelFromRealData();
+    
+    // Garantir que a estrutura está correta
+    const validatedFunnel = QuizDataAdapter.repairFunnelStructure(realFunnel);
+    
+    console.log('✅ Funil criado com dados reais:', {
+      pages: validatedFunnel.pages.length,
+      blocks: validatedFunnel.pages.reduce((total, page) => total + page.blocks.length, 0)
+    });
+    
+    return validatedFunnel;
+  }
+
+  // Método legado - manter para compatibilidade
+  createLegacyDefaultFunnel(): SchemaDrivenFunnelData {
     const now = new Date();
     return {
       id: `funnel-${Date.now()}`,
