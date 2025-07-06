@@ -196,21 +196,71 @@ export const useBlockConfig = (pageId: string, blockId: string) => {
 export const useDynamicComponent = (pageId: string, blockId: string) => {
   const { block, props, isConfigured } = useBlockConfig(pageId, blockId);
   
+  // Tipo expandido para suportar todas as propriedades dos componentes personalizados
+  const expandedProps: Record<string, any> = {
+    ...props,
+    // Props básicas
+    className: props.className,
+    style: props.style,
+    title: props.title,
+    subtitle: props.subtitle,
+    content: props.content,
+    text: props.text,
+    
+    // Props de imagem
+    src: props.src,
+    alt: props.alt,
+    width: props.width,
+    height: props.height,
+    
+    // Props de layout
+    alignment: props.alignment,
+    size: props.size,
+    fullWidth: props.fullWidth,
+    titleSize: props.titleSize,
+    fontSize: props.fontSize,
+    
+    // Props de progresso
+    value: props.value,
+    label: props.label,
+    showPercentage: props.showPercentage,
+    progressLabel: props.progressLabel,
+    progressValue: props.progressValue,
+    
+    // Props de questões
+    question: props.question,
+    options: props.options,
+    multipleSelection: props.multipleSelection,
+    maxSelections: props.maxSelections,
+    
+    // Props de componentes específicos
+    logoHeight: props.logoHeight,
+    logoAlt: props.logoAlt,
+    secondaryStyles: props.secondaryStyles,
+    installments: props.installments,
+    fullPrice: props.fullPrice,
+    savings: props.savings,
+    
+    // Props de usuário
+    userName: props.userName,
+    styleName: props.styleName,
+    styleImage: props.styleImage,
+    
+    // Props adicionais baseadas no tipo
+    ...(block?.type === 'header-component-real' && {
+      primaryStyle: props.primaryStyle || 'dynamic',
+      logo: props.logo || '/default-logo.png',
+      userName: props.userName || 'Usuário'
+    }),
+    ...(block?.type === 'button-component-real' && {
+      onClick: () => eval(props.onClick || 'console.log("Button clicked")'),
+      children: props.children || 'Clique aqui'
+    })
+  };
+  
   return {
     componentType: block?.type || 'div',
-    props: {
-      ...props,
-      // Props adicionais baseadas no tipo
-      ...(block?.type === 'header-component-real' && {
-        primaryStyle: props.primaryStyle || 'dynamic',
-        logo: props.logo || '/default-logo.png',
-        userName: props.userName || 'Usuário'
-      }),
-      ...(block?.type === 'button-component-real' && {
-        onClick: () => eval(props.onClick || 'console.log("Button clicked")'),
-        children: props.children || 'Clique aqui'
-      })
-    },
+    props: expandedProps,
     isConfigured,
     rawBlock: block
   };
