@@ -87,15 +87,22 @@ export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSideb
               {categories.map(category => {
                 const categoryBlocks = getBlocksByCategory(category);
                 
+                // Debug: verificar duplicatas
+                const blockIds = categoryBlocks.map(b => b.id);
+                const duplicateIds = blockIds.filter((id, index) => blockIds.indexOf(id) !== index);
+                if (duplicateIds.length > 0) {
+                  console.error('🔴 DUPLICATE IDs found in category', category, ':', duplicateIds);
+                }
+                
                 return (
                   <div key={category}>
                     <h3 className="text-sm font-medium text-gray-700 mb-2 px-1">
                       {category} ({categoryBlocks.length})
                     </h3>
                     <div className="space-y-1">
-                      {categoryBlocks.map(block => (
+                      {categoryBlocks.map((block, blockIndex) => (
                         <Button
-                          key={block.id}
+                          key={`${block.id}-${blockIndex}`}
                           variant="ghost"
                           className="w-full justify-start p-3 h-auto hover:bg-[#FAF9F7] transition-colors"
                           onClick={() => onComponentSelect(block.type)}

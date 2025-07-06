@@ -827,7 +827,7 @@ const blockLibrary = [
     category: 'Funil'
   },
   { 
-    id: 'strategic-question',
+    id: 'strategic-question-basic',
     type: 'strategic-question', 
     name: 'Pergunta Estratégica', 
     description: 'Pergunta para qualificação com suporte a imagens',
@@ -976,7 +976,7 @@ const blockLibrary = [
   },
   // Quiz Estratégico
   { 
-    id: 'strategic-question',
+    id: 'strategic-question-advanced',
     type: 'strategic-question', 
     name: 'Questão Estratégica', 
     description: 'Pergunta de qualificação de lead',
