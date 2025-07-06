@@ -289,6 +289,9 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
               onComponentSelect={handleComponentSelect}
               activeTab={activeTab}
               onTabChange={setActiveTab}
+              funnelPages={funnel.pages}
+              currentPageId={currentPageId ?? undefined}
+              setCurrentPage={setCurrentPage}
             />
           </div>
         </ResizablePanel>

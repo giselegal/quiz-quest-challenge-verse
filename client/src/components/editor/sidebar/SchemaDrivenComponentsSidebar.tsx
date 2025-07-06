@@ -10,6 +10,9 @@ interface SchemaDrivenComponentsSidebarProps {
   onComponentSelect: (type: string) => void;
   activeTab?: string;
   onTabChange?: (tab: string) => void;
+  funnelPages?: Array<{ id: string; name: string; title?: string; order?: number }>;
+  currentPageId?: string;
+  setCurrentPage?: (pageId: string) => void;
 }
 
 // Mapeamento de ícones
@@ -49,7 +52,10 @@ const iconMap: { [key: string]: React.ReactNode } = {
 export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSidebarProps> = ({ 
   onComponentSelect,
   activeTab = 'blocks',
-  onTabChange
+  onTabChange,
+  funnelPages = [],
+  currentPageId,
+  setCurrentPage
 }) => {
   const categories = getCategories();
   const allBlocks = blockDefinitions;
@@ -62,7 +68,6 @@ export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSideb
           {allBlocks.length} blocos disponíveis
         </p>
       </div>
-      
       <Tabs value={activeTab} onValueChange={onTabChange} className="flex-1 flex flex-col">
         <div className="border-b px-4 py-2">
           <TabsList className="w-full">
@@ -70,17 +75,35 @@ export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSideb
             <TabsTrigger value="blocks" className="flex-1">Blocos</TabsTrigger>
           </TabsList>
         </div>
-        
-        <TabsContent value="pages" className="flex-1 p-4">
-          <div className="text-center text-gray-500 py-8">
-            <Target className="w-12 h-12 mx-auto mb-4 opacity-50" />
-            <p className="text-sm">
-              Sistema de páginas<br />
-              será implementado aqui
-            </p>
-          </div>
+        <TabsContent value="pages" className="flex-1 p-0 overflow-hidden">
+          <ScrollArea className="h-full">
+            <div className="p-2 space-y-1">
+              {funnelPages.length === 0 ? (
+                <div className="text-center text-gray-500 py-8">
+                  <Target className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                  <p className="text-sm">Nenhuma página encontrada</p>
+                </div>
+              ) : (
+                funnelPages
+                  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+                  .map((page) => (
+                    <Button
+                      key={page.id}
+                      variant={page.id === currentPageId ? 'default' : 'ghost'}
+                      className={`w-full justify-start px-3 py-2 h-auto text-left rounded-md ${page.id === currentPageId ? 'bg-[#B89B7A]/10 text-[#432818]' : ''}`}
+                      onClick={() => setCurrentPage && setCurrentPage(page.id)}
+                    >
+                      <span className="font-medium text-sm truncate">{page.name || page.title || `Página ${page.order}`}</span>
+                      {page.title && (
+                        <span className="block text-xs text-gray-500 truncate">{page.title}</span>
+                      )}
+                    </Button>
+                  ))
+              )}
+            </div>
+          </ScrollArea>
         </TabsContent>
-
+        
         <TabsContent value="blocks" className="flex-1 overflow-hidden">
           <ScrollArea className="h-full">
             <div className="p-4 space-y-4">
