@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { SchemaDrivenComponentsSidebar } from './sidebar/SchemaDrivenComponentsSidebar';
 import { SimpleSidebar } from './sidebar/SimpleSidebar';
-import { ModernPropertyPanel } from './ModernPropertyPanel';
+import { DynamicPropertiesPanel } from './panels/DynamicPropertiesPanel';
 import { SyncStatus } from './status/SyncStatus';
 import { VersionManager } from './version/VersionManager';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
@@ -23,20 +23,6 @@ import {
   Users,
   BarChart3
 } from 'lucide-react';
-import { BlockData } from '@/types/blocks';
-import { Block } from '@/hooks/useBlockForm';
-
-// Helper para converter BlockData para Block
-const adaptBlockDataToBlock = (blockData: BlockData | null): Block | null => {
-  if (!blockData) return null;
-  return {
-    id: blockData.id,
-    type: blockData.type,
-    properties: blockData.properties,
-    hidden: blockData.properties?.hidden || false,
-    locked: blockData.properties?.locked || false,
-  };
-};
 
 interface SchemaDrivenEditorLayoutV2Props {
   funnelId?: string;
@@ -425,13 +411,12 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
         {/* Right Properties Panel */}
         <ResizablePanel defaultSize={25} minSize={20} maxSize={35}>
           <div className="h-full border-l border-gray-200 bg-white">
-            <ModernPropertyPanel
-              selectedBlock={adaptBlockDataToBlock(selectedBlock)}
-              onUpdate={(updates) => {
-                if (selectedBlockId && updates?.properties) {
-                  updateBlock(selectedBlockId, { properties: updates.properties });
-                }
-              }}
+            <DynamicPropertiesPanel
+              selectedBlock={selectedBlock}
+              funnelConfig={funnel.config}
+              onBlockPropertyChange={handleBlockPropertyChange}
+              onNestedPropertyChange={handleNestedPropertyChange}
+              onFunnelConfigChange={updateFunnelConfig}
             />
           </div>
         </ResizablePanel>
