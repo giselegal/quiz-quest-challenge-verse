@@ -409,7 +409,7 @@ const EnhancedSimpleDragDropEditor: React.FC = () => {
         {component.type === "quiz-options" && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {component.data.options.map((option: any, index: number) => (
-              <div key={index} className="group border-2 border-gray-200 rounded-xl p-4 hover:border-blue-500 hover:shadow-lg cursor-pointer transition-all duration-200 bg-white">
+              <div key={`${component.id}-option-${index}`} className="group border-2 border-gray-200 rounded-xl p-4 hover:border-blue-500 hover:shadow-lg cursor-pointer transition-all duration-200 bg-white">
                 <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg mb-3 overflow-hidden relative">
                   <div className="absolute inset-0 flex items-center justify-center">
                     <Image className="w-8 h-8 text-gray-400" />
@@ -458,7 +458,7 @@ const EnhancedSimpleDragDropEditor: React.FC = () => {
                 <h4 className="font-semibold text-gray-800 mb-2">Características</h4>
                 <ul className="text-sm text-gray-600 space-y-1">
                   {component.data.characteristics?.map((char: string, index: number) => (
-                    <li key={index}>• {char}</li>
+                    <li key={`${component.id}-char-${index}`}>• {char}</li>
                   ))}
                 </ul>
               </div>
@@ -466,7 +466,7 @@ const EnhancedSimpleDragDropEditor: React.FC = () => {
                 <h4 className="font-semibold text-gray-800 mb-2">Dicas de Styling</h4>
                 <ul className="text-sm text-gray-600 space-y-1">
                   {component.data.tips?.map((tip: string, index: number) => (
-                    <li key={index}>• {tip}</li>
+                    <li key={`${component.id}-tip-${index}`}>• {tip}</li>
                   ))}
                 </ul>
               </div>
@@ -552,7 +552,7 @@ const EnhancedSimpleDragDropEditor: React.FC = () => {
             </div>
             <div className="space-y-3">
               {component.data.options.map((option: string, index: number) => (
-                <div key={index} className="border-2 border-gray-200 rounded-lg p-4 hover:border-blue-500 hover:bg-blue-50 cursor-pointer transition-all duration-200">
+                <div key={`${component.id}-strategic-option-${index}`} className="border-2 border-gray-200 rounded-lg p-4 hover:border-blue-500 hover:bg-blue-50 cursor-pointer transition-all duration-200">
                   <div className="flex items-center space-x-3">
                     <div className="w-5 h-5 border-2 border-gray-300 rounded-full"></div>
                     <span className="text-gray-700">{option}</span>
@@ -576,7 +576,7 @@ const EnhancedSimpleDragDropEditor: React.FC = () => {
                   <span className="font-semibold text-gray-800">{component.data.name}</span>
                   <div className="flex ml-2">
                     {[1,2,3,4,5].map(star => (
-                      <span key={star} className="text-yellow-400">⭐</span>
+                      <span key={`${component.id}-star-${star}`} className="text-yellow-400">⭐</span>
                     ))}
                   </div>
                 </div>
