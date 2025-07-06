@@ -195,13 +195,25 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
           updatePage(currentPage.id, { blocks: newBlocks });
         }
       }}
-      onBlockAdd={(blockType, position) => {
+      onBlockAdd={(blockType) => {
         if (currentPage) {
-          addBlock(blockType, position);
+          const definition = blockDefinitions.find(def => def.type === blockType);
+          if (definition) {
+            const defaultProperties: Record<string, any> = {};
+            definition.propertiesSchema?.forEach(prop => {
+              if (prop.defaultValue !== undefined) {
+                defaultProperties[prop.key] = prop.defaultValue;
+              }
+            });
+            addBlock({
+              type: blockType,
+              properties: defaultProperties
+            });
+          }
         }
       }}
       onBlockSelect={setSelectedBlock}
-      selectedBlockId={selectedBlockId}
+      selectedBlockId={selectedBlockId || undefined}
       onBlockUpdate={handleInlineEdit}
     >
     <div className={`h-screen flex flex-col overflow-hidden bg-gray-50 ${className}`}>
@@ -332,7 +344,7 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                   {/* Canvas Content com Drag & Drop */}
                   <DroppableCanvas
                     blocks={currentPage?.blocks || []}
-                    selectedBlockId={selectedBlockId}
+                    selectedBlockId={selectedBlockId || undefined}
                     onBlockSelect={(blockId) => setSelectedBlock(blockId)}
                     onBlockDelete={deleteBlock}
                     onBlockDuplicate={(blockId) => {
@@ -365,7 +377,21 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                       }
                     }}
                     onSaveInline={handleInlineEdit}
-                    onAddBlock={(blockType) => addBlock(blockType)}
+                    onAddBlock={(blockType) => {
+                      const definition = blockDefinitions.find(def => def.type === blockType);
+                      if (definition) {
+                        const defaultProperties: Record<string, any> = {};
+                        definition.propertiesSchema?.forEach(prop => {
+                          if (prop.defaultValue !== undefined) {
+                            defaultProperties[prop.key] = prop.defaultValue;
+                          }
+                        });
+                        addBlock({
+                          type: blockType,
+                          properties: defaultProperties
+                        });
+                      }
+                    }}
                   />
                   
                   {!currentPage && (
