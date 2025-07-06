@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
+import { InlineEditText } from './InlineEditText';
 
 interface QuestionOption {
   id: string;
@@ -30,6 +31,7 @@ interface QuestionMultipleBlockProps {
   };
   isSelected?: boolean;
   onClick?: () => void;
+  onPropertyChange?: (key: string, value: any) => void;
   disabled?: boolean;
   className?: string;
 }
@@ -38,6 +40,7 @@ const QuestionMultipleBlock: React.FC<QuestionMultipleBlockProps> = ({
   block,
   isSelected = false,
   onClick,
+  onPropertyChange,
   disabled = false,
   className
 }) => {
@@ -75,9 +78,16 @@ const QuestionMultipleBlock: React.FC<QuestionMultipleBlockProps> = ({
 
       {/* Question */}
       <div className="text-center mb-8">
-        <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: textColor }}>
-          {question}
-        </h2>
+        <InlineEditText
+          value={question}
+          onSave={(newValue) => onPropertyChange?.('question', newValue)}
+          placeholder="Digite a pergunta..."
+          disabled={disabled}
+          multiline={true}
+          as="h2"
+          className="text-2xl md:text-3xl font-bold mb-4"
+          style={{ color: textColor }}
+        />
         
         {multipleSelection && (
           <Badge variant="outline" className="mb-4">
