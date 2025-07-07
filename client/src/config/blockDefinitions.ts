@@ -579,6 +579,9 @@ export const blockDefinitions: BlockDefinition[] = [
       { key: 'minSelections', label: 'Mínimo de Seleções', type: 'number-input', min: 1, max: 10, defaultValue: 1 },
       { key: 'validationMessage', label: 'Mensagem de Validação', type: 'text-input', placeholder: 'Selecione uma opção', defaultValue: 'Selecione uma opção' },
       { key: 'gridGap', label: 'Espaçamento (px)', type: 'number-input', min: 4, max: 32, defaultValue: 16 },
+      { key: 'selectedOptions', label: 'Opções Selecionadas', type: 'array-editor', itemSchema: [
+        { key: 'value', label: 'ID da Opção', type: 'text-input', placeholder: 'opcao-1', defaultValue: '' }
+      ], defaultValue: [] },
     ],
   },
 
