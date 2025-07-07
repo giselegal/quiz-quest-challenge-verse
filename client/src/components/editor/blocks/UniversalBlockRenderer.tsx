@@ -22,6 +22,11 @@ import QuizIntroHeaderBlock from './QuizIntroHeaderBlock';
 import QuizNameInputBlock from './QuizNameInputBlock';
 import QuizTitleBlock from './QuizTitleBlock';
 
+// Blocos de passos do funil
+import FunnelIntroStep from '../../funnel-blocks/steps/FunnelIntroStep';
+import OfferTransitionStep from '../../funnel-blocks/steps/OfferTransitionStep';
+import OfferPageStep from '../../funnel-blocks/steps/OfferPageStep';
+
 // Blocos UI/Avançados
 import AlertBlock from './AlertBlock';
 import ArgumentsBlock from './ArgumentsBlock';
@@ -192,6 +197,50 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <QuizNameInputBlock {...commonProps} />;
       case 'quiz-title':
         return <QuizTitleBlock {...commonProps} />;
+
+      // BLOCOS DE PASSOS DO FUNIL
+      case 'funnel-intro':
+        return (
+          <FunnelIntroStep
+            id={block.id || 'funnel-intro'}
+            stepType="intro"
+            stepNumber={1}
+            totalSteps={3}
+            data={block.properties}
+            className={commonProps.className}
+            style={{}}
+            isEditable={!disabled}
+            onEdit={onClick}
+          />
+        );
+      case 'funnel-offer-transition':
+        return (
+          <OfferTransitionStep
+            id={block.id || 'offer-transition'}
+            stepType="offer-transition"
+            stepNumber={2}
+            totalSteps={3}
+            data={block.properties}
+            className={commonProps.className}
+            style={{}}
+            isEditable={!disabled}
+            onEdit={onClick}
+          />
+        );
+      case 'funnel-offer-page':
+        return (
+          <OfferPageStep
+            id={block.id || 'offer-page'}
+            stepType="offer-page"
+            stepNumber={3}
+            totalSteps={3}
+            data={block.properties}
+            className={commonProps.className}
+            style={{}}
+            isEditable={!disabled}
+            onEdit={onClick}
+          />
+        );
 
       // BLOCOS UNIFICADOS DO FUNIL - Componentes reutilizáveis que garantem fidelidade visual
       case 'FunnelHeroBlock':

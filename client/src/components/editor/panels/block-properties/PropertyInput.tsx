@@ -5,7 +5,8 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
-import { Plus, Trash2, Type, Image, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
+import { useDropzone } from 'react-dropzone';
+import { Plus, Trash2, Type, Image, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Upload } from 'lucide-react';
 import { PropertySchema } from '@/config/blockDefinitions';
 
 interface PropertyInputProps {
@@ -63,6 +64,7 @@ export const PropertyInput: React.FC<PropertyInputProps> = ({
       );
 
     case 'textarea':
+    case 'text-area': // Alias para compatibilidade
       return (
         <div className="space-y-2">
           <Label htmlFor={schema.key}>{schema.label}</Label>
@@ -346,6 +348,46 @@ export const PropertyInput: React.FC<PropertyInputProps> = ({
       );
 
     case 'image-url':
+    case 'image-upload': // Novo tipo para upload de arquivo
+      if (schema.type === 'image-upload') {
+        const { getRootProps, getInputProps, isDragActive } = useDropzone({
+          accept: { 'image/*': [] },
+          onDrop: (files) => {
+            if (files.length > 0) {
+              const file = files[0];
+              // Simular URL para preview (em produção, enviar para servidor)
+              const url = URL.createObjectURL(file);
+              handleInputChange(url);
+            }
+          }
+        });
+
+        return (
+          <div className="space-y-2">
+            <Label htmlFor={schema.key}>{schema.label}</Label>
+            <div
+              {...getRootProps()}
+              className={`border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition-colors ${
+                isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-gray-400'
+              }`}
+            >
+              <input {...getInputProps()} />
+              <Upload className="h-8 w-8 mx-auto mb-2 text-gray-400" />
+              {isDragActive ? (
+                <p className="text-blue-600">Solte a imagem aqui...</p>
+              ) : (
+                <div>
+                  <p className="text-gray-600">Arraste uma imagem ou clique para selecionar</p>
+                  <p className="text-xs text-gray-400 mt-1">PNG, JPG, GIF até 10MB</p>
+                </div>
+              )}
+            </div>
+            {currentValue && renderImagePreview(currentValue)}
+          </div>
+        );
+      }
+      
+      // Fallback para image-url
       return (
         <div className="space-y-2">
           <Label htmlFor={schema.key}>{schema.label}</Label>
@@ -357,9 +399,6 @@ export const PropertyInput: React.FC<PropertyInputProps> = ({
             placeholder={schema.placeholder}
           />
           {currentValue && renderImagePreview(currentValue)}
-          {schema.description && (
-            <p className="text-xs text-gray-500">{schema.description}</p>
-          )}
         </div>
       );
 

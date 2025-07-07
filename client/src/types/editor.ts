@@ -97,7 +97,29 @@ export interface EditorConfig {
 }
 
 // Tipos para as propriedades de cada campo no painel de propriedades
-export type PropertyType = 'text' | 'number' | 'color' | 'select' | 'boolean' | 'url' | 'array-of-objects' | 'image' | 'icon-select' | 'textarea' | 'range';
+export type PropertyType = 
+  | 'text' 
+  | 'number' 
+  | 'color' 
+  | 'select' 
+  | 'boolean' 
+  | 'url' 
+  | 'array-of-objects' 
+  | 'image' 
+  | 'icon-select' 
+  | 'textarea' 
+  | 'text-area'
+  | 'range'
+  | 'image-upload'
+  | 'font-size-slider'
+  | 'font-weight-buttons'
+  | 'text-style-buttons'
+  | 'text-align-buttons'
+  | 'content-type-buttons'
+  | 'color-palette'
+  | 'image-url'
+  | 'video-url'
+  | 'json-editor';
 
 export interface PropertySchema {
   key: string; // Chave da propriedade (ex: 'text', 'fontSize')
@@ -112,6 +134,8 @@ export interface PropertySchema {
   step?: number; // Para 'number' e 'range'
   placeholder?: string; // Para campos de texto
   helpText?: string; // Texto de ajuda
+  description?: string; // Descrição adicional
+  rows?: number; // Para textarea
 }
 
 // Interface para as opções de uma pergunta

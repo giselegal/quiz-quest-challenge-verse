@@ -91,7 +91,7 @@ export const DynamicPropertiesPanel: React.FC<DynamicPropertiesPanelProps> = ({
                 schema={{
                   key: 'description',
                   label: 'Descrição',
-                  type: 'textarea',
+                  type: 'text-area',
                   placeholder: 'Descrição do funil...',
                   rows: 3
                 }}
