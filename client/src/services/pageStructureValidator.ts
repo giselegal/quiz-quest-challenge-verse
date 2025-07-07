@@ -1,14 +1,12 @@
 /**
  * Validador e corretor de estrutura de páginas para garantir que todas
  * as páginas na aba "Páginas" sejam schema-driven e editáveis
- * 
- * OBJETIVO: Transformar TODAS as etapas do funil em componentes padronizados
- * e editáveis usando os tipos definidos em blockDefinitions.ts
  */
 
-import type { BlockData } from '@/types/blocks';
-import type { SchemaDrivenPageData, SchemaDrivenFunnelData } from './schemaDrivenFunnelService';
+// Importe os tipos necessários (assumindo que estão em 'src/types.ts')
+import type { Block, Page as SchemaDrivenPageData, Funnel as SchemaDrivenFunnelData } from '@/types/blocks'; // Renomeei Page para evitar conflito local
 import { blockDefinitions } from '@/config/blockDefinitions';
+// import { QuizDataAdapter } from './quizDataAdapter'; // Não usado neste arquivo, pode ser removido se não for necessário
 
 export interface PageValidationResult {
   isValid: boolean;
@@ -68,7 +66,7 @@ export class PageStructureValidator {
   /**
    * Valida um bloco individual
    */
-  private static validateBlock(block: BlockData, index: number): { errors: string[]; warnings: string[] } {
+  private static validateBlock(block: Block, index: number): { errors: string[]; warnings: string[] } {
     const errors: string[] = [];
     const warnings: string[] = [];
 
@@ -77,23 +75,29 @@ export class PageStructureValidator {
       errors.push(`Bloco no índice ${index} não possui ID válido`);
     }
 
-    // 2. Verificar se o tipo do bloco existe nas definições schema-driven
+    // 2. Verificar se o tipo do bloco existe nas definições
     const definition = blockDefinitions.find(def => def.type === block.type);
     if (!definition) {
-      errors.push(`Tipo de bloco '${block.type}' no índice ${index} não encontrado nas definições schema-driven - será convertido para tipo padrão`);
+      errors.push(`Tipo de bloco '${block.type}' no índice ${index} não encontrado nas definições schema-driven`);
     }
 
-    // 3. Verificar se tem propriedades
+    // 3. Verificar se tem propriedades (e inicializar se ausente para evitar erros)
     if (!block.properties) {
-      warnings.push(`Bloco '${block.type}' no índice ${index} não possui propriedades - será inicializado com propriedades padrão`);
+      warnings.push(`Bloco '${block.type}' no índice ${index} não possui propriedades - pode não ser editável`);
     }
 
-    // 4. Verificar compatibilidade com schema
+    // 4. Verificar se as propriedades estão compatíveis com o schema
     if (definition && block.properties) {
       const allProps = definition.propertiesSchema || [];
       allProps.forEach(prop => {
-        if (prop.defaultValue !== undefined && !(prop.key in block.properties)) {
-          warnings.push(`Propriedade '${prop.key}' ausente no bloco '${block.type}' no índice ${index} - será aplicado valor padrão`);
+        // Verifica se uma propriedade obrigatória (sem defaultValue) está faltando
+        if (prop.defaultValue === undefined && !(prop.key in block.properties)) {
+          // Isso pode ser um erro ou um aviso dependendo da sua regra de negócio
+          warnings.push(`Propriedade obrigatória '${prop.key}' ausente no bloco '${block.type}' no índice ${index}.`);
+        }
+        // Verifica se uma propriedade com defaultValue está faltando
+        else if (prop.defaultValue !== undefined && !(prop.key in block.properties)) {
+          warnings.push(`Propriedade '${prop.key}' ausente no bloco '${block.type}' no índice ${index} - será usada propriedade padrão.`);
         }
       });
     }
