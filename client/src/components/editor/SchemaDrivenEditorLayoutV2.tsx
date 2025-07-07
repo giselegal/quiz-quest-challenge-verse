@@ -22,7 +22,8 @@ import {
   Smartphone,
   FileText,
   Users,
-  BarChart3
+  BarChart3,
+  Menu
 } from 'lucide-react';
 
 interface SchemaDrivenEditorLayoutV2Props {
@@ -37,6 +38,8 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
   const [activeTab, setActiveTab] = useState('blocks');
   const [deviceView, setDeviceView] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
   const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [showLeftSidebar, setShowLeftSidebar] = useState(true);
+  const [showRightSidebar, setShowRightSidebar] = useState(true);
 
   // Hook principal do editor com backend
   const {
@@ -218,23 +221,23 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
       onBlockUpdate={handleInlineEdit}
     >
     <div className={`h-screen flex flex-col overflow-hidden bg-gray-50 ${className}`}>
-      {/* Header */}
-      <div className="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4">
-        <div className="flex items-center space-x-4">
-          {/* Info do funil */}
-          <div className="flex items-center space-x-2">
-            <FileText className="w-5 h-5 text-gray-500" />
-            <span className="font-medium text-gray-800">{funnel.name}</span>
-            <Badge variant={funnel.isPublished ? 'default' : 'secondary'}>
+      {/* Header - Mobile First Design */}
+      <div className="h-12 sm:h-14 bg-white border-b border-gray-200 flex items-center justify-between px-2 sm:px-4">
+        <div className="flex items-center space-x-1 sm:space-x-4 min-w-0 flex-1">
+          {/* Info do funil - Mobile compact */}
+          <div className="flex items-center space-x-1 sm:space-x-2 min-w-0">
+            <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 flex-shrink-0" />
+            <span className="font-medium text-gray-800 text-sm sm:text-base truncate">{funnel.name}</span>
+            <Badge variant={funnel.isPublished ? 'default' : 'secondary'} className="text-xs hidden sm:inline-flex">
               {funnel.isPublished ? 'Publicado' : 'Rascunho'}
             </Badge>
           </div>
 
-          {/* Info da página atual */}
+          {/* Info da página atual - Mobile hidden */}
           {currentPage && (
-            <div className="flex items-center space-x-2 text-sm text-gray-600">
+            <div className="hidden lg:flex items-center space-x-2 text-sm text-gray-600">
               <span>•</span>
-              <span>{currentPage.title}</span>
+              <span className="truncate">{currentPage.title}</span>
               <Badge variant="outline" className="text-xs">
                 {currentPage.blocks.length} bloco{currentPage.blocks.length !== 1 ? 's' : ''}
               </Badge>
@@ -242,112 +245,166 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
           )}
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1 sm:space-x-2">
           {/* Status de sincronização compacto */}
-          <SyncStatus
-            autoSaveState={autoSaveState}
-            isSaving={isSaving}
-            isOnline={isOnline}
-            onManualSave={() => saveFunnel(true)}
-            onSync={syncWithBackend}
-            onToggleAutoSave={handleToggleAutoSave}
-            compact
-          />
+          <div className="hidden sm:block">
+            <SyncStatus
+              autoSaveState={autoSaveState}
+              isSaving={isSaving}
+              isOnline={isOnline}
+              onManualSave={() => saveFunnel(true)}
+              onSync={syncWithBackend}
+              onToggleAutoSave={handleToggleAutoSave}
+              compact
+            />
+          </div>
 
-          {/* Device view controls */}
+          {/* Mobile Toggle Buttons */}
+          {deviceView === 'mobile' && (
+            <div className="flex space-x-1">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowLeftSidebar(!showLeftSidebar)}
+                className="px-2"
+              >
+                <Menu className="w-3 h-3" />
+              </Button>
+              <Button
+                variant="outline" 
+                size="sm"
+                onClick={() => setShowRightSidebar(!showRightSidebar)}
+                className="px-2"
+              >
+                <Settings className="w-3 h-3" />
+              </Button>
+            </div>
+          )}
+
+          {/* Device view controls - Mobile optimized */}
           <div className="flex border rounded-md">
             <Button
               variant={deviceView === 'mobile' ? 'default' : 'ghost'}
               size="sm"
-              onClick={() => setDeviceView('mobile')}
-              className="rounded-r-none px-2"
+              onClick={() => {
+                setDeviceView('mobile');
+                setShowLeftSidebar(false);
+                setShowRightSidebar(false);
+              }}
+              className="rounded-r-none px-1.5 sm:px-2"
             >
-              <Smartphone className="w-4 h-4" />
+              <Smartphone className="w-3 h-3 sm:w-4 sm:h-4" />
             </Button>
             <Button
               variant={deviceView === 'tablet' ? 'default' : 'ghost'}
               size="sm"
-              onClick={() => setDeviceView('tablet')}
-              className="rounded-none px-2"
+              onClick={() => {
+                setDeviceView('tablet');
+                setShowLeftSidebar(true);
+                setShowRightSidebar(true);
+              }}
+              className="rounded-none px-1.5 sm:px-2 hidden sm:inline-flex"
             >
-              <Tablet className="w-4 h-4" />
+              <Tablet className="w-3 h-3 sm:w-4 sm:h-4" />
             </Button>
             <Button
               variant={deviceView === 'desktop' ? 'default' : 'ghost'}
               size="sm"
-              onClick={() => setDeviceView('desktop')}
-              className="rounded-l-none px-2"
+              onClick={() => {
+                setDeviceView('desktop');
+                setShowLeftSidebar(true);
+                setShowRightSidebar(true);
+              }}
+              className="rounded-l-none px-1.5 sm:px-2"
             >
-              <Monitor className="w-4 h-4" />
+              <Monitor className="w-3 h-3 sm:w-4 sm:h-4" />
             </Button>
           </div>
 
-          {/* Ações principais */}
-          <VersionManager
-            versions={getVersionHistory()}
-            currentVersion={funnel.version}
-            onRestoreVersion={restoreVersion}
-            trigger={
-              <Button variant="outline" size="sm">
-                <BarChart3 className="w-4 h-4 mr-1" />
-                Versões
-              </Button>
-            }
-          />
+          {/* Ações principais - Mobile minimized */}
+          <div className="hidden md:block">
+            <VersionManager
+              versions={getVersionHistory()}
+              currentVersion={funnel.version}
+              onRestoreVersion={restoreVersion}
+              trigger={
+                <Button variant="outline" size="sm">
+                  <BarChart3 className="w-4 h-4 mr-1" />
+                  Versões
+                </Button>
+              }
+            />
+          </div>
 
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" className="hidden sm:inline-flex">
             <Eye className="w-4 h-4 mr-1" />
-            Preview
+            <span className="hidden lg:inline">Preview</span>
           </Button>
 
           <Button 
             size="sm" 
             onClick={() => saveFunnel(true)}
             disabled={isSaving}
-            className="bg-[#B89B7A] hover:bg-[#a08965]"
+            className="bg-[#B89B7A] hover:bg-[#a08965] px-2 sm:px-3"
           >
-            <Save className="w-4 h-4 mr-1" />
-            {isSaving ? 'Salvando...' : 'Salvar'}
+            <Save className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-1" />
+            <span className="hidden sm:inline">{isSaving ? 'Salvando...' : 'Salvar'}</span>
           </Button>
         </div>
       </div>
 
-      {/* Main Content */}
-      <ResizablePanelGroup direction="horizontal" className="flex-1">
-        {/* Left Sidebar */}
-        <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-          <div className="h-full border-r border-gray-200 bg-white flex flex-col">
-            <div className="flex-1 overflow-hidden">
-              <SchemaDrivenComponentsSidebar 
-                onComponentSelect={handleComponentSelect}
-                activeTab={activeTab}
-                onTabChange={setActiveTab}
-                funnelPages={funnel.pages}
-                currentPageId={currentPageId ?? undefined}
-                setCurrentPage={setCurrentPage}
-              />
+      {/* Main Content - Mobile Responsive Layout */}
+      <div className="flex-1 flex flex-col sm:flex-row overflow-hidden">
+        {/* Left Sidebar - Mobile: Show/Hide with toggle */}
+        <div className={`
+          ${deviceView === 'mobile' ? (showLeftSidebar ? 'block absolute left-0 top-0 bottom-0 z-50 bg-white shadow-lg' : 'hidden') : 'block'} 
+          w-full sm:w-80 lg:w-96 h-full border-r border-gray-200 bg-white flex flex-col
+        `}>
+          {/* Close button for mobile */}
+          {deviceView === 'mobile' && showLeftSidebar && (
+            <div className="flex justify-end p-2 border-b">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => setShowLeftSidebar(false)}
+                className="h-8 w-8 p-0"
+              >
+                ×
+              </Button>
             </div>
+          )}
+          <div className="flex-1 overflow-hidden">
+            <SchemaDrivenComponentsSidebar 
+              onComponentSelect={(type) => {
+                handleComponentSelect(type);
+                if (deviceView === 'mobile') setShowLeftSidebar(false);
+              }}
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+              funnelPages={funnel.pages}
+              currentPageId={currentPageId ?? undefined}
+              setCurrentPage={setCurrentPage}
+            />
           </div>
-        </ResizablePanel>
+        </div>
         
-        <ResizableHandle withHandle />
-        
-        {/* Central Canvas */}
-        <ResizablePanel defaultSize={55}>
-          <div className="h-full overflow-auto bg-gray-50">
-            <div className="p-8">
-              <div className={`mx-auto bg-white min-h-[800px] shadow-lg rounded-lg transition-all duration-300 ${
-                deviceView === 'mobile' ? 'max-w-sm' :
-                deviceView === 'tablet' ? 'max-w-2xl' :
-                'max-w-4xl'
+        {/* Central Canvas - Mobile Optimized */}
+        <div className="flex-1 h-full overflow-auto bg-gray-50">
+          <div className={`p-2 sm:p-4 lg:p-8 ${deviceView === 'mobile' ? 'px-1' : ''}`}>
+            <div className={`mx-auto bg-white shadow-lg rounded-lg transition-all duration-300 ${
+              deviceView === 'mobile' ? 'max-w-full min-h-[600px]' :
+              deviceView === 'tablet' ? 'max-w-2xl min-h-[700px]' :
+              'max-w-4xl min-h-[800px]'
+            }`}>
+              <div className={`${
+                deviceView === 'mobile' ? 'p-2 sm:p-4' : 'p-4 sm:p-6'
               }`}>
-                <div className="p-6">
-                  {/* Canvas Content com Drag & Drop */}
-                  <DroppableCanvas
-                    blocks={currentPage?.blocks || []}
-                    selectedBlockId={selectedBlockId || undefined}
-                    onBlockSelect={(blockId) => setSelectedBlock(blockId)}
-                    onBlockDelete={deleteBlock}
+                {/* Canvas Content com Drag & Drop */}
+                <DroppableCanvas
+                  blocks={currentPage?.blocks || []}
+                  selectedBlockId={selectedBlockId || undefined}
+                  onBlockSelect={(blockId) => setSelectedBlock(blockId)}
+                  onBlockDelete={deleteBlock}
                     onBlockDuplicate={(blockId) => {
                       const block = currentPage?.blocks.find(b => b.id === blockId);
                       if (block && currentPage) {
@@ -393,35 +450,64 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                         });
                       }
                     }}
-                  />
+                  onBlockUpdate={(blockId, updates) => {
+                    updateBlock(blockId, updates);
+                  }}
+                  onReorder={reorderBlocks}
+                  className={deviceView === 'mobile' ? 'mobile-canvas' : ''}
+                />
                   
-                  {!currentPage && (
-                    <div className="text-center py-16 text-gray-500">
-                      <h3 className="text-lg font-medium mb-2">Nenhuma página selecionada</h3>
-                      <p className="text-sm">Selecione uma página para começar a editar.</p>
-                    </div>
-                  )}
-                </div>
+                {!currentPage && (
+                  <div className="text-center py-16 text-gray-500">
+                    <h3 className="text-lg font-medium mb-2">Nenhuma página selecionada</h3>
+                    <p className="text-sm">Selecione uma página para começar a editar.</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
-        </ResizablePanel>
+        </div>
         
-        <ResizableHandle withHandle />
-        
-        {/* Right Properties Panel */}
-        <ResizablePanel defaultSize={25} minSize={20} maxSize={35}>
-          <div className="h-full border-l border-gray-200 bg-white">
+        {/* Right Sidebar - Properties Panel - Mobile: Show/Hide with toggle */}
+        <div className={`
+          ${deviceView === 'mobile' ? (showRightSidebar ? 'block absolute right-0 top-0 bottom-0 z-50 bg-white shadow-lg' : 'hidden') : 'block'} 
+          w-full sm:w-80 lg:w-96 h-full border-l border-gray-200 bg-white flex flex-col
+        `}>
+          {/* Close button for mobile */}
+          {deviceView === 'mobile' && showRightSidebar && (
+            <div className="flex justify-start p-2 border-b">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => setShowRightSidebar(false)}
+                className="h-8 w-8 p-0"
+              >
+                ×
+              </Button>
+            </div>
+          )}
+          <div className="flex-1 overflow-hidden">
             <DynamicPropertiesPanel
               selectedBlock={selectedBlock}
-              funnelConfig={funnel.config}
+              funnelConfig={funnel}
               onBlockPropertyChange={handleBlockPropertyChange}
               onNestedPropertyChange={handleNestedPropertyChange}
               onFunnelConfigChange={updateFunnelConfig}
             />
           </div>
-        </ResizablePanel>
-      </ResizablePanelGroup>
+        </div>
+        
+        {/* Mobile Overlay */}
+        {deviceView === 'mobile' && (showLeftSidebar || showRightSidebar) && (
+          <div 
+            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            onClick={() => {
+              setShowLeftSidebar(false);
+              setShowRightSidebar(false);
+            }}
+          />
+        )}
+      </div>
     </div>
     </DndProvider>
   );

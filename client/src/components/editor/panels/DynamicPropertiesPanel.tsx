@@ -136,7 +136,7 @@ export const DynamicPropertiesPanel: React.FC<DynamicPropertiesPanelProps> = ({
 
   return (
     <ScrollArea className="h-full">
-      <div className="p-4 space-y-6">
+      <div className="p-2 sm:p-4 space-y-3 sm:space-y-6">
         {/* Cabeçalho do bloco */}
         <Card>
           <CardHeader>

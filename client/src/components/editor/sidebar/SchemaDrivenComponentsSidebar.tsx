@@ -62,23 +62,23 @@ export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSideb
 
   return (
     <div className="h-full flex flex-col">
-      <div className="p-4 border-b border-gray-200">
-        <h2 className="font-playfair text-lg text-[#432818]">Biblioteca</h2>
+      <div className="p-2 sm:p-4 border-b border-gray-200">
+        <h2 className="font-playfair text-base sm:text-lg text-[#432818]">Biblioteca</h2>
         <p className="text-xs text-gray-600">
-          {funnelPages.length} páginas • {allBlocks.length} blocos disponíveis
+          {funnelPages.length} páginas • {allBlocks.length} blocos
         </p>
       </div>
       <Tabs value={activeTab} onValueChange={onTabChange} className="flex-1 flex flex-col min-h-0">
-        <div className="border-b border-gray-200 px-4 py-2 flex-shrink-0">
+        <div className="border-b border-gray-200 px-2 sm:px-4 py-2 flex-shrink-0">
           <TabsList className="w-full">
-            <TabsTrigger value="pages" className="flex-1">Páginas</TabsTrigger>
-            <TabsTrigger value="blocks" className="flex-1">Blocos</TabsTrigger>
+            <TabsTrigger value="pages" className="flex-1 text-xs sm:text-sm">Páginas</TabsTrigger>
+            <TabsTrigger value="blocks" className="flex-1 text-xs sm:text-sm">Blocos</TabsTrigger>
           </TabsList>
         </div>
         
         <TabsContent value="pages" className="flex-1 p-0 m-0 data-[state=active]:flex data-[state=active]:flex-col overflow-hidden">
           <ScrollArea className="flex-1">
-            <div className="p-3 space-y-2">
+            <div className="p-2 sm:p-3 space-y-1 sm:space-y-2">
               {funnelPages.length === 0 ? (
                 <div className="text-center text-gray-500 py-8">
                   <Target className="w-12 h-12 mx-auto mb-4 opacity-50" />
@@ -91,7 +91,7 @@ export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSideb
                     <Button
                       key={page.id}
                       variant="ghost"
-                      className={`w-full justify-start px-3 py-2.5 h-auto text-left rounded-md hover:bg-gray-50 transition-colors ${
+                      className={`w-full justify-start px-2 sm:px-3 py-2 sm:py-2.5 h-auto text-left rounded-md hover:bg-gray-50 transition-colors ${
                         page.id === currentPageId 
                           ? 'bg-[#B89B7A]/10 border border-[#B89B7A]/20 text-[#432818]' 
                           : 'hover:bg-gray-50'
@@ -99,11 +99,11 @@ export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSideb
                       onClick={() => setCurrentPage && setCurrentPage(page.id)}
                     >
                       <div className="flex flex-col items-start w-full">
-                        <span className="font-medium text-sm text-[#432818] truncate w-full">
+                        <span className="font-medium text-xs sm:text-sm text-[#432818] truncate w-full">
                           {page.name || page.title || `Página ${page.order || index + 1}`}
                         </span>
                         {page.title && page.name !== page.title && (
-                          <span className="text-xs text-gray-500 truncate w-full mt-0.5">
+                          <span className="text-xs text-gray-500 truncate w-full mt-0.5 hidden sm:block">
                             {page.title}
                           </span>
                         )}
@@ -117,39 +117,39 @@ export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSideb
         
         <TabsContent value="blocks" className="flex-1 p-0 m-0 data-[state=active]:flex data-[state=active]:flex-col overflow-hidden">
           <ScrollArea className="flex-1">
-            <div className="p-4 space-y-4">
+            <div className="p-2 sm:p-4 space-y-3 sm:space-y-4">
               {categories.map(category => {
                 const categoryBlocks = getBlocksByCategory(category);
                 
                 return (
                   <div key={category}>
-                    <h3 className="text-sm font-medium text-gray-700 mb-2 px-1">
+                    <h3 className="text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2 px-1">
                       {category} ({categoryBlocks.length})
                     </h3>
-                    <div className="space-y-1">
+                    <div className="space-y-0.5 sm:space-y-1">
                       {categoryBlocks.map((block, blockIndex) => (
                         <Button
                           key={`${block.id}-${blockIndex}`}
                           variant="ghost"
-                          className="w-full justify-start p-3 h-auto hover:bg-[#FAF9F7] transition-colors"
+                          className="w-full justify-start p-2 sm:p-3 h-auto hover:bg-[#FAF9F7] transition-colors mobile-component-item"
                           onClick={() => onComponentSelect(block.type)}
                         >
-                          <div className="flex items-start space-x-3 w-full">
-                            <div className="text-[#B89B7A] mt-0.5">
-                              {iconMap[block.icon] || <Type className="w-4 h-4" />}
+                          <div className="flex items-start space-x-2 sm:space-x-3 w-full">
+                            <div className="text-[#B89B7A] mt-0.5 flex-shrink-0">
+                              {iconMap[block.icon] || <Type className="w-3 h-3 sm:w-4 sm:h-4 mobile-component-icon" />}
                             </div>
                             <div className="text-left flex-1 min-w-0">
-                              <div className="flex items-center space-x-2">
-                                <span className="font-medium text-sm text-[#432818] truncate">
+                              <div className="flex items-center space-x-1 sm:space-x-2">
+                                <span className="font-medium text-xs sm:text-sm text-[#432818] truncate">
                                   {block.name}
                                 </span>
                                 {block.isNew && (
-                                  <Badge variant="secondary" className="text-xs bg-[#B89B7A]/10 text-[#B89B7A] border-[#B89B7A]/20">
+                                  <Badge variant="secondary" className="text-xs bg-[#B89B7A]/10 text-[#B89B7A] border-[#B89B7A]/20 hidden sm:inline-flex">
                                     Novo
                                   </Badge>
                                 )}
                               </div>
-                              <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">
+                              <p className="text-xs text-gray-500 mt-0.5 line-clamp-2 hidden sm:block">
                                 {block.description}
                               </p>
                             </div>

@@ -31,12 +31,12 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
   const [internalSelectedOptions, setInternalSelectedOptions] = useState<string[]>(selectedOptions || []);
   const [validationError, setValidationError] = useState<string>('');
 
-  // Sincronizar estado interno com propriedades do bloco
+  // Sincronizar estado interno com propriedades do bloco apenas na inicialização
   useEffect(() => {
     if (selectedOptions && Array.isArray(selectedOptions)) {
       setInternalSelectedOptions(selectedOptions);
     }
-  }, [selectedOptions]);
+  }, []); // Removido todas as dependências para evitar loop
 
   const handlePropertyChange = (key: string, value: any) => {
     if (onPropertyChange) {
