@@ -109,7 +109,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
         className={`
           bg-gray-100 p-4 sm:p-6 md:p-8 rounded-lg text-gray-500 flex flex-col items-center justify-center min-h-[120px] sm:min-h-[150px] cursor-pointer transition-all duration-200
           ${isSelected 
-            ? 'outline-2 outline-blue-500 outline-offset-2' 
+            ? 'outline-2 outline-[#B89B7A] outline-offset-2' 
             : 'hover:shadow-sm'
           }
           ${className}
@@ -129,7 +129,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
       className={`
         py-2 sm:py-3 md:py-4 text-center space-y-2 sm:space-y-3 cursor-pointer transition-all duration-200
         ${isSelected 
-          ? 'outline-2 outline-blue-500 outline-offset-2' 
+          ? 'outline-2 outline-[#B89B7A] outline-offset-2' 
           : 'hover:shadow-sm'
         }
         ${className}
@@ -160,13 +160,13 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
               className={`
                 group relative rounded-lg text-xs sm:text-sm font-medium ring-offset-background 
                 transition-all duration-300 ease-in-out transform hover:scale-[1.02] 
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89B7A] focus-visible:ring-offset-2 
                 disabled:pointer-events-none disabled:opacity-50 active:scale-95 
                 border-2 bg-white hover:shadow-lg overflow-hidden w-full gap-1 sm:gap-2 flex 
                 flex-col items-center justify-start option-button min-h-[80px] sm:min-h-[100px] md:min-h-[120px]
                 ${isSelected 
-                  ? 'border-blue-500 bg-blue-50 shadow-lg scale-[1.02]' 
-                  : 'border-zinc-200 hover:border-zinc-300 hover:bg-gray-50 shadow-sm'
+                  ? 'border-[#B89B7A] bg-[#FAF9F7] shadow-lg scale-[1.02]' 
+                  : 'border-zinc-200 hover:border-[#B89B7A] hover:bg-[#FAF9F7] shadow-sm'
                 }
                 ${isEditing ? 'cursor-default' : 'cursor-pointer'}
                 touch-manipulation
@@ -198,7 +198,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
                   />
                   {/* Overlay de seleção */}
                   {isSelected && (
-                    <div className="absolute inset-0 bg-blue-500 bg-opacity-20 rounded-t-lg transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-[#B89B7A] bg-opacity-20 rounded-t-lg transition-opacity duration-300"></div>
                   )}
                 </div>
               )}
@@ -207,7 +207,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
                 <div className="break-words w-full custom-quill quill ql-editor quill-option text-center">
                   <div 
                     className={`font-medium transition-colors duration-300 leading-tight ${
-                      isSelected ? 'text-blue-700' : 'text-[#432818] group-hover:text-blue-600'
+                      isSelected ? 'text-[#432818]' : 'text-[#432818] group-hover:text-[#B89B7A]'
                     }`}
                     dangerouslySetInnerHTML={{ __html: option.text || 'Opção sem texto' }}
                   />
@@ -227,8 +227,8 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
       
       {/* Informações de seleção para modo de edição */}
       {isEditing && (
-        <div className="mt-2 sm:mt-3 mx-2 sm:mx-3 p-2 sm:p-3 bg-gray-50 border border-gray-200 rounded-md">
-          <p className="text-xs sm:text-sm text-gray-600">
+        <div className="mt-2 sm:mt-3 mx-2 sm:mx-3 p-2 sm:p-3 bg-[#FAF9F7] border border-[#B89B7A]/20 rounded-md">
+          <p className="text-xs sm:text-sm text-[#8F7A6A]">
             Modo de edição: {internalSelectedOptions.length} opção(ões) selecionada(s)
             {multipleSelection && ` (máx: ${maxSelections}, mín: ${minSelections})`}
           </p>
