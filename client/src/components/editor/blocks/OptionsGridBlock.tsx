@@ -87,20 +87,20 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
   const getGridCols = (cols: number) => {
     const baseClasses = {
       1: 'grid-cols-1',
-      2: 'grid-cols-1 md:grid-cols-2',
-      3: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
-      4: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
+      2: 'grid-cols-1 sm:grid-cols-2',
+      3: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
+      4: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
     };
-    return baseClasses[cols as keyof typeof baseClasses] || 'grid-cols-1 md:grid-cols-2';
+    return baseClasses[cols as keyof typeof baseClasses] || 'grid-cols-1 sm:grid-cols-2';
   };
 
   const getImageHeight = (size: string) => {
     const sizeClasses = {
-      small: 'h-20 sm:h-24',
-      medium: 'h-24 sm:h-32',
-      large: 'h-32 sm:h-48 md:h-64'
+      small: 'h-16 sm:h-20 md:h-24',
+      medium: 'h-20 sm:h-24 md:h-32',
+      large: 'h-24 sm:h-32 md:h-48'
     };
-    return sizeClasses[size as keyof typeof sizeClasses] || 'h-32 sm:h-48 md:h-64';
+    return sizeClasses[size as keyof typeof sizeClasses] || 'h-24 sm:h-32 md:h-48';
   };
 
   if (!options || options.length === 0) {
@@ -127,7 +127,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
   return (
     <div
       className={`
-        py-4 sm:py-6 text-center space-y-4 cursor-pointer transition-all duration-200
+        py-3 sm:py-4 md:py-6 text-center space-y-3 sm:space-y-4 cursor-pointer transition-all duration-200
         ${isSelected 
           ? 'outline-2 outline-blue-500 outline-offset-2' 
           : 'hover:shadow-sm'
@@ -139,7 +139,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
       data-block-type={block.type}
     >
       {title && (
-        <h3 className="text-lg sm:text-xl font-bold text-[#432818] mb-4 sm:mb-6 px-4">
+        <h3 className="text-base sm:text-lg md:text-xl font-bold text-[#432818] mb-3 sm:mb-4 md:mb-6 px-3 sm:px-4">
           <InlineEditableText
             value={title}
             onSave={(value: string) => handlePropertyChange('title', value)}
@@ -150,8 +150,8 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
         </h3>
       )}
       <div 
-        className={`grid ${getGridCols(columns)} w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8`}
-        style={{ gap: `${gridGap}px` }}
+        className={`grid ${getGridCols(columns)} w-full max-w-6xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8`}
+        style={{ gap: `${Math.max(8, gridGap * 0.75)}px` }}
       >
         {options.map((option: any, index: number) => {
           const isSelected = isOptionSelected(option.id);
