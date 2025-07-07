@@ -127,7 +127,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
   return (
     <div
       className={`
-        py-2 sm:py-3 md:py-4 text-center space-y-2 sm:space-y-3 cursor-pointer transition-all duration-200
+        py-1 sm:py-2 md:py-3 text-center space-y-1 sm:space-y-2 cursor-pointer transition-all duration-200 w-full
         ${isSelected 
           ? 'outline-2 outline-[#B89B7A] outline-offset-2' 
           : 'hover:shadow-sm'
@@ -139,7 +139,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
       data-block-type={block.type}
     >
       {title && (
-        <h3 className="text-sm sm:text-base md:text-lg font-bold text-[#432818] mb-2 sm:mb-3 md:mb-4 px-2 sm:px-3">
+        <h3 className="text-base sm:text-lg md:text-xl font-bold text-[#432818] mb-2 sm:mb-3 md:mb-4 px-1 sm:px-2">
           <InlineEditableText
             value={title}
             onSave={(value: string) => handlePropertyChange('title', value)}
@@ -150,7 +150,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
         </h3>
       )}
       <div 
-        className={`grid ${getGridCols(columns)} w-full mx-auto px-3 sm:px-4 md:px-6 gap-3 sm:gap-4`}
+        className={`grid ${getGridCols(columns)} w-full mx-auto px-1 sm:px-2 md:px-4 gap-2 sm:gap-3 md:gap-4`}
       >
         {options.map((option: any, index: number) => {
           const isSelected = isOptionSelected(option.id);
@@ -158,12 +158,12 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
             <button 
               key={option.id || index} 
               className={`
-                group relative rounded-lg text-xs sm:text-sm font-medium ring-offset-background 
+                group relative rounded-lg text-sm sm:text-base font-medium ring-offset-background 
                 transition-all duration-300 ease-in-out transform hover:scale-[1.02] 
                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89B7A] focus-visible:ring-offset-2 
                 disabled:pointer-events-none disabled:opacity-50 active:scale-95 
                 border-2 bg-white hover:shadow-lg overflow-hidden w-full gap-1 sm:gap-2 flex 
-                flex-col items-center justify-start option-button min-h-[80px] sm:min-h-[100px] md:min-h-[120px]
+                flex-col items-center justify-start option-button min-h-[120px] sm:min-h-[140px] md:min-h-[160px]
                 ${isSelected 
                   ? 'border-[#B89B7A] bg-[#FAF9F7] shadow-lg scale-[1.02]' 
                   : 'border-zinc-200 hover:border-[#B89B7A] hover:bg-[#FAF9F7] shadow-sm'
@@ -203,7 +203,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
                 </div>
               )}
               
-              <div className="py-1 sm:py-2 px-2 sm:px-3 w-full flex flex-row text-xs sm:text-sm items-center justify-center">
+              <div className="py-2 sm:py-3 px-2 sm:px-3 w-full flex flex-row text-sm sm:text-base items-center justify-center">
                 <div className="break-words w-full custom-quill quill ql-editor quill-option text-center">
                   <div 
                     className={`font-medium transition-colors duration-300 leading-tight ${
@@ -220,15 +220,15 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
       
       {/* Mensagem de validação */}
       {validationError && (
-        <div className="mt-2 sm:mt-3 mx-2 sm:mx-3 p-2 sm:p-3 bg-red-50 border border-red-200 rounded-md">
-          <p className="text-xs sm:text-sm text-red-600">{validationError}</p>
+        <div className="mt-2 sm:mt-3 mx-1 sm:mx-2 p-2 sm:p-3 bg-red-50 border border-red-200 rounded-md">
+          <p className="text-sm sm:text-base text-red-600">{validationError}</p>
         </div>
       )}
       
       {/* Informações de seleção para modo de edição */}
       {isEditing && (
-        <div className="mt-2 sm:mt-3 mx-2 sm:mx-3 p-2 sm:p-3 bg-[#FAF9F7] border border-[#B89B7A]/20 rounded-md">
-          <p className="text-xs sm:text-sm text-[#8F7A6A]">
+        <div className="mt-2 sm:mt-3 mx-1 sm:mx-2 p-2 sm:p-3 bg-[#FAF9F7] border border-[#B89B7A]/20 rounded-md">
+          <p className="text-sm sm:text-base text-[#8F7A6A]">
             Modo de edição: {internalSelectedOptions.length} opção(ões) selecionada(s)
             {multipleSelection && ` (máx: ${maxSelections}, mín: ${minSelections})`}
           </p>
