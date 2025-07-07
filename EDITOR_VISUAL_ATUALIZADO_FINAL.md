@@ -254,3 +254,66 @@ O editor visual foi modernizado com sucesso, eliminando duplicidades e garantind
 **Data de Atualização**: 7 de Janeiro de 2025  
 **Responsável**: Sistema de Modernização do Editor  
 **Próxima Revisão**: Após correção dos tipos TypeScript
+# Componente FunnelIntroStep
+
+O componente `FunnelIntroStep` foi criado como parte da modernização do editor visual de funis. Este componente representa a primeira etapa do funil e é responsável por apresentar uma introdução ao usuário.
+
+## Características
+
+- Design responsivo com suporte a imagem de fundo
+- Título e subtítulo personalizáveis
+- Botão de ação configurável
+- Suporte a logo da marca
+- Barra de progresso opcional
+- Integração com o sistema de navegação do funil
+- Modo de edição para o editor visual
+
+## Propriedades
+
+| Propriedade | Tipo | Descrição |
+|-------------|------|-----------|
+| title | string | Título principal da página |
+| subtitle | string | Subtítulo ou descrição |
+| buttonText | string | Texto do botão de ação |
+| backgroundImage | string | URL da imagem de fundo |
+| logoUrl | string | URL do logo da marca |
+| showProgressBar | boolean | Exibir barra de progresso |
+
+## Integração com o Editor
+
+O componente foi integrado à aba "Blocos" do editor visual através do mapeamento em `editorBlocksMapping.ts` e da definição no `blockDefinitions.ts`, permitindo sua utilização no editor de funis.
+
+## Próximos Passos
+
+1. Validar a exibição do componente na aba "Blocos" do editor
+2. Testar a edição de propriedades através do painel lateral
+3. Verificar a integração com o fluxo completo de 21 etapas do funil
+4. Documentar exemplos adicionais de uso
+
+## Exemplo de Uso
+
+```tsx
+import FunnelIntroStep from '@/components/funnel-blocks/steps/FunnelIntroStep';
+import { FunnelConfigProvider } from '@/components/funnel-blocks/editor/FunnelConfigProvider';
+
+const MyFunnel = () => {
+  return (
+    <FunnelConfigProvider>
+      <FunnelIntroStep
+        id="intro-page"
+        stepNumber={1}
+        totalSteps={21}
+        stepType="intro"
+        data={{
+          title: "Descubra seu Estilo Pessoal",
+          subtitle: "Responda algumas perguntas e receba sua análise personalizada",
+          buttonText: "Começar Agora",
+          backgroundImage: "/images/background.jpg",
+          logoUrl: "/images/logo.png",
+          showProgressBar: true
+        }}
+      />
+    </FunnelConfigProvider>
+  );
+};
+```

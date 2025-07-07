@@ -1405,3 +1405,40 @@ export const blockDefinitions: BlockDefinition[] = [
 export const findBlockDefinition = (type: string): BlockDefinition | undefined => {
   return blockDefinitions.find(block => block.type === type);
 };
+
+// Helper para obter todas as categorias únicas
+export const getCategories = (): string[] => {
+  const categories = blockDefinitions.map(block => block.category);
+  return [...new Set(categories)].map(category => {
+    // Formatar nomes das categorias para exibição
+    switch (category) {
+      case 'basic': return 'Básico';
+      case 'layout': return 'Layout';
+      case 'quiz': return 'Quiz';
+      case 'funnel': return 'Funil';
+      case 'media': return 'Mídia';
+      case 'advanced': return 'Avançado';
+      default: return category;
+    }
+  });
+};
+
+// Helper para obter blocos por categoria
+export const getBlocksByCategory = (category: string): BlockDefinition[] => {
+  // Mapear o nome formatado de volta para o valor interno
+  const categoryMap: Record<string, string> = {
+    'Básico': 'basic',
+    'Layout': 'layout',
+    'Quiz': 'quiz',
+    'Funil': 'funnel',
+    'Mídia': 'media',
+    'Avançado': 'advanced'
+  };
+  
+  const categoryValue = categoryMap[category] || category;
+  
+  return blockDefinitions.filter(block => block.category === categoryValue).map(block => ({
+    ...block,
+    id: block.type // Garantir que cada bloco tenha um id para uso no componente
+  }));
+};
