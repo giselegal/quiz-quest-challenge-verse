@@ -1013,6 +1013,254 @@ export const blockDefinitions: BlockDefinition[] = [
       { key: 'backgroundColor', label: 'Cor de Fundo', type: 'color-picker', defaultValue: '#e0e7ff' },
     ],
   },
+
+  // =====================================================================
+  // BLOCOS ESPECÍFICOS DO QUIZ - MODULARES E SCHEMA-DRIVEN
+  // =====================================================================
+
+  // Etapa 1: Blocos da Introdução
+  {
+    type: 'quiz-intro-header',
+    name: 'Cabeçalho do Quiz',
+    description: 'Cabeçalho com logo, barra de progresso e botão voltar',
+    icon: 'Crown',
+    category: 'Quiz',
+    propertiesSchema: [
+      { key: 'logoUrl', label: 'URL do Logo', type: 'image-url', defaultValue: 'https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png' },
+      { key: 'logoAlt', label: 'Texto Alt do Logo', type: 'text-input', defaultValue: 'Logo' },
+      { key: 'logoWidth', label: 'Largura do Logo', type: 'number-input', defaultValue: 96, min: 30, max: 200 },
+      { key: 'logoHeight', label: 'Altura do Logo', type: 'number-input', defaultValue: 96, min: 30, max: 200 },
+      { key: 'progressValue', label: 'Valor do Progresso', type: 'number-input', defaultValue: 0, min: 0, max: 100 },
+      { key: 'progressMax', label: 'Máximo do Progresso', type: 'number-input', defaultValue: 100, min: 1, max: 100 },
+      { key: 'showBackButton', label: 'Mostrar Botão Voltar', type: 'boolean-switch', defaultValue: true },
+    ],
+  },
+
+  {
+    type: 'quiz-title',
+    name: 'Título do Quiz',
+    description: 'Título principal do quiz com formatação customizável',
+    icon: 'Type',
+    category: 'Quiz',
+    propertiesSchema: [
+      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Teste de Estilo Pessoal' },
+      { key: 'fontSize', label: 'Tamanho da Fonte', type: 'select', options: [
+        { label: 'Pequeno', value: 'text-lg' },
+        { label: 'Médio', value: 'text-2xl' },
+        { label: 'Grande', value: 'text-3xl' },
+        { label: 'Extra Grande', value: 'text-4xl' },
+      ], defaultValue: 'text-3xl' },
+      { key: 'fontWeight', label: 'Peso da Fonte', type: 'select', options: [
+        { label: 'Normal', value: 'font-normal' },
+        { label: 'Médio', value: 'font-medium' },
+        { label: 'Semibold', value: 'font-semibold' },
+        { label: 'Bold', value: 'font-bold' },
+      ], defaultValue: 'font-bold' },
+      { key: 'textAlign', label: 'Alinhamento', type: 'select', options: [
+        { label: 'Esquerda', value: 'text-left' },
+        { label: 'Centro', value: 'text-center' },
+        { label: 'Direita', value: 'text-right' },
+      ], defaultValue: 'text-center' },
+      { key: 'color', label: 'Cor do Texto', type: 'color-picker', defaultValue: '#374151' },
+    ],
+  },
+
+  {
+    type: 'quiz-name-input',
+    name: 'Campo de Nome do Quiz',
+    description: 'Campo para coleta do nome do usuário',
+    icon: 'TextCursorInput',
+    category: 'Quiz',
+    propertiesSchema: [
+      { key: 'label', label: 'Rótulo', type: 'text-input', defaultValue: 'NOME' },
+      { key: 'placeholder', label: 'Placeholder', type: 'text-input', defaultValue: 'Digite seu nome aqui...' },
+      { key: 'required', label: 'Campo Obrigatório', type: 'boolean-switch', defaultValue: true },
+      { key: 'inputType', label: 'Tipo de Input', type: 'select', options: [
+        { label: 'Texto', value: 'text' },
+        { label: 'Email', value: 'email' },
+        { label: 'Telefone', value: 'tel' },
+      ], defaultValue: 'text' },
+      { key: 'helperText', label: 'Texto de Ajuda', type: 'text-input', defaultValue: '' },
+    ],
+  },
+
+  // Etapas 2-11: Blocos das Questões Principais
+  {
+    type: 'quiz-question-main',
+    name: 'Questão Principal do Quiz',
+    description: 'Questão principal com opções múltiplas e imagens',
+    icon: 'HelpCircle',
+    category: 'Quiz',
+    propertiesSchema: [
+      { key: 'question', label: 'Pergunta', type: 'textarea', defaultValue: 'Qual é a sua preferência?', rows: 3 },
+      { key: 'options', label: 'Opções', type: 'array-editor', defaultValue: [], itemSchema: [
+        { key: 'id', label: 'ID', type: 'text-input', placeholder: 'opcao-1' },
+        { key: 'text', label: 'Texto', type: 'text-input', placeholder: 'Opção 1' },
+        { key: 'value', label: 'Valor', type: 'text-input', placeholder: 'valor-1' },
+        { key: 'imageUrl', label: 'URL da Imagem', type: 'image-url', placeholder: 'https://...' },
+        { key: 'category', label: 'Categoria/Perfil', type: 'text-input', placeholder: 'natural' },
+      ]},
+      { key: 'multipleSelection', label: 'Múltipla Seleção', type: 'boolean-switch', defaultValue: true },
+      { key: 'maxSelections', label: 'Máximo de Seleções', type: 'number-input', defaultValue: 3, min: 1, max: 10 },
+      { key: 'showImages', label: 'Mostrar Imagens', type: 'boolean-switch', defaultValue: true },
+      { key: 'progressLabel', label: 'Rótulo do Progresso', type: 'text-input', defaultValue: 'Questão 1 de 10' },
+      { key: 'progressValue', label: 'Valor do Progresso', type: 'number-input', defaultValue: 10, min: 0, max: 100 },
+    ],
+  },
+
+  // Etapa 12: Bloco da Transição Principal
+  {
+    type: 'quiz-transition-main',
+    name: 'Transição Principal',
+    description: 'Página de transição entre questões principais e estratégicas',
+    icon: 'ArrowRightLeft',
+    category: 'Quiz',
+    propertiesSchema: [
+      { key: 'title', label: 'Título', type: 'text-input', defaultValue: '🕐 Enquanto calculamos o seu resultado...' },
+      { key: 'message', label: 'Mensagem Principal', type: 'textarea', defaultValue: 'Queremos te fazer algumas perguntas que vão tornar sua experiência ainda mais completa.', rows: 3 },
+      { key: 'submessage', label: 'Submensagem', type: 'textarea', defaultValue: 'A ideia é simples: te ajudar a enxergar com mais clareza onde você está agora — e para onde pode ir com mais intenção, leveza e autenticidade.', rows: 4 },
+      { key: 'additionalMessage', label: 'Mensagem Adicional', type: 'textarea', defaultValue: '💬 Responda com sinceridade. Isso é só entre você e a sua nova versão.', rows: 2 },
+      { key: 'progressValue', label: 'Valor do Progresso', type: 'number-input', defaultValue: 60, min: 0, max: 100 },
+    ],
+  },
+
+  // Etapas 13-18: Blocos das Questões Estratégicas
+  {
+    type: 'quiz-question-strategic',
+    name: 'Questão Estratégica',
+    description: 'Questão estratégica para qualificação e segmentação',
+    icon: 'Brain',
+    category: 'Quiz',
+    propertiesSchema: [
+      { key: 'question', label: 'Pergunta', type: 'textarea', defaultValue: 'Como você se vê hoje?', rows: 3 },
+      { key: 'subtitle', label: 'Subtítulo (opcional)', type: 'textarea', defaultValue: '', rows: 2 },
+      { key: 'options', label: 'Opções', type: 'array-editor', defaultValue: [], itemSchema: [
+        { key: 'id', label: 'ID', type: 'text-input', placeholder: '1' },
+        { key: 'text', label: 'Texto', type: 'textarea', placeholder: 'Opção 1', rows: 2 },
+        { key: 'value', label: 'Valor', type: 'text-input', placeholder: 'valor-1' },
+      ]},
+      { key: 'progressLabel', label: 'Rótulo do Progresso', type: 'text-input', defaultValue: 'Questão estratégica 1 de 6' },
+      { key: 'progressValue', label: 'Valor do Progresso', type: 'number-input', defaultValue: 70, min: 0, max: 100 },
+    ],
+  },
+
+  // Etapa 19: Bloco da Transição Final
+  {
+    type: 'quiz-transition-final',
+    name: 'Transição Final',
+    description: 'Página de transição final antes do resultado',
+    icon: 'LoaderCircle',
+    category: 'Quiz',
+    propertiesSchema: [
+      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Obrigada por compartilhar...' },
+      { key: 'message', label: 'Mensagem', type: 'textarea', defaultValue: 'Agora vamos preparar seu resultado personalizado com base em todas as suas respostas.', rows: 3 },
+      { key: 'showLoading', label: 'Mostrar Carregamento', type: 'boolean-switch', defaultValue: true },
+      { key: 'duration', label: 'Duração (ms)', type: 'number-input', defaultValue: 3000, min: 1000, max: 10000 },
+      { key: 'progressValue', label: 'Valor do Progresso', type: 'number-input', defaultValue: 95, min: 0, max: 100 },
+    ],
+  },
+
+  // Etapa 20: Blocos da Página de Resultado
+  {
+    type: 'quiz-result-header',
+    name: 'Cabeçalho do Resultado',
+    description: 'Cabeçalho da página de resultado com logo e informações',
+    icon: 'Award',
+    category: 'Quiz',
+    propertiesSchema: [
+      { key: 'logoUrl', label: 'URL do Logo', type: 'image-url', defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp' },
+      { key: 'logoAlt', label: 'Texto Alt do Logo', type: 'text-input', defaultValue: 'Logo Gisele Galvão' },
+      { key: 'logoHeight', label: 'Altura do Logo', type: 'text-input', defaultValue: '60px' },
+      { key: 'userName', label: 'Nome do Usuário', type: 'text-input', defaultValue: 'Seu Nome' },
+      { key: 'primaryStyle', label: 'Estilo Predominante', type: 'select', options: [
+        { label: 'Natural', value: 'natural' },
+        { label: 'Clássico', value: 'classico' },
+        { label: 'Contemporâneo', value: 'contemporaneo' },
+        { label: 'Elegante', value: 'elegante' },
+        { label: 'Romântico', value: 'romantico' },
+        { label: 'Sexy', value: 'sexy' },
+        { label: 'Dramático', value: 'dramatico' },
+        { label: 'Criativo', value: 'criativo' },
+      ], defaultValue: 'elegante' },
+    ],
+  },
+
+  {
+    type: 'quiz-result-card',
+    name: 'Card do Resultado',
+    description: 'Card principal com o resultado do estilo predominante',
+    icon: 'Gift',
+    category: 'Quiz',
+    propertiesSchema: [
+      { key: 'className', label: 'Classe CSS', type: 'text-input', defaultValue: 'result-card-main' },
+      { key: 'showImage', label: 'Mostrar Imagem', type: 'boolean-switch', defaultValue: true },
+      { key: 'showDescription', label: 'Mostrar Descrição', type: 'boolean-switch', defaultValue: true },
+      { key: 'showCharacteristics', label: 'Mostrar Características', type: 'boolean-switch', defaultValue: true },
+    ],
+  },
+
+  // Etapa 21: Blocos da Página de Oferta
+  {
+    type: 'quiz-offer-title',
+    name: 'Título da Oferta',
+    description: 'Título principal da página de oferta',
+    icon: 'ShoppingCart',
+    category: 'Quiz',
+    propertiesSchema: [
+      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Descubra Seu Estilo Predominante' },
+      { key: 'subtitle', label: 'Subtítulo', type: 'text-input', defaultValue: 'Tenha finalmente um guarda-roupa que funciona 100%' },
+      { key: 'titleColor', label: 'Cor do Título', type: 'color-picker', defaultValue: '#B89B7A' },
+      { key: 'subtitleColor', label: 'Cor do Subtítulo', type: 'color-picker', defaultValue: '#432818' },
+    ],
+  },
+
+  {
+    type: 'quiz-offer-countdown',
+    name: 'Timer da Oferta',
+    description: 'Contador regressivo para criar urgência',
+    icon: 'Clock',
+    category: 'Quiz',
+    propertiesSchema: [
+      { key: 'initialMinutes', label: 'Minutos Iniciais', type: 'number-input', defaultValue: 15, min: 1, max: 60 },
+      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Oferta expira em:' },
+      { key: 'backgroundColor', label: 'Cor de Fundo', type: 'color-picker', defaultValue: '#dc2626' },
+      { key: 'textColor', label: 'Cor do Texto', type: 'color-picker', defaultValue: '#ffffff' },
+    ],
+  },
+
+  {
+    type: 'quiz-offer-pricing',
+    name: 'Preços da Oferta',
+    description: 'Seção de preços com desconto e parcelamento',
+    icon: 'CircleDollarSign',
+    category: 'Quiz',
+    propertiesSchema: [
+      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Oferta por tempo limitado' },
+      { key: 'installments', label: 'Parcelamento', type: 'text-input', defaultValue: 'R$ 8,83' },
+      { key: 'fullPrice', label: 'Preço Total', type: 'text-input', defaultValue: 'R$ 39,90' },
+      { key: 'originalPrice', label: 'Preço Original', type: 'text-input', defaultValue: 'R$ 175,00' },
+      { key: 'savings', label: 'Economia', type: 'text-input', defaultValue: '77% OFF - Economia de R$ 135,10' },
+      { key: 'ctaText', label: 'Texto do Botão', type: 'text-input', defaultValue: 'QUERO DESCOBRIR MEU ESTILO AGORA' },
+      { key: 'ctaUrl', label: 'URL do Botão', type: 'text-input', defaultValue: '#' },
+    ],
+  },
+
+  {
+    type: 'quiz-offer-faq',
+    name: 'FAQ da Oferta',
+    description: 'Seção de perguntas frequentes',
+    icon: 'MessageSquare',
+    category: 'Quiz',
+    propertiesSchema: [
+      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Perguntas Frequentes' },
+      { key: 'questions', label: 'Perguntas', type: 'array-editor', defaultValue: [], itemSchema: [
+        { key: 'question', label: 'Pergunta', type: 'text-input', placeholder: 'Como funciona?' },
+        { key: 'answer', label: 'Resposta', type: 'textarea', placeholder: 'Resposta detalhada...', rows: 3 },
+      ]},
+    ],
+  },
+
+  // ...existing code...
 ];
 
 // =====================================================================

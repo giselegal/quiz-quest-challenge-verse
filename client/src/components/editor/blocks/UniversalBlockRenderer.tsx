@@ -202,6 +202,34 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'offer-page':
         return <QuizOfferPageBlock {...commonProps} />;
 
+      // BLOCOS ESPECÍFICOS DO QUIZ - MODULARES E SCHEMA-DRIVEN
+      case 'quiz-intro-header':
+        return <QuizIntroHeaderBlock {...commonProps} />;
+      case 'quiz-title':
+        return <QuizTitleBlock {...commonProps} />;
+      case 'quiz-name-input':
+        return <QuizNameInputBlock {...commonProps} />;
+      case 'quiz-question-main':
+        return <QuestionMultipleBlock {...commonProps} />;
+      case 'quiz-transition-main':
+        return <QuizTransitionBlock {...commonProps} />;
+      case 'quiz-question-strategic':
+        return <StrategicQuestionBlock {...commonProps} />;
+      case 'quiz-transition-final':
+        return <QuizTransitionBlock {...commonProps} />;
+      case 'quiz-result-header':
+        return <ResultHeaderBlock {...commonProps} />;
+      case 'quiz-result-card':
+        return <ResultPageBlock {...commonProps} />;
+      case 'quiz-offer-title':
+        return <HeaderBlock {...commonProps} />;
+      case 'quiz-offer-countdown':
+        return <UrgencyTimerBlock {...commonProps} />;
+      case 'quiz-offer-pricing':
+        return <ProductOfferBlock {...commonProps} />;
+      case 'quiz-offer-faq':
+        return <FAQSectionBlock {...commonProps} />;
+
       // BLOCOS AVANÇADOS RESTANTES
       case 'main-heading':
         return <HeaderBlock {...commonProps} />;
