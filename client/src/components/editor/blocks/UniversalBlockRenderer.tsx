@@ -22,6 +22,13 @@ import QuizIntroHeaderBlock from './QuizIntroHeaderBlock';
 import QuizNameInputBlock from './QuizNameInputBlock';
 import QuizTitleBlock from './QuizTitleBlock';
 
+// Blocos específicos do CaktoQuiz - Componentes com identidade visual
+import CaktoQuizIntro from './CaktoQuizIntro';
+import CaktoQuizQuestion from './CaktoQuizQuestion';
+import CaktoQuizTransition from './CaktoQuizTransition';
+import CaktoQuizResult from './CaktoQuizResult';
+import CaktoQuizOffer from './CaktoQuizOffer';
+
 // Blocos de passos do funil
 import FunnelIntroStep from '../../funnel-blocks/steps/FunnelIntroStep';
 import OfferTransitionStep from '../../funnel-blocks/steps/OfferTransitionStep';
@@ -242,7 +249,31 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
           />
         );
 
-      // NOVOS BLOCOS ESPECÍFICOS DE FUNIL - EDITÁVEIS
+      // COMPONENTES ESPECÍFICOS DO CAKTOQUIZ - COM IDENTIDADE VISUAL
+      case 'cakto-quiz-intro':
+      case 'funnel-quiz-intro':
+        return <CaktoQuizIntro {...commonProps} />;
+      
+      case 'cakto-quiz-question':
+      case 'quiz-question':
+        return <CaktoQuizQuestion {...commonProps} />;
+      
+      case 'cakto-quiz-transition':
+      case 'quiz-transition':
+      case 'funnel-transition':
+        return <CaktoQuizTransition {...commonProps} />;
+      
+      case 'cakto-quiz-result':
+      case 'quiz-result':
+      case 'funnel-result-intro':
+        return <CaktoQuizResult {...commonProps} />;
+      
+      case 'cakto-quiz-offer':
+      case 'quiz-offer':
+      case 'funnel-offer-page':
+        return <CaktoQuizOffer {...commonProps} />;
+
+      // NOVOS BLOCOS ESPECÍFICOS DE FUNIL - EDITÁVEIS (fallback genéricos)
       case 'rich-text':
         return (
           <div {...commonProps} className={cn("prose max-w-none p-4", commonProps.className)}>
@@ -253,9 +284,6 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
             )}
           </div>
         );
-      
-      case 'quiz-transition':
-        return <QuizTransitionBlock {...commonProps} />;
       
       case 'funnel-name-collect':
         return (
@@ -271,70 +299,6 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
             />
             {block.properties?.subtitle && (
               <p className="mt-2 text-sm text-gray-600">{block.properties.subtitle}</p>
-            )}
-          </div>
-        );
-      
-      case 'funnel-quiz-intro':
-        return (
-          <div {...commonProps} className={cn("p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg", commonProps.className)}>
-            <h2 className="text-2xl font-bold mb-4">
-              {block.properties?.title || 'Quiz Introdução'}
-            </h2>
-            {block.properties?.description && (
-              <p className="text-gray-700 mb-4">{block.properties.description}</p>
-            )}
-            {block.properties?.bullets && Array.isArray(block.properties.bullets) && (
-              <ul className="space-y-2 mb-4">
-                {block.properties.bullets.map((bullet: any, index: number) => (
-                  <li key={index} className="flex items-start">
-                    <span className="text-blue-500 mr-2">•</span>
-                    <span>{typeof bullet === 'string' ? bullet : (bullet[''] || bullet.text || 'Item')}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-            {block.properties?.buttonText && (
-              <button className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">
-                {block.properties.buttonText}
-              </button>
-            )}
-          </div>
-        );
-      
-      case 'funnel-transition':
-        return (
-          <div {...commonProps} className={cn("p-6 bg-gray-50 rounded-lg text-center", commonProps.className)}>
-            <h3 className="text-xl font-semibold mb-2">
-              {block.properties?.title || 'Transição'}
-            </h3>
-            <p className="text-gray-600">
-              {block.properties?.subtitle || 'Processando...'}
-            </p>
-            <div className="mt-4 w-full bg-gray-200 rounded-full h-2">
-              <div 
-                className="bg-blue-500 h-2 rounded-full transition-all duration-300" 
-                style={{ width: `${block.properties?.progress || 50}%` }}
-              />
-            </div>
-          </div>
-        );
-      
-      case 'funnel-result-intro':
-        return (
-          <div {...commonProps} className={cn("p-6 bg-green-50 rounded-lg", commonProps.className)}>
-            <h2 className="text-2xl font-bold text-green-800 mb-4">
-              {block.properties?.title || 'Resultado'}
-            </h2>
-            <p className="text-green-700">
-              {block.properties?.description || 'Aqui está o seu resultado!'}
-            </p>
-            {block.properties?.imageUrl && (
-              <img 
-                src={block.properties.imageUrl} 
-                alt="Resultado" 
-                className="mt-4 max-w-full h-auto rounded-lg"
-              />
             )}
           </div>
         );
