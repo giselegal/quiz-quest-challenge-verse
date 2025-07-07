@@ -190,195 +190,54 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'QuizOfferPageBlock':
         return <QuizOfferPageBlock {...commonProps} />;
 
-      // BLOCOS ESPECÍFICOS DO QUIZ INTRO - LAYOUT ESTRUTURADO
-      case 'quiz-intro-header':
-        return <QuizIntroHeaderBlock {...commonProps} />;
-      case 'quiz-name-input':
-        return <QuizNameInputBlock {...commonProps} />;
-      case 'quiz-title':
-        return <QuizTitleBlock {...commonProps} />;
-
-      // BLOCOS DE PASSOS DO FUNIL
-      case 'funnel-intro':
-        return (
-          <FunnelIntroStep
-            id={block.id || 'funnel-intro'}
-            stepType="intro"
-            stepNumber={1}
-            totalSteps={3}
-            data={block.properties}
-            className={commonProps.className}
-            style={{}}
-            isEditable={!disabled}
-            onEdit={onClick}
-          />
-        );
-      case 'funnel-offer-transition':
-        return (
-          <OfferTransitionStep
-            id={block.id || 'offer-transition'}
-            stepType="offer-transition"
-            stepNumber={2}
-            totalSteps={3}
-            data={block.properties}
-            className={commonProps.className}
-            style={{}}
-            isEditable={!disabled}
-            onEdit={onClick}
-          />
-        );
-      case 'funnel-offer-page':
-        return (
-          <OfferPageStep
-            id={block.id || 'offer-page'}
-            stepType="offer-page"
-            stepNumber={3}
-            totalSteps={3}
-            data={block.properties}
-            className={commonProps.className}
-            style={{}}
-            isEditable={!disabled}
-            onEdit={onClick}
-          />
-        );
-
-      // NOVOS BLOCOS ESPECÍFICOS DE FUNIL - EDITÁVEIS
-      case 'rich-text':
-        return (
-          <div {...commonProps} className={cn("prose max-w-none p-4", commonProps.className)}>
-            {block.properties?.content ? (
-              <div dangerouslySetInnerHTML={{ __html: block.properties.content }} />
-            ) : (
-              <p className="text-gray-500 italic">Clique para editar o conteúdo...</p>
-            )}
-          </div>
-        );
-      
-      case 'quiz-transition':
+      // BLOCOS ESPECÍFICOS DE QUIZ/FUNNEL - SCHEMA DRIVEN
+      case 'quiz-intro-page':
+        return <QuizStartPageBlock {...commonProps} />;
+      case 'quiz-question':
+        return <QuizQuestionBlock {...commonProps} />;
+      case 'quiz-transition-page':
         return <QuizTransitionBlock {...commonProps} />;
-      
-      case 'funnel-name-collect':
+      case 'result-page':
+        return <ResultPageBlock {...commonProps} />;
+      case 'offer-page':
+        return <QuizOfferPageBlock {...commonProps} />;
+
+      // BLOCOS AVANÇADOS RESTANTES
+      case 'main-heading':
+        return <HeaderBlock {...commonProps} />;
+      case 'chart-compare':
+        return <CompareBlock {...commonProps} />;
+      case 'testimonials-grid':
+        return <TestimonialsBlock {...commonProps} />;
+      case 'guarantee-section':
+        return <GuaranteeBlock {...commonProps} />;
+      case 'sales-offer':
+        return <ProductOfferBlock {...commonProps} />;
+      case 'urgency-timer':
+        return <UrgencyTimerBlock {...commonProps} />;
+      case 'bonus-section':
         return (
-          <div {...commonProps} className={cn("p-6 bg-white rounded-lg border", commonProps.className)}>
-            <h3 className="text-lg font-semibold mb-4">
-              {block.properties?.title || 'Coleta de Nome'}
+          <div {...commonProps} className={cn("p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg border-l-4 border-green-500", commonProps.className)}>
+            <h3 className="text-lg font-semibold text-green-800 mb-4">
+              {block.properties?.title || 'Bônus Especial'}
             </h3>
-            <input 
-              type="text" 
-              placeholder={block.properties?.placeholder || 'Digite seu nome'} 
-              className="w-full p-3 border rounded-lg"
-              disabled={disabled}
-            />
-            {block.properties?.subtitle && (
-              <p className="mt-2 text-sm text-gray-600">{block.properties.subtitle}</p>
-            )}
-          </div>
-        );
-      
-      case 'funnel-quiz-intro':
-        return (
-          <div {...commonProps} className={cn("p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg", commonProps.className)}>
-            <h2 className="text-2xl font-bold mb-4">
-              {block.properties?.title || 'Quiz Introdução'}
-            </h2>
-            {block.properties?.description && (
-              <p className="text-gray-700 mb-4">{block.properties.description}</p>
-            )}
-            {block.properties?.bullets && Array.isArray(block.properties.bullets) && (
-              <ul className="space-y-2 mb-4">
-                {block.properties.bullets.map((bullet: any, index: number) => (
+            <p className="text-green-700 mb-4">
+              {block.properties?.description || 'Descrição do bônus especial incluso.'}
+            </p>
+            {block.properties?.bonuses && Array.isArray(block.properties.bonuses) && (
+              <ul className="space-y-2">
+                {block.properties.bonuses.map((bonus: any, index: number) => (
                   <li key={index} className="flex items-start">
-                    <span className="text-blue-500 mr-2">•</span>
-                    <span>{typeof bullet === 'string' ? bullet : (bullet[''] || bullet.text || 'Item')}</span>
+                    <span className="text-green-500 mr-2">🎁</span>
+                    <span className="text-green-700">{typeof bonus === 'string' ? bonus : (bonus.title || bonus.text || 'Bônus')}</span>
                   </li>
                 ))}
               </ul>
             )}
-            {block.properties?.buttonText && (
-              <button className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">
-                {block.properties.buttonText}
-              </button>
-            )}
           </div>
         );
-      
-      case 'funnel-transition':
-        return (
-          <div {...commonProps} className={cn("p-6 bg-gray-50 rounded-lg text-center", commonProps.className)}>
-            <h3 className="text-xl font-semibold mb-2">
-              {block.properties?.title || 'Transição'}
-            </h3>
-            <p className="text-gray-600">
-              {block.properties?.subtitle || 'Processando...'}
-            </p>
-            <div className="mt-4 w-full bg-gray-200 rounded-full h-2">
-              <div 
-                className="bg-blue-500 h-2 rounded-full transition-all duration-300" 
-                style={{ width: `${block.properties?.progress || 50}%` }}
-              />
-            </div>
-          </div>
-        );
-      
-      case 'funnel-result-intro':
-        return (
-          <div {...commonProps} className={cn("p-6 bg-green-50 rounded-lg", commonProps.className)}>
-            <h2 className="text-2xl font-bold text-green-800 mb-4">
-              {block.properties?.title || 'Resultado'}
-            </h2>
-            <p className="text-green-700">
-              {block.properties?.description || 'Aqui está o seu resultado!'}
-            </p>
-            {block.properties?.imageUrl && (
-              <img 
-                src={block.properties.imageUrl} 
-                alt="Resultado" 
-                className="mt-4 max-w-full h-auto rounded-lg"
-              />
-            )}
-          </div>
-        );
-      
-      case 'funnel-result-details':
-        return (
-          <div {...commonProps} className={cn("p-6 bg-white rounded-lg border-l-4 border-green-500", commonProps.className)}>
-            <h3 className="font-semibold mb-2">
-              {block.properties?.title || 'Detalhes do Resultado'}
-            </h3>
-            <p className="text-gray-600">
-              {block.properties?.details || 'Detalhes específicos do resultado.'}
-            </p>
-            {block.properties?.recommendations && Array.isArray(block.properties.recommendations) && (
-              <ul className="mt-3 space-y-1">
-                {block.properties.recommendations.map((rec: string, index: number) => (
-                  <li key={index} className="text-sm text-gray-600">• {rec}</li>
-                ))}
-              </ul>
-            )}
-          </div>
-        );
-      
-      case 'funnel-step':
-        return (
-          <div {...commonProps} className={cn("p-6 bg-white rounded-lg border shadow-sm", commonProps.className)}>
-            <div className="flex items-center mb-4">
-              <span className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                {block.properties?.stepNumber || '1'}
-              </span>
-              <h3 className="text-lg font-semibold">
-                {block.properties?.title || 'Etapa do Funil'}
-              </h3>
-            </div>
-            <p className="text-gray-600">
-              {block.properties?.description || 'Descrição da etapa.'}
-            </p>
-            {block.properties?.actionText && (
-              <button className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
-                {block.properties.actionText}
-              </button>
-            )}
-          </div>
-        );
+      case 'faq-section':
+        return <FAQSectionBlock {...commonProps} />;
 
       // BLOCOS UNIFICADOS DO FUNIL - Componentes reutilizáveis que garantem fidelidade visual
       case 'FunnelHeroBlock':
