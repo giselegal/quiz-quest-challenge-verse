@@ -866,185 +866,6 @@ export const blockDefinitions: BlockDefinition[] = [
     ],
   },
 
-  // CATEGORIA: QUIZ ESPECÍFICO - Schemas dos componentes principais do quiz
-  // As 'pages' do funil usarão esses blocos como base.
-
-  {
-    type: 'quiz-intro-page', // Renomeado para consistência
-    name: 'Quiz - Página de Introdução',
-    description: 'Tela inicial do quiz com captura de nome e call-to-action.',
-    icon: 'Play',
-    category: 'Quiz',
-    isNew: true,
-    propertiesSchema: [
-      { key: 'logoUrl', label: 'URL da Logo', type: 'image-url', defaultValue: 'https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png' },
-      { key: 'logoAlt', label: 'Alt da Logo', type: 'text-input', defaultValue: 'Logo da Marca' },
-      { key: 'mainTitle', label: 'Título Principal', type: 'textarea', rows: 3, defaultValue: 'Chega de um guarda-roupa lotado e da sensação de que nada combina com você.' },
-      { key: 'subtitle', label: 'Subtítulo', type: 'textarea', rows: 2, defaultValue: 'Descubra seu Estilo e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.' },
-      { key: 'heroImage', label: 'Imagem Hero', type: 'image-url', defaultValue: 'https://cakto-quiz-br01.b-cdn.net/uploads/ecbe689b-1c0a-4071-98d3-4d391b6dd98f.png' },
-      { key: 'heroImageAlt', label: 'Alt da Imagem Hero', type: 'text-input', defaultValue: 'Mulher descobrindo seu estilo autêntico' },
-      { key: 'nameInputLabel', label: 'Rótulo Nome', type: 'text-input', defaultValue: 'Seu Nome' },
-      { key: 'nameInputPlaceholder', label: 'Placeholder Nome', type: 'text-input', defaultValue: 'Digite seu nome aqui...' },
-      { key: 'emailInputLabel', label: 'Rótulo E-mail', type: 'text-input', defaultValue: 'Seu E-mail *' },
-      { key: 'emailInputPlaceholder', label: 'Placeholder E-mail', type: 'text-input', defaultValue: 'Digite seu e-mail aqui...' },
-      { key: 'ctaText', label: 'Texto do CTA', type: 'text-input', defaultValue: 'Descobrir Meu Estilo' },
-      { key: 'ctaSubtext', label: 'Subtexto do CTA', type: 'text-input', defaultValue: '5x R$ 8,83' },
-      { key: 'backgroundColor', label: 'Cor de Fundo', type: 'color-picker', defaultValue: '#FAF9F7' },
-      { key: 'primaryColor', label: 'Cor Primária', type: 'color-picker', defaultValue: '#B89B7A' },
-      { key: 'hoverColor', label: 'Cor de Hover', type: 'color-picker', defaultValue: '#A68A6A' },
-      { key: 'textDark', label: 'Texto Escuro', type: 'color-picker', defaultValue: '#432818' },
-      { key: 'textMedium', label: 'Texto Médio', type: 'color-picker', defaultValue: '#8F7A6A' },
-    ],
-  },
-
-  {
-    type: 'quiz-question', // Já existia, mas agora é o bloco principal de questão
-    name: 'Quiz - Questão',
-    description: 'Uma única questão do quiz com opções de resposta.',
-    icon: 'HelpCircle',
-    category: 'Quiz',
-    propertiesSchema: [
-      { key: 'questionNumber', label: 'Número da Questão', type: 'number-input', defaultValue: 1, min: 1, hidden: false }, // Adicionado para exibir o número
-      { key: 'questionText', label: 'Texto da Pergunta', type: 'textarea', rows: 2, defaultValue: 'Qual é a sua pergunta?' },
-      { key: 'questionTextColor', label: 'Cor do Texto da Pergunta', type: 'color-picker', defaultValue: '#000000' },
-      { key: 'questionTextSize', label: 'Tamanho da Fonte da Pergunta', type: 'number-input', defaultValue: 28, min: 12, max: 48 },
-      { key: 'questionTextAlign', label: 'Alinhamento da Pergunta', type: 'select', options: [{ label: 'Esquerda', value: 'left' }, { label: 'Centro', value: 'center' }, { label: 'Direita', value: 'right' }], defaultValue: 'center' },
-
-      { key: 'questionType', label: 'Tipo de Exibição', type: 'select', defaultValue: 'both',
-        options: [
-          { label: 'Texto e Imagem', value: 'both' },
-          { label: 'Apenas Texto', value: 'text' },
-          { label: 'Apenas Imagem', value: 'image' }
-        ]
-      },
-      { key: 'maxSelections', label: 'Máximo de Seleções', type: 'number-input', defaultValue: 1, min: 1, max: 8, description: 'Número máximo de opções que o usuário pode selecionar.' },
-      { key: 'isRequired', label: 'Obrigatório', type: 'boolean-switch', defaultValue: true },
-      { key: 'autoProceed', label: 'Auto-avançar', type: 'boolean-switch', defaultValue: false, description: 'Avança automaticamente após seleção (se o máximo de seleções for atingido e não for múltipla escolha).' },
-
-      { key: 'options', label: 'Opções de Resposta', type: 'array-editor', defaultValue: [{ id: uuidv4(), text: 'Opção 1', imageUrl: '', profileType: '', scoreValue: 0 }],
-        itemSchema: [
-          { key: 'id', label: 'ID', type: 'text-input', hidden: true },
-          { key: 'text', label: 'Texto da Opção', type: 'textarea', rows: 1 },
-          { key: 'imageUrl', label: 'URL da Imagem (Opcional)', type: 'image-url' },
-          { key: 'profileType', label: 'Tipo de Perfil', type: 'text-input', placeholder: 'Ex: Natural' },
-          { key: 'scoreValue', label: 'Pontuação', type: 'number-input', defaultValue: 0 },
-        ]
-      },
-
-      { key: 'columns', label: 'Colunas', type: 'select', defaultValue: '2',
-        options: [
-          { label: '1 Coluna', value: '1' },
-          { label: '2 Colunas', value: '2' },
-          { label: '3 Colunas', value: '3' },
-          { label: '4 Colunas', value: '4' },
-        ],
-        description: 'Número de colunas para exibir as opções em layout de grade.'
-      },
-      { key: 'spacing', label: 'Espaçamento', type: 'select', defaultValue: 'md',
-        options: [
-          { label: 'Pequeno', value: 'sm' },
-          { label: 'Médio', value: 'md' },
-          { label: 'Grande', value: 'lg' },
-        ],
-      },
-      { key: 'optionStyle', label: 'Estilo da Opção', type: 'select', defaultValue: 'card',
-        options: [
-          { label: 'Simples', value: 'simple' },
-          { label: 'Card', value: 'card' },
-        ],
-      },
-
-      { key: 'primaryColor', label: 'Cor Principal', type: 'color-picker', defaultValue: '#B89B7A' },
-      { key: 'textColor', label: 'Cor do Texto', type: 'color-picker', defaultValue: '#432818' },
-      { key: 'borderColor', label: 'Cor da Borda', type: 'color-picker', defaultValue: '#e5e7eb' },
-
-      { key: 'showProgressBar', label: 'Mostrar Barra de Progresso', type: 'boolean-switch', defaultValue: true },
-      { key: 'progressPercent', label: 'Porcentagem do Progresso', type: 'number-input', min: 0, max: 100, defaultValue: 10 },
-    ]
-  },
-
-  {
-    type: 'quiz-transition-page', // Renomeado para consistência
-    name: 'Quiz - Página de Transição',
-    description: 'Tela de transição entre etapas do quiz.',
-    icon: 'ArrowRight',
-    category: 'Quiz',
-    propertiesSchema: [
-      { key: 'title', label: 'Título', type: 'text-input', defaultValue: '🕐 Enquanto calculamos o seu resultado...' },
-      { key: 'description', label: 'Descrição', type: 'textarea', rows: 3, defaultValue: 'Queremos te fazer algumas perguntas que vão tornar sua experiência ainda mais completa.' },
-      { key: 'buttonText', label: 'Texto do Botão', type: 'text-input', defaultValue: 'Responder Perguntas Estratégicas' },
-      { key: 'showProgress', label: 'Mostrar Progresso', type: 'boolean-switch', defaultValue: true },
-      { key: 'backgroundColor', label: 'Cor de Fundo', type: 'color-picker', defaultValue: '#ffffff' },
-      { key: 'textColor', label: 'Cor do Texto', type: 'color-picker', defaultValue: '#432818' },
-      { key: 'primaryColor', label: 'Cor Primária', type: 'color-picker', defaultValue: '#B89B7A' },
-    ],
-  },
-
-  {
-    type: 'result-page', // Renomeado para consistência
-    name: 'Quiz - Página de Resultado',
-    description: 'Exibição do resultado final do quiz.',
-    icon: 'Award',
-    category: 'Resultado',
-    propertiesSchema: [
-      { key: 'logoUrl', label: 'URL da Logo', type: 'image-url', defaultValue: 'https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png' },
-      { key: 'logoAlt', label: 'Alt da Logo', type: 'text-input', defaultValue: 'Logo da Marca' },
-      { key: 'mainTitle', label: 'Título Principal', type: 'textarea', rows: 2, defaultValue: 'Parabéns, {{userName}}! Seu estilo é {{calculatedStyle}}' },
-      { key: 'styleImage', label: 'Imagem do Estilo', type: 'image-url', defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp' },
-      { key: 'styleImageAlt', label: 'Alt da Imagem do Estilo', type: 'text-input', defaultValue: 'Imagem do estilo' },
-      { key: 'styleDescription', label: 'Descrição do Estilo', type: 'textarea', rows: 5, defaultValue: 'Baseado nas suas respostas, identificamos que seu estilo predominante é... [descrição detalhada]' },
-      { key: 'offerCtaText', label: 'Texto do Botão de Oferta', type: 'text-input', defaultValue: 'Ver Oferta Exclusiva' },
-      { key: 'offerCtaLink', label: 'Link do Botão de Oferta', type: 'url', defaultValue: '/quiz-descubra-seu-estilo' },
-      { key: 'backgroundColor', label: 'Cor de Fundo', type: 'color-picker', defaultValue: '#fffaf7' },
-      { key: 'textColor', label: 'Cor do Texto', type: 'color-picker', defaultValue: '#432818' },
-      { key: 'primaryColor', label: 'Cor Primária', type: 'color-picker', defaultValue: '#B89B7A' },
-    ],
-  },
-
-  {
-    type: 'offer-page', // Renomeado para consistência
-    name: 'Página de Oferta',
-    description: 'Página de vendas com oferta e call-to-action.',
-    icon: 'CheckCircle', // Usar CheckCircle para ofertas
-    category: 'Oferta',
-    propertiesSchema: [
-      { key: 'urgencyText', label: 'Texto de Urgência', type: 'text-input', defaultValue: '🔥 ÚLTIMAS HORAS...' },
-      { key: 'logoUrl', label: 'URL do Logo', type: 'image-url', defaultValue: 'https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png' },
-      { key: 'logoAlt', label: 'Alt da Logo', type: 'text-input', defaultValue: 'Logo da marca' },
-      { key: 'mainTitle', label: 'Título Principal', type: 'text-input', defaultValue: 'Transforme seu Guarda-Roupas com o Guia Completo!' },
-      { key: 'subtitle', label: 'Subtítulo', type: 'textarea', rows: 2, defaultValue: 'Aproveite esta oferta exclusiva para ter acesso ao Guia de Estilo, bônus especiais e um passo a passo prático para aplicar seu estilo com clareza e confiança.' },
-      { key: 'heroImage', label: 'Imagem Hero', type: 'image-url', defaultValue: 'https://placehold.co/600x400/B89B7A/ffffff?text=Oferta+Exclusiva' },
-      { key: 'heroImageAlt', label: 'Alt da Imagem Hero', type: 'text-input', defaultValue: 'Imagem da oferta' },
-      { key: 'problemsTitle', label: 'Título dos Problemas', type: 'text-input', defaultValue: 'Você se identifica com algum desses problemas?' },
-      {
-        key: 'problems',
-        label: 'Lista de Problemas',
-        type: 'array-editor',
-        defaultValue: [{ text: 'Guarda-roupa cheio mas nada para vestir' }],
-        itemSchema: [{ key: 'text', label: 'Problema', type: 'text-input' }]
-      },
-      { key: 'problemInsight', label: 'Insight dos Problemas', type: 'text-input', defaultValue: 'Isso acontece porque você não conhece seu estilo predominante.' },
-      { key: 'solutionTitle', label: 'Título da Solução', type: 'text-input', defaultValue: 'A Solução: Nosso Quiz + Guia de Estilo' },
-      { key: 'solutionDescription', label: 'Descrição da Solução', type: 'textarea', rows: 2, defaultValue: 'Nosso quiz científico e o guia prático vão te ajudar a organizar seu guarda-roupa e montar looks incríveis.' },
-      { key: 'benefitsTitle', label: 'Título dos Benefícios', type: 'text-input', defaultValue: 'Com o seu Guia de Estilo, você vai:' },
-      {
-        key: 'benefits',
-        label: 'Lista de Benefícios',
-        type: 'array-editor',
-        defaultValue: [{ text: 'Descobrir exatamente seu estilo' }],
-        itemSchema: [{ key: 'text', label: 'Benefício', type: 'text-input' }]
-      },
-      { key: 'socialProofTitle', label: 'Título da Prova Social', type: 'text-input', defaultValue: 'Mais de 15.000 mulheres já transformaram seu estilo!' },
-      { key: 'guaranteeTitle', label: 'Título da Garantia', type: 'text-input', defaultValue: 'Garantia Total de Satisfação' },
-      { key: 'guaranteeText', label: 'Texto da Garantia', type: 'text-input', defaultValue: 'Se não ficar satisfeita, devolvemos seu dinheiro em 30 dias.' },
-      { key: 'ctaText', label: 'Texto do CTA', type: 'text-input', defaultValue: 'Quero Transformar Meu Estilo Agora!' },
-      { key: 'ctaSubtext', label: 'Subtexto do CTA', type: 'text-input', defaultValue: 'Quiz + Guia Completo por apenas R$ 97,00' },
-      { key: 'backgroundColor', label: 'Cor de Fundo', type: 'color-picker', defaultValue: '#FFFBF7' },
-      { key: 'primaryColor', label: 'Cor Primária', type: 'color-picker', defaultValue: '#B89B7A' },
-      { key: 'textColor', label: 'Cor do Texto', type: 'color-picker', defaultValue: '#432818' },
-    ],
-  },
-
   // Outros blocos (mantidos e ajustados)
   {
     type: 'list',
@@ -1193,3 +1014,104 @@ export const blockDefinitions: BlockDefinition[] = [
     ],
   },
 ];
+
+// =====================================================================
+// 3. Funções utilitárias para trabalhar com as definições de blocos
+// =====================================================================
+
+/**
+ * Encontra uma definição de bloco pelo tipo
+ * @param type Tipo do bloco a ser encontrado
+ * @returns A definição do bloco ou undefined se não encontrado
+ */
+export function findBlockDefinition(type: string): BlockDefinition | undefined {
+  return blockDefinitions.find(def => def.type === type);
+}
+
+/**
+ * Obtém todas as categorias únicas dos blocos
+ * @returns Array com todas as categorias disponíveis
+ */
+export function getCategories(): string[] {
+  const categories = new Set(blockDefinitions.map(def => def.category));
+  return Array.from(categories).sort();
+}
+
+/**
+ * Obtém todos os blocos de uma categoria específica
+ * @param category Nome da categoria
+ * @returns Array com todas as definições de blocos da categoria
+ */
+export function getBlocksByCategory(category: string): BlockDefinition[] {
+  return blockDefinitions.filter(def => def.category === category);
+}
+
+/**
+ * Obtém blocos marcados como novos
+ * @returns Array com todas as definições de blocos novos
+ */
+export function getNewBlocks(): BlockDefinition[] {
+  return blockDefinitions.filter(def => def.isNew === true);
+}
+
+/**
+ * Busca blocos por texto (nome, descrição ou tags)
+ * @param searchTerm Termo de busca
+ * @returns Array com definições de blocos que correspondem à busca
+ */
+export function searchBlocks(searchTerm: string): BlockDefinition[] {
+  const term = searchTerm.toLowerCase();
+  return blockDefinitions.filter(def => 
+    def.name.toLowerCase().includes(term) ||
+    def.description.toLowerCase().includes(term) ||
+    def.tags?.some(tag => tag.toLowerCase().includes(term))
+  );
+}
+
+/**
+ * Valida se um tipo de bloco existe
+ * @param type Tipo do bloco
+ * @returns true se o tipo existe, false caso contrário
+ */
+export function isValidBlockType(type: string): boolean {
+  return blockDefinitions.some(def => def.type === type);
+}
+
+/**
+ * Cria um bloco com propriedades padrão baseado na definição
+ * @param type Tipo do bloco
+ * @param id ID único para o bloco (se não fornecido, será gerado)
+ * @returns Objeto Block com propriedades padrão ou null se tipo inválido
+ */
+export function createDefaultBlock(type: string, id?: string): Block | null {
+  const definition = findBlockDefinition(type);
+  if (!definition) return null;
+
+  const defaultProperties: Record<string, any> = {};
+  
+  // Preencher propriedades padrão baseado no schema
+  definition.propertiesSchema?.forEach(prop => {
+    if (prop.defaultValue !== undefined) {
+      defaultProperties[prop.key] = prop.defaultValue;
+    }
+  });
+
+  return {
+    id: id || `block-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+    type,
+    properties: defaultProperties
+  };
+}
+
+/**
+ * Obtém o schema de propriedades para um tipo de bloco
+ * @param type Tipo do bloco
+ * @returns Array com o schema de propriedades ou undefined se não encontrado
+ */
+export function getBlockPropertiesSchema(type: string): PropertySchema[] | undefined {
+  const definition = findBlockDefinition(type);
+  return definition?.propertiesSchema;
+}
+
+// Export default para compatibilidade
+export default blockDefinitions;

@@ -213,8 +213,6 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <GuaranteeBlock {...commonProps} />;
       case 'sales-offer':
         return <ProductOfferBlock {...commonProps} />;
-      case 'urgency-timer':
-        return <UrgencyTimerBlock {...commonProps} />;
       case 'bonus-section':
         return (
           <div {...commonProps} className={cn("p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg border-l-4 border-green-500", commonProps.className)}>
@@ -236,8 +234,6 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
             )}
           </div>
         );
-      case 'faq-section':
-        return <FAQSectionBlock {...commonProps} />;
 
       // BLOCOS UNIFICADOS DO FUNIL - Componentes reutilizáveis que garantem fidelidade visual
       case 'FunnelHeroBlock':
