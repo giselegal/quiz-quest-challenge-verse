@@ -7,21 +7,11 @@ import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { Slider } from "@/components/ui/slider";
 import {
   Play,
   Eye,
@@ -463,22 +453,185 @@ export default function ImprovedQuizEditor() {
     setCurrentPageIndex(0); // Resetar para primeira página
   }, [isAbTestMode, currentFunnel.variants]);
 
+  const deleteComponent = useCallback((componentId: string) => {
+    if (isAbTestMode && selectedVariant) {
+      setCurrentFunnel(prev => ({
+        ...prev,
+        variants: prev.variants?.map(variant => 
+          variant.id === selectedVariant
+            ? {
+                ...variant,
+                pages: variant.pages.map((page, index) => 
+                  index === currentPageIndex 
+                    ? { ...page, components: page.components.filter(comp => comp.id !== componentId) }
+                    : page
+                )
+              }
+            : variant
+        )
+      }));
+    } else {
+      setCurrentFunnel(prev => ({
+        ...prev,
+        pages: prev.pages.map((page, index) => 
+          index === currentPageIndex 
+            ? { ...page, components: page.components.filter(comp => comp.id !== componentId) }
+            : page
+        )
+      }));
+    }
+
+    if (selectedComponent === componentId) {
+      setSelectedComponent(null);
+    }
+
+    toast({
+      title: "Componente removido",
+      description: "Componente excluído com sucesso.",
+    });
+  }, [currentPageIndex, isAbTestMode, selectedVariant, selectedComponent, toast]);
+
+  const updateComponent = useCallback((componentId: string, updates: Partial<QuizComponent>) => {
+    if (isAbTestMode && selectedVariant) {
+      setCurrentFunnel(prev => ({
+        ...prev,
+        variants: prev.variants?.map(variant => 
+          variant.id === selectedVariant
+            ? {
+                ...variant,
+                pages: variant.pages.map((page, index) => 
+                  index === currentPageIndex 
+                    ? { 
+                        ...page, 
+                        components: page.components.map(comp => 
+                          comp.id === componentId ? { ...comp, ...updates } : comp
+                        )
+                      }
+                    : page
+                )
+              }
+            : variant
+        )
+      }));
+    } else {
+      setCurrentFunnel(prev => ({
+        ...prev,
+        pages: prev.pages.map((page, index) => 
+          index === currentPageIndex 
+            ? { 
+                ...page, 
+                components: page.components.map(comp => 
+                  comp.id === componentId ? { ...comp, ...updates } : comp
+                )
+              }
+            : page
+        )
+      }));
+    }
+  }, [currentPageIndex, isAbTestMode, selectedVariant]);
+
+  const moveComponent = useCallback((componentId: string, direction: 'up' | 'down') => {
+    const components = currentPage?.components || [];
+    const currentIndex = components.findIndex(comp => comp.id === componentId);
+    
+    if (currentIndex === -1) return;
+    
+    const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+    if (newIndex < 0 || newIndex >= components.length) return;
+    
+    const newComponents = [...components];
+    [newComponents[currentIndex], newComponents[newIndex]] = [newComponents[newIndex], newComponents[currentIndex]];
+    
+    if (isAbTestMode && selectedVariant) {
+      setCurrentFunnel(prev => ({
+        ...prev,
+        variants: prev.variants?.map(variant => 
+          variant.id === selectedVariant
+            ? {
+                ...variant,
+                pages: variant.pages.map((page, index) => 
+                  index === currentPageIndex 
+                    ? { ...page, components: newComponents }
+                    : page
+                )
+              }
+            : variant
+        )
+      }));
+    } else {
+      setCurrentFunnel(prev => ({
+        ...prev,
+        pages: prev.pages.map((page, index) => 
+          index === currentPageIndex 
+            ? { ...page, components: newComponents }
+            : page
+        )
+      }));
+    }
+  }, [currentPage?.components, currentPageIndex, isAbTestMode, selectedVariant]);
+
+  // Função para obter conteúdo padrão por tipo de componente
   // Função para obter conteúdo padrão por tipo de componente
   function getDefaultContent(type: string) {
     const defaults: Record<string, any> = {
-      heading: { text: "Novo Título", level: 2 },
-      paragraph: { text: "Novo parágrafo de texto." },
-      button: { text: "Clique aqui", action: "next" },
-      image: { src: "", alt: "Imagem" },
+      heading: { text: "Novo Título", level: 2, color: "#000000", align: "left" },
+      paragraph: { text: "Novo parágrafo de texto.", color: "#333333", align: "left", size: "16" },
+      button: { text: "Clique aqui", action: "next", color: "#ffffff", backgroundColor: "#3b82f6", size: "medium" },
+      image: { src: "", alt: "Imagem", width: "100%", height: "auto", borderRadius: "8" },
+      video: { src: "", title: "Vídeo", width: "100%", height: "315" },
       question: { 
         text: "Nova pergunta?", 
+        type: "single",
         options: [
-          { id: "opt1", text: "Opção 1" },
-          { id: "opt2", text: "Opção 2" }
+          { id: "opt1", text: "Opção 1", value: "option1" },
+          { id: "opt2", text: "Opção 2", value: "option2" }
         ]
       },
-      price: { amount: "97", currency: "R$", period: "único" },
-      offer: { title: "Oferta Especial", discount: "50%" }
+      price: { amount: "97", currency: "R$", period: "único", color: "#16a34a", size: "large" },
+      offer: { title: "Oferta Especial", discount: "50%", description: "Por tempo limitado", backgroundColor: "#fef3c7" },
+      separator: { type: "line", color: "#e5e7eb", thickness: "1", margin: "20" },
+      spacer: { height: "40" },
+      progress: { value: 0, max: 100, color: "#3b82f6", backgroundColor: "#e5e7eb" },
+      timer: { duration: 300, format: "mm:ss", onExpire: "continue" },
+      score: { current: 0, total: 10, showPercentage: true },
+      form: { 
+        fields: [
+          { id: "name", type: "text", label: "Nome", required: true },
+          { id: "email", type: "email", label: "E-mail", required: true }
+        ]
+      },
+      rating: { max: 5, value: 0, color: "#fbbf24" },
+      poll: { question: "Qual sua opinião?", options: ["Ótimo", "Bom", "Regular", "Ruim"] },
+      testimonial: { 
+        text: "Produto incrível! Recomendo muito.",
+        author: "João Silva",
+        role: "Cliente satisfeito",
+        avatar: "",
+        rating: 5
+      },
+      guarantee: { 
+        title: "Garantia de 30 dias",
+        description: "100% do seu dinheiro de volta",
+        icon: "shield"
+      },
+      urgency: {
+        type: "countdown",
+        message: "Oferta termina em:",
+        endDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+      },
+      benefits: {
+        title: "O que você vai receber:",
+        items: [
+          "Acesso completo ao curso",
+          "Suporte via WhatsApp",
+          "Certificado de conclusão"
+        ]
+      },
+      gallery: {
+        images: [],
+        layout: "grid",
+        columns: 3
+      }
     };
     return defaults[type] || { text: "Novo componente" };
   }
@@ -881,18 +1034,17 @@ export default function ImprovedQuizEditor() {
                 <h3 className="font-semibold">Propriedades</h3>
                 
                 {selectedComponent ? (
-                  <div className="space-y-4">
-                    <p className="text-sm text-muted-foreground">
-                      Editando: {selectedComponent}
-                    </p>
-                    {/* Aqui viriam os controles de propriedades do componente selecionado */}
-                    <div className="text-center text-sm text-muted-foreground">
-                      Controles de propriedades em desenvolvimento
-                    </div>
-                  </div>
+                  <ComponentPropertiesEditor
+                    component={currentPage?.components.find(comp => comp.id === selectedComponent)}
+                    onUpdate={(updates) => updateComponent(selectedComponent, updates)}
+                    onDelete={() => deleteComponent(selectedComponent)}
+                    onMove={(direction) => moveComponent(selectedComponent, direction)}
+                  />
                 ) : (
-                  <div className="text-center text-sm text-muted-foreground">
-                    Selecione um componente para editar suas propriedades
+                  <div className="text-center text-sm text-muted-foreground py-8">
+                    <Settings className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p className="font-medium mb-2">Nenhum componente selecionado</p>
+                    <p className="text-xs">Clique em um componente no canvas para editar suas propriedades</p>
                   </div>
                 )}
               </TabsContent>
@@ -979,7 +1131,51 @@ export default function ImprovedQuizEditor() {
                         } ${!isPreviewMode ? "hover:border-gray-300 cursor-pointer" : ""}`}
                         onClick={() => !isPreviewMode && setSelectedComponent(component.id)}
                       >
-                        <ComponentRenderer component={component} />
+                        <div className="relative">
+                          {!isPreviewMode && selectedComponent === component.id && (
+                            <div className="absolute -top-2 -right-2 flex gap-1 z-10">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  moveComponent(component.id, 'up');
+                                }}
+                                disabled={currentPage?.components.findIndex(c => c.id === component.id) === 0}
+                                className="h-6 w-6 p-0 bg-white shadow-sm border"
+                                title="Mover para cima"
+                              >
+                                <ArrowLeft className="h-3 w-3 rotate-90" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  moveComponent(component.id, 'down');
+                                }}
+                                disabled={currentPage?.components.findIndex(c => c.id === component.id) === (currentPage?.components.length || 0) - 1}
+                                className="h-6 w-6 p-0 bg-white shadow-sm border"
+                                title="Mover para baixo"
+                              >
+                                <ArrowRight className="h-3 w-3 rotate-90" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  deleteComponent(component.id);
+                                }}
+                                className="h-6 w-6 p-0 bg-white shadow-sm border"
+                                title="Excluir componente"
+                              >
+                                <Trash2 className="h-3 w-3" />
+                              </Button>
+                            </div>
+                          )}
+                          <ComponentRenderer component={component} />
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -1061,6 +1257,136 @@ function ComponentRenderer({ component }: { component: QuizComponent }) {
               {component.content.discount} OFF
             </div>
           )}
+        </div>
+      );
+    
+    // Novos tipos de componentes
+    case "image":
+      return (
+        <div className="flex justify-center">
+          <img 
+            src={component.content.src} 
+            alt={component.content.alt} 
+            className="max-w-full h-auto rounded-lg shadow-md"
+          />
+        </div>
+      );
+    
+    case "video":
+      return (
+        <div className="flex justify-center">
+          <iframe
+            src={component.content.src}
+            title={component.content.alt}
+            className="w-full h-60 rounded-lg shadow-md"
+            frameBorder="0"
+            allowFullScreen
+          />
+        </div>
+      );
+    
+    case "gallery":
+      return (
+        <div className="grid grid-cols-2 gap-2">
+          {(component.content.images || []).map((image: any) => (
+            <div key={image.src} className="flex justify-center">
+              <img 
+                src={image.src} 
+                alt={image.alt} 
+                className="w-full h-auto rounded-lg shadow-md"
+              />
+            </div>
+          ))}
+        </div>
+      );
+    
+    case "form":
+      return (
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">
+            {component.content.title || "Formulário"}
+          </h3>
+          <div className="grid grid-cols-1 gap-4">
+            {(component.content.fields || []).map((field: any) => (
+              <div key={field.name} className="flex flex-col">
+                <Label htmlFor={field.name} className="text-sm font-medium">
+                  {field.label}
+                </Label>
+                {field.type === "textarea" ? (
+                  <Textarea 
+                    id={field.name} 
+                    placeholder={field.placeholder} 
+                    className="mt-1"
+                    rows={3}
+                  />
+                ) : (
+                  <Input 
+                    id={field.name} 
+                    placeholder={field.placeholder} 
+                    type={field.type} 
+                    className="mt-1"
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    
+    case "timer":
+      return (
+        <div className="flex flex-col items-center">
+          <div className="text-4xl font-bold text-gray-900">
+            {component.data.remainingTime}
+          </div>
+          <div className="text-sm text-gray-600">
+            Tempo restante
+          </div>
+        </div>
+      );
+    
+    case "progress":
+      return (
+        <div className="w-full bg-gray-200 rounded-full h-2.5">
+          <div 
+            className="bg-blue-600 h-2.5 rounded-full" 
+            style={{ width: `${component.data.progress}%` }}
+          />
+        </div>
+      );
+    
+    case "rating":
+      return (
+        <div className="flex items-center gap-1">
+          {Array.from({ length: component.data.maxRating }, (_, index) => (
+            <Button
+              key={index}
+              variant={index < component.data.currentRating ? "default" : "outline"}
+              className="h-8 w-8 p-0 rounded-full"
+            >
+              <Star className="h-4 w-4" />
+            </Button>
+          ))}
+        </div>
+      );
+    
+    case "poll":
+      return (
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">
+            {component.content.question || "Enquete"}
+          </h3>
+          <div className="space-y-2">
+            {(component.content.options || []).map((option: any) => (
+              <Button
+                key={option.id}
+                variant="outline"
+                className="w-full justify-start"
+              >
+                {option.text}
+              </Button>
+            ))}
+          </div>
         </div>
       );
     
