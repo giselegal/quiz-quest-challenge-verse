@@ -88,19 +88,19 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
     const baseClasses = {
       1: 'grid-cols-1',
       2: 'grid-cols-1 sm:grid-cols-2',
-      3: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
-      4: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+      3: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3',
+      4: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
     };
     return baseClasses[cols as keyof typeof baseClasses] || 'grid-cols-1 sm:grid-cols-2';
   };
 
   const getImageHeight = (size: string) => {
     const sizeClasses = {
-      small: 'h-16 sm:h-20 md:h-24',
-      medium: 'h-20 sm:h-24 md:h-32',
-      large: 'h-24 sm:h-32 md:h-48'
+      small: 'h-12 sm:h-16 md:h-20',
+      medium: 'h-16 sm:h-20 md:h-24',
+      large: 'h-20 sm:h-24 md:h-32'
     };
-    return sizeClasses[size as keyof typeof sizeClasses] || 'h-24 sm:h-32 md:h-48';
+    return sizeClasses[size as keyof typeof sizeClasses] || 'h-20 sm:h-24 md:h-32';
   };
 
   if (!options || options.length === 0) {
@@ -139,7 +139,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
       data-block-type={block.type}
     >
       {title && (
-        <h3 className="text-base sm:text-lg md:text-xl font-bold text-[#432818] mb-3 sm:mb-4 md:mb-6 px-3 sm:px-4">
+        <h3 className="text-sm sm:text-base md:text-lg font-bold text-[#432818] mb-2 sm:mb-3 md:mb-4 px-2 sm:px-3">
           <InlineEditableText
             value={title}
             onSave={(value: string) => handlePropertyChange('title', value)}
@@ -150,7 +150,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
         </h3>
       )}
       <div 
-        className={`grid ${getGridCols(columns)} w-full max-w-6xl mx-auto px-2 sm:px-3 md:px-4 lg:px-6 xl:px-8 gap-2 sm:gap-3 md:gap-4`}
+        className={`grid ${getGridCols(columns)} w-full mx-auto px-3 sm:px-4 md:px-6 gap-3 sm:gap-4`}
       >
         {options.map((option: any, index: number) => {
           const isSelected = isOptionSelected(option.id);
@@ -161,14 +161,15 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
                 group relative rounded-lg text-sm font-medium ring-offset-background 
                 transition-all duration-300 ease-in-out transform hover:scale-[1.02] sm:hover:scale-105 
                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 
-                disabled:pointer-events-none disabled:opacity-50 
+                disabled:pointer-events-none disabled:opacity-50 active:scale-95 
                 border-2 bg-white hover:shadow-lg sm:hover:shadow-xl overflow-hidden w-full gap-1 sm:gap-2 flex 
-                flex-col items-center justify-start option-button min-h-[120px] sm:min-h-[140px]
+                flex-col items-center justify-start option-button min-h-[100px] sm:min-h-[120px] md:min-h-[140px]
                 ${isSelected 
                   ? 'border-blue-500 bg-blue-50 shadow-lg scale-[1.02] sm:scale-105' 
                   : 'border-zinc-200 hover:border-zinc-300 hover:bg-gray-50 shadow-md'
                 }
                 ${isEditing ? 'cursor-default' : 'cursor-pointer'}
+                touch-manipulation
               `}
               type="button"
               onClick={() => handleOptionSelect(option.id, option.value)}
