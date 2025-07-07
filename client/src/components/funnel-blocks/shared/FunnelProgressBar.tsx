@@ -73,4 +73,5 @@ const FunnelProgressBar: React.FC<FunnelProgressBarProps> = ({
   );
 };
 
+export { FunnelProgressBar };
 export default FunnelProgressBar;

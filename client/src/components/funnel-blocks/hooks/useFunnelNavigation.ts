@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router'; // Comentado para React puro
 import { useFunnelConfig } from '../editor/FunnelConfigProvider';
 
 interface UseFunnelNavigationOptions {
@@ -30,7 +30,7 @@ export function useFunnelNavigation({
     answers
   } = useFunnelConfig();
   
-  const router = useRouter();
+  // const router = useRouter(); // Removido para React puro
   
   // Estado local para histórico de navegação
   const [navigationHistory, setNavigationHistory] = useState<number[]>([initialStep]);
@@ -126,7 +126,8 @@ export function useFunnelNavigation({
   
   // Navegação para URLs específicas
   const navigateToURL = (url: string) => {
-    router.push(url);
+    // router.push(url); // Removido para React puro
+    window.location.href = url; // Usar navegação padrão do browser
   };
   
   // Limpar estado
