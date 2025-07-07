@@ -7,6 +7,11 @@ import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { Slider } from "@/components/ui/slider";
 import {
   Select,
   SelectContent,
@@ -22,6 +27,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Play,
   Eye,
@@ -54,6 +67,11 @@ import {
   TrendingUp,
   Clock,
   Check,
+  GripVertical,
+  Palette,
+  Code,
+  FileText,
+  Database,
 } from "lucide-react";
 
 // Interfaces dos tipos
@@ -279,10 +297,10 @@ export default function ImprovedQuizEditor() {
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
   const [isAbTestMode, setIsAbTestMode] = useState(false);
-
-  // Estados para edição
-  const [editingComponent, setEditingComponent] = useState<string | null>(null);
-  const [componentEditData, setComponentEditData] = useState<any>({});
+  const [draggedComponent, setDraggedComponent] = useState<string | null>(null);
+  const [showComponentEditor, setShowComponentEditor] = useState(false);
+  const [showTemplateDialog, setShowTemplateDialog] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   // Determinar as páginas atuais baseado no modo A/B test
   const getCurrentPages = () => {
@@ -457,6 +475,190 @@ export default function ImprovedQuizEditor() {
     });
   }, [selectedVariant, toast]);
 
+  // Funções de Drag and Drop
+  const handleDragStart = useCallback((componentType: string) => {
+    setDraggedComponent(componentType);
+    setIsDragging(true);
+  }, []);
+
+  const handleDragEnd = useCallback(() => {
+    setDraggedComponent(null);
+    setIsDragging(false);
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    if (draggedComponent) {
+      addComponent(draggedComponent);
+    }
+    setIsDragging(false);
+    setDraggedComponent(null);
+  }, [draggedComponent, addComponent]);
+
+  // Função para reordenar componentes
+  const reorderComponents = useCallback((startIndex: number, endIndex: number) => {
+    const newComponents = [...(currentPage?.components || [])];
+    const [removed] = newComponents.splice(startIndex, 1);
+    newComponents.splice(endIndex, 0, removed);
+
+    if (isAbTestMode && selectedVariant) {
+      setCurrentFunnel(prev => ({
+        ...prev,
+        variants: prev.variants?.map(variant => 
+          variant.id === selectedVariant
+            ? {
+                ...variant,
+                pages: variant.pages.map((page, index) => 
+                  index === currentPageIndex 
+                    ? { ...page, components: newComponents }
+                    : page
+                )
+              }
+            : variant
+        )
+      }));
+    } else {
+      setCurrentFunnel(prev => ({
+        ...prev,
+        pages: prev.pages.map((page, index) => 
+          index === currentPageIndex 
+            ? { ...page, components: newComponents }
+            : page
+        )
+      }));
+    }
+  }, [currentPage?.components, isAbTestMode, selectedVariant, currentPageIndex]);
+
+  // Função para duplicar componente
+  const duplicateComponent = useCallback((componentId: string) => {
+    const componentToDuplicate = currentPage?.components.find(c => c.id === componentId);
+    if (!componentToDuplicate) return;
+
+    const duplicatedComponent = {
+      ...componentToDuplicate,
+      id: `comp-${Date.now()}`,
+    };
+
+    if (isAbTestMode && selectedVariant) {
+      setCurrentFunnel(prev => ({
+        ...prev,
+        variants: prev.variants?.map(variant => 
+          variant.id === selectedVariant
+            ? {
+                ...variant,
+                pages: variant.pages.map((page, index) => 
+                  index === currentPageIndex 
+                    ? { ...page, components: [...page.components, duplicatedComponent] }
+                    : page
+                )
+              }
+            : variant
+        )
+      }));
+    } else {
+      setCurrentFunnel(prev => ({
+        ...prev,
+        pages: prev.pages.map((page, index) => 
+          index === currentPageIndex 
+            ? { ...page, components: [...page.components, duplicatedComponent] }
+            : page
+        )
+      }));
+    }
+
+    toast({
+      title: "Componente duplicado",
+      description: "Componente copiado com sucesso.",
+    });
+  }, [currentPage?.components, isAbTestMode, selectedVariant, currentPageIndex, toast]);
+
+  // Função para deletar componente
+  const deleteComponent = useCallback((componentId: string) => {
+    if (isAbTestMode && selectedVariant) {
+      setCurrentFunnel(prev => ({
+        ...prev,
+        variants: prev.variants?.map(variant => 
+          variant.id === selectedVariant
+            ? {
+                ...variant,
+                pages: variant.pages.map((page, index) => 
+                  index === currentPageIndex 
+                    ? { ...page, components: page.components.filter(c => c.id !== componentId) }
+                    : page
+                )
+              }
+            : variant
+        )
+      }));
+    } else {
+      setCurrentFunnel(prev => ({
+        ...prev,
+        pages: prev.pages.map((page, index) => 
+          index === currentPageIndex 
+            ? { ...page, components: page.components.filter(c => c.id !== componentId) }
+            : page
+        )
+      }));
+    }
+
+    if (selectedComponent === componentId) {
+      setSelectedComponent(null);
+    }
+
+    toast({
+      title: "Componente removido",
+      description: "Componente excluído com sucesso.",
+    });
+  }, [isAbTestMode, selectedVariant, currentPageIndex, selectedComponent, toast]);
+
+  // Função para atualizar propriedades do componente
+  const updateComponentContent = useCallback((componentId: string, newContent: any) => {
+    if (isAbTestMode && selectedVariant) {
+      setCurrentFunnel(prev => ({
+        ...prev,
+        variants: prev.variants?.map(variant => 
+          variant.id === selectedVariant
+            ? {
+                ...variant,
+                pages: variant.pages.map((page, index) => 
+                  index === currentPageIndex 
+                    ? { 
+                        ...page, 
+                        components: page.components.map(comp => 
+                          comp.id === componentId 
+                            ? { ...comp, content: { ...comp.content, ...newContent } }
+                            : comp
+                        )
+                      }
+                    : page
+                )
+              }
+            : variant
+        )
+      }));
+    } else {
+      setCurrentFunnel(prev => ({
+        ...prev,
+        pages: prev.pages.map((page, index) => 
+          index === currentPageIndex 
+            ? { 
+                ...page, 
+                components: page.components.map(comp => 
+                  comp.id === componentId 
+                    ? { ...comp, content: { ...comp.content, ...newContent } }
+                    : comp
+                )
+              }
+            : page
+        )
+      }));
+    }
+  }, [isAbTestMode, selectedVariant, currentPageIndex]);
+
   const toggleAbTestMode = useCallback(() => {
     setIsAbTestMode(!isAbTestMode);
     if (!isAbTestMode && currentFunnel.variants && currentFunnel.variants.length > 0) {
@@ -470,21 +672,11 @@ export default function ImprovedQuizEditor() {
   // Função para obter conteúdo padrão por tipo de componente
   function getDefaultContent(type: string) {
     const defaults: Record<string, any> = {
-      // Estrutura
       heading: { text: "Novo Título", level: 2 },
       paragraph: { text: "Novo parágrafo de texto." },
-      separator: {},
-      spacer: { height: "40px" },
-      
-      // Mídia
+      button: { text: "Clique aqui", action: "next" },
       image: { src: "", alt: "Imagem" },
-      video: { url: "", title: "Vídeo" },
-      gallery: { 
-        title: "Galeria",
-        images: []
-      },
-      
-      // Quiz
+      video: { src: "", title: "Vídeo" },
       question: { 
         text: "Nova pergunta?", 
         options: [
@@ -492,59 +684,34 @@ export default function ImprovedQuizEditor() {
           { id: "opt2", text: "Opção 2" }
         ]
       },
-      progress: { progress: 50 },
-      timer: { time: "00:30" },
-      score: { score: 0 },
-      
-      // Interação
-      button: { text: "Clique aqui", action: "next" },
-      form: { 
-        title: "Formulário",
-        fields: [
-          { label: "Nome", type: "text", placeholder: "Digite seu nome" },
-          { label: "Email", type: "email", placeholder: "Digite seu email" }
-        ]
-      },
-      rating: { question: "Como você avalia?", rating: 0 },
-      poll: { 
-        question: "Qual sua opinião?",
-        options: [
-          { text: "Opção 1", percentage: 45 },
-          { text: "Opção 2", percentage: 55 }
-        ]
-      },
-      
-      // Vendas
       price: { amount: "97", currency: "R$", period: "único" },
       offer: { title: "Oferta Especial", discount: "50%" },
+      separator: {},
+      spacer: { height: "40px" },
+      form: { fields: ["name", "email"] },
+      progress: { value: 50 },
+      timer: { time: "05:00" },
+      score: { score: 0, total: 10 },
+      rating: { stars: 5, value: 0 },
+      poll: { question: "Qual sua opinião?", options: ["Sim", "Não"] },
       testimonial: { 
-        text: "Excelente produto! Recomendo muito.",
+        text: "Este produto mudou minha vida!",
         author: "Cliente Satisfeito",
-        role: "Empresário"
+        avatar: ""
       },
       guarantee: { 
         title: "Garantia de 30 dias",
-        description: "100% do seu dinheiro de volta se não ficar satisfeito"
+        description: "100% do seu dinheiro de volta"
       },
       urgency: { 
         title: "Oferta por tempo limitado!",
-        description: "Não perca esta oportunidade única",
-        countdown: "23:59:45"
+        countdown: "24:00:00"
       },
       benefits: { 
         title: "Benefícios",
-        items: [
-          { text: "Acesso vitalício" },
-          { text: "Suporte especializado" },
-          { text: "Atualizações gratuitas" }
-        ]
+        items: ["Benefício 1", "Benefício 2", "Benefício 3"]
       },
-      
-      // Outros
-      loading: { 
-        text: "Processando suas respostas...",
-        subtitle: "Por favor, aguarde um momento"
-      }
+      gallery: { images: [] }
     };
     return defaults[type] || { text: "Novo componente" };
   }
@@ -575,6 +742,61 @@ export default function ImprovedQuizEditor() {
         variant: "destructive",
       });
     }
+  }, [toast]);
+
+  const exportFunnel = useCallback(() => {
+    try {
+      const dataStr = JSON.stringify(currentFunnel, null, 2);
+      const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+      
+      const exportFileDefaultName = `quiz-funnel-${currentFunnel.name.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.json`;
+      
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileDefaultName);
+      linkElement.click();
+      
+      toast({
+        title: "Funil exportado",
+        description: "Arquivo JSON baixado com sucesso.",
+      });
+    } catch (error) {
+      toast({
+        title: "Erro ao exportar",
+        description: "Não foi possível exportar o funil.",
+        variant: "destructive",
+      });
+    }
+  }, [currentFunnel, toast]);
+
+  const importFunnel = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const importedFunnel = JSON.parse(e.target?.result as string);
+        setCurrentFunnel(importedFunnel);
+        setCurrentPageIndex(0);
+        setSelectedComponent(null);
+        
+        toast({
+          title: "Funil importado",
+          description: "Configurações carregadas com sucesso.",
+        });
+      } catch (error) {
+        toast({
+          title: "Erro ao importar",
+          description: "Arquivo JSON inválido.",
+          variant: "destructive",
+        });
+      }
+    };
+    reader.readAsText(file);
+    
+    // Reset input value to allow importing the same file again
+    event.target.value = '';
   }, [toast]);
 
   // Carregar dados salvos ao inicializar
@@ -694,6 +916,27 @@ export default function ImprovedQuizEditor() {
               Salvar
             </Button>
 
+            <Button variant="outline" size="sm" onClick={exportFunnel}>
+              <Download className="h-4 w-4 mr-2" />
+              Exportar
+            </Button>
+
+            <div className="relative">
+              <input
+                type="file"
+                accept=".json"
+                onChange={importFunnel}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                id="import-file"
+              />
+              <Button variant="outline" size="sm" asChild>
+                <label htmlFor="import-file" className="cursor-pointer">
+                  <Upload className="h-4 w-4 mr-2" />
+                  Importar
+                </label>
+              </Button>
+            </div>
+
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="outline" size="sm">
@@ -751,6 +994,15 @@ export default function ImprovedQuizEditor() {
                       ))}
                     </SelectContent>
                   </Select>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowTemplateDialog(true)}
+                    className="ml-2"
+                  >
+                    <FileText className="h-4 w-4 mr-2" />
+                    Templates
+                  </Button>
                 </div>
 
                 <ScrollArea className="h-[calc(100vh-200px)]">
@@ -920,10 +1172,14 @@ export default function ImprovedQuizEditor() {
                               <Button
                                 key={component.type}
                                 variant="outline"
-                                className="w-full justify-start h-auto p-3"
+                                className="w-full justify-start h-auto p-3 cursor-grab active:cursor-grabbing"
                                 onClick={() => addComponent(component.type)}
+                                draggable
+                                onDragStart={() => handleDragStart(component.type)}
+                                onDragEnd={handleDragEnd}
                               >
                                 <div className="flex items-center gap-3">
+                                  <GripVertical className="h-4 w-4 text-gray-400" />
                                   <Icon className="h-4 w-4" />
                                   <div className="text-left">
                                     <div className="font-medium text-sm">{component.name}</div>
@@ -944,12 +1200,24 @@ export default function ImprovedQuizEditor() {
 
               {/* Aba de Propriedades */}
               <TabsContent value="settings" className="p-4 space-y-4">
-                <h3 className="font-semibold">Propriedades</h3>
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold">Propriedades</h3>
+                  {selectedComponent && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setShowComponentEditor(true)}
+                    >
+                      <Edit3 className="h-4 w-4 mr-2" />
+                      Editar
+                    </Button>
+                  )}
+                </div>
                 
                 {selectedComponent ? (
-                  <ComponentEditor 
+                  <ComponentPropertiesPanel
                     component={currentPage?.components.find(c => c.id === selectedComponent)}
-                    onUpdate={(newContent) => updateComponent(selectedComponent, newContent)}
+                    onUpdate={(content) => updateComponentContent(selectedComponent, content)}
                   />
                 ) : (
                   <div className="text-center text-sm text-muted-foreground py-8">
@@ -1009,7 +1277,11 @@ export default function ImprovedQuizEditor() {
             )}
 
             {/* Canvas da página */}
-            <div className={`bg-white rounded-lg shadow-sm border ${deviceStyles[deviceView]}`}>
+            <div 
+              className={`bg-white rounded-lg shadow-sm border ${deviceStyles[deviceView]} ${isDragging ? 'border-blue-300 border-dashed bg-blue-50' : ''}`}
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+            >
               <div className="p-6 min-h-[600px]">
                 {currentPage?.showProgress && (
                   <div className="mb-6">
@@ -1027,49 +1299,74 @@ export default function ImprovedQuizEditor() {
                 )}
 
                 {currentPage?.components.length === 0 ? (
-                  <div className="text-center py-20 text-gray-500">
+                  <div className="text-center py-20 text-gray-500 border-2 border-dashed border-gray-200 rounded-lg">
                     <Layout className="h-12 w-12 mx-auto mb-4 opacity-50" />
                     <p className="text-lg font-medium mb-2">Página vazia</p>
-                    <p className="text-sm">Adicione componentes usando o painel lateral</p>
+                    <p className="text-sm mb-4">Adicione componentes usando o painel lateral</p>
+                    <div className="text-xs text-muted-foreground">
+                      💡 Dica: Você pode arrastar componentes diretamente para esta área
+                    </div>
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {currentPage?.components.map((component) => (
+                    {currentPage?.components.map((component, index) => (
                       <div
                         key={component.id}
-                        className={`border-2 border-dashed border-transparent p-2 rounded-lg transition-colors relative group ${
+                        className={`group relative border-2 border-dashed border-transparent p-2 rounded-lg transition-colors ${
                           selectedComponent === component.id ? "border-blue-500 bg-blue-50" : ""
                         } ${!isPreviewMode ? "hover:border-gray-300 cursor-pointer" : ""}`}
                         onClick={() => !isPreviewMode && setSelectedComponent(component.id)}
                       >
-                        {!isPreviewMode && selectedComponent === component.id && (
-                          <div className="absolute -top-2 -right-2 flex gap-1 z-10">
-                            <Button
-                              variant="secondary"
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                duplicateComponent(component.id);
-                              }}
-                              className="h-6 w-6 p-0"
-                              title="Duplicar"
-                            >
-                              <Copy className="h-3 w-3" />
-                            </Button>
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                deleteComponent(component.id);
-                              }}
-                              className="h-6 w-6 p-0"
-                              title="Excluir"
-                            >
-                              <Trash2 className="h-3 w-3" />
-                            </Button>
+                        {!isPreviewMode && (
+                          <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                            <div className="flex gap-1">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  duplicateComponent(component.id);
+                                }}
+                                className="h-6 w-6 p-0 bg-white shadow-sm"
+                                title="Duplicar componente"
+                              >
+                                <Copy className="h-3 w-3" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedComponent(component.id);
+                                  setShowComponentEditor(true);
+                                }}
+                                className="h-6 w-6 p-0 bg-white shadow-sm"
+                                title="Editar componente"
+                              >
+                                <Edit3 className="h-3 w-3" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  deleteComponent(component.id);
+                                }}
+                                className="h-6 w-6 p-0 bg-white shadow-sm text-red-600 hover:text-red-700"
+                                title="Excluir componente"
+                              >
+                                <Trash2 className="h-3 w-3" />
+                              </Button>
+                            </div>
                           </div>
                         )}
+                        
+                        {!isPreviewMode && (
+                          <div className="absolute left-1 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing">
+                            <GripVertical className="h-4 w-4 text-gray-400" />
+                          </div>
+                        )}
+
                         <ComponentRenderer component={component} />
                       </div>
                     ))}
@@ -1080,38 +1377,108 @@ export default function ImprovedQuizEditor() {
           </div>
         </div>
       </div>
+
+      {/* Modal de Editor de Componente Avançado */}
+      <Dialog open={showComponentEditor} onOpenChange={setShowComponentEditor}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-auto">
+          <DialogHeader>
+            <DialogTitle>Editor de Componente</DialogTitle>
+            <DialogDescription>
+              Configure as propriedades avançadas do componente selecionado.
+            </DialogDescription>
+          </DialogHeader>
+          {selectedComponent && (
+            <AdvancedComponentEditor
+              component={currentPage?.components.find(c => c.id === selectedComponent)}
+              onUpdate={(content) => updateComponentContent(selectedComponent, content)}
+              onClose={() => setShowComponentEditor(false)}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal de Templates */}
+      <Dialog open={showTemplateDialog} onOpenChange={setShowTemplateDialog}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-auto">
+          <DialogHeader>
+            <DialogTitle>Templates de Página</DialogTitle>
+            <DialogDescription>
+              Escolha um template para começar rapidamente.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 py-4">
+            {Object.entries(PAGE_TEMPLATES).map(([type, template]) => {
+              const Icon = template.icon;
+              return (
+                <Card
+                  key={type}
+                  className="cursor-pointer hover:shadow-md transition-shadow"
+                  onClick={() => {
+                    addNewPage(type as QuizPage["type"]);
+                    setShowTemplateDialog(false);
+                  }}
+                >
+                  <CardHeader className="text-center p-4">
+                    <Icon className="h-8 w-8 mx-auto mb-2 text-blue-600" />
+                    <CardTitle className="text-sm">{template.name}</CardTitle>
+                    <p className="text-xs text-muted-foreground">{template.description}</p>
+                  </CardHeader>
+                </Card>
+              );
+            })}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
 
 // Componente para renderizar diferentes tipos de componentes
 function ComponentRenderer({ component }: { component: QuizComponent }) {
+  const componentStyle = {
+    color: component.style?.color,
+    backgroundColor: component.style?.backgroundColor,
+    fontSize: component.style?.fontSize,
+    textAlign: component.style?.textAlign as 'left' | 'center' | 'right' | 'justify',
+    display: component.style?.display,
+    ...component.style
+  };
+
   switch (component.type) {
     case "heading":
       const HeadingTag = `h${component.content.level || 2}` as keyof JSX.IntrinsicElements;
       return (
-        <HeadingTag className="font-bold text-gray-900">
+        <HeadingTag 
+          className={`font-bold text-gray-900 ${component.style?.className || ''}`}
+          style={componentStyle}
+        >
           {component.content.text || "Título"}
         </HeadingTag>
       );
     
     case "paragraph":
       return (
-        <p className="text-gray-700 leading-relaxed">
+        <p 
+          className={`text-gray-700 leading-relaxed ${component.style?.className || ''}`}
+          style={componentStyle}
+        >
           {component.content.text || "Parágrafo de texto."}
         </p>
       );
     
     case "button":
       return (
-        <Button className="w-full sm:w-auto">
+        <Button 
+          className={`w-full sm:w-auto ${component.style?.className || ''}`}
+          style={componentStyle}
+        >
           {component.content.text || "Botão"}
         </Button>
       );
     
     case "question":
       return (
-        <div className="space-y-4">
+        <div className={`space-y-4 ${component.style?.className || ''}`} style={componentStyle}>
           <h3 className="text-lg font-semibold">
             {component.content.text || "Pergunta do quiz?"}
           </h3>
@@ -1131,7 +1498,10 @@ function ComponentRenderer({ component }: { component: QuizComponent }) {
     
     case "price":
       return (
-        <div className="text-center p-4 border rounded-lg">
+        <div 
+          className={`text-center p-4 border rounded-lg ${component.style?.className || ''}`}
+          style={componentStyle}
+        >
           <div className="text-3xl font-bold text-green-600">
             {component.content.currency || "R$"} {component.content.amount || "97"}
           </div>
@@ -1143,7 +1513,10 @@ function ComponentRenderer({ component }: { component: QuizComponent }) {
     
     case "offer":
       return (
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <div 
+          className={`bg-yellow-50 border border-yellow-200 rounded-lg p-4 ${component.style?.className || ''}`}
+          style={componentStyle}
+        >
           <div className="text-lg font-semibold text-yellow-800">
             {component.content.title || "Oferta Especial"}
           </div>
@@ -1157,15 +1530,18 @@ function ComponentRenderer({ component }: { component: QuizComponent }) {
 
     case "image":
       return (
-        <div className="text-center">
+        <div 
+          className={`text-center ${component.style?.className || ''}`}
+          style={componentStyle}
+        >
           {component.content.src ? (
-            <img 
-              src={component.content.src} 
-              alt={component.content.alt || "Imagem"} 
-              className="mx-auto max-w-full h-auto rounded-lg"
+            <img
+              src={component.content.src}
+              alt={component.content.alt || "Imagem"}
+              className="max-w-full h-auto rounded-lg"
             />
           ) : (
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-gray-500">
+            <div className="border border-gray-300 border-dashed rounded-lg p-8 text-center text-gray-500">
               <Image className="h-12 w-12 mx-auto mb-2 opacity-50" />
               <p className="text-sm">Clique para adicionar imagem</p>
             </div>
@@ -1175,18 +1551,23 @@ function ComponentRenderer({ component }: { component: QuizComponent }) {
 
     case "video":
       return (
-        <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
-          {component.content.url ? (
-            <iframe
-              src={component.content.url}
-              className="w-full h-full rounded-lg"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+        <div 
+          className={`text-center ${component.style?.className || ''}`}
+          style={componentStyle}
+        >
+          {component.content.src ? (
+            <div className="aspect-video">
+              <iframe
+                src={component.content.src}
+                className="w-full h-full rounded-lg"
+                allowFullScreen
+                title={component.content.title || "Vídeo"}
+              />
+            </div>
           ) : (
-            <div className="text-center text-gray-500">
-              <Video className="h-12 w-12 mx-auto mb-2 opacity-50" />
-              <p className="text-sm">Adicionar vídeo</p>
+            <div className="border border-gray-300 border-dashed rounded-lg p-8 text-center text-gray-500 aspect-video flex flex-col items-center justify-center">
+              <Video className="h-12 w-12 mb-2 opacity-50" />
+              <p className="text-sm">Clique para adicionar vídeo</p>
             </div>
           )}
         </div>
@@ -1194,27 +1575,55 @@ function ComponentRenderer({ component }: { component: QuizComponent }) {
 
     case "separator":
       return (
-        <div className="my-4">
-          <Separator />
-        </div>
+        <hr 
+          className={`border-gray-300 my-4 ${component.style?.className || ''}`}
+          style={componentStyle}
+        />
       );
 
     case "spacer":
       return (
-        <div style={{ height: component.content.height || "40px" }} className="w-full" />
+        <div 
+          className={component.style?.className || ''}
+          style={{ 
+            height: component.content.height || '40px',
+            ...componentStyle 
+          }}
+        />
+      );
+
+    case "form":
+      return (
+        <div 
+          className={`space-y-4 ${component.style?.className || ''}`}
+          style={componentStyle}
+        >
+          <div className="space-y-2">
+            <Label htmlFor="name">Nome</Label>
+            <Input id="name" placeholder="Digite seu nome" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input id="email" type="email" placeholder="Digite seu email" />
+          </div>
+          <Button className="w-full">Enviar</Button>
+        </div>
       );
 
     case "progress":
       return (
-        <div className="space-y-2">
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-gray-600">Progresso do Quiz</span>
-            <span className="text-sm font-medium">{component.content.progress || 0}%</span>
+        <div 
+          className={`space-y-2 ${component.style?.className || ''}`}
+          style={componentStyle}
+        >
+          <div className="flex justify-between text-sm">
+            <span>Progresso</span>
+            <span>{component.content.value || 50}%</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div 
-              className="bg-blue-500 h-2 rounded-full transition-all" 
-              style={{ width: `${component.content.progress || 0}%` }}
+              className="bg-blue-500 h-2 rounded-full transition-all"
+              style={{ width: `${component.content.value || 50}%` }}
             />
           </div>
         </div>
@@ -1222,484 +1631,398 @@ function ComponentRenderer({ component }: { component: QuizComponent }) {
 
     case "timer":
       return (
-        <div className="flex items-center justify-center gap-2 p-4 bg-gray-50 rounded-lg">
-          <Clock className="h-5 w-5 text-gray-600" />
-          <span className="text-lg font-mono font-bold">
-            {component.content.time || "00:30"}
-          </span>
+        <div 
+          className={`text-center p-4 border rounded-lg ${component.style?.className || ''}`}
+          style={componentStyle}
+        >
+          <Clock className="h-8 w-8 mx-auto mb-2 text-blue-600" />
+          <div className="text-2xl font-bold">
+            {component.content.time || "05:00"}
+          </div>
+          <div className="text-sm text-gray-600">
+            Tempo restante
+          </div>
         </div>
       );
 
     case "score":
       return (
-        <div className="text-center p-4 bg-blue-50 rounded-lg">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <Star className="h-5 w-5 text-yellow-500" />
-            <span className="text-lg font-bold">Pontuação</span>
+        <div 
+          className={`text-center p-4 border rounded-lg ${component.style?.className || ''}`}
+          style={componentStyle}
+        >
+          <Star className="h-8 w-8 mx-auto mb-2 text-yellow-500" />
+          <div className="text-2xl font-bold">
+            {component.content.score || 0} / {component.content.total || 10}
           </div>
-          <div className="text-3xl font-bold text-blue-600">
-            {component.content.score || 0} pts
+          <div className="text-sm text-gray-600">
+            Sua pontuação
           </div>
-        </div>
-      );
-
-    case "form":
-      return (
-        <div className="space-y-4">
-          <h3 className="font-semibold">{component.content.title || "Formulário"}</h3>
-          <div className="space-y-3">
-            {(component.content.fields || []).map((field: any, index: number) => (
-              <div key={index} className="space-y-1">
-                <label className="text-sm font-medium">{field.label}</label>
-                <input
-                  type={field.type || "text"}
-                  placeholder={field.placeholder}
-                  className="w-full p-2 border rounded-md"
-                />
-              </div>
-            ))}
-            {(!component.content.fields || component.content.fields.length === 0) && (
-              <div className="p-4 border-2 border-dashed border-gray-300 rounded-lg text-center text-gray-500">
-                <Edit3 className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                <p className="text-sm">Adicionar campos ao formulário</p>
-              </div>
-            )}
-          </div>
-        </div>
-      );
-
-    case "rating":
-      return (
-        <div className="text-center space-y-2">
-          <p className="font-medium">{component.content.question || "Como você avalia?"}</p>
-          <div className="flex justify-center gap-1">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <Star
-                key={star}
-                className={`h-6 w-6 cursor-pointer transition-colors ${
-                  star <= (component.content.rating || 0)
-                    ? "text-yellow-500 fill-yellow-500"
-                    : "text-gray-300"
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      );
-
-    case "poll":
-      return (
-        <div className="space-y-4">
-          <h3 className="font-semibold text-center">
-            {component.content.question || "Qual sua opinião?"}
-          </h3>
-          <div className="space-y-2">
-            {(component.content.options || []).map((option: any, index: number) => (
-              <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                <span>{option.text}</span>
-                <div className="flex items-center gap-2">
-                  <div className="w-16 bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="bg-blue-500 h-2 rounded-full" 
-                      style={{ width: `${option.percentage || 0}%` }}
-                    />
-                  </div>
-                  <span className="text-sm text-gray-600">{option.percentage || 0}%</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      );
-
-    case "testimonial":
-      return (
-        <div className="bg-white border rounded-lg p-6 shadow-sm">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
-              <Users className="h-6 w-6 text-gray-400" />
-            </div>
-            <div className="flex-1">
-              <blockquote className="text-gray-700 italic mb-3">
-                "{component.content.text || "Excelente produto! Recomendo muito."}"
-              </blockquote>
-              <div className="flex items-center gap-2">
-                <span className="font-semibold text-sm">
-                  {component.content.author || "Cliente Satisfeito"}
-                </span>
-                {component.content.role && (
-                  <span className="text-sm text-gray-600">- {component.content.role}</span>
-                )}
-              </div>
-              <div className="flex gap-1 mt-2">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star
-                    key={star}
-                    className="h-4 w-4 text-yellow-500 fill-yellow-500"
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-
-    case "guarantee":
-      return (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <Check className="h-6 w-6 text-green-600" />
-            <span className="font-semibold text-green-800">
-              {component.content.title || "Garantia de 30 dias"}
-            </span>
-          </div>
-          <p className="text-sm text-green-700">
-            {component.content.description || "100% do seu dinheiro de volta se não ficar satisfeito"}
-          </p>
-        </div>
-      );
-
-    case "urgency":
-      return (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <Zap className="h-5 w-5 text-red-600" />
-            <span className="font-semibold text-red-800">
-              {component.content.title || "Oferta por tempo limitado!"}
-            </span>
-          </div>
-          {component.content.countdown && (
-            <div className="text-2xl font-bold text-red-600 font-mono">
-              {component.content.countdown}
-            </div>
-          )}
-          <p className="text-sm text-red-700 mt-2">
-            {component.content.description || "Não perca esta oportunidade única"}
-          </p>
-        </div>
-      );
-
-    case "benefits":
-      return (
-        <div className="space-y-3">
-          <h3 className="font-semibold text-center">
-            {component.content.title || "Benefícios"}
-          </h3>
-          <div className="space-y-2">
-            {(component.content.items || []).map((benefit: any, index: number) => (
-              <div key={index} className="flex items-center gap-3">
-                <Check className="h-5 w-5 text-green-500" />
-                <span className="text-gray-700">{benefit.text}</span>
-              </div>
-            ))}
-            {(!component.content.items || component.content.items.length === 0) && (
-              <div className="p-4 border-2 border-dashed border-gray-300 rounded-lg text-center text-gray-500">
-                <TrendingUp className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                <p className="text-sm">Adicionar benefícios</p>
-              </div>
-            )}
-          </div>
-        </div>
-      );
-
-    case "gallery":
-      return (
-        <div className="space-y-3">
-          <h3 className="font-semibold text-center">
-            {component.content.title || "Galeria"}
-          </h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {(component.content.images || []).map((image: any, index: number) => (
-              <div key={index} className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
-                {image.src ? (
-                  <img 
-                    src={image.src} 
-                    alt={image.alt || `Imagem ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-gray-400">
-                    <Image className="h-8 w-8" />
-                  </div>
-                )}
-              </div>
-            ))}
-            {(!component.content.images || component.content.images.length === 0) && (
-              <div className="col-span-full p-8 border-2 border-dashed border-gray-300 rounded-lg text-center text-gray-500">
-                <Image className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                <p className="text-sm">Adicionar imagens à galeria</p>
-              </div>
-            )}
-          </div>
-        </div>
-      );
-
-    case "loading":
-      return (
-        <div className="text-center py-8">
-          <div className="inline-flex items-center gap-3">
-            <RotateCcw className="h-6 w-6 animate-spin text-blue-500" />
-            <span className="text-lg font-medium">
-              {component.content.text || "Processando suas respostas..."}
-            </span>
-          </div>
-          {component.content.subtitle && (
-            <p className="text-sm text-gray-600 mt-2">{component.content.subtitle}</p>
-          )}
         </div>
       );
     
     default:
       return (
-        <div className="border border-gray-300 border-dashed rounded-lg p-4 text-center text-gray-500">
+        <div 
+          className={`border border-gray-300 border-dashed rounded-lg p-4 text-center text-gray-500 ${component.style?.className || ''}`}
+          style={componentStyle}
+        >
           Componente: {component.type}
         </div>
       );
   }
 }
 
-// Componente para editar propriedades dos componentes
-function ComponentEditor({ component, onUpdate }: { 
-  component?: QuizComponent; 
+// Componente para painel de propriedades simples
+function ComponentPropertiesPanel({ 
+  component, 
+  onUpdate 
+}: { 
+  component: QuizComponent | undefined;
   onUpdate: (content: any) => void;
 }) {
-  const [localContent, setLocalContent] = useState(component?.content || {});
-
-  useEffect(() => {
-    setLocalContent(component?.content || {});
-  }, [component]);
-
-  const handleUpdate = (field: string, value: any) => {
-    const newContent = { ...localContent, [field]: value };
-    setLocalContent(newContent);
-    onUpdate(newContent);
-  };
-
   if (!component) return null;
 
-  const renderEditor = () => {
-    switch (component.type) {
-      case "heading":
-        return (
-          <div className="space-y-3">
-            <div>
-              <label className="text-sm font-medium block mb-1">Texto</label>
-              <input
-                type="text"
-                value={localContent.text || ""}
-                onChange={(e) => handleUpdate("text", e.target.value)}
-                className="w-full p-2 border rounded"
-                placeholder="Digite o título"
+  return (
+    <ScrollArea className="h-[400px]">
+      <div className="space-y-4">
+        <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
+          <Badge variant="outline">{component.type}</Badge>
+          <span className="text-sm font-medium">{component.id}</span>
+        </div>
+
+        {component.type === "heading" && (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="heading-text">Texto do Título</Label>
+              <Input
+                id="heading-text"
+                value={component.content.text || ""}
+                onChange={(e) => onUpdate({ text: e.target.value })}
+                placeholder="Digite o título..."
               />
             </div>
-            <div>
-              <label className="text-sm font-medium block mb-1">Nível (H1-H6)</label>
-              <Select 
-                value={String(localContent.level || 2)} 
-                onValueChange={(value) => handleUpdate("level", parseInt(value))}
+            <div className="space-y-2">
+              <Label htmlFor="heading-level">Nível (H1-H6)</Label>
+              <Select
+                value={component.content.level?.toString() || "2"}
+                onValueChange={(value) => onUpdate({ level: parseInt(value) })}
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   {[1, 2, 3, 4, 5, 6].map(level => (
-                    <SelectItem key={level} value={String(level)}>
+                    <SelectItem key={level} value={level.toString()}>
                       H{level}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
-          </div>
-        );
+          </>
+        )}
 
-      case "paragraph":
-        return (
-          <div>
-            <label className="text-sm font-medium block mb-1">Texto</label>
-            <textarea
-              value={localContent.text || ""}
-              onChange={(e) => handleUpdate("text", e.target.value)}
-              className="w-full p-2 border rounded h-24 resize-none"
-              placeholder="Digite o texto do parágrafo"
+        {component.type === "paragraph" && (
+          <div className="space-y-2">
+            <Label htmlFor="paragraph-text">Texto do Parágrafo</Label>
+            <Textarea
+              id="paragraph-text"
+              value={component.content.text || ""}
+              onChange={(e) => onUpdate({ text: e.target.value })}
+              placeholder="Digite o texto do parágrafo..."
+              rows={4}
             />
           </div>
-        );
+        )}
 
-      case "button":
-        return (
-          <div className="space-y-3">
-            <div>
-              <label className="text-sm font-medium block mb-1">Texto do Botão</label>
-              <input
-                type="text"
-                value={localContent.text || ""}
-                onChange={(e) => handleUpdate("text", e.target.value)}
-                className="w-full p-2 border rounded"
-                placeholder="Texto do botão"
+        {component.type === "button" && (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="button-text">Texto do Botão</Label>
+              <Input
+                id="button-text"
+                value={component.content.text || ""}
+                onChange={(e) => onUpdate({ text: e.target.value })}
+                placeholder="Digite o texto do botão..."
               />
             </div>
-            <div>
-              <label className="text-sm font-medium block mb-1">Ação</label>
-              <Select 
-                value={localContent.action || "next"} 
-                onValueChange={(value) => handleUpdate("action", value)}
+            <div className="space-y-2">
+              <Label htmlFor="button-action">Ação do Botão</Label>
+              <Select
+                value={component.content.action || "next"}
+                onValueChange={(value) => onUpdate({ action: value })}
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="next">Próxima página</SelectItem>
-                  <SelectItem value="submit">Enviar formulário</SelectItem>
-                  <SelectItem value="link">Link externo</SelectItem>
+                  <SelectItem value="next">Próxima Página</SelectItem>
+                  <SelectItem value="previous">Página Anterior</SelectItem>
+                  <SelectItem value="submit">Enviar Formulário</SelectItem>
+                  <SelectItem value="external">Link Externo</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </>
+        )}
+
+        {component.type === "question" && (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="question-text">Pergunta</Label>
+              <Textarea
+                id="question-text"
+                value={component.content.text || ""}
+                onChange={(e) => onUpdate({ text: e.target.value })}
+                placeholder="Digite a pergunta..."
+                rows={3}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Opções de Resposta</Label>
+              {(component.content.options || []).map((option: any, index: number) => (
+                <div key={option.id} className="flex gap-2">
+                  <Input
+                    value={option.text}
+                    onChange={(e) => {
+                      const newOptions = [...(component.content.options || [])];
+                      newOptions[index] = { ...option, text: e.target.value };
+                      onUpdate({ options: newOptions });
+                    }}
+                    placeholder={`Opção ${index + 1}`}
+                  />
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      const newOptions = (component.content.options || []).filter((_: any, i: number) => i !== index);
+                      onUpdate({ options: newOptions });
+                    }}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  const newOptions = [
+                    ...(component.content.options || []),
+                    { id: `opt-${Date.now()}`, text: `Nova opção` }
+                  ];
+                  onUpdate({ options: newOptions });
+                }}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Adicionar Opção
+              </Button>
+            </div>
+          </>
+        )}
+
+        {component.type === "price" && (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="price-amount">Valor</Label>
+              <Input
+                id="price-amount"
+                value={component.content.amount || ""}
+                onChange={(e) => onUpdate({ amount: e.target.value })}
+                placeholder="97"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="price-currency">Moeda</Label>
+              <Input
+                id="price-currency"
+                value={component.content.currency || ""}
+                onChange={(e) => onUpdate({ currency: e.target.value })}
+                placeholder="R$"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="price-period">Período</Label>
+              <Input
+                id="price-period"
+                value={component.content.period || ""}
+                onChange={(e) => onUpdate({ period: e.target.value })}
+                placeholder="único, mensal, anual..."
+              />
+            </div>
+          </>
+        )}
+      </div>
+    </ScrollArea>
+  );
+}
+
+// Componente para editor avançado
+function AdvancedComponentEditor({ 
+  component, 
+  onUpdate, 
+  onClose 
+}: { 
+  component: QuizComponent | undefined;
+  onUpdate: (content: any) => void;
+  onClose: () => void;
+}) {
+  const [activeEditorTab, setActiveEditorTab] = useState("properties");
+
+  if (!component) return null;
+
+  return (
+    <div className="space-y-4">
+      <Tabs value={activeEditorTab} onValueChange={setActiveEditorTab}>
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="properties">Propriedades</TabsTrigger>
+          <TabsTrigger value="style">Estilo</TabsTrigger>
+          <TabsTrigger value="advanced">Avançado</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="properties" className="space-y-4">
+          <ComponentPropertiesPanel component={component} onUpdate={onUpdate} />
+        </TabsContent>
+
+        <TabsContent value="style" className="space-y-4">
+          <div className="space-y-4">
+            <h4 className="font-medium">Personalização Visual</h4>
+            
+            <div className="space-y-2">
+              <Label>Cor do Texto</Label>
+              <div className="flex gap-2">
+                <Input
+                  type="color"
+                  value={component.style?.color || "#000000"}
+                  onChange={(e) => onUpdate({ color: e.target.value })}
+                  className="w-16 h-10"
+                />
+                <Input
+                  value={component.style?.color || "#000000"}
+                  onChange={(e) => onUpdate({ color: e.target.value })}
+                  placeholder="#000000"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Cor de Fundo</Label>
+              <div className="flex gap-2">
+                <Input
+                  type="color"
+                  value={component.style?.backgroundColor || "#ffffff"}
+                  onChange={(e) => onUpdate({ backgroundColor: e.target.value })}
+                  className="w-16 h-10"
+                />
+                <Input
+                  value={component.style?.backgroundColor || "#ffffff"}
+                  onChange={(e) => onUpdate({ backgroundColor: e.target.value })}
+                  placeholder="#ffffff"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Tamanho da Fonte</Label>
+              <div className="flex items-center gap-2">
+                <Slider
+                  value={[parseInt(component.style?.fontSize?.replace('px', '') || '16')]}
+                  onValueChange={(value) => onUpdate({ fontSize: `${value[0]}px` })}
+                  max={48}
+                  min={12}
+                  step={1}
+                  className="flex-1"
+                />
+                <span className="text-sm w-12">{component.style?.fontSize || '16px'}</span>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Alinhamento</Label>
+              <Select
+                value={component.style?.textAlign || "left"}
+                onValueChange={(value) => onUpdate({ textAlign: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="left">Esquerda</SelectItem>
+                  <SelectItem value="center">Centro</SelectItem>
+                  <SelectItem value="right">Direita</SelectItem>
+                  <SelectItem value="justify">Justificado</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
-        );
+        </TabsContent>
 
-      case "image":
-        return (
-          <div className="space-y-3">
-            <div>
-              <label className="text-sm font-medium block mb-1">URL da Imagem</label>
-              <input
-                type="url"
-                value={localContent.src || ""}
-                onChange={(e) => handleUpdate("src", e.target.value)}
-                className="w-full p-2 border rounded"
-                placeholder="https://exemplo.com/imagem.jpg"
+        <TabsContent value="advanced" className="space-y-4">
+          <div className="space-y-4">
+            <h4 className="font-medium">Configurações Avançadas</h4>
+            
+            <div className="space-y-2">
+              <Label htmlFor="component-id">ID do Componente</Label>
+              <Input
+                id="component-id"
+                value={component.id}
+                disabled
+                className="bg-gray-50"
               />
             </div>
-            <div>
-              <label className="text-sm font-medium block mb-1">Texto Alternativo</label>
-              <input
-                type="text"
-                value={localContent.alt || ""}
-                onChange={(e) => handleUpdate("alt", e.target.value)}
-                className="w-full p-2 border rounded"
-                placeholder="Descrição da imagem"
-              />
-            </div>
-          </div>
-        );
 
-      case "question":
-        return (
-          <div className="space-y-3">
-            <div>
-              <label className="text-sm font-medium block mb-1">Pergunta</label>
-              <input
-                type="text"
-                value={localContent.text || ""}
-                onChange={(e) => handleUpdate("text", e.target.value)}
-                className="w-full p-2 border rounded"
-                placeholder="Digite a pergunta"
+            <div className="space-y-2">
+              <Label htmlFor="component-classes">Classes CSS Customizadas</Label>
+              <Input
+                id="component-classes"
+                value={component.style?.className || ""}
+                onChange={(e) => onUpdate({ className: e.target.value })}
+                placeholder="classe1 classe2 classe3"
               />
             </div>
-            <div>
-              <label className="text-sm font-medium block mb-1">Opções</label>
-              <div className="space-y-2">
-                {(localContent.options || []).map((option: any, index: number) => (
-                  <div key={index} className="flex gap-2">
-                    <input
-                      type="text"
-                      value={option.text}
-                      onChange={(e) => {
-                        const newOptions = [...(localContent.options || [])];
-                        newOptions[index] = { ...option, text: e.target.value };
-                        handleUpdate("options", newOptions);
-                      }}
-                      className="flex-1 p-2 border rounded"
-                      placeholder={`Opção ${index + 1}`}
-                    />
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => {
-                        const newOptions = [...(localContent.options || [])];
-                        newOptions.splice(index, 1);
-                        handleUpdate("options", newOptions);
-                      }}
-                      className="h-10 w-10 p-0"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ))}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    const newOptions = [
-                      ...(localContent.options || []),
-                      { id: `opt-${Date.now()}`, text: `Opção ${(localContent.options?.length || 0) + 1}` }
-                    ];
-                    handleUpdate("options", newOptions);
-                  }}
-                  className="w-full"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Adicionar Opção
-                </Button>
+
+            <div className="space-y-2">
+              <Label>Visibilidade</Label>
+              <div className="flex items-center space-x-2">
+                <Switch
+                  checked={component.style?.display !== "none"}
+                  onCheckedChange={(checked) => onUpdate({ display: checked ? "block" : "none" })}
+                />
+                <Label>Componente visível</Label>
               </div>
             </div>
-          </div>
-        );
 
-      case "price":
-        return (
-          <div className="space-y-3">
-            <div>
-              <label className="text-sm font-medium block mb-1">Valor</label>
-              <input
-                type="text"
-                value={localContent.amount || ""}
-                onChange={(e) => handleUpdate("amount", e.target.value)}
-                className="w-full p-2 border rounded"
-                placeholder="97"
-              />
-            </div>
-            <div>
-              <label className="text-sm font-medium block mb-1">Moeda</label>
-              <input
-                type="text"
-                value={localContent.currency || ""}
-                onChange={(e) => handleUpdate("currency", e.target.value)}
-                className="w-full p-2 border rounded"
-                placeholder="R$"
-              />
-            </div>
-            <div>
-              <label className="text-sm font-medium block mb-1">Período</label>
-              <input
-                type="text"
-                value={localContent.period || ""}
-                onChange={(e) => handleUpdate("period", e.target.value)}
-                className="w-full p-2 border rounded"
-                placeholder="único, mensal, anual"
+            <div className="space-y-2">
+              <Label htmlFor="component-data">Dados JSON</Label>
+              <Textarea
+                id="component-data"
+                value={JSON.stringify(component.data || {}, null, 2)}
+                onChange={(e) => {
+                  try {
+                    const data = JSON.parse(e.target.value);
+                    onUpdate({ data });
+                  } catch (error) {
+                    // Ignore invalid JSON
+                  }
+                }}
+                rows={6}
+                className="font-mono text-xs"
+                placeholder="{}"
               />
             </div>
           </div>
-        );
+        </TabsContent>
+      </Tabs>
 
-      default:
-        return (
-          <div className="text-center text-sm text-muted-foreground py-4">
-            <Edit3 className="h-8 w-8 mx-auto mb-2 opacity-50" />
-            <p>Editor para {component.type} em desenvolvimento</p>
-          </div>
-        );
-    }
-  };
-
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2 pb-2 border-b">
-        <Badge variant="outline">{component.type}</Badge>
-        <span className="text-sm font-medium">Propriedades</span>
+      <div className="flex justify-end gap-2 pt-4 border-t">
+        <Button variant="outline" onClick={onClose}>
+          Fechar
+        </Button>
+        <Button onClick={onClose}>
+          Salvar
+        </Button>
       </div>
-      {renderEditor()}
     </div>
   );
 }
