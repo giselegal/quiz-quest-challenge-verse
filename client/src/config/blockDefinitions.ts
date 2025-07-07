@@ -567,7 +567,13 @@ export const blockDefinitions: BlockDefinition[] = [
           { id: 'opcao-2', text: 'Opção 2', value: 'opcao-2', imageUrl: '', category: '' }
         ]
       },
-      { key: 'columns', label: 'Colunas (Grade)', type: 'number-input', min: 1, max: 4, defaultValue: 2 },
+      { key: 'columns', label: 'Colunas (Grade)', type: 'select', options: [
+        { label: 'Automático (2 col c/ imagem, 1 col sem)', value: 'auto' },
+        { label: '1 Coluna', value: '1' },
+        { label: '2 Colunas', value: '2' },
+        { label: '3 Colunas', value: '3' },
+        { label: '4 Colunas', value: '4' }
+      ], defaultValue: 'auto' },
       { key: 'showImages', label: 'Mostrar Imagens', type: 'boolean-switch', defaultValue: true },
       { key: 'imageSize', label: 'Tamanho das Imagens', type: 'select', options: [
         { label: 'Pequeno', value: 'small' },
