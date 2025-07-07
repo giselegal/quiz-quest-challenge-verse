@@ -252,22 +252,43 @@ export const blockDefinitions: BlockDefinition[] = [
     ],
   },
 
-  // FASE 2: Blocos mais complexos (implementar depois)
+  // =====================================================================
+  // FASE 2: BLOCOS DE QUIZ - ETAPAS COMPLETAS PADRONIZADAS
+  // =====================================================================
+  
+  // BLOCO 1: Introdução do Quiz (Etapa 1)
   {
-    id: 'QuizIntroBlock',
-    type: 'QuizIntroBlock',
-    name: 'Introdução do Quiz',
-    description: 'Bloco de introdução completo com coleta de nome.',
+    id: 'quiz-intro-page',
+    type: 'quiz-intro-page',
+    name: 'Página de Introdução do Quiz',
+    description: 'Página completa de introdução com coleta de dados e call-to-action.',
     icon: 'Play',
     category: 'Quiz',
     isNew: true,
     propertiesSchema: [
+      // --- Seção Visual ---
+      { 
+        key: 'logoUrl', 
+        label: 'URL do Logo', 
+        type: 'image-url', 
+        placeholder: 'https://exemplo.com/logo.png',
+        defaultValue: 'https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png'
+      },
+      { 
+        key: 'backgroundImage', 
+        label: 'Imagem de Fundo (Opcional)', 
+        type: 'image-url', 
+        placeholder: 'https://exemplo.com/background.jpg' 
+      },
+      
+      // --- Seção Conteúdo ---
       { 
         key: 'title', 
-        label: 'Título', 
+        label: 'Título Principal', 
         type: 'textarea', 
         placeholder: 'Título principal...',
         rows: 2,
+        defaultValue: 'Chega de um guarda-roupa lotado e da sensação de que nada combina com Você.',
         description: 'Suporta HTML para destaque de cor.' 
       },
       { 
@@ -275,13 +296,24 @@ export const blockDefinitions: BlockDefinition[] = [
         label: 'Subtítulo', 
         type: 'textarea', 
         placeholder: 'Subtítulo descritivo...',
-        rows: 2 
+        rows: 3,
+        defaultValue: 'Descubra seu estilo predominante e transforme seu guarda-roupa\nEm poucos minutos, descubra seu Estilo Predominante — e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.'
       },
       { 
-        key: 'logoUrl', 
-        label: 'URL do Logo', 
+        key: 'heroImageUrl', 
+        label: 'Imagem Principal', 
         type: 'image-url', 
-        placeholder: 'https://exemplo.com/logo.png' 
+        placeholder: 'https://exemplo.com/hero.jpg',
+        defaultValue: 'https://cakto-quiz-br01.b-cdn.net/uploads/ecbe689b-1c0a-4071-98d3-4d391b6dd98f.png'
+      },
+      
+      // --- Seção Formulário ---
+      { 
+        key: 'nameLabel', 
+        label: 'Rótulo do Campo Nome', 
+        type: 'text-input', 
+        defaultValue: 'Seu Nome',
+        placeholder: 'Seu Nome' 
       },
       { 
         key: 'namePlaceholder', 
@@ -291,31 +323,86 @@ export const blockDefinitions: BlockDefinition[] = [
         defaultValue: 'Digite seu nome aqui...' 
       },
       { 
-        key: 'buttonTextFilled', 
-        label: 'Texto do Botão', 
+        key: 'emailLabel', 
+        label: 'Rótulo do Campo E-mail', 
         type: 'text-input', 
-        placeholder: 'Começar Quiz!',
-        defaultValue: 'Quero Descobrir meu Estilo Agora!' 
+        defaultValue: 'Seu E-mail *',
+        placeholder: 'Seu E-mail' 
       },
       { 
-        key: 'required', 
+        key: 'emailPlaceholder', 
+        label: 'Placeholder do E-mail', 
+        type: 'text-input', 
+        placeholder: 'Digite seu e-mail aqui...',
+        defaultValue: 'Digite seu e-mail aqui...' 
+      },
+      { 
+        key: 'buttonText', 
+        label: 'Texto do Botão Principal', 
+        type: 'text-input', 
+        placeholder: 'Começar Quiz!',
+        defaultValue: 'Descobrir Meu Estilo' 
+      },
+      
+      // --- Seção Validação ---
+      { 
+        key: 'nameRequired', 
         label: 'Nome Obrigatório', 
         type: 'boolean-switch', 
         defaultValue: true 
       },
       { 
-        key: 'primary', 
-        label: 'Cor Primária', 
+        key: 'emailRequired', 
+        label: 'E-mail Obrigatório', 
+        type: 'boolean-switch', 
+        defaultValue: true 
+      },
+      
+      // --- Seção Estilos ---
+      { 
+        key: 'backgroundColor', 
+        label: 'Cor de Fundo', 
         type: 'color-picker', 
-        nestedPath: 'colors.primary', 
+        defaultValue: '#ffffff' 
+      },
+      { 
+        key: 'textColor', 
+        label: 'Cor do Texto', 
+        type: 'color-picker', 
+        defaultValue: '#432818' 
+      },
+      { 
+        key: 'primaryColor', 
+        label: 'Cor Primária (Botões)', 
+        type: 'color-picker', 
         defaultValue: '#B89B7A' 
       },
       { 
-        key: 'secondary', 
+        key: 'secondaryColor', 
         label: 'Cor Secundária', 
         type: 'color-picker', 
-        nestedPath: 'colors.secondary', 
         defaultValue: '#432818' 
+      },
+      
+      // --- Seção Layout ---
+      {
+        key: 'alignment',
+        label: 'Alinhamento do Conteúdo',
+        type: 'select',
+        options: [
+          { label: 'Esquerda', value: 'left' },
+          { label: 'Centro', value: 'center' },
+          { label: 'Direita', value: 'right' },
+        ],
+        defaultValue: 'center',
+      },
+      { 
+        key: 'maxWidth', 
+        label: 'Largura Máxima (%)', 
+        type: 'number-input', 
+        min: 50, 
+        max: 100, 
+        defaultValue: 90 
       },
     ],
   },
