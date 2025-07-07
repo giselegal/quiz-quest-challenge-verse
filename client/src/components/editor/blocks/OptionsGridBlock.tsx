@@ -96,11 +96,11 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
 
   const getImageHeight = (size: string) => {
     const sizeClasses = {
-      small: 'h-12 sm:h-16 md:h-20',
-      medium: 'h-16 sm:h-20 md:h-24',
-      large: 'h-20 sm:h-24 md:h-32'
+      small: 'h-24 sm:h-32 md:h-40',
+      medium: 'h-32 sm:h-40 md:h-48',
+      large: 'h-40 sm:h-48 md:h-64'
     };
-    return sizeClasses[size as keyof typeof sizeClasses] || 'h-20 sm:h-24 md:h-32';
+    return sizeClasses[size as keyof typeof sizeClasses] || 'h-40 sm:h-48 md:h-64';
   };
 
   if (!options || options.length === 0) {
