@@ -547,8 +547,9 @@ class SchemaDrivenFunnelService {
       }
     });
 
-    // ETAPAS 2-11: Questões principais (10 questões)
+    // ETAPAS 2-11: Questões principais (10 questões) - MODULARES COM CABEÇALHO
     REAL_QUIZ_QUESTIONS.forEach((questionData, index) => {
+      const currentProgress = 5 + (index + 1) * 5;
       pages.push({
         id: `etapa-${index + 2}-questao-${index + 1}`,
         name: `Questão ${index + 1}`,
@@ -556,11 +557,49 @@ class SchemaDrivenFunnelService {
         type: 'question',
         order: index + 2,
         blocks: [
+          // 1. Cabeçalho com logo e progresso
           {
-            id: `question-${index + 1}-block`,
-            type: 'quiz-question-main',
+            id: `question-${index + 1}-header`,
+            type: 'quiz-intro-header',
             properties: {
-              question: questionData.question,
+              logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+              logoAlt: 'Logo Gisele Galvão',
+              logoWidth: 96,
+              logoHeight: 96,
+              progressValue: currentProgress,
+              progressMax: 100,
+              showBackButton: true
+            }
+          },
+          // 2. Título da questão
+          {
+            id: `question-${index + 1}-title`,
+            type: 'quiz-title',
+            properties: {
+              title: questionData.question,
+              fontSize: 'text-2xl',
+              fontWeight: 'font-bold',
+              textAlign: 'text-center',
+              color: '#432818'
+            }
+          },
+          // 3. Indicador de progresso textual
+          {
+            id: `question-${index + 1}-progress-label`,
+            type: 'text',
+            properties: {
+              content: `Questão ${index + 1} de 10`,
+              fontSize: 'text-sm',
+              textAlign: 'text-center',
+              color: '#6B7280',
+              marginBottom: 24
+            }
+          },
+          // 4. Grade de opções (2 colunas para imagens)
+          {
+            id: `question-${index + 1}-options`,
+            type: 'options-grid',
+            properties: {
               options: questionData.options.map(opt => ({
                 id: opt.id,
                 text: opt.text,
@@ -568,17 +607,35 @@ class SchemaDrivenFunnelService {
                 imageUrl: (opt as any).imageUrl || undefined,
                 category: (opt as any).category || opt.value || opt.id
               })),
+              columns: questionData.type === 'both' ? 2 : 1,
+              showImages: questionData.type === 'both' || questionData.type === undefined,
+              imageSize: 'large', // Imagens maiores
               multipleSelection: questionData.multipleSelection || false,
               maxSelections: questionData.maxSelections || 1,
-              showImages: questionData.type === 'both' || questionData.type === undefined,
-              progressLabel: `Questão ${index + 1} de 10`,
-              progressValue: 5 + (index + 1) * 5
+              minSelections: 1,
+              validationMessage: `Selecione ${questionData.maxSelections || 1} opç${(questionData.maxSelections || 1) > 1 ? 'ões' : 'ão'}`,
+              gridGap: 16
+            }
+          },
+          // 5. Botão de continuar (com validação)
+          {
+            id: `question-${index + 1}-continue`,
+            type: 'button',
+            properties: {
+              text: 'Continuar',
+              variant: 'primary',
+              size: 'lg',
+              fullWidth: true,
+              backgroundColor: '#B89B7A',
+              textColor: '#ffffff',
+              disabled: true, // Disabled até seleção válida
+              requiresValidSelection: true
             }
           }
         ],
         settings: {
           showProgress: true,
-          progressValue: 5 + (index + 1) * 5,
+          progressValue: currentProgress,
           backgroundColor: '#ffffff',
           textColor: '#432818',
           maxWidth: 'max-w-4xl',
@@ -587,7 +644,7 @@ class SchemaDrivenFunnelService {
       });
     });
 
-    // ETAPA 12: Transição principal
+    // ETAPA 12: Transição principal - MODULAR COM CABEÇALHO
     pages.push({
       id: 'etapa-12-transicao-principal',
       name: 'Transição Principal',
@@ -595,15 +652,80 @@ class SchemaDrivenFunnelService {
       type: 'custom',
       order: 12,
       blocks: [
+        // 1. Cabeçalho com logo e progresso
         {
-          id: 'transition-main-block',
-          type: 'quiz-transition-main',
+          id: 'transition-main-header',
+          type: 'quiz-intro-header',
+          properties: {
+            logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+            logoAlt: 'Logo Gisele Galvão',
+            logoWidth: 96,
+            logoHeight: 96,
+            progressValue: 60,
+            progressMax: 100,
+            showBackButton: true
+          }
+        },
+        // 2. Título da transição
+        {
+          id: 'transition-main-title',
+          type: 'quiz-title',
           properties: {
             title: TRANSITIONS.mainTransition.title,
-            message: TRANSITIONS.mainTransition.message,
-            submessage: TRANSITIONS.mainTransition.submessage,
-            additionalMessage: TRANSITIONS.mainTransition.additionalMessage,
-            progressValue: 60
+            fontSize: 'text-3xl',
+            fontWeight: 'font-bold',
+            textAlign: 'text-center',
+            color: '#432818'
+          }
+        },
+        // 3. Mensagem principal
+        {
+          id: 'transition-main-message',
+          type: 'text',
+          properties: {
+            content: TRANSITIONS.mainTransition.message,
+            fontSize: 'text-lg',
+            textAlign: 'text-center',
+            color: '#432818',
+            marginBottom: 24
+          }
+        },
+        // 4. Submensagem
+        {
+          id: 'transition-main-submessage',
+          type: 'text',
+          properties: {
+            content: TRANSITIONS.mainTransition.submessage,
+            fontSize: 'text-base',
+            textAlign: 'text-center',
+            color: '#6B7280',
+            marginBottom: 24
+          }
+        },
+        // 5. Mensagem adicional
+        {
+          id: 'transition-main-additional',
+          type: 'text',
+          properties: {
+            content: TRANSITIONS.mainTransition.additionalMessage,
+            fontSize: 'text-base',
+            textAlign: 'text-center',
+            color: '#B89B7A',
+            fontWeight: 'font-medium',
+            marginBottom: 32
+          }
+        },
+        // 6. Botão continuar
+        {
+          id: 'transition-main-continue',
+          type: 'button',
+          properties: {
+            text: 'Continuar',
+            variant: 'primary',
+            size: 'lg',
+            fullWidth: true,
+            backgroundColor: '#B89B7A',
+            textColor: '#ffffff'
           }
         }
       ],
@@ -617,8 +739,9 @@ class SchemaDrivenFunnelService {
       }
     });
 
-    // ETAPAS 13-18: Questões estratégicas (6 questões)
+    // ETAPAS 13-18: Questões estratégicas (6 questões) - MODULARES COM CABEÇALHO
     STRATEGIC_QUESTIONS.forEach((questionData, index) => {
+      const currentProgress = 65 + (index + 1) * 5;
       pages.push({
         id: `etapa-${index + 13}-estrategica-${index + 1}`,
         name: `Questão Estratégica ${index + 1}`,
@@ -626,25 +749,94 @@ class SchemaDrivenFunnelService {
         type: 'question',
         order: index + 13,
         blocks: [
+          // 1. Cabeçalho com logo e progresso
           {
-            id: `strategic-question-${index + 1}-block`,
-            type: 'quiz-question-strategic',
+            id: `strategic-${index + 1}-header`,
+            type: 'quiz-intro-header',
             properties: {
-              question: questionData.question,
-              subtitle: (questionData as any).subtitle || '',
+              logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+              logoAlt: 'Logo Gisele Galvão',
+              logoWidth: 96,
+              logoHeight: 96,
+              progressValue: currentProgress,
+              progressMax: 100,
+              showBackButton: true
+            }
+          },
+          // 2. Título da questão
+          {
+            id: `strategic-${index + 1}-title`,
+            type: 'quiz-title',
+            properties: {
+              title: questionData.question,
+              fontSize: 'text-2xl',
+              fontWeight: 'font-bold',
+              textAlign: 'text-center',
+              color: '#432818'
+            }
+          },
+          // 3. Subtítulo (se existir)
+          ...((questionData as any).subtitle ? [{
+            id: `strategic-${index + 1}-subtitle`,
+            type: 'text',
+            properties: {
+              content: (questionData as any).subtitle,
+              fontSize: 'text-lg',
+              textAlign: 'text-center',
+              color: '#6B7280',
+              marginBottom: 16
+            }
+          }] : []),
+          // 4. Indicador de progresso
+          {
+            id: `strategic-${index + 1}-progress`,
+            type: 'text',
+            properties: {
+              content: `Questão estratégica ${index + 1} de 6`,
+              fontSize: 'text-sm',
+              textAlign: 'text-center',
+              color: '#6B7280',
+              marginBottom: 24
+            }
+          },
+          // 5. Opções (apenas texto, 1 coluna)
+          {
+            id: `strategic-${index + 1}-options`,
+            type: 'options-grid',
+            properties: {
               options: questionData.options.map(opt => ({
                 id: opt.id,
                 text: opt.text,
                 value: opt.value || opt.id
               })),
-              progressLabel: `Questão estratégica ${index + 1} de 6`,
-              progressValue: 65 + (index + 1) * 5
+              columns: 1,
+              showImages: false,
+              multipleSelection: false,
+              maxSelections: 1,
+              minSelections: 1,
+              validationMessage: 'Selecione uma opção',
+              gridGap: 12
+            }
+          },
+          // 6. Botão continuar
+          {
+            id: `strategic-${index + 1}-continue`,
+            type: 'button',
+            properties: {
+              text: 'Continuar',
+              variant: 'primary',
+              size: 'lg',
+              fullWidth: true,
+              backgroundColor: '#B89B7A',
+              textColor: '#ffffff',
+              disabled: true,
+              requiresValidSelection: true
             }
           }
         ],
         settings: {
           showProgress: true,
-          progressValue: 65 + (index + 1) * 5,
+          progressValue: currentProgress,
           backgroundColor: '#ffffff',
           textColor: '#432818',
           maxWidth: 'max-w-4xl',

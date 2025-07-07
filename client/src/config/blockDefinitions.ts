@@ -546,21 +546,39 @@ export const blockDefinitions: BlockDefinition[] = [
   {
     type: 'options-grid',
     name: 'Grid de Opções',
-    description: 'Exibe opções em um formato de grade, ideal para seleção visual.',
-    icon: 'Rows3', // Corrigido para o nome Lucide correto
+    description: 'Exibe opções em um formato de grade, ideal para seleção visual com imagens grandes.',
+    icon: 'Rows3',
     category: 'UI',
     propertiesSchema: [
-      { key: 'title', label: 'Título da Seção', type: 'text-input', placeholder: 'Escolha sua opção:' },
+      { key: 'title', label: 'Título da Seção', type: 'text-input', placeholder: 'Escolha sua opção:', defaultValue: '' },
       {
         key: 'options',
         label: 'Opções',
         type: 'array-editor',
         itemSchema: [
-          { key: 'text', label: 'Texto da Opção', type: 'text-input', placeholder: 'Opção 1' },
-          { key: 'imageUrl', label: 'URL da Imagem (Opcional)', type: 'image-url', placeholder: 'https://example.com/option1.jpg' },
+          { key: 'id', label: 'ID da Opção', type: 'text-input', placeholder: 'opcao-1', defaultValue: '' },
+          { key: 'text', label: 'Texto da Opção (HTML permitido)', type: 'textarea', placeholder: 'A) <strong>Texto</strong> da opção', defaultValue: '' },
+          { key: 'value', label: 'Valor da Opção', type: 'text-input', placeholder: 'valor-opcao', defaultValue: '' },
+          { key: 'imageUrl', label: 'URL da Imagem', type: 'image-url', placeholder: 'https://example.com/option1.jpg', defaultValue: '' },
+          { key: 'category', label: 'Categoria', type: 'text-input', placeholder: 'categoria-estilo', defaultValue: '' },
         ],
+        defaultValue: [
+          { id: 'opcao-1', text: 'Opção 1', value: 'opcao-1', imageUrl: '', category: '' },
+          { id: 'opcao-2', text: 'Opção 2', value: 'opcao-2', imageUrl: '', category: '' }
+        ]
       },
       { key: 'columns', label: 'Colunas (Grade)', type: 'number-input', min: 1, max: 4, defaultValue: 2 },
+      { key: 'showImages', label: 'Mostrar Imagens', type: 'boolean-switch', defaultValue: true },
+      { key: 'imageSize', label: 'Tamanho das Imagens', type: 'select', options: [
+        { label: 'Pequeno', value: 'small' },
+        { label: 'Médio', value: 'medium' },
+        { label: 'Grande', value: 'large' }
+      ], defaultValue: 'large' },
+      { key: 'multipleSelection', label: 'Seleção Múltipla', type: 'boolean-switch', defaultValue: false },
+      { key: 'maxSelections', label: 'Máximo de Seleções', type: 'number-input', min: 1, max: 10, defaultValue: 1 },
+      { key: 'minSelections', label: 'Mínimo de Seleções', type: 'number-input', min: 1, max: 10, defaultValue: 1 },
+      { key: 'validationMessage', label: 'Mensagem de Validação', type: 'text-input', placeholder: 'Selecione uma opção', defaultValue: 'Selecione uma opção' },
+      { key: 'gridGap', label: 'Espaçamento (px)', type: 'number-input', min: 4, max: 32, defaultValue: 16 },
     ],
   },
 
