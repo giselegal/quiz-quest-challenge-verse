@@ -13,11 +13,20 @@ export type PropertyType =
   | 'color-picker' 
   | 'select' 
   | 'image-upload' 
+  | 'image-url'
+  | 'video-url'
   | 'boolean-switch'
   | 'number-input'
   | 'array-editor'
   | 'options-editor'
-  | 'tabs-editor';
+  | 'tabs-editor'
+  | 'json-editor'
+  | 'font-size-slider'
+  | 'font-weight-buttons'
+  | 'text-style-buttons'
+  | 'text-align-buttons'
+  | 'content-type-buttons'
+  | 'color-palette';
 
 export interface PropertySchema {
   key: string;
@@ -1409,7 +1418,8 @@ export const findBlockDefinition = (type: string): BlockDefinition | undefined =
 // Helper para obter todas as categorias únicas
 export const getCategories = (): string[] => {
   const categories = blockDefinitions.map(block => block.category);
-  return [...new Set(categories)].map(category => {
+  const uniqueCategories = Array.from(new Set(categories));
+  return uniqueCategories.map(category => {
     // Formatar nomes das categorias para exibição
     switch (category) {
       case 'basic': return 'Básico';
