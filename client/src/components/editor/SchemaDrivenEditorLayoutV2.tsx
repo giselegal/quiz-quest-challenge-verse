@@ -390,16 +390,155 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
         
         {/* Central Canvas - Mobile Optimized */}
         <div className="flex-1 h-full overflow-auto bg-gray-50">
-          <div className={`p-2 sm:p-4 lg:p-8 ${deviceView === 'mobile' ? 'px-1' : ''}`}>
-            <div className={`mx-auto bg-white shadow-lg rounded-lg transition-all duration-300 ${
-              deviceView === 'mobile' ? 'max-w-full min-h-[600px]' :
-              deviceView === 'tablet' ? 'max-w-2xl min-h-[700px]' :
-              'max-w-4xl min-h-[800px]'
-            }`}>
-              <div className={`${
-                deviceView === 'mobile' ? 'p-2 sm:p-4' : 'p-4 sm:p-6'
-              }`}>
-                {/* Canvas Content com Drag & Drop */}
+          <div className={`flex justify-center ${
+            deviceView === 'mobile' ? 'p-2' :
+            deviceView === 'tablet' ? 'p-4' :
+            'p-8'
+          }`}>
+            {/* Device Frame for Mobile/Tablet */}
+            {deviceView === 'mobile' ? (
+              <div className="relative bg-black rounded-[2.5rem] p-2 shadow-2xl">
+                {/* Notch */}
+                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black rounded-b-xl z-10"></div>
+                {/* Screen */}
+                <div className="bg-white rounded-[2rem] w-[375px] min-h-[812px] overflow-hidden relative">
+                  <div className="p-4">
+                    <DroppableCanvas
+                      blocks={currentPage?.blocks || []}
+                      selectedBlockId={selectedBlockId || undefined}
+                      onBlockSelect={(blockId) => setSelectedBlock(blockId)}
+                      onBlockDelete={deleteBlock}
+                      onBlockDuplicate={(blockId) => {
+                        const block = currentPage?.blocks.find(b => b.id === blockId);
+                        if (block && currentPage) {
+                          const newBlock = {
+                            ...block,
+                            id: `${block.type}-${Date.now()}`
+                          };
+                          const blockIndex = currentPage.blocks.findIndex(b => b.id === blockId);
+                          const newBlocks = [...currentPage.blocks];
+                          newBlocks.splice(blockIndex + 1, 0, newBlock);
+                          updatePage(currentPage.id, { blocks: newBlocks });
+                        }
+                      }}
+                      onBlockToggleVisibility={(blockId) => {
+                        const block = currentPage?.blocks.find(b => b.id === blockId);
+                        if (block && currentPage) {
+                          const updatedBlock = {
+                            ...block,
+                            properties: {
+                              ...block.properties,
+                              hidden: !block.properties?.hidden
+                            }
+                          };
+                          const newBlocks = currentPage.blocks.map(b => 
+                            b.id === blockId ? updatedBlock : b
+                          );
+                          updatePage(currentPage.id, { blocks: newBlocks });
+                        }
+                      }}
+                      onSaveInline={handleInlineEdit}
+                      onAddBlock={(blockType) => {
+                        const definition = blockDefinitions.find(def => def.type === blockType);
+                        if (definition) {
+                          const defaultProperties: Record<string, any> = {};
+                          definition.propertiesSchema?.forEach(prop => {
+                            if (prop.defaultValue !== undefined) {
+                              defaultProperties[prop.key] = prop.defaultValue;
+                            }
+                          });
+                          addBlock({
+                            type: blockType,
+                            properties: defaultProperties
+                          });
+                        }
+                      }}
+                      onBlockUpdate={(blockId, updates) => {
+                        updateBlock(blockId, updates);
+                      }}
+                      onReorder={reorderBlocks}
+                      className="mobile-canvas"
+                    />
+                    
+                    {!currentPage && (
+                      <div className="text-center py-16 text-gray-500">
+                        <h3 className="text-lg font-medium mb-2">Nenhuma página selecionada</h3>
+                        <p className="text-sm">Selecione uma página para começar a editar.</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ) : deviceView === 'tablet' ? (
+              <div className="relative bg-gray-800 rounded-xl p-3 shadow-xl">
+                <div className="bg-white rounded-lg w-[768px] min-h-[1024px] overflow-hidden">
+                  <div className="p-6">
+                    <DroppableCanvas
+                      blocks={currentPage?.blocks || []}
+                      selectedBlockId={selectedBlockId || undefined}
+                      onBlockSelect={(blockId) => setSelectedBlock(blockId)}
+                      onBlockDelete={deleteBlock}
+                      onBlockDuplicate={(blockId) => {
+                        const block = currentPage?.blocks.find(b => b.id === blockId);
+                        if (block && currentPage) {
+                          const newBlock = {
+                            ...block,
+                            id: `${block.type}-${Date.now()}`
+                          };
+                          const blockIndex = currentPage.blocks.findIndex(b => b.id === blockId);
+                          const newBlocks = [...currentPage.blocks];
+                          newBlocks.splice(blockIndex + 1, 0, newBlock);
+                          updatePage(currentPage.id, { blocks: newBlocks });
+                        }
+                      }}
+                      onBlockToggleVisibility={(blockId) => {
+                        const block = currentPage?.blocks.find(b => b.id === blockId);
+                        if (block && currentPage) {
+                          const updatedBlock = {
+                            ...block,
+                            properties: {
+                              ...block.properties,
+                              hidden: !block.properties?.hidden
+                            }
+                          };
+                          const newBlocks = currentPage.blocks.map(b => 
+                            b.id === blockId ? updatedBlock : b
+                          );
+                          updatePage(currentPage.id, { blocks: newBlocks });
+                        }
+                      }}
+                      onSaveInline={handleInlineEdit}
+                      onAddBlock={(blockType) => {
+                        const definition = blockDefinitions.find(def => def.type === blockType);
+                        if (definition) {
+                          const defaultProperties: Record<string, any> = {};
+                          definition.propertiesSchema?.forEach(prop => {
+                            if (prop.defaultValue !== undefined) {
+                              defaultProperties[prop.key] = prop.defaultValue;
+                            }
+                          });
+                          addBlock({
+                            type: blockType,
+                            properties: defaultProperties
+                          });
+                        }
+                      }}
+                      onBlockUpdate={(blockId, updates) => {
+                        updateBlock(blockId, updates);
+                      }}
+                      onReorder={reorderBlocks}
+                      className=""
+                    />
+                    
+                    {!currentPage && (
+                      <div className="text-center py-16 text-gray-500">
+                        <h3 className="text-lg font-medium mb-2">Nenhuma página selecionada</h3>
+                        <p className="text-sm">Selecione uma página para começar a editar.</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
                 <DroppableCanvas
                   blocks={currentPage?.blocks || []}
                   selectedBlockId={selectedBlockId || undefined}
@@ -457,12 +596,13 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                   className={deviceView === 'mobile' ? 'mobile-canvas' : ''}
                 />
                   
-                {!currentPage && (
-                  <div className="text-center py-16 text-gray-500">
-                    <h3 className="text-lg font-medium mb-2">Nenhuma página selecionada</h3>
-                    <p className="text-sm">Selecione uma página para começar a editar.</p>
-                  </div>
-                )}
+                  {!currentPage && (
+                    <div className="text-center py-16 text-gray-500">
+                      <h3 className="text-lg font-medium mb-2">Nenhuma página selecionada</h3>
+                      <p className="text-sm">Selecione uma página para começar a editar.</p>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

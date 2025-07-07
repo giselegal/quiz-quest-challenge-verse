@@ -43,6 +43,35 @@
   }
 }
 
+/* Mobile Preview Device Frames */
+.mobile-device-frame {
+  position: relative;
+  background: #1a1a1a;
+  border-radius: 25px;
+  padding: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.mobile-device-frame::before {
+  content: '';
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: #333;
+  border-radius: 2px;
+}
+
+.tablet-device-frame {
+  position: relative;
+  background: #1a1a1a;
+  border-radius: 15px;
+  padding: 8px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+}
+
 /* Melhorar performance desativando todas as animações não críticas */
 * {
   will-change: auto !important;
