@@ -106,3 +106,22 @@ Todos os componentes aceitam as seguintes propriedades para personalização:
 - `data` - Dados específicos do componente
 
 Para mais detalhes, consulte a documentação de tipos em `@/types/funnel.ts`.
+
+## Resolução de Problemas (Troubleshooting)
+
+### Caminhos Incorretos
+Ao trabalhar com este projeto, sempre use o caminho relativo correto:
+- ✅ Use `./src/components/funnel-blocks/...` quando estiver na pasta `/client`
+- ❌ Evite usar `/client/src/components/funnel-blocks/...`
+
+### Erros de TypeScript
+Os erros de TypeScript podem ocorrer devido a:
+1. Imports incorretos (verifique os caminhos @/ vs ../)
+2. Propriedades faltando nos tipos (verifique as interfaces)
+3. Flag JSX não definida (apenas na verificação estática)
+
+### Problemas de Renderização
+Se um componente não renderizar corretamente:
+1. Verifique se todos os imports estão corretos
+2. Confira se as propriedades obrigatórias foram passadas
+3. Use o modo de depuração com `data-funnel-step` para identificar qual componente está com problemas
