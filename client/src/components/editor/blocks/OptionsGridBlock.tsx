@@ -181,7 +181,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
             >
               {/* Indicador de seleção */}
               {isSelected && (
-                <div className="absolute top-2 right-2 w-5 h-5 sm:w-6 sm:h-6 bg-blue-500 rounded-full flex items-center justify-center shadow-lg z-10 animate-pulse">
+                <div className="absolute top-2 right-2 w-5 h-5 sm:w-6 sm:h-6 bg-[#B89B7A] rounded-full flex items-center justify-center shadow-lg z-10 animate-pulse">
                   <Check className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                 </div>
               )}
@@ -220,14 +220,14 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
       
       {/* Mensagem de validação */}
       {validationError && (
-        <div className="mt-3 sm:mt-4 mx-3 sm:mx-4 p-2 sm:p-3 bg-red-50 border border-red-200 rounded-md">
+        <div className="mt-2 sm:mt-3 mx-2 sm:mx-3 p-2 sm:p-3 bg-red-50 border border-red-200 rounded-md">
           <p className="text-xs sm:text-sm text-red-600">{validationError}</p>
         </div>
       )}
       
       {/* Informações de seleção para modo de edição */}
       {isEditing && (
-        <div className="mt-3 sm:mt-4 mx-3 sm:mx-4 p-2 sm:p-3 bg-gray-50 border border-gray-200 rounded-md">
+        <div className="mt-2 sm:mt-3 mx-2 sm:mx-3 p-2 sm:p-3 bg-gray-50 border border-gray-200 rounded-md">
           <p className="text-xs sm:text-sm text-gray-600">
             Modo de edição: {internalSelectedOptions.length} opção(ões) selecionada(s)
             {multipleSelection && ` (máx: ${maxSelections}, mín: ${minSelections})`}
