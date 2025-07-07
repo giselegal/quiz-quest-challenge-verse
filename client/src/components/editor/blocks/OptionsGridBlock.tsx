@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { InlineEditableText } from './InlineEditableText';
-import { Rows3 } from 'lucide-react';
+import { Rows3, Check } from 'lucide-react';
 import type { BlockComponentProps } from '@/types/blocks';
 
 const OptionsGridBlock: React.FC<BlockComponentProps> = ({
@@ -24,13 +24,64 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
     maxSelections = 1,
     minSelections = 1,
     validationMessage = 'Selecione uma opção',
-    gridGap = 16
+    gridGap = 16,
+    selectedOptions = []
   } = block.properties;
+
+  // Estado local para gerenciar seleções
+  const [internalSelectedOptions, setInternalSelectedOptions] = useState<string[]>(selectedOptions || []);
+  const [validationError, setValidationError] = useState<string>('');
+
+  // Sincronizar estado interno com propriedades do bloco
+  useEffect(() => {
+    if (selectedOptions && Array.isArray(selectedOptions)) {
+      setInternalSelectedOptions(selectedOptions);
+    }
+  }, [selectedOptions]);
 
   const handlePropertyChange = (key: string, value: any) => {
     if (onPropertyChange) {
       onPropertyChange(key, value);
     }
+  };
+
+  const handleOptionSelect = (optionId: string, optionValue: string) => {
+    if (isEditing) return; // Não permitir seleção no modo de edição
+
+    let newSelectedOptions: string[] = [];
+    
+    if (multipleSelection) {
+      // Seleção múltipla
+      if (internalSelectedOptions.includes(optionId)) {
+        // Desmarcar opção
+        newSelectedOptions = internalSelectedOptions.filter(id => id !== optionId);
+      } else {
+        // Marcar opção (respeitando limite máximo)
+        if (internalSelectedOptions.length < maxSelections) {
+          newSelectedOptions = [...internalSelectedOptions, optionId];
+        } else {
+          setValidationError(`Máximo de ${maxSelections} seleções permitidas`);
+          return;
+        }
+      }
+    } else {
+      // Seleção única
+      newSelectedOptions = internalSelectedOptions.includes(optionId) ? [] : [optionId];
+    }
+
+    setInternalSelectedOptions(newSelectedOptions);
+    handlePropertyChange('selectedOptions', newSelectedOptions);
+    
+    // Validar seleção
+    if (newSelectedOptions.length < minSelections) {
+      setValidationError(validationMessage || `Selecione pelo menos ${minSelections} opção(ões)`);
+    } else {
+      setValidationError('');
+    }
+  };
+
+  const isOptionSelected = (optionId: string) => {
+    return internalSelectedOptions.includes(optionId);
   };
 
   const getGridCols = (cols: number) => {
@@ -102,35 +153,68 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
         className={`grid ${getGridCols(columns)} max-w-4xl mx-auto`}
         style={{ gap: `${gridGap}px` }}
       >
-        {options.map((option: any, index: number) => (
-          <button 
-            key={option.id || index} 
-            className="whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 option border-zinc-200 bg-background hover:bg-primary hover:text-foreground px-4 hover:shadow-2xl overflow-hidden min-w-full gap-2 flex h-auto py-2 flex-col items-center justify-start border drop-shadow-none option-button"
-            type="button"
-            data-option-id={option.id}
-            data-option-value={option.value}
-            data-option-category={option.category}
-          >
-            {showImages && option.imageUrl && (
-              <img
-                src={option.imageUrl}
-                alt={option.text}
-                width="256"
-                height="256"
-                className={`w-full rounded-t-md bg-white ${getImageHeight(imageSize)} object-cover`}
-                onError={(e) => (e.currentTarget.src = 'https://placehold.co/256x256/cccccc/333333?text=Erro')}
-              />
-            )}
-            <div className="py-2 px-4 w-full flex flex-row text-base items-center text-full-primary justify-between">
-              <div className="break-words w-full custom-quill quill ql-editor quill-option text-centered mt-2">
-                <div 
-                  className="font-medium text-[#432818]"
-                  dangerouslySetInnerHTML={{ __html: option.text || 'Opção sem texto' }}
-                />
+        {options.map((option: any, index: number) => {
+          const isSelected = isOptionSelected(option.id);
+          return (
+            <button 
+              key={option.id || index} 
+              className={`
+                relative whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-all duration-200 
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 
+                disabled:pointer-events-none disabled:opacity-50 
+                border-2 bg-white hover:shadow-lg overflow-hidden min-w-full gap-2 flex h-auto py-2 
+                flex-col items-center justify-start option-button
+                ${isSelected 
+                  ? 'border-blue-500 bg-blue-50 shadow-lg' 
+                  : 'border-zinc-200 hover:border-zinc-300 hover:bg-gray-50'
+                }
+                ${isEditing ? 'cursor-default' : 'cursor-pointer'}
+              `}
+              type="button"
+              onClick={() => handleOptionSelect(option.id, option.value)}
+              disabled={isEditing}
+              data-option-id={option.id}
+              data-option-value={option.value}
+              data-option-category={option.category}
+              data-selected={isSelected}
+            >
+              {/* Indicador de seleção */}
+              {isSelected && (
+                <div className="absolute top-2 right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                  <Check className="w-4 h-4 text-white" />
+                </div>
+              )}
+              
+              {showImages && option.imageUrl && (
+                <div className="relative w-full">
+                  <img
+                    src={option.imageUrl}
+                    alt={option.text}
+                    width="256"
+                    height="256"
+                    className={`w-full rounded-t-md bg-white ${getImageHeight(imageSize)} object-cover`}
+                    onError={(e) => (e.currentTarget.src = 'https://placehold.co/256x256/cccccc/333333?text=Erro')}
+                  />
+                  {/* Overlay de seleção */}
+                  {isSelected && (
+                    <div className="absolute inset-0 bg-blue-500 bg-opacity-20 rounded-t-md"></div>
+                  )}
+                </div>
+              )}
+              
+              <div className="py-2 px-4 w-full flex flex-row text-base items-center text-full-primary justify-between">
+                <div className="break-words w-full custom-quill quill ql-editor quill-option text-centered mt-2">
+                  <div 
+                    className={`font-medium transition-colors ${
+                      isSelected ? 'text-blue-700' : 'text-[#432818]'
+                    }`}
+                    dangerouslySetInnerHTML={{ __html: option.text || 'Opção sem texto' }}
+                  />
+                </div>
               </div>
-            </div>
-          </button>
-        ))}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
