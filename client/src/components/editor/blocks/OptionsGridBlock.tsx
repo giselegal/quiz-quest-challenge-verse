@@ -1,16 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { InlineEditableText } from './InlineEditableText';
 import { Rows3, Check } from 'lucide-react';
-import type { BlockComponentProps } from '@/types              <div className="py-3 sm:py-4 px-3 sm:px-4 w-full flex flex-row text-sm sm:text-base md:text-lg items-center justify-center">
-                <div className="break-words w-full custom-quill quill ql-editor quill-option text-center">
-                  <div 
-                    className={`font-medium transition-colors duration-300 leading-tight ${
-                      isSelected ? 'text-[#432818]' : 'text-[#432818] group-hover:text-[#B89B7A]'
-                    }`}
-                    dangerouslySetInnerHTML={{ __html: option.text || 'Opção sem texto' }}
-                  />
-                </div>
-              </div>
+import type { BlockComponentProps } from '@/types/blocks';
 const OptionsGridBlock: React.FC<BlockComponentProps> = ({
   block,
   isSelected = false,
@@ -104,11 +95,11 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
 
   const getImageHeight = (size: string) => {
     const sizeClasses = {
-      small: 'h-28 sm:h-36 md:h-44 lg:h-52',
-      medium: 'h-36 sm:h-44 md:h-52 lg:h-60',
-      large: 'h-44 sm:h-52 md:h-60 lg:h-72'
+      small: 'h-20 sm:h-24 md:h-28 lg:h-32',
+      medium: 'h-24 sm:h-28 md:h-32 lg:h-36',
+      large: 'h-28 sm:h-32 md:h-36 lg:h-40'
     };
-    return sizeClasses[size as keyof typeof sizeClasses] || 'h-44 sm:h-52 md:h-60 lg:h-72';
+    return sizeClasses[size as keyof typeof sizeClasses] || 'h-28 sm:h-32 md:h-36 lg:h-40';
   };
 
   if (!options || options.length === 0) {
@@ -147,7 +138,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
       data-block-type={block.type}
     >
       {title && (
-        <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#432818] mb-3 sm:mb-4 md:mb-6 px-2 sm:px-3">
+        <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#432818] mb-3 sm:mb-4 md:mb-6 px-1 sm:px-2">
           <InlineEditableText
             value={title}
             onSave={(value: string) => handlePropertyChange('title', value)}
@@ -158,7 +149,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
         </h3>
       )}
       <div 
-        className={`grid ${getGridCols(columns)} w-full mx-auto px-2 sm:px-3 md:px-4 gap-3 sm:gap-4 md:gap-6`}
+        className={`grid ${getGridCols(columns)} w-full mx-auto gap-2 sm:gap-3 md:gap-4`}
       >
         {options.map((option: any, index: number) => {
           const isSelected = isOptionSelected(option.id);
@@ -170,8 +161,8 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
                 transition-all duration-300 ease-in-out transform hover:scale-[1.02] 
                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89B7A] focus-visible:ring-offset-2 
                 disabled:pointer-events-none disabled:opacity-50 active:scale-95 
-                border-2 bg-white hover:shadow-lg overflow-hidden w-full gap-2 sm:gap-3 flex 
-                flex-col items-center justify-start option-button min-h-[140px] sm:min-h-[160px] md:min-h-[200px] lg:min-h-[240px]
+                border-2 bg-white hover:shadow-lg overflow-hidden w-full gap-1 sm:gap-2 flex 
+                flex-col items-center justify-start option-button aspect-[4/5] 
                 ${isSelected 
                   ? 'border-[#B89B7A] bg-[#FAF9F7] shadow-lg scale-[1.02]' 
                   : 'border-zinc-200 hover:border-[#B89B7A] hover:bg-[#FAF9F7] shadow-sm'
@@ -211,7 +202,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
                 </div>
               )}
               
-              <div className="py-2 sm:py-3 px-2 sm:px-3 w-full flex flex-row text-sm sm:text-base items-center justify-center">
+              <div className="py-1 sm:py-2 px-2 sm:px-3 w-full flex flex-row text-xs sm:text-sm md:text-base items-center justify-center flex-shrink-0">
                 <div className="break-words w-full custom-quill quill ql-editor quill-option text-center">
                   <div 
                     className={`font-medium transition-colors duration-300 leading-tight ${
@@ -228,14 +219,14 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
       
       {/* Mensagem de validação */}
       {validationError && (
-        <div className="mt-2 sm:mt-3 mx-1 sm:mx-2 p-2 sm:p-3 bg-red-50 border border-red-200 rounded-md">
+        <div className="mt-2 sm:mt-3 p-2 sm:p-3 bg-red-50 border border-red-200 rounded-md">
           <p className="text-sm sm:text-base text-red-600">{validationError}</p>
         </div>
       )}
       
       {/* Informações de seleção para modo de edição */}
       {isEditing && (
-        <div className="mt-2 sm:mt-3 mx-1 sm:mx-2 p-2 sm:p-3 bg-[#FAF9F7] border border-[#B89B7A]/20 rounded-md">
+        <div className="mt-2 sm:mt-3 p-2 sm:p-3 bg-[#FAF9F7] border border-[#B89B7A]/20 rounded-md">
           <p className="text-sm sm:text-base text-[#8F7A6A]">
             Modo de edição: {internalSelectedOptions.length} opção(ões) selecionada(s)
             {multipleSelection && ` (máx: ${maxSelections}, mín: ${minSelections})`}
