@@ -107,7 +107,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
     return (
       <div
         className={`
-          bg-gray-100 p-8 rounded-lg text-gray-500 flex flex-col items-center justify-center min-h-[150px] cursor-pointer transition-all duration-200
+          bg-gray-100 p-4 sm:p-6 md:p-8 rounded-lg text-gray-500 flex flex-col items-center justify-center min-h-[120px] sm:min-h-[150px] cursor-pointer transition-all duration-200
           ${isSelected 
             ? 'outline-2 outline-blue-500 outline-offset-2' 
             : 'hover:shadow-sm'
@@ -118,8 +118,8 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
         data-block-id={block.id}
         data-block-type={block.type}
       >
-        <Rows3 className="w-12 h-12 mb-4 opacity-50" />
-        <p>Configure as opções do grid no painel de propriedades.</p>
+        <Rows3 className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 mb-2 sm:mb-3 md:mb-4 opacity-50" />
+        <p className="text-xs sm:text-sm md:text-base text-center px-2">Configure as opções do grid no painel de propriedades.</p>
       </div>
     );
   }
@@ -150,8 +150,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
         </h3>
       )}
       <div 
-        className={`grid ${getGridCols(columns)} w-full max-w-6xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8`}
-        style={{ gap: `${Math.max(8, gridGap * 0.75)}px` }}
+        className={`grid ${getGridCols(columns)} w-full max-w-6xl mx-auto px-2 sm:px-3 md:px-4 lg:px-6 xl:px-8 gap-2 sm:gap-3 md:gap-4`}
       >
         {options.map((option: any, index: number) => {
           const isSelected = isOptionSelected(option.id);
@@ -159,14 +158,14 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
             <button 
               key={option.id || index} 
               className={`
-                group relative whitespace-nowrap rounded-lg text-sm font-medium ring-offset-background 
-                transition-all duration-300 ease-in-out transform hover:scale-105 
+                group relative rounded-lg text-sm font-medium ring-offset-background 
+                transition-all duration-300 ease-in-out transform hover:scale-[1.02] sm:hover:scale-105 
                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 
                 disabled:pointer-events-none disabled:opacity-50 
-                border-2 bg-white hover:shadow-xl overflow-hidden w-full gap-2 flex 
-                flex-col items-center justify-start option-button
+                border-2 bg-white hover:shadow-lg sm:hover:shadow-xl overflow-hidden w-full gap-1 sm:gap-2 flex 
+                flex-col items-center justify-start option-button min-h-[120px] sm:min-h-[140px]
                 ${isSelected 
-                  ? 'border-blue-500 bg-blue-50 shadow-lg scale-105' 
+                  ? 'border-blue-500 bg-blue-50 shadow-lg scale-[1.02] sm:scale-105' 
                   : 'border-zinc-200 hover:border-zinc-300 hover:bg-gray-50 shadow-md'
                 }
                 ${isEditing ? 'cursor-default' : 'cursor-pointer'}
@@ -181,8 +180,8 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
             >
               {/* Indicador de seleção */}
               {isSelected && (
-                <div className="absolute top-3 right-3 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center shadow-lg z-10 animate-pulse">
-                  <Check className="w-4 h-4 text-white" />
+                <div className="absolute top-2 right-2 w-5 h-5 sm:w-6 sm:h-6 bg-blue-500 rounded-full flex items-center justify-center shadow-lg z-10 animate-pulse">
+                  <Check className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                 </div>
               )}
               
@@ -203,10 +202,10 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
                 </div>
               )}
               
-              <div className="py-3 px-4 w-full flex flex-row text-base items-center justify-center">
+              <div className="py-2 sm:py-3 px-2 sm:px-4 w-full flex flex-row text-sm sm:text-base items-center justify-center">
                 <div className="break-words w-full custom-quill quill ql-editor quill-option text-center">
                   <div 
-                    className={`font-medium transition-colors duration-300 ${
+                    className={`font-medium transition-colors duration-300 leading-tight ${
                       isSelected ? 'text-blue-700' : 'text-[#432818] group-hover:text-blue-600'
                     }`}
                     dangerouslySetInnerHTML={{ __html: option.text || 'Opção sem texto' }}
@@ -220,15 +219,15 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
       
       {/* Mensagem de validação */}
       {validationError && (
-        <div className="mt-4 mx-4 p-3 bg-red-50 border border-red-200 rounded-md">
-          <p className="text-sm text-red-600">{validationError}</p>
+        <div className="mt-3 sm:mt-4 mx-3 sm:mx-4 p-2 sm:p-3 bg-red-50 border border-red-200 rounded-md">
+          <p className="text-xs sm:text-sm text-red-600">{validationError}</p>
         </div>
       )}
       
       {/* Informações de seleção para modo de edição */}
       {isEditing && (
-        <div className="mt-4 mx-4 p-3 bg-gray-50 border border-gray-200 rounded-md">
-          <p className="text-sm text-gray-600">
+        <div className="mt-3 sm:mt-4 mx-3 sm:mx-4 p-2 sm:p-3 bg-gray-50 border border-gray-200 rounded-md">
+          <p className="text-xs sm:text-sm text-gray-600">
             Modo de edição: {internalSelectedOptions.length} opção(ões) selecionada(s)
             {multipleSelection && ` (máx: ${maxSelections}, mín: ${minSelections})`}
           </p>
