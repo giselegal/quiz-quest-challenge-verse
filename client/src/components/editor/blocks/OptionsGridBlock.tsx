@@ -127,7 +127,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
   return (
     <div
       className={`
-        py-3 sm:py-4 md:py-6 text-center space-y-3 sm:space-y-4 cursor-pointer transition-all duration-200
+        py-2 sm:py-3 md:py-4 text-center space-y-2 sm:space-y-3 cursor-pointer transition-all duration-200
         ${isSelected 
           ? 'outline-2 outline-blue-500 outline-offset-2' 
           : 'hover:shadow-sm'
@@ -158,15 +158,15 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
             <button 
               key={option.id || index} 
               className={`
-                group relative rounded-lg text-sm font-medium ring-offset-background 
-                transition-all duration-300 ease-in-out transform hover:scale-[1.02] sm:hover:scale-105 
+                group relative rounded-lg text-xs sm:text-sm font-medium ring-offset-background 
+                transition-all duration-300 ease-in-out transform hover:scale-[1.02] 
                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 
                 disabled:pointer-events-none disabled:opacity-50 active:scale-95 
-                border-2 bg-white hover:shadow-lg sm:hover:shadow-xl overflow-hidden w-full gap-1 sm:gap-2 flex 
-                flex-col items-center justify-start option-button min-h-[100px] sm:min-h-[120px] md:min-h-[140px]
+                border-2 bg-white hover:shadow-lg overflow-hidden w-full gap-1 sm:gap-2 flex 
+                flex-col items-center justify-start option-button min-h-[80px] sm:min-h-[100px] md:min-h-[120px]
                 ${isSelected 
-                  ? 'border-blue-500 bg-blue-50 shadow-lg scale-[1.02] sm:scale-105' 
-                  : 'border-zinc-200 hover:border-zinc-300 hover:bg-gray-50 shadow-md'
+                  ? 'border-blue-500 bg-blue-50 shadow-lg scale-[1.02]' 
+                  : 'border-zinc-200 hover:border-zinc-300 hover:bg-gray-50 shadow-sm'
                 }
                 ${isEditing ? 'cursor-default' : 'cursor-pointer'}
                 touch-manipulation
@@ -203,7 +203,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
                 </div>
               )}
               
-              <div className="py-2 sm:py-3 px-2 sm:px-4 w-full flex flex-row text-sm sm:text-base items-center justify-center">
+              <div className="py-1 sm:py-2 px-2 sm:px-3 w-full flex flex-row text-xs sm:text-sm items-center justify-center">
                 <div className="break-words w-full custom-quill quill ql-editor quill-option text-center">
                   <div 
                     className={`font-medium transition-colors duration-300 leading-tight ${
