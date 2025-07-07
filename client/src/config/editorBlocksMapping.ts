@@ -2,9 +2,9 @@
  * Mapeamento dos Blocos Modernos para o Editor
  * 
  * Este arquivo conecta os blockDefinitions com os componentes reais
- * implementados em /components/editor/blocks/
+ * implementados em /components/editor/blocks/ e /components/funnel-blocks/
  * 
- * ATUALIZADO: Usando apenas blocos confirmados como funcionais
+ * ATUALIZADO: Usando blocos confirmados como funcionais + novos blocos de funil
  */
 
 import { ComponentType } from 'react';
@@ -34,6 +34,22 @@ import TestimonialsBlock from '@/components/editor/blocks/TestimonialsBlock';
 import GuaranteeBlock from '@/components/editor/blocks/GuaranteeBlock';
 import { VideoPlayerBlock } from '@/components/editor/blocks/VideoPlayerBlock';
 
+// Imports dos novos blocos de funil
+import FunnelStepBlock from '@/components/funnel-blocks/editor/FunnelStepBlock';
+import { 
+  FunnelIntroStep, 
+  NameCollectStep, 
+  QuizIntroStep, 
+  QuestionMultipleStep,
+  QuizTransitionStep, 
+  ProcessingStep, 
+  ResultIntroStep, 
+  ResultDetailsStep, 
+  ResultGuideStep, 
+  OfferTransitionStep, 
+  OfferPageStep
+} from '@/components/funnel-blocks';
+
 // Interface para props genéricas de bloco
 export interface BaseBlockProps {
   blockId: string;
@@ -45,7 +61,7 @@ export interface BaseBlockProps {
   style?: React.CSSProperties;
 }
 
-// Mapeamento de tipos para componentes (apenas blocos funcionais)
+// Mapeamento de tipos para componentes (blocos funcionais + novos blocos de funil)
 export const EDITOR_BLOCKS_MAP: Record<string, ComponentType<any>> = {
   // Blocos Básicos Modernos
   'header': HeaderBlock,
@@ -80,6 +96,20 @@ export const EDITOR_BLOCKS_MAP: Record<string, ComponentType<any>> = {
   'testimonials': TestimonialsBlock,
   'guarantee': GuaranteeBlock,
   'video-player': VideoPlayerBlock,
+  
+  // Novos blocos de funil reutilizáveis
+  'funnel-step': FunnelStepBlock,
+  'funnel-intro': FunnelIntroStep,
+  'funnel-name-collect': NameCollectStep,
+  'funnel-quiz-intro': QuizIntroStep,
+  'funnel-question': QuestionMultipleStep,
+  'funnel-transition': QuizTransitionStep,
+  'funnel-processing': ProcessingStep,
+  'funnel-result-intro': ResultIntroStep,
+  'funnel-result-details': ResultDetailsStep,
+  'funnel-result-guide': ResultGuideStep,
+  'funnel-offer-transition': OfferTransitionStep,
+  'funnel-offer-page': OfferPageStep
 };
 
 // Helper para verificar se um tipo de bloco existe
@@ -92,10 +122,10 @@ export const getBlockComponent = (blockType: string): ComponentType<any> | null 
   return EDITOR_BLOCKS_MAP[blockType] || null;
 };
 
-// Lista de tipos de blocos disponíveis (apenas funcionais)
+// Lista de tipos de blocos disponíveis (todos funcionais)
 export const AVAILABLE_BLOCK_TYPES = Object.keys(EDITOR_BLOCKS_MAP);
 
-// Categorias de blocos para organização na sidebar (apenas funcionais)
+// Categorias de blocos para organização na sidebar
 export const BLOCK_CATEGORIES = {
   basic: ['header', 'text', 'image', 'button', 'spacer'],
   advanced: ['rich-text', 'quiz-step'],
@@ -108,6 +138,13 @@ export const BLOCK_CATEGORIES = {
   ],
   offer: [
     'quiz-offer-page', 'testimonials', 'guarantee', 'faq-section', 'video-player'
+  ],
+  // Nova categoria para os blocos de funil
+  funnel: [
+    'funnel-step', 'funnel-intro', 'funnel-name-collect', 
+    'funnel-quiz-intro', 'funnel-question', 'funnel-transition', 
+    'funnel-processing', 'funnel-result-intro', 'funnel-result-details', 
+    'funnel-result-guide', 'funnel-offer-transition', 'funnel-offer-page'
   ]
 };
 
