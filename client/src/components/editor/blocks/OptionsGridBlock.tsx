@@ -95,11 +95,11 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
 
   const getImageHeight = (size: string) => {
     const sizeClasses = {
-      small: 'h-20 sm:h-24 md:h-28 lg:h-32',
-      medium: 'h-24 sm:h-28 md:h-32 lg:h-36',
-      large: 'h-28 sm:h-32 md:h-36 lg:h-40'
+      small: 'h-32 sm:h-40 md:h-44 lg:h-48',
+      medium: 'h-40 sm:h-48 md:h-52 lg:h-56',
+      large: 'h-48 sm:h-56 md:h-60 lg:h-64'
     };
-    return sizeClasses[size as keyof typeof sizeClasses] || 'h-28 sm:h-32 md:h-36 lg:h-40';
+    return sizeClasses[size as keyof typeof sizeClasses] || 'h-48 sm:h-56 md:h-60 lg:h-64';
   };
 
   if (!options || options.length === 0) {
@@ -149,7 +149,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
         </h3>
       )}
       <div 
-        className={`grid ${getGridCols(columns)} w-full mx-auto gap-2 sm:gap-3 md:gap-4`}
+        className={`grid ${getGridCols(columns)} w-full mx-auto px-1 sm:px-0 gap-3 sm:gap-4 md:gap-5`}
       >
         {options.map((option: any, index: number) => {
           const isSelected = isOptionSelected(option.id);
@@ -161,8 +161,8 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
                 transition-all duration-300 ease-in-out transform hover:scale-[1.02] 
                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89B7A] focus-visible:ring-offset-2 
                 disabled:pointer-events-none disabled:opacity-50 active:scale-95 
-                border-2 bg-white hover:shadow-lg overflow-hidden w-full gap-1 sm:gap-2 flex 
-                flex-col items-center justify-start option-button aspect-[4/5] 
+                border-2 bg-white hover:shadow-lg overflow-hidden w-full gap-1 flex 
+                flex-col items-center justify-start option-button aspect-[3/4] 
                 ${isSelected 
                   ? 'border-[#B89B7A] bg-[#FAF9F7] shadow-lg scale-[1.02]' 
                   : 'border-zinc-200 hover:border-[#B89B7A] hover:bg-[#FAF9F7] shadow-sm'
@@ -186,7 +186,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
               )}
               
               {showImages && option.imageUrl && (
-                <div className="relative w-full">
+                <div className="relative w-full flex-1">
                   <img
                     src={option.imageUrl}
                     alt={option.text}
@@ -202,7 +202,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
                 </div>
               )}
               
-              <div className="py-1 sm:py-2 px-2 sm:px-3 w-full flex flex-row text-xs sm:text-sm md:text-base items-center justify-center flex-shrink-0">
+              <div className="py-1 px-1 sm:px-2 w-full flex flex-row text-xs sm:text-sm items-center justify-center flex-shrink-0">
                 <div className="break-words w-full custom-quill quill ql-editor quill-option text-center">
                   <div 
                     className={`font-medium transition-colors duration-300 leading-tight ${
