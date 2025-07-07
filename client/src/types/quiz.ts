@@ -28,7 +28,8 @@ export interface QuizQuestion {
   id: string;
   order: number;
   question: string;
-  type: 'normal' | 'strategic';
+  title?: string; // Adicionado para compatibilidade
+  type: 'normal' | 'strategic' | 'text' | 'both' | 'image'; // Expandido para compatibilidade
   options: QuizOption[];
   imageUrl?: string;
   multiSelect?: number;
@@ -38,14 +39,19 @@ export interface QuizOption {
   id: string;
   text: string;
   style?: StyleType;
+  styleCategory?: string; // Adicionado para compatibilidade
   imageUrl?: string;
   weight?: number;
+  value?: string;
+  category?: string;
 }
 
 export interface QuizResponse {
   questionId: string;
   selectedOptionIds: string[]; // Array para múltiplas seleções
+  selectedOptionId?: string; // Para compatibilidade com código antigo
   selectedStyles?: StyleType[]; // Estilos das opções selecionadas
+  selectedStyle?: StyleType; // Para compatibilidade com código antigo
   timestamp: Date;
 }
 
@@ -62,7 +68,9 @@ export interface QuizResult {
   responses: QuizResponse[];
   styleScores: StyleScore[];
   predominantStyle: StyleType;
+  primaryStyle?: StyleType; // Para compatibilidade
   complementaryStyles: StyleType[];
+  secondaryStyles?: StyleType[]; // Para compatibilidade
   totalNormalQuestions: number;
   calculatedAt: Date;
   utmParams?: {
@@ -70,6 +78,13 @@ export interface QuizResult {
     medium?: string;
     campaign?: string;
   };
+}
+
+// Alias para compatibilidade
+export interface StyleResult extends StyleScore {
+  description?: string;
+  imageUrl?: string;
+  guideImageUrl?: string;
 }
 
 export interface QuizSession {
@@ -126,3 +141,39 @@ export type BlockType =
   | "custom-code"
   | "heading"
   | "paragraph";
+
+// Tipo para BlockData que estava sendo importado incorretamente
+export interface BlockData {
+  id: string;
+  type: string;
+  properties: Record<string, any>;
+  order?: number;
+  visible?: boolean;
+}
+
+// Versioning
+export interface QuizVersion {
+  id: string;
+  version: number;
+  createdAt: string;
+  changes: string[];
+  data: any;
+}
+
+// Interfaces para funil
+export interface QuizFunnel {
+  id: string;
+  name: string;
+  description?: string;
+  theme?: any;
+  config?: any;
+  questions?: QuizQuestion[];
+  results?: any[];
+  intro?: any;
+  offer?: any;
+  pages: any[];
+  isPublished: boolean;
+  version: number;
+  createdAt?: string;
+  updatedAt?: string;
+}

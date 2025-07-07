@@ -198,3 +198,11 @@ export interface QuizFunnel {
   updatedAt?: string;
   createdAt?: string;
 }
+// Versioning para QuizFunnel
+export interface QuizVersion {
+  id: string;
+  version: number;
+  createdAt: string;
+  changes: string[];
+  data: any;
+}
