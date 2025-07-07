@@ -5,7 +5,6 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
-import FunnelStepsColumn, { REAL_FUNNEL_STEPS } from './FunnelStepsColumn';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -280,7 +279,6 @@ export default function ImprovedQuizEditor() {
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
   const [isAbTestMode, setIsAbTestMode] = useState(false);
-  const [selectedStepId, setSelectedStepId] = useState<string | null>(null);
 
   // Determinar as páginas atuais baseado no modo A/B test
   const getCurrentPages = () => {
