@@ -1,11 +1,12 @@
 /**
- * Índice para componentes reutilizáveis de funil
+ * Componentes reutilizáveis para funis
  * 
- * Este arquivo exporta todos os componentes necessários para implementar
- * as 21 etapas de um funil completo (/quiz, /resultado, /quiz-descubra-seu-estilo)
+ * Este módulo exporta todos os componentes necessários para construir
+ * um funil completo com 21 etapas, incluindo componentes de etapa,
+ * componentes compartilhados, editor e hooks.
  */
 
-// Componentes para as 21 etapas do funil
+// Etapas do funil (Steps)
 export { default as FunnelIntroStep } from './steps/FunnelIntroStep';
 export { default as NameCollectStep } from './steps/NameCollectStep';
 export { default as QuizIntroStep } from './steps/QuizIntroStep';
@@ -18,21 +19,20 @@ export { default as ResultGuideStep } from './steps/ResultGuideStep';
 export { default as OfferTransitionStep } from './steps/OfferTransitionStep';
 export { default as OfferPageStep } from './steps/OfferPageStep';
 
-// Componentes compartilhados entre etapas
+// Componentes compartilhados (Shared)
 export { default as FunnelProgressBar } from './shared/FunnelProgressBar';
-export { default as FunnelNavigation } from './shared/FunnelNavigation';
-export { default as AnimatedTransition } from './shared/AnimatedTransition';
 export { default as QuizOption } from './shared/QuizOption';
+export { default as CountdownTimer } from './shared/CountdownTimer';
 export { default as ResultCard } from './shared/ResultCard';
 export { default as StyleGuideViewer } from './shared/StyleGuideViewer';
 export { default as OfferCard } from './shared/OfferCard';
-export { default as CountdownTimer } from './shared/CountdownTimer';
 
-// Componentes para edição visual (compatíveis com editor)
+// Editor
 export { default as FunnelStepBlock } from './editor/FunnelStepBlock';
-export { default as FunnelConfigProvider } from './editor/FunnelConfigProvider';
+export { default as FunnelConfigProvider, useFunnelConfig } from './editor/FunnelConfigProvider';
 
-// Hook para lógica do funil
-export { default as useFunnelNavigation } from './hooks/useFunnelNavigation';
-export { default as useQuizProgress } from './hooks/useQuizProgress';
-export { default as useQuizResult } from './hooks/useQuizResult';
+// Hooks
+export { useFunnelNavigation } from './hooks/useFunnelNavigation';
+
+// Tipos
+export * from '@/types/funnel';
