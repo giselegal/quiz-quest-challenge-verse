@@ -280,6 +280,10 @@ export default function ImprovedQuizEditor() {
   const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
   const [isAbTestMode, setIsAbTestMode] = useState(false);
 
+  // Estados para edição
+  const [editingComponent, setEditingComponent] = useState<string | null>(null);
+  const [componentEditData, setComponentEditData] = useState<any>({});
+
   // Determinar as páginas atuais baseado no modo A/B test
   const getCurrentPages = () => {
     if (isAbTestMode && selectedVariant) {
@@ -466,10 +470,21 @@ export default function ImprovedQuizEditor() {
   // Função para obter conteúdo padrão por tipo de componente
   function getDefaultContent(type: string) {
     const defaults: Record<string, any> = {
+      // Estrutura
       heading: { text: "Novo Título", level: 2 },
       paragraph: { text: "Novo parágrafo de texto." },
-      button: { text: "Clique aqui", action: "next" },
+      separator: {},
+      spacer: { height: "40px" },
+      
+      // Mídia
       image: { src: "", alt: "Imagem" },
+      video: { url: "", title: "Vídeo" },
+      gallery: { 
+        title: "Galeria",
+        images: []
+      },
+      
+      // Quiz
       question: { 
         text: "Nova pergunta?", 
         options: [
@@ -477,8 +492,59 @@ export default function ImprovedQuizEditor() {
           { id: "opt2", text: "Opção 2" }
         ]
       },
+      progress: { progress: 50 },
+      timer: { time: "00:30" },
+      score: { score: 0 },
+      
+      // Interação
+      button: { text: "Clique aqui", action: "next" },
+      form: { 
+        title: "Formulário",
+        fields: [
+          { label: "Nome", type: "text", placeholder: "Digite seu nome" },
+          { label: "Email", type: "email", placeholder: "Digite seu email" }
+        ]
+      },
+      rating: { question: "Como você avalia?", rating: 0 },
+      poll: { 
+        question: "Qual sua opinião?",
+        options: [
+          { text: "Opção 1", percentage: 45 },
+          { text: "Opção 2", percentage: 55 }
+        ]
+      },
+      
+      // Vendas
       price: { amount: "97", currency: "R$", period: "único" },
-      offer: { title: "Oferta Especial", discount: "50%" }
+      offer: { title: "Oferta Especial", discount: "50%" },
+      testimonial: { 
+        text: "Excelente produto! Recomendo muito.",
+        author: "Cliente Satisfeito",
+        role: "Empresário"
+      },
+      guarantee: { 
+        title: "Garantia de 30 dias",
+        description: "100% do seu dinheiro de volta se não ficar satisfeito"
+      },
+      urgency: { 
+        title: "Oferta por tempo limitado!",
+        description: "Não perca esta oportunidade única",
+        countdown: "23:59:45"
+      },
+      benefits: { 
+        title: "Benefícios",
+        items: [
+          { text: "Acesso vitalício" },
+          { text: "Suporte especializado" },
+          { text: "Atualizações gratuitas" }
+        ]
+      },
+      
+      // Outros
+      loading: { 
+        text: "Processando suas respostas...",
+        subtitle: "Por favor, aguarde um momento"
+      }
     };
     return defaults[type] || { text: "Novo componente" };
   }
@@ -881,18 +947,15 @@ export default function ImprovedQuizEditor() {
                 <h3 className="font-semibold">Propriedades</h3>
                 
                 {selectedComponent ? (
-                  <div className="space-y-4">
-                    <p className="text-sm text-muted-foreground">
-                      Editando: {selectedComponent}
-                    </p>
-                    {/* Aqui viriam os controles de propriedades do componente selecionado */}
-                    <div className="text-center text-sm text-muted-foreground">
-                      Controles de propriedades em desenvolvimento
-                    </div>
-                  </div>
+                  <ComponentEditor 
+                    component={currentPage?.components.find(c => c.id === selectedComponent)}
+                    onUpdate={(newContent) => updateComponent(selectedComponent, newContent)}
+                  />
                 ) : (
-                  <div className="text-center text-sm text-muted-foreground">
-                    Selecione um componente para editar suas propriedades
+                  <div className="text-center text-sm text-muted-foreground py-8">
+                    <Settings className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p className="font-medium mb-2">Nenhum componente selecionado</p>
+                    <p>Clique em um componente na página para editar suas propriedades</p>
                   </div>
                 )}
               </TabsContent>
@@ -974,11 +1037,39 @@ export default function ImprovedQuizEditor() {
                     {currentPage?.components.map((component) => (
                       <div
                         key={component.id}
-                        className={`border-2 border-dashed border-transparent p-2 rounded-lg transition-colors ${
+                        className={`border-2 border-dashed border-transparent p-2 rounded-lg transition-colors relative group ${
                           selectedComponent === component.id ? "border-blue-500 bg-blue-50" : ""
                         } ${!isPreviewMode ? "hover:border-gray-300 cursor-pointer" : ""}`}
                         onClick={() => !isPreviewMode && setSelectedComponent(component.id)}
                       >
+                        {!isPreviewMode && selectedComponent === component.id && (
+                          <div className="absolute -top-2 -right-2 flex gap-1 z-10">
+                            <Button
+                              variant="secondary"
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                duplicateComponent(component.id);
+                              }}
+                              className="h-6 w-6 p-0"
+                              title="Duplicar"
+                            >
+                              <Copy className="h-3 w-3" />
+                            </Button>
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                deleteComponent(component.id);
+                              }}
+                              className="h-6 w-6 p-0"
+                              title="Excluir"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        )}
                         <ComponentRenderer component={component} />
                       </div>
                     ))}
@@ -1063,6 +1154,300 @@ function ComponentRenderer({ component }: { component: QuizComponent }) {
           )}
         </div>
       );
+
+    case "image":
+      return (
+        <div className="text-center">
+          {component.content.src ? (
+            <img 
+              src={component.content.src} 
+              alt={component.content.alt || "Imagem"} 
+              className="mx-auto max-w-full h-auto rounded-lg"
+            />
+          ) : (
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-gray-500">
+              <Image className="h-12 w-12 mx-auto mb-2 opacity-50" />
+              <p className="text-sm">Clique para adicionar imagem</p>
+            </div>
+          )}
+        </div>
+      );
+
+    case "video":
+      return (
+        <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
+          {component.content.url ? (
+            <iframe
+              src={component.content.url}
+              className="w-full h-full rounded-lg"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          ) : (
+            <div className="text-center text-gray-500">
+              <Video className="h-12 w-12 mx-auto mb-2 opacity-50" />
+              <p className="text-sm">Adicionar vídeo</p>
+            </div>
+          )}
+        </div>
+      );
+
+    case "separator":
+      return (
+        <div className="my-4">
+          <Separator />
+        </div>
+      );
+
+    case "spacer":
+      return (
+        <div style={{ height: component.content.height || "40px" }} className="w-full" />
+      );
+
+    case "progress":
+      return (
+        <div className="space-y-2">
+          <div className="flex justify-between items-center">
+            <span className="text-sm text-gray-600">Progresso do Quiz</span>
+            <span className="text-sm font-medium">{component.content.progress || 0}%</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div 
+              className="bg-blue-500 h-2 rounded-full transition-all" 
+              style={{ width: `${component.content.progress || 0}%` }}
+            />
+          </div>
+        </div>
+      );
+
+    case "timer":
+      return (
+        <div className="flex items-center justify-center gap-2 p-4 bg-gray-50 rounded-lg">
+          <Clock className="h-5 w-5 text-gray-600" />
+          <span className="text-lg font-mono font-bold">
+            {component.content.time || "00:30"}
+          </span>
+        </div>
+      );
+
+    case "score":
+      return (
+        <div className="text-center p-4 bg-blue-50 rounded-lg">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <Star className="h-5 w-5 text-yellow-500" />
+            <span className="text-lg font-bold">Pontuação</span>
+          </div>
+          <div className="text-3xl font-bold text-blue-600">
+            {component.content.score || 0} pts
+          </div>
+        </div>
+      );
+
+    case "form":
+      return (
+        <div className="space-y-4">
+          <h3 className="font-semibold">{component.content.title || "Formulário"}</h3>
+          <div className="space-y-3">
+            {(component.content.fields || []).map((field: any, index: number) => (
+              <div key={index} className="space-y-1">
+                <label className="text-sm font-medium">{field.label}</label>
+                <input
+                  type={field.type || "text"}
+                  placeholder={field.placeholder}
+                  className="w-full p-2 border rounded-md"
+                />
+              </div>
+            ))}
+            {(!component.content.fields || component.content.fields.length === 0) && (
+              <div className="p-4 border-2 border-dashed border-gray-300 rounded-lg text-center text-gray-500">
+                <Edit3 className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">Adicionar campos ao formulário</p>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+
+    case "rating":
+      return (
+        <div className="text-center space-y-2">
+          <p className="font-medium">{component.content.question || "Como você avalia?"}</p>
+          <div className="flex justify-center gap-1">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Star
+                key={star}
+                className={`h-6 w-6 cursor-pointer transition-colors ${
+                  star <= (component.content.rating || 0)
+                    ? "text-yellow-500 fill-yellow-500"
+                    : "text-gray-300"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      );
+
+    case "poll":
+      return (
+        <div className="space-y-4">
+          <h3 className="font-semibold text-center">
+            {component.content.question || "Qual sua opinião?"}
+          </h3>
+          <div className="space-y-2">
+            {(component.content.options || []).map((option: any, index: number) => (
+              <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                <span>{option.text}</span>
+                <div className="flex items-center gap-2">
+                  <div className="w-16 bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-blue-500 h-2 rounded-full" 
+                      style={{ width: `${option.percentage || 0}%` }}
+                    />
+                  </div>
+                  <span className="text-sm text-gray-600">{option.percentage || 0}%</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+
+    case "testimonial":
+      return (
+        <div className="bg-white border rounded-lg p-6 shadow-sm">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
+              <Users className="h-6 w-6 text-gray-400" />
+            </div>
+            <div className="flex-1">
+              <blockquote className="text-gray-700 italic mb-3">
+                "{component.content.text || "Excelente produto! Recomendo muito."}"
+              </blockquote>
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-sm">
+                  {component.content.author || "Cliente Satisfeito"}
+                </span>
+                {component.content.role && (
+                  <span className="text-sm text-gray-600">- {component.content.role}</span>
+                )}
+              </div>
+              <div className="flex gap-1 mt-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star
+                    key={star}
+                    className="h-4 w-4 text-yellow-500 fill-yellow-500"
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+
+    case "guarantee":
+      return (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <Check className="h-6 w-6 text-green-600" />
+            <span className="font-semibold text-green-800">
+              {component.content.title || "Garantia de 30 dias"}
+            </span>
+          </div>
+          <p className="text-sm text-green-700">
+            {component.content.description || "100% do seu dinheiro de volta se não ficar satisfeito"}
+          </p>
+        </div>
+      );
+
+    case "urgency":
+      return (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <Zap className="h-5 w-5 text-red-600" />
+            <span className="font-semibold text-red-800">
+              {component.content.title || "Oferta por tempo limitado!"}
+            </span>
+          </div>
+          {component.content.countdown && (
+            <div className="text-2xl font-bold text-red-600 font-mono">
+              {component.content.countdown}
+            </div>
+          )}
+          <p className="text-sm text-red-700 mt-2">
+            {component.content.description || "Não perca esta oportunidade única"}
+          </p>
+        </div>
+      );
+
+    case "benefits":
+      return (
+        <div className="space-y-3">
+          <h3 className="font-semibold text-center">
+            {component.content.title || "Benefícios"}
+          </h3>
+          <div className="space-y-2">
+            {(component.content.items || []).map((benefit: any, index: number) => (
+              <div key={index} className="flex items-center gap-3">
+                <Check className="h-5 w-5 text-green-500" />
+                <span className="text-gray-700">{benefit.text}</span>
+              </div>
+            ))}
+            {(!component.content.items || component.content.items.length === 0) && (
+              <div className="p-4 border-2 border-dashed border-gray-300 rounded-lg text-center text-gray-500">
+                <TrendingUp className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">Adicionar benefícios</p>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+
+    case "gallery":
+      return (
+        <div className="space-y-3">
+          <h3 className="font-semibold text-center">
+            {component.content.title || "Galeria"}
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {(component.content.images || []).map((image: any, index: number) => (
+              <div key={index} className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                {image.src ? (
+                  <img 
+                    src={image.src} 
+                    alt={image.alt || `Imagem ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-400">
+                    <Image className="h-8 w-8" />
+                  </div>
+                )}
+              </div>
+            ))}
+            {(!component.content.images || component.content.images.length === 0) && (
+              <div className="col-span-full p-8 border-2 border-dashed border-gray-300 rounded-lg text-center text-gray-500">
+                <Image className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">Adicionar imagens à galeria</p>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+
+    case "loading":
+      return (
+        <div className="text-center py-8">
+          <div className="inline-flex items-center gap-3">
+            <RotateCcw className="h-6 w-6 animate-spin text-blue-500" />
+            <span className="text-lg font-medium">
+              {component.content.text || "Processando suas respostas..."}
+            </span>
+          </div>
+          {component.content.subtitle && (
+            <p className="text-sm text-gray-600 mt-2">{component.content.subtitle}</p>
+          )}
+        </div>
+      );
     
     default:
       return (
@@ -1071,4 +1456,250 @@ function ComponentRenderer({ component }: { component: QuizComponent }) {
         </div>
       );
   }
+}
+
+// Componente para editar propriedades dos componentes
+function ComponentEditor({ component, onUpdate }: { 
+  component?: QuizComponent; 
+  onUpdate: (content: any) => void;
+}) {
+  const [localContent, setLocalContent] = useState(component?.content || {});
+
+  useEffect(() => {
+    setLocalContent(component?.content || {});
+  }, [component]);
+
+  const handleUpdate = (field: string, value: any) => {
+    const newContent = { ...localContent, [field]: value };
+    setLocalContent(newContent);
+    onUpdate(newContent);
+  };
+
+  if (!component) return null;
+
+  const renderEditor = () => {
+    switch (component.type) {
+      case "heading":
+        return (
+          <div className="space-y-3">
+            <div>
+              <label className="text-sm font-medium block mb-1">Texto</label>
+              <input
+                type="text"
+                value={localContent.text || ""}
+                onChange={(e) => handleUpdate("text", e.target.value)}
+                className="w-full p-2 border rounded"
+                placeholder="Digite o título"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium block mb-1">Nível (H1-H6)</label>
+              <Select 
+                value={String(localContent.level || 2)} 
+                onValueChange={(value) => handleUpdate("level", parseInt(value))}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {[1, 2, 3, 4, 5, 6].map(level => (
+                    <SelectItem key={level} value={String(level)}>
+                      H{level}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        );
+
+      case "paragraph":
+        return (
+          <div>
+            <label className="text-sm font-medium block mb-1">Texto</label>
+            <textarea
+              value={localContent.text || ""}
+              onChange={(e) => handleUpdate("text", e.target.value)}
+              className="w-full p-2 border rounded h-24 resize-none"
+              placeholder="Digite o texto do parágrafo"
+            />
+          </div>
+        );
+
+      case "button":
+        return (
+          <div className="space-y-3">
+            <div>
+              <label className="text-sm font-medium block mb-1">Texto do Botão</label>
+              <input
+                type="text"
+                value={localContent.text || ""}
+                onChange={(e) => handleUpdate("text", e.target.value)}
+                className="w-full p-2 border rounded"
+                placeholder="Texto do botão"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium block mb-1">Ação</label>
+              <Select 
+                value={localContent.action || "next"} 
+                onValueChange={(value) => handleUpdate("action", value)}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="next">Próxima página</SelectItem>
+                  <SelectItem value="submit">Enviar formulário</SelectItem>
+                  <SelectItem value="link">Link externo</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        );
+
+      case "image":
+        return (
+          <div className="space-y-3">
+            <div>
+              <label className="text-sm font-medium block mb-1">URL da Imagem</label>
+              <input
+                type="url"
+                value={localContent.src || ""}
+                onChange={(e) => handleUpdate("src", e.target.value)}
+                className="w-full p-2 border rounded"
+                placeholder="https://exemplo.com/imagem.jpg"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium block mb-1">Texto Alternativo</label>
+              <input
+                type="text"
+                value={localContent.alt || ""}
+                onChange={(e) => handleUpdate("alt", e.target.value)}
+                className="w-full p-2 border rounded"
+                placeholder="Descrição da imagem"
+              />
+            </div>
+          </div>
+        );
+
+      case "question":
+        return (
+          <div className="space-y-3">
+            <div>
+              <label className="text-sm font-medium block mb-1">Pergunta</label>
+              <input
+                type="text"
+                value={localContent.text || ""}
+                onChange={(e) => handleUpdate("text", e.target.value)}
+                className="w-full p-2 border rounded"
+                placeholder="Digite a pergunta"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium block mb-1">Opções</label>
+              <div className="space-y-2">
+                {(localContent.options || []).map((option: any, index: number) => (
+                  <div key={index} className="flex gap-2">
+                    <input
+                      type="text"
+                      value={option.text}
+                      onChange={(e) => {
+                        const newOptions = [...(localContent.options || [])];
+                        newOptions[index] = { ...option, text: e.target.value };
+                        handleUpdate("options", newOptions);
+                      }}
+                      className="flex-1 p-2 border rounded"
+                      placeholder={`Opção ${index + 1}`}
+                    />
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        const newOptions = [...(localContent.options || [])];
+                        newOptions.splice(index, 1);
+                        handleUpdate("options", newOptions);
+                      }}
+                      className="h-10 w-10 p-0"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    const newOptions = [
+                      ...(localContent.options || []),
+                      { id: `opt-${Date.now()}`, text: `Opção ${(localContent.options?.length || 0) + 1}` }
+                    ];
+                    handleUpdate("options", newOptions);
+                  }}
+                  className="w-full"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Adicionar Opção
+                </Button>
+              </div>
+            </div>
+          </div>
+        );
+
+      case "price":
+        return (
+          <div className="space-y-3">
+            <div>
+              <label className="text-sm font-medium block mb-1">Valor</label>
+              <input
+                type="text"
+                value={localContent.amount || ""}
+                onChange={(e) => handleUpdate("amount", e.target.value)}
+                className="w-full p-2 border rounded"
+                placeholder="97"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium block mb-1">Moeda</label>
+              <input
+                type="text"
+                value={localContent.currency || ""}
+                onChange={(e) => handleUpdate("currency", e.target.value)}
+                className="w-full p-2 border rounded"
+                placeholder="R$"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium block mb-1">Período</label>
+              <input
+                type="text"
+                value={localContent.period || ""}
+                onChange={(e) => handleUpdate("period", e.target.value)}
+                className="w-full p-2 border rounded"
+                placeholder="único, mensal, anual"
+              />
+            </div>
+          </div>
+        );
+
+      default:
+        return (
+          <div className="text-center text-sm text-muted-foreground py-4">
+            <Edit3 className="h-8 w-8 mx-auto mb-2 opacity-50" />
+            <p>Editor para {component.type} em desenvolvimento</p>
+          </div>
+        );
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-2 pb-2 border-b">
+        <Badge variant="outline">{component.type}</Badge>
+        <span className="text-sm font-medium">Propriedades</span>
+      </div>
+      {renderEditor()}
+    </div>
+  );
 }
