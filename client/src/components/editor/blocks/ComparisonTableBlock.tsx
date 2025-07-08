@@ -1,146 +1,41 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { Check, X, Star } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 
 interface ComparisonTableBlockProps {
   title?: string;
-  columns?: Array<{
-    title: string;
-    features: string[];
-    highlighted?: boolean;
-    price?: string;
-    buttonText?: string;
-  }>;
-  showHeaders?: boolean;
+  showBenefits?: boolean;
   className?: string;
 }
 
 const ComparisonTableBlock: React.FC<ComparisonTableBlockProps> = ({
-  title = 'Compare as Opções',
-  columns = [
-    {
-      title: 'Sem Orientação',
-      features: ['Tentativa e erro', 'Compras desnecessárias', 'Insegurança'],
-      highlighted: false
-    },
-    {
-      title: 'Com Nosso Método',
-      features: ['Estilo definido', 'Compras certeiras', 'Confiança total'],
-      highlighted: true,
-      price: 'R$ 97',
-      buttonText: 'ESCOLHER ESTE PLANO'
-    }
-  ],
-  showHeaders = true,
+  title = 'O Guia de Estilo e Imagem + Bônus Exclusivos',
+  showBenefits = true,
   className
 }) => {
-  const maxFeatures = Math.max(...columns.map(col => col.features.length));
+  // Dados reais da página de resultado
+  const benefits = [
+    'Looks com intenção e identidade',
+    'Cores, modelagens e tecidos a seu favor', 
+    'Imagem alinhada aos seus objetivos',
+    'Guarda-roupa funcional, sem compras por impulso'
+  ];
 
   return (
-    <div className={cn("py-12 bg-gray-50", className)}>
-      <div className="max-w-6xl mx-auto px-6">
-        {title && (
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">
-            {title}
-          </h2>
-        )}
-
-        <div className="overflow-x-auto">
-          <div className="min-w-full bg-white rounded-xl shadow-lg overflow-hidden">
-            {/* Headers */}
-            {showHeaders && (
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-0">
-                {columns.map((column, index) => (
-                  <div
-                    key={index}
-                    className={cn(
-                      "p-6 text-center relative",
-                      column.highlighted
-                        ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white"
-                        : "bg-gray-100 text-gray-700",
-                      index !== 0 && "border-l border-gray-200"
-                    )}
-                  >
-                    {column.highlighted && (
-                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                        <div className="bg-yellow-400 text-black px-4 py-1 rounded-full text-xs font-bold flex items-center">
-                          <Star className="w-3 h-3 mr-1" />
-                          RECOMENDADO
-                        </div>
-                      </div>
-                    )}
-                    <h3 className="text-xl font-bold mb-2">{column.title}</h3>
-                    {column.price && (
-                      <div className="text-2xl font-bold mb-2">{column.price}</div>
-                    )}
-                  </div>
-                ))}
+    <div className={cn("bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] p-6 rounded-lg mb-6 border border-[#B89B7A]/10 glass-panel", className)}>
+      <h3 className="text-xl font-medium text-[#aa6b5d] mb-4">{title}</h3>
+      {showBenefits && (
+        <ul className="space-y-3 text-left max-w-xl mx-auto text-[#432818]">
+          {benefits.map((item, index) => (
+            <li key={index} className="flex items-start">
+              <div className="flex-shrink-0 h-5 w-5 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white mr-2 mt-0.5">
+                <Check className="h-3 w-3" />
               </div>
-            )}
-
-            {/* Features Comparison */}
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-0">
-              {columns.map((column, columnIndex) => (
-                <div
-                  key={columnIndex}
-                  className={cn(
-                    "p-6 space-y-4",
-                    columnIndex !== 0 && "border-l border-gray-200"
-                  )}
-                >
-                  {Array.from({ length: maxFeatures }, (_, featureIndex) => {
-                    const feature = column.features[featureIndex];
-                    const hasFeature = !!feature;
-                    
-                    return (
-                      <div
-                        key={featureIndex}
-                        className="flex items-center min-h-[50px] py-2"
-                      >
-                        {hasFeature ? (
-                          <>
-                            <Check className={cn(
-                              "w-5 h-5 mr-3 flex-shrink-0",
-                              column.highlighted ? "text-green-500" : "text-green-600"
-                            )} />
-                            <span className="text-gray-700">{feature}</span>
-                          </>
-                        ) : (
-                          <>
-                            <X className="w-5 h-5 mr-3 text-red-400 flex-shrink-0" />
-                            <span className="text-gray-400">Não incluído</span>
-                          </>
-                        )}
-                      </div>
-                    );
-                  })}
-
-                  {/* Action Button */}
-                  {column.buttonText && (
-                    <div className="pt-4">
-                      <button className={cn(
-                        "w-full py-3 px-6 rounded-lg font-semibold transition-all duration-300",
-                        column.highlighted
-                          ? "bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl"
-                          : "bg-gray-200 hover:bg-gray-300 text-gray-700"
-                      )}>
-                        {column.buttonText}
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Footer Note */}
-        <div className="text-center mt-8">
-          <p className="text-gray-600 text-sm">
-            ✨ Escolha a opção que mais se adequa ao seu perfil
-          </p>
-        </div>
-      </div>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

@@ -1,74 +1,50 @@
 import React from 'react';
-import { Star, Badge } from 'lucide-react';
-import { InlineEditableText } from './InlineEditableText';
-import type { BlockComponentProps } from '@/types/blocks';
+import { cn } from '@/lib/utils';
+import { useAuth } from '@/context/AuthContext';
 
-const ResultHeaderBlock: React.FC<BlockComponentProps> = ({ 
-  block,
-  isSelected = false,
-  isEditing = false,
-  onClick,
-  onPropertyChange,
-  className = ''
+interface ResultHeaderBlockProps {
+  title?: string;
+  subtitle?: string;
+  logoUrl?: string;
+  showLogo?: boolean;
+  className?: string;
+}
+
+const ResultHeaderBlock: React.FC<ResultHeaderBlockProps> = ({
+  title = 'Parabéns!',
+  subtitle = 'Seu Estilo Pessoal foi Revelado',
+  logoUrl = 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+  showLogo = true,
+  className
 }) => {
-  const { 
-    title = 'Seu Resultado', 
-    subtitle = '', 
-    badgeText = 'SEU ESTILO' 
-  } = block.properties;
-
-  const handlePropertyChange = (key: string, value: any) => {
-    if (onPropertyChange) {
-      onPropertyChange(key, value);
-    }
-  };
+  const { user } = useAuth();
+  const userName = user?.userName || localStorage.getItem('userName') || '';
 
   return (
-    <div 
-      className={`
-        p-6 rounded-lg cursor-pointer transition-all duration-200 text-center
-        ${isSelected 
-          ? 'border-2 border-blue-500 bg-blue-50' 
-          : 'border-2 border-dashed border-[#B89B7A]/40 hover:bg-[#FAF9F7]'
-        }
-        ${className}
-      `}
-      onClick={onClick}
-      data-block-id={block.id}
-      data-block-type={block.type}
-    >
-      <div className="space-y-4">
-        {/* Badge */}
-        <div className="flex justify-center">
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#B89B7A] text-white">
-            <Star className="w-3 h-3 mr-1" />
-            <InlineEditableText
-              value={badgeText}
-              onSave={(value: string) => handlePropertyChange('badgeText', value)}
-              className="text-white font-medium"
-              placeholder="Badge do resultado"
-              tag="span"
+    <div className={cn("text-center py-8 bg-gradient-to-b from-[#faf8f5] to-transparent", className)}>
+      <div className="max-w-4xl mx-auto px-4">
+        {showLogo && (
+          <div className="mb-6">
+            <img 
+              src={logoUrl} 
+              alt="Gisele Galvão - Consultoria de Imagem" 
+              className="h-16 md:h-20 mx-auto object-contain"
+              loading="eager"
             />
-          </span>
-        </div>
+          </div>
+        )}
         
-        {/* Título */}
-        <InlineEditableText
-          value={title}
-          onSave={(value: string) => handlePropertyChange('title', value)}
-          className="text-3xl md:text-4xl font-bold text-[#432818]"
-          placeholder="Título do resultado"
-          tag="h1"
-        />
+        <h1 className="text-3xl md:text-4xl font-bold text-[#aa6b5d] mb-2">
+          {title} {userName && (
+            <span className="text-[#B89B7A]">{userName}!</span>
+          )}
+        </h1>
         
-        {/* Subtítulo */}
-        <InlineEditableText
-          value={subtitle}
-          onSave={(value: string) => handlePropertyChange('subtitle', value)}
-          className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed"
-          placeholder="Subtítulo ou descrição do resultado"
-          tag="p"
-        />
+        <p className="text-lg text-[#432818] mb-4">
+          {subtitle}
+        </p>
+        
+        <div className="w-24 h-1 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] mx-auto rounded-full"></div>
       </div>
     </div>
   );

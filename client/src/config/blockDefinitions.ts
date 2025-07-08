@@ -1879,13 +1879,10 @@ export const blockDefinitions: BlockDefinition[] = [
         defaultValue: 'O que nossos clientes dizem'
       },
       {
-        key: 'testimonials',
-        label: 'Depoimentos',
-        type: 'array-editor',
-        defaultValue: [
-          { name: 'Maria Silva', text: 'Transformou meu guarda-roupa!', rating: 5 },
-          { name: 'Ana Costa', text: 'Finalmente encontrei meu estilo!', rating: 5 }
-        ]
+        key: 'showSubtitle',
+        label: 'Mostrar Subtítulo',
+        type: 'boolean-switch',
+        defaultValue: true
       },
       {
         key: 'showRating',
@@ -1894,15 +1891,10 @@ export const blockDefinitions: BlockDefinition[] = [
         defaultValue: true
       },
       {
-        key: 'layout',
-        label: 'Layout',
-        type: 'select',
-        options: [
-          { label: 'Grade', value: 'grid' },
-          { label: 'Carrossel', value: 'carousel' },
-          { label: 'Lista', value: 'list' }
-        ],
-        defaultValue: 'grid'
+        key: 'showSubtitle',
+        label: 'Mostrar Subtítulo',
+        type: 'boolean-switch',
+        defaultValue: true
       }
     ]
   },
@@ -1910,42 +1902,19 @@ export const blockDefinitions: BlockDefinition[] = [
   {
     type: 'value-anchoring',
     name: 'Ancoragem de Valor',
-    description: 'Demonstra o valor e economia da oferta',
+    description: 'Tabela de valor real do funil - O que você recebe hoje',
     icon: 'CircleDollarSign',
     category: 'Vendas',
     propertiesSchema: [
       {
-        key: 'originalPrice',
-        label: 'Preço Original',
-        type: 'number-input',
-        defaultValue: 497
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'O Que Você Recebe Hoje'
       },
       {
-        key: 'currentPrice',
-        label: 'Preço Atual',
-        type: 'number-input',
-        defaultValue: 97
-      },
-      {
-        key: 'valueItems',
-        label: 'Itens de Valor',
-        type: 'array-editor',
-        defaultValue: [
-          { item: 'Consultoria Personalizada', value: 200 },
-          { item: 'Análise de Coloração', value: 150 },
-          { item: 'Guia de Estilo Digital', value: 97 },
-          { item: 'Suporte VIP 30 dias', value: 50 }
-        ]
-      },
-      {
-        key: 'showTotal',
-        label: 'Mostrar Total',
-        type: 'boolean-switch',
-        defaultValue: true
-      },
-      {
-        key: 'highlightSavings',
-        label: 'Destacar Economia',
+        key: 'showPricing',
+        label: 'Mostrar Preço',
         type: 'boolean-switch',
         defaultValue: true
       }
@@ -1955,7 +1924,7 @@ export const blockDefinitions: BlockDefinition[] = [
   {
     type: 'advanced-cta',
     name: 'CTA Avançado',
-    description: 'Call-to-action com múltiplos elementos persuasivos',
+    description: 'Call-to-action real do funil com link de pagamento',
     icon: 'Target',
     category: 'Vendas',
     propertiesSchema: [
@@ -1963,37 +1932,13 @@ export const blockDefinitions: BlockDefinition[] = [
         key: 'mainText',
         label: 'Texto Principal',
         type: 'text-input',
-        defaultValue: 'TRANSFORME SEU ESTILO AGORA'
-      },
-      {
-        key: 'subText',
-        label: 'Subtexto',
-        type: 'text-input',
-        defaultValue: 'Descubra seu estilo único em 15 minutos'
+        defaultValue: 'Descubra Como Aplicar Seu Estilo na Prática'
       },
       {
         key: 'buttonText',
         label: 'Texto do Botão',
         type: 'text-input',
-        defaultValue: 'QUERO DESCOBRIR MEU ESTILO'
-      },
-      {
-        key: 'urgencyText',
-        label: 'Texto de Urgência',
-        type: 'text-input',
-        defaultValue: 'Últimas 24 horas com desconto especial!'
-      },
-      {
-        key: 'guaranteeText',
-        label: 'Garantia',
-        type: 'text-input',
-        defaultValue: 'Garantia de 30 dias ou seu dinheiro de volta'
-      },
-      {
-        key: 'showUrgency',
-        label: 'Mostrar Urgência',
-        type: 'boolean-switch',
-        defaultValue: true
+        defaultValue: 'Quero meu Guia de Estilo Agora'
       },
       {
         key: 'showGuarantee',
@@ -2002,53 +1947,30 @@ export const blockDefinitions: BlockDefinition[] = [
         defaultValue: true
       },
       {
-        key: 'buttonAnimation',
-        label: 'Animação do Botão',
-        type: 'select',
-        options: [
-          { label: 'Nenhuma', value: 'none' },
-          { label: 'Pulse', value: 'pulse' },
-          { label: 'Bounce', value: 'bounce' },
-          { label: 'Brilho', value: 'glow' }
-        ],
-        defaultValue: 'pulse'
+        key: 'showSecurityBadge',
+        label: 'Mostrar Badge de Segurança',
+        type: 'boolean-switch',
+        defaultValue: true
       }
     ]
   },
 
   {
     type: 'comparison-table',
-    name: 'Tabela de Comparação',
-    description: 'Tabela comparativa de opções ou produtos',
-    icon: 'Scale',
+    name: 'Lista de Benefícios',
+    description: 'Lista de benefícios real do funil - O que está incluído',
+    icon: 'Check',
     category: 'Vendas',
     propertiesSchema: [
       {
         key: 'title',
         label: 'Título',
         type: 'text-input',
-        defaultValue: 'Compare as Opções'
+        defaultValue: 'O Guia de Estilo e Imagem + Bônus Exclusivos'
       },
       {
-        key: 'columns',
-        label: 'Colunas',
-        type: 'array-editor',
-        defaultValue: [
-          {
-            title: 'Sem Orientação',
-            features: ['Tentativa e erro', 'Compras desnecessárias', 'Insegurança'],
-            highlighted: false
-          },
-          {
-            title: 'Com Nosso Método',
-            features: ['Estilo definido', 'Compras certeiras', 'Confiança total'],
-            highlighted: true
-          }
-        ]
-      },
-      {
-        key: 'showHeaders',
-        label: 'Mostrar Cabeçalhos',
+        key: 'showBenefits',
+        label: 'Mostrar Lista de Benefícios',
         type: 'boolean-switch',
         defaultValue: true
       }
@@ -2104,7 +2026,348 @@ export const blockDefinitions: BlockDefinition[] = [
     ]
   },
 
-  // ...existing code...
+  // COMPONENTES MODULARES REAIS DA RESULT PAGE
+  {
+    type: 'result-header',
+    name: 'Cabeçalho de Resultado',
+    description: 'Header real da página de resultado com nome do usuário',
+    icon: 'Award',
+    category: 'Resultado',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Parabéns!'
+      },
+      {
+        key: 'subtitle',
+        label: 'Subtítulo',
+        type: 'text-input',
+        defaultValue: 'Seu Estilo Pessoal foi Revelado'
+      },
+      {
+        key: 'showLogo',
+        label: 'Mostrar Logo',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+
+  {
+    type: 'style-card',
+    name: 'Card do Estilo',
+    description: 'Card real do estilo predominante com imagem e descrição',
+    icon: 'Sparkles',
+    category: 'Resultado',
+    propertiesSchema: [
+      {
+        key: 'showProgress',
+        label: 'Mostrar Progresso',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'showDescription',
+        label: 'Mostrar Descrição',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'showImage',
+        label: 'Mostrar Imagem',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+
+  {
+    type: 'before-after',
+    name: 'Antes e Depois',
+    description: 'Seção real de transformação antes/depois da ResultPage',
+    icon: 'ArrowRightLeft',
+    category: 'Resultado',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Sua Transformação Começa Agora'
+      },
+      {
+        key: 'showComparison',
+        label: 'Mostrar Comparação',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+
+  {
+    type: 'bonus-section',
+    name: 'Seção de Bônus',
+    description: 'Bônus reais da ResultPage com imagens e valores',
+    icon: 'Gift',
+    category: 'Resultado',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Bônus Exclusivos para Você'
+      },
+      {
+        key: 'showImages',
+        label: 'Mostrar Imagens',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+
+  {
+    type: 'testimonials-real',
+    name: 'Depoimentos Reais',
+    description: 'Depoimentos reais da ResultPage com nomes e profissões',
+    icon: 'MessageSquare',
+    category: 'Resultado',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Transformações Reais'
+      },
+      {
+        key: 'showRatings',
+        label: 'Mostrar Avaliações',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'layout',
+        label: 'Layout',
+        type: 'select',
+        options: [
+          { label: 'Grade', value: 'grid' },
+          { label: 'Carrossel', value: 'carousel' }
+        ],
+        defaultValue: 'grid'
+      }
+    ]
+  },
+
+  {
+    type: 'guarantee-section',
+    name: 'Seção de Garantia',
+    description: 'Garantia real da ResultPage com detalhes completos',
+    icon: 'Shield',
+    category: 'Resultado',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Garantia Incondicional'
+      },
+      {
+        key: 'guaranteePeriod',
+        label: 'Período da Garantia',
+        type: 'text-input',
+        defaultValue: '7 dias'
+      },
+      {
+        key: 'showIcon',
+        label: 'Mostrar Ícone',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+
+  {
+    type: 'mentor-section',
+    name: 'Seção da Mentora',
+    description: 'Seção real da Gisele Galvão com credenciais e foto',
+    icon: 'Users',
+    category: 'Resultado',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Conheça Gisele Galvão'
+      },
+      {
+        key: 'showCredentials',
+        label: 'Mostrar Credenciais',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'showImage',
+        label: 'Mostrar Imagem',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+
+  {
+    type: 'secure-purchase',
+    name: 'Compra Segura',
+    description: 'Elemento real de compra segura da ResultPage',
+    icon: 'Shield',
+    category: 'Resultado',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Compra 100% Segura e Protegida'
+      },
+      {
+        key: 'showFeatures',
+        label: 'Mostrar Recursos',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+
+  {
+    type: 'value-stack',
+    name: 'Ancoragem de Valor',
+    description: 'Tabela real de valor da ResultPage com preços e economia',
+    icon: 'CircleDollarSign',
+    category: 'Resultado',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'O Que Você Recebe Hoje'
+      },
+      {
+        key: 'showPricing',
+        label: 'Mostrar Preços',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+
+  {
+    type: 'final-cta',
+    name: 'CTA Final',
+    description: 'Call-to-action final real da ResultPage com link de pagamento',
+    icon: 'Target',
+    category: 'Resultado',
+    propertiesSchema: [
+      {
+        key: 'mainText',
+        label: 'Texto Principal',
+        type: 'text-input',
+        defaultValue: 'Descubra Como Aplicar Seu Estilo na Prática'
+      },
+      {
+        key: 'buttonText',
+        label: 'Texto do Botão',
+        type: 'text-input',
+        defaultValue: 'Quero meu Guia de Estilo Agora'
+      },
+      {
+        key: 'showGuarantee',
+        label: 'Mostrar Garantia',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'showSecurityBadge',
+        label: 'Mostrar Badge de Segurança',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+
+  // === BLOCOS DE QUIZ (extraídos do QuizPage real) ===
+  {
+    type: 'quiz-question',
+    name: 'Questão do Quiz',
+    description: 'Questão real do quiz com opções e imagens reais do Cloudinary',
+    icon: 'HelpCircle',
+    category: 'Quiz',
+    propertiesSchema: [
+      {
+        key: 'question',
+        label: 'Pergunta',
+        type: 'text-input',
+        defaultValue: 'Qual dessas opções representa melhor seu estilo?'
+      },
+      {
+        key: 'allowMultiple',
+        label: 'Permitir Múltiplas Seleções',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'showImages',
+        label: 'Mostrar Imagens',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'options',
+        label: 'Opções',
+        type: 'array-editor',
+        defaultValue: [
+          { id: '1', text: 'Clássico e elegante', imageUrl: 'https://res.cloudinary.com/dtx0k4ue6/image/upload/v1710847234/estilo-classico_urkpfx.jpg' },
+          { id: '2', text: 'Moderno e descolado', imageUrl: 'https://res.cloudinary.com/dtx0k4ue6/image/upload/v1710847235/estilo-moderno_hqxmzv.jpg' },
+          { id: '3', text: 'Natural e autêntico', imageUrl: 'https://res.cloudinary.com/dtx0k4ue6/image/upload/v1710847236/estilo-natural_wnxkdi.jpg' }
+        ]
+      }
+    ]
+  },
+
+  {
+    type: 'quiz-progress',
+    name: 'Progresso do Quiz',
+    description: 'Barra de progresso real do quiz com dados dinâmicos',
+    icon: 'LoaderCircle',
+    category: 'Quiz',
+    propertiesSchema: [
+      {
+        key: 'currentStep',
+        label: 'Etapa Atual',
+        type: 'number-input',
+        defaultValue: 3,
+        min: 1
+      },
+      {
+        key: 'totalSteps',
+        label: 'Total de Etapas',
+        type: 'number-input',
+        defaultValue: 10,
+        min: 1
+      },
+      {
+        key: 'stepTitle',
+        label: 'Título da Etapa',
+        type: 'text-input',
+        defaultValue: 'Descobrindo seu estilo...'
+      },
+      {
+        key: 'showStepNumbers',
+        label: 'Mostrar Números',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  }
+
 ];
 
 // =====================================================================

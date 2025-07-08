@@ -15,6 +15,17 @@ import UrgencyTimerBlock from './UrgencyTimerBlock';
 import FAQSectionBlock from './FAQSectionBlock';
 import TestimonialsBlock from './TestimonialsBlock';
 import GuaranteeBlock from './GuaranteeBlock';
+
+// Import new modular blocks from ResultPage
+import StyleCardBlock from './StyleCardBlock';
+import BeforeAfterBlock from './BeforeAfterBlock';
+import BonusBlock from './BonusBlock';
+import MentorBlock from './MentorBlock';
+import SecurePurchaseBlock from './SecurePurchaseBlock';
+import ValueStackBlock from './ValueStackBlock';
+import FinalCTABlock from './FinalCTABlock';
+import QuizQuestionBlock from './QuizQuestionBlock';
+import QuizProgressBlock from './QuizProgressBlock';
 import { VideoPlayerBlock } from './VideoPlayerBlock';
 
 // Blocos específicos do Quiz Intro
@@ -47,7 +58,6 @@ import TermsBlock from './TermsBlock';
 
 // Blocos especiais do quiz
 import QuizStartPageBlock from './QuizStartPageBlock';
-import QuizQuestionBlock from './QuizQuestionBlock';
 
 // Novos blocos modulares avançados
 import SocialProofBlock from './SocialProofBlock';
@@ -191,6 +201,32 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <AdvancedCTABlock {...commonProps} />;
       case 'comparison-table':
         return <ComparisonTableBlock {...commonProps} />;
+
+      // Componentes modulares reais da ResultPage
+      case 'style-card':
+        return <StyleCardBlock {...commonProps} />;
+      case 'before-after':
+        return <BeforeAfterBlock {...commonProps} />;
+      case 'bonus-section':
+        return <BonusBlock {...commonProps} />;
+      case 'testimonials-real':
+        return <TestimonialsBlock {...commonProps} />;
+      case 'guarantee-section':
+        return <GuaranteeBlock {...commonProps} />;
+      case 'mentor-section':
+        return <MentorBlock {...commonProps} />;
+      case 'secure-purchase':
+        return <SecurePurchaseBlock {...commonProps} />;
+      case 'value-anchoring':
+        return <ValueStackBlock {...commonProps} />;
+      case 'advanced-cta':
+        return <FinalCTABlock {...commonProps} />;
+
+      // Componentes modulares reais do Quiz
+      case 'quiz-question':
+        return <QuizQuestionBlock {...commonProps} />;
+      case 'quiz-progress':
+        return <QuizProgressBlock {...commonProps} />;
       case 'product-carousel':
         return <ProductCarouselBlock {...commonProps} />;
 
@@ -263,33 +299,9 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <HeaderBlock {...commonProps} />;
       case 'chart-compare':
         return <CompareBlock {...commonProps} />;
-      case 'testimonials-grid':
-        return <TestimonialsBlock {...{...commonProps, block: {...block, type: 'testimonials-grid' as const}}} />;
-      case 'guarantee-section':
-        return <GuaranteeBlock {...commonProps} />;
       case 'sales-offer':
         return <ProductOfferBlock {...commonProps} />;
-      case 'bonus-section':
-        return (
-          <div {...commonProps} className={cn("p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg border-l-4 border-green-500", commonProps.className)}>
-            <h3 className="text-lg font-semibold text-green-800 mb-4">
-              {block.properties?.title || 'Bônus Especial'}
-            </h3>
-            <p className="text-green-700 mb-4">
-              {block.properties?.description || 'Descrição do bônus especial incluso.'}
-            </p>
-            {block.properties?.bonuses && Array.isArray(block.properties.bonuses) && (
-              <ul className="space-y-2">
-                {block.properties.bonuses.map((bonus: any, index: number) => (
-                  <li key={index} className="flex items-start">
-                    <span className="text-green-500 mr-2">🎁</span>
-                    <span className="text-green-700">{typeof bonus === 'string' ? bonus : (bonus.title || bonus.text || 'Bônus')}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        );
+
 
       // BLOCOS UNIFICADOS DO FUNIL - Componentes reutilizáveis que garantem fidelidade visual
       case 'FunnelHeroBlock':
