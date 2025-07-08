@@ -26,7 +26,7 @@ import {
   type InsertQuizResult,
   type HotmartPurchase,
   type InsertHotmartPurchase
-} from "@shared/schema";
+} from "@shared/schema_sqlite";
 import { eq, desc } from "drizzle-orm";
 import { db } from "./db";
 import crypto from "crypto";
