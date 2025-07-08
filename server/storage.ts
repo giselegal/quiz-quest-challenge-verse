@@ -133,7 +133,7 @@ export class DatabaseStorage implements IStorage {
 
   async updateFunnel(id: string, updates: Partial<InsertFunnel>): Promise<Funnel | undefined> {
     const result = await db.update(funnels)
-      .set({ ...updates, updatedAt: new Date() })
+      .set({ ...updates, updatedAt: new Date().toISOString() })
       .where(eq(funnels.id, id))
       .returning();
     return result[0];

@@ -4,6 +4,7 @@ import crypto from "crypto";
 import path from "path";
 import { storage } from "./storage";
 import { getFacebookCAPI } from "./services/facebookCAPI";
+import { generateQuizHtml } from "./quizTemplate";
 import { 
   insertUtmAnalyticsSchema, 
   insertQuizParticipantSchema,
@@ -1232,8 +1233,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ success: false, error: "Funil não encontrado" });
       }
 
-      // Marcar funil como publicado
-      const updatedFunnel = await storage.updateFunnel(id, { isPublished: true });
+      // Marcar funil como publicado usando update simples
+      const updatedFunnel = await storage.updateFunnel(id, { 
+        isPublished: 1 as any  // SQLite armazena boolean como integer
+      });
       
       res.json({ 
         success: true, 
@@ -1275,7 +1278,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ success: false, error: "Quiz não configurado neste funil" });
       }
 
-      // Gerar HTML do quiz
+      // Gerar HTML do quiz usando template
       const htmlContent = generateQuizHtml(funnel, quizConfig);
       
       res.setHeader('Content-Type', 'text/html');
@@ -1284,6 +1287,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error("Error serving funnel:", error);
       res.status(500).json({ success: false, error: "Failed to serve funnel" });
     }
+  });
+
+  // Rota de conveniência para acessar o funil publicado mais facilmente
+  app.get("/quiz-estilo", async (req, res) => {
+    // Redirecionar para o funil de teste com ID específico
+    const funnelId = "funnel_1752011415947_x7ganjisu";
+    res.redirect(`/teste-funil?id=${funnelId}`);
   });
 
   const httpServer = createServer(app);
