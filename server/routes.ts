@@ -330,62 +330,59 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Hotmart Webhook Route
+  // Hotmart Webhook Route (ÚNICO ENDPOINT CONSOLIDADO)
   app.post("/api/webhooks/hotmart", async (req, res) => {
     try {
-      const signature = req.headers["x-hotmart-signature"] as string;
-      const payload = JSON.stringify(req.body);
-
+      console.log("Hotmart webhook received:", {
+        headers: req.headers,
+        body: req.body
+      });
+      
+      // Tentar diferentes headers de assinatura (Hotmart pode usar variações)
+      const signature = (req.headers["x-hotmart-signature"] || 
+                        req.headers["x-hotmart-hottok"] || 
+                        req.headers["x-signature"]) as string;
+      
       if (!signature) {
+        console.error("Missing webhook signature in headers:", Object.keys(req.headers));
         return res.status(401).json({ success: false, error: "Missing signature" });
       }
 
       // Validar a assinatura do webhook
+      const payload = JSON.stringify(req.body);
       const isValid = validateHotmartSignature(payload, signature);
 
       if (!isValid) {
-        console.log("Invalid webhook signature");
+        console.error("Invalid webhook signature:", { signature, payload: payload.substring(0, 100) });
         return res.status(401).json({ success: false, error: "Invalid signature" });
       }
 
-      // Processa o evento do webhook
-      const event = req.body;
-      // TODO: Adicionar lógica para processar o evento do webhook
-
-      res.json({ success: true, message: "Webhook received successfully" });
-    } catch (error) {
-      console.error("Error processing webhook:", error);
-      res.status(500).json({ success: false, error: "Failed to process webhook" });
-    }
-  });
-
-  // Hotmart Webhook Handler
-  app.post("/api/webhooks/hotmart", async (req, res) => {
-    try {
-      console.log("Hotmart webhook received:", req.headers, req.body);
-      
-      // Validar assinatura do webhook
-      const signature = req.headers["x-hotmart-hottok"] as string;
-      const isValid = validateHotmartSignature(JSON.stringify(req.body), signature);
-      
-      if (!isValid) {
-        console.error("Invalid Hotmart webhook signature");
-        return res.status(401).json({ success: false, error: "Invalid signature" });
-      }
-      
-      const webhookData = req.body;
+      console.log("Webhook signature validated successfully");
       
       // Processar diferentes tipos de evento
+      const webhookData = req.body;
+      
       if (webhookData.event === "PURCHASE_COMPLETE") {
         await handlePurchaseComplete(webhookData);
       } else if (webhookData.event === "PURCHASE_APPROVED") {
         await handlePurchaseApproved(webhookData);
+      } else {
+        console.log("Unhandled webhook event type:", webhookData.event);
       }
       
-      res.json({ success: true, message: "Webhook processed successfully" });
+      res.json({ 
+        success: true, 
+        message: "Webhook processed successfully",
+        eventType: webhookData.event,
+        timestamp: new Date().toISOString()
+      });
     } catch (error) {
       console.error("Error processing Hotmart webhook:", error);
-      res.status(500).json({ success: false, error: "Failed to process webhook" });
+      res.status(500).json({ 
+        success: false, 
+        error: "Failed to process webhook",
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
     }
   });
 
@@ -418,6 +415,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const buyerData = webhookData.data.buyer;
       const purchaseData = webhookData.data.purchase;
       
+      // Verificar se a compra já foi processada para evitar duplicação
+      const existingPurchase = await storage.getHotmartPurchaseByTransaction(purchaseData.transaction);
+      
+      if (existingPurchase) {
+        console.log("Purchase already processed, skipping:", purchaseData.transaction);
+        return;
+      }
+      
       // 1. Salvar compra no banco de dados
       const savedPurchase = await storage.createHotmartPurchase({
         transactionId: purchaseData.transaction,
@@ -435,7 +440,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         facebookEventSent: false,
       });
       
-      // 2. Criar evento de conversão
+      // 2. Criar evento de conversão ÚNICO
       const conversionEvent = await storage.createConversionEvent({
         eventType: "purchase",
         eventSource: "hotmart",
@@ -449,46 +454,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
           hotmart_product_id: purchaseData.product.id,
           affiliate_email: purchaseData.affiliate?.email,
           commission_value: purchaseData.commission?.value,
+          purchase_id: savedPurchase.id,
+          webhook_event_id: webhookData.id,
         },
       });
       
-      // 3. Disparar evento para Facebook CAPI
-      const facebookCAPI = getFacebookCAPI();
-      const facebookEventId = `hotmart_${purchaseData.transaction}_${Date.now()}`;
+      // 3. Disparar evento para Facebook CAPI com deduplicação
+      let facebookEventId = null;
+      let facebookSuccess = false;
       
-      await facebookCAPI.trackPurchase({
-        email: buyerData.email,
-        name: buyerData.name,
-        value: purchaseData.price.value / 100, // Converter centavos para reais
-        currency: purchaseData.price.currency_value || 'BRL',
-        transactionId: purchaseData.transaction,
-        productName: purchaseData.product.name,
-      });
+      try {
+        const facebookCAPI = getFacebookCAPI();
+        facebookEventId = `hotmart_purchase_${purchaseData.transaction}_${Date.now()}`;
+        
+        await facebookCAPI.trackPurchase({
+          email: buyerData.email,
+          name: buyerData.name,
+          value: purchaseData.price.value / 100, // Converter centavos para reais
+          currency: purchaseData.price.currency_value || 'BRL',
+          transactionId: purchaseData.transaction,
+          productName: purchaseData.product.name,
+        });
+        
+        facebookSuccess = true;
+        console.log("Purchase event sent to Facebook CAPI with ID:", facebookEventId);
+      } catch (error) {
+        console.error("Error sending purchase to Facebook CAPI:", error);
+        facebookEventId = `failed_${Date.now()}`;
+      }
       
-      // 4. Atualizar status da compra e evento
+      // 4. Atualizar status da compra
       await storage.updateHotmartPurchase(purchaseData.transaction, {
-        facebookEventSent: true,
+        facebookEventSent: facebookSuccess,
         conversionEventId: conversionEvent.id,
       });
       
-      await storage.createConversionEvent({
-        eventType: "facebook_purchase",
-        eventSource: "facebook_capi",
-        userEmail: buyerData.email,
-        userName: buyerData.name,
-        eventValue: purchaseData.price.value,
-        currency: purchaseData.price.currency_value || "BRL",
-        transactionId: purchaseData.transaction,
-        productName: purchaseData.product.name,
-        facebookEventId: facebookEventId,
-        metadata: {
-          original_event_id: conversionEvent.id,
-          hotmart_transaction: purchaseData.transaction,
-          capi_response: "sent",
-        },
-      });
-      
-      console.log("Purchase event sent to Facebook CAPI with ID:", facebookEventId);
+      // 5. Registrar resultado do envio para Facebook (apenas se enviou)
+      if (facebookSuccess) {
+        await storage.createConversionEvent({
+          eventType: "facebook_purchase",
+          eventSource: "facebook_capi",
+          userEmail: buyerData.email,
+          userName: buyerData.name,
+          eventValue: purchaseData.price.value,
+          currency: purchaseData.price.currency_value || "BRL",
+          transactionId: purchaseData.transaction,
+          productName: purchaseData.product.name,
+          facebookEventId: facebookEventId,
+          metadata: {
+            original_event_id: conversionEvent.id,
+            hotmart_transaction: purchaseData.transaction,
+            purchase_id: savedPurchase.id,
+            capi_response: "sent",
+          },
+        });
+      }
     } catch (error) {
       console.error("Error handling purchase complete:", error);
     }
@@ -502,18 +522,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const buyerData = webhookData.data.buyer;
       const purchaseData = webhookData.data.purchase;
       
-      // Disparar evento adicional para Facebook CAPI se necessário
-      const facebookCAPI = getFacebookCAPI();
-      await facebookCAPI.trackPurchase({
-        email: buyerData.email,
-        name: buyerData.name,
-        value: purchaseData.price.value / 100,
-        currency: purchaseData.price.currency_value || 'BRL',
-        transactionId: purchaseData.transaction,
-        productName: purchaseData.product.name,
-      });
+      // Verificar se a compra já foi processada para evitar duplicação
+      const existingPurchase = await storage.getHotmartPurchaseByTransaction(purchaseData.transaction);
       
-      console.log("Purchase approved event sent to Facebook CAPI");
+      if (existingPurchase) {
+        console.log("Purchase already exists, updating status to approved");
+        
+        // Atualizar status para aprovado
+        await storage.updateHotmartPurchase(purchaseData.transaction, {
+          status: "approved",
+        });
+        
+        // Criar apenas evento de status update se necessário
+        await storage.createConversionEvent({
+          eventType: "purchase_approved",
+          eventSource: "hotmart",
+          userEmail: buyerData.email,
+          userName: buyerData.name,
+          eventValue: purchaseData.price.value,
+          currency: purchaseData.price.currency_value || "BRL",
+          transactionId: purchaseData.transaction,
+          productName: purchaseData.product.name,
+          metadata: {
+            original_purchase_id: existingPurchase.id,
+            status_change: "complete_to_approved",
+            webhook_event_id: webhookData.id,
+          },
+        });
+        
+        console.log("Purchase status updated to approved");
+      } else {
+        console.log("Purchase not found for APPROVED event, creating new purchase record");
+        
+        // Se não existe, criar novo registro (caso raro)
+        await handlePurchaseComplete(webhookData);
+      }
     } catch (error) {
       console.error("Error handling purchase approved:", error);
     }
@@ -526,24 +569,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.log("Quiz result received:", { userData, quizResult });
       
-      // 1. Criar participante do quiz se não existir
-      let participant;
-      try {
-        participant = await storage.createQuizParticipant({
-          name: userData.name,
-          email: userData.email,
-          quizId: crypto.randomUUID(),
-          utmSource: utmData?.source,
-          utmMedium: utmData?.medium,
-          utmCampaign: utmData?.campaign,
+      // Validar dados obrigatórios
+      if (!userData?.email || !quizResult) {
+        return res.status(400).json({ 
+          success: false, 
+          error: "Missing required data: userData.email and quizResult" 
         });
+      }
+      
+      // 1. Verificar se participante já existe ou criar novo
+      let participant;
+      const participantData = {
+        name: userData.name,
+        email: userData.email,
+        quizId: crypto.randomUUID(),
+        utmSource: utmData?.source,
+        utmMedium: utmData?.medium,
+        utmCampaign: utmData?.campaign,
+      };
+      
+      try {
+        participant = await storage.createQuizParticipant(participantData);
+        console.log("New participant created:", participant.id);
       } catch (error) {
-        console.log("Participant might already exist, continuing...");
+        console.log("Error creating participant, might already exist:", error);
+        // Em caso de erro (possivelmente email duplicado), continuar sem participante
+        // ou implementar busca por email se necessário
       }
       
       // 2. Salvar resultado detalhado do quiz
       const savedQuizResult = await storage.createQuizResult({
-        participantId: participant?.id,
+        participantId: participant?.id || null,
         quizType: "style-discovery",
         primaryStyle: quizResult?.primaryStyle?.category,
         stylePercentage: quizResult?.primaryStyle?.percentage,
@@ -553,11 +609,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         browserData: browserData,
       });
       
-      // 3. Criar evento de conversão (Lead)
+      // 3. Criar evento de conversão (Lead) - ÚNICO por resultado
+      const eventId = `quiz_lead_${Date.now()}_${crypto.randomUUID()}`;
       const conversionEvent = await storage.createConversionEvent({
         eventType: "lead",
         eventSource: "quiz",
-        participantId: participant?.id,
+        participantId: participant?.id || null,
         userEmail: userData.email,
         userName: userData.name,
         utmSource: utmData?.source,
@@ -570,45 +627,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
           quiz_type: "style-discovery",
           primary_style: quizResult?.primaryStyle?.category,
           style_percentage: quizResult?.primaryStyle?.percentage,
+          quiz_result_id: savedQuizResult.id,
+          internal_event_id: eventId,
         },
       });
       
-      // 4. Disparar evento Lead para Facebook CAPI
-      const facebookCAPI = getFacebookCAPI();
-      const facebookEventId = `quiz_${Date.now()}_${crypto.randomUUID()}`;
+      // 4. Disparar evento Lead para Facebook CAPI com deduplicação
+      let facebookEventId = null;
+      let facebookSuccess = false;
       
-      await facebookCAPI.trackLead({
-        email: userData.email,
-        name: userData.name,
-        ipAddress: browserData?.ipAddress,
-        userAgent: browserData?.userAgent,
-        fbp: browserData?.fbp,
-        fbc: browserData?.fbc || utmData?.fbclid,
-      }, {
-        source_url: browserData?.url || 'https://giselegalvao.com.br/quiz',
-        dominant_style: quizResult?.primaryStyle?.category,
-        quiz_score: quizResult?.primaryStyle?.percentage,
-        utm_source: utmData?.source,
-        utm_medium: utmData?.medium,
-        utm_campaign: utmData?.campaign,
-        event_id: facebookEventId,
-      });
+      try {
+        const facebookCAPI = getFacebookCAPI();
+        facebookEventId = `quiz_lead_${savedQuizResult.id}_${Date.now()}`;
+        
+        await facebookCAPI.trackLead({
+          email: userData.email,
+          name: userData.name,
+          ipAddress: browserData?.ipAddress,
+          userAgent: browserData?.userAgent,
+          fbp: browserData?.fbp,
+          fbc: browserData?.fbc || utmData?.fbclid,
+        }, {
+          source_url: browserData?.url || 'https://giselegalvao.com.br/quiz',
+          dominant_style: quizResult?.primaryStyle?.category,
+          quiz_score: quizResult?.primaryStyle?.percentage,
+          utm_source: utmData?.source,
+          utm_medium: utmData?.medium,
+          utm_campaign: utmData?.campaign,
+          event_id: facebookEventId,
+          internal_conversion_id: conversionEvent.id,
+        });
+        
+        facebookSuccess = true;
+        console.log("Quiz lead event sent to Facebook CAPI with ID:", facebookEventId);
+      } catch (error) {
+        console.error("Error sending to Facebook CAPI:", error);
+        facebookEventId = `failed_${Date.now()}`;
+      }
       
-      // 5. Atualizar evento com ID do Facebook
-      await storage.createConversionEvent({
-        eventType: "facebook_lead",
-        eventSource: "facebook_capi",
-        participantId: participant?.id,
-        userEmail: userData.email,
-        userName: userData.name,
-        facebookEventId: facebookEventId,
-        metadata: {
-          original_event_id: conversionEvent.id,
-          capi_response: "sent",
-        },
-      });
-      
-      console.log("Quiz lead event sent to Facebook CAPI with ID:", facebookEventId);
+      // 5. Registrar resultado do envio para Facebook (apenas se enviou)
+      if (facebookSuccess) {
+        await storage.createConversionEvent({
+          eventType: "facebook_lead",
+          eventSource: "facebook_capi",
+          participantId: participant?.id || null,
+          userEmail: userData.email,
+          userName: userData.name,
+          facebookEventId: facebookEventId,
+          metadata: {
+            original_event_id: conversionEvent.id,
+            quiz_result_id: savedQuizResult.id,
+            capi_response: "sent",
+            internal_event_id: eventId,
+          },
+        });
+      }
       
       res.json({ 
         success: true, 
