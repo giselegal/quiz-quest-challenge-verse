@@ -64,28 +64,40 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
         </div>
       ) : (
         /* Blocks List */
-        <div className="space-y-4">
-          {blocks.map((block, index) => (
-            <React.Fragment key={block.id}>
-              {/* Drop Zone Between Blocks */}
-              <DropZoneBetween
-                position={index}
-                isVisible={isDraggingFromSidebar}
-              />
-              
-              {/* Block Item */}
-              <SortableBlockItem
-                block={block}
-                isSelected={block.id === selectedBlockId}
-                onSelect={() => onBlockSelect(block.id)}
-                onDelete={() => onBlockDelete(block.id)}
-                onDuplicate={() => onBlockDuplicate(block.id)}
-                onToggleVisibility={() => onBlockToggleVisibility(block.id)}
-                onSaveInline={onSaveInline}
-                disabled={disabled}
-              />
-            </React.Fragment>
-          ))}
+        <div className="space-y-4 max-w-4xl mx-auto">
+          {blocks.map((block, index) => {
+            // Verificar se é um componente inline para centralizar
+            const isInlineComponent = block.type?.includes('-inline');
+            
+            return (
+              <React.Fragment key={block.id}>
+                {/* Drop Zone Between Blocks */}
+                <DropZoneBetween
+                  position={index}
+                  isVisible={isDraggingFromSidebar}
+                />
+                
+                {/* Block Item - Centralizar componentes inline */}
+                <div className={cn(
+                  isInlineComponent && "flex justify-center items-center"
+                )}>
+                  <SortableBlockItem
+                    block={block}
+                    isSelected={block.id === selectedBlockId}
+                    onSelect={() => onBlockSelect(block.id)}
+                    onDelete={() => onBlockDelete(block.id)}
+                    onDuplicate={() => onBlockDuplicate(block.id)}
+                    onToggleVisibility={() => onBlockToggleVisibility(block.id)}
+                    onSaveInline={onSaveInline}
+                    disabled={disabled}
+                    className={cn(
+                      isInlineComponent && "max-w-fit"
+                    )}
+                  />
+                </div>
+              </React.Fragment>
+            );
+          })}
           
           {/* Final Drop Zone */}
           <DropZoneBetween
