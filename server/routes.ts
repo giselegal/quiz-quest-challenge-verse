@@ -8,7 +8,10 @@ import {
   insertQuizParticipantSchema,
   insertFunnelSchema,
   insertFunnelPageSchema,
-  insertFunnelVersionSchema
+  insertFunnelVersionSchema,
+  insertConversionEventSchema,
+  insertQuizResultSchema,
+  insertHotmartPurchaseSchema
 } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -328,18 +331,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Hotmart Webhook Route
-  app.post("/api/webhook-hotmart", async (req, res) => {
+  app.post("/api/webhooks/hotmart", async (req, res) => {
     try {
-      const signature = req.headers["x-hm-signature"];
+      const signature = req.headers["x-hotmart-signature"] as string;
       const payload = JSON.stringify(req.body);
 
-      // Verifica a assinatura do webhook
-      const isValid = crypto.timingSafeEqual(
-        Buffer.from(signature, "utf8"),
-        Buffer.from(process.env.HM_SECRET, "utf8")
-      );
+      if (!signature) {
+        return res.status(401).json({ success: false, error: "Missing signature" });
+      }
+
+      // Validar a assinatura do webhook
+      const isValid = validateHotmartSignature(payload, signature);
 
       if (!isValid) {
+        console.log("Invalid webhook signature");
         return res.status(401).json({ success: false, error: "Invalid signature" });
       }
 
@@ -396,8 +401,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const computedSignature = hmac.update(payload).digest("hex");
       
       return crypto.timingSafeEqual(
-        Buffer.from(signature, "utf8"),
-        Buffer.from(computedSignature, "utf8")
+        Buffer.from(signature, "hex"),
+        Buffer.from(computedSignature, "hex")
       );
     } catch (error) {
       console.error("Error validating signature:", error);
@@ -413,8 +418,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const buyerData = webhookData.data.buyer;
       const purchaseData = webhookData.data.purchase;
       
-      // Disparar evento para Facebook CAPI
+      // 1. Salvar compra no banco de dados
+      const savedPurchase = await storage.createHotmartPurchase({
+        transactionId: purchaseData.transaction,
+        status: "complete",
+        buyerEmail: buyerData.email,
+        buyerName: buyerData.name,
+        productId: purchaseData.product.id.toString(),
+        productName: purchaseData.product.name,
+        price: purchaseData.price.value, // já vem em centavos
+        currency: purchaseData.price.currency_value || "BRL",
+        commissionValue: purchaseData.commission?.value,
+        affiliateEmail: purchaseData.affiliate?.email,
+        webhookEventId: webhookData.id,
+        rawWebhookData: webhookData,
+        facebookEventSent: false,
+      });
+      
+      // 2. Criar evento de conversão
+      const conversionEvent = await storage.createConversionEvent({
+        eventType: "purchase",
+        eventSource: "hotmart",
+        userEmail: buyerData.email,
+        userName: buyerData.name,
+        eventValue: purchaseData.price.value,
+        currency: purchaseData.price.currency_value || "BRL",
+        transactionId: purchaseData.transaction,
+        productName: purchaseData.product.name,
+        metadata: {
+          hotmart_product_id: purchaseData.product.id,
+          affiliate_email: purchaseData.affiliate?.email,
+          commission_value: purchaseData.commission?.value,
+        },
+      });
+      
+      // 3. Disparar evento para Facebook CAPI
       const facebookCAPI = getFacebookCAPI();
+      const facebookEventId = `hotmart_${purchaseData.transaction}_${Date.now()}`;
+      
       await facebookCAPI.trackPurchase({
         email: buyerData.email,
         name: buyerData.name,
@@ -424,7 +465,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
         productName: purchaseData.product.name,
       });
       
-      console.log("Purchase event sent to Facebook CAPI");
+      // 4. Atualizar status da compra e evento
+      await storage.updateHotmartPurchase(purchaseData.transaction, {
+        facebookEventSent: true,
+        conversionEventId: conversionEvent.id,
+      });
+      
+      await storage.createConversionEvent({
+        eventType: "facebook_purchase",
+        eventSource: "facebook_capi",
+        userEmail: buyerData.email,
+        userName: buyerData.name,
+        eventValue: purchaseData.price.value,
+        currency: purchaseData.price.currency_value || "BRL",
+        transactionId: purchaseData.transaction,
+        productName: purchaseData.product.name,
+        facebookEventId: facebookEventId,
+        metadata: {
+          original_event_id: conversionEvent.id,
+          hotmart_transaction: purchaseData.transaction,
+          capi_response: "sent",
+        },
+      });
+      
+      console.log("Purchase event sent to Facebook CAPI with ID:", facebookEventId);
     } catch (error) {
       console.error("Error handling purchase complete:", error);
     }
@@ -462,11 +526,57 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.log("Quiz result received:", { userData, quizResult });
       
-      // Salvar resultado do quiz no banco de dados
-      // (implementar quando o schema estiver expandido)
+      // 1. Criar participante do quiz se não existir
+      let participant;
+      try {
+        participant = await storage.createQuizParticipant({
+          name: userData.name,
+          email: userData.email,
+          quizId: crypto.randomUUID(),
+          utmSource: utmData?.source,
+          utmMedium: utmData?.medium,
+          utmCampaign: utmData?.campaign,
+        });
+      } catch (error) {
+        console.log("Participant might already exist, continuing...");
+      }
       
-      // Disparar evento Lead para Facebook CAPI
+      // 2. Salvar resultado detalhado do quiz
+      const savedQuizResult = await storage.createQuizResult({
+        participantId: participant?.id,
+        quizType: "style-discovery",
+        primaryStyle: quizResult?.primaryStyle?.category,
+        stylePercentage: quizResult?.primaryStyle?.percentage,
+        allStyles: quizResult?.allStyles,
+        answers: quizResult?.answers,
+        utmData: utmData,
+        browserData: browserData,
+      });
+      
+      // 3. Criar evento de conversão (Lead)
+      const conversionEvent = await storage.createConversionEvent({
+        eventType: "lead",
+        eventSource: "quiz",
+        participantId: participant?.id,
+        userEmail: userData.email,
+        userName: userData.name,
+        utmSource: utmData?.source,
+        utmMedium: utmData?.medium,
+        utmCampaign: utmData?.campaign,
+        utmContent: utmData?.content,
+        utmTerm: utmData?.term,
+        fbclid: utmData?.fbclid,
+        metadata: {
+          quiz_type: "style-discovery",
+          primary_style: quizResult?.primaryStyle?.category,
+          style_percentage: quizResult?.primaryStyle?.percentage,
+        },
+      });
+      
+      // 4. Disparar evento Lead para Facebook CAPI
       const facebookCAPI = getFacebookCAPI();
+      const facebookEventId = `quiz_${Date.now()}_${crypto.randomUUID()}`;
+      
       await facebookCAPI.trackLead({
         email: userData.email,
         name: userData.name,
@@ -481,21 +591,152 @@ export async function registerRoutes(app: Express): Promise<Server> {
         utm_source: utmData?.source,
         utm_medium: utmData?.medium,
         utm_campaign: utmData?.campaign,
+        event_id: facebookEventId,
       });
       
-      console.log("Quiz lead event sent to Facebook CAPI");
+      // 5. Atualizar evento com ID do Facebook
+      await storage.createConversionEvent({
+        eventType: "facebook_lead",
+        eventSource: "facebook_capi",
+        participantId: participant?.id,
+        userEmail: userData.email,
+        userName: userData.name,
+        facebookEventId: facebookEventId,
+        metadata: {
+          original_event_id: conversionEvent.id,
+          capi_response: "sent",
+        },
+      });
+      
+      console.log("Quiz lead event sent to Facebook CAPI with ID:", facebookEventId);
       
       res.json({ 
         success: true, 
         message: "Quiz result processed successfully",
-        result: quizResult 
+        result: savedQuizResult,
+        eventId: conversionEvent.id,
+        facebookEventId: facebookEventId,
       });
     } catch (error) {
       console.error("Error processing quiz result:", error);
       res.status(500).json({ 
         success: false, 
-        error: "Failed to process quiz result" 
+        error: "Failed to process quiz result",
+        details: error instanceof Error ? error.message : "Unknown error",
       });
+    }
+  });
+
+  // Analytics and Tracking API Routes
+  app.get("/api/conversion-events", async (req, res) => {
+    try {
+      const events = await storage.getConversionEvents();
+      res.json({ success: true, data: events });
+    } catch (error) {
+      console.error("Error fetching conversion events:", error);
+      res.status(500).json({ success: false, error: "Failed to fetch conversion events" });
+    }
+  });
+
+  app.get("/api/conversion-events/email/:email", async (req, res) => {
+    try {
+      const { email } = req.params;
+      const events = await storage.getConversionEventsByEmail(email);
+      res.json({ success: true, data: events });
+    } catch (error) {
+      console.error("Error fetching conversion events by email:", error);
+      res.status(500).json({ success: false, error: "Failed to fetch conversion events" });
+    }
+  });
+
+  app.get("/api/quiz-results", async (req, res) => {
+    try {
+      const results = await storage.getQuizResults();
+      res.json({ success: true, data: results });
+    } catch (error) {
+      console.error("Error fetching quiz results:", error);
+      res.status(500).json({ success: false, error: "Failed to fetch quiz results" });
+    }
+  });
+
+  app.get("/api/hotmart-purchases", async (req, res) => {
+    try {
+      const purchases = await storage.getHotmartPurchases();
+      res.json({ success: true, data: purchases });
+    } catch (error) {
+      console.error("Error fetching Hotmart purchases:", error);
+      res.status(500).json({ success: false, error: "Failed to fetch purchases" });
+    }
+  });
+
+  app.get("/api/hotmart-purchases/:transactionId", async (req, res) => {
+    try {
+      const { transactionId } = req.params;
+      const purchase = await storage.getHotmartPurchaseByTransaction(transactionId);
+      
+      if (!purchase) {
+        return res.status(404).json({ success: false, error: "Purchase not found" });
+      }
+      
+      res.json({ success: true, data: purchase });
+    } catch (error) {
+      console.error("Error fetching Hotmart purchase:", error);
+      res.status(500).json({ success: false, error: "Failed to fetch purchase" });
+    }
+  });
+
+  // Analytics Dashboard Endpoint
+  app.get("/api/analytics/dashboard", async (req, res) => {
+    try {
+      const [
+        conversionEvents,
+        quizResults,
+        hotmartPurchases,
+        utmAnalytics
+      ] = await Promise.all([
+        storage.getConversionEvents(),
+        storage.getQuizResults(),
+        storage.getHotmartPurchases(),
+        storage.getUtmAnalytics()
+      ]);
+
+      // Métricas consolidadas
+      const metrics = {
+        totalLeads: conversionEvents.filter(e => e.eventType === "lead").length,
+        totalPurchases: conversionEvents.filter(e => e.eventType === "purchase").length,
+        totalQuizCompletions: quizResults.length,
+        totalRevenue: hotmartPurchases.reduce((sum, p) => sum + (p.price || 0), 0) / 100, // converter centavos para reais
+        conversionRate: 0,
+        topUtmSources: {} as Record<string, number>,
+        recentEvents: conversionEvents.slice(0, 10),
+      };
+
+      // Calcular taxa de conversão
+      if (metrics.totalLeads > 0) {
+        metrics.conversionRate = (metrics.totalPurchases / metrics.totalLeads) * 100;
+      }
+
+      // Top UTM sources
+      utmAnalytics.forEach(utm => {
+        if (utm.utmSource) {
+          metrics.topUtmSources[utm.utmSource] = (metrics.topUtmSources[utm.utmSource] || 0) + 1;
+        }
+      });
+
+      res.json({ 
+        success: true, 
+        data: {
+          metrics,
+          charts: {
+            conversionEvents: conversionEvents.slice(0, 30),
+            revenueByDay: hotmartPurchases.slice(0, 30),
+            quizResultsByStyle: quizResults.slice(0, 100),
+          }
+        }
+      });
+    } catch (error) {
+      console.error("Error fetching analytics dashboard:", error);
+      res.status(500).json({ success: false, error: "Failed to fetch analytics" });
     }
   });
 
