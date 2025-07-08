@@ -397,21 +397,22 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
           }`}>
             {/* Mobile/Tablet Preview - Show Full Editor Layout */}
             {deviceView === 'mobile' ? (
-              <div className="w-[375px] min-h-[812px] bg-white shadow-lg overflow-hidden">
+              <div className="w-[480px] min-h-[854px] bg-white shadow-lg overflow-hidden">
                 {/* Full Editor Layout scaled for mobile */}
                 <div className="h-full flex">
-                  {/* Left Sidebar - Steps Panel (very narrow) */}
-                  <div className="w-8 bg-gray-50 border-r overflow-hidden">
-                    <div className="p-1 text-xs">
-                      <div className="mb-2 text-center">
-                        <span className="text-gray-600 font-bold">
+                  {/* Left Sidebar - Steps Panel */}
+                  <div className="w-14 bg-gray-50 border-r overflow-hidden">
+                    <div className="p-2 text-xs">
+                      <div className="mb-3 text-center">
+                        <span className="text-gray-600 font-bold text-sm">
                           {funnel?.pages.findIndex(p => p.id === currentPage?.id) + 1 || 1}
                         </span>
+                        <div className="text-gray-500 text-xs">de {funnel?.pages.length || 0}</div>
                       </div>
-                      {funnel?.pages.slice(0, 8).map((page, index) => (
+                      {funnel?.pages.slice(0, 10).map((page, index) => (
                         <div 
                           key={page.id}
-                          className={`w-6 h-6 mb-1 mx-auto rounded text-xs flex items-center justify-center cursor-pointer ${
+                          className={`w-8 h-8 mb-1 mx-auto rounded text-xs flex items-center justify-center cursor-pointer ${
                             page.id === currentPage?.id ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600'
                           }`}
                           onClick={() => switchToPage(page.id)}
@@ -422,15 +423,15 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                     </div>
                   </div>
                   
-                  {/* Middle - Components Sidebar (narrow) */}
-                  <div className="w-16 bg-white border-r overflow-hidden">
-                    <div className="p-1">
-                      <div className="text-xs text-gray-600 font-medium mb-1 text-center">Comp</div>
-                      <div className="space-y-1">
-                        {blockDefinitions.slice(0, 6).map((definition) => (
+                  {/* Middle - Components Sidebar */}
+                  <div className="w-20 bg-white border-r overflow-hidden">
+                    <div className="p-2">
+                      <div className="text-xs text-gray-600 font-medium mb-2 text-center">Componentes</div>
+                      <div className="space-y-2">
+                        {blockDefinitions.slice(0, 8).map((definition) => (
                           <div
                             key={definition.type}
-                            className="w-12 h-12 bg-gray-100 rounded text-xs flex flex-col items-center justify-center cursor-pointer hover:bg-gray-200"
+                            className="w-16 h-14 bg-gray-100 rounded text-xs flex flex-col items-center justify-center cursor-pointer hover:bg-gray-200"
                             onMouseDown={() => {
                               const defaultProperties: Record<string, any> = {};
                               definition.propertiesSchema?.forEach(prop => {
@@ -444,7 +445,8 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                               });
                             }}
                           >
-                            <span className="text-xs">{definition.icon}</span>
+                            <span className="text-sm mb-1">{definition.icon}</span>
+                            <span className="text-xs text-center leading-tight">{definition.label.slice(0, 8)}</span>
                           </div>
                         ))}
                       </div>
@@ -453,7 +455,7 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                   
                   {/* Canvas Area */}
                   <div className="flex-1 bg-gray-50 overflow-auto">
-                    <div className="p-1">
+                    <div className="p-2">
                       <div className="bg-white rounded min-h-full">
                         <DroppableCanvas
                           blocks={currentPage?.blocks || []}
@@ -509,33 +511,33 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                             updateBlock(blockId, updates);
                           }}
                           onReorder={reorderBlocks}
-                          className="mobile-canvas p-1"
+                          className="mobile-canvas p-2"
                         />
                         
                         {!currentPage && (
-                          <div className="text-center py-4 text-gray-500">
-                            <h3 className="text-xs font-medium mb-1">Nenhuma página</h3>
-                            <p className="text-xs">Selecione uma página</p>
+                          <div className="text-center py-8 text-gray-500">
+                            <h3 className="text-sm font-medium mb-2">Nenhuma página selecionada</h3>
+                            <p className="text-xs">Selecione uma página para começar a editar</p>
                           </div>
                         )}
                       </div>
                     </div>
                   </div>
                   
-                  {/* Right Sidebar - Properties (very narrow) */}
-                  <div className="w-12 bg-white border-l overflow-hidden">
-                    <div className="p-1">
-                      <div className="text-xs text-gray-600 font-medium mb-1 text-center">Props</div>
+                  {/* Right Sidebar - Properties */}
+                  <div className="w-16 bg-white border-l overflow-hidden">
+                    <div className="p-2">
+                      <div className="text-xs text-gray-600 font-medium mb-2 text-center">Props</div>
                       {selectedBlockId && (
-                        <div className="space-y-1">
-                          <div className="w-8 h-6 bg-gray-100 rounded text-xs flex items-center justify-center">
-                            T
+                        <div className="space-y-2">
+                          <div className="w-12 h-8 bg-gray-100 rounded text-xs flex items-center justify-center">
+                            Texto
                           </div>
-                          <div className="w-8 h-6 bg-gray-100 rounded text-xs flex items-center justify-center">
-                            C
+                          <div className="w-12 h-8 bg-gray-100 rounded text-xs flex items-center justify-center">
+                            Cor
                           </div>
-                          <div className="w-8 h-6 bg-gray-100 rounded text-xs flex items-center justify-center">
-                            S
+                          <div className="w-12 h-8 bg-gray-100 rounded text-xs flex items-center justify-center">
+                            Estilo
                           </div>
                         </div>
                       )}
