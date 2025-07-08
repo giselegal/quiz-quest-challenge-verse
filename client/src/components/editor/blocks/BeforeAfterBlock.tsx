@@ -341,3 +341,63 @@ const BeforeAfterBlock: React.FC<BeforeAfterBlockProps> = ({
 };
 
 export default BeforeAfterBlock;
+                      <div className="w-0.5 h-4 bg-gray-600"></div>
+                      <div className="w-0.5 h-4 bg-gray-600"></div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-0.5">
+                      <div className="w-4 h-0.5 bg-gray-600"></div>
+                      <div className="w-4 h-0.5 bg-gray-600"></div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Labels */}
+            {showLabels && (
+              <>
+                <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm font-medium">
+                  {beforeLabel}
+                </div>
+                <div className="absolute top-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm font-medium">
+                  {afterLabel}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Descriptions */}
+        {showDescriptions && (beforeDescription || afterDescription) && (
+          <div className="flex-1 w-full max-w-md">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {beforeDescription && (
+                <div className="text-center">
+                  <h3 className="text-lg font-semibold mb-2 text-red-600">
+                    {beforeLabel}
+                  </h3>
+                  <p className="text-gray-600">
+                    {beforeDescription}
+                  </p>
+                </div>
+              )}
+              {afterDescription && (
+                <div className="text-center">
+                  <h3 className="text-lg font-semibold mb-2 text-green-600">
+                    {afterLabel}
+                  </h3>
+                  <p className="text-gray-600">
+                    {afterDescription}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default BeforeAfterBlock;
