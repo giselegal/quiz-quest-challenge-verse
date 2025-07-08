@@ -16,25 +16,23 @@ import StatsMetricsBlock from './StatsMetricsBlock';
 // Legacy blocks - can be imported if they exist
 // import OptionsGridBlock from './OptionsGridBlock';
 
-import type { BlockComponentProps } from '@/types/blocks';
-
-// Define the component registry type
-export type BlockComponent = React.FC<BlockComponentProps>;
+// Define the component registry type with looser typing for flexibility
+export type BlockComponent = React.FC<any>;
 
 // Registry of all available block components
 export const BLOCK_COMPONENTS: Record<string, BlockComponent> = {
   // Modern blocks
-  'product-carousel': ProductCarouselBlock,
-  'before-after': BeforeAfterBlock,
-  'benefits-list': BenefitsListBlock,
-  'price-comparison': PriceComparisonBlock,
-  'countdown-timer': CountdownTimerBlock,
-  'faq-section': FAQBlock,
-  'testimonials-grid': TestimonialsBlock,
-  'comparison-table': ComparisonTableBlock,
-  'social-proof': SocialProofBlock,
-  'advanced-cta': AdvancedCTABlock,
-  'stats-metrics': StatsMetricsBlock,
+  'product-carousel': ProductCarouselBlock as BlockComponent,
+  'before-after': BeforeAfterBlock as BlockComponent,
+  'benefits-list': BenefitsListBlock as BlockComponent,
+  'price-comparison': PriceComparisonBlock as BlockComponent,
+  'countdown-timer': CountdownTimerBlock as BlockComponent,
+  'faq-section': FAQBlock as BlockComponent,
+  'testimonials-grid': TestimonialsBlock as BlockComponent,
+  'comparison-table': ComparisonTableBlock as BlockComponent,
+  'social-proof': SocialProofBlock as BlockComponent,
+  'advanced-cta': AdvancedCTABlock as BlockComponent,
+  'stats-metrics': StatsMetricsBlock as BlockComponent,
   
   // Legacy blocks (if they exist)
   // 'options-grid': OptionsGridBlock,
@@ -54,13 +52,19 @@ export function isBlockTypeRegistered(type: string): type is BlockType {
 }
 
 // Function to get all registered block types
-export function getRegisteredBlockTypes(): BlockType[] {
-  return Object.keys(BLOCK_COMPONENTS) as BlockType[];
+export function getRegisteredBlockTypes(): string[] {
+  return Object.keys(BLOCK_COMPONENTS);
 }
 
 // Universal block renderer component
-interface UniversalBlockRendererProps extends BlockComponentProps {
+interface UniversalBlockRendererProps {
   type: string;
+  block: any;
+  isSelected?: boolean;
+  isEditing?: boolean;
+  onClick?: () => void;
+  onPropertyChange?: (key: string, value: any) => void;
+  className?: string;
 }
 
 export const UniversalBlockRenderer: React.FC<UniversalBlockRendererProps> = ({
@@ -97,7 +101,7 @@ export function useBlockComponent(type: string) {
   return {
     component,
     isRegistered,
-    render: (props: BlockComponentProps) => (
+    render: (props: any) => (
       <UniversalBlockRenderer type={type} {...props} />
     )
   };
@@ -110,31 +114,31 @@ export const BLOCK_CATEGORIES = {
     'price-comparison', 
     'comparison-table',
     'advanced-cta'
-  ],
+  ] as string[],
   'Credibilidade': [
     'testimonials-grid',
     'social-proof',
     'before-after',
     'stats-metrics'
-  ],
+  ] as string[],
   'Conteúdo': [
     'benefits-list',
     'faq-section'
-  ],
+  ] as string[],
   'Urgência': [
     'countdown-timer'
-  ]
+  ] as string[]
 } as const;
 
 // Function to get blocks by category
-export function getBlocksByCategory(category: keyof typeof BLOCK_CATEGORIES): BlockType[] {
-  return BLOCK_CATEGORIES[category] || [];
+export function getBlocksByCategory(category: keyof typeof BLOCK_CATEGORIES): string[] {
+  return [...(BLOCK_CATEGORIES[category] || [])];
 }
 
 // Function to get category for a block type
-export function getBlockCategory(type: BlockType): keyof typeof BLOCK_CATEGORIES | null {
+export function getBlockCategory(type: string): keyof typeof BLOCK_CATEGORIES | null {
   for (const [category, blocks] of Object.entries(BLOCK_CATEGORIES)) {
-    if (blocks.includes(type as any)) {
+    if (blocks.includes(type)) {
       return category as keyof typeof BLOCK_CATEGORIES;
     }
   }
@@ -152,7 +156,7 @@ export interface BlockMetadata {
   tags?: string[];
 }
 
-export const BLOCK_METADATA: Record<BlockType, BlockMetadata> = {
+export const BLOCK_METADATA: Record<string, BlockMetadata> = {
   'product-carousel': {
     name: 'Carrossel de Produtos',
     description: 'Showcase interativo de produtos com animações e filtros',
@@ -228,12 +232,12 @@ export const BLOCK_METADATA: Record<BlockType, BlockMetadata> = {
 };
 
 // Function to get metadata for a block
-export function getBlockMetadata(type: BlockType): BlockMetadata | null {
+export function getBlockMetadata(type: string): BlockMetadata | null {
   return BLOCK_METADATA[type] || null;
 }
 
 // Function to search blocks by name or tags
-export function searchBlocks(query: string): BlockType[] {
+export function searchBlocks(query: string): string[] {
   const lowercaseQuery = query.toLowerCase();
   return getRegisteredBlockTypes().filter(type => {
     const metadata = getBlockMetadata(type);
