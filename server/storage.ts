@@ -110,7 +110,15 @@ export class DatabaseStorage implements IStorage {
 
   // Funnel operations
   async createFunnel(funnel: InsertFunnel): Promise<Funnel> {
-    const result = await db.insert(funnels).values(funnel).returning();
+    const id = `funnel_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const now = new Date().toISOString();
+    const funnelWithId = {
+      ...funnel,
+      id,
+      createdAt: now,
+      updatedAt: now
+    };
+    const result = await db.insert(funnels).values(funnelWithId).returning();
     return result[0];
   }
 
