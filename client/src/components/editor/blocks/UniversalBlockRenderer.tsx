@@ -43,6 +43,8 @@ import HeadingInlineBlock from './HeadingInlineBlock';
 import TextInlineBlock from './TextInlineBlock';
 import ImageInlineBlock from './ImageInlineBlock';
 import ButtonInlineBlock from './ButtonInlineBlock';
+import ComparisonTableInlineBlock from './ComparisonTableInlineBlock';
+import AdvancedCTAInlineBlock from './AdvancedCTAInlineBlock';
 import { VideoPlayerBlock } from './VideoPlayerBlock';
 
 // Blocos específicos do Quiz Intro
@@ -332,6 +334,10 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <ImageInlineBlock {...commonProps} />;
       case 'button-inline':
         return <ButtonInlineBlock {...commonProps} />;
+      case 'comparison-table':
+        return <ComparisonTableInlineBlock {...commonProps} />;
+      case 'advanced-cta':
+        return <AdvancedCTAInlineBlock {...commonProps} />;
 
       // BLOCOS AVANÇADOS RESTANTES
       case 'main-heading':

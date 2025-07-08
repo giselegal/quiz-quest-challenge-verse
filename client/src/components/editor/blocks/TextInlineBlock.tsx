@@ -35,7 +35,7 @@ const TextInlineBlock: React.FC<BlockComponentProps> = ({
   return (
     <div 
       className={`
-        inline-flex items-center justify-center max-w-2xl mx-auto
+        w-full flex items-center justify-center
         p-3 rounded-lg transition-all duration-200
         ${isSelected 
           ? 'border-2 border-blue-500 bg-blue-50' 
