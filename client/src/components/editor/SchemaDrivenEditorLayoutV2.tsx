@@ -405,11 +405,11 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                     <div className="p-2 text-xs">
                       <div className="mb-3 text-center">
                         <span className="text-gray-600 font-bold text-sm">
-                          {funnel?.pages.findIndex(p => p.id === currentPage?.id) + 1 || 1}
+                          {(funnel?.pages || []).findIndex(p => p.id === currentPage?.id) + 1 || 1}
                         </span>
-                        <div className="text-gray-500 text-xs">de {funnel?.pages.length || 0}</div>
+                        <div className="text-gray-500 text-xs">de {(funnel?.pages || []).length || 0}</div>
                       </div>
-                      {funnel?.pages.slice(0, 10).map((page, index) => (
+                      {(funnel?.pages || []).slice(0, 10).map((page, index) => (
                         <div 
                           key={page.id}
                           className={`w-8 h-8 mb-1 mx-auto rounded text-xs flex items-center justify-center cursor-pointer ${
@@ -446,7 +446,7 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                             }}
                           >
                             <span className="text-sm mb-1">{definition.icon}</span>
-                            <span className="text-xs text-center leading-tight">{definition.label.slice(0, 8)}</span>
+                            <span className="text-xs text-center leading-tight">{(definition.name || '').slice(0, 8)}</span>
                           </div>
                         ))}
                       </div>
