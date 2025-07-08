@@ -84,12 +84,7 @@ const App = () => {
                   path="/descubra-seu-estilo"
                   component={QuizDescubraSeuEstilo}
                 />
-                {/* Editor de Quiz - Interface Específica para Quiz */}
-                <Route
-                  path="/quiz-editor"
-                  component={lazy(() => import("./app/editor/page"))}
-                />
-                {/* Editor Principal - Única Rota de Edição */}
+                {/* Editor Principal - ÚNICO EDITOR para Quiz e Funis Completos */}
                 <Route
                   path="/editor"
                   component={SchemaDrivenEditorPage}

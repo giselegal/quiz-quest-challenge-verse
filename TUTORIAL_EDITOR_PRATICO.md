@@ -4,12 +4,14 @@
 
 ### Passo 1: Acessar o Editor
 ```
-👉 ACESSE: http://localhost:5000/quiz-editor
+👉 ACESSE: http://localhost:5000/editor
 ```
 
-**IMPORTANTE**: Existem dois editores diferentes:
-- **`/editor`** → Editor visual com blocos (SchemaDrivenEditor)
-- **`/quiz-editor`** → Editor específico para quiz (QuizEditorInterface) - ESTE TUTORIAL
+**Editor Unificado**: Agora usamos apenas um editor para TUDO:
+- ✅ **Quiz completo** (perguntas, opções, resultados)
+- ✅ **Páginas dinâmicas** (landing pages, vendas, captura)
+- ✅ **Sistema de blocos** (287 componentes modulares)
+- ✅ **Componentes inline** (editáveis diretamente)
 
 ### Passo 2: Interface Atual
 Você verá 6 seções principais:
