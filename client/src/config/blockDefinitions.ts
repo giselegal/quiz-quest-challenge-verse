@@ -947,7 +947,7 @@ export const blockDefinitions: BlockDefinition[] = [
     ],
   },
 
-  {
+                                  {
     type: 'value-anchoring',
     name: 'Ancoragem de Valor',
     description: 'Demonstração de valor e ROI.',
