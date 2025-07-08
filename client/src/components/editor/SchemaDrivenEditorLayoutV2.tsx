@@ -1,11 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { SchemaDrivenComponentsSidebar } from './sidebar/SchemaDrivenComponentsSidebar';
-import { SimpleSidebar } from './sidebar/SimpleSidebar';
 import { DynamicPropertiesPanel } from './panels/DynamicPropertiesPanel';
-import { SyncStatus } from './status/SyncStatus';
-import { VersionManager } from './version/VersionManager';
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useSchemaEditor } from '@/hooks/useSchemaEditor';
