@@ -83,7 +83,7 @@ const ResultPage: React.FC = () => {
     // Depois carregar as imagens específicas do estilo
     const {
       category
-    } = primaryStyle;
+    } = styleData;
     const {
       image,
       guideImage
@@ -106,14 +106,32 @@ const ResultPage: React.FC = () => {
   }, [imagesLoaded, completeLoading]);
   if (!primaryStyle) return <ErrorState />;
   if (isLoading) return <ResultSkeleton />;
+  
+  // Adaptar dados para compatibilidade com os componentes
+  const styleData = {
+    category: 'Natural' as keyof typeof styleConfig, // Default fallback
+    percentage: 85
+  };
+  
+  // Se primaryStyle existe e tem dados válidos, usar esses dados
+  if (primaryStyle) {
+    if (typeof primaryStyle === 'string') {
+      styleData.category = primaryStyle as keyof typeof styleConfig;
+    } else if (typeof primaryStyle === 'object' && 'category' in primaryStyle) {
+      styleData.category = (primaryStyle as any).category || 'Natural';
+      styleData.percentage = (primaryStyle as any).percentage || 85;
+    }
+  }
+  
   const {
     category
-  } = primaryStyle;
+  } = styleData;
+  const styleConfigData = styleConfig[category] || styleConfig.Natural;
   const {
     image,
     guideImage,
     description
-  } = styleConfig[category];
+  } = styleConfigData;
   const handleCTAClick = () => {
     // Track checkout initiation
     trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
@@ -145,7 +163,13 @@ const ResultPage: React.FC = () => {
       <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
       
       {renderConfigurableComponent('header-component-real', 
-        <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={user?.userName} />
+        <Header 
+          primaryStyle={styleData as any} 
+          logoHeight={globalStyles.logoHeight} 
+          logo={globalStyles.logo} 
+          logoAlt={globalStyles.logoAlt} 
+          userName={user?.userName} 
+        />
       )}
 
       <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
@@ -163,9 +187,9 @@ const ResultPage: React.FC = () => {
                         <span className="text-sm text-[#8F7A6A]">
                           Seu estilo predominante
                         </span>
-                        <span className="text-[#aa6b5d] font-medium">{primaryStyle.percentage || 85}%</span>
+                        <span className="text-[#aa6b5d] font-medium">{styleData.percentage}%</span>
                       </div>
-                      <Progress value={primaryStyle.percentage || 85} className="h-2 bg-[#F3E8E6]" indicatorClassName="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]" />
+                      <Progress value={styleData.percentage} className="h-2 bg-[#F3E8E6]" indicatorClassName="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]" />
                     </div>
                   </div>
 
@@ -181,8 +205,12 @@ const ResultPage: React.FC = () => {
                           <div className="space-y-2">
                             {secondaryStyles.slice(0, 2).map((style, index) => (
                               <div key={index} className="flex items-center justify-between">
-                                <span className="text-sm text-[#432818]">{style.category}</span>
-                                <span className="text-sm font-semibold text-[#aa6b5d]">{style.percentage}%</span>
+                                <span className="text-sm text-[#432818]">
+                                  {typeof style === 'string' ? style : (style as any).category || style}
+                                </span>
+                                <span className="text-sm font-semibold text-[#aa6b5d]">
+                                  {typeof style === 'object' && (style as any).percentage ? (style as any).percentage : 15}%
+                                </span>
                               </div>
                             ))}
                           </div>
