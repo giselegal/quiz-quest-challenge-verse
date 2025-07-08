@@ -2,32 +2,42 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import type { BlockData } from '@/types/blocks';
 
-// Importar todos os componentes dos blocos
-import HeaderBlock from './HeaderBlock';
-import TextBlock from './TextBlock';
-import { ImageBlock } from './ImageBlock';
-import ButtonBlock from './ButtonBlock';
+// Componentes que ainda são utilizados (não inline)
 import { SpacerBlock } from './SpacerBlock';
-import ResultHeaderBlock from './ResultHeaderBlock';
-import ResultDescriptionBlock from './ResultDescriptionBlock';
-import ProductOfferBlock from './ProductOfferBlock';
-import UrgencyTimerBlock from './UrgencyTimerBlock';
 import FAQSectionBlock from './FAQSectionBlock';
-import TestimonialsBlock from './TestimonialsBlock';
 import GuaranteeBlock from './GuaranteeBlock';
-
-// Import new modular blocks from ResultPage
-import StyleCardBlock from './StyleCardBlock';
 import BeforeAfterBlock from './BeforeAfterBlock';
-import BonusBlock from './BonusBlock';
 import MentorBlock from './MentorBlock';
 import SecurePurchaseBlock from './SecurePurchaseBlock';
 import ValueStackBlock from './ValueStackBlock';
-import FinalCTABlock from './FinalCTABlock';
 import QuizQuestionBlock from './QuizQuestionBlock';
 import QuizProgressBlock from './QuizProgressBlock';
+import { VideoPlayerBlock } from './VideoPlayerBlock';
+import ArgumentsBlock from './ArgumentsBlock';
+import AudioBlock from './AudioBlock';
+import ConfettiBlock from './ConfettiBlock';
+import FormInputBlock from './FormInputBlock';
+import ListBlock from './ListBlock';
+import MarqueeBlock from './MarqueeBlock';
+import OptionsGridBlock from './OptionsGridBlock';
+import ScriptBlock from './ScriptBlock';
+import TermsBlock from './TermsBlock';
+import QuizStartPageBlock from './QuizStartPageBlock';
+import ProductCarouselBlock from './ProductCarouselBlock';
+import ResultPageBlock from './ResultPageBlock';
+import QuizOfferPageBlock from './QuizOfferPageBlock';
+import QuestionMultipleBlock from './QuestionMultipleBlock';
+import StrategicQuestionBlock from './StrategicQuestionBlock';
+import QuizTransitionBlock from './QuizTransitionBlock';
+import ModernResultPageBlock from './ModernResultPageBlock';
+import UnifiedFunnelBlock from './UnifiedFunnelBlock';
 
-// Novos componentes INLINE editáveis
+// Blocos específicos do Quiz Intro
+import QuizIntroHeaderBlock from './QuizIntroHeaderBlock';
+import QuizNameInputBlock from './QuizNameInputBlock';
+import QuizTitleBlock from './QuizTitleBlock';
+
+// TODOS OS COMPONENTES INLINE editáveis
 import StyleCardInlineBlock from './StyleCardInlineBlock';
 import TestimonialInlineBlock from './TestimonialInlineBlock';
 import BonusInlineBlock from './BonusInlineBlock';
@@ -45,54 +55,6 @@ import ImageInlineBlock from './ImageInlineBlock';
 import ButtonInlineBlock from './ButtonInlineBlock';
 import ComparisonTableInlineBlock from './ComparisonTableInlineBlock';
 import AdvancedCTAInlineBlock from './AdvancedCTAInlineBlock';
-import { VideoPlayerBlock } from './VideoPlayerBlock';
-
-// Blocos específicos do Quiz Intro
-import QuizIntroHeaderBlock from './QuizIntroHeaderBlock';
-import QuizNameInputBlock from './QuizNameInputBlock';
-import QuizTitleBlock from './QuizTitleBlock';
-
-// Blocos de passos do funil
-import FunnelIntroStep from '../../funnel-blocks/steps/FunnelIntroStep';
-import OfferTransitionStep from '../../funnel-blocks/steps/OfferTransitionStep';
-import OfferPageStep from '../../funnel-blocks/steps/OfferPageStep';
-
-// Blocos UI/Avançados
-import AlertBlock from './AlertBlock';
-import ArgumentsBlock from './ArgumentsBlock';
-import AudioBlock from './AudioBlock';
-import CarouselBlock from './CarouselBlock';
-import LoaderBlock from './LoaderBlock';
-import CompareBlock from './CompareBlock';
-import ConfettiBlock from './ConfettiBlock';
-import QuoteBlock from './QuoteBlock';
-import FormInputBlock from './FormInputBlock';
-import ChartAreaBlock from './ChartAreaBlock';
-import ChartLevelBlock from './ChartLevelBlock';
-import ListBlock from './ListBlock';
-import MarqueeBlock from './MarqueeBlock';
-import OptionsGridBlock from './OptionsGridBlock';
-import ScriptBlock from './ScriptBlock';
-import TermsBlock from './TermsBlock';
-
-// Blocos especiais do quiz
-import QuizStartPageBlock from './QuizStartPageBlock';
-
-// Novos blocos modulares avançados
-import SocialProofBlock from './SocialProofBlock';
-import ValueAnchoringBlock from './ValueAnchoringBlock';
-import AdvancedCTABlock from './AdvancedCTABlock';
-import ComparisonTableBlock from './ComparisonTableBlock';
-import ProductCarouselBlock from './ProductCarouselBlock';
-import ResultPageBlock from './ResultPageBlock';
-import QuizOfferPageBlock from './QuizOfferPageBlock';
-import QuestionMultipleBlock from './QuestionMultipleBlock';
-import StrategicQuestionBlock from './StrategicQuestionBlock';
-import QuizTransitionBlock from './QuizTransitionBlock';
-import ModernResultPageBlock from './ModernResultPageBlock';
-
-// Blocos unificados do funil
-import UnifiedFunnelBlock from './UnifiedFunnelBlock';
 
 export interface BlockRendererProps {
   block: BlockData;
@@ -104,8 +66,9 @@ export interface BlockRendererProps {
 }
 
 /**
- * Universal Block Renderer for Schema-Driven Editor
+ * Universal Block Renderer for Schema-Driven Editor (ALL INLINE)
  * Renders any block type based on its type property
+ * All components are now inline-editable for better UX
  */
 export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
   block,
@@ -141,35 +104,35 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
   // Render do bloco baseado no tipo
   const renderBlock = () => {
     switch (block.type) {
-      // Blocos básicos
+      // Blocos básicos - TODOS INLINE
       case 'header':
-        return <HeaderBlock {...commonProps} />;
+        return <HeadingInlineBlock {...commonProps} />;
       case 'text':
-        return <TextBlock {...commonProps} />;
+        return <TextInlineBlock {...commonProps} />;
       case 'image':
-        return <ImageBlock {...commonProps} />;
+        return <ImageInlineBlock {...commonProps} />;
       case 'button':
-        return <ButtonBlock {...commonProps} />;
+        return <ButtonInlineBlock {...commonProps} />;
       case 'spacer':
         return <SpacerBlock {...commonProps} />;
 
-      // Blocos de resultado
+      // Blocos de resultado - INLINE
       case 'result-header':
-        return <ResultHeaderBlock {...commonProps} />;
+        return <HeadingInlineBlock {...commonProps} />;
       case 'result-description':
-        return <ResultDescriptionBlock {...commonProps} />;
+        return <TextInlineBlock {...commonProps} />;
 
-      // Blocos de oferta
+      // Blocos de oferta - INLINE
       case 'product-offer':
-        return <ProductOfferBlock {...commonProps} />;
+        return <PricingInlineBlock {...commonProps} />;
       case 'urgency-timer':
-        return <UrgencyTimerBlock {...commonProps} />;
+        return <LoaderInlineBlock {...commonProps} />;
 
-      // Blocos de credibilidade
+      // Blocos de credibilidade - INLINE
       case 'faq-section':
         return <FAQSectionBlock {...commonProps} />;
       case 'testimonials':
-        return <TestimonialsBlock {...{...commonProps, block: {...block, type: 'testimonials-grid' as const}}} />;
+        return <TestimonialInlineBlock {...commonProps} />;
       case 'guarantee':
         return <GuaranteeBlock {...commonProps} />;
 
@@ -179,27 +142,27 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'audio':
         return <AudioBlock {...commonProps} />;
 
-      // Blocos UI/Avançados
+      // Blocos UI/Avançados - INLINE
       case 'alert':
-        return <AlertBlock {...commonProps} />;
+        return <NotificationInlineBlock {...commonProps} />;
       case 'arguments':
         return <ArgumentsBlock {...commonProps} />;
       case 'carousel':
-        return <CarouselBlock {...commonProps} />;
+        return <ProductCarouselBlock {...commonProps} />;
       case 'loader':
-        return <LoaderBlock {...commonProps} />;
+        return <LoaderInlineBlock {...commonProps} />;
       case 'compare':
-        return <CompareBlock {...commonProps} />;
+        return <ComparisonInlineBlock {...commonProps} />;
       case 'confetti':
         return <ConfettiBlock {...commonProps} />;
       case 'quote':
-        return <QuoteBlock {...commonProps} />;
+        return <TestimonialInlineBlock {...commonProps} />;
       case 'form-input':
         return <FormInputBlock {...commonProps} />;
       case 'chart-area':
-        return <ChartAreaBlock {...commonProps} />;
+        return <StatInlineBlock {...commonProps} />;
       case 'chart-level':
-        return <ChartLevelBlock {...commonProps} />;
+        return <ProgressInlineBlock {...commonProps} />;
       case 'list':
         return <ListBlock {...commonProps} />;
       case 'marquee':
@@ -213,13 +176,13 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
 
       // Componentes modulares reais da ResultPage - INLINE e EDITÁVEIS
       case 'style-card':
-        return <StyleCardBlock {...commonProps} />;
+        return <StyleCardInlineBlock {...commonProps} />;
       case 'before-after':
         return <BeforeAfterBlock {...commonProps} />;
       case 'bonus-section':
-        return <BonusBlock {...commonProps} />;
+        return <BonusInlineBlock {...commonProps} />;
       case 'testimonials-real':
-        return <TestimonialsBlock {...commonProps} />;
+        return <TestimonialInlineBlock {...commonProps} />;
       case 'guarantee-section':
         return <GuaranteeBlock {...commonProps} />;
       case 'mentor-section':
@@ -229,7 +192,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'value-stack':
         return <ValueStackBlock {...commonProps} />;
       case 'final-cta':
-        return <FinalCTABlock {...commonProps} />;
+        return <CTAInlineBlock {...commonProps} />;
 
       // Componentes modulares reais do Quiz
       case 'quiz-question':
@@ -263,11 +226,11 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'product-carousel':
         return <ProductCarouselBlock {...commonProps} />;
       
-      // Componentes que estavam causando erro
+      // Componentes que estavam causando erro - INLINE
       case 'testimonials-grid':
-        return <TestimonialsBlock {...commonProps} />;
+        return <TestimonialInlineBlock {...commonProps} />;
       case 'social-proof':
-        return <TestimonialsBlock {...commonProps} />;
+        return <TestimonialInlineBlock {...commonProps} />;
       case 'value-anchoring':
         return <div className="w-full bg-gray-100 p-4 rounded-lg border-2 border-dashed border-gray-300 text-center">
           <p className="text-gray-600">Componente "Ancoragem de Valor" - Em desenvolvimento</p>
@@ -321,17 +284,17 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'quiz-offer-page':
         return <QuizOfferPageBlock {...commonProps} />;
       
-      // BLOCOS DE RESULTADO ANTIGOS (mantidos para compatibilidade)
+      // BLOCOS DE RESULTADO ANTIGOS (mantidos para compatibilidade) - INLINE
       case 'quiz-result-header':
-        return <ResultHeaderBlock {...commonProps} />;
+        return <HeadingInlineBlock {...commonProps} />;
       case 'quiz-result-card':
         return <ResultPageBlock {...commonProps} />;
       case 'quiz-offer-title':
-        return <HeaderBlock {...commonProps} />;
+        return <HeadingInlineBlock {...commonProps} />;
       case 'quiz-offer-countdown':
-        return <UrgencyTimerBlock {...commonProps} />;
+        return <LoaderInlineBlock {...commonProps} />;
       case 'quiz-offer-pricing':
-        return <ProductOfferBlock {...commonProps} />;
+        return <PricingInlineBlock {...commonProps} />;
       case 'quiz-offer-faq':
         return <FAQSectionBlock {...commonProps} />;
 
@@ -349,13 +312,13 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'advanced-cta':
         return <AdvancedCTAInlineBlock {...commonProps} />;
 
-      // BLOCOS AVANÇADOS RESTANTES
+      // BLOCOS AVANÇADOS RESTANTES - INLINE
       case 'main-heading':
-        return <HeaderBlock {...commonProps} />;
+        return <HeadingInlineBlock {...commonProps} />;
       case 'chart-compare':
-        return <CompareBlock {...commonProps} />;
+        return <ComparisonInlineBlock {...commonProps} />;
       case 'sales-offer':
-        return <ProductOfferBlock {...commonProps} />;
+        return <PricingInlineBlock {...commonProps} />;
 
 
       // BLOCOS UNIFICADOS DO FUNIL - Componentes reutilizáveis que garantem fidelidade visual
