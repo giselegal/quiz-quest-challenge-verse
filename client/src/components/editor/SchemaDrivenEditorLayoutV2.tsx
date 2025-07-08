@@ -17,8 +17,6 @@ import {
   Tablet,
   Smartphone,
   FileText,
-  Users,
-  BarChart3,
   Menu
 } from 'lucide-react';
 
@@ -37,35 +35,25 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
   const [showLeftSidebar, setShowLeftSidebar] = useState(true);
   const [showRightSidebar, setShowRightSidebar] = useState(true);
 
-  // Hook principal do editor com backend
+  // Hook principal do editor com backend - apenas funcionalidades essenciais
   const {
     funnel,
     currentPage,
     selectedBlock,
     isLoading,
     isSaving,
-    autoSaveState,
     currentPageId,
     selectedBlockId,
     createNewFunnel,
-    loadFunnel,
     saveFunnel,
-    syncWithBackend,
     addPage,
     updatePage,
-    deletePage,
     setCurrentPage,
     addBlock,
     updateBlock,
     deleteBlock,
-    reorderBlocks,
     setSelectedBlock,
-    updateFunnelConfig,
-    updatePageSettings,
-    getVersionHistory,
-    restoreVersion,
-    enableAutoSave,
-    disableAutoSave
+    updateFunnelConfig
   } = useSchemaEditor(funnelId);
 
   // Monitorar status de conexão
@@ -82,8 +70,23 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
     };
   }, []);
 
-  // Handler para adicionar novo bloco
+  // Handler para adicionar novo bloco - apenas componentes inline funcionais
   const handleComponentSelect = (blockType: string) => {
+    // Lista de tipos inline funcionais permitidos
+    const allowedInlineTypes = [
+      'main-heading-inline', 'text-inline', 'image-inline', 'button-inline',
+      'style-card-inline', 'testimonial-inline', 'bonus-inline', 'cta-inline',
+      'progress-inline', 'badge-inline', 'stat-inline', 'pricing-inline',
+      'loader-inline', 'comparison-inline', 'notification-inline',
+      'comparison-table', 'advanced-cta'
+    ];
+
+    // Só processa se for um tipo permitido
+    if (!allowedInlineTypes.includes(blockType)) {
+      console.warn(`Tipo de bloco ${blockType} não é permitido (apenas componentes inline funcionais)`);
+      return;
+    }
+
     const definition = blockDefinitions.find(def => def.type === blockType);
     if (!definition) return;
 
@@ -145,13 +148,9 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
     }
   };
 
-  // Controles de auto-save
-  const handleToggleAutoSave = () => {
-    if (autoSaveState.isEnabled) {
-      disableAutoSave();
-    } else {
-      enableAutoSave();
-    }
+  // Controles simplificados - apenas save manual
+  const handleSave = () => {
+    saveFunnel(true);
   };
 
   // Se não há funil e não está carregando, criar novo
@@ -164,10 +163,9 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
   if (isLoading) {
     return (
       <div className="h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#B89B7A] mx-auto mb-4"></div>
-          <h2 className="text-xl font-semibold text-gray-700">Carregando Editor...</h2>
-          <p className="text-gray-500">Aguarde enquanto configuramos seu workspace</p>
+        <div className="inline-flex items-center px-4 py-2 bg-white rounded-lg shadow-sm border">
+          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#B89B7A] mr-3"></div>
+          <span className="text-gray-700">Carregando...</span>
         </div>
       </div>
     );
@@ -177,11 +175,13 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
     return (
       <div className="h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <h2 className="text-xl font-semibold text-gray-700 mb-4">Nenhum funil encontrado</h2>
-          <Button onClick={createNewFunnel}>
-            <Plus className="w-4 h-4 mr-2" />
-            Criar Novo Funil
-          </Button>
+          <div className="inline-flex items-center px-6 py-3 bg-white rounded-lg shadow-sm border">
+            <span className="text-gray-700 mr-3">Nenhum funil encontrado</span>
+            <Button onClick={createNewFunnel} size="sm">
+              <Plus className="w-4 h-4 mr-2" />
+              Criar Novo
+            </Button>
+          </div>
         </div>
       </div>
     );
@@ -196,7 +196,16 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
         }
       }}
       onBlockAdd={(blockType) => {
-        if (currentPage) {
+        // Filtrar apenas blocos inline funcionais
+        const inlineTypes = [
+          'main-heading-inline', 'text-inline', 'image-inline', 'button-inline',
+          'style-card-inline', 'testimonial-inline', 'bonus-inline', 'cta-inline',
+          'progress-inline', 'badge-inline', 'stat-inline', 'pricing-inline',
+          'loader-inline', 'comparison-inline', 'notification-inline',
+          'comparison-table', 'advanced-cta'
+        ];
+        
+        if (currentPage && inlineTypes.includes(blockType)) {
           const definition = blockDefinitions.find(def => def.type === blockType);
           if (definition) {
             const defaultProperties: Record<string, any> = {};
@@ -242,17 +251,15 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
         </div>
 
         <div className="flex items-center space-x-1 sm:space-x-2">
-          {/* Status de sincronização compacto */}
-          <div className="hidden sm:block">
-            <SyncStatus
-              autoSaveState={autoSaveState}
-              isSaving={isSaving}
-              isOnline={isOnline}
-              onManualSave={() => saveFunnel(true)}
-              onSync={syncWithBackend}
-              onToggleAutoSave={handleToggleAutoSave}
-              compact
-            />
+          {/* Status simples inline */}
+          <div className="hidden sm:flex items-center space-x-2">
+            <div className={`w-2 h-2 rounded-full ${
+              isSaving ? 'bg-yellow-500 animate-pulse' : 
+              isOnline ? 'bg-green-500' : 'bg-red-500'
+            }`} />
+            <span className="text-xs text-gray-600">
+              {isSaving ? 'Salvando...' : isOnline ? 'Online' : 'Offline'}
+            </span>
           </div>
 
           {/* Mobile Toggle Buttons */}
@@ -319,17 +326,10 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
 
           {/* Ações principais - Mobile minimized */}
           <div className="hidden md:block">
-            <VersionManager
-              versions={getVersionHistory()}
-              currentVersion={funnel.version}
-              onRestoreVersion={restoreVersion}
-              trigger={
-                <Button variant="outline" size="sm">
-                  <BarChart3 className="w-4 h-4 mr-1" />
-                  Versões
-                </Button>
-              }
-            />
+            <Button variant="outline" size="sm" onClick={() => saveFunnel(true)}>
+              <Save className="w-4 h-4 mr-1" />
+              Backup
+            </Button>
           </div>
 
           <Button variant="outline" size="sm" className="hidden sm:inline-flex">
@@ -339,7 +339,7 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
 
           <Button 
             size="sm" 
-            onClick={() => saveFunnel(true)}
+            onClick={handleSave}
             disabled={isSaving}
             className="bg-[#B89B7A] hover:bg-[#a08965] px-2 sm:px-3"
           >
@@ -424,21 +424,35 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                     <div className="p-2">
                       <div className="text-xs text-gray-600 font-medium mb-2 text-center">Componentes</div>
                       <div className="space-y-2">
-                        {blockDefinitions.slice(0, 8).map((definition) => (
+                        {blockDefinitions.filter(def => 
+                        ['main-heading-inline', 'text-inline', 'image-inline', 'button-inline',
+                         'style-card-inline', 'testimonial-inline', 'cta-inline', 'pricing-inline']
+                        .includes(def.type)
+                      ).slice(0, 8).map((definition) => (
                           <div
                             key={definition.type}
                             className="w-16 h-14 bg-gray-100 rounded text-xs flex flex-col items-center justify-center cursor-pointer hover:bg-gray-200"
                             onMouseDown={() => {
-                              const defaultProperties: Record<string, any> = {};
-                              definition.propertiesSchema?.forEach(prop => {
-                                if (prop.defaultValue !== undefined) {
-                                  defaultProperties[prop.key] = prop.defaultValue;
-                                }
-                              });
-                              addBlock({
-                                type: definition.type,
-                                properties: defaultProperties
-                              });
+                              // Apenas adicionar se for componente inline funcional
+                              const inlineTypes = [
+                                'main-heading-inline', 'text-inline', 'image-inline', 'button-inline',
+                                'style-card-inline', 'testimonial-inline', 'bonus-inline', 'cta-inline',
+                                'progress-inline', 'badge-inline', 'stat-inline', 'pricing-inline',
+                                'loader-inline', 'comparison-inline', 'notification-inline'
+                              ];
+                              
+                              if (inlineTypes.includes(definition.type)) {
+                                const defaultProperties: Record<string, any> = {};
+                                definition.propertiesSchema?.forEach(prop => {
+                                  if (prop.defaultValue !== undefined) {
+                                    defaultProperties[prop.key] = prop.defaultValue;
+                                  }
+                                });
+                                addBlock({
+                                  type: definition.type,
+                                  properties: defaultProperties
+                                });
+                              }
                             }}
                           >
                             <span className="text-sm mb-1">{definition.icon}</span>
@@ -489,18 +503,29 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                           }}
                           onSaveInline={handleInlineEdit}
                           onAddBlock={(blockType) => {
-                            const definition = blockDefinitions.find(def => def.type === blockType);
-                            if (definition) {
-                              const defaultProperties: Record<string, any> = {};
-                              definition.propertiesSchema?.forEach(prop => {
-                                if (prop.defaultValue !== undefined) {
-                                  defaultProperties[prop.key] = prop.defaultValue;
-                                }
-                              });
-                              addBlock({
-                                type: blockType,
-                                properties: defaultProperties
-                              });
+                            // Filtrar apenas tipos inline funcionais
+                            const inlineTypes = [
+                              'main-heading-inline', 'text-inline', 'image-inline', 'button-inline',
+                              'style-card-inline', 'testimonial-inline', 'bonus-inline', 'cta-inline',
+                              'progress-inline', 'badge-inline', 'stat-inline', 'pricing-inline',
+                              'loader-inline', 'comparison-inline', 'notification-inline',
+                              'comparison-table', 'advanced-cta'
+                            ];
+                            
+                            if (inlineTypes.includes(blockType)) {
+                              const definition = blockDefinitions.find(def => def.type === blockType);
+                              if (definition) {
+                                const defaultProperties: Record<string, any> = {};
+                                definition.propertiesSchema?.forEach(prop => {
+                                  if (prop.defaultValue !== undefined) {
+                                    defaultProperties[prop.key] = prop.defaultValue;
+                                  }
+                                });
+                                addBlock({
+                                  type: blockType,
+                                  properties: defaultProperties
+                                });
+                              }
                             }
                           }}
                           className="mobile-canvas p-2"
@@ -576,18 +601,29 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                       }}
                       onSaveInline={handleInlineEdit}
                       onAddBlock={(blockType) => {
-                        const definition = blockDefinitions.find(def => def.type === blockType);
-                        if (definition) {
-                          const defaultProperties: Record<string, any> = {};
-                          definition.propertiesSchema?.forEach(prop => {
-                            if (prop.defaultValue !== undefined) {
-                              defaultProperties[prop.key] = prop.defaultValue;
-                            }
-                          });
-                          addBlock({
-                            type: blockType,
-                            properties: defaultProperties
-                          });
+                        // Filtrar apenas tipos inline funcionais
+                        const inlineTypes = [
+                          'main-heading-inline', 'text-inline', 'image-inline', 'button-inline',
+                          'style-card-inline', 'testimonial-inline', 'bonus-inline', 'cta-inline',
+                          'progress-inline', 'badge-inline', 'stat-inline', 'pricing-inline',
+                          'loader-inline', 'comparison-inline', 'notification-inline',
+                          'comparison-table', 'advanced-cta'
+                        ];
+                        
+                        if (inlineTypes.includes(blockType)) {
+                          const definition = blockDefinitions.find(def => def.type === blockType);
+                          if (definition) {
+                            const defaultProperties: Record<string, any> = {};
+                            definition.propertiesSchema?.forEach(prop => {
+                              if (prop.defaultValue !== undefined) {
+                                defaultProperties[prop.key] = prop.defaultValue;
+                              }
+                            });
+                            addBlock({
+                              type: blockType,
+                              properties: defaultProperties
+                            });
+                          }
                         }
                       }}
                       className=""
@@ -641,18 +677,29 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                     }}
                     onSaveInline={handleInlineEdit}
                     onAddBlock={(blockType) => {
-                      const definition = blockDefinitions.find(def => def.type === blockType);
-                      if (definition) {
-                        const defaultProperties: Record<string, any> = {};
-                        definition.propertiesSchema?.forEach(prop => {
-                          if (prop.defaultValue !== undefined) {
-                            defaultProperties[prop.key] = prop.defaultValue;
-                          }
-                        });
-                        addBlock({
-                          type: blockType,
-                          properties: defaultProperties
-                        });
+                      // Filtrar apenas tipos inline funcionais
+                      const inlineTypes = [
+                        'main-heading-inline', 'text-inline', 'image-inline', 'button-inline',
+                        'style-card-inline', 'testimonial-inline', 'bonus-inline', 'cta-inline',
+                        'progress-inline', 'badge-inline', 'stat-inline', 'pricing-inline',
+                        'loader-inline', 'comparison-inline', 'notification-inline',
+                        'comparison-table', 'advanced-cta'
+                      ];
+                      
+                      if (inlineTypes.includes(blockType)) {
+                        const definition = blockDefinitions.find(def => def.type === blockType);
+                        if (definition) {
+                          const defaultProperties: Record<string, any> = {};
+                          definition.propertiesSchema?.forEach(prop => {
+                            if (prop.defaultValue !== undefined) {
+                              defaultProperties[prop.key] = prop.defaultValue;
+                            }
+                          });
+                          addBlock({
+                            type: blockType,
+                            properties: defaultProperties
+                          });
+                        }
                       }
                     }}
                     className=""

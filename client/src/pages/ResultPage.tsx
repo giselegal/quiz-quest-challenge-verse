@@ -2,31 +2,29 @@ import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { usePageConfig } from '@/hooks/usePageConfig';
+import DynamicBlockRenderer from '@/components/DynamicBlockRenderer';
+import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
-import { ShoppingCart, CheckCircle, ArrowDown, Lock, Award, Sparkles, Gift, Users, Shield, Crown, Star } from 'lucide-react';
+import { ShoppingCart, CheckCircle, ArrowDown, Lock } from 'lucide-react';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
+import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
+import ErrorState from '@/components/result/ErrorState';
+import MotivationSection from '@/components/result/MotivationSection';
+import MentorSection from '@/components/result/MentorSection';
+import GuaranteeSection from '@/components/result/GuaranteeSection';
+import Testimonials from '@/components/quiz-result/sales/Testimonials';
+import BeforeAfterTransformation from '@/components/result/BeforeAfterTransformation';
+import BonusSection from '@/components/result/BonusSection';
 import { Button } from '@/components/ui/button';
 import { useLoadingState } from '@/hooks/useLoadingState';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
+import ResultSkeleton from '@/components/result/ResultSkeleton';
 import { trackButtonClick } from '@/utils/analytics';
+import BuildInfo from '@/components/BuildInfo';
+import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
-
-// COMPONENTES INLINE REUTILIZÁVEIS E INDEPENDENTES
-import HeadingInlineBlock from '@/components/editor/blocks/HeadingInlineBlock';
-import TextInlineBlock from '@/components/editor/blocks/TextInlineBlock';
-import ImageInlineBlock from '@/components/editor/blocks/ImageInlineBlock';
-import StyleCardInlineBlock from '@/components/editor/blocks/StyleCardInlineBlock';
-import TestimonialInlineBlock from '@/components/editor/blocks/TestimonialInlineBlock';
-import CTAInlineBlock from '@/components/editor/blocks/CTAInlineBlock';
-import PricingInlineBlock from '@/components/editor/blocks/PricingInlineBlock';
-import BonusInlineBlock from '@/components/editor/blocks/BonusInlineBlock';
-import BadgeInlineBlock from '@/components/editor/blocks/BadgeInlineBlock';
-import StatInlineBlock from '@/components/editor/blocks/StatInlineBlock';
-import ProgressInlineBlock from '@/components/editor/blocks/ProgressInlineBlock';
-import ComparisonInlineBlock from '@/components/editor/blocks/ComparisonInlineBlock';
-import NotificationInlineBlock from '@/components/editor/blocks/NotificationInlineBlock';
 
 const ResultPage: React.FC = () => {
   const {
