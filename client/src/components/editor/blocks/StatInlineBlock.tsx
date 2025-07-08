@@ -40,7 +40,7 @@ const StatInlineBlock: React.FC<StatInlineBlockProps> = ({
       className={cn(
         "inline-flex items-center gap-3 p-4 bg-white rounded-lg border border-gray-200 shadow-sm",
         "transition-all duration-200 hover:shadow-md hover:scale-105 cursor-pointer",
-        "min-w-[150px] max-w-[250px] w-full text-center",
+        "w-full text-center",
         disabled && "opacity-75 cursor-not-allowed",
         className
       )}

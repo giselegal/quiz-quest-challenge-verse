@@ -28,7 +28,7 @@ const BonusInlineBlock: React.FC<BonusInlineBlockProps> = ({
       className={cn(
         "inline-flex items-center gap-3 p-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border-l-4 border-green-500",
         "transition-all duration-200 hover:shadow-md hover:scale-105 cursor-pointer",
-        "min-w-[260px] max-w-[380px] w-full",
+        "w-full",
         disabled && "opacity-75 cursor-not-allowed",
         className
       )}

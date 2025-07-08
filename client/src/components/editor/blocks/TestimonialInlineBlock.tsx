@@ -30,7 +30,7 @@ const TestimonialInlineBlock: React.FC<TestimonialInlineBlockProps> = ({
       className={cn(
         "inline-flex items-start gap-3 p-4 bg-[#fff7f3] rounded-lg border border-[#B89B7A]/20",
         "transition-all duration-200 hover:shadow-md hover:scale-105 cursor-pointer",
-        "min-w-[300px] max-w-[450px] w-full",
+        "w-full",
         disabled && "opacity-75 cursor-not-allowed",
         className
       )}

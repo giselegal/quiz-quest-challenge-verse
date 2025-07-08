@@ -44,7 +44,7 @@ const LoaderInlineBlock: React.FC<LoaderInlineBlockProps> = ({
       role="button"
       tabIndex={0}
       className={cn(
-        "group/canvas-item inline-block min-w-[300px] max-w-[450px] w-full",
+        "group/canvas-item inline-block w-full",
         "min-h-[1.25rem] relative border-2 border-dashed rounded-md p-4",
         "hover:border-2 hover:border-blue-500 transition-all cursor-pointer",
         isHovered ? "border-blue-500" : "border-gray-300",

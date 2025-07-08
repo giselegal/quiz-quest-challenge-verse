@@ -44,7 +44,7 @@ const NotificationInlineBlock: React.FC<NotificationInlineBlockProps> = ({
       role="button"
       tabIndex={0}
       className={cn(
-        "group/canvas-item inline-block relative min-w-[320px] max-w-[450px] w-full",
+        "group/canvas-item inline-block relative w-full",
         "min-h-[1.25rem] border-2 border-dashed rounded-md p-4",
         "hover:border-blue-500 transition-all cursor-pointer",
         isHovered ? "border-blue-500" : "border-gray-300",

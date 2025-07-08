@@ -28,7 +28,7 @@ const StyleCardInlineBlock: React.FC<StyleCardInlineBlockProps> = ({
       className={cn(
         "inline-flex items-center gap-3 p-4 bg-white rounded-lg border-l-4 border-[#B89B7A] shadow-sm",
         "transition-all duration-200 hover:shadow-md hover:scale-105 cursor-pointer",
-        "min-w-[280px] max-w-[400px] w-full",
+        "w-full",
         disabled && "opacity-75 cursor-not-allowed",
         className
       )}

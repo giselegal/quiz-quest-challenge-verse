@@ -37,7 +37,7 @@ const PricingInlineBlock: React.FC<PricingInlineBlockProps> = ({
       tabIndex={0}
       className={cn(
         "group/canvas-item inline-block cursor-pointer hover:opacity-75 transition-all ease-in-out",
-        "min-w-[280px] max-w-[350px] w-full",
+        "w-full",
         "min-h-[1.25rem] relative border border-zinc-200 rounded-md bg-transparent",
         "hover:border-2 hover:border-blue-500",
         isHovered && "border-2 border-blue-500",

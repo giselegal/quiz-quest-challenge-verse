@@ -30,7 +30,7 @@ const CTAInlineBlock: React.FC<CTAInlineBlockProps> = ({
       className={cn(
         "inline-flex items-center gap-3 p-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-lg text-white",
         "transition-all duration-200 hover:shadow-lg hover:scale-105 cursor-pointer",
-        "min-w-[320px] max-w-[480px] w-full",
+        "w-full",
         disabled && "opacity-75 cursor-not-allowed",
         className
       )}

@@ -28,7 +28,7 @@ const ProgressInlineBlock: React.FC<ProgressInlineBlockProps> = ({
       className={cn(
         "inline-flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 shadow-sm",
         "transition-all duration-200 hover:shadow-md hover:scale-105 cursor-pointer",
-        "min-w-[200px] max-w-[320px] w-full",
+        "w-full",
         disabled && "opacity-75 cursor-not-allowed",
         className
       )}

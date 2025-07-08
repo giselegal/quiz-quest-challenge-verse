@@ -53,7 +53,7 @@ const BadgeInlineBlock: React.FC<BadgeInlineBlockProps> = ({
       className={cn(
         "inline-flex items-center gap-2 px-3 py-2 rounded-full border text-sm font-medium",
         "transition-all duration-200 hover:shadow-md hover:scale-105 cursor-pointer",
-        "min-w-fit max-w-[200px]",
+        "w-full",
         getVariantStyles(),
         disabled && "opacity-75 cursor-not-allowed",
         className

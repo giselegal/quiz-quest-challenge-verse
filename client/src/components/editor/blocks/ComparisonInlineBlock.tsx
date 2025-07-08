@@ -34,7 +34,7 @@ const ComparisonInlineBlock: React.FC<ComparisonInlineBlockProps> = ({
       tabIndex={0}
       className={cn(
         "group/canvas-item inline-block overflow-hidden relative cursor-col-resize",
-        "min-w-[320px] max-w-[500px] w-full h-[200px]",
+        "w-full h-[200px]",
         "border-2 border-dashed rounded-md",
         "hover:border-blue-500 transition-all",
         isHovered ? "border-blue-500" : "border-gray-300",
