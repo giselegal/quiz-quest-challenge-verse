@@ -46,7 +46,10 @@ export type IconType =
   | 'TriangleAlert'
   | 'Book'
   | 'Mic'
-  | 'GalleryHorizontalEnd'; // Adicionei os ícones que estavam faltando no HTML anterior
+  | 'GalleryHorizontalEnd'
+  | 'Zap'
+  | 'Target'
+  | 'TrendingUp'; // Adicionei os ícones que estavam faltando no HTML anterior
 
 
 // Tipos base para o schema de propriedades
@@ -1522,6 +1525,331 @@ export const blockDefinitions: BlockDefinition[] = [
         { key: 'answer', label: 'Resposta', type: 'textarea', placeholder: 'Resposta detalhada...', rows: 3 },
       ]},
     ],
+  },
+
+  // =====================================================================
+  // NOVOS COMPONENTES MODERNOS E REUTILIZÁVEIS
+  // =====================================================================
+
+  {
+    type: 'product-carousel',
+    name: 'Carrossel de Produtos',
+    description: 'Carrossel interativo de produtos com animações e filtros.',
+    icon: 'ShoppingCart',
+    category: 'Vendas',
+    isNew: true,
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        placeholder: 'Nossos Produtos Exclusivos',
+        defaultValue: 'Nossos Produtos Exclusivos'
+      },
+      {
+        key: 'subtitle',
+        label: 'Subtítulo',
+        type: 'textarea',
+        placeholder: 'Descubra produtos selecionados especialmente para você',
+        defaultValue: 'Descubra produtos selecionados especialmente para o seu estilo',
+        rows: 2
+      },
+      {
+        key: 'displayMode',
+        label: 'Modo de Exibição',
+        type: 'select',
+        options: [
+          { label: 'Grade', value: 'grid' },
+          { label: 'Carrossel', value: 'carousel' },
+          { label: 'Masonry', value: 'masonry' }
+        ],
+        defaultValue: 'carousel'
+      },
+      {
+        key: 'slidesPerView',
+        label: 'Produtos por Linha',
+        type: 'number-input',
+        min: 1,
+        max: 4,
+        defaultValue: 2
+      },
+      {
+        key: 'cardStyle',
+        label: 'Estilo dos Cards',
+        type: 'select',
+        options: [
+          { label: 'Minimal', value: 'minimal' },
+          { label: 'Elegante', value: 'elegant' },
+          { label: 'Negrito', value: 'bold' },
+          { label: 'Gradiente', value: 'gradient' }
+        ],
+        defaultValue: 'elegant'
+      },
+      {
+        key: 'showPrices',
+        label: 'Mostrar Preços',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'showRatings',
+        label: 'Mostrar Avaliações',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'showFeatures',
+        label: 'Mostrar Recursos',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'autoplay',
+        label: 'Reprodução Automática',
+        type: 'boolean-switch',
+        defaultValue: false
+      },
+      {
+        key: 'products',
+        label: 'Produtos',
+        type: 'array-editor',
+        defaultValue: [],
+        itemSchema: [
+          { key: 'name', label: 'Nome', type: 'text-input' },
+          { key: 'price', label: 'Preço', type: 'number-input' },
+          { key: 'originalPrice', label: 'Preço Original', type: 'number-input' },
+          { key: 'image', label: 'Imagem', type: 'image-url' },
+          { key: 'category', label: 'Categoria', type: 'text-input' },
+          { key: 'rating', label: 'Avaliação (1-5)', type: 'number-input', min: 1, max: 5 },
+          { key: 'ctaText', label: 'Texto do Botão', type: 'text-input' }
+        ]
+      }
+    ]
+  },
+
+  {
+    type: 'comparison-table',
+    name: 'Tabela de Comparação',
+    description: 'Comparação avançada de planos e recursos.',
+    icon: 'Scale',
+    category: 'Vendas',
+    isNew: true,
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        placeholder: 'Escolha o Plano Ideal',
+        defaultValue: 'Escolha o Plano Ideal para Você'
+      },
+      {
+        key: 'subtitle',
+        label: 'Subtítulo',
+        type: 'textarea',
+        placeholder: 'Compare nossos planos...',
+        defaultValue: 'Compare nossos planos e encontre o que melhor se adapta às suas necessidades',
+        rows: 2
+      },
+      {
+        key: 'displayMode',
+        label: 'Modo de Exibição',
+        type: 'select',
+        options: [
+          { label: 'Tabela', value: 'table' },
+          { label: 'Cards', value: 'cards' },
+          { label: 'Abas', value: 'tabs' }
+        ],
+        defaultValue: 'cards'
+      },
+      {
+        key: 'showPrices',
+        label: 'Mostrar Preços',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'showFeatures',
+        label: 'Mostrar Recursos',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'highlightPopular',
+        label: 'Destacar Popular',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'compactMode',
+        label: 'Modo Compacto',
+        type: 'boolean-switch',
+        defaultValue: false
+      }
+    ]
+  },
+
+  {
+    type: 'social-proof',
+    name: 'Prova Social Avançada',
+    description: 'Depoimentos, estatísticas e atividades ao vivo.',
+    icon: 'Users',
+    category: 'Credibilidade',
+    isNew: true,
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        placeholder: 'Junte-se a Milhares de Clientes',
+        defaultValue: 'Junte-se a Milhares de Mulheres Satisfeitas'
+      },
+      {
+        key: 'subtitle',
+        label: 'Subtítulo',
+        type: 'textarea',
+        placeholder: 'Veja o que nossos clientes estão dizendo...',
+        defaultValue: 'Veja o que nossas clientes estão dizendo sobre suas transformações',
+        rows: 2
+      },
+      {
+        key: 'displayMode',
+        label: 'Modo de Exibição',
+        type: 'select',
+        options: [
+          { label: 'Grade', value: 'grid' },
+          { label: 'Carrossel', value: 'carousel' },
+          { label: 'Ticker', value: 'ticker' },
+          { label: 'Masonry', value: 'masonry' }
+        ],
+        defaultValue: 'grid'
+      },
+      {
+        key: 'layout',
+        label: 'Layout',
+        type: 'select',
+        options: [
+          { label: 'Compacto', value: 'compact' },
+          { label: 'Detalhado', value: 'detailed' },
+          { label: 'Minimal', value: 'minimal' }
+        ],
+        defaultValue: 'detailed'
+      },
+      {
+        key: 'showStats',
+        label: 'Mostrar Estatísticas',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'autoplay',
+        label: 'Reprodução Automática',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'animateNumbers',
+        label: 'Animar Números',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+
+  {
+    type: 'advanced-cta',
+    name: 'CTA Avançado',
+    description: 'Call-to-action com countdown, garantias e animações.',
+    icon: 'Zap',
+    category: 'Vendas',
+    isNew: true,
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        placeholder: 'Transforme Seu Estilo Hoje',
+        defaultValue: 'Transforme Seu Estilo Hoje Mesmo'
+      },
+      {
+        key: 'subtitle',
+        label: 'Subtítulo',
+        type: 'text-input',
+        placeholder: 'Descubra seu estilo único...',
+        defaultValue: 'Descubra seu estilo único em poucos minutos'
+      },
+      {
+        key: 'description',
+        label: 'Descrição',
+        type: 'textarea',
+        placeholder: 'Faça o quiz gratuito...',
+        defaultValue: 'Faça o quiz gratuito e receba um guia personalizado com tudo o que você precisa para se vestir com mais confiança e estilo.',
+        rows: 3
+      },
+      {
+        key: 'urgencyText',
+        label: 'Texto de Urgência',
+        type: 'text-input',
+        placeholder: 'Mais de 200 mulheres fizeram hoje!',
+        defaultValue: '⚡ Mais de 200 mulheres fizeram o quiz hoje!'
+      },
+      {
+        key: 'variant',
+        label: 'Variante',
+        type: 'select',
+        options: [
+          { label: 'Padrão', value: 'standard' },
+          { label: 'Hero', value: 'hero' },
+          { label: 'Fixo', value: 'sticky' },
+          { label: 'Flutuante', value: 'floating' },
+          { label: 'Modal', value: 'modal' }
+        ],
+        defaultValue: 'standard'
+      },
+      {
+        key: 'style',
+        label: 'Estilo',
+        type: 'select',
+        options: [
+          { label: 'Minimal', value: 'minimal' },
+          { label: 'Negrito', value: 'bold' },
+          { label: 'Gradiente', value: 'gradient' },
+          { label: 'Contornado', value: 'outlined' },
+          { label: 'Glassmorphism', value: 'glassmorphism' }
+        ],
+        defaultValue: 'gradient'
+      },
+      {
+        key: 'animation',
+        label: 'Animação',
+        type: 'select',
+        options: [
+          { label: 'Nenhuma', value: 'none' },
+          { label: 'Pulse', value: 'pulse' },
+          { label: 'Bounce', value: 'bounce' },
+          { label: 'Brilho', value: 'glow' },
+          { label: 'Shake', value: 'shake' }
+        ],
+        defaultValue: 'glow'
+      },
+      {
+        key: 'showPricing',
+        label: 'Mostrar Preço',
+        type: 'boolean-switch',
+        defaultValue: false
+      },
+      {
+        key: 'price',
+        label: 'Preço',
+        type: 'number-input',
+        defaultValue: 0
+      },
+      {
+        key: 'originalPrice',
+        label: 'Preço Original',
+        type: 'number-input',
+        defaultValue: 97
+      }
+    ]
   },
 
   // ...existing code...
