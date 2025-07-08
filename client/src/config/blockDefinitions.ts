@@ -1534,17 +1534,6 @@ export const blockDefinitions: BlockDefinition[] = [
       { key: 'textColor', label: 'Cor do Texto', type: 'color-picker', defaultValue: '#432818' },
     ],
   },
-      { key: 'savings', label: 'Economia', type: 'text-input', defaultValue: '77% OFF - Economia de R$ 135,10' },
-      { key: 'ctaText', label: 'Texto do Botão', type: 'text-input', defaultValue: 'QUERO DESCOBRIR MEU ESTILO AGORA' },
-      { key: 'ctaUrl', label: 'URL do Botão', type: 'text-input', defaultValue: '#checkout' },
-      { key: 'showTestimonials', label: 'Mostrar Depoimentos', type: 'boolean-switch', defaultValue: true },
-      { key: 'showFaq', label: 'Mostrar FAQ', type: 'boolean-switch', defaultValue: true },
-      { key: 'showGuarantee', label: 'Mostrar Garantia', type: 'boolean-switch', defaultValue: true },
-      { key: 'backgroundColor', label: 'Cor de Fundo', type: 'color-picker', defaultValue: '#FFFBF7' },
-      { key: 'accentColor', label: 'Cor de Destaque', type: 'color-picker', defaultValue: '#B89B7A' },
-      { key: 'textColor', label: 'Cor do Texto', type: 'color-picker', defaultValue: '#432818' },
-    ],
-  },
 
   // =====================================================================
   // NOVOS COMPONENTES MODERNOS E REUTILIZÁVEIS
