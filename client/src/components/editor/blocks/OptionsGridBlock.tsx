@@ -83,14 +83,14 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
     return internalSelectedOptions.includes(optionId);
   };
 
-  const getGridCols = (cols: number) => {
-    const baseClasses = {
-      1: 'grid-cols-1',
-      2: 'grid-cols-1 sm:grid-cols-2',
-      3: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
-      4: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-    };
-    return baseClasses[cols as keyof typeof baseClasses] || 'grid-cols-1 sm:grid-cols-2';
+  const getGridCols = (hasImages: boolean, textOnlyColumns: number = 1) => {
+    if (hasImages) {
+      // Opções com imagens sempre usam 2 colunas
+      return 'grid-cols-1 sm:grid-cols-2';
+    } else {
+      // Opções só com texto usam 1 coluna por padrão
+      return textOnlyColumns === 1 ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2';
+    }
   };
 
   const getImageHeight = (size: string) => {
@@ -148,9 +148,16 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
           />
         </h3>
       )}
-      <div 
-        className={`grid ${getGridCols(columns)} w-full mx-auto px-1 sm:px-0 gap-3 sm:gap-4 md:gap-5`}
-      >
+      
+      {/* Detectar se tem imagens para escolher layout automaticamente */}
+      {(() => {
+        const hasImages = options.some((option: any) => option.imageUrl && option.imageUrl.trim() !== '');
+        const gridCols = getGridCols(hasImages, columns);
+        
+        return (
+          <div 
+            className={`grid ${gridCols} w-full mx-auto px-1 sm:px-0 gap-3 sm:gap-4 md:gap-5`}
+          >
         {options.map((option: any, index: number) => {
           const isSelected = isOptionSelected(option.id);
           return (

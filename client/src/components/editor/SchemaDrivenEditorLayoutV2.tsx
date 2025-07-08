@@ -659,7 +659,6 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                         });
                       }
                     }}
-                    onReorder={reorderBlocks}
                     className=""
                   />
                   
