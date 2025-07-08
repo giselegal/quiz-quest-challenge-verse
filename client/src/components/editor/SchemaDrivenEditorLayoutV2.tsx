@@ -395,27 +395,65 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
             deviceView === 'tablet' ? 'p-4' :
             'p-8'
           }`}>
-            {/* Device Frame for Mobile/Tablet */}
+            {/* Mobile/Tablet Preview - Show Full Editor Layout */}
             {deviceView === 'mobile' ? (
-              <div className="relative bg-black rounded-[2.5rem] p-2 shadow-2xl">
-                {/* Notch */}
-                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black rounded-b-xl z-10"></div>
-                {/* Screen - Full Editor Layout */}
-                <div className="bg-white rounded-[2rem] w-[375px] min-h-[812px] overflow-hidden relative">
-                  {/* Mobile Editor Layout - 3 panels vertically stacked */}
-                  <div className="h-full flex flex-col">
-                    {/* Top: Steps Panel (collapsed) */}
-                    <div className="bg-gray-50 border-b p-2 text-xs">
-                      <div className="flex items-center justify-between">
-                        <span className="font-medium text-gray-700">
-                          {currentPage ? `${pages.findIndex(p => p.id === currentPage.id) + 1}/${pages.length} - ${currentPage.title}` : 'Editor'}
+              <div className="w-[375px] min-h-[812px] bg-white shadow-lg overflow-hidden">
+                {/* Full Editor Layout scaled for mobile */}
+                <div className="h-full flex">
+                  {/* Left Sidebar - Steps Panel (very narrow) */}
+                  <div className="w-8 bg-gray-50 border-r overflow-hidden">
+                    <div className="p-1 text-xs">
+                      <div className="mb-2 text-center">
+                        <span className="text-gray-600 font-bold">
+                          {funnel?.pages.findIndex(p => p.id === currentPage?.id) + 1 || 1}
                         </span>
-                        <div className="text-gray-500">📱 Mobile</div>
+                      </div>
+                      {funnel?.pages.slice(0, 8).map((page, index) => (
+                        <div 
+                          key={page.id}
+                          className={`w-6 h-6 mb-1 mx-auto rounded text-xs flex items-center justify-center cursor-pointer ${
+                            page.id === currentPage?.id ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600'
+                          }`}
+                          onClick={() => switchToPage(page.id)}
+                        >
+                          {index + 1}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Middle - Components Sidebar (narrow) */}
+                  <div className="w-16 bg-white border-r overflow-hidden">
+                    <div className="p-1">
+                      <div className="text-xs text-gray-600 font-medium mb-1 text-center">Comp</div>
+                      <div className="space-y-1">
+                        {blockDefinitions.slice(0, 6).map((definition) => (
+                          <div
+                            key={definition.type}
+                            className="w-12 h-12 bg-gray-100 rounded text-xs flex flex-col items-center justify-center cursor-pointer hover:bg-gray-200"
+                            onMouseDown={() => {
+                              const defaultProperties: Record<string, any> = {};
+                              definition.propertiesSchema?.forEach(prop => {
+                                if (prop.defaultValue !== undefined) {
+                                  defaultProperties[prop.key] = prop.defaultValue;
+                                }
+                              });
+                              addBlock({
+                                type: definition.type,
+                                properties: defaultProperties
+                              });
+                            }}
+                          >
+                            <span className="text-xs">{definition.icon}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
-                    
-                    {/* Middle: Canvas Area */}
-                    <div className="flex-1 overflow-auto bg-gray-50 p-1">
+                  </div>
+                  
+                  {/* Canvas Area */}
+                  <div className="flex-1 bg-gray-50 overflow-auto">
+                    <div className="p-1">
                       <div className="bg-white rounded min-h-full">
                         <DroppableCanvas
                           blocks={currentPage?.blocks || []}
@@ -471,45 +509,43 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                             updateBlock(blockId, updates);
                           }}
                           onReorder={reorderBlocks}
-                          className="mobile-canvas p-2"
+                          className="mobile-canvas p-1"
                         />
                         
                         {!currentPage && (
-                          <div className="text-center py-8 text-gray-500">
-                            <h3 className="text-sm font-medium mb-1">Nenhuma página selecionada</h3>
-                            <p className="text-xs">Selecione uma página para editar</p>
+                          <div className="text-center py-4 text-gray-500">
+                            <h3 className="text-xs font-medium mb-1">Nenhuma página</h3>
+                            <p className="text-xs">Selecione uma página</p>
                           </div>
                         )}
                       </div>
                     </div>
-                    
-                    {/* Bottom: Components + Properties tabs */}
-                    <div className="bg-white border-t">
-                      <div className="flex text-xs border-b">
-                        <button className="flex-1 p-2 bg-blue-50 text-blue-600 border-b-2 border-blue-500">
-                          Componentes
-                        </button>
-                        <button className="flex-1 p-2 text-gray-600">
-                          Propriedades
-                        </button>
-                      </div>
-                      <div className="h-24 overflow-auto p-2">
-                        <div className="grid grid-cols-4 gap-1">
-                          {[...Array(8)].map((_, i) => (
-                            <div key={i} className="aspect-square bg-gray-100 rounded flex items-center justify-center text-xs text-gray-500">
-                              C{i+1}
-                            </div>
-                          ))}
+                  </div>
+                  
+                  {/* Right Sidebar - Properties (very narrow) */}
+                  <div className="w-12 bg-white border-l overflow-hidden">
+                    <div className="p-1">
+                      <div className="text-xs text-gray-600 font-medium mb-1 text-center">Props</div>
+                      {selectedBlockId && (
+                        <div className="space-y-1">
+                          <div className="w-8 h-6 bg-gray-100 rounded text-xs flex items-center justify-center">
+                            T
+                          </div>
+                          <div className="w-8 h-6 bg-gray-100 rounded text-xs flex items-center justify-center">
+                            C
+                          </div>
+                          <div className="w-8 h-6 bg-gray-100 rounded text-xs flex items-center justify-center">
+                            S
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
             ) : deviceView === 'tablet' ? (
-              <div className="relative bg-gray-800 rounded-xl p-3 shadow-xl">
-                <div className="bg-white rounded-lg w-[768px] min-h-[1024px] overflow-hidden">
-                  <div className="p-6">
+              <div className="w-[768px] min-h-[1024px] bg-white shadow-lg overflow-hidden">
+                <div className="p-6">
                     <DroppableCanvas
                       blocks={currentPage?.blocks || []}
                       selectedBlockId={selectedBlockId || undefined}
@@ -575,7 +611,6 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                     )}
                   </div>
                 </div>
-              </div>
             ) : (
               /* Desktop View */
               <div className="bg-white shadow-lg rounded-lg max-w-4xl min-h-[800px] w-full">
