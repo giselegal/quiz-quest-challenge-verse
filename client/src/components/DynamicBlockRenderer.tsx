@@ -307,7 +307,7 @@ const DynamicBlockRenderer: React.FC<DynamicBlockRendererProps> = ({
         );
 
       // ETAPAS ESPECÍFICAS DO FUNIL - COMPONENTES PERSONALIZADOS
-      
+
       // ETAPA 1: Quiz Introdução
       case 'quiz-intro-etapa-1':
         return (
@@ -368,7 +368,7 @@ const DynamicBlockRenderer: React.FC<DynamicBlockRendererProps> = ({
                 <h2 className="text-2xl md:text-3xl font-bold text-[#432818] text-center leading-relaxed" style={{ fontFamily: 'Playfair Display, serif' }}>
                   {props.question || 'Qual o seu tipo de roupa favorita?'}
                 </h2>
-                
+
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                   {(props.options || []).map((option: any, index: number) => (
                     <div
@@ -459,7 +459,7 @@ const DynamicBlockRenderer: React.FC<DynamicBlockRendererProps> = ({
                 <h2 className="text-2xl md:text-3xl font-bold text-[#432818] text-center leading-relaxed" style={{ fontFamily: 'Playfair Display, serif' }}>
                   {props.question || 'Qual é sua faixa etária?'}
                 </h2>
-                
+
                 <div className="space-y-3 max-w-2xl mx-auto">
                   {(props.options || []).map((option: any, index: number) => (
                     <div
@@ -536,7 +536,7 @@ const DynamicBlockRenderer: React.FC<DynamicBlockRendererProps> = ({
                 <h2 className="text-2xl text-[#B89B7A] font-semibold mb-6">
                   Você descobriu seu Estilo Predominante
                 </h2>
-                
+
                 {/* Card do Estilo */}
                 <div className="max-w-md mx-auto mb-8">
                   <div className="bg-gradient-to-br from-[#f9f4ef] to-[#f0e6d6] rounded-xl p-6 border border-[#B89B7A]/20">

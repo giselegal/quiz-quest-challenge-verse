@@ -38,6 +38,14 @@ export { default as TestimonialsBlock } from './TestimonialsBlock';
 export { default as GuaranteeBlock } from './GuaranteeBlock';
 export { VideoPlayerBlock } from './VideoPlayerBlock';
 
+// Sales Components
+export { default as ProductCarouselBlock } from './ProductCarouselBlock';
+export { default as BeforeAfterBlock } from './BeforeAfterBlock';
+export { default as TwoColumnsBlock } from './TwoColumnsBlock';
+export { default as ProsConsBlock } from './ProsConsBlock';
+export { default as DynamicPricingBlock } from './DynamicPricingBlock';
+export { default as ValueAnchoringBlock } from './ValueAnchoringBlock';
+
 // Renderizador universal (principal)
 export { UniversalBlockRenderer } from './UniversalBlockRenderer';
 

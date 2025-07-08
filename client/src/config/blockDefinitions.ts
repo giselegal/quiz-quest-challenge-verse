@@ -750,6 +750,249 @@ export const blockDefinitions: BlockDefinition[] = [
 
   // Categoria: Vendas
   {
+    type: 'product-carousel',
+    name: 'Carrossel de Produtos',
+    description: 'Carrossel responsivo com produtos e CTAs.',
+    icon: 'ShoppingCart',
+    category: 'Vendas',
+    propertiesSchema: [
+      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Nossos Produtos' },
+      { key: 'subtitle', label: 'Subtítulo', type: 'text-input', defaultValue: '' },
+      {
+        key: 'products',
+        label: 'Produtos',
+        type: 'array-editor',
+        defaultValue: [
+          { id: '1', name: 'Produto 1', description: 'Descrição do produto', price: 'R$ 97,00', image: 'https://placehold.co/400x300', ctaText: 'Comprar Agora' }
+        ],
+        itemSchema: [
+          { key: 'id', label: 'ID', type: 'text-input' },
+          { key: 'name', label: 'Nome', type: 'text-input' },
+          { key: 'description', label: 'Descrição', type: 'textarea', rows: 2 },
+          { key: 'price', label: 'Preço', type: 'text-input' },
+          { key: 'originalPrice', label: 'Preço Original', type: 'text-input' },
+          { key: 'discount', label: 'Desconto', type: 'text-input' },
+          { key: 'image', label: 'Imagem', type: 'image-url' },
+          { key: 'rating', label: 'Avaliação (1-5)', type: 'number-input', min: 1, max: 5 },
+          { key: 'reviews', label: 'Número de Avaliações', type: 'number-input' },
+          { key: 'ctaText', label: 'Texto do Botão', type: 'text-input' },
+          { key: 'ctaUrl', label: 'URL do Botão', type: 'text-input' }
+        ]
+      },
+      { key: 'itemsPerView', label: 'Items por Visualização', type: 'number-input', min: 1, max: 4, defaultValue: 3 },
+      { key: 'showArrows', label: 'Mostrar Setas', type: 'boolean-switch', defaultValue: true },
+      { key: 'showDots', label: 'Mostrar Pontos', type: 'boolean-switch', defaultValue: true },
+      { key: 'autoplay', label: 'Autoplay', type: 'boolean-switch', defaultValue: false },
+      { key: 'autoplayInterval', label: 'Intervalo Autoplay (ms)', type: 'number-input', defaultValue: 5000 }
+    ],
+  },
+
+  {
+    type: 'before-after',
+    name: 'Antes e Depois',
+    description: 'Comparação interativa antes e depois.',
+    icon: 'ArrowRightLeft',
+    category: 'Vendas',
+    propertiesSchema: [
+      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Transformação' },
+      { key: 'subtitle', label: 'Subtítulo', type: 'text-input', defaultValue: '' },
+      { key: 'beforeImage', label: 'Imagem Antes', type: 'image-url', placeholder: 'https://example.com/before.jpg' },
+      { key: 'afterImage', label: 'Imagem Depois', type: 'image-url', placeholder: 'https://example.com/after.jpg' },
+      { key: 'beforeLabel', label: 'Label Antes', type: 'text-input', defaultValue: 'Antes' },
+      { key: 'afterLabel', label: 'Label Depois', type: 'text-input', defaultValue: 'Depois' },
+      { key: 'beforeDescription', label: 'Descrição Antes', type: 'textarea', rows: 3 },
+      { key: 'afterDescription', label: 'Descrição Depois', type: 'textarea', rows: 3 },
+      { key: 'showLabels', label: 'Mostrar Labels', type: 'boolean-switch', defaultValue: true },
+      { key: 'showDescriptions', label: 'Mostrar Descrições', type: 'boolean-switch', defaultValue: true },
+      { key: 'sliderPosition', label: 'Posição Inicial do Slider (%)', type: 'number-input', min: 0, max: 100, defaultValue: 50 }
+    ],
+  },
+
+  {
+    type: 'two-columns',
+    name: 'Duas Colunas',
+    description: 'Layout flexível de duas colunas.',
+    icon: 'Rows3',
+    category: 'Vendas',
+    propertiesSchema: [
+      { key: 'title', label: 'Título', type: 'text-input', defaultValue: '' },
+      { key: 'subtitle', label: 'Subtítulo', type: 'text-input', defaultValue: '' },
+      {
+        key: 'columnRatio',
+        label: 'Proporção das Colunas',
+        type: 'select',
+        options: [
+          { label: '50% - 50%', value: '50-50' },
+          { label: '60% - 40%', value: '60-40' },
+          { label: '40% - 60%', value: '40-60' },
+          { label: '70% - 30%', value: '70-30' },
+          { label: '30% - 70%', value: '30-70' }
+        ],
+        defaultValue: '50-50'
+      },
+      {
+        key: 'verticalAlignment',
+        label: 'Alinhamento Vertical',
+        type: 'select',
+        options: [
+          { label: 'Topo', value: 'top' },
+          { label: 'Centro', value: 'center' },
+          { label: 'Base', value: 'bottom' }
+        ],
+        defaultValue: 'top'
+      },
+      { key: 'gap', label: 'Espaçamento (px)', type: 'number-input', min: 0, max: 100, defaultValue: 32 },
+      { key: 'mobileStack', label: 'Empilhar no Mobile', type: 'boolean-switch', defaultValue: true }
+    ],
+  },
+
+  {
+    type: 'pros-cons',
+    name: 'Prós e Contras',
+    description: 'Lista de vantagens e desvantagens.',
+    icon: 'Scale',
+    category: 'Vendas',
+    propertiesSchema: [
+      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Prós e Contras' },
+      { key: 'subtitle', label: 'Subtítulo', type: 'text-input', defaultValue: '' },
+      { key: 'prosTitle', label: 'Título dos Prós', type: 'text-input', defaultValue: 'Vantagens' },
+      { key: 'consTitle', label: 'Título dos Contras', type: 'text-input', defaultValue: 'Desvantagens' },
+      {
+        key: 'pros',
+        label: 'Lista de Prós',
+        type: 'array-editor',
+        defaultValue: [
+          { id: '1', text: 'Vantagem 1', highlight: false }
+        ],
+        itemSchema: [
+          { key: 'id', label: 'ID', type: 'text-input' },
+          { key: 'text', label: 'Texto', type: 'text-input' },
+          { key: 'icon', label: 'Ícone', type: 'text-input' },
+          { key: 'highlight', label: 'Destacar', type: 'boolean-switch' }
+        ]
+      },
+      {
+        key: 'cons',
+        label: 'Lista de Contras',
+        type: 'array-editor',
+        defaultValue: [
+          { id: '1', text: 'Desvantagem 1', severity: 'low' }
+        ],
+        itemSchema: [
+          { key: 'id', label: 'ID', type: 'text-input' },
+          { key: 'text', label: 'Texto', type: 'text-input' },
+          { key: 'icon', label: 'Ícone', type: 'text-input' },
+          { key: 'severity', label: 'Gravidade', type: 'select', options: [
+            { label: 'Baixa', value: 'low' },
+            { label: 'Média', value: 'medium' },
+            { label: 'Alta', value: 'high' }
+          ]}
+        ]
+      },
+      {
+        key: 'layout',
+        label: 'Layout',
+        type: 'select',
+        options: [
+          { label: 'Lado a Lado', value: 'side-by-side' },
+          { label: 'Empilhado', value: 'stacked' }
+        ],
+        defaultValue: 'side-by-side'
+      },
+      { key: 'showIcons', label: 'Mostrar Ícones', type: 'boolean-switch', defaultValue: true }
+    ],
+  },
+
+  {
+    type: 'dynamic-pricing',
+    name: 'Preços Dinâmicos',
+    description: 'Tabela de preços flexível e responsiva.',
+    icon: 'CircleDollarSign',
+    category: 'Vendas',
+    propertiesSchema: [
+      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Escolha seu Plano' },
+      { key: 'subtitle', label: 'Subtítulo', type: 'text-input', defaultValue: '' },
+      {
+        key: 'plans',
+        label: 'Planos',
+        type: 'array-editor',
+        defaultValue: [
+          { id: '1', name: 'Básico', price: '97', features: ['Recurso 1', 'Recurso 2'], ctaText: 'Escolher Plano' }
+        ],
+        itemSchema: [
+          { key: 'id', label: 'ID', type: 'text-input' },
+          { key: 'name', label: 'Nome do Plano', type: 'text-input' },
+          { key: 'description', label: 'Descrição', type: 'text-input' },
+          { key: 'price', label: 'Preço', type: 'text-input' },
+          { key: 'originalPrice', label: 'Preço Original', type: 'text-input' },
+          { key: 'period', label: 'Período', type: 'text-input' },
+          { key: 'discount', label: 'Desconto', type: 'text-input' },
+          { key: 'badge', label: 'Badge', type: 'text-input' },
+          { key: 'badgeColor', label: 'Cor do Badge', type: 'color-picker' },
+          { key: 'ctaText', label: 'Texto do Botão', type: 'text-input' },
+          { key: 'ctaUrl', label: 'URL do Botão', type: 'text-input' },
+          { key: 'isPopular', label: 'Mais Popular', type: 'boolean-switch' },
+          { key: 'isRecommended', label: 'Recomendado', type: 'boolean-switch' }
+        ]
+      },
+      {
+        key: 'layout',
+        label: 'Layout',
+        type: 'select',
+        options: [
+          { label: 'Cards', value: 'cards' },
+          { label: 'Tabela', value: 'table' },
+          { label: 'Minimal', value: 'minimal' }
+        ],
+        defaultValue: 'cards'
+      },
+      { key: 'currency', label: 'Moeda', type: 'text-input', defaultValue: 'R$' }
+    ],
+  },
+
+  {
+    type: 'value-anchoring',
+    name: 'Ancoragem de Valor',
+    description: 'Demonstração de valor e ROI.',
+    icon: 'Target',
+    category: 'Vendas',
+    propertiesSchema: [
+      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Valor Investido vs Retorno' },
+      { key: 'subtitle', label: 'Subtítulo', type: 'text-input', defaultValue: '' },
+      {
+        key: 'anchoringType',
+        label: 'Tipo de Ancoragem',
+        type: 'select',
+        options: [
+          { label: 'Comparação de Preços', value: 'price-comparison' },
+          { label: 'Valor do Tempo', value: 'time-value' },
+          { label: 'Análise de Custos', value: 'cost-analysis' },
+          { label: 'Calculadora ROI', value: 'roi-calculator' }
+        ],
+        defaultValue: 'price-comparison'
+      },
+      { key: 'mainValue', label: 'Valor Principal', type: 'text-input', defaultValue: 'R$ 97,00' },
+      { key: 'comparisonValue', label: 'Valor de Comparação', type: 'text-input', defaultValue: 'R$ 2.970,00' },
+      { key: 'period', label: 'Período', type: 'text-input', defaultValue: '' },
+      { key: 'description', label: 'Descrição', type: 'textarea', rows: 3 },
+      { key: 'highlightSavings', label: 'Destacar Economia', type: 'boolean-switch', defaultValue: true },
+      { key: 'savingsText', label: 'Texto da Economia', type: 'text-input', defaultValue: 'Economia de 96%' },
+      {
+        key: 'visualType',
+        label: 'Tipo Visual',
+        type: 'select',
+        options: [
+          { label: 'Comparação', value: 'comparison' },
+          { label: 'Cards', value: 'cards' },
+          { label: 'Gráfico', value: 'chart' },
+          { label: 'Calculadora', value: 'calculator' }
+        ],
+        defaultValue: 'comparison'
+      }
+    ],
+  },
+
+  {
     type: 'sales-offer',
     name: 'Oferta de Vendas',
     description: 'Apresentação da oferta principal com preços.',
