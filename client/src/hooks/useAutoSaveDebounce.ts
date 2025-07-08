@@ -45,12 +45,37 @@ export const useAutoSaveDebounce = (
       }
 
       try {
-        console.log('[AutoSave] Executando save...');
+        setSaveStatus('saving');
         await saveFunction();
         lastSaveRef.current = now;
-        console.log('[AutoSave] Save concluído com sucesso');
+        setLastSave(new Date());
+        setSaveStatus('success');
+        console.log(`✅ Auto-save successful: ${new Date().toLocaleTimeString()}`);
       } catch (error) {
-        console.error('[AutoSave] Erro no save:', error);
+        setSaveStatus('error');
+        console.error('❌ Auto-save failed:', error);
+
+        // Se for erro de localStorage, tentar limpeza
+        if (error instanceof DOMException && error.name === 'QuotaExceededError') {
+          console.warn('⚠️ LocalStorage quota exceeded, attempting cleanup...');
+          try {
+            // Limpar dados antigos do localStorage
+            const keysToRemove = [];
+            for (let i = 0; i < localStorage.length; i++) {
+              const key = localStorage.key(i);
+              if (key && (key.startsWith('quiz-versions-') || key.startsWith('caktoquiz-'))) {
+                keysToRemove.push(key);
+              }
+            }
+            // Remover apenas versões antigas, manter as mais recentes
+            keysToRemove.slice(0, -3).forEach(key => {
+              try { localStorage.removeItem(key); } catch (e) { /* ignore */ }
+            });
+            console.log('🧹 Cleaned up old localStorage data');
+          } catch (cleanupError) {
+            console.warn('Failed to cleanup localStorage:', cleanupError);
+          }
+        }
       }
     }, delay);
 
