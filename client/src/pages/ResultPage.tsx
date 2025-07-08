@@ -123,6 +123,13 @@ const ResultPage: React.FC = () => {
     }
   }
   
+  // Debug para identificar problemas
+  console.log('ResultPage Debug:', {
+    primaryStyle,
+    secondaryStyles,
+    styleData
+  });
+  
   const {
     category
   } = styleData;
@@ -203,23 +210,57 @@ const ResultPage: React.FC = () => {
                           <h3 className="text-lg font-medium text-[#432818] mb-2">Estilos que Também Influenciam Você</h3>
                           {/* Renderizar estilos secundários de forma correta */}
                           <div className="space-y-2">
-                            {secondaryStyles.slice(0, 2).map((style, index) => (
-                              <div key={index} className="flex items-center justify-between">
-                                <span className="text-sm text-[#432818]">
-                                  {typeof style === 'string' ? style : (style as any).category || style}
-                                </span>
-                                <span className="text-sm font-semibold text-[#aa6b5d]">
-                                  {typeof style === 'object' && (style as any).percentage ? (style as any).percentage : 15}%
-                                </span>
+                            {secondaryStyles && secondaryStyles.length > 0 ? (
+                              secondaryStyles.slice(0, 2).map((style, index) => {
+                                // Extrair dados do estilo secundário corretamente
+                                let styleName = '';
+                                let stylePercentage = 0;
+                                
+                                if (typeof style === 'string') {
+                                  styleName = style;
+                                  stylePercentage = 15; // fallback
+                                } else if (typeof style === 'object') {
+                                  styleName = (style as any).category || String(style);
+                                  stylePercentage = (style as any).percentage || (style as any).score || 15;
+                                }
+                                
+                                return (
+                                  <div key={index} className="flex items-center justify-between">
+                                    <span className="text-sm text-[#432818]">
+                                      {styleName}
+                                    </span>
+                                    <span className="text-sm font-semibold text-[#aa6b5d]">
+                                      {stylePercentage}%
+                                    </span>
+                                  </div>
+                                );
+                              })
+                            ) : (
+                              <div className="text-sm text-[#8F7A6A] italic">
+                                Calculando estilos complementares...
                               </div>
-                            ))}
+                            )}
                           </div>
                         </div>
                       </AnimatedWrapper>
                     </div>
                     <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500}>
                       <div className="max-w-[238px] mx-auto relative">
-                        <img src={`${image}?q=auto:best&f=auto&w=238`} alt={`Estilo ${category}`} className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" loading="eager" fetchPriority="high" width="238" height="auto" />
+                        <img 
+                          src={`${image}?q=auto:best&f=auto&w=238`} 
+                          alt={`Estilo ${category}`} 
+                          className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" 
+                          loading="eager" 
+                          fetchPriority="high" 
+                          width="238" 
+                          height="auto"
+                          onError={(e) => {
+                            console.error('Erro ao carregar imagem do estilo:', e);
+                            console.log('URL da imagem:', `${image}?q=auto:best&f=auto&w=238`);
+                            console.log('Category:', category);
+                            console.log('StyleConfig data:', styleConfigData);
+                          }}
+                        />
                         <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
                         <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>
                       </div>
@@ -227,7 +268,18 @@ const ResultPage: React.FC = () => {
                   </div>
                   <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
                     <div className="mt-8 max-w-[540px] mx-auto relative">
-                      <img src={`${guideImage}?q=auto:best&f=auto&w=540`} alt={`Guia de Estilo ${category}`} loading="lazy" className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" width="540" height="auto" />
+                      <img 
+                        src={`${guideImage}?q=auto:best&f=auto&w=540`} 
+                        alt={`Guia de Estilo ${category}`} 
+                        loading="lazy" 
+                        className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" 
+                        width="540" 
+                        height="auto"
+                        onError={(e) => {
+                          console.error('Erro ao carregar imagem do guia:', e);
+                          console.log('URL do guia:', `${guideImage}?q=auto:best&f=auto&w=540`);
+                        }}
+                      />
                       <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
                         Exclusivo
                       </div>
