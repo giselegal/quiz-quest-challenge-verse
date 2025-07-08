@@ -160,6 +160,8 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
           >
             {options.map((option: any, index: number) => {
           const isSelected = isOptionSelected(option.id);
+          const hasOptionImage = option.imageUrl && option.imageUrl.trim() !== '';
+          
           return (
             <button 
               key={option.id || index} 
@@ -169,7 +171,8 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89B7A] focus-visible:ring-offset-2 
                 disabled:pointer-events-none disabled:opacity-50 active:scale-95 
                 border-2 bg-white hover:shadow-lg overflow-hidden w-full gap-1 flex 
-                flex-col items-center justify-start option-button aspect-[3/4] 
+                flex-col items-center justify-start option-button
+                ${hasImages && hasOptionImage ? 'aspect-[3/4]' : 'aspect-auto min-h-[60px] py-3 px-4'} 
                 ${isSelected 
                   ? 'border-[#B89B7A] bg-[#FAF9F7] shadow-lg scale-[1.02]' 
                   : 'border-zinc-200 hover:border-[#B89B7A] hover:bg-[#FAF9F7] shadow-sm'
@@ -209,10 +212,14 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
                 </div>
               )}
               
-              <div className="py-1 px-1 sm:px-2 w-full flex flex-row text-xs sm:text-sm items-center justify-center flex-shrink-0">
+              <div className={`w-full flex flex-row items-center justify-center flex-shrink-0 ${
+                hasOptionImage ? 'py-1 px-1 sm:px-2 text-xs sm:text-sm' : 'py-2 px-3 text-sm sm:text-base'
+              }`}>
                 <div className="break-words w-full custom-quill quill ql-editor quill-option text-center">
                   <div 
-                    className={`font-medium transition-colors duration-300 leading-tight ${
+                    className={`font-medium transition-colors duration-300 ${
+                      hasOptionImage ? 'leading-tight' : 'leading-relaxed'
+                    } ${
                       isSelected ? 'text-[#432818]' : 'text-[#432818] group-hover:text-[#B89B7A]'
                     }`}
                     dangerouslySetInnerHTML={{ __html: option.text || 'Opção sem texto' }}
