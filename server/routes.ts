@@ -1296,6 +1296,138 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.redirect(`/teste-funil?id=${funnelId}`);
   });
 
+  // Rota para validar regras de pontuação do quiz
+  app.post("/api/quiz/validate-scoring", async (req, res) => {
+    try {
+      const { quizConfig } = req.body;
+      
+      if (!quizConfig || !quizConfig.questions || !quizConfig.results) {
+        return res.status(400).json({ 
+          success: false, 
+          error: "Configuração de quiz inválida" 
+        });
+      }
+
+      const issues: string[] = [];
+      const resultIds = quizConfig.results.map((r: any) => r.id);
+      
+      // Validar se todas as pontuações referenciam resultados existentes
+      quizConfig.questions.forEach((question: any, qIndex: number) => {
+        if (!question.options || question.options.length === 0) {
+          issues.push(`Questão ${qIndex + 1}: Sem opções de resposta`);
+          return;
+        }
+
+        question.options.forEach((option: any, oIndex: number) => {
+          if (!option.points) {
+            issues.push(`Q${qIndex + 1}, Opção ${oIndex + 1}: Sem pontuações definidas`);
+            return;
+          }
+
+          Object.keys(option.points).forEach(pointKey => {
+            if (!resultIds.includes(pointKey)) {
+              issues.push(`Q${qIndex + 1}, Opção ${oIndex + 1}: Pontuação para "${pointKey}" não tem resultado correspondente`);
+            }
+          });
+
+          // Verificar se há pontuação para todos os resultados
+          resultIds.forEach(resultId => {
+            if (!(resultId in option.points)) {
+              issues.push(`Q${qIndex + 1}, Opção ${oIndex + 1}: Faltando pontuação para "${resultId}"`);
+            }
+          });
+        });
+      });
+
+      // Verificar se há pelo menos uma questão
+      if (quizConfig.questions.length === 0) {
+        issues.push("Quiz deve ter pelo menos uma questão");
+      }
+
+      // Verificar se há pelo menos dois resultados
+      if (quizConfig.results.length < 2) {
+        issues.push("Quiz deve ter pelo menos dois resultados possíveis");
+      }
+
+      res.json({
+        success: true,
+        isValid: issues.length === 0,
+        issues: issues,
+        summary: {
+          questionsCount: quizConfig.questions.length,
+          resultsCount: quizConfig.results.length,
+          totalOptions: quizConfig.questions.reduce((sum: number, q: any) => sum + (q.options?.length || 0), 0)
+        }
+      });
+    } catch (error) {
+      console.error("Error validating quiz scoring:", error);
+      res.status(500).json({ success: false, error: "Failed to validate quiz scoring" });
+    }
+  });
+
+  // Rota para simular resultado do quiz (para teste das regras)
+  app.post("/api/quiz/simulate-result", async (req, res) => {
+    try {
+      const { quizConfig, answers } = req.body;
+      
+      if (!quizConfig || !answers) {
+        return res.status(400).json({ 
+          success: false, 
+          error: "Quiz config and answers are required" 
+        });
+      }
+
+      const scores: Record<string, number> = {};
+      
+      // Inicializar pontuações
+      quizConfig.results.forEach((result: any) => {
+        scores[result.id] = 0;
+      });
+
+      // Calcular pontuações baseado nas respostas
+      Object.entries(answers).forEach(([questionIndex, optionId]) => {
+        const qIndex = parseInt(questionIndex);
+        const question = quizConfig.questions[qIndex];
+        
+        if (question && question.options) {
+          const selectedOption = question.options.find((opt: any) => opt.id === optionId);
+          
+          if (selectedOption && selectedOption.points) {
+            Object.entries(selectedOption.points).forEach(([resultId, points]) => {
+              if (scores[resultId] !== undefined) {
+                scores[resultId] += Number(points);
+              }
+            });
+          }
+        }
+      });
+
+      // Encontrar resultado com maior pontuação
+      let maxScore = -1;
+      let predominantResult = null;
+      
+      Object.entries(scores).forEach(([resultId, score]) => {
+        if (score > maxScore) {
+          maxScore = score;
+          predominantResult = resultId;
+        }
+      });
+
+      const resultData = quizConfig.results.find((r: any) => r.id === predominantResult);
+
+      res.json({
+        success: true,
+        scores: scores,
+        predominantResult: predominantResult,
+        resultData: resultData,
+        totalScore: Object.values(scores).reduce((sum: number, score: number) => sum + score, 0)
+      });
+    } catch (error) {
+      console.error("Error simulating quiz result:", error);
+      res.status(500).json({ success: false, error: "Failed to simulate quiz result" });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;

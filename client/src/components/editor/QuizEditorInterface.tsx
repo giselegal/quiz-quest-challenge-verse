@@ -252,34 +252,79 @@ const QuizEditorInterface: React.FC = () => {
   };
 
   // Validar regras de pontuação
-  const validateScoringRules = () => {
-    const resultIds = quizConfig.results.map(r => r.id);
-    const issues: string[] = [];
-
-    quizConfig.questions.forEach((question, qIndex) => {
-      question.options.forEach((option, oIndex) => {
-        Object.keys(option.points).forEach(pointKey => {
-          if (!resultIds.includes(pointKey)) {
-            issues.push(`Q${qIndex + 1}, Opção ${oIndex + 1}: Pontuação para "${pointKey}" não tem resultado correspondente`);
-          }
-        });
+  const validateScoringRules = async () => {
+    try {
+      const response = await fetch('/api/quiz/validate-scoring', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ quizConfig })
       });
-    });
 
-    if (issues.length > 0) {
+      const result = await response.json();
+      
+      if (result.success) {
+        if (result.isValid) {
+          toast({
+            title: 'Validação OK! ✅',
+            description: `${result.summary.questionsCount} questões, ${result.summary.resultsCount} resultados, ${result.summary.totalOptions} opções`,
+          });
+        } else {
+          toast({
+            title: 'Problemas Encontrados ⚠️',
+            description: `${result.issues.length} problemas: ${result.issues.slice(0, 2).join('; ')}${result.issues.length > 2 ? '...' : ''}`,
+            variant: 'destructive',
+          });
+          console.log('Problemas detalhados:', result.issues);
+        }
+      }
+    } catch (error) {
       toast({
-        title: 'Problemas de Validação',
-        description: issues.join('; '),
+        title: 'Erro na Validação',
+        description: 'Não foi possível validar as regras de pontuação.',
         variant: 'destructive',
       });
-    } else {
+    }
+  };
+
+  // Simular resultado do quiz
+  const simulateQuizResult = async () => {
+    // Criar respostas de exemplo (primeira opção de cada questão)
+    const sampleAnswers: Record<string, string> = {};
+    quizConfig.questions.forEach((question, index) => {
+      if (question.options.length > 0) {
+        sampleAnswers[index.toString()] = question.options[0].id;
+      }
+    });
+
+    try {
+      const response = await fetch('/api/quiz/simulate-result', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          quizConfig, 
+          answers: sampleAnswers 
+        })
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        const scoresText = Object.entries(result.scores)
+          .map(([id, score]) => `${id}: ${score}`)
+          .join(', ');
+          
+        toast({
+          title: `Resultado: ${result.resultData?.title || result.predominantResult}`,
+          description: `Pontuações: ${scoresText}`,
+        });
+      }
+    } catch (error) {
       toast({
-        title: 'Validação OK!',
-        description: 'Todas as regras de pontuação estão corretas.',
+        title: 'Erro na Simulação',
+        description: 'Não foi possível simular o resultado.',
+        variant: 'destructive',
       });
     }
-
-    return issues.length === 0;
   };
 
   return (
@@ -301,6 +346,15 @@ const QuizEditorInterface: React.FC = () => {
           >
             <BarChart3 className="w-4 h-4 mr-2" />
             Validar Regras
+          </Button>
+          
+          <Button 
+            onClick={simulateQuizResult}
+            variant="outline"
+            size="sm"
+          >
+            <TestTube className="w-4 h-4 mr-2" />
+            Simular Resultado
           </Button>
           
           <Button 
