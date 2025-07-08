@@ -171,11 +171,11 @@ export interface Page {
 export const blockDefinitions: BlockDefinition[] = [
   // Categoria: Texto
   {
-    type: 'main-heading', // Renomeado de 'header' para ser mais específico
-    name: 'Título Principal',
-    description: 'Cabeçalho principal da seção.',
+    type: 'main-heading-inline', // Renomeado para inline
+    name: 'Título Principal (Inline)',
+    description: 'Cabeçalho principal horizontal responsivo inline.',
     icon: 'Heading1', // Corrigido para o nome Lucide correto
-    category: 'Texto',
+    category: 'Inline',
     propertiesSchema: [
       {
         key: 'title',
@@ -217,11 +217,11 @@ export const blockDefinitions: BlockDefinition[] = [
   },
 
   {
-    type: 'text',
-    name: 'Parágrafo',
-    description: 'Bloco de texto simples.',
+    type: 'text-inline',
+    name: 'Parágrafo (Inline)',
+    description: 'Bloco de texto horizontal responsivo inline.',
     icon: 'Type',
-    category: 'Texto',
+    category: 'Inline',
     propertiesSchema: [
       {
         key: 'content',
@@ -258,11 +258,11 @@ export const blockDefinitions: BlockDefinition[] = [
 
   // Categoria: Mídia
   {
-    type: 'image',
-    name: 'Imagem',
-    description: 'Imagem com configurações de tamanho e alinhamento.',
+    type: 'image-inline',
+    name: 'Imagem (Inline)',
+    description: 'Imagem horizontal responsiva inline.',
     icon: 'Image', // Corrigido para o nome Lucide correto
-    category: 'Mídia',
+    category: 'Inline',
     propertiesSchema: [
       {
         key: 'src',

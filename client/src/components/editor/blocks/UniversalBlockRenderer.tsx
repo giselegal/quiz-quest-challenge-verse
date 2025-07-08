@@ -39,6 +39,10 @@ import PricingInlineBlock from './PricingInlineBlock';
 import LoaderInlineBlock from './LoaderInlineBlock';
 import ComparisonInlineBlock from './ComparisonInlineBlock';
 import NotificationInlineBlock from './NotificationInlineBlock';
+import HeadingInlineBlock from './HeadingInlineBlock';
+import TextInlineBlock from './TextInlineBlock';
+import ImageInlineBlock from './ImageInlineBlock';
+import ButtonInlineBlock from './ButtonInlineBlock';
 import { VideoPlayerBlock } from './VideoPlayerBlock';
 
 // Blocos específicos do Quiz Intro
@@ -318,6 +322,16 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <ProductOfferBlock {...commonProps} />;
       case 'quiz-offer-faq':
         return <FAQSectionBlock {...commonProps} />;
+
+      // COMPONENTES INLINE BÁSICOS
+      case 'main-heading-inline':
+        return <HeadingInlineBlock {...commonProps} />;
+      case 'text-inline':
+        return <TextInlineBlock {...commonProps} />;
+      case 'image-inline':
+        return <ImageInlineBlock {...commonProps} />;
+      case 'button-inline':
+        return <ButtonInlineBlock {...commonProps} />;
 
       // BLOCOS AVANÇADOS RESTANTES
       case 'main-heading':

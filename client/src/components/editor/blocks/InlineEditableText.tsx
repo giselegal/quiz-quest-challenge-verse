@@ -2,51 +2,43 @@ import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
 interface InlineEditableTextProps {
-  tag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' | 'div';
   value: string;
-  onSave: (newValue: string) => void;
-  isTextArea?: boolean;
+  onChange: (value: string) => void;
   placeholder?: string;
   className?: string;
-  style?: React.CSSProperties;
+  multiline?: boolean;
   disabled?: boolean;
 }
 
 export const InlineEditableText: React.FC<InlineEditableTextProps> = ({
-  tag: Tag = 'span',
   value,
-  onSave,
-  isTextArea = false,
-  placeholder = 'Clique para editar...',
+  onChange,
+  placeholder = 'Digite aqui...',
   className = '',
-  style,
+  multiline = false,
   disabled = false
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(value);
-  const [mounted, setMounted] = useState(false);
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    setMounted(true);
     setEditValue(value);
   }, [value]);
 
   useEffect(() => {
     if (isEditing && inputRef.current) {
       inputRef.current.focus();
-      
-      // Select all text for easy replacement
-      if ('select' in inputRef.current) {
+      if (multiline && inputRef.current instanceof HTMLTextAreaElement) {
+        inputRef.current.select();
+      } else if (inputRef.current instanceof HTMLInputElement) {
         inputRef.current.select();
       }
     }
-  }, [isEditing]);
+  }, [isEditing, multiline]);
 
   const handleSave = () => {
-    if (editValue !== value) {
-      onSave(editValue);
-    }
+    onChange(editValue.trim() || placeholder);
     setIsEditing(false);
   };
 
@@ -56,10 +48,7 @@ export const InlineEditableText: React.FC<InlineEditableTextProps> = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !isTextArea) {
-      e.preventDefault();
-      handleSave();
-    } else if (e.key === 'Enter' && e.ctrlKey && isTextArea) {
+    if (e.key === 'Enter' && (!multiline || e.ctrlKey)) {
       e.preventDefault();
       handleSave();
     } else if (e.key === 'Escape') {
@@ -72,96 +61,59 @@ export const InlineEditableText: React.FC<InlineEditableTextProps> = ({
     handleSave();
   };
 
-  const handleClick = (e: React.MouseEvent) => {
-    if (disabled) return;
-    e.preventDefault();
-    e.stopPropagation();
-    setIsEditing(true);
-  };
-
-  if (!mounted) {
+  if (disabled || !isEditing) {
     return (
-      <Tag className={className} style={style}>
+      <span
+        className={cn(
+          'cursor-pointer hover:bg-blue-50 hover:outline hover:outline-1 hover:outline-blue-300 rounded px-1 transition-all duration-200',
+          !value && 'text-gray-400 italic',
+          className
+        )}
+        onClick={() => !disabled && setIsEditing(true)}
+        title="Clique para editar"
+      >
         {value || placeholder}
-      </Tag>
+      </span>
     );
   }
 
-  if (disabled) {
+  if (multiline) {
     return (
-      <Tag 
-        className={className} 
-        style={style}
-        dangerouslySetInnerHTML={{ __html: value || placeholder }}
+      <textarea
+        ref={inputRef as React.RefObject<HTMLTextAreaElement>}
+        value={editValue}
+        onChange={(e) => setEditValue(e.target.value)}
+        onKeyDown={handleKeyDown}
+        onBlur={handleBlur}
+        placeholder={placeholder}
+        className={cn(
+          'resize-none outline-none bg-transparent border-none text-inherit font-inherit leading-inherit',
+          'focus:ring-1 focus:ring-blue-500 rounded px-1',
+          className
+        )}
+        style={{ 
+          minHeight: '1.5em',
+          width: '100%'
+        }}
+        rows={1}
       />
     );
   }
 
-  if (isEditing) {
-    if (isTextArea) {
-      return (
-        <textarea
-          ref={inputRef as React.RefObject<HTMLTextAreaElement>}
-          value={editValue}
-          onChange={(e) => setEditValue(e.target.value)}
-          onBlur={handleBlur}
-          onKeyDown={handleKeyDown}
-          placeholder={placeholder}
-          className={cn(
-            'w-full resize-none border-2 border-blue-500 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white',
-            className
-          )}
-          style={{
-            ...style,
-            minHeight: '80px',
-            fontFamily: 'inherit',
-            fontSize: 'inherit',
-            fontWeight: 'inherit',
-            lineHeight: 'inherit'
-          }}
-          rows={3}
-        />
-      );
-    } else {
-      return (
-        <input
-          ref={inputRef as React.RefObject<HTMLInputElement>}
-          type="text"
-          value={editValue}
-          onChange={(e) => setEditValue(e.target.value)}
-          onBlur={handleBlur}
-          onKeyDown={handleKeyDown}
-          placeholder={placeholder}
-          className={cn(
-            'w-full border-2 border-blue-500 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white',
-            className
-          )}
-          style={{
-            ...style,
-            fontFamily: 'inherit',
-            fontSize: 'inherit',
-            fontWeight: 'inherit',
-            lineHeight: 'inherit',
-            backgroundColor: 'white',
-            color: '#000'
-          }}
-        />
-      );
-    }
-  }
-
   return (
-    <Tag
+    <input
+      ref={inputRef as React.RefObject<HTMLInputElement>}
+      type="text"
+      value={editValue}
+      onChange={(e) => setEditValue(e.target.value)}
+      onKeyDown={handleKeyDown}
+      onBlur={handleBlur}
+      placeholder={placeholder}
       className={cn(
-        'cursor-pointer hover:bg-blue-50 hover:ring-1 hover:ring-blue-200 rounded px-1 py-0.5 transition-all duration-200 min-h-[1.5em] inline-block',
+        'outline-none bg-transparent border-none text-inherit font-inherit leading-inherit w-full',
+        'focus:ring-1 focus:ring-blue-500 rounded px-1',
         className
       )}
-      style={style}
-      onClick={handleClick}
-      title="Clique para editar"
-      dangerouslySetInnerHTML={{ 
-        __html: value || `<span class="text-gray-400 italic">${placeholder}</span>` 
-      }}
     />
   );
 };
