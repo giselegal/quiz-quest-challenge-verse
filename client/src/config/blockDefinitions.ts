@@ -2366,6 +2366,273 @@ export const blockDefinitions: BlockDefinition[] = [
         defaultValue: true
       }
     ]
+  },
+
+  // === COMPONENTES INLINE EDITÁVEIS E RESPONSIVOS ===
+  {
+    type: 'style-card-inline',
+    name: 'Card de Estilo (Inline)',
+    description: 'Componente inline editável para mostrar estilo descoberto',
+    icon: 'Sparkles',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Seu Estilo Único'
+      },
+      {
+        key: 'subtitle',
+        label: 'Subtítulo',
+        type: 'text-input',
+        defaultValue: 'Descoberto através do quiz'
+      },
+      {
+        key: 'description',
+        label: 'Descrição',
+        type: 'textarea',
+        defaultValue: 'Características principais do seu perfil de estilo pessoal'
+      },
+      {
+        key: 'showIcon',
+        label: 'Mostrar Ícone',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+
+  {
+    type: 'testimonial-inline',
+    name: 'Depoimento (Inline)',
+    description: 'Depoimento inline editável com estrelas e autor',
+    icon: 'Quote',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'text',
+        label: 'Texto do Depoimento',
+        type: 'textarea',
+        defaultValue: 'Descobri meu estilo autêntico e agora me visto com muito mais confiança!'
+      },
+      {
+        key: 'authorName',
+        label: 'Nome do Autor',
+        type: 'text-input',
+        defaultValue: 'Maria Silva'
+      },
+      {
+        key: 'authorRole',
+        label: 'Cargo/Descrição',
+        type: 'text-input',
+        defaultValue: 'Cliente satisfeita'
+      },
+      {
+        key: 'rating',
+        label: 'Avaliação (1-5)',
+        type: 'number-input',
+        defaultValue: 5,
+        min: 1,
+        max: 5
+      },
+      {
+        key: 'showStars',
+        label: 'Mostrar Estrelas',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+
+  {
+    type: 'bonus-inline',
+    name: 'Bônus (Inline)',
+    description: 'Item de bônus inline editável com valor e descrição',
+    icon: 'Gift',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título do Bônus',
+        type: 'text-input',
+        defaultValue: 'Bônus Exclusivo'
+      },
+      {
+        key: 'value',
+        label: 'Valor',
+        type: 'text-input',
+        defaultValue: 'R$ 97,00'
+      },
+      {
+        key: 'description',
+        label: 'Descrição',
+        type: 'textarea',
+        defaultValue: 'Material adicional incluso gratuitamente'
+      },
+      {
+        key: 'showIcon',
+        label: 'Mostrar Ícone',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+
+  {
+    type: 'cta-inline',
+    name: 'CTA (Inline)',
+    description: 'Call-to-action inline editável com preço e botão',
+    icon: 'Target',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'text',
+        label: 'Texto Principal',
+        type: 'text-input',
+        defaultValue: 'Transforme seu estilo hoje'
+      },
+      {
+        key: 'buttonText',
+        label: 'Texto do Botão',
+        type: 'text-input',
+        defaultValue: 'Quero meu Guia'
+      },
+      {
+        key: 'price',
+        label: 'Preço',
+        type: 'text-input',
+        defaultValue: 'R$ 97,00'
+      },
+      {
+        key: 'showPrice',
+        label: 'Mostrar Preço',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+
+  {
+    type: 'progress-inline',
+    name: 'Progresso (Inline)',
+    description: 'Barra de progresso inline editável e responsiva',
+    icon: 'TrendingUp',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'label',
+        label: 'Rótulo',
+        type: 'text-input',
+        defaultValue: 'Progresso do Quiz'
+      },
+      {
+        key: 'percentage',
+        label: 'Porcentagem',
+        type: 'number-input',
+        defaultValue: 65,
+        min: 0,
+        max: 100
+      },
+      {
+        key: 'color',
+        label: 'Cor',
+        type: 'color-picker',
+        defaultValue: '#B89B7A'
+      },
+      {
+        key: 'showPercentage',
+        label: 'Mostrar Porcentagem',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+
+  {
+    type: 'badge-inline',
+    name: 'Badge (Inline)',
+    description: 'Badge inline editável para indicadores e rótulos',
+    icon: 'Shield',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'text',
+        label: 'Texto',
+        type: 'text-input',
+        defaultValue: 'Compra Segura'
+      },
+      {
+        key: 'type',
+        label: 'Tipo',
+        type: 'select',
+        defaultValue: 'security',
+        options: [
+          { label: 'Segurança', value: 'security' },
+          { label: 'Garantia', value: 'guarantee' },
+          { label: 'Avaliação', value: 'rating' },
+          { label: 'Conquista', value: 'achievement' }
+        ]
+      },
+      {
+        key: 'variant',
+        label: 'Variante',
+        type: 'select',
+        defaultValue: 'default',
+        options: [
+          { label: 'Padrão', value: 'default' },
+          { label: 'Sucesso', value: 'success' },
+          { label: 'Aviso', value: 'warning' },
+          { label: 'Info', value: 'info' }
+        ]
+      },
+      {
+        key: 'showIcon',
+        label: 'Mostrar Ícone',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+
+  {
+    type: 'stat-inline',
+    name: 'Estatística (Inline)',
+    description: 'Estatística inline editável com valor e descrição',
+    icon: 'Users',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'value',
+        label: 'Valor',
+        type: 'text-input',
+        defaultValue: '1000+'
+      },
+      {
+        key: 'label',
+        label: 'Rótulo',
+        type: 'text-input',
+        defaultValue: 'Clientes Satisfeitas'
+      },
+      {
+        key: 'type',
+        label: 'Tipo',
+        type: 'select',
+        defaultValue: 'users',
+        options: [
+          { label: 'Usuários', value: 'users' },
+          { label: 'Crescimento', value: 'growth' },
+          { label: 'Satisfação', value: 'satisfaction' },
+          { label: 'Tempo', value: 'time' }
+        ]
+      },
+      {
+        key: 'showIcon',
+        label: 'Mostrar Ícone',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
   }
 
 ];

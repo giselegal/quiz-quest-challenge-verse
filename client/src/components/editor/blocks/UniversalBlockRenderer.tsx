@@ -26,6 +26,15 @@ import ValueStackBlock from './ValueStackBlock';
 import FinalCTABlock from './FinalCTABlock';
 import QuizQuestionBlock from './QuizQuestionBlock';
 import QuizProgressBlock from './QuizProgressBlock';
+
+// Novos componentes INLINE editáveis
+import StyleCardInlineBlock from './StyleCardInlineBlock';
+import TestimonialInlineBlock from './TestimonialInlineBlock';
+import BonusInlineBlock from './BonusInlineBlock';
+import CTAInlineBlock from './CTAInlineBlock';
+import ProgressInlineBlock from './ProgressInlineBlock';
+import BadgeInlineBlock from './BadgeInlineBlock';
+import StatInlineBlock from './StatInlineBlock';
 import { VideoPlayerBlock } from './VideoPlayerBlock';
 
 // Blocos específicos do Quiz Intro
@@ -192,17 +201,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'terms':
         return <TermsBlock {...commonProps} />;
 
-      // Novos blocos modulares avançados
-      case 'social-proof':
-        return <SocialProofBlock {...commonProps} />;
-      case 'value-anchoring':
-        return <ValueAnchoringBlock {...commonProps} />;
-      case 'advanced-cta':
-        return <AdvancedCTABlock {...commonProps} />;
-      case 'comparison-table':
-        return <ComparisonTableBlock {...commonProps} />;
-
-      // Componentes modulares reais da ResultPage
+      // Componentes modulares reais da ResultPage - INLINE e EDITÁVEIS
       case 'style-card':
         return <StyleCardBlock {...commonProps} />;
       case 'before-after':
@@ -217,9 +216,9 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <MentorBlock {...commonProps} />;
       case 'secure-purchase':
         return <SecurePurchaseBlock {...commonProps} />;
-      case 'value-anchoring':
+      case 'value-stack':
         return <ValueStackBlock {...commonProps} />;
-      case 'advanced-cta':
+      case 'final-cta':
         return <FinalCTABlock {...commonProps} />;
 
       // Componentes modulares reais do Quiz
@@ -227,6 +226,22 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <QuizQuestionBlock {...commonProps} />;
       case 'quiz-progress':
         return <QuizProgressBlock {...commonProps} />;
+
+      // NOVOS COMPONENTES INLINE EDITÁVEIS E RESPONSIVOS
+      case 'style-card-inline':
+        return <StyleCardInlineBlock {...commonProps} />;
+      case 'testimonial-inline':
+        return <TestimonialInlineBlock {...commonProps} />;
+      case 'bonus-inline':
+        return <BonusInlineBlock {...commonProps} />;
+      case 'cta-inline':
+        return <CTAInlineBlock {...commonProps} />;
+      case 'progress-inline':
+        return <ProgressInlineBlock {...commonProps} />;
+      case 'badge-inline':
+        return <BadgeInlineBlock {...commonProps} />;
+      case 'stat-inline':
+        return <StatInlineBlock {...commonProps} />;
       case 'product-carousel':
         return <ProductCarouselBlock {...commonProps} />;
 
@@ -249,8 +264,6 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       // BLOCOS ESPECÍFICOS DE QUIZ/FUNNEL - SCHEMA DRIVEN
       case 'quiz-intro-page':
         return <QuizStartPageBlock {...commonProps} />;
-      case 'quiz-question':
-        return <QuizQuestionBlock {...commonProps} />;
       case 'quiz-transition-page':
         return <QuizTransitionBlock {...commonProps} />;
       case 'result-page':
