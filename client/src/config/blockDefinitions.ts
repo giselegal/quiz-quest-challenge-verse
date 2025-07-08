@@ -1427,18 +1427,18 @@ export const blockDefinitions: BlockDefinition[] = [
     ],
   },
 
-  // Etapa 20: Blocos da Página de Resultado
+  // Etapa 20: Página de Resultado Moderna
   {
-    type: 'quiz-result-header',
-    name: 'Cabeçalho do Resultado',
-    description: 'Cabeçalho da página de resultado com logo e informações',
+    type: 'modern-result-page',
+    name: 'Página de Resultado Moderna',
+    description: 'Página completa de resultado do quiz com design moderno e animações',
     icon: 'Award',
     category: 'Quiz',
     propertiesSchema: [
       { key: 'logoUrl', label: 'URL do Logo', type: 'image-url', defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp' },
       { key: 'logoAlt', label: 'Texto Alt do Logo', type: 'text-input', defaultValue: 'Logo Gisele Galvão' },
       { key: 'logoHeight', label: 'Altura do Logo', type: 'text-input', defaultValue: '60px' },
-      { key: 'userName', label: 'Nome do Usuário', type: 'text-input', defaultValue: 'Seu Nome' },
+      { key: 'userName', label: 'Nome do Usuário', type: 'text-input', defaultValue: 'Querida' },
       { key: 'primaryStyle', label: 'Estilo Predominante', type: 'select', options: [
         { label: 'Natural', value: 'natural' },
         { label: 'Clássico', value: 'classico' },
@@ -1449,81 +1449,44 @@ export const blockDefinitions: BlockDefinition[] = [
         { label: 'Dramático', value: 'dramatico' },
         { label: 'Criativo', value: 'criativo' },
       ], defaultValue: 'elegante' },
-    ],
-  },
-
-  {
-    type: 'quiz-result-card',
-    name: 'Card do Resultado',
-    description: 'Card principal com o resultado do estilo predominante',
-    icon: 'Gift',
-    category: 'Quiz',
-    propertiesSchema: [
-      { key: 'className', label: 'Classe CSS', type: 'text-input', defaultValue: 'result-card-main' },
-      { key: 'showImage', label: 'Mostrar Imagem', type: 'boolean-switch', defaultValue: true },
-      { key: 'showDescription', label: 'Mostrar Descrição', type: 'boolean-switch', defaultValue: true },
+      { key: 'showStyleImage', label: 'Mostrar Imagem do Estilo', type: 'boolean-switch', defaultValue: true },
       { key: 'showCharacteristics', label: 'Mostrar Características', type: 'boolean-switch', defaultValue: true },
+      { key: 'showSecondaryStyles', label: 'Mostrar Estilos Secundários', type: 'boolean-switch', defaultValue: true },
+      { key: 'ctaText', label: 'Texto do Botão', type: 'text-input', defaultValue: 'DESCOBRIR MEU GUARDA-ROUPA IDEAL' },
+      { key: 'ctaUrl', label: 'URL do Botão', type: 'text-input', defaultValue: '#oferta' },
+      { key: 'backgroundColor', label: 'Cor de Fundo', type: 'color-picker', defaultValue: '#FFFBF7' },
+      { key: 'accentColor', label: 'Cor de Destaque', type: 'color-picker', defaultValue: '#B89B7A' },
+      { key: 'textColor', label: 'Cor do Texto', type: 'color-picker', defaultValue: '#432818' },
     ],
   },
 
-  // Etapa 21: Blocos da Página de Oferta
+  // Etapa 21: Página de Oferta do Quiz
   {
-    type: 'quiz-offer-title',
-    name: 'Título da Oferta',
-    description: 'Título principal da página de oferta',
+    type: 'quiz-offer-page',
+    name: 'Página de Oferta do Quiz',
+    description: 'Página completa de oferta com countdown, preços e depoimentos',
     icon: 'ShoppingCart',
     category: 'Quiz',
     propertiesSchema: [
-      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Descubra Seu Estilo Predominante' },
+      { key: 'logoUrl', label: 'URL do Logo', type: 'image-url', defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp' },
+      { key: 'logoAlt', label: 'Texto Alt do Logo', type: 'text-input', defaultValue: 'Logo Gisele Galvão' },
+      { key: 'logoHeight', label: 'Altura do Logo', type: 'text-input', defaultValue: '60px' },
+      { key: 'title', label: 'Título Principal', type: 'text-input', defaultValue: 'Descubra Seu Estilo Predominante' },
       { key: 'subtitle', label: 'Subtítulo', type: 'text-input', defaultValue: 'Tenha finalmente um guarda-roupa que funciona 100%' },
-      { key: 'titleColor', label: 'Cor do Título', type: 'color-picker', defaultValue: '#B89B7A' },
-      { key: 'subtitleColor', label: 'Cor do Subtítulo', type: 'color-picker', defaultValue: '#432818' },
-    ],
-  },
-
-  {
-    type: 'quiz-offer-countdown',
-    name: 'Timer da Oferta',
-    description: 'Contador regressivo para criar urgência',
-    icon: 'Clock',
-    category: 'Quiz',
-    propertiesSchema: [
-      { key: 'initialMinutes', label: 'Minutos Iniciais', type: 'number-input', defaultValue: 15, min: 1, max: 60 },
-      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Oferta expira em:' },
-      { key: 'backgroundColor', label: 'Cor de Fundo', type: 'color-picker', defaultValue: '#dc2626' },
-      { key: 'textColor', label: 'Cor do Texto', type: 'color-picker', defaultValue: '#ffffff' },
-    ],
-  },
-
-  {
-    type: 'quiz-offer-pricing',
-    name: 'Preços da Oferta',
-    description: 'Seção de preços com desconto e parcelamento',
-    icon: 'CircleDollarSign',
-    category: 'Quiz',
-    propertiesSchema: [
-      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Oferta por tempo limitado' },
-      { key: 'installments', label: 'Parcelamento', type: 'text-input', defaultValue: 'R$ 8,83' },
-      { key: 'fullPrice', label: 'Preço Total', type: 'text-input', defaultValue: 'R$ 39,90' },
+      { key: 'heroImage', label: 'Imagem Hero', type: 'image-url', defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911574/ELEGANTE_PREDOMINANTE_awmgit.webp' },
+      { key: 'countdownMinutes', label: 'Minutos do Countdown', type: 'number-input', defaultValue: 15, min: 1, max: 60 },
+      { key: 'installmentPrice', label: 'Preço Parcelado', type: 'text-input', defaultValue: 'R$ 8,83' },
+      { key: 'fullPrice', label: 'Preço à Vista', type: 'text-input', defaultValue: 'R$ 39,90' },
       { key: 'originalPrice', label: 'Preço Original', type: 'text-input', defaultValue: 'R$ 175,00' },
       { key: 'savings', label: 'Economia', type: 'text-input', defaultValue: '77% OFF - Economia de R$ 135,10' },
       { key: 'ctaText', label: 'Texto do Botão', type: 'text-input', defaultValue: 'QUERO DESCOBRIR MEU ESTILO AGORA' },
-      { key: 'ctaUrl', label: 'URL do Botão', type: 'text-input', defaultValue: '#' },
-    ],
-  },
-
-  {
-    type: 'quiz-offer-faq',
-    name: 'FAQ da Oferta',
-    description: 'Seção de perguntas frequentes',
-    icon: 'MessageSquare',
-    category: 'Quiz',
-    propertiesSchema: [
-      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Perguntas Frequentes' },
-      { key: 'questions', label: 'Perguntas', type: 'array-editor', defaultValue: [], itemSchema: [
-        { key: 'question', label: 'Pergunta', type: 'text-input', placeholder: 'Como funciona?' },
-        { key: 'answer', label: 'Resposta', type: 'textarea', placeholder: 'Resposta detalhada...', rows: 3 },
-      ]},
+      { key: 'ctaUrl', label: 'URL do Botão', type: 'text-input', defaultValue: '#checkout' },
+      { key: 'showTestimonials', label: 'Mostrar Depoimentos', type: 'boolean-switch', defaultValue: true },
+      { key: 'showFaq', label: 'Mostrar FAQ', type: 'boolean-switch', defaultValue: true },
+      { key: 'showGuarantee', label: 'Mostrar Garantia', type: 'boolean-switch', defaultValue: true },
+      { key: 'backgroundColor', label: 'Cor de Fundo', type: 'color-picker', defaultValue: '#FFFBF7' },
+      { key: 'accentColor', label: 'Cor de Destaque', type: 'color-picker', defaultValue: '#B89B7A' },
+      { key: 'textColor', label: 'Cor do Texto', type: 'color-picker', defaultValue: '#432818' },
     ],
   },
 

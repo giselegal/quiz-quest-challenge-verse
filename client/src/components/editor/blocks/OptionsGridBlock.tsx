@@ -158,7 +158,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
           <div 
             className={`grid ${gridCols} w-full mx-auto px-1 sm:px-0 gap-3 sm:gap-4 md:gap-5`}
           >
-        {options.map((option: any, index: number) => {
+            {options.map((option: any, index: number) => {
           const isSelected = isOptionSelected(option.id);
           return (
             <button 
@@ -222,7 +222,9 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
             </button>
           );
         })}
-      </div>
+        </div>
+        );
+      })()}
       
       {/* Mensagem de validação */}
       {validationError && (

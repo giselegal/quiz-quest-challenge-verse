@@ -53,6 +53,7 @@ import QuizOfferPageBlock from './QuizOfferPageBlock';
 import QuestionMultipleBlock from './QuestionMultipleBlock';
 import StrategicQuestionBlock from './StrategicQuestionBlock';
 import QuizTransitionBlock from './QuizTransitionBlock';
+import ModernResultPageBlock from './ModernResultPageBlock';
 
 // Blocos unificados do funil
 import UnifiedFunnelBlock from './UnifiedFunnelBlock';
@@ -217,6 +218,14 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <StrategicQuestionBlock {...commonProps} />;
       case 'quiz-transition-final':
         return <QuizTransitionBlock {...commonProps} />;
+      
+      // NOVOS COMPONENTES ESPECÍFICOS DE PÁGINAS (Etapas 20 e 21)
+      case 'modern-result-page':
+        return <ModernResultPageBlock {...commonProps} />;
+      case 'quiz-offer-page':
+        return <QuizOfferPageBlock {...commonProps} />;
+      
+      // BLOCOS DE RESULTADO ANTIGOS (mantidos para compatibilidade)
       case 'quiz-result-header':
         return <ResultHeaderBlock {...commonProps} />;
       case 'quiz-result-card':

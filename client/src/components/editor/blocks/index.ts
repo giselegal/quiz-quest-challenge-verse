@@ -28,6 +28,9 @@ export { default as QuestionMultipleBlock } from './QuestionMultipleBlock';
 export { default as StrategicQuestionBlock } from './StrategicQuestionBlock';
 export { default as QuizTransitionBlock } from './QuizTransitionBlock';
 
+// Novos componentes específicos de páginas (Etapas 20 e 21)
+export { default as ModernResultPageBlock } from './ModernResultPageBlock';
+
 // Blocos de resultado e oferta (confirmados como funcionais)
 export { default as ResultHeaderBlock } from './ResultHeaderBlock';
 export { default as ResultDescriptionBlock } from './ResultDescriptionBlock';
