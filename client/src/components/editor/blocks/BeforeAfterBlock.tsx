@@ -1,6 +1,22 @@
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { InlineEditableText } from './InlineEditableText';
+import { ChevronLeft, ChevronRight, Quote, ArrowRightLeft } from 'lucide-react';
 import type { BlockComponentProps } from '@/types/blocks';
+import { Card, CardContent } from '@/components/ui/card';
+
+interface Transformation {
+  id: string;
+  name: string;
+  age?: string;
+  location?: string;
+  beforeImage?: string;
+  afterImage?: string;
+  combinedImage?: string;
+  testimonial?: string;
+  results?: string[];
+  style?: string;
+}
 
 interface BeforeAfterBlockProps extends BlockComponentProps {
   block: {
@@ -9,18 +25,17 @@ interface BeforeAfterBlockProps extends BlockComponentProps {
     properties: {
       title?: string;
       subtitle?: string;
-      beforeImage: string;
-      afterImage: string;
+      transformations?: Transformation[];
+      beforeImage?: string;
+      afterImage?: string;
       beforeLabel?: string;
       afterLabel?: string;
-      beforeDescription?: string;
-      afterDescription?: string;
-      showLabels?: boolean;
-      showDescriptions?: boolean;
-      sliderPosition?: number;
-      orientation?: 'horizontal' | 'vertical';
+      displayMode?: 'transformations' | 'slider';
+      showTestimonials?: boolean;
+      showResults?: boolean;
       backgroundColor?: string;
       textColor?: string;
+      cardStyle?: 'minimal' | 'elegant' | 'bold';
     };
   };
 }
@@ -28,198 +43,299 @@ interface BeforeAfterBlockProps extends BlockComponentProps {
 const BeforeAfterBlock: React.FC<BeforeAfterBlockProps> = ({
   block,
   isSelected = false,
+  isEditing = false,
   onClick,
+  onPropertyChange,
   className = ''
 }) => {
   const {
-    title = 'Transformação',
-    subtitle = '',
-    beforeImage,
-    afterImage,
+    title = 'Transformações Reais',
+    subtitle = 'Veja as transformações incríveis de nossas clientes',
+    transformations = [
+      {
+        id: 'transformation-1',
+        name: 'Maria Silva',
+        age: '34 anos',
+        location: 'São Paulo',
+        combinedImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/before-after-1.webp',
+        testimonial: 'Nunca pensei que pudesse me sentir tão confiante! O guia de estilo mudou completamente minha relação com a moda.',
+        results: ['Autoestima elevada', 'Guarda-roupa organizado', 'Compras mais inteligentes'],
+        style: 'Elegante'
+      }
+    ],
+    beforeImage = '',
+    afterImage = '',
     beforeLabel = 'Antes',
     afterLabel = 'Depois',
-    beforeDescription = '',
-    afterDescription = '',
-    showLabels = true,
-    showDescriptions = true,
-    sliderPosition: initialPosition = 50,
-    orientation = 'horizontal',
+    displayMode = 'transformations',
+    showTestimonials = true,
+    showResults = true,
     backgroundColor = '#ffffff',
-    textColor = '#374151'
+    textColor = '#432818',
+    cardStyle = 'elegant'
   } = block.properties;
 
-  const [sliderPosition, setSliderPosition] = useState(initialPosition);
-  const [isDragging, setIsDragging] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const handleMouseMove = (e: MouseEvent) => {
-    if (!isDragging || !containerRef.current) return;
-
-    const rect = containerRef.current.getBoundingClientRect();
-    const position = orientation === 'horizontal' 
-      ? ((e.clientX - rect.left) / rect.width) * 100
-      : ((e.clientY - rect.top) / rect.height) * 100;
-    
-    setSliderPosition(Math.min(100, Math.max(0, position)));
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  React.useEffect(() => {
-    if (isDragging) {
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-      return () => {
-        document.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('mouseup', handleMouseUp);
-      };
+  const handlePropertyChange = (key: string, value: any) => {
+    if (onPropertyChange) {
+      onPropertyChange(key, value);
     }
-  }, [isDragging]);
+  };
+
+  const nextSlide = () => {
+    if (transformations && transformations.length > 1) {
+      setCurrentSlide((prev) => (prev + 1) % transformations.length);
+    }
+  };
+
+  const prevSlide = () => {
+    if (transformations && transformations.length > 1) {
+      setCurrentSlide((prev) => (prev - 1 + transformations.length) % transformations.length);
+    }
+  };
+
+  const getCardStyleClasses = () => {
+    const baseClasses = 'relative overflow-hidden transition-all duration-300';
+    
+    switch (cardStyle) {
+      case 'minimal':
+        return `${baseClasses} bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md`;
+      case 'bold':
+        return `${baseClasses} bg-gradient-to-br from-[#B89B7A] to-[#A68A6A] text-white rounded-xl shadow-lg hover:shadow-xl`;
+      case 'elegant':
+      default:
+        return `${baseClasses} bg-white border border-[#B89B7A]/20 rounded-lg shadow-md hover:shadow-lg hover:border-[#B89B7A]/40`;
+    }
+  };
+
+  const renderTransformation = (transformation: Transformation, index: number) => (
+    <div key={transformation.id} className="w-full">
+      <Card className={getCardStyleClasses()}>
+        <CardContent className="p-6">
+          <div className="text-center mb-6">
+            <h3 className="text-xl font-bold text-[#432818] mb-2">
+              {transformation.name}
+            </h3>
+            {(transformation.age || transformation.location) && (
+              <p className="text-sm text-[#6B4F43] mb-2">
+                {[transformation.age, transformation.location].filter(Boolean).join(' • ')}
+              </p>
+            )}
+            {transformation.style && (
+              <span className="inline-block px-3 py-1 bg-[#B89B7A] text-white text-xs rounded-full">
+                Estilo {transformation.style}
+              </span>
+            )}
+          </div>
+
+          <div className="mb-6">
+            {transformation.combinedImage ? (
+              <div className="relative max-w-md mx-auto">
+                <img
+                  src={transformation.combinedImage}
+                  alt={`Transformação de ${transformation.name}`}
+                  className="w-full h-auto rounded-lg shadow-md"
+                  loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.src = 'https://placehold.co/600x400/cccccc/333333?text=Antes+%26+Depois';
+                  }}
+                />
+                <div className="absolute top-2 left-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-xs">
+                  <ArrowRightLeft className="w-3 h-3 inline mr-1" />
+                  Antes & Depois
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
+                {transformation.beforeImage && (
+                  <div className="relative">
+                    <img
+                      src={transformation.beforeImage}
+                      alt={`${transformation.name} - Antes`}
+                      className="w-full h-auto rounded-lg shadow-md"
+                      loading="lazy"
+                    />
+                    <div className="absolute bottom-2 left-2 bg-red-500 text-white px-2 py-1 rounded text-xs">
+                      Antes
+                    </div>
+                  </div>
+                )}
+                {transformation.afterImage && (
+                  <div className="relative">
+                    <img
+                      src={transformation.afterImage}
+                      alt={`${transformation.name} - Depois`}
+                      className="w-full h-auto rounded-lg shadow-md"
+                      loading="lazy"
+                    />
+                    <div className="absolute bottom-2 left-2 bg-green-500 text-white px-2 py-1 rounded text-xs">
+                      Depois
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {showResults && transformation.results && transformation.results.length > 0 && (
+            <div className="mb-4">
+              <h4 className="font-semibold text-sm text-[#432818] mb-2">Resultados:</h4>
+              <ul className="space-y-1">
+                {transformation.results.map((result, idx) => (
+                  <li key={idx} className="text-sm flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0" />
+                    {result}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {showTestimonials && transformation.testimonial && (
+            <div className="relative">
+              <Quote className="absolute top-0 left-0 w-6 h-6 text-[#B89B7A] opacity-50" />
+              <blockquote className="pl-8 italic text-gray-600 text-sm leading-relaxed">
+                "{transformation.testimonial}"
+              </blockquote>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+
+  if (!transformations || transformations.length === 0) {
+    return (
+      <div
+        className={`
+          bg-gray-100 p-6 rounded-lg text-gray-500 flex flex-col items-center justify-center min-h-[300px] cursor-pointer transition-all duration-200
+          ${isSelected 
+            ? 'outline-2 outline-[#B89B7A] outline-offset-2' 
+            : 'hover:shadow-sm'
+          }
+          ${className}
+        `}
+        onClick={onClick}
+        data-block-id={block.id}
+        data-block-type={block.type}
+      >
+        <ArrowRightLeft className="w-12 h-12 mb-4 opacity-50" />
+        <p className="text-center">Configure as transformações no painel de propriedades.</p>
+      </div>
+    );
+  }
 
   return (
-    <div 
+    <div
       className={`
-        w-full p-6 rounded-lg cursor-pointer transition-all duration-200
+        py-8 px-4 cursor-pointer transition-all duration-200 w-full
         ${isSelected 
-          ? 'border-2 border-blue-500 bg-blue-50' 
-          : 'border-2 border-dashed border-[#B89B7A]/40 hover:bg-[#FAF9F7]'
+          ? 'outline-2 outline-[#B89B7A] outline-offset-2' 
+          : 'hover:shadow-sm'
         }
         ${className}
       `}
-      style={{ backgroundColor, color: textColor }}
       onClick={onClick}
       data-block-id={block.id}
       data-block-type={block.type}
+      style={{ backgroundColor, color: textColor }}
     >
-      {/* Header */}
-      {(title || subtitle) && (
+      {title && (
         <div className="text-center mb-8">
-          {title && (
-            <h2 className="text-2xl md:text-3xl font-bold mb-2" style={{ color: textColor }}>
-              {title}
-            </h2>
-          )}
+          <h2 className="text-2xl md:text-3xl font-bold mb-2">
+            <InlineEditableText
+              value={title}
+              onSave={(value: string) => handlePropertyChange('title', value)}
+              className="inline-block"
+              placeholder="Título das transformações"
+              tag="h2"
+            />
+          </h2>
           {subtitle && (
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              {subtitle}
+            <p className="text-lg text-opacity-80 max-w-2xl mx-auto">
+              <InlineEditableText
+                value={subtitle}
+                onSave={(value: string) => handlePropertyChange('subtitle', value)}
+                className="inline-block"
+                placeholder="Subtítulo das transformações"
+                tag="p"
+              />
             </p>
           )}
         </div>
       )}
 
-      <div className={`flex ${orientation === 'horizontal' ? 'flex-col lg:flex-row' : 'flex-col'} gap-8 items-center`}>
-        {/* Before/After Slider */}
-        <div className="flex-1 w-full max-w-2xl">
-          <div
-            ref={containerRef}
-            className="relative overflow-hidden rounded-lg shadow-lg aspect-video bg-gray-100"
-            style={{ userSelect: 'none' }}
-          >
-            {/* After Image (Background) */}
-            <img
-              src={afterImage}
-              alt={afterLabel}
-              className="absolute inset-0 w-full h-full object-cover"
-              draggable={false}
-            />
-            
-            {/* Before Image (Clipped) */}
-            <div
-              className="absolute inset-0 overflow-hidden"
-              style={{
-                clipPath: orientation === 'horizontal'
-                  ? `polygon(0 0, ${sliderPosition}% 0, ${sliderPosition}% 100%, 0 100%)`
-                  : `polygon(0 0, 100% 0, 100% ${sliderPosition}%, 0 ${sliderPosition}%)`
-              }}
-            >
-              <img
-                src={beforeImage}
-                alt={beforeLabel}
-                className="w-full h-full object-cover"
-                draggable={false}
-              />
-            </div>
-
-            {/* Slider Handle */}
-            <div
-              className={`absolute ${orientation === 'horizontal' ? 'top-0 bottom-0 w-1' : 'left-0 right-0 h-1'} bg-white shadow-lg cursor-${orientation === 'horizontal' ? 'ew' : 'ns'}-resize`}
-              style={{
-                [orientation === 'horizontal' ? 'left' : 'top']: `${sliderPosition}%`,
-                transform: orientation === 'horizontal' ? 'translateX(-50%)' : 'translateY(-50%)'
-              }}
-              onMouseDown={handleMouseDown}
-            >
-              <div
-                className={`absolute ${orientation === 'horizontal' ? 'top-1/2 left-1/2 w-8 h-8' : 'left-1/2 top-1/2 w-8 h-8'} bg-white rounded-full shadow-lg border-2 border-gray-300 cursor-pointer`}
-                style={{
-                  transform: 'translate(-50%, -50%)'
-                }}
+      <div className="max-w-6xl mx-auto">
+        {transformations.length > 1 ? (
+          <div className="relative">
+            <div className="overflow-hidden">
+              <div 
+                className="flex transition-transform duration-300 ease-in-out"
+                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
               >
-                <div className="flex items-center justify-center h-full">
-                  {orientation === 'horizontal' ? (
-                    <div className="flex gap-0.5">
-                      <div className="w-0.5 h-4 bg-gray-600"></div>
-                      <div className="w-0.5 h-4 bg-gray-600"></div>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col gap-0.5">
-                      <div className="w-4 h-0.5 bg-gray-600"></div>
-                      <div className="w-4 h-0.5 bg-gray-600"></div>
-                    </div>
-                  )}
-                </div>
+                {transformations.map((transformation, index) => (
+                  <div key={transformation.id} className="w-full flex-shrink-0 px-4">
+                    {renderTransformation(transformation, index)}
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* Labels */}
-            {showLabels && (
-              <>
-                <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm font-medium">
-                  {beforeLabel}
-                </div>
-                <div className="absolute top-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm font-medium">
-                  {afterLabel}
-                </div>
-              </>
-            )}
-          </div>
-        </div>
+            <button
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white shadow-lg rounded-full p-2 transition-all duration-200 z-10"
+              onClick={(e) => {
+                e.stopPropagation();
+                prevSlide();
+              }}
+              disabled={isEditing}
+            >
+              <ChevronLeft className="w-5 h-5 text-gray-700" />
+            </button>
+            <button
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white shadow-lg rounded-full p-2 transition-all duration-200 z-10"
+              onClick={(e) => {
+                e.stopPropagation();
+                nextSlide();
+              }}
+              disabled={isEditing}
+            >
+              <ChevronRight className="w-5 h-5 text-gray-700" />
+            </button>
 
-        {/* Descriptions */}
-        {showDescriptions && (beforeDescription || afterDescription) && (
-          <div className="flex-1 w-full max-w-md">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {beforeDescription && (
-                <div className="text-center">
-                  <h3 className="text-lg font-semibold mb-2 text-red-600">
-                    {beforeLabel}
-                  </h3>
-                  <p className="text-gray-600">
-                    {beforeDescription}
-                  </p>
-                </div>
-              )}
-              {afterDescription && (
-                <div className="text-center">
-                  <h3 className="text-lg font-semibold mb-2 text-green-600">
-                    {afterLabel}
-                  </h3>
-                  <p className="text-gray-600">
-                    {afterDescription}
-                  </p>
-                </div>
-              )}
+            <div className="flex justify-center gap-2 mt-6">
+              {transformations.map((_, index) => (
+                <button
+                  key={index}
+                  className={`w-3 h-3 rounded-full transition-all duration-200 ${
+                    index === currentSlide 
+                      ? 'bg-[#B89B7A] scale-110' 
+                      : 'bg-gray-300 hover:bg-gray-400'
+                  }`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCurrentSlide(index);
+                  }}
+                  disabled={isEditing}
+                />
+              ))}
             </div>
+          </div>
+        ) : (
+          <div className="max-w-2xl mx-auto">
+            {renderTransformation(transformations[0], 0)}
           </div>
         )}
       </div>
+
+      {isEditing && (
+        <div className="mt-6 p-3 bg-[#FAF9F7] border border-[#B89B7A]/20 rounded-md">
+          <p className="text-sm text-[#8F7A6A]">
+            Modo de edição: {transformations.length} transformação(ões) • 
+            Slide atual: {currentSlide + 1}
+          </p>
+        </div>
+      )}
     </div>
   );
 };

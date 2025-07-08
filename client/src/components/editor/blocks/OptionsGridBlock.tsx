@@ -16,7 +16,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
       { id: 'opcao-1', text: 'Opção 1', value: 'opcao-1', imageUrl: '', category: '' },
       { id: 'opcao-2', text: 'Opção 2', value: 'opcao-2', imageUrl: '', category: '' }
     ],
-    columns = 'auto',
+    columns = 2,
     showImages = true,
     imageSize = 'large',
     multipleSelection = false,
@@ -83,62 +83,23 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
     return internalSelectedOptions.includes(optionId);
   };
 
-  // Detectar automaticamente se há imagens para ajustar o grid
-  const hasImages = showImages && options.some((option: any) => option.imageUrl && option.imageUrl.trim() !== '');
-  
-  // Lógica automática: 2 colunas para imagens, 1 coluna para só texto
-  const autoColumns = hasImages ? 2 : 1;
-  const effectiveColumns = columns === 'auto' ? autoColumns : columns;
-
-  const getGridCols = (cols: string | number) => {
-    // Usar lógica automática baseada na presença de imagens
-    let numCols: number;
-    
-    if (cols === 'auto') {
-      numCols = hasImages ? 2 : 1;
-    } else {
-      numCols = typeof cols === 'string' ? parseInt(cols) : cols;
-    }
-    
+  const getGridCols = (cols: number) => {
     const baseClasses = {
       1: 'grid-cols-1',
       2: 'grid-cols-1 sm:grid-cols-2',
       3: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
       4: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
     };
-    return baseClasses[numCols as keyof typeof baseClasses] || 'grid-cols-1';
+    return baseClasses[cols as keyof typeof baseClasses] || 'grid-cols-1 sm:grid-cols-2';
   };
 
-  // Tamanhos de imagem baseados no HTML de referência
   const getImageHeight = (size: string) => {
-    // Baseado no HTML: width="256" height="256" class="w-full rounded-t-md bg-white h-full"
-    // Para imagens grandes como no exemplo
     const sizeClasses = {
-      small: 'h-48 sm:h-56 md:h-60',
-      medium: 'h-56 sm:h-64 md:h-72', 
-      large: 'h-64 sm:h-72 md:h-80'
+      small: 'h-32 sm:h-40 md:h-44 lg:h-48',
+      medium: 'h-40 sm:h-48 md:h-52 lg:h-56',
+      large: 'h-48 sm:h-56 md:h-60 lg:h-64'
     };
-    return sizeClasses[size as keyof typeof sizeClasses] || 'h-64 sm:h-72 md:h-80';
-  };
-
-  // Tamanhos de card baseados no tipo de conteúdo
-  const getCardHeight = () => {
-    if (hasImages) {
-      // Cards com imagem: mais altos para acomodar imagem + texto
-      return 'min-h-[240px] sm:min-h-[280px] md:min-h-[320px]';
-    } else {
-      // Cards só texto: mais compactos, baseados no conteúdo
-      return 'min-h-[60px] sm:min-h-[80px] md:min-h-[100px]';
-    }
-  };
-
-  // Espaçamento baseado no tipo de conteúdo  
-  const getCardGap = () => {
-    if (hasImages) {
-      return 'gap-4 sm:gap-5 md:gap-6';
-    } else {
-      return 'gap-3 sm:gap-4 md:gap-5';
-    }
+    return sizeClasses[size as keyof typeof sizeClasses] || 'h-48 sm:h-56 md:h-60 lg:h-64';
   };
 
   if (!options || options.length === 0) {
@@ -188,7 +149,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
         </h3>
       )}
       <div 
-        className={`grid ${getGridCols(columns)} w-full mx-auto px-1 sm:px-2 ${getCardGap()}`}
+        className={`grid ${getGridCols(columns)} w-full mx-auto px-1 sm:px-0 gap-3 sm:gap-4 md:gap-5`}
       >
         {options.map((option: any, index: number) => {
           const isSelected = isOptionSelected(option.id);
@@ -196,14 +157,12 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
             <button 
               key={option.id || index} 
               className={`
-                group relative rounded-lg font-medium ring-offset-background 
+                group relative rounded-lg text-sm sm:text-base md:text-lg font-medium ring-offset-background 
                 transition-all duration-300 ease-in-out transform hover:scale-[1.02] 
                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89B7A] focus-visible:ring-offset-2 
                 disabled:pointer-events-none disabled:opacity-50 active:scale-95 
-                border-2 bg-white hover:shadow-lg overflow-hidden w-full flex 
-                flex-col items-center justify-start option-button ${getCardHeight()}
-                ${hasImages ? 'gap-1' : 'gap-2 py-3'}
-                ${hasImages ? 'text-sm sm:text-base' : 'text-base sm:text-lg'}
+                border-2 bg-white hover:shadow-lg overflow-hidden w-full gap-1 flex 
+                flex-col items-center justify-start option-button aspect-[3/4] 
                 ${isSelected 
                   ? 'border-[#B89B7A] bg-[#FAF9F7] shadow-lg scale-[1.02]' 
                   : 'border-zinc-200 hover:border-[#B89B7A] hover:bg-[#FAF9F7] shadow-sm'
@@ -233,26 +192,20 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
                     alt={option.text}
                     width="256"
                     height="256"
-                    className={`w-full rounded-t-md bg-white ${getImageHeight(imageSize)} object-cover transition-all duration-300`}
+                    className={`w-full rounded-t-lg bg-white ${getImageHeight(imageSize)} object-cover transition-all duration-300`}
                     onError={(e) => (e.currentTarget.src = 'https://placehold.co/256x256/cccccc/333333?text=Erro')}
                   />
                   {/* Overlay de seleção */}
                   {isSelected && (
-                    <div className="absolute inset-0 bg-[#B89B7A] bg-opacity-20 rounded-t-md transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-[#B89B7A] bg-opacity-20 rounded-t-lg transition-opacity duration-300"></div>
                   )}
                 </div>
               )}
               
-              <div className={`
-                w-full flex flex-row items-center justify-center flex-shrink-0
-                ${hasImages ? 'py-2 px-4' : 'py-3 px-4'}
-                ${hasImages ? 'text-base' : 'text-base sm:text-lg'}
-              `}>
+              <div className="py-1 px-1 sm:px-2 w-full flex flex-row text-xs sm:text-sm items-center justify-center flex-shrink-0">
                 <div className="break-words w-full custom-quill quill ql-editor quill-option text-center">
                   <div 
-                    className={`font-medium transition-colors duration-300 ${
-                      hasImages ? 'leading-tight' : 'leading-relaxed'
-                    } ${
+                    className={`font-medium transition-colors duration-300 leading-tight ${
                       isSelected ? 'text-[#432818]' : 'text-[#432818] group-hover:text-[#B89B7A]'
                     }`}
                     dangerouslySetInnerHTML={{ __html: option.text || 'Opção sem texto' }}
