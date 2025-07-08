@@ -64,7 +64,7 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
         </div>
       ) : (
         /* Blocks List */
-        <div className="space-y-4 pl-16">
+        <div className="space-y-4">
           {blocks.map((block, index) => (
             <React.Fragment key={block.id}>
               {/* Drop Zone Between Blocks */}

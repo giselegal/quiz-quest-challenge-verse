@@ -19,7 +19,7 @@
   }
   
   .mobile-canvas .block-controls {
-    @apply scale-75 -left-12;
+    @apply scale-90;
   }
   
   .mobile-component-item {

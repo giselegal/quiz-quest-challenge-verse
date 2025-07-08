@@ -65,36 +65,36 @@ export const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
       )}
       onClick={onSelect}
     >
-      {/* Drag Handle e Controls */}
+      {/* Controls Overlay - Top Right */}
       <div className={cn(
-        'absolute -left-16 top-2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-10',
+        'absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-10 bg-white/90 backdrop-blur-sm rounded-md p-1 shadow-sm',
         isSelected && 'opacity-100'
       )}>
         {/* Drag Handle */}
         <Button
           variant="ghost"
           size="sm"
-          className="w-8 h-8 p-0 cursor-grab active:cursor-grabbing hover:bg-gray-100"
+          className="w-6 h-6 p-0 cursor-grab active:cursor-grabbing hover:bg-gray-100"
           {...attributes}
           {...listeners}
         >
-          <GripVertical className="w-4 h-4 text-gray-400" />
+          <GripVertical className="w-3 h-3 text-gray-600" />
         </Button>
 
         {/* Toggle Visibility */}
         <Button
           variant="ghost"
           size="sm"
-          className="w-8 h-8 p-0 hover:bg-gray-100"
+          className="w-6 h-6 p-0 hover:bg-gray-100"
           onClick={(e) => {
             e.stopPropagation();
             onToggleVisibility();
           }}
         >
           {isHidden ? (
-            <EyeOff className="w-4 h-4 text-gray-400" />
+            <EyeOff className="w-3 h-3 text-gray-600" />
           ) : (
-            <Eye className="w-4 h-4 text-gray-400" />
+            <Eye className="w-3 h-3 text-gray-600" />
           )}
         </Button>
 
@@ -102,26 +102,26 @@ export const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
         <Button
           variant="ghost"
           size="sm"
-          className="w-8 h-8 p-0 hover:bg-gray-100"
+          className="w-6 h-6 p-0 hover:bg-gray-100"
           onClick={(e) => {
             e.stopPropagation();
             onDuplicate();
           }}
         >
-          <Copy className="w-4 h-4 text-gray-400" />
+          <Copy className="w-3 h-3 text-gray-600" />
         </Button>
 
         {/* Delete */}
         <Button
           variant="ghost"
           size="sm"
-          className="w-8 h-8 p-0 hover:bg-red-100 hover:text-red-600"
+          className="w-6 h-6 p-0 hover:bg-red-100 hover:text-red-600"
           onClick={(e) => {
             e.stopPropagation();
             onDelete();
           }}
         >
-          <Trash2 className="w-4 h-4 text-gray-400" />
+          <Trash2 className="w-3 h-3 text-gray-600 hover:text-red-600" />
         </Button>
       </div>
 
@@ -142,9 +142,9 @@ export const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
           )}
         />
 
-        {/* Block Type Label */}
+        {/* Block Type Label - Bottom Left when selected */}
         {isSelected && (
-          <div className="absolute top-2 right-2 bg-blue-500 text-white text-xs px-2 py-1 rounded shadow-lg">
+          <div className="absolute bottom-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded shadow-lg">
             {block.type}
           </div>
         )}
