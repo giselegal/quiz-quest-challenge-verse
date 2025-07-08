@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { EditorBlock } from '@/types/editor';
+import { UniversalBlockRenderer, isBlockTypeRegistered } from '../blocks/BlockRegistry';
 import { HeaderBlock } from './blocks/HeaderBlock';
 import { HeroBlock } from './blocks/HeroBlock';
 import { BonusCarouselBlock } from './blocks/BonusCarouselBlock';
@@ -18,6 +19,19 @@ interface BlockRendererProps {
 }
 
 export const BlockRenderer: React.FC<BlockRendererProps> = ({ block, onSelect }) => {
+  // Check if it's a modern block registered in BlockRegistry
+  if (isBlockTypeRegistered(block.type)) {
+    return (
+      <UniversalBlockRenderer
+        type={block.type}
+        block={block}
+        onClick={onSelect}
+        className="cursor-pointer"
+      />
+    );
+  }
+
+  // Legacy blocks - maintain existing logic for backward compatibility
   switch (block.type) {
     case 'header':
       return <HeaderBlock content={block.content} onClick={onSelect} />;
