@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { InlineEditableText } from './InlineEditableText';
+import { useDynamicData } from '@/hooks/useDynamicData';
 import { 
   TrendingUp, 
   Users, 
@@ -68,61 +69,12 @@ const StatsMetricsBlock: React.FC<StatsBlockProps> = ({
   onPropertyChange,
   className = ''
 }) => {
+  const dynamicData = useDynamicData();
+  
   const {
     title = 'Nossos Resultados Falam por Si',
     subtitle = 'Transformando a vida de milhares de mulheres todos os dias',
-    stats = [
-      {
-        id: 'stat-1',
-        label: 'Mulheres Transformadas',
-        value: 15420,
-        suffix: '+',
-        change: 12.5,
-        changeLabel: 'este mês',
-        icon: 'Users',
-        color: '#B89B7A',
-        description: 'Descobriram seu estilo único',
-        trend: 'up',
-        isAnimated: true
-      },
-      {
-        id: 'stat-2',
-        label: 'Avaliação Média',
-        value: 4.9,
-        suffix: '/5',
-        change: 0.2,
-        changeLabel: 'último trimestre',
-        icon: 'Star',
-        color: '#F59E0B',
-        description: 'Satisfação das clientes',
-        trend: 'up',
-        isAnimated: true
-      },
-      {
-        id: 'stat-3',
-        label: 'Taxa de Sucesso',
-        value: 96,
-        suffix: '%',
-        change: 3.1,
-        changeLabel: 'este ano',
-        icon: 'Target',
-        color: '#10B981',
-        description: 'Clientes satisfeitas',
-        trend: 'up',
-        isAnimated: true
-      },
-      {
-        id: 'stat-4',
-        label: 'Estilos Descobertos',
-        value: 8,
-        prefix: '',
-        icon: 'Crown',
-        color: '#8B5CF6',
-        description: 'Diferentes personalidades de estilo',
-        trend: 'neutral',
-        isAnimated: false
-      }
-    ],
+    stats: staticStats,
     layout = 'grid',
     columns = 4,
     showProgress = false,
@@ -134,6 +86,60 @@ const StatsMetricsBlock: React.FC<StatsBlockProps> = ({
     textColor = '#432818',
     accentColor = '#B89B7A'
   } = block.properties;
+
+  // Usar estatísticas dinâmicas se disponíveis, senão usar estáticas/padrão
+  const stats = staticStats || [
+    {
+      id: 'stat-1',
+      label: 'Mulheres Transformadas',
+      value: dynamicData.stats.totalUsers,
+      suffix: '+',
+      change: 12.5,
+      changeLabel: 'este mês',
+      icon: 'Users',
+      color: '#B89B7A',
+      description: 'Descobriram seu estilo único',
+      trend: 'up' as const,
+      isAnimated: true
+    },
+    {
+      id: 'stat-2',
+      label: 'Avaliação Média',
+      value: 4.9,
+      suffix: '/5',
+      change: 0.2,
+      changeLabel: 'último trimestre',
+      icon: 'Star',
+      color: '#F59E0B',
+      description: 'Satisfação das clientes',
+      trend: 'up' as const,
+      isAnimated: true
+    },
+    {
+      id: 'stat-3',
+      label: 'Taxa de Satisfação',
+      value: dynamicData.stats.satisfactionRate,
+      suffix: '%',
+      change: 3.1,
+      changeLabel: 'este ano',
+      icon: 'Target',
+      color: '#10B981',
+      description: 'Clientes satisfeitas',
+      trend: 'up' as const,
+      isAnimated: true
+    },
+    {
+      id: 'stat-4',
+      label: 'Transformações',
+      value: dynamicData.stats.transformations,
+      prefix: '',
+      icon: 'Crown',
+      color: '#8B5CF6',
+      description: 'Mudanças de estilo realizadas',
+      trend: 'neutral' as const,
+      isAnimated: true
+    }
+  ];
 
   const [animatedValues, setAnimatedValues] = useState<Record<string, number>>({});
 
