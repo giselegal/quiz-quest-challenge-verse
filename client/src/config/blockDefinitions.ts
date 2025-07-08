@@ -1860,6 +1860,250 @@ export const blockDefinitions: BlockDefinition[] = [
     ]
   },
 
+  
+  // =====================================================================
+  // BLOCOS MODULARES AVANÇADOS - Baseados no código do anexo
+  // =====================================================================
+  
+  {
+    type: 'social-proof',
+    name: 'Prova Social',
+    description: 'Componente de validação e credibilidade social',
+    icon: 'Users',
+    category: 'Vendas',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'O que nossos clientes dizem'
+      },
+      {
+        key: 'testimonials',
+        label: 'Depoimentos',
+        type: 'array-editor',
+        defaultValue: [
+          { name: 'Maria Silva', text: 'Transformou meu guarda-roupa!', rating: 5 },
+          { name: 'Ana Costa', text: 'Finalmente encontrei meu estilo!', rating: 5 }
+        ]
+      },
+      {
+        key: 'showRating',
+        label: 'Mostrar Avaliações',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'layout',
+        label: 'Layout',
+        type: 'select',
+        options: [
+          { label: 'Grade', value: 'grid' },
+          { label: 'Carrossel', value: 'carousel' },
+          { label: 'Lista', value: 'list' }
+        ],
+        defaultValue: 'grid'
+      }
+    ]
+  },
+
+  {
+    type: 'value-anchoring',
+    name: 'Ancoragem de Valor',
+    description: 'Demonstra o valor e economia da oferta',
+    icon: 'CircleDollarSign',
+    category: 'Vendas',
+    propertiesSchema: [
+      {
+        key: 'originalPrice',
+        label: 'Preço Original',
+        type: 'number-input',
+        defaultValue: 497
+      },
+      {
+        key: 'currentPrice',
+        label: 'Preço Atual',
+        type: 'number-input',
+        defaultValue: 97
+      },
+      {
+        key: 'valueItems',
+        label: 'Itens de Valor',
+        type: 'array-editor',
+        defaultValue: [
+          { item: 'Consultoria Personalizada', value: 200 },
+          { item: 'Análise de Coloração', value: 150 },
+          { item: 'Guia de Estilo Digital', value: 97 },
+          { item: 'Suporte VIP 30 dias', value: 50 }
+        ]
+      },
+      {
+        key: 'showTotal',
+        label: 'Mostrar Total',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'highlightSavings',
+        label: 'Destacar Economia',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+
+  {
+    type: 'advanced-cta',
+    name: 'CTA Avançado',
+    description: 'Call-to-action com múltiplos elementos persuasivos',
+    icon: 'Target',
+    category: 'Vendas',
+    propertiesSchema: [
+      {
+        key: 'mainText',
+        label: 'Texto Principal',
+        type: 'text-input',
+        defaultValue: 'TRANSFORME SEU ESTILO AGORA'
+      },
+      {
+        key: 'subText',
+        label: 'Subtexto',
+        type: 'text-input',
+        defaultValue: 'Descubra seu estilo único em 15 minutos'
+      },
+      {
+        key: 'buttonText',
+        label: 'Texto do Botão',
+        type: 'text-input',
+        defaultValue: 'QUERO DESCOBRIR MEU ESTILO'
+      },
+      {
+        key: 'urgencyText',
+        label: 'Texto de Urgência',
+        type: 'text-input',
+        defaultValue: 'Últimas 24 horas com desconto especial!'
+      },
+      {
+        key: 'guaranteeText',
+        label: 'Garantia',
+        type: 'text-input',
+        defaultValue: 'Garantia de 30 dias ou seu dinheiro de volta'
+      },
+      {
+        key: 'showUrgency',
+        label: 'Mostrar Urgência',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'showGuarantee',
+        label: 'Mostrar Garantia',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'buttonAnimation',
+        label: 'Animação do Botão',
+        type: 'select',
+        options: [
+          { label: 'Nenhuma', value: 'none' },
+          { label: 'Pulse', value: 'pulse' },
+          { label: 'Bounce', value: 'bounce' },
+          { label: 'Brilho', value: 'glow' }
+        ],
+        defaultValue: 'pulse'
+      }
+    ]
+  },
+
+  {
+    type: 'comparison-table',
+    name: 'Tabela de Comparação',
+    description: 'Tabela comparativa de opções ou produtos',
+    icon: 'Scale',
+    category: 'Vendas',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Compare as Opções'
+      },
+      {
+        key: 'columns',
+        label: 'Colunas',
+        type: 'array-editor',
+        defaultValue: [
+          {
+            title: 'Sem Orientação',
+            features: ['Tentativa e erro', 'Compras desnecessárias', 'Insegurança'],
+            highlighted: false
+          },
+          {
+            title: 'Com Nosso Método',
+            features: ['Estilo definido', 'Compras certeiras', 'Confiança total'],
+            highlighted: true
+          }
+        ]
+      },
+      {
+        key: 'showHeaders',
+        label: 'Mostrar Cabeçalhos',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+
+  {
+    type: 'product-carousel',
+    name: 'Carrossel de Produtos',
+    description: 'Exibição em carrossel de produtos ou ofertas',
+    icon: 'GalleryHorizontalEnd',
+    category: 'Vendas',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Nossos Produtos'
+      },
+      {
+        key: 'products',
+        label: 'Produtos',
+        type: 'array-editor',
+        defaultValue: [
+          {
+            title: 'Análise Completa de Estilo',
+            description: 'Descubra seu estilo pessoal único',
+            price: 97,
+            image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'
+          }
+        ]
+      },
+      {
+        key: 'autoPlay',
+        label: 'Reprodução Automática',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'showDots',
+        label: 'Mostrar Indicadores',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'itemsPerView',
+        label: 'Itens por Vista',
+        type: 'number-input',
+        defaultValue: 3,
+        min: 1,
+        max: 6
+      }
+    ]
+  },
+
   // ...existing code...
 ];
 

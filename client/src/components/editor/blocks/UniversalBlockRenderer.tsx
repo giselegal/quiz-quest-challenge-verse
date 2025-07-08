@@ -48,6 +48,13 @@ import TermsBlock from './TermsBlock';
 // Blocos especiais do quiz
 import QuizStartPageBlock from './QuizStartPageBlock';
 import QuizQuestionBlock from './QuizQuestionBlock';
+
+// Novos blocos modulares avançados
+import SocialProofBlock from './SocialProofBlock';
+import ValueAnchoringBlock from './ValueAnchoringBlock';
+import AdvancedCTABlock from './AdvancedCTABlock';
+import ComparisonTableBlock from './ComparisonTableBlock';
+import ProductCarouselBlock from './ProductCarouselBlock';
 import ResultPageBlock from './ResultPageBlock';
 import QuizOfferPageBlock from './QuizOfferPageBlock';
 import QuestionMultipleBlock from './QuestionMultipleBlock';
@@ -174,6 +181,18 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <ScriptBlock {...commonProps} />;
       case 'terms':
         return <TermsBlock {...commonProps} />;
+
+      // Novos blocos modulares avançados
+      case 'social-proof':
+        return <SocialProofBlock {...commonProps} />;
+      case 'value-anchoring':
+        return <ValueAnchoringBlock {...commonProps} />;
+      case 'advanced-cta':
+        return <AdvancedCTABlock {...commonProps} />;
+      case 'comparison-table':
+        return <ComparisonTableBlock {...commonProps} />;
+      case 'product-carousel':
+        return <ProductCarouselBlock {...commonProps} />;
 
       // BLOCOS ESPECÍFICOS DO QUIZ - DADOS REAIS
       case 'QuizStartPageBlock':
