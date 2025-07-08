@@ -6,6 +6,7 @@ import { InlineEditableText } from './InlineEditableText';
 import { ChevronLeft, ChevronRight, ShoppingCart, Star, Heart, Eye, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import useEmblaCarousel from 'embla-carousel-react';
+import { useDynamicData } from '@/hooks/useDynamicData';
 import type { BlockComponentProps } from '@/types/blocks';
 
 interface Product {
@@ -54,13 +55,31 @@ const ProductCarouselBlock: React.FC<ProductCarouselBlockProps> = ({
   onPropertyChange,
   className = ''
 }) => {
+  const dynamicData = useDynamicData();
+  
   const {
     title = 'Nossos Produtos Exclusivos',
     subtitle = 'Descubra produtos selecionados especialmente para o seu estilo',
-    products = [
+    products: staticProducts,
+    displayMode = 'carousel',
+    slidesPerView = 2,
+    showPrices = true,
+    showRatings = true,
+    showFeatures = true,
+    backgroundColor = '#ffffff',
+    textColor = '#432818',
+    cardStyle = 'elegant',
+    autoplay = false,
+    loop = true
+  } = block.properties;
+
+  // Usar produtos dinâmicos se disponíveis, senão usar produtos estáticos/padrão
+  const products = dynamicData.recommendations.products.length > 0 
+    ? dynamicData.recommendations.products 
+    : staticProducts || [
       {
         id: 'product-1',
-        name: 'Guia Completo de Estilo Romântico',
+        name: `Guia Completo ${dynamicData.quizResult.primaryStyle?.name ? `de Estilo ${dynamicData.quizResult.primaryStyle.name}` : 'Personalizado'}`,
         price: 197,
         originalPrice: 297,
         discount: 33,
@@ -86,18 +105,7 @@ const ProductCarouselBlock: React.FC<ProductCarouselBlockProps> = ({
         isNew: true,
         ctaText: 'Agendar Agora'
       }
-    ],
-    displayMode = 'carousel',
-    slidesPerView = 2,
-    showPrices = true,
-    showRatings = true,
-    showFeatures = true,
-    backgroundColor = '#ffffff',
-    textColor = '#432818',
-    cardStyle = 'elegant',
-    autoplay = false,
-    loop = true
-  } = block.properties;
+    ];
 
   const [emblaRef, emblaApi] = useEmblaCarousel({ 
     loop,
