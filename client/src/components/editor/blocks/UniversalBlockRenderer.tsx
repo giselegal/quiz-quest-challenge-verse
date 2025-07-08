@@ -133,7 +133,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'faq-section':
         return <FAQSectionBlock {...commonProps} />;
       case 'testimonials':
-        return <TestimonialsBlock {...commonProps} />;
+        return <TestimonialsBlock {...{...commonProps, block: {...block, type: 'testimonials-grid' as const}}} />;
       case 'guarantee':
         return <GuaranteeBlock {...commonProps} />;
 
@@ -245,7 +245,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'chart-compare':
         return <CompareBlock {...commonProps} />;
       case 'testimonials-grid':
-        return <TestimonialsBlock {...commonProps} />;
+        return <TestimonialsBlock {...{...commonProps, block: {...block, type: 'testimonials-grid' as const}}} />;
       case 'guarantee-section':
         return <GuaranteeBlock {...commonProps} />;
       case 'sales-offer':
