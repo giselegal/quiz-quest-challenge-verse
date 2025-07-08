@@ -415,7 +415,7 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                           className={`w-8 h-8 mb-1 mx-auto rounded text-xs flex items-center justify-center cursor-pointer ${
                             page.id === currentPage?.id ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600'
                           }`}
-                          onClick={() => switchToPage(page.id)}
+                          onClick={() => setCurrentPage(page.id)}
                         >
                           {index + 1}
                         </div>
@@ -507,10 +507,6 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                               });
                             }
                           }}
-                          onBlockUpdate={(blockId, updates) => {
-                            updateBlock(blockId, updates);
-                          }}
-                          onReorder={reorderBlocks}
                           className="mobile-canvas p-2"
                         />
                         
@@ -598,10 +594,6 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                           });
                         }
                       }}
-                      onBlockUpdate={(blockId, updates) => {
-                        updateBlock(blockId, updates);
-                      }}
-                      onReorder={reorderBlocks}
                       className=""
                     />
                     
@@ -666,9 +658,6 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                           properties: defaultProperties
                         });
                       }
-                    }}
-                    onBlockUpdate={(blockId, updates) => {
-                      updateBlock(blockId, updates);
                     }}
                     onReorder={reorderBlocks}
                     className=""
