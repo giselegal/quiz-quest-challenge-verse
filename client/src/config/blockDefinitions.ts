@@ -2793,6 +2793,410 @@ export const blockDefinitions: BlockDefinition[] = [
         defaultValue: true
       }
     ]
+  },
+
+  // =====================================================================
+  // COMPONENTES INLINE ESPECÍFICOS DA ETAPA 20 (RESULT PAGE)
+  // =====================================================================
+  
+  {
+    type: 'result-header-inline',
+    name: 'Cabeçalho de Resultado (Inline)',
+    description: 'Card principal com estilo predominante, progresso e imagens',
+    icon: 'Award',
+    category: 'Result Page',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        placeholder: 'Seu estilo predominante',
+        defaultValue: 'Seu Estilo Predominante'
+      },
+      {
+        key: 'percentage',
+        label: 'Porcentagem',
+        type: 'number-input',
+        min: 0,
+        max: 100,
+        defaultValue: 85
+      },
+      {
+        key: 'description',
+        label: 'Descrição',
+        type: 'textarea',
+        placeholder: 'Descrição do estilo...',
+        rows: 4,
+        defaultValue: 'Descubra como aplicar seu estilo pessoal único na prática...'
+      },
+      {
+        key: 'imageUrl',
+        label: 'URL da Imagem do Estilo',
+        type: 'image-url',
+        defaultValue: 'https://via.placeholder.com/238x320?text=Estilo'
+      },
+      {
+        key: 'guideImageUrl',
+        label: 'URL da Imagem do Guia',
+        type: 'image-url',
+        defaultValue: 'https://via.placeholder.com/540x300?text=Guia+de+Estilo'
+      },
+      {
+        key: 'progressColor',
+        label: 'Cor do Progresso',
+        type: 'color-picker',
+        defaultValue: '#B89B7A'
+      },
+      {
+        key: 'badgeText',
+        label: 'Texto do Badge',
+        type: 'text-input',
+        defaultValue: 'Exclusivo'
+      }
+    ]
+  },
+
+  {
+    type: 'value-stack-inline',
+    name: 'Stack de Valor (Inline)',
+    description: 'Seção com benefícios, itens de valor e preços',
+    icon: 'CircleDollarSign',
+    category: 'Result Page',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'O Que Você Recebe Hoje'
+      },
+      {
+        key: 'items',
+        label: 'Itens de Valor',
+        type: 'array-editor',
+        itemSchema: [
+          {
+            key: 'name',
+            label: 'Nome do Item',
+            type: 'text-input',
+            defaultValue: 'Item'
+          },
+          {
+            key: 'value',
+            label: 'Valor',
+            type: 'text-input',
+            defaultValue: 'R$ 0,00'
+          }
+        ],
+        defaultValue: [
+          { name: 'Guia Principal', value: 'R$ 67,00' },
+          { name: 'Bônus - Peças-chave', value: 'R$ 79,00' },
+          { name: 'Bônus - Visagismo Facial', value: 'R$ 29,00' }
+        ]
+      },
+      {
+        key: 'totalValue',
+        label: 'Valor Total',
+        type: 'text-input',
+        defaultValue: 'R$ 175,00'
+      },
+      {
+        key: 'finalPrice',
+        label: 'Preço Final',
+        type: 'text-input',
+        defaultValue: 'R$ 39,00'
+      },
+      {
+        key: 'finalPriceLabel',
+        label: 'Label do Preço Final',
+        type: 'text-input',
+        defaultValue: 'Hoje por apenas'
+      },
+      {
+        key: 'paymentInfo',
+        label: 'Info do Pagamento',
+        type: 'text-input',
+        defaultValue: 'Pagamento único'
+      },
+      {
+        key: 'benefits',
+        label: 'Benefícios',
+        type: 'array-editor',
+        itemSchema: [
+          {
+            key: 'benefit',
+            label: 'Benefício',
+            type: 'text-input',
+            defaultValue: 'Benefício'
+          }
+        ],
+        defaultValue: [
+          'Looks com intenção e identidade',
+          'Cores, modelagens e tecidos a seu favor',
+          'Imagem alinhada aos seus objetivos',
+          'Guarda-roupa funcional, sem compras por impulso'
+        ]
+      }
+    ]
+  },
+
+  {
+    type: 'cta-section-inline',
+    name: 'Seção CTA (Inline)',
+    description: 'Seção de call-to-action com título e botão',
+    icon: 'ShoppingCart',
+    category: 'Result Page',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Descubra Como Aplicar Seu Estilo na Prática'
+      },
+      {
+        key: 'buttonText',
+        label: 'Texto do Botão',
+        type: 'text-input',
+        defaultValue: 'Quero meu Guia de Estilo Agora'
+      },
+      {
+        key: 'buttonUrl',
+        label: 'URL do Botão',
+        type: 'text-input',
+        defaultValue: '#'
+      },
+      {
+        key: 'buttonColor',
+        label: 'Cor do Botão',
+        type: 'color-picker',
+        defaultValue: 'linear-gradient(to right, #4CAF50, #45a049)'
+      },
+      {
+        key: 'securityText',
+        label: 'Texto de Segurança',
+        type: 'text-input',
+        defaultValue: 'Oferta exclusiva nesta página'
+      },
+      {
+        key: 'arrowEnabled',
+        label: 'Mostrar Seta',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'style',
+        label: 'Estilo',
+        type: 'select',
+        options: [
+          { label: 'Verde', value: 'green' },
+          { label: 'Primário', value: 'primary' },
+          { label: 'Secundário', value: 'secondary' }
+        ],
+        defaultValue: 'green'
+      }
+    ]
+  },
+
+  {
+    type: 'guarantee-inline',
+    name: 'Garantia (Inline)',
+    description: 'Seção de garantia com ícone e características',
+    icon: 'Shield',
+    category: 'Result Page',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Garantia de 30 Dias'
+      },
+      {
+        key: 'description',
+        label: 'Descrição',
+        type: 'textarea',
+        rows: 3,
+        defaultValue: 'Se você não ficar satisfeita com o resultado, devolvemos 100% do seu dinheiro em até 30 dias.'
+      },
+      {
+        key: 'iconType',
+        label: 'Tipo de Ícone',
+        type: 'select',
+        options: [
+          { label: 'Escudo', value: 'shield' },
+          { label: 'Estrela', value: 'star' },
+          { label: 'Check', value: 'check' }
+        ],
+        defaultValue: 'shield'
+      },
+      {
+        key: 'backgroundColor',
+        label: 'Cor de Fundo',
+        type: 'color-picker',
+        defaultValue: '#f9f4ef'
+      },
+      {
+        key: 'borderColor',
+        label: 'Cor da Borda',
+        type: 'color-picker',
+        defaultValue: '#B89B7A'
+      },
+      {
+        key: 'features',
+        label: 'Características',
+        type: 'array-editor',
+        itemSchema: [
+          {
+            key: 'feature',
+            label: 'Característica',
+            type: 'text-input',
+            defaultValue: 'Característica'
+          }
+        ],
+        defaultValue: [
+          'Garantia incondicional',
+          'Devolução em até 30 dias',
+          'Suporte completo',
+          'Sem riscos'
+        ]
+      }
+    ]
+  },
+
+  {
+    type: 'transformation-inline',
+    name: 'Transformação (Inline)',
+    description: 'Comparação antes/depois com imagens e descrições',
+    icon: 'ArrowRightLeft',
+    category: 'Result Page',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título Principal',
+        type: 'text-input',
+        defaultValue: 'Sua Transformação Começa Aqui'
+      },
+      {
+        key: 'subtitle',
+        label: 'Subtítulo',
+        type: 'text-input',
+        defaultValue: 'Veja o que você vai alcançar'
+      },
+      {
+        key: 'beforeTitle',
+        label: 'Título do Antes',
+        type: 'text-input',
+        defaultValue: 'ANTES'
+      },
+      {
+        key: 'beforeDescription',
+        label: 'Descrição do Antes',
+        type: 'textarea',
+        rows: 3,
+        defaultValue: 'Sem direção no guarda-roupa, comprando por impulso e se sentindo sempre inadequada.'
+      },
+      {
+        key: 'beforeImage',
+        label: 'Imagem do Antes',
+        type: 'image-url',
+        defaultValue: 'https://via.placeholder.com/300x200?text=Antes'
+      },
+      {
+        key: 'afterTitle',
+        label: 'Título do Depois',
+        type: 'text-input',
+        defaultValue: 'DEPOIS'
+      },
+      {
+        key: 'afterDescription',
+        label: 'Descrição do Depois',
+        type: 'textarea',
+        rows: 3,
+        defaultValue: 'Com um estilo autêntico, confiante e alinhado com seus objetivos pessoais e profissionais.'
+      },
+      {
+        key: 'afterImage',
+        label: 'Imagem do Depois',
+        type: 'image-url',
+        defaultValue: 'https://via.placeholder.com/300x200?text=Depois'
+      },
+      {
+        key: 'arrowColor',
+        label: 'Cor da Seta',
+        type: 'color-picker',
+        defaultValue: '#B89B7A'
+      }
+    ]
+  },
+
+  {
+    type: 'final-value-proposition-inline',
+    name: 'Proposta de Valor Final (Inline)',
+    description: 'Seção final com título, benefícios e CTA',
+    icon: 'Crown',
+    category: 'Result Page',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título Principal',
+        type: 'text-input',
+        defaultValue: 'Vista-se de Você — na Prática'
+      },
+      {
+        key: 'description',
+        label: 'Descrição',
+        type: 'textarea',
+        rows: 3,
+        defaultValue: 'Agora que você conhece seu estilo, é hora de aplicá-lo com clareza e intenção.'
+      },
+      {
+        key: 'sectionTitle',
+        label: 'Título da Seção',
+        type: 'text-input',
+        defaultValue: 'O Guia de Estilo e Imagem + Bônus Exclusivos'
+      },
+      {
+        key: 'buttonText',
+        label: 'Texto do Botão',
+        type: 'text-input',
+        defaultValue: 'Garantir Meu Guia + Bônus Especiais'
+      },
+      {
+        key: 'buttonUrl',
+        label: 'URL do Botão',
+        type: 'text-input',
+        defaultValue: '#'
+      },
+      {
+        key: 'securityText',
+        label: 'Texto de Segurança',
+        type: 'text-input',
+        defaultValue: 'Oferta exclusiva nesta página'
+      },
+      {
+        key: 'dividerEnabled',
+        label: 'Mostrar Divisor',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'benefits',
+        label: 'Benefícios',
+        type: 'array-editor',
+        itemSchema: [
+          {
+            key: 'benefit',
+            label: 'Benefício',
+            type: 'text-input',
+            defaultValue: 'Benefício'
+          }
+        ],
+        defaultValue: [
+          'Looks com intenção e identidade',
+          'Cores, modelagens e tecidos a seu favor',
+          'Imagem alinhada aos seus objetivos',
+          'Guarda-roupa funcional, sem compras por impulso'
+        ]
+      }
+    ]
   }
 
 ];

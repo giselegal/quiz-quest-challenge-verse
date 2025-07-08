@@ -71,15 +71,17 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
   }, []);
 
   // Handler para adicionar novo bloco - apenas componentes inline funcionais
-  const handleComponentSelect = (blockType: string) => {
-    // Lista de tipos inline funcionais permitidos
-    const allowedInlineTypes = [
-      'main-heading-inline', 'text-inline', 'image-inline', 'button-inline',
-      'style-card-inline', 'testimonial-inline', 'bonus-inline', 'cta-inline',
-      'progress-inline', 'badge-inline', 'stat-inline', 'pricing-inline',
-      'loader-inline', 'comparison-inline', 'notification-inline',
-      'comparison-table', 'advanced-cta'
-    ];
+  const handleComponentSelect = (blockType: string) => {        // Lista de tipos inline funcionais permitidos
+        const allowedInlineTypes = [
+          'main-heading-inline', 'text-inline', 'image-inline', 'button-inline',
+          'style-card-inline', 'testimonial-inline', 'bonus-inline', 'cta-inline',
+          'progress-inline', 'badge-inline', 'stat-inline', 'pricing-inline',
+          'loader-inline', 'comparison-inline', 'notification-inline',
+          'comparison-table', 'advanced-cta',
+          // Novos componentes inline para etapa 20 (ResultPage)
+          'result-header-inline', 'value-stack-inline', 'cta-section-inline',
+          'guarantee-inline', 'transformation-inline', 'final-value-proposition-inline'
+        ];
 
     // Só processa se for um tipo permitido
     if (!allowedInlineTypes.includes(blockType)) {
@@ -509,7 +511,13 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                               'style-card-inline', 'testimonial-inline', 'bonus-inline', 'cta-inline',
                               'progress-inline', 'badge-inline', 'stat-inline', 'pricing-inline',
                               'loader-inline', 'comparison-inline', 'notification-inline',
-                              'comparison-table', 'advanced-cta'
+                              'comparison-table', 'advanced-cta',
+                              // Novos componentes inline para etapa 20 (ResultPage)
+                              'result-header-inline', 'value-stack-inline', 'cta-section-inline',
+                              'guarantee-inline', 'transformation-inline', 'final-value-proposition-inline',
+                              // Novos componentes inline para etapa 20 (ResultPage)
+                              'result-header-inline', 'value-stack-inline', 'cta-section-inline',
+                              'guarantee-inline', 'transformation-inline', 'final-value-proposition-inline'
                             ];
                             
                             if (inlineTypes.includes(blockType)) {

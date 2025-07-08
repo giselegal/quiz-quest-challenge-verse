@@ -56,6 +56,14 @@ import ButtonInlineBlock from './ButtonInlineBlock';
 import ComparisonTableInlineBlock from './ComparisonTableInlineBlock';
 import AdvancedCTAInlineBlock from './AdvancedCTAInlineBlock';
 
+// Novos componentes inline para a etapa 20 (ResultPage)
+import ResultHeaderInlineBlock from './ResultHeaderInlineBlock';
+import ValueStackInlineBlock from './ValueStackInlineBlock';
+import CTASectionInlineBlock from './CTASectionInlineBlock';
+import GuaranteeInlineBlock from './GuaranteeInlineBlock';
+import TransformationInlineBlock from './TransformationInlineBlock';
+import FinalValuePropositionInlineBlock from './FinalValuePropositionInlineBlock';
+
 export interface BlockRendererProps {
   block: BlockData;
   isSelected?: boolean;
@@ -311,6 +319,20 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <ComparisonTableInlineBlock {...commonProps} />;
       case 'advanced-cta':
         return <AdvancedCTAInlineBlock {...commonProps} />;
+
+      // COMPONENTES INLINE ESPECÍFICOS DA ETAPA 20 (RESULT PAGE) 
+      case 'result-header-inline':
+        return <ResultHeaderInlineBlock {...commonProps} />;
+      case 'value-stack-inline':
+        return <ValueStackInlineBlock {...commonProps} />;
+      case 'cta-section-inline':
+        return <CTASectionInlineBlock {...commonProps} />;
+      case 'guarantee-inline':
+        return <GuaranteeInlineBlock {...commonProps} />;
+      case 'transformation-inline':
+        return <TransformationInlineBlock {...commonProps} />;
+      case 'final-value-proposition-inline':
+        return <FinalValuePropositionInlineBlock {...commonProps} />;
 
       // BLOCOS AVANÇADOS RESTANTES - INLINE
       case 'main-heading':
