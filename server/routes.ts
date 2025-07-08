@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import crypto from "crypto";
+import path from "path";
 import { storage } from "./storage";
 import { getFacebookCAPI } from "./services/facebookCAPI";
 import { 
@@ -15,6 +16,11 @@ import {
 } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Dashboard Analytics Route
+  app.get("/dashboard", (req, res) => {
+    res.sendFile(path.join(process.cwd(), 'dashboard_analytics.html'));
+  });
+
   // UTM Analytics API Routes
   app.post("/api/utm-analytics", async (req, res) => {
     try {
