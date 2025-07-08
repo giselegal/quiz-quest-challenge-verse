@@ -2633,6 +2633,166 @@ export const blockDefinitions: BlockDefinition[] = [
         defaultValue: true
       }
     ]
+  },
+
+  {
+    type: 'pricing-inline',
+    name: 'Preço (Inline)',
+    description: 'Card de preço inline editável estilo profissional',
+    icon: 'Crown',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título do Plano',
+        type: 'text-input',
+        defaultValue: 'Plano Premium'
+      },
+      {
+        key: 'badge',
+        label: 'Badge',
+        type: 'text-input',
+        defaultValue: 'Mais Popular'
+      },
+      {
+        key: 'price',
+        label: 'Preço',
+        type: 'text-input',
+        defaultValue: 'R$ 39,90'
+      },
+      {
+        key: 'originalPrice',
+        label: 'Preço Original',
+        type: 'text-input',
+        defaultValue: 'R$ 47,00'
+      },
+      {
+        key: 'discount',
+        label: 'Desconto',
+        type: 'text-input',
+        defaultValue: '15% Off'
+      },
+      {
+        key: 'period',
+        label: 'Período',
+        type: 'text-input',
+        defaultValue: 'à vista'
+      },
+      {
+        key: 'isPopular',
+        label: 'Marcar como Popular',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+
+  {
+    type: 'loader-inline',
+    name: 'Carregamento (Inline)',
+    description: 'Barra de carregamento inline com animação',
+    icon: 'LoaderCircle',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Carregando...'
+      },
+      {
+        key: 'percentage',
+        label: 'Porcentagem',
+        type: 'number-input',
+        defaultValue: 60,
+        min: 0,
+        max: 100
+      },
+      {
+        key: 'description',
+        label: 'Descrição',
+        type: 'text-input',
+        defaultValue: 'Analisando seu estilo pessoal...'
+      },
+      {
+        key: 'animated',
+        label: 'Animado',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'color',
+        label: 'Cor',
+        type: 'color-picker',
+        defaultValue: '#B89B7A'
+      }
+    ]
+  },
+
+  {
+    type: 'comparison-inline',
+    name: 'Comparação (Inline)',
+    description: 'Comparação antes/depois inline interativa',
+    icon: 'ArrowRightLeft',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'beforeTitle',
+        label: 'Título "Antes"',
+        type: 'text-input',
+        defaultValue: 'Antes'
+      },
+      {
+        key: 'afterTitle',
+        label: 'Título "Depois"',
+        type: 'text-input',
+        defaultValue: 'Depois'
+      },
+      {
+        key: 'beforeText',
+        label: 'Texto "Antes"',
+        type: 'textarea',
+        defaultValue: 'Sem direção de estilo, compras por impulso'
+      },
+      {
+        key: 'afterText',
+        label: 'Texto "Depois"',
+        type: 'textarea',
+        defaultValue: 'Estilo definido, compras certeiras'
+      },
+      {
+        key: 'dividerPosition',
+        label: 'Posição do Divisor (%)',
+        type: 'number-input',
+        defaultValue: 50,
+        min: 10,
+        max: 90
+      }
+    ]
+  },
+
+  {
+    type: 'notification-inline',
+    name: 'Notificações (Inline)',
+    description: 'Lista de notificações inline editável estilo profissional',
+    icon: 'Bell',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'maxVisible',
+        label: 'Máximo Visível',
+        type: 'number-input',
+        defaultValue: 4,
+        min: 1,
+        max: 10
+      },
+      {
+        key: 'animated',
+        label: 'Animado',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
   }
 
 ];

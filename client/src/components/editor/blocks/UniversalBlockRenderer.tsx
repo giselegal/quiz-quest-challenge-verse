@@ -35,6 +35,10 @@ import CTAInlineBlock from './CTAInlineBlock';
 import ProgressInlineBlock from './ProgressInlineBlock';
 import BadgeInlineBlock from './BadgeInlineBlock';
 import StatInlineBlock from './StatInlineBlock';
+import PricingInlineBlock from './PricingInlineBlock';
+import LoaderInlineBlock from './LoaderInlineBlock';
+import ComparisonInlineBlock from './ComparisonInlineBlock';
+import NotificationInlineBlock from './NotificationInlineBlock';
 import { VideoPlayerBlock } from './VideoPlayerBlock';
 
 // Blocos específicos do Quiz Intro
@@ -242,6 +246,14 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <BadgeInlineBlock {...commonProps} />;
       case 'stat-inline':
         return <StatInlineBlock {...commonProps} />;
+      case 'pricing-inline':
+        return <PricingInlineBlock {...commonProps} />;
+      case 'loader-inline':
+        return <LoaderInlineBlock {...commonProps} />;
+      case 'comparison-inline':
+        return <ComparisonInlineBlock {...commonProps} />;
+      case 'notification-inline':
+        return <NotificationInlineBlock {...commonProps} />;
       case 'product-carousel':
         return <ProductCarouselBlock {...commonProps} />;
 
