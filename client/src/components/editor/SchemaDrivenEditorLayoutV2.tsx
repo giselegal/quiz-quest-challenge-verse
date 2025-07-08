@@ -539,11 +539,15 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                   </div>
                 </div>
               </div>
-                <DroppableCanvas
-                  blocks={currentPage?.blocks || []}
-                  selectedBlockId={selectedBlockId || undefined}
-                  onBlockSelect={(blockId) => setSelectedBlock(blockId)}
-                  onBlockDelete={deleteBlock}
+            ) : (
+              /* Desktop View */
+              <div className="bg-white shadow-lg rounded-lg max-w-4xl min-h-[800px] w-full">
+                <div className="p-6">
+                  <DroppableCanvas
+                    blocks={currentPage?.blocks || []}
+                    selectedBlockId={selectedBlockId || undefined}
+                    onBlockSelect={(blockId) => setSelectedBlock(blockId)}
+                    onBlockDelete={deleteBlock}
                     onBlockDuplicate={(blockId) => {
                       const block = currentPage?.blocks.find(b => b.id === blockId);
                       if (block && currentPage) {
@@ -589,12 +593,12 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                         });
                       }
                     }}
-                  onBlockUpdate={(blockId, updates) => {
-                    updateBlock(blockId, updates);
-                  }}
-                  onReorder={reorderBlocks}
-                  className={deviceView === 'mobile' ? 'mobile-canvas' : ''}
-                />
+                    onBlockUpdate={(blockId, updates) => {
+                      updateBlock(blockId, updates);
+                    }}
+                    onReorder={reorderBlocks}
+                    className=""
+                  />
                   
                   {!currentPage && (
                     <div className="text-center py-16 text-gray-500">
@@ -604,7 +608,7 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                   )}
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
         
