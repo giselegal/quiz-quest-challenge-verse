@@ -1,6 +1,8 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import crypto from "crypto";
 import { storage } from "./storage";
+import { getFacebookCAPI } from "./services/facebookCAPI";
 import { 
   insertUtmAnalyticsSchema, 
   insertQuizParticipantSchema,
@@ -322,6 +324,178 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error updating page config:", error);
       res.status(500).json({ success: false, error: "Failed to update page config" });
+    }
+  });
+
+  // Hotmart Webhook Route
+  app.post("/api/webhook-hotmart", async (req, res) => {
+    try {
+      const signature = req.headers["x-hm-signature"];
+      const payload = JSON.stringify(req.body);
+
+      // Verifica a assinatura do webhook
+      const isValid = crypto.timingSafeEqual(
+        Buffer.from(signature, "utf8"),
+        Buffer.from(process.env.HM_SECRET, "utf8")
+      );
+
+      if (!isValid) {
+        return res.status(401).json({ success: false, error: "Invalid signature" });
+      }
+
+      // Processa o evento do webhook
+      const event = req.body;
+      // TODO: Adicionar lógica para processar o evento do webhook
+
+      res.json({ success: true, message: "Webhook received successfully" });
+    } catch (error) {
+      console.error("Error processing webhook:", error);
+      res.status(500).json({ success: false, error: "Failed to process webhook" });
+    }
+  });
+
+  // Hotmart Webhook Handler
+  app.post("/api/webhooks/hotmart", async (req, res) => {
+    try {
+      console.log("Hotmart webhook received:", req.headers, req.body);
+      
+      // Validar assinatura do webhook
+      const signature = req.headers["x-hotmart-hottok"] as string;
+      const isValid = validateHotmartSignature(JSON.stringify(req.body), signature);
+      
+      if (!isValid) {
+        console.error("Invalid Hotmart webhook signature");
+        return res.status(401).json({ success: false, error: "Invalid signature" });
+      }
+      
+      const webhookData = req.body;
+      
+      // Processar diferentes tipos de evento
+      if (webhookData.event === "PURCHASE_COMPLETE") {
+        await handlePurchaseComplete(webhookData);
+      } else if (webhookData.event === "PURCHASE_APPROVED") {
+        await handlePurchaseApproved(webhookData);
+      }
+      
+      res.json({ success: true, message: "Webhook processed successfully" });
+    } catch (error) {
+      console.error("Error processing Hotmart webhook:", error);
+      res.status(500).json({ success: false, error: "Failed to process webhook" });
+    }
+  });
+
+  // Função para validar assinatura do Hotmart
+  const validateHotmartSignature = (payload: string, signature: string | undefined): boolean => {
+    try {
+      if (!signature || !process.env.HOTMART_WEBHOOK_SECRET) {
+        console.warn("Missing signature or webhook secret");
+        return false;
+      }
+      
+      const hmac = crypto.createHmac("sha256", process.env.HOTMART_WEBHOOK_SECRET);
+      const computedSignature = hmac.update(payload).digest("hex");
+      
+      return crypto.timingSafeEqual(
+        Buffer.from(signature, "utf8"),
+        Buffer.from(computedSignature, "utf8")
+      );
+    } catch (error) {
+      console.error("Error validating signature:", error);
+      return false;
+    }
+  };
+
+  // Função para processar compra completa
+  const handlePurchaseComplete = async (webhookData: any) => {
+    try {
+      console.log("Processing purchase complete:", webhookData);
+      
+      const buyerData = webhookData.data.buyer;
+      const purchaseData = webhookData.data.purchase;
+      
+      // Disparar evento para Facebook CAPI
+      const facebookCAPI = getFacebookCAPI();
+      await facebookCAPI.trackPurchase({
+        email: buyerData.email,
+        name: buyerData.name,
+        value: purchaseData.price.value / 100, // Converter centavos para reais
+        currency: purchaseData.price.currency_value || 'BRL',
+        transactionId: purchaseData.transaction,
+        productName: purchaseData.product.name,
+      });
+      
+      console.log("Purchase event sent to Facebook CAPI");
+    } catch (error) {
+      console.error("Error handling purchase complete:", error);
+    }
+  };
+
+  // Função para processar compra aprovada
+  const handlePurchaseApproved = async (webhookData: any) => {
+    try {
+      console.log("Processing purchase approved:", webhookData);
+      
+      const buyerData = webhookData.data.buyer;
+      const purchaseData = webhookData.data.purchase;
+      
+      // Disparar evento adicional para Facebook CAPI se necessário
+      const facebookCAPI = getFacebookCAPI();
+      await facebookCAPI.trackPurchase({
+        email: buyerData.email,
+        name: buyerData.name,
+        value: purchaseData.price.value / 100,
+        currency: purchaseData.price.currency_value || 'BRL',
+        transactionId: purchaseData.transaction,
+        productName: purchaseData.product.name,
+      });
+      
+      console.log("Purchase approved event sent to Facebook CAPI");
+    } catch (error) {
+      console.error("Error handling purchase approved:", error);
+    }
+  };
+
+  // Quiz Results and Lead Tracking
+  app.post("/api/quiz-results", async (req, res) => {
+    try {
+      const { userData, quizResult, utmData, browserData } = req.body;
+      
+      console.log("Quiz result received:", { userData, quizResult });
+      
+      // Salvar resultado do quiz no banco de dados
+      // (implementar quando o schema estiver expandido)
+      
+      // Disparar evento Lead para Facebook CAPI
+      const facebookCAPI = getFacebookCAPI();
+      await facebookCAPI.trackLead({
+        email: userData.email,
+        name: userData.name,
+        ipAddress: browserData?.ipAddress,
+        userAgent: browserData?.userAgent,
+        fbp: browserData?.fbp,
+        fbc: browserData?.fbc || utmData?.fbclid,
+      }, {
+        source_url: browserData?.url || 'https://giselegalvao.com.br/quiz',
+        dominant_style: quizResult?.primaryStyle?.category,
+        quiz_score: quizResult?.primaryStyle?.percentage,
+        utm_source: utmData?.source,
+        utm_medium: utmData?.medium,
+        utm_campaign: utmData?.campaign,
+      });
+      
+      console.log("Quiz lead event sent to Facebook CAPI");
+      
+      res.json({ 
+        success: true, 
+        message: "Quiz result processed successfully",
+        result: quizResult 
+      });
+    } catch (error) {
+      console.error("Error processing quiz result:", error);
+      res.status(500).json({ 
+        success: false, 
+        error: "Failed to process quiz result" 
+      });
     }
   });
 
