@@ -35,7 +35,7 @@ const TextInlineBlock: React.FC<BlockComponentProps> = ({
   return (
     <div 
       className={`
-        w-full flex items-center justify-center
+        w-full flex items-center
         p-3 rounded-lg transition-all duration-200
         ${isSelected 
           ? 'border-2 border-blue-500 bg-blue-50' 
@@ -46,7 +46,7 @@ const TextInlineBlock: React.FC<BlockComponentProps> = ({
     >
       <p 
         className={`
-          text-gray-700 leading-relaxed
+          w-full text-gray-700 leading-relaxed
           ${sizeClasses[fontSize as keyof typeof sizeClasses]}
           ${alignmentClasses[alignment as keyof typeof alignmentClasses]}
         `}

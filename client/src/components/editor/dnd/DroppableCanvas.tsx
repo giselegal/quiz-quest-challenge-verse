@@ -64,7 +64,7 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
         </div>
       ) : (
         /* Blocks List */
-        <div className="space-y-4 max-w-4xl mx-auto">
+        <div className="space-y-4 w-full mx-auto">
           {blocks.map((block, index) => {
             // Verificar se é um componente inline para centralizar
             const isInlineComponent = block.type?.includes('-inline');
@@ -77,9 +77,10 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
                   isVisible={isDraggingFromSidebar}
                 />
                 
-                {/* Block Item - Centralizar componentes inline */}
+                {/* Block Item - Largura total para componentes inline */}
                 <div className={cn(
-                  isInlineComponent && "flex justify-center items-center"
+                  "w-full",
+                  isInlineComponent && "w-full min-w-full"
                 )}>
                   <SortableBlockItem
                     block={block}
@@ -91,7 +92,8 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
                     onSaveInline={onSaveInline}
                     disabled={disabled}
                     className={cn(
-                      isInlineComponent && "max-w-fit"
+                      "w-full",
+                      isInlineComponent && "w-full !max-w-none"
                     )}
                   />
                 </div>

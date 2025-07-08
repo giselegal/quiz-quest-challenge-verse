@@ -31,7 +31,7 @@ const ImageInlineBlock: React.FC<BlockComponentProps> = ({
   return (
     <div 
       className={`
-        w-full flex items-center
+        w-full flex items-center justify-start
         p-3 rounded-lg transition-all duration-200
         ${alignmentClasses[alignment as keyof typeof alignmentClasses]}
         ${isSelected 

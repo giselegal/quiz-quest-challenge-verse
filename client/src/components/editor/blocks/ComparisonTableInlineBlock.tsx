@@ -32,7 +32,7 @@ const ComparisonTableInlineBlock: React.FC<BlockComponentProps> = ({
         {title}
       </h3>
       
-      <div className="w-full max-w-4xl overflow-x-auto">
+      <div className="w-full overflow-x-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {items.map((item: any, index: number) => (
             <div 

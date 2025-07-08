@@ -57,7 +57,7 @@ export const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
       ref={setNodeRef}
       style={style}
       className={cn(
-        'group relative rounded-lg transition-all duration-200',
+        'group relative w-full rounded-lg transition-all duration-200',
         isDragging && 'opacity-50 scale-105 z-50',
         isOver && 'ring-2 ring-blue-400',
         isSelected && 'ring-2 ring-blue-500',
@@ -127,7 +127,7 @@ export const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
 
       {/* Block Content */}
       <div className={cn(
-        'relative',
+        'relative w-full',
         isHidden && 'pointer-events-none'
       )}>
         <UniversalBlockRenderer
@@ -137,7 +137,7 @@ export const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
           onSaveInline={onSaveInline}
           disabled={disabled}
           className={cn(
-            'transition-all duration-200',
+            'w-full transition-all duration-200',
             isDragging && 'pointer-events-none'
           )}
         />

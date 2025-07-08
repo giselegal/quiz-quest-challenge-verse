@@ -39,7 +39,7 @@ const ButtonInlineBlock: React.FC<BlockComponentProps> = ({
   return (
     <div 
       className={`
-        w-full flex items-center justify-center
+        w-full flex items-center
         p-3 rounded-lg transition-all duration-200
         ${isSelected 
           ? 'border-2 border-blue-500 bg-blue-50' 
@@ -54,7 +54,7 @@ const ButtonInlineBlock: React.FC<BlockComponentProps> = ({
           border-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
           ${styleClasses[style as keyof typeof styleClasses]}
           ${sizeClasses[size as keyof typeof sizeClasses]}
-          ${fullWidth ? 'w-full' : 'w-auto'}
+          w-full
           hover:transform hover:scale-105 active:scale-95
         `}
         type="button"

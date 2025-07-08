@@ -38,7 +38,7 @@ const HeadingInlineBlock: React.FC<BlockComponentProps> = ({
   return (
     <div 
       className={`
-        w-full flex items-center justify-center
+        w-full flex items-center
         p-3 rounded-lg transition-all duration-200
         ${isSelected 
           ? 'border-2 border-blue-500 bg-blue-50' 
@@ -49,7 +49,7 @@ const HeadingInlineBlock: React.FC<BlockComponentProps> = ({
     >
       <HeadingTag 
         className={`
-          font-bold text-gray-800 leading-tight
+          w-full font-bold text-gray-800 leading-tight
           ${sizeClasses[size as keyof typeof sizeClasses]}
           ${alignmentClasses[alignment as keyof typeof alignmentClasses]}
         `}

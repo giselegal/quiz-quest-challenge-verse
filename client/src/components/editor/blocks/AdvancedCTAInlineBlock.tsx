@@ -31,7 +31,7 @@ const AdvancedCTAInlineBlock: React.FC<BlockComponentProps> = ({
         ${className}
       `}
     >
-      <div className="w-full max-w-2xl text-center space-y-6">
+      <div className="w-full text-center space-y-6">
         {/* Título Principal */}
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
           {title}
