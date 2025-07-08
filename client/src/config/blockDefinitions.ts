@@ -219,7 +219,7 @@ export const blockDefinitions: BlockDefinition[] = [
   {
     type: 'text-inline',
     name: 'Parágrafo (Inline)',
-    description: 'Bloco de texto horizontal responsivo inline.',
+    description: 'Bloco de texto horizontal responsivo inline com suporte a personalização.',
     icon: 'Type',
     category: 'Inline',
     propertiesSchema: [
@@ -236,14 +236,30 @@ export const blockDefinitions: BlockDefinition[] = [
         label: 'Tamanho da Fonte',
         type: 'select',
         options: [
-          { label: 'Pequeno', value: 'small' },
-          { label: 'Médio', value: 'medium' },
-          { label: 'Grande', value: 'large' },
+          { label: 'Extra Pequeno', value: 'xs' },
+          { label: 'Pequeno', value: 'sm' },
+          { label: 'Normal', value: 'base' },
+          { label: 'Grande', value: 'lg' },
+          { label: 'Extra Grande', value: 'xl' },
+          { label: 'XXL', value: '2xl' },
+          { label: 'XXXL', value: '3xl' },
         ],
-        defaultValue: 'medium',
+        defaultValue: 'base',
       },
       {
-        key: 'alignment',
+        key: 'fontWeight',
+        label: 'Peso da Fonte',
+        type: 'select',
+        options: [
+          { label: 'Normal', value: 'normal' },
+          { label: 'Médio', value: 'medium' },
+          { label: 'Semibold', value: 'semibold' },
+          { label: 'Bold', value: 'bold' },
+        ],
+        defaultValue: 'normal',
+      },
+      {
+        key: 'textAlign',
         label: 'Alinhamento',
         type: 'select',
         options: [
@@ -253,6 +269,37 @@ export const blockDefinitions: BlockDefinition[] = [
         ],
         defaultValue: 'left',
       },
+      {
+        key: 'useUsername',
+        label: 'Usar Nome do Usuário',
+        type: 'boolean-switch',
+        defaultValue: false
+      },
+      {
+        key: 'usernamePattern',
+        label: 'Padrão de Personalização',
+        type: 'text-input',
+        placeholder: 'Olá {{username}}, ...',
+        defaultValue: 'Olá {{username}}!'
+      },
+      {
+        key: 'trackingEnabled',
+        label: 'Habilitar Analytics',
+        type: 'boolean-switch',
+        defaultValue: false
+      },
+      {
+        key: 'animation',
+        label: 'Animação',
+        type: 'select',
+        options: [
+          { label: 'Fade In', value: 'fadeIn' },
+          { label: 'Slide da Esquerda', value: 'slideInFromLeft' },
+          { label: 'Slide da Direita', value: 'slideInFromRight' },
+          { label: 'Scale In', value: 'scaleIn' },
+        ],
+        defaultValue: 'fadeIn',
+      }
     ],
   },
 

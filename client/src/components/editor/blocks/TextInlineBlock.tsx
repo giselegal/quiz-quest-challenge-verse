@@ -1,6 +1,13 @@
-import React from 'react';
-import { InlineEditableText } from './InlineEditableText';
+import React, { useEffect } from 'react';
+import InlineBaseWrapper from './base/InlineBaseWrapper';
+import InlineEditableText from './base/InlineEditableText';
 import type { BlockComponentProps } from '@/types/blocks';
+import { 
+  getPersonalizedText, 
+  trackComponentView, 
+  trackComponentClick,
+  RESPONSIVE_PATTERNS 
+} from '@/utils/inlineComponentUtils';
 
 const TextInlineBlock: React.FC<BlockComponentProps> = ({ 
   block,
@@ -10,9 +17,23 @@ const TextInlineBlock: React.FC<BlockComponentProps> = ({
 }) => {
   const { 
     content = 'Conteúdo do texto aqui...',
-    fontSize = 'medium',
-    alignment = 'left'
+    fontSize = 'base',
+    fontWeight = 'normal',
+    textAlign = 'left',
+    useUsername = false,
+    usernamePattern = '',
+    trackingEnabled = false,
+    animation = 'fadeIn'
   } = block.properties;
+
+  // Get username from context or props (placeholder for now)
+  const username = 'Usuário'; // This would come from user context
+
+  useEffect(() => {
+    if (trackingEnabled) {
+      trackComponentView(block.id, 'text-inline');
+    }
+  }, [trackingEnabled, block.id]);
 
   const handlePropertyChange = (key: string, value: any) => {
     if (onPropertyChange) {
@@ -20,46 +41,48 @@ const TextInlineBlock: React.FC<BlockComponentProps> = ({
     }
   };
 
-  const sizeClasses = {
-    small: 'text-sm sm:text-base',
-    medium: 'text-base sm:text-lg',
-    large: 'text-lg sm:text-xl'
+  const handleClick = () => {
+    if (trackingEnabled) {
+      trackComponentClick(block.id, 'text-inline', 'text_click');
+    }
   };
 
-  const alignmentClasses = {
-    left: 'text-left',
-    center: 'text-center',
-    right: 'text-right'
-  };
+  const personalizedContent = getPersonalizedText(
+    content,
+    usernamePattern || content,
+    username,
+    useUsername
+  );
 
   return (
-    <div 
-      className={`
-        w-full flex items-center
-        p-3 rounded-lg transition-all duration-200
-        ${isSelected 
-          ? 'border-2 border-blue-500 bg-blue-50' 
-          : 'border-2 border-dashed border-transparent hover:border-blue-300 hover:bg-blue-50/30'
-        }
-        ${className}
-      `}
+    <InlineBaseWrapper
+      block={block}
+      isSelected={isSelected}
+      onPropertyChange={onPropertyChange}
+      className={className}
+      minHeight="2rem"
+      editLabel="Editar Texto"
     >
-      <p 
+      <div 
         className={`
-          w-full text-gray-700 leading-relaxed
-          ${sizeClasses[fontSize as keyof typeof sizeClasses]}
-          ${alignmentClasses[alignment as keyof typeof alignmentClasses]}
+          w-full flex items-center
+          ${RESPONSIVE_PATTERNS.MOBILE_CENTER}
         `}
+        onClick={handleClick}
       >
         <InlineEditableText
-          value={content}
+          value={personalizedContent}
           onChange={(value) => handlePropertyChange('content', value)}
           placeholder="Digite seu texto aqui..."
-          className="min-w-0 outline-none bg-transparent"
-          multiline
+          fontSize={fontSize as any}
+          fontWeight={fontWeight as any}
+          textAlign={textAlign as any}
+          multiline={true}
+          maxLines={3}
+          className="w-full leading-relaxed"
         />
-      </p>
-    </div>
+      </div>
+    </InlineBaseWrapper>
   );
 };
 

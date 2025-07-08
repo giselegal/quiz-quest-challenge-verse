@@ -1,152 +1,209 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { Crown, Edit3 } from 'lucide-react';
+import InlineBaseWrapper from './base/InlineBaseWrapper';
+import InlineEditableText from './base/InlineEditableText';
+import type { BlockComponentProps } from '@/types/blocks';
+import { 
+  getPersonalizedText, 
+  trackComponentView, 
+  trackComponentClick,
+  trackComponentConversion,
+  RESPONSIVE_PATTERNS,
+  INLINE_ANIMATIONS
+} from '@/utils/inlineComponentUtils';
+import { Crown, Star, TrendingUp, CheckCircle, Sparkles } from 'lucide-react';
 
-interface PricingInlineBlockProps {
-  title?: string;
-  badge?: string;
-  price?: string;
-  originalPrice?: string;
-  discount?: string;
-  period?: string;
-  isPopular?: boolean;
-  onClick?: () => void;
-  className?: string;
-  onPropertyChange?: (key: string, value: any) => void;
-  disabled?: boolean;
-}
-
-const PricingInlineBlock: React.FC<PricingInlineBlockProps> = ({
-  title = 'Plano Premium',
-  badge = 'Mais Popular',
-  price = 'R$ 39,90',
-  originalPrice = 'R$ 47,00',
-  discount = '15% Off',
-  period = 'à vista',
-  isPopular = true,
-  onClick,
-  className,
+const PricingInlineBlock: React.FC<BlockComponentProps> = ({
+  block,
+  isSelected = false,
   onPropertyChange,
-  disabled = false
+  className = ''
 }) => {
+  const {
+    title = 'Plano Premium',
+    badge = 'Mais Popular',
+    price = 'R$ 39,90',
+    originalPrice = 'R$ 47,00',
+    discount = '15% Off',
+    period = 'à vista',
+    isPopular = true,
+    icon = 'crown',
+    showIcon = true,
+    useUsername = false,
+    usernamePattern = 'Perfeito para {{username}}!',
+    trackingEnabled = false,
+    animation = 'scaleIn',
+    theme = 'primary',
+    showDiscount = true,
+    showOriginalPrice = true,
+    conversionValue = 39.90
+  } = block.properties;
+
   const [isHovered, setIsHovered] = useState(false);
+  
+  // Get username from context (placeholder)
+  const username = 'Usuário';
+
+  useEffect(() => {
+    if (trackingEnabled) {
+      trackComponentView(block.id, 'pricing-inline');
+    }
+  }, [trackingEnabled, block.id]);
+
+  const handlePropertyChange = (key: string, value: any) => {
+    if (onPropertyChange) {
+      onPropertyChange(key, value);
+    }
+  };
+
+  const getIcon = () => {
+    const iconMap = {
+      'crown': Crown,
+      'star': Star,
+      'trending-up': TrendingUp,
+      'check-circle': CheckCircle,
+      'sparkles': Sparkles
+    };
+    const IconComponent = iconMap[icon as keyof typeof iconMap] || Crown;
+    return <IconComponent className="w-5 h-5 text-[#B89B7A]" />;
+  };
+
+  const handleClick = async () => {
+    if (trackingEnabled) {
+      trackComponentClick(block.id, 'pricing-inline', 'pricing_click');
+      trackComponentConversion(block.id, 'pricing-inline', conversionValue);
+    }
+  };
+
+  const personalizedTitle = getPersonalizedText(
+    title,
+    usernamePattern,
+    username,
+    useUsername
+  );
+
+  const personalizedBadge = getPersonalizedText(
+    badge,
+    badge,
+    username,
+    useUsername
+  );
 
   return (
-    <div 
-      role="button"
-      tabIndex={0}
-      className={cn(
-        "group/canvas-item inline-block cursor-pointer hover:opacity-75 transition-all ease-in-out",
-        "w-full",
-        "min-h-[1.25rem] relative border border-zinc-200 rounded-md bg-transparent",
-        "hover:border-2 hover:border-blue-500",
-        isHovered && "border-2 border-blue-500",
-        disabled && "opacity-75 cursor-not-allowed",
-        className
-      )}
-      onClick={!disabled ? onClick : undefined}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+    <InlineBaseWrapper
+      block={block}
+      isSelected={isSelected}
+      onPropertyChange={onPropertyChange}
+      className={cn(className, INLINE_ANIMATIONS[animation as keyof typeof INLINE_ANIMATIONS])}
+      minHeight="5rem"
+      editLabel="Editar Preço"
     >
-      {/* Popular Badge */}
-      {isPopular && (
-        <div className="w-full h-fit p-2 bg-[#B89B7A] flex items-center justify-center rounded-t-md">
-          <p 
-            className="text-sm font-bold text-white cursor-pointer"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (onPropertyChange && !disabled) {
-                const newBadge = prompt('Novo texto do badge:', badge);
-                if (newBadge !== null) onPropertyChange('badge', newBadge);
-              }
-            }}
-          >
-            {badge}
-          </p>
-        </div>
-      )}
+      <div 
+        className="w-full border border-zinc-200 rounded-lg bg-white overflow-hidden hover:shadow-lg transition-all duration-300"
+        onClick={handleClick}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {/* Popular Badge */}
+        {isPopular && (
+          <div className="w-full bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] flex items-center justify-center py-2">
+            <InlineEditableText
+              value={personalizedBadge}
+              onChange={(value) => handlePropertyChange('badge', value)}
+              placeholder="Badge do plano..."
+              fontSize="sm"
+              fontWeight="bold"
+              textAlign="center"
+              className="text-white placeholder-white/70"
+            />
+          </div>
+        )}
 
-      {/* Main Content */}
-      <div className="w-full h-auto flex flex-row justify-between items-center p-4">
-        {/* Title Section */}
-        <div className="w-auto h-auto flex flex-row justify-start items-start gap-2">
-          <Crown className="w-5 h-5 text-[#B89B7A] mt-1" />
-          <h3 
-            className="text-xl font-bold text-[#432818] cursor-pointer"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (onPropertyChange && !disabled) {
-                const newTitle = prompt('Novo título:', title);
-                if (newTitle !== null) onPropertyChange('title', newTitle);
-              }
-            }}
-          >
-            {title}
-          </h3>
-        </div>
-
-        {/* Price Section */}
-        <div className="w-auto h-fit p-3 flex-col items-start justify-start bg-[#B89B7A]/10 rounded-md border-none">
-          <div 
-            className="text-xs font-light w-full h-auto text-left leading-4 text-[#aa6b5d] cursor-pointer"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (onPropertyChange && !disabled) {
-                const newDiscount = prompt('Novo desconto:', discount);
-                if (newDiscount !== null) onPropertyChange('discount', newDiscount);
-              }
-            }}
-          >
-            {discount}
-          </div>
-          <div 
-            className="text-2xl font-bold w-full h-auto text-center leading-none text-[#432818] cursor-pointer"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (onPropertyChange && !disabled) {
-                const newPrice = prompt('Novo preço:', price);
-                if (newPrice !== null) onPropertyChange('price', newPrice);
-              }
-            }}
-          >
-            {price}
-          </div>
-          <div 
-            className="text-xs font-light w-full h-auto text-right text-[#8F7A6A] cursor-pointer"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (onPropertyChange && !disabled) {
-                const newPeriod = prompt('Novo período:', period);
-                if (newPeriod !== null) onPropertyChange('period', newPeriod);
-              }
-            }}
-          >
-            {period}
-          </div>
-          {originalPrice && (
-            <div 
-              className="text-xs text-gray-500 line-through text-center w-full mt-1 cursor-pointer"
-              onClick={(e) => {
-                e.stopPropagation();
-                if (onPropertyChange && !disabled) {
-                  const newOriginalPrice = prompt('Preço original:', originalPrice);
-                  if (newOriginalPrice !== null) onPropertyChange('originalPrice', newOriginalPrice);
-                }
-              }}
-            >
-              {originalPrice}
+        {/* Main Content */}
+        <div className="p-4 flex items-center justify-between">
+          {/* Title Section */}
+          <div className="flex items-center gap-3">
+            {showIcon && (
+              <div className="flex-shrink-0">
+                {getIcon()}
+              </div>
+            )}
+            
+            <div>
+              <InlineEditableText
+                value={personalizedTitle}
+                onChange={(value) => handlePropertyChange('title', value)}
+                placeholder="Título do plano..."
+                fontSize="xl"
+                fontWeight="bold"
+                className="text-[#432818]"
+              />
             </div>
-          )}
-        </div>
-      </div>
+          </div>
 
-      {/* Edit indicator */}
-      {!disabled && (
-        <div className="absolute top-2 right-2 opacity-0 group-hover/canvas-item:opacity-100 transition-opacity">
-          <Edit3 className="w-4 h-4 text-blue-500" />
+          {/* Price Section */}
+          <div className="flex-shrink-0 text-right">
+            <div className="bg-[#B89B7A]/10 rounded-lg p-3 border border-[#B89B7A]/20">
+              {/* Discount Badge */}
+              {showDiscount && discount && (
+                <div className="mb-1">
+                  <InlineEditableText
+                    value={discount}
+                    onChange={(value) => handlePropertyChange('discount', value)}
+                    placeholder="Desconto..."
+                    fontSize="xs"
+                    fontWeight="medium"
+                    textAlign="right"
+                    className="text-[#aa6b5d]"
+                  />
+                </div>
+              )}
+              
+              {/* Price and Original Price */}
+              <div className="flex items-center justify-end gap-2">
+                <InlineEditableText
+                  value={price}
+                  onChange={(value) => handlePropertyChange('price', value)}
+                  placeholder="R$ 39,90"
+                  fontSize="xl"
+                  fontWeight="bold"
+                  textAlign="right"
+                  className="text-[#432818]"
+                />
+                
+                {showOriginalPrice && originalPrice && (
+                  <InlineEditableText
+                    value={originalPrice}
+                    onChange={(value) => handlePropertyChange('originalPrice', value)}
+                    placeholder="R$ 47,00"
+                    fontSize="sm"
+                    textAlign="right"
+                    className="text-gray-500 line-through"
+                  />
+                )}
+              </div>
+              
+              {/* Period */}
+              <div className="mt-1">
+                <InlineEditableText
+                  value={period}
+                  onChange={(value) => handlePropertyChange('period', value)}
+                  placeholder="Período..."
+                  fontSize="xs"
+                  textAlign="right"
+                  className="text-gray-600"
+                />
+              </div>
+            </div>
+          </div>
         </div>
-      )}
-    </div>
+
+        {/* Hover Effect Indicator */}
+        {isHovered && (
+          <div className="absolute inset-0 border-2 border-blue-500 rounded-lg pointer-events-none" />
+        )}
+      </div>
+    </InlineBaseWrapper>
   );
 };
 
