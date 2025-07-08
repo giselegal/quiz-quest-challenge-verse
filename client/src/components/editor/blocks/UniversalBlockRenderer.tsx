@@ -262,6 +262,16 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <NotificationInlineBlock {...commonProps} />;
       case 'product-carousel':
         return <ProductCarouselBlock {...commonProps} />;
+      
+      // Componentes que estavam causando erro
+      case 'testimonials-grid':
+        return <TestimonialsBlock {...commonProps} />;
+      case 'social-proof':
+        return <TestimonialsBlock {...commonProps} />;
+      case 'value-anchoring':
+        return <div className="w-full bg-gray-100 p-4 rounded-lg border-2 border-dashed border-gray-300 text-center">
+          <p className="text-gray-600">Componente "Ancoragem de Valor" - Em desenvolvimento</p>
+        </div>;
 
       // BLOCOS ESPECÍFICOS DO QUIZ - DADOS REAIS
       case 'QuizStartPageBlock':
