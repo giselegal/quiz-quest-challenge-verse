@@ -31,23 +31,9 @@ const QuizDescubraSeuEstilo = lazy(
   () => import("./pages/quiz-descubra-seu-estilo")
 );
 const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
-const SimpleDragDropEditor = lazy(
-  () => import("./components/visual-editor/SimpleDragDropEditor")
-);
-const EnhancedSimpleDragDropEditor = lazy(
-  () => import("./components/visual-editor/EnhancedSimpleDragDropEditor")
-);
-const ImprovedQuizEditor = lazy(
-  () => import("./components/visual-editor/ImprovedQuizEditor")
-);
-const ModernQuizEditor = lazy(
-  () => import("./components/visual-editor/ModernQuizEditor")
-);
-const EditorTestPage = lazy(
-  () => import("./components/editor/EditorTestPage")
-);
-const EditorFixedPage = lazy(() => import("./pages/EditorFixedPage"));
-const CaktoQuizAdvancedPage = lazy(() => import("./pages/CaktoQuizAdvancedPage"));
+
+// Editor Principal - Consolidado
+const SchemaDrivenEditorPage = lazy(() => import("./pages/SchemaDrivenEditorPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App = () => {
@@ -98,60 +84,20 @@ const App = () => {
                   path="/descubra-seu-estilo"
                   component={QuizDescubraSeuEstilo}
                 />
-                {/* Editor Visual */}
+                {/* Editor de Quiz - Interface Específica para Quiz */}
                 <Route
-                  path="/editor-visual"
-                  component={SimpleDragDropEditor}
+                  path="/quiz-editor"
+                  component={lazy(() => import("./app/editor/page"))}
                 />
-                {/* Simple Editor - enhanced professional version */}
-                <Route
-                  path="/simple-editor"
-                  component={EnhancedSimpleDragDropEditor}
-                />
-                {/* Enhanced Professional Editor */}
-                <Route
-                  path="/enhanced-editor"
-                  component={EnhancedSimpleDragDropEditor}
-                />
-                {/* Editor Melhorado - nova versão organizada */}
-                <Route
-                  path="/editor-improved"
-                  component={ImprovedQuizEditor}
-                />
-                {/* Editor Modular - nova arquitetura modular */}
-                <Route
-                  path="/editor-modular"
-                  component={EditorTestPage}
-                />
-                {/* Editor Modular Direto - implementação modular final */}
-                <Route
-                  path="/editor-modular-final"
-                  component={lazy(() => import("./components/editor/ModularQuizEditor"))}
-                />
-                {/* Editor Fixed - versão corrigida com FunnelStepsColumn integrado */}
-                <Route
-                  path="/editor-fixed"
-                  component={EditorFixedPage}
-                />
-                {/* Schema-Driven Editor V2 - nova rota principal */}
+                {/* Editor Principal - Única Rota de Edição */}
                 <Route
                   path="/editor"
-                  component={lazy(() => import("./pages/SchemaDrivenEditorPage"))}
+                  component={SchemaDrivenEditorPage}
                 />
-                {/* Schema-Driven Editor - rota específica */}
-                <Route
-                  path="/schema-editor"
-                  component={lazy(() => import("./pages/SchemaDrivenEditorPage"))}
-                />
-                {/* Schema-Driven Editor dinâmico - edição de funis específicos */}
+                {/* Editor com ID específico */}
                 <Route
                   path="/editor/:id"
-                  component={lazy(() => import("./pages/SchemaDrivenEditorPage"))}
-                />
-                {/* CaktoQuiz Advanced Editor - editor mais completo similar ao CaktoQuiz */}
-                <Route
-                  path="/advanced-editor"
-                  component={CaktoQuizAdvancedPage}
+                  component={SchemaDrivenEditorPage}
                 />
                 {/* Admin - protegido com AdminAuthProvider */}
                 <Route path="/admin/:rest*">

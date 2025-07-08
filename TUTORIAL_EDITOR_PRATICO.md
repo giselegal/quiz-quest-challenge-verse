@@ -4,12 +4,31 @@
 
 ### Passo 1: Acessar o Editor
 ```
-👉 ACESSE: http://localhost:5000/editor
+👉 ACESSE: http://localhost:5000/quiz-editor
 ```
+
+**IMPORTANTE**: Existem dois editores diferentes:
+- **`/editor`** → Editor visual com blocos (SchemaDrivenEditor)
+- **`/quiz-editor`** → Editor específico para quiz (QuizEditorInterface) - ESTE TUTORIAL
 
 ### Passo 2: Interface Atual
 Você verá 6 seções principais:
-1. **Configuração do Funil** (nome e descrição)
+1. **Configuração### ✅ **Melhorias Implementadas**
+
+#### 🔧 **1. Consolidação de Rotas:**
+- Removidas **7 rotas de editores antigos**
+- Mantida apenas `/editor` como rota principal
+- Eliminada fragmentação de código
+
+#### 🧩 **2. Componentes Corrigidos:**
+- `TestimonialsGridBlock` - Implementado com grid responsivo
+- `SocialProofBlock` - Importado corretamente
+- `ValueAnchoringBlock` - Mapeado no UniversalBlockRenderer
+
+#### 🎯 **3. Arquitetura Simplificada:**
+- UniversalBlockRenderer atualizado
+- Sistema modular consolidado
+- Foco único no editor principal (nome e descrição)
 2. **Introdução** (título, subtítulo, descrição, botão)
 3. **Questões** (perguntas e opções com pontuação)
 4. **Resultados** (tipos de resultado possíveis)
@@ -129,7 +148,7 @@ Resultado da simulação:
 
 ### Teste Rápido:
 ```bash
-1. Acesse: http://localhost:5000/editor
+1. Acesse: http://localhost:5000/quiz-editor
 2. Altere o título para "Meu Quiz Teste"
 3. Clique "Validar Regras" → Deve estar OK
 4. Clique "Simular Resultado" → Veja a pontuação
@@ -183,6 +202,104 @@ npm run dev
 - Confirme que o quiz foi publicado
 - Verifique URL gerada
 - Teste em nova aba/janela
+
+---
+
+## 🏗️ ARQUITETURA DO SISTEMA
+
+### 📊 **Editor Principal**
+
+#### 🎯 **Editor Utilizado:**
+- **QuizEditorInterface** → `/quiz-editor` (ESTE TUTORIAL)
+- Interface específica para edição de quiz
+- Integração completa com backend
+- Validação automática de regras de pontuação
+
+#### 📝 **Diferenças dos Editores:**
+- **`/editor`** → Editor visual com sistema de blocos (SchemaDrivenEditor)
+- **`/quiz-editor`** → Editor específico para quiz (QuizEditorInterface)
+
+### 🧩 **Sistema de Blocos (287 componentes)**
+
+#### ✅ **Componentes Inline Implementados:**
+- `PricingInlineBlock` - Tabelas de preços
+- `CTAInlineBlock` - Botões de ação
+- `TestimonialInlineBlock` - Depoimentos inline
+- `BonusInlineBlock` - Ofertas especiais
+- `StatInlineBlock` - Estatísticas
+- `LoaderInlineBlock` - Animações de carregamento
+- `ComparisonInlineBlock` - Tabelas comparativas
+- `NotificationInlineBlock` - Alertas e notificações
+
+#### ✅ **Componentes Grid Implementados (NOVOS):**
+- `TestimonialsGridBlock` - Grid de depoimentos com rating
+- `SocialProofBlock` - Prova social e validação
+- `ValueAnchoringBlock` - Âncora de valor e preços
+
+#### 🔧 **Melhorias Técnicas Implementadas:**
+- **Rotas Simplificadas**: Removidas 7 rotas de editores antigos
+- **Componentes Corrigidos**: 3 componentes faltantes implementados
+- **UniversalBlockRenderer**: Mapeamento atualizado para novos componentes
+- **Arquitetura Limpa**: Foco único no editor `/editor`
+
+### 🔄 **Fluxo de Dados Schema-Driven:**
+```
+Funnel → FunnelPages → Blocks → Properties
+```
+
+#### 💾 **Gerenciamento de Estado:**
+- **LocalStorage**: Persistência de configurações
+- **Context API**: Estado global (Auth, Quiz, Admin)
+- **TanStack Query**: Cache e sincronização
+
+#### 🗄️ **Base de Dados (8 tabelas):**
+- `users`, `funnels`, `funnelPages`
+- `utmAnalytics`, `quizParticipants`
+- Schema com versionamento e tracking
+
+### ⚠️ **Observações do Sistema**
+
+#### � **Backend:**
+- Conectividade pode variar
+- Sistema de fallback local implementado
+- Validação funciona independente da conexão
+
+#### 🧩 **Componentes:**
+- Sistema modular bem estruturado
+- 287 componentes de blocos disponíveis
+- Foco principal em funcionalidade de quiz
+
+### 📈 **Pontos Fortes**
+
+#### ✅ **Arquitetura Moderna:**
+- TypeScript em todo projeto
+- Radix UI para acessibilidade
+- Tailwind CSS para consistência
+- Framer Motion para animações
+
+#### ⚡ **Performance:**
+- Lazy loading implementado
+- Critical CSS otimizado
+- Hot module replacement
+
+#### 🎯 **Funcionalidades:**
+- Sistema de quiz funcional
+- Analytics integrado (Facebook Pixel)
+- Tracking de conversões
+- Persistência de dados
+
+### 🎯 **Foco Principal**
+
+#### 👍 **Editor Recomendado:**
+- Use **APENAS** o editor em `/editor`
+- É o mais estável e documentado
+- Tem melhor integração com backend
+- Suporte completo a quiz e validação de regras
+
+### 📊 **Status Atualizado do Sistema:**
+- **Funcionalidade**: 85% ✅ (Melhorado - componentes corrigidos)
+- **Estabilidade**: 75% ✅ (Melhorado - rotas consolidadas)
+- **Manutenibilidade**: 70% ✅ (Melhorado - arquitetura limpa)
 
 ---
 

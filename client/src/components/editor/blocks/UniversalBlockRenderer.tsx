@@ -31,6 +31,9 @@ import StrategicQuestionBlock from './StrategicQuestionBlock';
 import QuizTransitionBlock from './QuizTransitionBlock';
 import ModernResultPageBlock from './ModernResultPageBlock';
 import UnifiedFunnelBlock from './UnifiedFunnelBlock';
+import TestimonialsGridBlock from './TestimonialsGridBlock';
+import SocialProofBlock from './SocialProofBlock';
+import ValueAnchoringBlock from './ValueAnchoringBlock';
 
 // Blocos específicos do Quiz Intro
 import QuizIntroHeaderBlock from './QuizIntroHeaderBlock';
@@ -234,15 +237,13 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'product-carousel':
         return <ProductCarouselBlock {...commonProps} />;
       
-      // Componentes que estavam causando erro - INLINE
+      // Componentes que estavam causando erro - CORRIGIDOS
       case 'testimonials-grid':
-        return <TestimonialInlineBlock {...commonProps} />;
+        return <TestimonialsGridBlock {...commonProps} />;
       case 'social-proof':
-        return <TestimonialInlineBlock {...commonProps} />;
+        return <SocialProofBlock {...commonProps} />;
       case 'value-anchoring':
-        return <div className="w-full bg-gray-100 p-4 rounded-lg border-2 border-dashed border-gray-300 text-center">
-          <p className="text-gray-600">Componente "Ancoragem de Valor" - Em desenvolvimento</p>
-        </div>;
+        return <ValueAnchoringBlock {...commonProps} />;
 
       // BLOCOS ESPECÍFICOS DO QUIZ - DADOS REAIS
       case 'QuizStartPageBlock':
