@@ -37,6 +37,7 @@ export interface IStorage {
   createUser(user: InsertUser): Promise<User>;
   createUtmAnalytics(utmData: InsertUtmAnalytics): Promise<UtmAnalytics>;
   createQuizParticipant(participant: InsertQuizParticipant): Promise<QuizParticipant>;
+  getQuizParticipants(): Promise<QuizParticipant[]>;
   getUtmAnalytics(): Promise<UtmAnalytics[]>;
   
   // Funnel operations
@@ -97,6 +98,10 @@ export class DatabaseStorage implements IStorage {
   async createQuizParticipant(participant: InsertQuizParticipant): Promise<QuizParticipant> {
     const result = await db.insert(quizParticipants).values(participant).returning();
     return result[0];
+  }
+
+  async getQuizParticipants(): Promise<QuizParticipant[]> {
+    return await db.select().from(quizParticipants).orderBy(desc(quizParticipants.createdAt));
   }
 
   async getUtmAnalytics(): Promise<UtmAnalytics[]> {

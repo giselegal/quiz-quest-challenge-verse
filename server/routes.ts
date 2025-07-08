@@ -49,6 +49,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/quiz-participants", async (req, res) => {
+    try {
+      const participants = await storage.getQuizParticipants();
+      res.json({ success: true, data: participants });
+    } catch (error) {
+      console.error("Error fetching quiz participants:", error);
+      res.status(500).json({ success: false, error: "Failed to fetch participants" });
+    }
+  });
+
   // Funnel API Routes
   app.post("/api/funnels", async (req, res) => {
     try {

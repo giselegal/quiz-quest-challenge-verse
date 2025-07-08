@@ -8,7 +8,7 @@ import https from 'https';
 import http from 'http';
 
 class QuizAPITester {
-    constructor(baseUrl = 'http://localhost:3000/api') {
+    constructor(baseUrl = 'http://localhost:5000/api') {
         this.baseUrl = baseUrl;
     }
 
