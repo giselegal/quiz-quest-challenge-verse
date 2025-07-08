@@ -25,6 +25,7 @@ import { trackButtonClick } from '@/utils/analytics';
 import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
+import { loadMockData } from '@/utils/mockResultData';
 
 const ResultPage: React.FC = () => {
   const {
@@ -68,6 +69,16 @@ const ResultPage: React.FC = () => {
       applyStyles();
     }
   }, [pageConfig, configLoading, applyStyles]);
+
+  // Carregar dados mock durante desenvolvimento se não houver resultado
+  useEffect(() => {
+    if (!primaryStyle && process.env.NODE_ENV === 'development') {
+      console.log('Carregando dados mock para desenvolvimento...');
+      loadMockData();
+      // Force reload dos dados após carregar mock
+      window.location.reload();
+    }
+  }, [primaryStyle]);
 
   useEffect(() => {
     if (!primaryStyle) return;

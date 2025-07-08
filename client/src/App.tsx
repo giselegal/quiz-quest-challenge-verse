@@ -26,6 +26,7 @@ const LoadingFallback = () => (
 const LandingPage = lazy(() => import("./pages/LandingPage"));
 const QuizPage = lazy(() => import("./components/QuizPage"));
 const ResultPage = lazy(() => import("./pages/ResultPage"));
+const TestResultPage = lazy(() => import("./pages/TestResultPage"));
 const QuizDescubraSeuEstilo = lazy(
   () => import("./pages/quiz-descubra-seu-estilo")
 );
@@ -86,6 +87,8 @@ const App = () => {
                 <Route path="/quiz" component={QuizPage} />
                 {/* Rotas do teste A/B */}
                 <Route path="/resultado" component={ResultPage} />
+                {/* Teste do componente de resultado */}
+                <Route path="/test-resultado" component={TestResultPage} />
                 <Route
                   path="/quiz-descubra-seu-estilo"
                   component={QuizDescubraSeuEstilo}
