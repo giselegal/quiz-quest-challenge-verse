@@ -85,11 +85,11 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
 
   const getGridCols = (hasImages: boolean, textOnlyColumns: number = 1) => {
     if (hasImages) {
-      // Opções com imagens sempre usam 2 colunas
+      // Opções com imagens sempre usam 2 colunas (mobile e desktop)
       return 'grid-cols-1 sm:grid-cols-2';
     } else {
-      // Opções só com texto usam 1 coluna por padrão
-      return textOnlyColumns === 1 ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2';
+      // Opções só com texto usam sempre 1 coluna para melhor legibilidade
+      return 'grid-cols-1';
     }
   };
 
