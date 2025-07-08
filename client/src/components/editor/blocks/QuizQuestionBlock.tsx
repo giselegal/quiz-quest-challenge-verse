@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { InlineEditText } from './InlineEditText';
 import type { BlockComponentProps } from '@/types/blocks';
+import { Button } from '@/components/ui/button';
+import { CheckCircle, ArrowRight } from 'lucide-react';
 import { Check } from 'lucide-react';
 
 /**
@@ -53,7 +55,7 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
 
   const handleOptionSelect = (optionId: string) => {
     let newAnswers: string[];
-    
+
     if (isStrategicQuestion) {
       // QUESTÕES ESTRATÉGICAS: apenas 1 seleção
       newAnswers = [optionId];
@@ -71,10 +73,10 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
         }
       }
     }
-    
+
     setSelectedAnswers(newAnswers);
     setHasAnswered(newAnswers.length > 0);
-    
+
     // AUTO-AVANÇO para questões normais após 3ª seleção
     if (!isStrategicQuestion && newAnswers.length === maxSelections && autoAdvance) {
       setTimeout(() => {
@@ -83,7 +85,7 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
         }
       }, 500); // Pequeno delay para feedback visual
     }
-    
+
     if (onAnswer) {
       onAnswer(newAnswers);
     }
@@ -154,7 +156,7 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
             as="h2"
             disabled={!isEditing}
           />
-          
+
           {description && (
             <InlineEditText
               value={description}
@@ -165,13 +167,13 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
               disabled={!isEditing}
             />
           )}
-          
+
           {!isStrategicQuestion && (
             <p className="text-sm text-[#8F7A6A]">
               Selecione exatamente 3 opções ({selectedAnswers.length}/3)
             </p>
           )}
-          
+
           {isStrategicQuestion && (
             <p className="text-sm text-[#8F7A6A]">
               Selecione uma opção para continuar
@@ -190,7 +192,7 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
             const isSelected = selectedAnswers.includes(option.id);
             const showImage = questionType === 'both' || questionType === 'image';
             const showText = questionType === 'both' || questionType === 'text';
-            
+
             return (
               <button
                 key={option.id || index}
@@ -207,10 +209,10 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
                 {/* Selection Indicator */}
                 {isSelected && (
                   <div className="absolute top-2 right-2 w-6 h-6 bg-[#B89B7A] rounded-full flex items-center justify-center"> {/* brand-gold */}
-                    <Check className="w-4 h-4 text-white" />
+                    <CheckCircle className="w-4 h-4 text-white" />
                   </div>
                 )}
-                
+
                 {/* Option Image */}
                 {showImage && option.imageUrl && (
                   <div className="mb-3">
@@ -221,7 +223,7 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
                     />
                   </div>
                 )}
-                
+
                 {/* Option Text */}
                 {showText && (
                   <div className="text-center space-y-1">
@@ -284,13 +286,14 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
 
         {/* Navigation */}
         <div className="flex justify-between items-center pt-8">
-          <button
+          <Button
+            variant="outline"
+            size="sm"
             onClick={handlePrevious}
-            className="px-6 py-3 text-[#8F7A6A] hover:text-[#432818] transition-colors" // brand colors
           >
             ← Anterior
-          </button>
-          
+          </Button>
+
           <div className="text-center">
             {!canProceed && (
               <p className="text-sm text-[#8F7A6A]">
@@ -306,20 +309,13 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
               </p>
             )}
           </div>
-          
-          <button
+
+          <Button
             onClick={handleNext}
             disabled={!canProceed}
-            className={cn(
-              'px-6 py-3 rounded-lg font-medium transition-all',
-              'focus:outline-none focus:ring-4 focus:ring-[#B89B7A]/20',
-              canProceed
-                ? 'bg-[#B89B7A] text-white hover:bg-[#A38A69] shadow-md hover:shadow-lg hover:scale-105' // brand-gold
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            )}
           >
-            {isStrategicQuestion ? 'Continuar' : 'Próximo'} →
-          </button>
+            {isStrategicQuestion ? 'Continuar' : 'Próximo'} <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
         </div>
       </div>
     </div>
