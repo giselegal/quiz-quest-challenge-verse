@@ -4,8 +4,8 @@
  * Execute: node test_apis.js
  */
 
-const https = require('https');
-const http = require('http');
+import https from 'https';
+import http from 'http';
 
 class QuizAPITester {
     constructor(baseUrl = 'http://localhost:3000/api') {
@@ -235,8 +235,8 @@ async function main() {
 }
 
 // Executar se for chamado diretamente
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
     main().catch(console.error);
 }
 
-module.exports = QuizAPITester;
+export default QuizAPITester;

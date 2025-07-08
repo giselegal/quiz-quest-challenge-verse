@@ -288,17 +288,62 @@ if __name__ == "__main__":
 
 ## 🚀 **TESTANDO AGORA**
 
-**1. Abra o terminal e execute:**
+### **PASSO 1: Iniciar o Servidor**
 ```bash
-curl http://localhost:3000/api/quiz-results
+cd /workspaces/quiz-quest-challenge-verse
+npm run dev
 ```
+*Aguarde a mensagem: "Server running on port 3000"*
 
-**2. Ou abra o navegador em:**
+### **PASSO 2: Testar as APIs**
+
+**🌐 Método 1 - Navegador (Mais Fácil):**
 ```
 http://localhost:3000/api/quiz-results
+http://localhost:3000/api/conversion-events
+http://localhost:3000/api/hotmart-purchases
 ```
 
-**3. Para um dashboard visual, salve o código HTML acima como `dashboard.html` e abra no navegador!**
+**🔧 Método 2 - Terminal/CURL:**
+```bash
+curl http://localhost:3000/api/quiz-results
+curl http://localhost:3000/api/conversion-events
+```
+
+**📊 Método 3 - Dashboard Visual:**
+Abra o arquivo: `dashboard_analytics.html` no navegador
+
+**🐍 Método 4 - Python:**
+```bash
+python test_apis.py
+```
+
+**📱 Método 5 - JavaScript:**
+```bash
+node test_apis.js
+```
+
+### **PASSO 3: Verificar Resultados**
+
+**✅ Resposta Esperada:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "...",
+      "participantId": "...",
+      "responses": {...},
+      "createdAt": "..."
+    }
+  ]
+}
+```
+
+**❌ Se der erro de conexão:**
+1. Verifique se o servidor está rodando
+2. Confirme a porta (pode ser 3000, 5173, etc.)
+3. Teste outros endpoints
 
 ---
 
