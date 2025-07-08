@@ -66,7 +66,7 @@ const QuizOfferPageComponent: React.FC<QuizOfferPageComponentProps> = ({
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const benefits = [
+  const benefits = block.properties.benefits || [
     'Identifique seu estilo predominante em minutos',
     'Guia completo personalizado para seu perfil',
     'Dicas exclusivas de combinações',
@@ -75,7 +75,7 @@ const QuizOfferPageComponent: React.FC<QuizOfferPageComponentProps> = ({
     'Suporte especializado'
   ];
 
-  const testimonials = [
+  const testimonials = block.properties.testimonials || [
     {
       name: 'Marina S.',
       text: 'Finalmente entendi meu estilo! Agora me visto com muito mais confiança.',
@@ -93,7 +93,7 @@ const QuizOfferPageComponent: React.FC<QuizOfferPageComponentProps> = ({
     }
   ];
 
-  const faqItems = [
+  const faqItems = block.properties.faqItems || [
     {
       question: 'Como funciona o quiz?',
       answer: 'O quiz é baseado em metodologia científica de análise de estilo. Você responde perguntas sobre suas preferências e recebe um resultado personalizado.'

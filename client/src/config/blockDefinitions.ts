@@ -1481,6 +1481,62 @@ export const blockDefinitions: BlockDefinition[] = [
       { key: 'savings', label: 'Economia', type: 'text-input', defaultValue: '77% OFF - Economia de R$ 135,10' },
       { key: 'ctaText', label: 'Texto do Botão', type: 'text-input', defaultValue: 'QUERO DESCOBRIR MEU ESTILO AGORA' },
       { key: 'ctaUrl', label: 'URL do Botão', type: 'text-input', defaultValue: '#checkout' },
+      { 
+        key: 'benefits', 
+        label: 'Lista de Benefícios', 
+        type: 'array-editor', 
+        defaultValue: [
+          'Identifique seu estilo predominante em minutos',
+          'Guia completo personalizado para seu perfil',
+          'Dicas exclusivas de combinações',
+          'Acesso a comunidade VIP',
+          'Garantia de 7 dias',
+          'Suporte especializado'
+        ],
+        itemSchema: [
+          { key: 'text', label: 'Benefício', type: 'text-input', placeholder: 'Novo benefício' }
+        ]
+      },
+      { 
+        key: 'testimonials', 
+        label: 'Depoimentos', 
+        type: 'array-editor', 
+        defaultValue: [
+          { name: 'Marina S.', text: 'Finalmente entendi meu estilo! Agora me visto com muito mais confiança.', rating: 5 },
+          { name: 'Juliana R.', text: 'O guia transformou completamente meu guarda-roupa. Vale cada centavo!', rating: 5 },
+          { name: 'Carla M.', text: 'Nunca pensei que descobrir meu estilo seria tão fácil e prático.', rating: 5 }
+        ],
+        itemSchema: [
+          { key: 'name', label: 'Nome', type: 'text-input', placeholder: 'Nome do cliente' },
+          { key: 'text', label: 'Depoimento', type: 'textarea', placeholder: 'Texto do depoimento', rows: 3 },
+          { key: 'rating', label: 'Avaliação (1-5)', type: 'number-input', min: 1, max: 5, defaultValue: 5 }
+        ]
+      },
+      { 
+        key: 'faqItems', 
+        label: 'Perguntas Frequentes', 
+        type: 'array-editor', 
+        defaultValue: [
+          { question: 'Como funciona o quiz?', answer: 'O quiz é baseado em metodologia científica de análise de estilo. Você responde perguntas sobre suas preferências e recebe um resultado personalizado.' },
+          { question: 'O que está incluso no guia?', answer: 'Você recebe um guia completo com seu estilo predominante, dicas de combinações, paleta de cores ideal e muito mais.' },
+          { question: 'Posso usar em qualquer idade?', answer: 'Sim! Nosso método funciona para mulheres de todas as idades e estilos de vida.' }
+        ],
+        itemSchema: [
+          { key: 'question', label: 'Pergunta', type: 'text-input', placeholder: 'Pergunta frequente' },
+          { key: 'answer', label: 'Resposta', type: 'textarea', placeholder: 'Resposta detalhada', rows: 3 }
+        ]
+      },
+      { key: 'showTestimonials', label: 'Mostrar Depoimentos', type: 'boolean-switch', defaultValue: true },
+      { key: 'showFaq', label: 'Mostrar FAQ', type: 'boolean-switch', defaultValue: true },
+      { key: 'showGuarantee', label: 'Mostrar Garantia', type: 'boolean-switch', defaultValue: true },
+      { key: 'backgroundColor', label: 'Cor de Fundo', type: 'color-picker', defaultValue: '#FFFBF7' },
+      { key: 'accentColor', label: 'Cor de Destaque', type: 'color-picker', defaultValue: '#B89B7A' },
+      { key: 'textColor', label: 'Cor do Texto', type: 'color-picker', defaultValue: '#432818' },
+    ],
+  },
+      { key: 'savings', label: 'Economia', type: 'text-input', defaultValue: '77% OFF - Economia de R$ 135,10' },
+      { key: 'ctaText', label: 'Texto do Botão', type: 'text-input', defaultValue: 'QUERO DESCOBRIR MEU ESTILO AGORA' },
+      { key: 'ctaUrl', label: 'URL do Botão', type: 'text-input', defaultValue: '#checkout' },
       { key: 'showTestimonials', label: 'Mostrar Depoimentos', type: 'boolean-switch', defaultValue: true },
       { key: 'showFaq', label: 'Mostrar FAQ', type: 'boolean-switch', defaultValue: true },
       { key: 'showGuarantee', label: 'Mostrar Garantia', type: 'boolean-switch', defaultValue: true },
