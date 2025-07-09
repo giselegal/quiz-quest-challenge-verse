@@ -381,12 +381,7 @@ const StatsMetricsBlock: React.FC<StatsBlockProps> = ({
         <div className={`
           ${layout === 'horizontal' ? 'flex flex-wrap justify-center gap-6' :
             layout === 'vertical' ? 'space-y-6 max-w-md mx-auto' :
-            `grid gap-6 ${
-              columns === 1 ? 'grid-cols-1 max-w-md mx-auto' :
-              columns === 2 ? 'grid-cols-1 md:grid-cols-2 max-w-3xl mx-auto' :
-              columns === 3 ? 'grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto' :
-              'grid-cols-1 md:grid-cols-2'
-            }`
+            'flex flex-wrap gap-6 justify-center max-w-4xl mx-auto'
           }
         `}>
           {stats.map((stat, index) => renderStat(stat, index))}
