@@ -73,6 +73,8 @@ import FinalValuePropositionInlineBlock from './FinalValuePropositionInlineBlock
 import TwoColumnsInlineBlock from './TwoColumnsInlineBlock';
 import TestimonialsRealInlineBlock from './TestimonialsRealInlineBlock';
 import MentorSectionInlineBlock from './MentorSectionInlineBlock';
+import BeforeAfterInlineBlock from './BeforeAfterInlineBlock';
+import FAQSectionInlineBlock from './FAQSectionInlineBlock';
 
 export interface BlockRendererProps {
   block: BlockData;
@@ -182,7 +184,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
 
       // Blocos de credibilidade - INLINE com wrapper
       case 'faq-section':
-        return <InlineWrapper blockType={blockType}><FAQSectionBlock {...commonProps} /></InlineWrapper>;
+        return <InlineWrapper blockType={blockType}><FAQSectionInlineBlock {...commonProps} /></InlineWrapper>;
       case 'testimonials':
         return <InlineWrapper blockType={blockType}><TestimonialInlineBlock {...commonProps} /></InlineWrapper>;
       case 'guarantee':
@@ -230,7 +232,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'style-card':
         return <InlineWrapper blockType={blockType}><StyleCardInlineBlock {...commonProps} /></InlineWrapper>;
       case 'before-after':
-        return <InlineWrapper blockType={blockType}><BeforeAfterBlock {...commonProps} /></InlineWrapper>;
+        return <InlineWrapper blockType={blockType}><BeforeAfterInlineBlock {...commonProps} /></InlineWrapper>;
       case 'bonus-section':
         return <InlineWrapper blockType={blockType}><BonusInlineBlock {...commonProps} /></InlineWrapper>;
       case 'testimonials-real':
