@@ -145,13 +145,13 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
       console.log('🆕 Creating new funnel automatically');
       createNewFunnel();
     } else if (funnel) {
-      console.log('✅ Funnel loaded in editor:', { 
-        id: funnel.id, 
-        pages: funnel.pages.length, 
-        currentPageId, 
-        currentPageBlocks: currentPage?.blocks.length,
-        lastModified: funnel.lastModified
-      });
+      // console.log('✅ Funnel loaded in editor:', { 
+      //   id: funnel.id, 
+      //   pages: funnel.pages.length, 
+      //   currentPageId, 
+      //   currentPageBlocks: currentPage?.blocks.length,
+      //   lastModified: funnel.lastModified
+      // });
     }
   }, [funnel, isLoading, funnelId, createNewFunnel]);
 

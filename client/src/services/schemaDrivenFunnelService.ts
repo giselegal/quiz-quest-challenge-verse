@@ -167,7 +167,7 @@ class SchemaDrivenFunnelService {
         lastModified: new Date().toISOString()
       }));
       this.markPendingChanges();
-      console.log('💾 Funnel saved locally');
+      // console.log('💾 Funnel saved locally');
     } catch (error) {
       console.error('❌ Failed to save funnel locally:', error);
     }
@@ -311,7 +311,7 @@ class SchemaDrivenFunnelService {
       const limitedVersions = versions.slice(-10);
       localStorage.setItem(`${this.versionStorageKey}-${funnel.id}`, JSON.stringify(limitedVersions));
       
-      console.log(`📋 Version ${version.version} saved`);
+      // console.log(`📋 Version ${version.version} saved`);
       return version;
     } catch (error) {
       if (error instanceof DOMException && error.name === 'QuotaExceededError') {
