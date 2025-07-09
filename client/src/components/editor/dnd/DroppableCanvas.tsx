@@ -63,42 +63,30 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
           </p>
         </div>
       ) : (
-        /* Canvas com Layout Flexbox Responsivo - Mobile-First, máximo 2 colunas */
-        <div className="w-full mx-auto">
-          {/* Container Flexbox Responsivo para todos os blocos */}
-          <div className="flex flex-wrap gap-3 md:gap-4 w-full">
+        /* Canvas com Layout Flexbox Inline - Todos os componentes em linha */
+        <div className="w-full mx-auto max-w-7xl">
+          {/* Container Flexbox - TODOS OS COMPONENTES INLINE HORIZONTALMENTE */}
+          <div className="flex flex-wrap gap-3 md:gap-4 w-full justify-start items-stretch">
             {blocks.map((block, index) => {
-              // Definir se é um componente inline baseado no tipo
-              const isInlineComponent = block.type?.includes('-inline') || 
-                ['header', 'text', 'image', 'button', 'style-card', 'before-after', 
-                 'bonus-section', 'testimonials-real', 'guarantee-section', 'mentor-section'].includes(block.type);
+              // TODOS os componentes são tratados como inline agora
+              const isInlineComponent = true;
               
-              // Definir larguras responsivas baseadas no tipo de componente
+              // Larguras padrão responsivas - mobile-first, máximo 2 colunas
               const getResponsiveWidth = () => {
-                if (!isInlineComponent) {
-                  // Componentes não-inline ocupam largura total
-                  return "w-full";
+                // Componentes grandes que precisam de mais espaço
+                if (['faq-section', 'video-player', 'quiz-question', 'quiz-start-page', 
+                     'result-page', 'quiz-offer-page', 'testimonials-grid', 'value-stack'].includes(block.type)) {
+                  return "w-full min-w-0 flex-[1_1_100%]"; // Largura total
                 }
                 
-                // Componentes inline: mobile 100%, tablet+ até 2 colunas
-                switch (block.type) {
-                  case 'style-card':
-                  case 'before-after':
-                  case 'bonus-section':
-                    return "w-full sm:w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(50%-0.5rem)]";
-                  case 'testimonials-real':
-                  case 'guarantee-section':
-                  case 'mentor-section':
-                    return "w-full sm:w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(50%-0.5rem)]";
-                  case 'header':
-                  case 'text':
-                    return "w-full sm:w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(50%-0.5rem)]";
-                  case 'image':
-                  case 'button':
-                    return "w-full sm:w-[calc(50%-0.375rem)] md:w-[calc(50%-0.5rem)] lg:w-[calc(50%-0.5rem)]";
-                  default:
-                    return "w-full sm:w-[calc(50%-0.375rem)] md:w-[calc(50%-0.5rem)] lg:w-[calc(50%-0.5rem)]";
+                // Componentes pequenos (botões, badges, stats)
+                if (['button', 'badge', 'stat', 'loader', 'notification'].includes(block.type) || 
+                    block.type?.includes('button') || block.type?.includes('badge')) {
+                  return "w-full sm:w-auto md:w-auto lg:w-auto flex-[0_1_auto] min-w-[200px]";
                 }
+                
+                // Componentes padrão - 50% em desktop, 100% em mobile
+                return "w-full sm:w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(50%-0.5rem)] flex-[1_1_calc(50%-0.5rem)] min-w-[300px]";
               };
 
               return (
@@ -109,12 +97,11 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
                     isVisible={isDraggingFromSidebar}
                   />
                   
-                  {/* Block Item Container Responsivo */}
+                  {/* Block Item Container - TODOS INLINE AGORA */}
                   <div className={cn(
                     getResponsiveWidth(),
                     "min-h-[120px] transition-all duration-200",
-                    // Para componentes não-inline, quebra a linha
-                    !isInlineComponent && "basis-full"
+                    "flex-shrink-0" // Evita encolhimento excessivo
                   )}>
                     <SortableBlockItem
                       block={block}
@@ -127,8 +114,12 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
                       disabled={disabled}
                       className={cn(
                         "w-full h-full transition-all duration-200",
-                        isInlineComponent && "border border-gray-200 rounded-md shadow-sm bg-white min-h-[120px]",
-                        !isInlineComponent && "border border-gray-300 rounded-lg shadow-md bg-white min-h-[200px]"
+                        // Todos os componentes têm identidade visual consistente
+                        "border border-gray-200 rounded-lg shadow-sm bg-white",
+                        "hover:shadow-md hover:border-blue-300",
+                        "min-h-[120px] flex flex-col",
+                        // Cores da marca para identidade visual
+                        isSelected && "ring-2 ring-blue-500 border-blue-400 bg-blue-50"
                       )}
                     />
                   </div>
