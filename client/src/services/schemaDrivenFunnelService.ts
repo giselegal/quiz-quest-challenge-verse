@@ -95,10 +95,17 @@ class SchemaDrivenFunnelService {
     errorCount: 0
   };
 
+  constructor() {
+    // Limpeza imediata na inicialização
+    this.performEmergencyCleanup();
+  }
+
   // Auto-save management
   enableAutoSave(interval: number = 10) {
     this.autoSaveState.isEnabled = true;
     this.autoSaveState.interval = interval;
+    // Limpeza inicial ao habilitar auto-save
+    this.cleanupLocalStorage();
     this.startAutoSaveInterval();
   }
 
@@ -189,6 +196,98 @@ class SchemaDrivenFunnelService {
     this.autoSaveState.pendingChanges = false;
   }
 
+  // Limpeza preventiva do localStorage
+  private cleanupLocalStorage(): void {
+    try {
+      // Remover versões antigas (mais de 7 dias)
+      const cutoffDate = new Date();
+      cutoffDate.setDate(cutoffDate.getDate() - 7);
+      
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key?.startsWith(this.versionStorageKey)) {
+          try {
+            const versions = JSON.parse(localStorage.getItem(key) || '[]');
+            const recentVersions = versions.filter((v: any) => 
+              new Date(v.createdAt) > cutoffDate
+            ).slice(-5); // Manter apenas 5 versões recentes
+            
+            if (recentVersions.length === 0) {
+              localStorage.removeItem(key);
+            } else if (recentVersions.length !== versions.length) {
+              localStorage.setItem(key, JSON.stringify(recentVersions));
+            }
+          } catch {
+            localStorage.removeItem(key);
+          }
+        }
+      }
+    } catch (error) {
+      console.warn('⚠️ Error during localStorage cleanup:', error);
+    }
+  }
+
+  // Limpeza de emergência em caso de quota exceeded
+  private emergencyCleanup(): void {
+    try {
+      console.log('🚨 Emergency cleanup initiated');
+      
+      // Remover todas as versões antigas
+      const keysToRemove: string[] = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key?.startsWith(this.versionStorageKey)) {
+          keysToRemove.push(key);
+        }
+      }
+      
+      keysToRemove.forEach(key => {
+        try {
+          localStorage.removeItem(key);
+        } catch {
+          // Ignorar erros individuais
+        }
+      });
+      
+      console.log(`🧹 Removed ${keysToRemove.length} version history entries`);
+    } catch (error) {
+      console.error('❌ Emergency cleanup failed:', error);
+    }
+  }
+
+  // Limpeza mais agressiva na inicialização
+  private performEmergencyCleanup(): void {
+    try {
+      console.log('🧹 Performing initial localStorage cleanup...');
+      let removed = 0;
+      
+      // Obter todas as chaves de uma vez para evitar problemas de índice
+      const allKeys: string[] = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key) allKeys.push(key);
+      }
+      
+      // Remover todas as versões antigas
+      allKeys.forEach(key => {
+        if (key.startsWith(this.versionStorageKey)) {
+          try {
+            localStorage.removeItem(key);
+            removed++;
+          } catch {
+            // Ignorar erros
+          }
+        }
+      });
+      
+      if (removed > 0) {
+        console.log(`🧹 Cleared ${removed} version entries from localStorage`);
+      }
+    } catch (error) {
+      console.error('❌ Initial cleanup failed:', error);
+    }
+  }
+
   // Version management
   saveVersion(funnel: SchemaDrivenFunnelData, description?: string, isAutoSave: boolean = false): FunnelVersion {
     const version: FunnelVersion = {
@@ -202,17 +301,32 @@ class SchemaDrivenFunnelService {
     };
 
     try {
+      // Limpeza proativa do localStorage antes de salvar
+      this.cleanupLocalStorage();
+      
       const versions = this.getVersionHistory(funnel.id);
       versions.push(version);
       
-      // Manter apenas as últimas 50 versões
-      const limitedVersions = versions.slice(-50);
+      // Manter apenas as últimas 10 versões para economizar espaço
+      const limitedVersions = versions.slice(-10);
       localStorage.setItem(`${this.versionStorageKey}-${funnel.id}`, JSON.stringify(limitedVersions));
       
       console.log(`📋 Version ${version.version} saved`);
       return version;
     } catch (error) {
-      console.error('❌ Failed to save version:', error);
+      if (error instanceof DOMException && error.name === 'QuotaExceededError') {
+        console.warn('⚠️ LocalStorage quota exceeded, performing emergency cleanup');
+        this.emergencyCleanup();
+        // Tentar salvar novamente apenas a versão atual sem histórico
+        try {
+          localStorage.setItem(`${this.versionStorageKey}-${funnel.id}`, JSON.stringify([version]));
+          console.log(`📋 Version ${version.version} saved after cleanup`);
+        } catch (secondError) {
+          console.error('❌ Failed to save even after cleanup:', secondError);
+        }
+      } else {
+        console.error('❌ Failed to save version:', error);
+      }
       return version;
     }
   }
