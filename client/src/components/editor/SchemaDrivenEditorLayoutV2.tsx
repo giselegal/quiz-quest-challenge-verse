@@ -367,10 +367,14 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                 setCurrentPage={setCurrentPage}
               />
             </div>
+          </div>
         )}
         
         {/* Central Canvas - LARGURAS ESPECÍFICAS POR DISPOSITIVO */}
-        <div className="flex-1 flex flex-col overflow-hidden bg-gray-50">
+        <div className={`
+          flex-1 flex flex-col overflow-hidden bg-gray-50
+          ${deviceView === 'mobile' && (showLeftSidebar || showRightSidebar) ? 'blur-sm' : ''}
+        `}>
           <div className="flex-1 overflow-auto flex justify-center">
             <div className={`
               ${deviceView === 'mobile' 
@@ -585,7 +589,7 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
         {showRightSidebar && (
           <div className={`
             ${deviceView === 'mobile' 
-              ? 'mobile-sidebar right-0' 
+              ? 'fixed top-14 right-0 bottom-0 w-72 z-50 bg-white shadow-xl border-l border-gray-300' 
               : deviceView === 'tablet'
               ? 'relative w-64 bg-white border-l border-gray-200'
               : 'relative w-80 bg-white border-l border-gray-200'

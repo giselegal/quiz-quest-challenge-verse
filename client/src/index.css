@@ -28,6 +28,12 @@
     z-index: 999 !important;
   }
   
+  /* Garantir que o editor principal ocupe toda a largura disponível */
+  .editor-mobile-layout {
+    width: 100vw !important;
+    height: 100vh !important;
+  }
+  
   /* Canvas mobile com largura limitada */
   .canvas-mobile {
     width: 100% !important;
