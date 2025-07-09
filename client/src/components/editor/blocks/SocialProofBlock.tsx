@@ -88,8 +88,12 @@ const SocialProofBlock: React.FC<SocialProofBlockProps> = ({
           </div>
         )}
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {testimonials.map((testimonial, index) => renderTestimonial(testimonial, index))}
+        <div className="flex flex-wrap gap-8 justify-center">
+          {testimonials.map((testimonial, index) => (
+            <div key={index} className="flex-1 min-w-[300px] max-w-lg">
+              {renderTestimonial(testimonial, index)}
+            </div>
+          ))}
         </div>
         
         {/* Elemento de confiança adicional */}
