@@ -8,35 +8,49 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Layout mobile específico para o editor */
-@media (max-width: 640px) {
+/* Layout mobile específico para o editor - FORÇA MOBILE */
+@media (max-width: 768px) {
   .editor-mobile-layout {
     position: relative;
     overflow: hidden;
   }
   
   .editor-mobile-canvas {
-    width: 100%;
-    max-width: 375px;
-    margin: 0 auto;
-    padding: 8px;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 4px !important;
   }
   
   .editor-mobile-sidebar {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    width: 280px;
-    background: white;
-    z-index: 50;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    position: fixed !important;
+    top: 56px !important;
+    bottom: 0 !important;
+    width: 300px !important;
+    background: white !important;
+    z-index: 9999 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+    border: 2px solid #007acc !important;
   }
   
   .editor-mobile-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 40;
+    position: fixed !important;
+    inset: 0 !important;
+    background: rgba(0, 0, 0, 0.7) !important;
+    z-index: 9998 !important;
+  }
+  
+  /* FORÇAR botões mobile */
+  .mobile-toggle-buttons {
+    display: flex !important;
+    gap: 4px !important;
+  }
+  
+  /* Esconder botões desktop no mobile */
+  @media (max-width: 768px) {
+    .hidden-mobile {
+      display: none !important;
+    }
   }
 }
 

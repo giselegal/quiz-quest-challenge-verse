@@ -240,28 +240,38 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
             </span>
           </div>
 
-          {/* Mobile Toggle Buttons - Sempre visíveis em tela pequena */}
-          <div className="flex space-x-1 sm:hidden">
+          {/* Mobile Toggle Buttons - SEMPRE VISÍVEIS */}
+          <div className="mobile-toggle-buttons md:hidden">
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setShowLeftSidebar(!showLeftSidebar)}
-              className="px-2"
+              onClick={() => {
+                setShowLeftSidebar(!showLeftSidebar);
+                console.log('Left sidebar toggled:', !showLeftSidebar);
+              }}
+              className="px-3 py-2 bg-blue-500 text-white hover:bg-blue-600 border-blue-600"
+              style={{ display: 'flex !important' }}
             >
-              <Menu className="w-3 h-3" />
+              <Menu className="w-4 h-4" />
+              <span className="ml-1 text-xs">Menu</span>
             </Button>
             <Button
               variant="outline" 
               size="sm"
-              onClick={() => setShowRightSidebar(!showRightSidebar)}
-              className="px-2"
+              onClick={() => {
+                setShowRightSidebar(!showRightSidebar);
+                console.log('Right sidebar toggled:', !showRightSidebar);
+              }}
+              className="px-3 py-2 bg-green-500 text-white hover:bg-green-600 border-green-600"
+              style={{ display: 'flex !important' }}
             >
-              <Settings className="w-3 h-3" />
+              <Settings className="w-4 h-4" />
+              <span className="ml-1 text-xs">Config</span>
             </Button>
           </div>
 
           {/* Device view controls - Mobile optimized */}
-          <div className="flex border rounded-md">
+          <div className="flex border rounded-md hidden-mobile md:flex">
             <Button
               variant={deviceView === 'mobile' ? 'default' : 'ghost'}
               size="sm"
