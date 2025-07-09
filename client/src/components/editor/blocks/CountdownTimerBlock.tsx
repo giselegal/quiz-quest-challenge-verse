@@ -198,13 +198,13 @@ const CountdownTimerBlock: React.FC<CountdownTimerBlockProps> = ({
         return (
           <span key={unit.label} className="inline-flex items-baseline gap-1">
             <span className={cn(
-              'text-2xl md:text-3xl font-bold tabular-nums',
+              'text-xl sm:text-2xl md:text-3xl font-bold tabular-nums',
               pulseAnimation && isUrgent && 'animate-pulse'
             )}>
               {unit.value.toString().padStart(2, '0')}
             </span>
-            <span className="text-sm opacity-80">{unit.shortLabel}</span>
-            {index < 3 && <span className="mx-1 opacity-60">:</span>}
+            <span className="text-xs sm:text-sm opacity-80">{unit.shortLabel}</span>
+            {index < 3 && <span className="mx-0.5 sm:mx-1 opacity-60">:</span>}
           </span>
         );
 
@@ -338,7 +338,7 @@ const CountdownTimerBlock: React.FC<CountdownTimerBlockProps> = ({
     return (
       <div
         className={cn(
-          'bg-gray-100 p-8 rounded-lg text-gray-500 flex flex-col items-center justify-center min-h-[200px] cursor-pointer transition-all duration-200',
+          'bg-gray-100 p-4 sm:p-6 md:p-8 rounded-lg text-gray-500 flex flex-col items-center justify-center min-h-[150px] sm:min-h-[180px] md:min-h-[200px] cursor-pointer transition-all duration-200',
           isSelected && 'outline-2 outline-[#B89B7A] outline-offset-2',
           !isSelected && 'hover:shadow-sm',
           className
@@ -347,9 +347,9 @@ const CountdownTimerBlock: React.FC<CountdownTimerBlockProps> = ({
         data-block-id={block.id}
         data-block-type={block.type}
       >
-        <Timer className="w-12 h-12 mb-4 opacity-50" />
-        <p className="text-center">Countdown Timer (Preview)</p>
-        <p className="text-sm text-center mt-2">Configure o timer no painel de propriedades</p>
+        <Timer className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 mb-3 sm:mb-4 opacity-50" />
+        <p className="text-center text-sm sm:text-base">Countdown Timer (Preview)</p>
+        <p className="text-xs sm:text-sm text-center mt-2">Configure o timer no painel de propriedades</p>
       </div>
     );
   }
@@ -357,7 +357,7 @@ const CountdownTimerBlock: React.FC<CountdownTimerBlockProps> = ({
   return (
     <div
       className={cn(
-        'py-8 px-4 cursor-pointer transition-all duration-200 w-full',
+        'py-4 sm:py-6 md:py-8 px-4 cursor-pointer transition-all duration-200 w-full',
         isSelected && 'outline-2 outline-[#B89B7A] outline-offset-2',
         !isSelected && 'hover:shadow-sm',
         themeClasses.container,
@@ -369,9 +369,9 @@ const CountdownTimerBlock: React.FC<CountdownTimerBlockProps> = ({
       style={{ backgroundColor: backgroundColor !== '#ffffff' ? backgroundColor : undefined }}
     >
       {/* Header */}
-      <div className="text-center mb-8">
+      <div className="text-center mb-6 sm:mb-8">
         {title && (
-          <h2 className={cn('text-2xl md:text-3xl font-bold mb-2', themeClasses.text)}>
+          <h2 className={cn('text-xl sm:text-2xl md:text-3xl font-bold mb-2', themeClasses.text)}>
             <InlineEditableText
               value={title}
               onSave={(value: string) => handlePropertyChange('title', value)}
@@ -382,7 +382,7 @@ const CountdownTimerBlock: React.FC<CountdownTimerBlockProps> = ({
           </h2>
         )}
         {subtitle && (
-          <p className={cn('text-lg mb-4', themeClasses.accent)}>
+          <p className={cn('text-base sm:text-lg mb-3 sm:mb-4', themeClasses.accent)}>
             <InlineEditableText
               value={subtitle}
               onSave={(value: string) => handlePropertyChange('subtitle', value)}
@@ -394,9 +394,9 @@ const CountdownTimerBlock: React.FC<CountdownTimerBlockProps> = ({
         )}
         
         {urgencyText && !isExpired && (
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Clock className="w-5 h-5" />
-            <span className="font-medium">{urgencyText}</span>
+          <div className="flex items-center justify-center gap-2 mb-3 sm:mb-4">
+            <Clock className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="font-medium text-sm sm:text-base">{urgencyText}</span>
           </div>
         )}
 
@@ -406,13 +406,13 @@ const CountdownTimerBlock: React.FC<CountdownTimerBlockProps> = ({
       {/* Timer Display */}
       <div className="max-w-4xl mx-auto">
         {layout === 'compact' ? (
-          <div className="text-center text-4xl md:text-6xl font-bold font-mono">
+          <div className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold font-mono">
             {units.map((unit, index) => renderTimeUnit(unit, index))}
           </div>
         ) : (
           <div className={cn(
-            'grid gap-4 justify-center',
-            layout === 'circular' ? 'grid-cols-2 md:grid-cols-4' : 'grid-cols-2 md:grid-cols-4'
+            'grid gap-3 sm:gap-4 justify-center',
+            layout === 'circular' ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-2 sm:grid-cols-4'
           )}>
             {units.map((unit, index) => renderTimeUnit(unit, index))}
           </div>
@@ -420,7 +420,7 @@ const CountdownTimerBlock: React.FC<CountdownTimerBlockProps> = ({
 
         {/* Progress Bar */}
         {showProgress && initialTotal > 0 && !isExpired && (
-          <div className="mt-8">
+          <div className="mt-6 sm:mt-8">
             <div className="w-full bg-white/20 rounded-full h-2 overflow-hidden">
               <motion.div
                 className="h-full bg-white rounded-full"
@@ -429,7 +429,7 @@ const CountdownTimerBlock: React.FC<CountdownTimerBlockProps> = ({
                 transition={{ duration: 0.5 }}
               />
             </div>
-            <p className="text-center text-sm mt-2 opacity-80">
+            <p className="text-center text-xs sm:text-sm mt-2 opacity-80">
               {Math.round(progressPercentage)}% da oferta já expirou
             </p>
           </div>
@@ -438,8 +438,8 @@ const CountdownTimerBlock: React.FC<CountdownTimerBlockProps> = ({
 
       {/* Editor Info */}
       {isEditing && (
-        <div className="mt-8 p-4 bg-black/20 rounded-md">
-          <p className="text-sm opacity-80">
+        <div className="mt-6 sm:mt-8 p-3 sm:p-4 bg-black/20 rounded-md">
+          <p className="text-xs sm:text-sm opacity-80">
             Modo de edição: Layout {layout} • Tema {theme} • 
             {isExpired ? 'Expirado' : `${timeLeft.total}s restantes`}
           </p>
