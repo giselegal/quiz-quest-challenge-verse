@@ -203,7 +203,7 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
       selectedBlockId={selectedBlockId || undefined}
       onBlockUpdate={handleInlineEdit}
     >
-    <div className={`h-screen flex flex-col overflow-hidden bg-gray-50 ${className}`}>
+    <div className={`h-screen flex flex-col overflow-hidden bg-gray-50 editor-mobile-layout ${className}`}>
       {/* Header - Mobile First Design */}
       <div className="h-12 sm:h-14 bg-white border-b border-gray-200 flex items-center justify-between px-2 sm:px-4">
         <div className="flex items-center space-x-1 sm:space-x-4 min-w-0 flex-1">
@@ -240,27 +240,25 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
             </span>
           </div>
 
-          {/* Mobile Toggle Buttons */}
-          {deviceView === 'mobile' && (
-            <div className="flex space-x-1">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowLeftSidebar(!showLeftSidebar)}
-                className="px-2"
-              >
-                <Menu className="w-3 h-3" />
-              </Button>
-              <Button
-                variant="outline" 
-                size="sm"
-                onClick={() => setShowRightSidebar(!showRightSidebar)}
-                className="px-2"
-              >
-                <Settings className="w-3 h-3" />
-              </Button>
-            </div>
-          )}
+          {/* Mobile Toggle Buttons - Sempre visíveis em tela pequena */}
+          <div className="flex space-x-1 sm:hidden">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowLeftSidebar(!showLeftSidebar)}
+              className="px-2"
+            >
+              <Menu className="w-3 h-3" />
+            </Button>
+            <Button
+              variant="outline" 
+              size="sm"
+              onClick={() => setShowRightSidebar(!showRightSidebar)}
+              className="px-2"
+            >
+              <Settings className="w-3 h-3" />
+            </Button>
+          </div>
 
           {/* Device view controls - Mobile optimized */}
           <div className="flex border rounded-md">
@@ -329,12 +327,12 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
 
       {/* Main Content - Mobile First Layout */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Left Sidebar - Responsive */}
-        {showLeftSidebar && (
-          <div className={`
-            ${deviceView === 'mobile' ? 'fixed inset-y-0 left-0 z-50 w-80 bg-white shadow-xl' : 'relative w-80 lg:w-96'} 
-            border-r border-gray-200 bg-white flex flex-col
-          `}>
+        {/* Left Sidebar - Sempre visível em desktop, sobreposta no mobile */}
+        <div className={`
+          ${showLeftSidebar ? 'block' : 'hidden'} 
+          ${deviceView === 'mobile' ? 'editor-mobile-sidebar left-0' : 'relative w-80 lg:w-96'} 
+          border-r border-gray-200 bg-white flex flex-col
+        `}>
             {/* Header with close button for mobile */}
             <div className="flex items-center justify-between p-3 border-b border-gray-200">
               <h2 className="font-semibold text-gray-900">Componentes</h2>
@@ -362,8 +360,7 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                 setCurrentPage={setCurrentPage}
               />
             </div>
-          </div>
-        )}
+        </div>
         
         {/* Central Canvas - Responsive */}
         <div className="flex-1 flex flex-col overflow-hidden bg-gray-50">
@@ -374,9 +371,9 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
               deviceView === 'tablet' ? 'p-4' :
               'p-6'
             }`}>
-              {/* Mobile: Full width canvas */}
+              {/* Mobile: Canvas responsivo */}
               {deviceView === 'mobile' ? (
-                <div className="w-full bg-white rounded-lg shadow-sm min-h-[calc(100vh-200px)]">
+                <div className="editor-mobile-canvas bg-white rounded-lg shadow-sm min-h-[calc(100vh-200px)]">
                   <div className="p-4">
                     <DroppableCanvas
                       blocks={currentPage?.blocks || []}
@@ -580,12 +577,12 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
           </div>
         </div>
         
-        {/* Right Sidebar - Properties Panel - Responsive */}
-        {showRightSidebar && (
-          <div className={`
-            ${deviceView === 'mobile' ? 'fixed inset-y-0 right-0 z-50 w-80 bg-white shadow-xl' : 'relative w-80 lg:w-96'} 
-            border-l border-gray-200 bg-white flex flex-col
-          `}>
+        {/* Right Sidebar - Properties Panel - Sempre visível em desktop, sobreposta no mobile */}
+        <div className={`
+          ${showRightSidebar ? 'block' : 'hidden'} 
+          ${deviceView === 'mobile' ? 'editor-mobile-sidebar right-0' : 'relative w-80 lg:w-96'} 
+          border-l border-gray-200 bg-white flex flex-col
+        `}>
             {/* Header with close button for mobile */}
             <div className="flex items-center justify-between p-3 border-b border-gray-200">
               <h2 className="font-semibold text-gray-900">Propriedades</h2>
@@ -609,13 +606,12 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                 onFunnelConfigChange={updateFunnelConfig}
               />
             </div>
-          </div>
-        )}
+        </div>
         
         {/* Mobile Overlay */}
         {deviceView === 'mobile' && (showLeftSidebar || showRightSidebar) && (
           <div 
-            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            className="editor-mobile-overlay"
             onClick={() => {
               setShowLeftSidebar(false);
               setShowRightSidebar(false);

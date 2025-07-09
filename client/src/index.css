@@ -8,6 +8,38 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Layout mobile específico para o editor */
+@media (max-width: 640px) {
+  .editor-mobile-layout {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .editor-mobile-canvas {
+    width: 100%;
+    max-width: 375px;
+    margin: 0 auto;
+    padding: 8px;
+  }
+  
+  .editor-mobile-sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 280px;
+    background: white;
+    z-index: 50;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  }
+  
+  .editor-mobile-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 40;
+  }
+}
+
 /* Mobile Editor Optimizations */
 @layer utilities {
   .mobile-canvas {
