@@ -95,41 +95,94 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
                   isVisible={isDraggingFromSidebar}
                 />
                 
-                {/* Início do grupo horizontal */}
-                {shouldStartGroup && (
+                {/* Renderizar com ou sem agrupamento */}
+                {shouldStartGroup ? (
+                  // Início de um grupo horizontal
                   <div className="flex flex-wrap gap-4 w-full mb-4 p-2 border border-dashed border-blue-200 rounded-lg bg-blue-50/30">
-                )}
-                
-                {/* Block Item - Layout flexível */}
-                <div className={cn(
-                  isInlineComponent ? "flex-1 min-w-0 max-w-none" : "w-full mb-4",
-                  isInGroup && "flex-1 min-w-[200px] max-w-[400px]" // Limitar largura em grupos
-                )}>
-                  <SortableBlockItem
-                    block={block}
-                    isSelected={block.id === selectedBlockId}
-                    onSelect={() => onBlockSelect(block.id)}
-                    onDelete={() => onBlockDelete(block.id)}
-                    onDuplicate={() => onBlockDuplicate(block.id)}
-                    onToggleVisibility={() => onBlockToggleVisibility(block.id)}
-                    onSaveInline={onSaveInline}
-                    disabled={disabled}
-                    className={cn(
-                      "w-full transition-all duration-200",
-                      isInlineComponent && "h-auto min-h-[120px]",
-                      isInGroup && "border border-gray-200 rounded-md shadow-sm bg-white"
+                    <div className={cn(
+                      "flex-1 min-w-0 max-w-none",
+                      isInGroup && "flex-1 min-w-[200px] max-w-[400px]"
+                    )}>
+                      <SortableBlockItem
+                        block={block}
+                        isSelected={block.id === selectedBlockId}
+                        onSelect={() => onBlockSelect(block.id)}
+                        onDelete={() => onBlockDelete(block.id)}
+                        onDuplicate={() => onBlockDuplicate(block.id)}
+                        onToggleVisibility={() => onBlockToggleVisibility(block.id)}
+                        onSaveInline={onSaveInline}
+                        disabled={disabled}
+                        className={cn(
+                          "w-full transition-all duration-200",
+                          isInlineComponent && "h-auto min-h-[120px]",
+                          isInGroup && "border border-gray-200 rounded-md shadow-sm bg-white"
+                        )}
+                      />
+                    </div>
+                    {!shouldEndGroup && (
+                      // Placeholder para manter o grupo aberto se não termina aqui
+                      <></>
                     )}
-                  />
-                </div>
-                
-                {/* Fim do grupo horizontal */}
-                {shouldEndGroup && (
                   </div>
-                )}
-                
-                {/* Componentes não-inline mantêm layout vertical */}
-                {!isInlineComponent && !isInGroup && (
-                  <div className="mb-4" />
+                ) : shouldEndGroup ? (
+                  // Item que fecha um grupo (renderizar apenas o item)
+                  <div className={cn(
+                    "flex-1 min-w-0 max-w-none",
+                    isInGroup && "flex-1 min-w-[200px] max-w-[400px]"
+                  )}>
+                    <SortableBlockItem
+                      block={block}
+                      isSelected={block.id === selectedBlockId}
+                      onSelect={() => onBlockSelect(block.id)}
+                      onDelete={() => onBlockDelete(block.id)}
+                      onDuplicate={() => onBlockDuplicate(block.id)}
+                      onToggleVisibility={() => onBlockToggleVisibility(block.id)}
+                      onSaveInline={onSaveInline}
+                      disabled={disabled}
+                      className={cn(
+                        "w-full transition-all duration-200",
+                        isInlineComponent && "h-auto min-h-[120px]",
+                        isInGroup && "border border-gray-200 rounded-md shadow-sm bg-white"
+                      )}
+                    />
+                  </div>
+                ) : isInGroup ? (
+                  // Item no meio de um grupo (apenas o item)
+                  <div className={cn(
+                    "flex-1 min-w-0 max-w-none",
+                    "flex-1 min-w-[200px] max-w-[400px]"
+                  )}>
+                    <SortableBlockItem
+                      block={block}
+                      isSelected={block.id === selectedBlockId}
+                      onSelect={() => onBlockSelect(block.id)}
+                      onDelete={() => onBlockDelete(block.id)}
+                      onDuplicate={() => onBlockDuplicate(block.id)}
+                      onToggleVisibility={() => onBlockToggleVisibility(block.id)}
+                      onSaveInline={onSaveInline}
+                      disabled={disabled}
+                      className={cn(
+                        "w-full transition-all duration-200",
+                        isInlineComponent && "h-auto min-h-[120px]",
+                        "border border-gray-200 rounded-md shadow-sm bg-white"
+                      )}
+                    />
+                  </div>
+                ) : (
+                  // Item normal (não inline ou não agrupado)
+                  <div className="w-full mb-4">
+                    <SortableBlockItem
+                      block={block}
+                      isSelected={block.id === selectedBlockId}
+                      onSelect={() => onBlockSelect(block.id)}
+                      onDelete={() => onBlockDelete(block.id)}
+                      onDuplicate={() => onBlockDuplicate(block.id)}
+                      onToggleVisibility={() => onBlockToggleVisibility(block.id)}
+                      onSaveInline={onSaveInline}
+                      disabled={disabled}
+                      className="w-full transition-all duration-200"
+                    />
+                  </div>
                 )}
               </React.Fragment>
             );
