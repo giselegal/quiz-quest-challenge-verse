@@ -301,61 +301,55 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
 
         {/* Main Layout */}
         <div className="flex-1 flex overflow-hidden relative">
-          {/* Overlay para mobile quando sidebar está aberta */}
-          {showLeftSidebar && deviceView === 'mobile' && (
+          {/* Overlay para mobile quando sidebar está aberta - TESTE FORÇADO */}
+          {(showLeftSidebar || showRightSidebar) && deviceView === 'mobile' && (
             <div 
               className="fixed inset-0 bg-black bg-opacity-50 z-40"
-              onClick={() => setShowLeftSidebar(false)}
-            />
-          )}
-          {showRightSidebar && deviceView === 'mobile' && (
-            <div 
-              className="fixed inset-0 bg-black bg-opacity-50 z-40"
-              onClick={() => setShowRightSidebar(false)}
+              onClick={() => {
+                console.log('🔄 Overlay clicked - closing sidebars');
+                setShowLeftSidebar(false);
+                setShowRightSidebar(false);
+              }}
             />
           )}
 
-          {/* Left Sidebar - DEBUG: Sempre visível quando showLeftSidebar = true */}
-          {showLeftSidebar && (
-            <div className={`
-              ${deviceView === 'mobile' 
-                ? 'fixed top-14 left-0 bottom-0 w-80 z-50 bg-white shadow-2xl border-r border-gray-300' 
-                : deviceView === 'tablet'
-                ? 'relative w-64 bg-white border-r border-gray-200'
-                : 'relative w-80 bg-white border-r border-gray-200'
-              } 
-              flex flex-col
-            `} 
-            style={{ display: showLeftSidebar ? 'flex' : 'none' }} // DEBUG: Força exibição
+          {/* Left Sidebar - MOBILE ALWAYS RENDERED */}
+          <div 
+            className={`
+              fixed top-14 left-0 bottom-0 w-80 z-50 bg-white shadow-2xl border-r border-gray-300
+              flex flex-col transition-transform duration-300 ease-in-out
+              ${showLeftSidebar ? 'translate-x-0' : '-translate-x-full'}
+            `}
           >
-              <div className="flex items-center justify-between p-3 border-b border-gray-200">
-                <h2 className="font-semibold text-gray-900">Componentes</h2>
-                {deviceView === 'mobile' && (
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={() => setShowLeftSidebar(false)}
-                    className="h-8 w-8 p-0"
-                  >
-                    ×
-                  </Button>
-                )}
-              </div>
-              <div className="flex-1 overflow-hidden">
-                <SchemaDrivenComponentsSidebar 
-                  onComponentSelect={(type) => {
-                    handleComponentSelect(type);
-                    if (deviceView === 'mobile') setShowLeftSidebar(false);
-                  }}
-                  activeTab={activeTab}
-                  onTabChange={setActiveTab}
-                  funnelPages={funnel.pages}
-                  currentPageId={currentPageId ?? undefined}
-                  setCurrentPage={setCurrentPage}
-                />
-              </div>
+            <div className="flex items-center justify-between p-3 border-b border-gray-200">
+              <h2 className="font-semibold text-gray-900">Componentes</h2>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => {
+                  console.log('🔄 Closing left sidebar from X button');
+                  setShowLeftSidebar(false);
+                }}
+                className="h-8 w-8 p-0"
+              >
+                ×
+              </Button>
             </div>
-          )}
+            <div className="flex-1 overflow-hidden">
+              <SchemaDrivenComponentsSidebar 
+                onComponentSelect={(type) => {
+                  console.log('🔄 Component selected:', type);
+                  handleComponentSelect(type);
+                  setShowLeftSidebar(false);
+                }}
+                activeTab={activeTab}
+                onTabChange={setActiveTab}
+                funnelPages={funnel?.pages || []}
+                currentPageId={currentPageId ?? undefined}
+                setCurrentPage={setCurrentPage}
+              />
+            </div>
+          </div>
           
           {/* Central Canvas */}
           <div className="flex-1 flex flex-col overflow-hidden bg-gray-50">
@@ -523,43 +517,38 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
             </div>
           </div>
           
-          {/* Right Sidebar - DEBUG: Sempre visível quando showRightSidebar = true */}
-          {showRightSidebar && (
-            <div className={`
-              ${deviceView === 'mobile' 
-                ? 'fixed top-14 right-0 bottom-0 w-80 z-50 bg-white shadow-2xl border-l border-gray-300' 
-                : deviceView === 'tablet'
-                ? 'relative w-64 bg-white border-l border-gray-200'
-                : 'relative w-80 bg-white border-l border-gray-200'
-              } 
-              flex flex-col
+          {/* Right Sidebar - MOBILE ALWAYS RENDERED */}
+          <div 
+            className={`
+              fixed top-14 right-0 bottom-0 w-80 z-50 bg-white shadow-2xl border-l border-gray-300
+              flex flex-col transition-transform duration-300 ease-in-out
+              ${showRightSidebar ? 'translate-x-0' : 'translate-x-full'}
             `}
-            style={{ display: showRightSidebar ? 'flex' : 'none' }} // DEBUG: Força exibição
           >
-              <div className="flex items-center justify-between p-3 border-b border-gray-200">
-                <h2 className="font-semibold text-gray-900">Propriedades</h2>
-                {deviceView === 'mobile' && (
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={() => setShowRightSidebar(false)}
-                    className="h-8 w-8 p-0"
-                  >
-                    ×
-                  </Button>
-                )}
-              </div>
-              <div className="flex-1 overflow-hidden">
-                <DynamicPropertiesPanel
-                  selectedBlock={selectedBlock}
-                  funnelConfig={funnel}
-                  onBlockPropertyChange={handleBlockPropertyChange}
-                  onNestedPropertyChange={handleNestedPropertyChange}
-                  onFunnelConfigChange={updateFunnelConfig}
-                />
-              </div>
+            <div className="flex items-center justify-between p-3 border-b border-gray-200">
+              <h2 className="font-semibold text-gray-900">Propriedades</h2>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => {
+                  console.log('🔄 Closing right sidebar from X button');
+                  setShowRightSidebar(false);
+                }}
+                className="h-8 w-8 p-0"
+              >
+                ×
+              </Button>
             </div>
-          )}
+            <div className="flex-1 overflow-hidden">
+              <DynamicPropertiesPanel
+                selectedBlock={selectedBlock}
+                funnelConfig={funnel}
+                onBlockPropertyChange={handleBlockPropertyChange}
+                onNestedPropertyChange={handleNestedPropertyChange}
+                onFunnelConfigChange={updateFunnelConfig}
+              />
+            </div>
+          </div>
           
 
         </div>
