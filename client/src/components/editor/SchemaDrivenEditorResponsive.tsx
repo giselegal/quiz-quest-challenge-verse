@@ -127,6 +127,15 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
       showRightSidebar,
       windowWidth: window.innerWidth 
     });
+    
+    // Log específico para mobile
+    if (deviceView === 'mobile') {
+      console.log('📱 MOBILE MODE:', {
+        leftSidebarVisible: showLeftSidebar,
+        rightSidebarVisible: showRightSidebar,
+        shouldShowSidebars: 'Sidebars devem aparecer no mobile se showLeftSidebar/showRightSidebar for true'
+      });
+    }
   }, [deviceView, showLeftSidebar, showRightSidebar]);
 
   // Loading state
@@ -241,8 +250,8 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
                 size="sm"
                 onClick={() => {
                   setDeviceView('mobile');
-                  setShowLeftSidebar(false);
-                  setShowRightSidebar(false);
+                  // Removidas linhas que escondiam sidebars automaticamente no mobile
+                  // As sidebars agora permanecem no estado atual escolhido pelo usuário
                 }}
                 className="rounded-r-none px-2"
               >
@@ -325,6 +334,11 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
                 } 
                 flex flex-col
               `}
+              style={{ 
+                display: 'flex',
+                visibility: 'visible',
+                opacity: 1
+              }}
             >
               <div className="flex items-center justify-between p-3 border-b border-gray-200">
                 <h2 className="font-semibold text-gray-900">Componentes</h2>
@@ -538,6 +552,11 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
                 } 
                 flex flex-col
               `}
+              style={{ 
+                display: 'flex',
+                visibility: 'visible',
+                opacity: 1
+              }}
             >
             <div className="flex items-center justify-between p-3 border-b border-gray-200">
               <h2 className="font-semibold text-gray-900">Propriedades</h2>
