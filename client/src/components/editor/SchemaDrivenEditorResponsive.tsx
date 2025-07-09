@@ -12,7 +12,7 @@ import {
   Eye,
   Plus
 } from 'lucide-react';
-import { useSchemaEditor } from '@/hooks/useSchemaEditor';
+import { useSchemaEditorFixed as useSchemaEditor } from '@/hooks/useSchemaEditorFixed';
 import { SchemaDrivenComponentsSidebar } from './sidebar/SchemaDrivenComponentsSidebar';
 import { DynamicPropertiesPanel } from './panels/DynamicPropertiesPanel';
 import { DroppableCanvas } from './dnd/DroppableCanvas';

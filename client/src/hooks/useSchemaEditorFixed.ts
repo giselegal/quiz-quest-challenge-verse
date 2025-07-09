@@ -50,7 +50,7 @@ interface UseSchemaEditorReturn {
   disableAutoSave: () => void;
 }
 
-export const useSchemaEditor = (initialFunnelId?: string): UseSchemaEditorReturn => {
+export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorReturn => {
   const [funnel, setFunnel] = useState<SchemaDrivenFunnelData | null>(null);
   const [currentPageId, setCurrentPageId] = useState<string | null>(null);
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
@@ -59,29 +59,18 @@ export const useSchemaEditor = (initialFunnelId?: string): UseSchemaEditorReturn
   const [autoSaveState, setAutoSaveState] = useState<AutoSaveState>(schemaDrivenFunnelService.getAutoSaveState());
   
   const { toast } = useToast();
-  const autoSaveIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Atualizar estado do auto-save periodicamente (reduzido para evitar lag)
-  useEffect(() => {
-    const updateAutoSaveState = () => {
-      setAutoSaveState(schemaDrivenFunnelService.getAutoSaveState());
-    };
-
-    const interval = setInterval(updateAutoSaveState, 5000); // Mudado de 1s para 5s
-    return () => clearInterval(interval);
-  }, []);
+  const initializedRef = useRef(false);
 
   // Computed values
   const currentPage = funnel?.pages?.find(page => page.id === currentPageId) || null;
   const selectedBlock = currentPage?.blocks?.find(block => block.id === selectedBlockId) || null;
 
-  // Salvar funil localmente sempre que mudar (com controle de quota)
+  // Salvar funil localmente com controle de quota
   const saveToLocal = useCallback((funnelData: SchemaDrivenFunnelData) => {
     try {
       schemaDrivenFunnelService.saveLocalFunnel(funnelData);
     } catch (error) {
       console.warn('⚠️ Failed to save to localStorage (quota exceeded):', error);
-      // Limpar dados antigos do localStorage para liberar espaço
       try {
         localStorage.removeItem('schema-driven-versions');
         schemaDrivenFunnelService.saveLocalFunnel(funnelData);
@@ -128,6 +117,11 @@ export const useSchemaEditor = (initialFunnelId?: string): UseSchemaEditorReturn
   }, [toast]);
 
   const loadFunnel = useCallback(async (funnelId: string) => {
+    if (!funnelId || typeof funnelId !== 'string') {
+      console.error('❌ loadFunnel called with invalid ID:', funnelId);
+      return;
+    }
+    
     setIsLoading(true);
     try {
       const loadedFunnel = await schemaDrivenFunnelService.loadFunnel(funnelId);
@@ -188,7 +182,6 @@ export const useSchemaEditor = (initialFunnelId?: string): UseSchemaEditorReturn
       const result = await schemaDrivenFunnelService.syncWithBackend();
       
       if (result.success) {
-        // Recarregar funil atualizado
         if (funnel) {
           const updatedFunnel = await schemaDrivenFunnelService.loadFunnel(funnel.id);
           if (updatedFunnel) {
@@ -224,7 +217,7 @@ export const useSchemaEditor = (initialFunnelId?: string): UseSchemaEditorReturn
           ...pageData,
           id: `page-${Date.now()}`,
           order: prev.pages.length + 1,
-        }
+        } as SchemaDrivenPageData
       ]
     }));
   }, [updateFunnelState]);
@@ -245,10 +238,10 @@ export const useSchemaEditor = (initialFunnelId?: string): UseSchemaEditorReturn
     }));
     
     if (currentPageId === pageId) {
-      setCurrentPageId(funnel?.pages?.[0]?.id || null);
+      setCurrentPageId(null);
       setSelectedBlockId(null);
     }
-  }, [updateFunnelState, currentPageId, funnel]);
+  }, [updateFunnelState, currentPageId]);
 
   const setCurrentPage = useCallback((pageId: string) => {
     setCurrentPageId(pageId);
@@ -272,52 +265,43 @@ export const useSchemaEditor = (initialFunnelId?: string): UseSchemaEditorReturn
           : page
       )
     }));
-
-    setSelectedBlockId(newBlock.id);
   }, [currentPageId, updateFunnelState]);
 
   const updateBlock = useCallback((blockId: string, updates: Partial<BlockData>) => {
-    if (!currentPageId) return;
-
     updateFunnelState(prev => ({
       ...prev,
-      pages: prev.pages.map(page =>
-        page.id === currentPageId
-          ? {
-              ...page,
-              blocks: page.blocks.map(block =>
-                block.id === blockId ? { ...block, ...updates } : block
-              )
-            }
-          : page
-      )
+      pages: prev.pages.map(page => ({
+        ...page,
+        blocks: page.blocks.map(block =>
+          block.id === blockId ? { ...block, ...updates } : block
+        )
+      }))
     }));
-  }, [currentPageId, updateFunnelState]);
+  }, [updateFunnelState]);
 
   const deleteBlock = useCallback((blockId: string) => {
-    if (!currentPageId) return;
-
     updateFunnelState(prev => ({
       ...prev,
-      pages: prev.pages.map(page =>
-        page.id === currentPageId
-          ? { ...page, blocks: page.blocks.filter(block => block.id !== blockId) }
-          : page
-      )
+      pages: prev.pages.map(page => ({
+        ...page,
+        blocks: page.blocks.filter(block => block.id !== blockId)
+      }))
     }));
-
+    
     if (selectedBlockId === blockId) {
       setSelectedBlockId(null);
     }
-  }, [currentPageId, updateFunnelState, selectedBlockId]);
+  }, [updateFunnelState, selectedBlockId]);
 
   const reorderBlocks = useCallback((newBlocks: BlockData[]) => {
     if (!currentPageId) return;
-
+    
     updateFunnelState(prev => ({
       ...prev,
       pages: prev.pages.map(page =>
-        page.id === currentPageId ? { ...page, blocks: newBlocks } : page
+        page.id === currentPageId
+          ? { ...page, blocks: newBlocks }
+          : page
       )
     }));
   }, [currentPageId, updateFunnelState]);
@@ -376,25 +360,43 @@ export const useSchemaEditor = (initialFunnelId?: string): UseSchemaEditorReturn
     schemaDrivenFunnelService.disableAutoSave();
   }, []);
 
-  // Carregar funil inicial
+  // Inicializar funil apenas uma vez
   useEffect(() => {
-    if (initialFunnelId) {
+    if (initializedRef.current) return;
+    initializedRef.current = true;
+
+    if (initialFunnelId && typeof initialFunnelId === 'string') {
+      console.log('🔄 Loading funnel with ID:', initialFunnelId);
       loadFunnel(initialFunnelId);
     } else {
-      // SEMPRE criar o funil com as 21 etapas reais para garantir que apareça no editor
+      console.log('🆕 Creating default funnel');
       const defaultFunnel = schemaDrivenFunnelService.createDefaultFunnel();
       setFunnel(defaultFunnel);
       setCurrentPageId(defaultFunnel.pages[0]?.id || null);
-      // Salvar localmente para próximas sessões
-      schemaDrivenFunnelService.saveLocalFunnel(defaultFunnel);
+      
+      try {
+        schemaDrivenFunnelService.saveLocalFunnel(defaultFunnel);
+      } catch (error) {
+        console.warn('⚠️ Failed to save default funnel to localStorage:', error);
+      }
       
       console.log('🎯 Funil carregado com', defaultFunnel.pages.length, 'etapas:', defaultFunnel.pages.map(p => p.name));
     }
   }, [initialFunnelId, loadFunnel]);
 
+  // Atualizar estado do auto-save menos frequentemente
+  useEffect(() => {
+    const updateAutoSaveState = () => {
+      setAutoSaveState(schemaDrivenFunnelService.getAutoSaveState());
+    };
+
+    const interval = setInterval(updateAutoSaveState, 10000); // 10 segundos
+    return () => clearInterval(interval);
+  }, []);
+
   // Ativar auto-save por padrão
   useEffect(() => {
-    schemaDrivenFunnelService.enableAutoSave(10);
+    schemaDrivenFunnelService.enableAutoSave(30); // 30 segundos para reduzir carga
     
     return () => {
       schemaDrivenFunnelService.destroy();

@@ -310,6 +310,12 @@ class SchemaDrivenFunnelService {
   }
 
   async loadFunnel(funnelId: string): Promise<SchemaDrivenFunnelData | null> {
+    // Validar funnelId para evitar requisições inválidas
+    if (!funnelId || typeof funnelId !== 'string' || funnelId === '[object Object]') {
+      console.error('❌ Invalid funnelId provided to loadFunnel:', funnelId);
+      return null;
+    }
+
     try {
       // Tentar carregar do backend primeiro
       const response = await fetch(`${this.baseUrl}/funnels/${funnelId}`);
@@ -323,7 +329,11 @@ class SchemaDrivenFunnelService {
         };
         
         // Atualizar localStorage com dados mais recentes
-        this.saveLocalFunnel(funnel);
+        try {
+          this.saveLocalFunnel(funnel);
+        } catch (saveError) {
+          console.warn('⚠️ Failed to save to localStorage, continuing without cache:', saveError);
+        }
         console.log('☁️ Funnel loaded from backend');
         return funnel;
       }
