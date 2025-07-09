@@ -347,7 +347,8 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
                 onComponentSelect={(type) => {
                   console.log('🔄 Component selected:', type);
                   handleComponentSelect(type);
-                  setShowLeftSidebar(false);
+                  // Removida lógica que fechava sidebar automaticamente
+                  // A sidebar agora permanece aberta para melhor experiência do usuário
                 }}
                 activeTab={activeTab}
                 onTabChange={setActiveTab}

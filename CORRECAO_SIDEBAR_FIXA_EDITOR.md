@@ -4,13 +4,16 @@
 A coluna de blocos do editor (sidebar esquerda) estava sumindo automaticamente quando o usuário selecionava um componente, causando uma experiência ruim de UX.
 
 ## CAUSA RAIZ
-No arquivo `SchemaDrivenEditorLayoutV2.tsx`, linha 361, havia uma lógica que fechava automaticamente a sidebar esquerda sempre que um componente era selecionado no modo mobile:
+**ARQUIVO CORRETO IDENTIFICADO**: O problema estava no arquivo `SchemaDrivenEditorResponsive.tsx` (não no `SchemaDrivenEditorLayoutV2.tsx` como inicialmente pensado), que é o arquivo realmente usado pela aplicação.
+
+No arquivo `SchemaDrivenEditorResponsive.tsx`, linha 350, havia uma lógica que fechava automaticamente a sidebar esquerda sempre que um componente era selecionado:
 
 ```tsx
 // CÓDIGO PROBLEMÁTICO (REMOVIDO)
 onComponentSelect={(type) => {
+  console.log('🔄 Component selected:', type);
   handleComponentSelect(type);
-  if (deviceView === 'mobile') setShowLeftSidebar(false); // ⚠️ CAUSAVA O PROBLEMA
+  setShowLeftSidebar(false); // ⚠️ CAUSAVA O PROBLEMA
 }}
 ```
 
