@@ -22,13 +22,14 @@ Esta lógica foi implementada originalmente para melhorar a experiência em disp
 ## SOLUÇÃO IMPLEMENTADA
 
 ### 1. Remoção da Lógica de Auto-fechamento
-Removida a linha que fechava automaticamente a sidebar:
+Removida a linha que fechava automaticamente a sidebar no arquivo correto `SchemaDrivenEditorResponsive.tsx`:
 
 ```tsx
 // CÓDIGO CORRIGIDO
 onComponentSelect={(type) => {
+  console.log('🔄 Component selected:', type);
   handleComponentSelect(type);
-  // Removida lógica que fechava sidebar automaticamente no mobile
+  // Removida lógica que fechava sidebar automaticamente
   // A sidebar agora permanece aberta para melhor experiência do usuário
 }}
 ```
@@ -58,9 +59,10 @@ Os usuários ainda podem controlar a visibilidade da sidebar através de:
 - **Responsividade**: Mantida responsividade sem sacrificar funcionalidade
 
 ## ARQUIVOS MODIFICADOS
+- `/client/src/components/editor/SchemaDrivenEditorResponsive.tsx`
+  - Linha 347-352: Removida lógica de auto-fechamento da sidebar
 - `/client/src/components/editor/SchemaDrivenEditorLayoutV2.tsx`
-  - Linha 358-366: Removida lógica de auto-fechamento da sidebar
-  - Correção de estrutura JSX para resolver erros de sintaxe
+  - Correção de estrutura JSX para resolver erros de sintaxe (arquivo auxiliar)
 
 ## STATUS
 ✅ **IMPLEMENTADO E TESTADO**
