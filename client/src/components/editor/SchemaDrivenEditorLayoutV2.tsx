@@ -240,33 +240,25 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
             </span>
           </div>
 
-          {/* Mobile Toggle Buttons - SEMPRE VISÍVEIS */}
-          <div className="mobile-toggle-buttons md:hidden">
+          {/* Mobile Toggle Buttons - FORÇAR VISIBILIDADE */}
+          <div className="flex space-x-2 lg:hidden">
             <Button
-              variant="outline"
+              variant="default"
               size="sm"
-              onClick={() => {
-                setShowLeftSidebar(!showLeftSidebar);
-                console.log('Left sidebar toggled:', !showLeftSidebar);
-              }}
-              className="px-3 py-2 bg-blue-500 text-white hover:bg-blue-600 border-blue-600"
-              style={{ display: 'flex !important' }}
+              onClick={() => setShowLeftSidebar(!showLeftSidebar)}
+              className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1"
             >
-              <Menu className="w-4 h-4" />
-              <span className="ml-1 text-xs">Menu</span>
+              <Menu className="w-4 h-4 mr-1" />
+              Menu
             </Button>
             <Button
-              variant="outline" 
+              variant="default" 
               size="sm"
-              onClick={() => {
-                setShowRightSidebar(!showRightSidebar);
-                console.log('Right sidebar toggled:', !showRightSidebar);
-              }}
-              className="px-3 py-2 bg-green-500 text-white hover:bg-green-600 border-green-600"
-              style={{ display: 'flex !important' }}
+              onClick={() => setShowRightSidebar(!showRightSidebar)}
+              className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1"
             >
-              <Settings className="w-4 h-4" />
-              <span className="ml-1 text-xs">Config</span>
+              <Settings className="w-4 h-4 mr-1" />
+              Props
             </Button>
           </div>
 
@@ -335,14 +327,19 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
         </div>
       </div>
 
-      {/* Main Content - Mobile First Layout */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Left Sidebar - Sempre visível em desktop, sobreposta no mobile */}
-        <div className={`
-          ${showLeftSidebar ? 'block' : 'hidden'} 
-          ${deviceView === 'mobile' ? 'editor-mobile-sidebar left-0' : 'relative w-80 lg:w-96'} 
-          border-r border-gray-200 bg-white flex flex-col
-        `}>
+      {/* Main Content - LAYOUT CONSISTENTE PARA TODAS AS TELAS */}
+      <div className="flex-1 flex overflow-hidden relative">
+        {/* Left Sidebar - RESPONSIVO CORRETO */}
+        {showLeftSidebar && (
+          <div className={`
+            ${deviceView === 'mobile' 
+              ? 'fixed top-14 left-0 bottom-0 w-72 z-50 bg-white shadow-xl border-r border-gray-300' 
+              : deviceView === 'tablet'
+              ? 'relative w-64 bg-white border-r border-gray-200'
+              : 'relative w-80 bg-white border-r border-gray-200'
+            } 
+            flex flex-col
+          `}>
             {/* Header with close button for mobile */}
             <div className="flex items-center justify-between p-3 border-b border-gray-200">
               <h2 className="font-semibold text-gray-900">Componentes</h2>
@@ -370,20 +367,22 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                 setCurrentPage={setCurrentPage}
               />
             </div>
-        </div>
+        )}
         
-        {/* Central Canvas - Responsive */}
+        {/* Central Canvas - LARGURAS ESPECÍFICAS POR DISPOSITIVO */}
         <div className="flex-1 flex flex-col overflow-hidden bg-gray-50">
-          {/* Canvas Content */}
-          <div className="flex-1 overflow-auto">
-            <div className={`${
-              deviceView === 'mobile' ? 'p-2' :
-              deviceView === 'tablet' ? 'p-4' :
-              'p-6'
-            }`}>
-              {/* Mobile: Canvas responsivo */}
+          <div className="flex-1 overflow-auto flex justify-center">
+            <div className={`
+              ${deviceView === 'mobile' 
+                ? 'w-full max-w-sm mx-auto p-2' 
+                : deviceView === 'tablet'
+                ? 'w-full max-w-2xl mx-auto p-4'
+                : 'w-full max-w-4xl mx-auto p-6'
+              }
+            `}>
+              {/* CANVAS MOBILE - Largura de smartphone real */}
               {deviceView === 'mobile' ? (
-                <div className="editor-mobile-canvas bg-white rounded-lg shadow-sm min-h-[calc(100vh-200px)]">
+                <div className="w-full max-w-sm bg-white rounded-lg shadow-sm min-h-[calc(100vh-120px)] mx-auto">
                   <div className="p-4">
                     <DroppableCanvas
                       blocks={currentPage?.blocks || []}
@@ -448,8 +447,7 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                   </div>
                 </div>
               ) : deviceView === 'tablet' ? (
-                <div className="flex justify-center">
-                  <div className="w-[768px] bg-white rounded-lg shadow-lg min-h-[1024px]">
+                <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg min-h-[calc(100vh-120px)] mx-auto">
                     <div className="p-6">
                       <DroppableCanvas
                         blocks={currentPage?.blocks || []}
@@ -512,12 +510,9 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                         </div>
                       )}
                     </div>
-                  </div>
                 </div>
               ) : (
-                /* Desktop View */
-                <div className="flex justify-center">
-                  <div className="bg-white shadow-lg rounded-lg max-w-4xl min-h-[800px] w-full">
+                <div className="w-full bg-white rounded-lg shadow-lg min-h-[calc(100vh-120px)]">
                     <div className="p-6">
                       <DroppableCanvas
                         blocks={currentPage?.blocks || []}
@@ -580,19 +575,23 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                         </div>
                       )}
                     </div>
-                  </div>
                 </div>
               )}
             </div>
           </div>
         </div>
         
-        {/* Right Sidebar - Properties Panel - Sempre visível em desktop, sobreposta no mobile */}
-        <div className={`
-          ${showRightSidebar ? 'block' : 'hidden'} 
-          ${deviceView === 'mobile' ? 'editor-mobile-sidebar right-0' : 'relative w-80 lg:w-96'} 
-          border-l border-gray-200 bg-white flex flex-col
-        `}>
+        {/* Right Sidebar - Properties Panel */}
+        {showRightSidebar && (
+          <div className={`
+            ${deviceView === 'mobile' 
+              ? 'mobile-sidebar right-0' 
+              : deviceView === 'tablet'
+              ? 'relative w-64 bg-white border-l border-gray-200'
+              : 'relative w-80 bg-white border-l border-gray-200'
+            } 
+            flex flex-col
+          `}>
             {/* Header with close button for mobile */}
             <div className="flex items-center justify-between p-3 border-b border-gray-200">
               <h2 className="font-semibold text-gray-900">Propriedades</h2>
@@ -616,12 +615,12 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                 onFunnelConfigChange={updateFunnelConfig}
               />
             </div>
-        </div>
+        )}
         
         {/* Mobile Overlay */}
         {deviceView === 'mobile' && (showLeftSidebar || showRightSidebar) && (
           <div 
-            className="editor-mobile-overlay"
+            className="mobile-overlay"
             onClick={() => {
               setShowLeftSidebar(false);
               setShowRightSidebar(false);
@@ -629,7 +628,6 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
           />
         )}
       </div>
-    </div>
     </DndProvider>
   );
 };

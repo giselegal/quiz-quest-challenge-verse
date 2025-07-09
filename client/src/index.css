@@ -8,49 +8,45 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Layout mobile específico para o editor - FORÇA MOBILE */
-@media (max-width: 768px) {
-  .editor-mobile-layout {
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .editor-mobile-canvas {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 4px !important;
-  }
-  
-  .editor-mobile-sidebar {
+/* Layout responsivo CORRETO para o editor */
+@media (max-width: 1024px) {
+  /* Sidebar mobile fixa com overlay */
+  .mobile-sidebar {
     position: fixed !important;
     top: 56px !important;
     bottom: 0 !important;
-    width: 300px !important;
+    width: 280px !important;
     background: white !important;
-    z-index: 9999 !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
-    border: 2px solid #007acc !important;
+    z-index: 1000 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
   }
   
-  .editor-mobile-overlay {
+  .mobile-overlay {
     position: fixed !important;
     inset: 0 !important;
-    background: rgba(0, 0, 0, 0.7) !important;
-    z-index: 9998 !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    z-index: 999 !important;
   }
   
-  /* FORÇAR botões mobile */
-  .mobile-toggle-buttons {
-    display: flex !important;
-    gap: 4px !important;
+  /* Canvas mobile com largura limitada */
+  .canvas-mobile {
+    width: 100% !important;
+    max-width: 375px !important;
+    margin: 0 auto !important;
   }
   
-  /* Esconder botões desktop no mobile */
-  @media (max-width: 768px) {
-    .hidden-mobile {
-      display: none !important;
-    }
+  /* Canvas tablet */
+  .canvas-tablet {
+    width: 100% !important;
+    max-width: 768px !important;
+    margin: 0 auto !important;
+  }
+  
+  /* Canvas desktop */
+  .canvas-desktop {
+    width: 100% !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
   }
 }
 
