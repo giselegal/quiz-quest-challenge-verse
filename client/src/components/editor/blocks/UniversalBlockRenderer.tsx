@@ -75,6 +75,9 @@ import TwoColumnsInlineBlock from './TwoColumnsInlineBlock';
 // EXEMPLO DEMONSTRATIVO: Componente que implementa todos os 10 princípios
 import ExampleInlineBlock from './ExampleInlineBlock';
 
+// DEMONSTRAÇÃO DE LAYOUT: Componente que mostra layouts horizontais lado a lado
+import InlineDemoLayoutBlock from './InlineDemoLayoutBlock';
+
 export interface BlockRendererProps {
   block: BlockData;
   isSelected?: boolean;
@@ -417,6 +420,10 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
             </p>
           </div>
         );
+
+      // EXEMPLO DEMONSTRATIVO: Componente que implementa todos os 10 princípios fundamentais
+      case 'example-inline':
+        return <ExampleInlineBlock {...commonProps} />;
 
       // Fallback para tipos não reconhecidos
       default:
