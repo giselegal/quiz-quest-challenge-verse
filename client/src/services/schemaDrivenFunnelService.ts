@@ -571,6 +571,10 @@ class SchemaDrivenFunnelService {
    */
   private createModularPages(): SchemaDrivenPageData[] {
     console.log('🏗️ Iniciando criação das páginas modulares...');
+    console.log('🔍 DEBUG: REAL_QUIZ_QUESTIONS length:', REAL_QUIZ_QUESTIONS?.length);
+    console.log('🔍 DEBUG: STRATEGIC_QUESTIONS length:', STRATEGIC_QUESTIONS?.length);
+    console.log('🔍 DEBUG: TRANSITIONS keys:', Object.keys(TRANSITIONS || {}));
+    
     const pages: SchemaDrivenPageData[] = [];
 
     // ETAPA 1: Introdução - QuizIntro (Coleta do nome)
