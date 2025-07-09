@@ -70,6 +70,7 @@ import CTASectionInlineBlock from './CTASectionInlineBlock';
 import GuaranteeInlineBlock from './GuaranteeInlineBlock';
 import TransformationInlineBlock from './TransformationInlineBlock';
 import FinalValuePropositionInlineBlock from './FinalValuePropositionInlineBlock';
+import TwoColumnsInlineBlock from './TwoColumnsInlineBlock';
 
 export interface BlockRendererProps {
   block: BlockData;
@@ -338,6 +339,8 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <TransformationInlineBlock {...commonProps} />;
       case 'final-value-proposition-inline':
         return <FinalValuePropositionInlineBlock {...commonProps} />;
+      case 'two-columns-inline':
+        return <TwoColumnsInlineBlock {...commonProps} />;
 
       // BLOCOS AVANÇADOS RESTANTES - INLINE
       case 'main-heading':

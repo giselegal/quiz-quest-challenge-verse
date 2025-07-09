@@ -77,27 +77,27 @@ export const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
         <Button
           variant="ghost"
           size="sm"
-          className="w-6 h-6 p-0 cursor-grab active:cursor-grabbing hover:bg-gray-100"
+          className="w-5 h-5 md:w-6 md:h-6 p-0 cursor-grab active:cursor-grabbing hover:bg-gray-100"
           {...attributes}
           {...listeners}
         >
-          <GripVertical className="w-3 h-3 text-gray-600" />
+          <GripVertical className="w-2.5 h-2.5 md:w-3 md:h-3 text-gray-600" />
         </Button>
 
         {/* Toggle Visibility */}
         <Button
           variant="ghost"
           size="sm"
-          className="w-6 h-6 p-0 hover:bg-gray-100"
+          className="w-5 h-5 md:w-6 md:h-6 p-0 hover:bg-gray-100"
           onClick={(e) => {
             e.stopPropagation();
             onToggleVisibility();
           }}
         >
           {isHidden ? (
-            <EyeOff className="w-3 h-3 text-gray-600" />
+            <EyeOff className="w-2.5 h-2.5 md:w-3 md:h-3 text-gray-600" />
           ) : (
-            <Eye className="w-3 h-3 text-gray-600" />
+            <Eye className="w-2.5 h-2.5 md:w-3 md:h-3 text-gray-600" />
           )}
         </Button>
 
@@ -105,26 +105,26 @@ export const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
         <Button
           variant="ghost"
           size="sm"
-          className="w-6 h-6 p-0 hover:bg-gray-100"
+          className="w-5 h-5 md:w-6 md:h-6 p-0 hover:bg-gray-100"
           onClick={(e) => {
             e.stopPropagation();
             onDuplicate();
           }}
         >
-          <Copy className="w-3 h-3 text-gray-600" />
+          <Copy className="w-2.5 h-2.5 md:w-3 md:h-3 text-gray-600" />
         </Button>
 
         {/* Delete */}
         <Button
           variant="ghost"
           size="sm"
-          className="w-6 h-6 p-0 hover:bg-red-100 hover:text-red-600"
+          className="w-5 h-5 md:w-6 md:h-6 p-0 hover:bg-red-100 hover:text-red-600"
           onClick={(e) => {
             e.stopPropagation();
             onDelete();
           }}
         >
-          <Trash2 className="w-3 h-3 text-gray-600 hover:text-red-600" />
+          <Trash2 className="w-2.5 h-2.5 md:w-3 md:h-3 text-gray-600 hover:text-red-600" />
         </Button>
       </div>
 

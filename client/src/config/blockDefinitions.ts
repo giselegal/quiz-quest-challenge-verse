@@ -855,38 +855,84 @@ export const blockDefinitions: BlockDefinition[] = [
   {
     type: 'two-columns',
     name: 'Duas Colunas',
-    description: 'Layout flexível de duas colunas.',
+    description: 'Layout responsivo de duas colunas com depoimentos ou conteúdo personalizado.',
     icon: 'Rows3',
-    category: 'Vendas',
+    category: 'Inline',
     propertiesSchema: [
-      { key: 'title', label: 'Título', type: 'text-input', defaultValue: '' },
-      { key: 'subtitle', label: 'Subtítulo', type: 'text-input', defaultValue: '' },
+      { key: 'title', label: 'Título da Seção', type: 'text-input', defaultValue: 'Depoimentos dos Clientes' },
+      { key: 'showTitle', label: 'Mostrar Título', type: 'boolean-switch', defaultValue: true },
       {
-        key: 'columnRatio',
-        label: 'Proporção das Colunas',
+        key: 'layout',
+        label: 'Tipo de Layout',
         type: 'select',
         options: [
-          { label: '50% - 50%', value: '50-50' },
-          { label: '60% - 40%', value: '60-40' },
-          { label: '40% - 60%', value: '40-60' },
-          { label: '70% - 30%', value: '70-30' },
-          { label: '30% - 70%', value: '30-70' }
+          { label: 'Grid Responsivo', value: 'grid' },
+          { label: 'Flexbox', value: 'flex' }
         ],
-        defaultValue: '50-50'
+        defaultValue: 'grid'
       },
       {
-        key: 'verticalAlignment',
-        label: 'Alinhamento Vertical',
+        key: 'columnType',
+        label: 'Tipo de Conteúdo',
         type: 'select',
         options: [
-          { label: 'Topo', value: 'top' },
+          { label: 'Depoimentos/Reviews', value: 'reviews' },
+          { label: 'Cards de Benefícios', value: 'benefits' },
+          { label: 'Estatísticas', value: 'stats' },
+          { label: 'Conteúdo Personalizado', value: 'custom' }
+        ],
+        defaultValue: 'reviews'
+      },
+      { key: 'showRating', label: 'Mostrar Estrelas', type: 'boolean-switch', defaultValue: true },
+      { key: 'showHandle', label: 'Mostrar @handle', type: 'boolean-switch', defaultValue: true },
+      {
+        key: 'cardStyle',
+        label: 'Estilo dos Cards',
+        type: 'select',
+        options: [
+          { label: 'Com Borda', value: 'bordered' },
+          { label: 'Preenchido', value: 'filled' },
+          { label: 'Minimalista', value: 'minimal' },
+          { label: 'Elevado', value: 'elevated' }
+        ],
+        defaultValue: 'bordered'
+      },
+      {
+        key: 'alignment',
+        label: 'Alinhamento',
+        type: 'select',
+        options: [
+          { label: 'Esquerda', value: 'left' },
           { label: 'Centro', value: 'center' },
-          { label: 'Base', value: 'bottom' }
+          { label: 'Direita', value: 'right' }
         ],
-        defaultValue: 'top'
+        defaultValue: 'center'
       },
-      { key: 'gap', label: 'Espaçamento (px)', type: 'number-input', min: 0, max: 100, defaultValue: 32 },
-      { key: 'mobileStack', label: 'Empilhar no Mobile', type: 'boolean-switch', defaultValue: true }
+      {
+        key: 'spacing',
+        label: 'Espaçamento',
+        type: 'select',
+        options: [
+          { label: 'Compacto', value: 'tight' },
+          { label: 'Normal', value: 'normal' },
+          { label: 'Amplo', value: 'loose' }
+        ],
+        defaultValue: 'normal'
+      },
+      { key: 'useUsername', label: 'Personalizar com Nome', type: 'boolean-switch', defaultValue: false },
+      { key: 'trackingEnabled', label: 'Habilitar Métricas', type: 'boolean-switch', defaultValue: false },
+      {
+        key: 'animation',
+        label: 'Animação',
+        type: 'select',
+        options: [
+          { label: 'Fade In', value: 'fadeIn' },
+          { label: 'Scale In', value: 'scaleIn' },
+          { label: 'Slide Up', value: 'slideUp' },
+          { label: 'Sem Animação', value: 'none' }
+        ],
+        defaultValue: 'fadeIn'
+      }
     ],
   },
 
