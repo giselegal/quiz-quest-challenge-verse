@@ -43,39 +43,39 @@ const ValueStackBlock: React.FC<ValueStackBlockProps> = ({
   }, 0);
 
   return (
-    <div className={cn("py-8", className)}>
+    <div className={cn("py-4 sm:py-6 md:py-8 px-4", className)}>
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#aa6b5d] text-center mb-8">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#aa6b5d] text-center mb-6 sm:mb-8 px-2">
           {title}
         </h2>
         
         <div className="bg-white rounded-xl shadow-lg border border-[#B89B7A]/20 overflow-hidden">
-          <div className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white p-6 text-center">
-            <h3 className="text-xl font-semibold mb-2">Pacote Completo de Transformação</h3>
-            <p className="opacity-90">Tudo que você precisa para descobrir e aplicar seu estilo único</p>
+          <div className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white p-4 sm:p-5 md:p-6 text-center">
+            <h3 className="text-lg sm:text-xl font-semibold mb-2">Pacote Completo de Transformação</h3>
+            <p className="opacity-90 text-sm sm:text-base">Tudo que você precisa para descobrir e aplicar seu estilo único</p>
           </div>
           
-          <div className="p-6">
-            <div className="space-y-4">
+          <div className="p-4 sm:p-5 md:p-6">
+            <div className="space-y-3 sm:space-y-4">
               {valueItems.map((item, index) => (
                 <div 
                   key={index}
-                  className="flex items-start justify-between p-4 bg-[#f9f4ef] rounded-lg border border-[#B89B7A]/10"
+                  className="flex flex-col sm:flex-row sm:items-start sm:justify-between p-3 sm:p-4 bg-[#f9f4ef] rounded-lg border border-[#B89B7A]/10 gap-3 sm:gap-4"
                 >
-                  <div className="flex items-start gap-3 flex-1">
-                    <CheckCircle className="w-5 h-5 text-[#B89B7A] mt-0.5 flex-shrink-0" />
-                    <div>
-                      <h4 className="font-semibold text-[#432818] mb-1">
+                  <div className="flex items-start gap-2 sm:gap-3 flex-1">
+                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-[#B89B7A] mt-0.5 flex-shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <h4 className="font-semibold text-[#432818] mb-1 text-sm sm:text-base leading-tight">
                         {item.title}
                       </h4>
-                      <p className="text-sm text-[#8F7A6A]">
+                      <p className="text-xs sm:text-sm text-[#8F7A6A] leading-relaxed">
                         {item.description}
                       </p>
                     </div>
                   </div>
                   {showPricing && (
-                    <div className="text-right ml-4">
-                      <span className="text-[#aa6b5d] font-bold">
+                    <div className="text-left sm:text-right sm:ml-4 flex-shrink-0">
+                      <span className="text-[#aa6b5d] font-bold text-sm sm:text-base">
                         {item.value}
                       </span>
                     </div>
@@ -85,19 +85,19 @@ const ValueStackBlock: React.FC<ValueStackBlockProps> = ({
             </div>
             
             {showPricing && (
-              <div className="mt-6 pt-6 border-t border-[#B89B7A]/20">
+              <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-[#B89B7A]/20">
                 <div className="text-center">
-                  <div className="mb-4">
-                    <span className="text-lg text-[#8F7A6A]">Valor total se comprado separadamente:</span>
-                    <div className="text-2xl font-bold text-gray-400 line-through">
+                  <div className="mb-3 sm:mb-4">
+                    <span className="text-sm sm:text-lg text-[#8F7A6A]">Valor total se comprado separadamente:</span>
+                    <div className="text-xl sm:text-2xl font-bold text-gray-400 line-through">
                       R$ {totalValue.toLocaleString('pt-BR')},00
                     </div>
                   </div>
                   
-                  <div className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white p-6 rounded-lg">
-                    <div className="text-sm opacity-90 mb-2">Seu investimento hoje:</div>
-                    <div className="text-4xl font-bold mb-2">R$ 97,00</div>
-                    <div className="text-sm opacity-90">
+                  <div className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white p-4 sm:p-5 md:p-6 rounded-lg">
+                    <div className="text-xs sm:text-sm opacity-90 mb-2">Seu investimento hoje:</div>
+                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">R$ 97,00</div>
+                    <div className="text-xs sm:text-sm opacity-90 leading-relaxed">
                       Economize R$ {(totalValue - 97).toLocaleString('pt-BR')},00 (mais de 75% de desconto)
                     </div>
                   </div>
