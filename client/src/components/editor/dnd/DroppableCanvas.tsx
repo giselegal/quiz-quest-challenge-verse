@@ -119,7 +119,7 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
                         "hover:shadow-md hover:border-blue-300",
                         "min-h-[120px] flex flex-col",
                         // Cores da marca para identidade visual
-                        isSelected && "ring-2 ring-blue-500 border-blue-400 bg-blue-50"
+                        (block.id === selectedBlockId) && "ring-2 ring-blue-500 border-blue-400 bg-blue-50"
                       )}
                     />
                   </div>
