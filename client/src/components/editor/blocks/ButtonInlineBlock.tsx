@@ -12,6 +12,14 @@ import {
   INLINE_ANIMATIONS
 } from '@/utils/inlineComponentUtils';
 import { 
+  BRAND_COLORS,
+  BUTTON_STYLES,
+  TYPOGRAPHY,
+  ANIMATIONS,
+  EFFECTS,
+  RESPONSIVE_PATTERNS as BRAND_RESPONSIVE
+} from '@/utils/brandDesignSystem';
+import { 
   ArrowRight, 
   Download, 
   ExternalLink, 
@@ -116,24 +124,26 @@ const ButtonInlineBlock: React.FC<BlockComponentProps> = ({
   // Support both old 'style' and new 'variant' properties
   const currentVariant = variant || style;
 
-  const styleClasses = {
-    primary: 'bg-[#B89B7A] hover:bg-[#a08965] text-white border-[#B89B7A] hover:border-[#a08965]',
-    secondary: 'bg-white hover:bg-gray-50 text-gray-800 border-gray-300 hover:border-gray-400',
-    accent: 'bg-[#432818] hover:bg-[#2a1910] text-white border-[#432818] hover:border-[#2a1910]',
-    outline: 'bg-transparent hover:bg-[#B89B7A] text-[#B89B7A] hover:text-white border-[#B89B7A]',
-    success: 'bg-green-600 hover:bg-green-700 text-white border-green-600',
-    warning: 'bg-yellow-500 hover:bg-yellow-600 text-white border-yellow-500',
-    danger: 'bg-red-600 hover:bg-red-700 text-white border-red-600',
-    ghost: 'bg-transparent hover:bg-gray-50 text-gray-700 border-transparent'
+  // Usar o sistema de design da marca
+  const variantClasses = {
+    primary: `bg-[${BRAND_COLORS.primary.main}] hover:bg-[${BRAND_COLORS.primary.hover}] text-white border-[${BRAND_COLORS.primary.main}] hover:border-[${BRAND_COLORS.primary.hover}] ${EFFECTS.shadows.brand}`,
+    secondary: `bg-[${BRAND_COLORS.secondary.main}] hover:bg-[${BRAND_COLORS.secondary.hover}] text-white border-[${BRAND_COLORS.secondary.main}] hover:border-[${BRAND_COLORS.secondary.hover}]`,
+    accent: `bg-gradient-to-r from-[${BRAND_COLORS.primary.main}] to-[${BRAND_COLORS.secondary.main}] hover:from-[${BRAND_COLORS.primary.hover}] hover:to-[${BRAND_COLORS.secondary.hover}] text-white border-transparent ${EFFECTS.shadows.glow}`,
+    outline: `bg-transparent hover:bg-[${BRAND_COLORS.primary.main}] text-[${BRAND_COLORS.primary.main}] hover:text-white border-[${BRAND_COLORS.primary.main}] ${EFFECTS.borders.brand}`,
+    ghost: `bg-transparent hover:bg-[${BRAND_COLORS.primary.light}] text-[${BRAND_COLORS.primary.main}] hover:text-[${BRAND_COLORS.secondary.main}] border-transparent`,
+    success: `bg-[${BRAND_COLORS.success}] hover:bg-green-700 text-white border-[${BRAND_COLORS.success}]`,
+    warning: `bg-[${BRAND_COLORS.warning}] hover:bg-yellow-600 text-white border-[${BRAND_COLORS.warning}]`,
+    danger: `bg-[${BRAND_COLORS.error}] hover:bg-red-700 text-white border-[${BRAND_COLORS.error}]`
   };
 
+  // Tamanhos responsivos com tipografia da marca
   const sizeClasses = {
-    sm: 'px-3 py-1.5 text-sm',
-    default: 'px-6 py-2.5 text-base',
-    medium: 'px-6 py-2.5 text-base',
-    lg: 'px-8 py-3 text-lg',
-    large: 'px-8 py-3 text-lg',
-    xl: 'px-10 py-4 text-xl'
+    sm: `px-3 py-1.5 md:px-4 md:py-2 ${TYPOGRAPHY.button.small}`,
+    default: `px-4 py-2 md:px-6 md:py-2.5 ${TYPOGRAPHY.button.medium}`,
+    medium: `px-4 py-2 md:px-6 md:py-2.5 ${TYPOGRAPHY.button.medium}`,
+    lg: `px-6 py-2.5 md:px-8 md:py-3 ${TYPOGRAPHY.button.large}`,
+    large: `px-6 py-2.5 md:px-8 md:py-3 ${TYPOGRAPHY.button.large}`,
+    xl: `px-8 py-3 md:px-10 md:py-4 ${TYPOGRAPHY.button.xl}`
   };
 
   return (
@@ -148,7 +158,7 @@ const ButtonInlineBlock: React.FC<BlockComponentProps> = ({
       <div className={cn(
         "flex items-center",
         fullWidth ? "w-full" : "w-auto",
-        RESPONSIVE_PATTERNS.MOBILE_CENTER
+        BRAND_RESPONSIVE.flex.centerToLeft
       )}>
         <button
           onClick={handleClick}
@@ -166,8 +176,8 @@ const ButtonInlineBlock: React.FC<BlockComponentProps> = ({
             // Size classes
             sizeClasses[size as keyof typeof sizeClasses],
             
-            // Style/Variant classes
-            styleClasses[currentVariant as keyof typeof styleClasses],
+            // Style/Variant classes com cores da marca
+            variantClasses[currentVariant as keyof typeof variantClasses],
             
             // Full width
             fullWidth && 'w-full',
