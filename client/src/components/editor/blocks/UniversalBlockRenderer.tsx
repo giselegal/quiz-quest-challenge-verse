@@ -72,6 +72,9 @@ import TransformationInlineBlock from './TransformationInlineBlock';
 import FinalValuePropositionInlineBlock from './FinalValuePropositionInlineBlock';
 import TwoColumnsInlineBlock from './TwoColumnsInlineBlock';
 
+// EXEMPLO DEMONSTRATIVO: Componente que implementa todos os 10 princípios
+import ExampleInlineBlock from './ExampleInlineBlock';
+
 export interface BlockRendererProps {
   block: BlockData;
   isSelected?: boolean;

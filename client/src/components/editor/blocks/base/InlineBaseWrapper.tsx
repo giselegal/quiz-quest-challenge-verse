@@ -111,6 +111,40 @@ const InlineBaseWrapper: React.FC<InlineBaseWrapperProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [lastInteraction, setLastInteraction] = useState<number>(0);
   
+  // 1. REUTILIZÁVEL: Sistema de classes CSS dinâmicas
+  const gapClasses = {
+    none: 'gap-0',
+    xs: 'gap-1',
+    sm: 'gap-2',
+    md: 'gap-4',
+    lg: 'gap-6',
+    xl: 'gap-8'
+  };
+  
+  const justifyClasses = {
+    start: 'justify-start',
+    center: 'justify-center',
+    end: 'justify-end',
+    between: 'justify-between',
+    around: 'justify-around',
+    evenly: 'justify-evenly'
+  };
+  
+  const alignClasses = {
+    start: 'items-start',
+    center: 'items-center',
+    end: 'items-end',
+    stretch: 'items-stretch',
+    baseline: 'items-baseline'
+  };
+  
+  const directionClasses = {
+    row: 'flex-row',
+    col: 'flex-col',
+    'row-reverse': 'flex-row-reverse',
+    'col-reverse': 'flex-col-reverse'
+  };
+  
   // 5. TRACKING GRANULAR: Hooks de analytics
   useEffect(() => {
     if (trackingData && isSelected) {
@@ -181,40 +215,6 @@ const InlineBaseWrapper: React.FC<InlineBaseWrapperProps> = ({
     }
   }, [onDelete, trackingData, block.id]);
   
-  // 1. REUTILIZÁVEL: Sistema de classes CSS dinâmicas
-  const gapClasses = {
-    none: 'gap-0',
-    xs: 'gap-1',
-    sm: 'gap-2',
-    md: 'gap-4',
-    lg: 'gap-6',
-    xl: 'gap-8'
-  };
-  
-  const justifyClasses = {
-    start: 'justify-start',
-    center: 'justify-center',
-    end: 'justify-end',
-    between: 'justify-between',
-    around: 'justify-around',
-    evenly: 'justify-evenly'
-  };
-  
-  const alignClasses = {
-    start: 'items-start',
-    center: 'items-center',
-    end: 'items-end',
-    stretch: 'items-stretch',
-    baseline: 'items-baseline'
-  };
-  
-  const directionClasses = {
-    row: 'flex-row',
-    col: 'flex-col',
-    'row-reverse': 'flex-row-reverse',
-    'col-reverse': 'flex-col-reverse'
-  };
-  
   // 3. RESPONSIVO: Classes mobile-first
   const getResponsiveClasses = () => {
     let classes = [];
@@ -249,66 +249,32 @@ const InlineBaseWrapper: React.FC<InlineBaseWrapperProps> = ({
     
     return classes.join(' ');
   };
-  const { trackingEnabled = false, useUsername = false } = block.properties;
 
-  // Mapeamento de classes para flexibilidade
-  const gapClasses = {
-    sm: 'gap-2',
-    md: 'gap-4', 
-    lg: 'gap-6'
-  };
-
-  const justifyClasses = {
-    start: 'justify-start',
-    center: 'justify-center',
-    end: 'justify-end',
-    between: 'justify-between',
-    around: 'justify-around'
-  };
-
-  const alignClasses = {
-    start: 'items-start',
-    center: 'items-center',
-    end: 'items-end',
-    stretch: 'items-stretch'
-  };
-
-  const handleEdit = () => {
-    if (onEdit) {
-      onEdit();
-    }
-  };
+  // Extract properties for block data access
+  const { 
+    trackingEnabled = false,
+    useUsername = false 
+  } = block.properties || {};
 
   return (
     <div
       className={cn(
-        // FLEXBOX: Layout flexível e configurável
-        'flex',
-        // Direção responsiva - adaptável por prop
-        direction === 'row' && 'flex-col sm:flex-row',
-        direction === 'col' && 'flex-col',
-        // Quebra de linha quando necessário (mobile-first)
-        wrap && 'flex-wrap',
-        // Espaçamento configurável
-        gapClasses[gap],
-        // Alinhamento configurável
-        justifyClasses[justify],
-        alignClasses[align],
+        // 4. INLINE (HORIZONTAL): Base flexbox layout
+        'relative w-full flex transition-all duration-200',
+        getResponsiveClasses(),
         
-        // RESPONSIVO: Base structure
-        'group/inline-component relative',
-        'transition-all duration-300 ease-in-out',
+        // Wrap behavior
+        wrap === true && 'flex-wrap',
+        wrap === 'reverse' && 'flex-wrap-reverse',
+        wrap === false && 'flex-nowrap',
         
-        // Sizing responsivo
-        fullWidth ? 'w-full' : 'w-auto min-w-fit',
+        // Width control
+        fullWidth ? 'w-full' : 'w-auto',
         
-        // Altura mínima configurável
-        `min-h-[${minHeight}]`,
-        
-        // INLINE (HORIZONTAL): Padding responsivo para componentes lado a lado
+        // 4. INLINE: Padding responsivo para componentes lado a lado
         'px-2 py-2 sm:px-4 sm:py-3 md:px-6 md:py-4',
         
-        // Estados visuais
+        // 6. UX APRIMORADA: Estados visuais
         'border-2 border-transparent rounded-lg',
         'hover:border-blue-300 hover:bg-blue-50/30',
         
@@ -318,27 +284,52 @@ const InlineBaseWrapper: React.FC<InlineBaseWrapperProps> = ({
           'shadow-lg shadow-blue-500/20'
         ],
         
+        // Estados de erro e loading
+        hasError && 'border-red-500 bg-red-50',
+        isLoading && 'opacity-70 pointer-events-none',
+        
         // Cursor interativo
         'cursor-pointer',
         
         // Classes customizadas (máxima flexibilidade)
         className
       )}
-      style={{ minHeight }}
+      style={{ 
+        minHeight, 
+        maxWidth,
+        aspectRatio 
+      }}
       data-component="inline-base-wrapper"
       data-direction={direction}
       data-gap={gap}
+      data-block-id={block.id}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
+      {/* 6. UX: Loading Overlay */}
+      {isLoading && (
+        <div className="absolute inset-0 bg-white/70 flex items-center justify-center rounded-lg z-20">
+          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+        </div>
+      )}
+
+      {/* 6. UX: Error State */}
+      {hasError && errorMessage && (
+        <div className="absolute top-0 left-0 right-0 bg-red-500 text-white text-xs px-2 py-1 rounded-t-lg z-10">
+          ⚠️ {errorMessage}
+        </div>
+      )}
+
       {/* Main Content */}
-      <div className="flex-1 w-full">
+      <div className="flex-1 w-full min-w-0">
         {children}
       </div>
 
-      {/* Edit Overlay */}
-      {showEditOverlay && isSelected && (
+      {/* 6. UX: Edit Overlay */}
+      {showEditOverlay && isSelected && showControls && (
         <div className="absolute -top-3 -right-3 z-10">
           <div className="flex items-center gap-2">
-            {/* Tracking Indicator */}
+            {/* 5. TRACKING: Tracking Indicator */}
             {trackingEnabled && (
               <div className="px-2 py-1 bg-green-500 text-white rounded-full text-xs font-medium flex items-center gap-1">
                 <Eye className="w-3 h-3" />
@@ -353,24 +344,89 @@ const InlineBaseWrapper: React.FC<InlineBaseWrapperProps> = ({
               </div>
             )}
             
-            {/* Edit Button */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleEdit();
-              }}
-              className="px-3 py-1 bg-blue-500 text-white rounded-full text-xs font-medium hover:bg-blue-600 flex items-center gap-1 transition-colors"
-            >
-              <Edit3 className="w-3 h-3" />
-              {editLabel}
-            </button>
+            {/* Control Buttons */}
+            <div className="flex items-center bg-white rounded-full shadow-lg border border-gray-200 overflow-hidden">
+              {/* Edit Button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleEdit();
+                }}
+                className="px-3 py-1 bg-blue-500 text-white text-xs font-medium hover:bg-blue-600 flex items-center gap-1 transition-colors"
+                title={editLabel}
+              >
+                <Edit3 className="w-3 h-3" />
+                {editLabel}
+              </button>
+              
+              {/* Action Buttons */}
+              <div className="flex items-center">
+                {onDuplicate && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDuplicate();
+                    }}
+                    className="p-1 hover:bg-gray-100 transition-colors"
+                    title="Duplicar"
+                  >
+                    <Copy className="w-3 h-3 text-gray-600" />
+                  </button>
+                )}
+                
+                {onMove && (
+                  <>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onMove('up');
+                      }}
+                      className="p-1 hover:bg-gray-100 transition-colors"
+                      title="Mover para cima"
+                    >
+                      <Move className="w-3 h-3 text-gray-600 rotate-180" />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onMove('down');
+                      }}
+                      className="p-1 hover:bg-gray-100 transition-colors"
+                      title="Mover para baixo"
+                    >
+                      <Move className="w-3 h-3 text-gray-600" />
+                    </button>
+                  </>
+                )}
+                
+                {onDelete && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete();
+                    }}
+                    className="p-1 hover:bg-red-100 transition-colors"
+                    title="Deletar"
+                  >
+                    <Trash2 className="w-3 h-3 text-red-600" />
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}
 
-      {/* Metrics Overlay (if tracking enabled) */}
-      {trackingEnabled && (
+      {/* 5. TRACKING: Metrics Overlay (if tracking enabled) */}
+      {trackingEnabled && isHovered && (
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-400 to-blue-500 rounded-b-lg opacity-60" />
+      )}
+      
+      {/* 9. PERFORMANCE: Draggable indicator */}
+      {isDraggable && isHovered && (
+        <div className="absolute top-2 left-2 opacity-60">
+          <MoreHorizontal className="w-4 h-4 text-gray-400 rotate-90" />
+        </div>
       )}
     </div>
   );
