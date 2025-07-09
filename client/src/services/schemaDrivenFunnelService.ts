@@ -2,6 +2,12 @@ import type { BlockData } from '@/components/editor/blocks';
 import { REAL_QUIZ_QUESTIONS, STRATEGIC_QUESTIONS, TRANSITIONS } from '@/components/visual-editor/realQuizData';
 import { QuizDataAdapter } from './quizDataAdapter';
 
+// DEBUG: Verificar se os dados estão sendo importados corretamente
+console.log('🔍 DEBUG - Dados importados:');
+console.log('  REAL_QUIZ_QUESTIONS:', REAL_QUIZ_QUESTIONS?.length || 'UNDEFINED');
+console.log('  STRATEGIC_QUESTIONS:', STRATEGIC_QUESTIONS?.length || 'UNDEFINED');
+console.log('  TRANSITIONS:', TRANSITIONS ? 'OK' : 'UNDEFINED');
+
 // Tipos para o sistema schema-driven
 export interface SchemaDrivenFunnelData {
   id: string;
