@@ -156,9 +156,8 @@ const ButtonInlineBlock: React.FC<BlockComponentProps> = ({
       editLabel="Editar Botão"
     >
       <div className={cn(
-        "flex items-center",
-        fullWidth ? "w-full" : "w-auto",
-        BRAND_RESPONSIVE.flex.centerToLeft
+        "flex items-center justify-center md:justify-start",
+        fullWidth ? "w-full" : "w-auto"
       )}>
         <button
           onClick={handleClick}
@@ -166,11 +165,11 @@ const ButtonInlineBlock: React.FC<BlockComponentProps> = ({
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           className={cn(
-            // Base button styles
+            // Base button styles com sistema de design da marca
             'relative overflow-hidden rounded-lg font-semibold border-2',
-            'transition-all duration-300 ease-in-out',
-            'transform hover:scale-105 active:scale-95',
-            'focus:outline-none focus:ring-4 focus:ring-blue-300',
+            ANIMATIONS.transition,
+            ANIMATIONS.hover.scale,
+            EFFECTS.focus.brand,
             'disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none',
             
             // Size classes
@@ -185,8 +184,8 @@ const ButtonInlineBlock: React.FC<BlockComponentProps> = ({
             // Loading state
             (isLoading || loading) && 'cursor-wait',
             
-            // Hover effects
-            isHovered && 'shadow-lg'
+            // Hover effects com identidade da marca
+            isHovered && EFFECTS.shadows.xl
           )}
         >
           {/* Loading Overlay */}
