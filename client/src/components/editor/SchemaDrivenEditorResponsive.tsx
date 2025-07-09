@@ -595,7 +595,7 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
                 selectedBlock={selectedBlock}
                 funnelConfig={funnel}
                 onBlockPropertyChange={handleBlockPropertyChange}
-                onNestedPropertyChange={handleNestedPropertyChange}
+                onNestedPropertyChange={(path, value) => handleNestedPropertyChange(path.split('.'), value)}
                 onFunnelConfigChange={updateFunnelConfig}
               />
             </div>
