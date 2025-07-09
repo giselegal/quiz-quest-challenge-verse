@@ -75,6 +75,10 @@ import TwoColumnsInlineBlock from './TwoColumnsInlineBlock';
 // EXEMPLO DEMONSTRATIVO: Componente que implementa todos os 10 princípios
 import ExampleInlineBlock from './ExampleInlineBlock';
 
+// NOVOS COMPONENTES INLINE RESPONSIVOS CRIADOS
+import SpacerInlineBlock from './SpacerInlineBlock';
+import AudioPlayerInlineBlock from './AudioPlayerInlineBlock';
+
 // DEMONSTRAÇÃO DE LAYOUT: Componente que mostra layouts horizontais lado a lado
 import InlineDemoLayoutBlock from './InlineDemoLayoutBlock';
 
@@ -170,7 +174,9 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'button':
         return <InlineWrapper blockType={blockType}><ButtonInlineBlock {...commonProps} /></InlineWrapper>;
       case 'spacer':
-        return <InlineWrapper blockType={blockType}><SpacerBlock {...commonProps} /></InlineWrapper>;
+        return <InlineWrapper blockType={blockType}><SpacerInlineBlock {...commonProps} /></InlineWrapper>;
+      case 'spacer-inline':
+        return <InlineWrapper blockType={blockType}><SpacerInlineBlock {...commonProps} /></InlineWrapper>;
 
       // Blocos de resultado - INLINE
       case 'result-header':
@@ -196,7 +202,9 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'video-player':
         return <InlineWrapper blockType={blockType}><VideoPlayerBlock {...commonProps} /></InlineWrapper>;
       case 'audio':
-        return <InlineWrapper blockType={blockType}><AudioBlock {...commonProps} /></InlineWrapper>;
+        return <InlineWrapper blockType={blockType}><AudioPlayerInlineBlock {...commonProps} /></InlineWrapper>;
+      case 'audio-player-inline':
+        return <InlineWrapper blockType={blockType}><AudioPlayerInlineBlock {...commonProps} /></InlineWrapper>;
 
       // Blocos UI/Avançados - INLINE
       case 'alert':
@@ -423,6 +431,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
 
       // EXEMPLO DEMONSTRATIVO: Componente que implementa todos os 10 princípios fundamentais
       case 'example-inline':
+      case 'example-demo':
         return <ExampleInlineBlock {...commonProps} />;
 
       // DEMONSTRAÇÃO DE LAYOUT: Componente lado a lado responsivo
