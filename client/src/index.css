@@ -8,6 +8,79 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Variáveis Globais de Estilo para o Canvas */
+:root {
+  --global-gap: 0.25rem; /* 4px */
+  --global-width: 38rem; /* 608px */
+  --global-radius: 0.5rem; /* 8px */
+}
+
+/* Estilos base para o editor canvas */
+.editor-canvas {
+  width: 100%;
+  max-width: var(--global-width);
+  margin: 0 auto;
+  padding: var(--global-gap);
+  border-radius: var(--global-radius);
+}
+
+/* Elementos do Canvas Principal */
+.canvas-logo {
+  width: 96px;
+  height: 96px;
+  max-width: 6rem; /* 96px */
+}
+
+.canvas-progress-bar {
+  height: 0.5rem; /* 8px */
+  width: 100%;
+  border-radius: var(--global-radius);
+}
+
+.canvas-main-title {
+  font-size: 1.875rem; /* 30px */
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.canvas-main-image {
+  width: 100%;
+  max-width: 24rem; /* 384px */
+  height: auto;
+}
+
+.canvas-input-field {
+  height: 2.5rem; /* 40px */
+  width: 100%;
+  padding: 1rem; /* 16px */
+  font-size: 1rem; /* 16px */
+  border-radius: var(--global-radius);
+}
+
+.canvas-input-label {
+  font-size: 0.875rem; /* 14px */
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.canvas-continue-button {
+  height: 3.5rem; /* 56px */
+  width: 100%;
+  min-width: 100%;
+  padding: 0.5rem 1rem; /* 8px vertical, 16px horizontal */
+  font-size: 0.875rem; /* 14px */
+  font-weight: 600;
+  border-radius: var(--global-radius);
+  background: #B89B7A;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.canvas-continue-button:hover {
+  background: #a08965;
+  transform: translateY(-1px);
+}
+
 /* Layout responsivo CORRETO para o editor */
 @media (max-width: 1024px) {
   /* Sidebar mobile fixa com overlay */

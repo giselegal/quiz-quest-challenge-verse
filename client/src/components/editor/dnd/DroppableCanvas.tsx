@@ -48,31 +48,73 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
     <div
       ref={setNodeRef}
       className={cn(
-        'relative min-h-[800px] w-full p-4 transition-all duration-200',
+        'relative min-h-[800px] w-full transition-all duration-200 editor-canvas',
         isOver && isDraggingFromSidebar && 'bg-blue-50 ring-2 ring-blue-300 ring-dashed',
         className
       )}
+      style={{
+        padding: 'var(--global-gap)',
+        maxWidth: 'var(--global-width)',
+        margin: '0 auto',
+        borderRadius: 'var(--global-radius)'
+      }}
     >
       {/* Empty State */}
       {blocks.length === 0 ? (
-        <div className="flex flex-col items-center justify-center h-96 text-gray-500 border-2 border-dashed border-gray-300 rounded-lg">
-          <Plus className="w-12 h-12 mb-4" />
-          <h3 className="text-lg font-medium mb-2">Canvas Vazio</h3>
-          <p className="text-sm text-center max-w-md">
-            Arraste componentes da barra lateral para começar a construir sua página.
-          </p>
+        <div className="flex flex-col items-center justify-center h-96 text-gray-500 border-2 border-dashed border-gray-300 rounded-lg bg-white">
+          {/* Logo placeholder */}
+          <div className="canvas-logo bg-gray-100 rounded-full flex items-center justify-center mb-4">
+            <Plus className="w-8 h-8 text-gray-400" />
+          </div>
+          
+          {/* Progress bar placeholder */}
+          <div className="canvas-progress-bar bg-gray-200 rounded-full mb-6 max-w-md w-full">
+            <div className="h-full bg-blue-300 rounded-full" style={{ width: '0%' }}></div>
+          </div>
+          
+          {/* Main title */}
+          <h3 className="canvas-main-title text-gray-700 mb-2 text-center">
+            Teste de Estilo Pessoal
+          </h3>
+          
+          {/* Main image placeholder */}
+          <div className="canvas-main-image bg-gray-100 rounded-lg flex items-center justify-center mb-6" style={{ height: '200px' }}>
+            <span className="text-gray-400 text-sm">Imagem Principal</span>
+          </div>
+          
+          {/* Input field placeholder */}
+          <div className="w-full max-w-md mb-4">
+            <label className="canvas-input-label text-gray-600 block">NOME</label>
+            <input 
+              type="text" 
+              className="canvas-input-field border border-gray-300 bg-gray-50" 
+              placeholder="Digite seu nome aqui..."
+              disabled
+            />
+          </div>
+          
+          {/* Continue button */}
+          <button className="canvas-continue-button max-w-md opacity-75 cursor-not-allowed">
+            Continuar
+          </button>
+          
+          <div className="mt-8 text-center">
+            <p className="text-sm text-gray-500 mb-2">
+              Arraste componentes da barra lateral para começar a construir sua página.
+            </p>
+          </div>
         </div>
       ) : (
-        /* LAYOUT HORIZONTAL PURO - 100% LARGURA - SEM AGRUPAMENTO VERTICAL */
-        <div className="w-full overflow-x-auto">
-          {/* Container Flexbox HORIZONTAL - LARGURA 100% - RESPONSIVO */}
-          <div className="flex gap-6 w-full min-w-max items-start h-auto">
+        /* LAYOUT VERTICAL CENTRALIZADO - CONFORME ESPECIFICAÇÕES */
+        <div className="w-full bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          {/* Container Flexbox VERTICAL - CENTRALIZADO - RESPONSIVO */}
+          <div className="flex flex-col items-center gap-6 w-full max-w-2xl mx-auto">
             {blocks.map((block, index) => {
-              // LARGURA 100% RESPONSIVA - MÁXIMO 2 COLUNAS INTERNAS POR COMPONENTE
+              // LARGURA 100% RESPONSIVA - CENTRALIZADA CONFORME ESPECIFICAÇÕES
               const getResponsiveWidth = () => {
-                // Todos os componentes ocupam largura fixa mas responsiva
-                // LARGURA UNIFICADA para layout horizontal consistente
-                return "w-[350px] min-w-[300px] max-w-[450px] flex-shrink-0";
+                // Todos os componentes ocupam largura total do canvas centralizado
+                // LARGURA UNIFICADA para layout vertical consistente
+                return "w-full max-w-full";
               };
 
               return (
@@ -83,7 +125,7 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
                     isVisible={isDraggingFromSidebar}
                   />
                   
-                  {/* Block Item Container - TODOS INLINE AGORA */}
+                  {/* Block Item Container - TODOS CENTRALIZADOS E FULL WIDTH */}
                   <div className={cn(
                     getResponsiveWidth(),
                     "min-h-[120px] transition-all duration-200",
