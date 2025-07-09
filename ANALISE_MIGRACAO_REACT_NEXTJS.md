@@ -28,59 +28,184 @@
 └── app/           (algumas páginas vazias Next.js)
 ```
 
-## 📊 Análise Comparativa
+## 📁 Mapeamento Completo dos Arquivos do Editor
 
-### ✅ Vantagens da Migração para Next.js
-
-#### 1. SEO e Performance
-- **SSR/SSG:** Melhoria significativa no SEO
-- **Meta tags dinâmicas:** Para cada página do quiz
-- **Core Web Vitals:** Possível melhoria nos scores
-- **Carregamento inicial:** Redução do tempo de first paint
-
-#### 2. Funcionalidades Avançadas
-- **API Routes:** Consolidar backend no frontend
-- **Image Optimization:** Next.js Image component
-- **Automatic Code Splitting:** Por página/rota
-- **Middleware:** Para auth e redirects
-
-#### 3. Ecosystem e Tooling
-- **Vercel deployment:** Otimizado para Next.js
-- **Next.js Analytics:** Insights detalhados
-- **Maior comunidade:** Mais recursos e plugins
-
-### ❌ Desvantagens e Desafios
-
-#### 1. Complexidade da Migração
-```typescript
-// Migração necessária em TODOS os arquivos:
-- 102 componentes React
-- 38+ custom hooks  
-- Sistema de routing wouter → Next.js
-- Express APIs → Next.js API routes
-- Vite config → Next.js config
+### 🎯 Editor Principal (Core)
+```
+/client/src/components/editor/
+├── SchemaDrivenEditorResponsive.tsx     ✅ EDITOR PRINCIPAL
+├── SchemaDrivenEditorLayoutV2.tsx       ✅ Layout alternativo
+├── SchemaDrivenEditorLayout.tsx         📄 Layout base
+├── ModularQuizEditor.tsx                📄 Editor modular
+├── QuizEditorInterface.tsx              📄 Interface do quiz
+├── EditorLayout.tsx                     📄 Layout genérico
+├── PageEditor.tsx                       📄 Editor de página
+└── BlockRenderer.tsx                    🔧 Renderizador principal
 ```
 
-#### 2. Quebras no Sistema Atual
-- **Editor Visual:** Muito complexo, risco alto de quebra
-- **Wouter → Next Router:** Mudança completa de paradigma
-- **Express APIs:** Reescrita completa necessária
-- **Vite plugins:** Substituição por Next.js equivalentes
-
-#### 3. Performance Current vs Future
-```javascript
-// ATUAL (Vite + React)
-- Build time: ~4.48s ✅
-- Hot reload: Instantâneo ✅
-- Bundle size: Otimizado ✅
-- Dev experience: Excelente ✅
-
-// NEXT.JS (Estimado)
-- Build time: ~15-30s ⚠️
-- Hot reload: Mais lento ⚠️
-- Bundle size: Maior inicial ⚠️
-- Dev experience: Boa ✅
+### 🎨 Sistema de Blocos (145+ componentes)
 ```
+/client/src/components/editor/blocks/
+├── base/
+│   ├── InlineBaseWrapper.tsx            ✅ WRAPPER PRINCIPAL
+│   └── InlineBaseWrapperV2.tsx          📄 Wrapper v2
+├── UniversalBlockRenderer.tsx           ✅ RENDERIZADOR UNIVERSAL
+├── ExampleInlineBlock.tsx               ✅ Exemplo inline
+├── SpacerInlineBlock.tsx                ✅ Espaçador inline
+├── AudioPlayerInlineBlock.tsx           ✅ Player audio inline
+├── FAQSectionInlineBlock.tsx            ✅ FAQ inline
+├── InlineDemoLayoutBlock.tsx            ✅ Layout demo inline
+├── TextInlineBlock.tsx                  📄 Texto inline
+├── ImageInlineBlock.tsx                 📄 Imagem inline
+├── ButtonInlineBlock.tsx                📄 Botão inline
+├── VideoPlayerInlineBlock.tsx           📄 Vídeo inline
+├── PricingInlineBlock.tsx               📄 Preços inline
+├── TestimonialsCarouselInline.tsx       📄 Depoimentos inline
+├── ComparisonTableInlineBlock.tsx       📄 Tabela comparação
+├── GuaranteeInlineBlock.tsx             📄 Garantia inline
+├── CTAInlineBlock.tsx                   📄 CTA inline
+├── ValueStackInlineBlock.tsx            📄 Stack de valor
+├── StyleCardInlineBlock.tsx             📄 Card de estilo
+└── ... mais 120+ blocos especializados
+```
+
+### 🖱️ Drag & Drop System
+```
+/client/src/components/editor/dnd/
+├── DroppableCanvas.tsx                  ✅ CANVAS PRINCIPAL
+├── SortableBlockItem.tsx                🔧 Item arrastável
+├── DraggableComponentItem.tsx           🔧 Componente arrastável
+└── DndProvider.tsx                      🔧 Provider DnD
+```
+
+### 🎛️ Painéis e Propriedades
+```
+/client/src/components/editor/panels/
+├── DynamicPropertiesPanel.tsx           ✅ PAINEL PRINCIPAL
+├── PropertiesPanel.tsx                  📄 Painel básico
+├── ConfigPanel.tsx                      📄 Configurações
+├── VersioningPanel.tsx                  📄 Versionamento
+├── FunnelManagementPanel.tsx            📄 Gestão funis
+└── block-properties/
+    └── PropertyInput.tsx                🔧 Input propriedades
+```
+
+### 📂 Sidebar e Navegação
+```
+/client/src/components/editor/sidebar/
+├── SchemaDrivenComponentsSidebar.tsx    ✅ SIDEBAR PRINCIPAL
+├── ComponentsSidebar.tsx                📄 Sidebar básica
+└── SimpleSidebar.tsx                    📄 Sidebar simples
+```
+
+### 🔧 Hooks do Editor (11 hooks especializados)
+```
+/client/src/hooks/editor/
+├── useEditorActions.ts                  🎯 Ações do editor
+├── useEditorHistory.ts                  📋 Histórico
+├── useEditorBlocks.ts                   🧱 Gestão blocos
+├── useEditorTheme.ts                    🎨 Temas
+├── useEditorPersistence.ts              💾 Persistência
+├── useBlockOperations.ts                🔧 Operações blocos
+├── useKeyboardShortcuts.ts              ⌨️ Atalhos
+├── useUndoRedo.ts                       ↩️ Undo/Redo
+├── useEditorTemplates.ts                📄 Templates
+└── ... mais hooks especializados
+```
+
+### 🎬 Preview e Visualização
+```
+/client/src/components/editor/preview/
+├── PreviewContainer.tsx                 👁️ Container preview
+├── PreviewContent.tsx                   📄 Conteúdo preview
+├── PagePreview.tsx                      📑 Preview página
+├── BlockRenderer.tsx                    🔧 Renderizador preview
+├── ResultPagePreview.tsx                🎯 Preview resultado
+└── blocks/                              
+    ├── HeadlineBlock.tsx                📄 Preview headline
+    ├── TextBlock.tsx                    📄 Preview texto
+    ├── HeroBlock.tsx                    📄 Preview hero
+    ├── PricingBlock.tsx                 📄 Preview preços
+    └── ... mais 10+ blocos preview
+```
+
+### 📝 Hooks de Suporte
+```
+/client/src/hooks/
+├── useSchemaEditorFixed.ts              ✅ HOOK PRINCIPAL
+├── useSchemaEditor.ts                   📄 Hook base
+├── useInlineEdit.ts                     ✏️ Edição inline
+├── useAutoSaveDebounce.ts              💾 Auto-save
+├── useEditor.ts                         🔧 Editor base
+├── useUnifiedEditor.ts                  🔄 Editor unificado
+└── ... mais 25+ hooks relacionados
+```
+
+### 🏗️ Páginas do Editor
+```
+/client/src/pages/
+├── SchemaDrivenEditorPage.tsx           ✅ PÁGINA PRINCIPAL
+├── admin/
+│   └── DashboardPage.tsx               📊 Dashboard admin
+└── /client/src/app/editor/
+    ├── page.tsx                        📄 Página Next.js (vazia)
+    └── [id]/page.tsx                   📄 Página dinâmica (vazia)
+```
+
+### 📋 Arquivos de Configuração
+```
+/client/src/config/
+├── blockDefinitions.ts                  🧱 Definições blocos
+└── editorConfig.ts                     ⚙️ Config editor
+
+/client/src/services/
+├── schemaDrivenFunnelService.ts        🔧 SERVIÇO PRINCIPAL
+├── editorService.ts                    📄 Serviço editor
+└── blockService.ts                     🧱 Serviço blocos
+```
+
+## 📊 Estatísticas do Editor
+
+### Volume de Código
+- **Total de arquivos:** 245+ arquivos
+- **Componentes de blocos:** 145+ componentes
+- **Hooks especializados:** 38+ hooks
+- **Linhas de código:** ~15.000+ linhas
+- **Complexidade:** Muito Alta
+
+### Funcionalidades Implementadas
+✅ **Drag & Drop avançado** - Sistema completo  
+✅ **Auto-save inteligente** - Debounce + localStorage  
+✅ **Undo/Redo** - Histórico de estados  
+✅ **Inline editing** - Edição em tempo real  
+✅ **Preview responsivo** - Mobile/tablet/desktop  
+✅ **Componentes inline** - Layout flexbox  
+✅ **Tracking granular** - Analytics detalhados  
+✅ **Painel propriedades** - Configuração dinâmica  
+✅ **Versionamento** - Controle de versões  
+✅ **Templates** - Modelos pré-definidos
+
+### Dependências Críticas
+- **@dnd-kit:** Sistema drag & drop
+- **React Hook Form:** Formulários
+- **Radix UI:** Componentes UI
+- **Wouter:** Roteamento
+- **Zustand/Context:** Estado global
+- **Tailwind:** Estilização responsiva
+
+---
+
+## 🚨 Impacto da Migração no Editor
+
+A migração para Next.js impactaria **TODOS esses 245+ arquivos**, especialmente:
+
+1. **Roteamento:** Wouter → Next.js Router
+2. **Estado:** Context/Zustand → Next.js state management  
+3. **APIs:** Express endpoints → Next.js API routes
+4. **Build:** Vite → Next.js webpack
+5. **SSR concerns:** CSR → SSR/SSG adaptations
+
+**Risco estimado:** 🔴 **MUITO ALTO** para quebra do editor
 
 ## 🎯 Contexto do Projeto
 
@@ -209,4 +334,3 @@
 - Equipe tiver mais capacidade
 - Benefícios SEO se tornarem críticos
 - Surgir necessidade real de SSR
-3
