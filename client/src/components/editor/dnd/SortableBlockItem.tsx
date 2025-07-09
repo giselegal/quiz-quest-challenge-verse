@@ -59,8 +59,8 @@ export const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
       className={cn(
         'group relative w-full rounded-lg transition-all duration-200',
         isDragging && 'opacity-50 scale-105 z-50',
-        isOver && 'ring-2 ring-blue-400',
-        isSelected && 'ring-2 ring-blue-500',
+        isOver && 'ring-1 ring-blue-300/50',
+        isSelected && 'ring-1 ring-blue-400/60 shadow-sm',
         isHidden && 'opacity-60'
       )}
       onClick={onSelect}
@@ -147,7 +147,7 @@ export const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
 
         {/* Block Type Label - Bottom Left when selected */}
         {isSelected && (
-          <div className="absolute bottom-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded shadow-lg">
+          <div className="absolute bottom-2 left-2 bg-gray-600/80 text-white text-xs px-2 py-1 rounded-md shadow-sm opacity-75">
             {block.type}
           </div>
         )}

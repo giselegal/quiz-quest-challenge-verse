@@ -314,7 +314,7 @@ const BenefitsListBlock: React.FC<BenefitsListBlockProps> = ({
       <div
         className={cn(
           'bg-gray-100 p-8 rounded-lg text-gray-500 flex flex-col items-center justify-center min-h-[200px] cursor-pointer transition-all duration-200',
-          isSelected && 'outline-2 outline-[#B89B7A] outline-offset-2',
+          isSelected && 'ring-1 ring-gray-400/40 bg-gray-50/30',
           !isSelected && 'hover:shadow-sm',
           className
         )}
@@ -332,7 +332,7 @@ const BenefitsListBlock: React.FC<BenefitsListBlockProps> = ({
     <div
       className={cn(
         'py-8 px-4 cursor-pointer transition-all duration-200 w-full',
-        isSelected && 'outline-2 outline-[#B89B7A] outline-offset-2',
+        isSelected && 'ring-1 ring-gray-400/40 bg-gray-50/30',
         !isSelected && 'hover:shadow-sm',
         className
       )}
