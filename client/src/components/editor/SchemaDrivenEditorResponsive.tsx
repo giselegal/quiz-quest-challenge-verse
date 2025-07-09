@@ -191,8 +191,15 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
               <Button
                 variant="default"
                 size="sm"
-                onClick={() => setShowLeftSidebar(!showLeftSidebar)}
-                className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1"
+                onClick={() => {
+                  setShowLeftSidebar(!showLeftSidebar);
+                  if (showRightSidebar) setShowRightSidebar(false);
+                }}
+                className={`text-white text-xs px-2 py-1 ${
+                  showLeftSidebar 
+                    ? 'bg-blue-700 hover:bg-blue-800' 
+                    : 'bg-blue-600 hover:bg-blue-700'
+                }`}
               >
                 <Menu className="w-4 h-4 mr-1" />
                 Menu
@@ -200,8 +207,15 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
               <Button
                 variant="default" 
                 size="sm"
-                onClick={() => setShowRightSidebar(!showRightSidebar)}
-                className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1"
+                onClick={() => {
+                  setShowRightSidebar(!showRightSidebar);
+                  if (showLeftSidebar) setShowLeftSidebar(false);
+                }}
+                className={`text-white text-xs px-2 py-1 ${
+                  showRightSidebar 
+                    ? 'bg-green-700 hover:bg-green-800' 
+                    : 'bg-green-600 hover:bg-green-700'
+                }`}
               >
                 <Settings className="w-4 h-4 mr-1" />
                 Props
@@ -275,6 +289,20 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
 
         {/* Main Layout */}
         <div className="flex-1 flex overflow-hidden relative">
+          {/* Overlay para mobile quando sidebar está aberta */}
+          {showLeftSidebar && deviceView === 'mobile' && (
+            <div 
+              className="fixed inset-0 bg-black bg-opacity-50 z-40"
+              onClick={() => setShowLeftSidebar(false)}
+            />
+          )}
+          {showRightSidebar && deviceView === 'mobile' && (
+            <div 
+              className="fixed inset-0 bg-black bg-opacity-50 z-40"
+              onClick={() => setShowRightSidebar(false)}
+            />
+          )}
+
           {/* Left Sidebar */}
           {showLeftSidebar && (
             <div className={`
@@ -517,16 +545,7 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
             </div>
           )}
           
-          {/* Mobile Overlay */}
-          {deviceView === 'mobile' && (showLeftSidebar || showRightSidebar) && (
-            <div 
-              className="fixed inset-0 bg-black bg-opacity-50 z-40"
-              onClick={() => {
-                setShowLeftSidebar(false);
-                setShowRightSidebar(false);
-              }}
-            />
-          )}
+
         </div>
       </div>
     );
