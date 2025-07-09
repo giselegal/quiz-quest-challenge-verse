@@ -254,7 +254,7 @@ const CountdownTimerBlock: React.FC<CountdownTimerBlockProps> = ({
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className={cn(
-                  'text-xl font-bold tabular-nums',
+                  'text-base sm:text-lg md:text-xl font-bold tabular-nums',
                   pulseAnimation && isUrgent && 'animate-pulse'
                 )}>
                   {unit.value}
@@ -277,14 +277,14 @@ const CountdownTimerBlock: React.FC<CountdownTimerBlockProps> = ({
             transition={{ duration: 1, repeat: Infinity }}
           >
             <Card className={themeClasses.card}>
-              <CardContent className="p-4 text-center">
+              <CardContent className="p-3 sm:p-4 text-center">
                 <div className={cn(
-                  'text-3xl md:text-4xl font-bold tabular-nums mb-1',
+                  'text-2xl sm:text-3xl md:text-4xl font-bold tabular-nums mb-1',
                   themeClasses.text
                 )}>
                   {unit.value.toString().padStart(2, '0')}
                 </div>
-                <div className={cn('text-sm opacity-80', themeClasses.accent)}>
+                <div className={cn('text-xs sm:text-sm opacity-80', themeClasses.accent)}>
                   {unit.label}
                 </div>
               </CardContent>

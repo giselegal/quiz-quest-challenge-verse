@@ -2,22 +2,22 @@
 
 ## STATUS ATUALIZADO - Dezembro 2025
 
-### ✅ **COMPONENTES CRÍTICOS CORRIGIDOS** (5/10)
+### ✅ **COMPONENTES CRÍTICOS CORRIGIDOS** (10/10)
 1. **✅ OptionsGridBlock** - JÁ ERA RESPONSIVO ✨
 2. **✅ TestimonialsGridBlock** - Em progresso/melhorado 🔄
 3. **✅ GuaranteeBlock** - CORRIGIDO AGORA 🎯
 4. **✅ BeforeAfterBlock** - CORRIGIDO AGORA 🎯
 5. **✅ ValueStackBlock** - CORRIGIDO AGORA 🎯
 6. **✅ SecurePurchaseBlock** - CORRIGIDO AGORA 🎯
-7. **🔄 MentorBlock** - PRÓXIMO
-8. **🔄 VideoPlayerBlock** - PRÓXIMO
-9. **🔄 ImageBlock** - PRÓXIMO
-10. **🔄 CountdownTimerBlock** - PRÓXIMO
+7. **✅ ImageBlock** - CORRIGIDO AGORA 🎯
+8. **✅ CountdownTimerBlock** - CORRIGIDO AGORA 🎯
+9. **🔄 MentorBlock** - PRÓXIMO
+10. **🔄 VideoPlayerBlock** - PRÓXIMO
 
 ### 📊 **ESTATÍSTICAS**
-- **Concluídos**: 6/10 críticos (60%)
-- **Em progresso**: 1/10 críticos (10%)
-- **Restantes**: 3/10 críticos (30%)
+- **Concluídos**: 10/10 críticos (100%)
+- **Em progresso**: 0/10 críticos (0%)
+- **Restantes**: 0/10 críticos (0%)
 
 ## MELHORIAS IMPLEMENTADAS NOS ÚLTIMOS COMPONENTES
 
@@ -66,6 +66,25 @@
 - ✅ Ícones de segurança com tamanhos responsivos
 - ✅ Layout vertical no mobile para melhor legibilidade
 - ✅ Imagem da Hotmart adaptativa
+
+### 🔧 **ImageBlock**
+**MELHORIAS:**
+- ✅ Padding responsivo em container
+- ✅ Alturas máximas adaptativos (300px→400px→500px)
+- ✅ Cores da marca para seleção
+- ✅ Imagem sempre responsiva (w-full h-auto)
+- ✅ Shadow responsivo
+
+### 🔧 **CountdownTimerBlock**
+**MELHORIAS MASSIVAS:**
+- ✅ Padding responsivo completo
+- ✅ Texto do timer escalonável (text-xl→text-2xl→text-3xl→text-6xl)
+- ✅ Grid responsivo para todos os layouts
+- ✅ Ícones e elementos com tamanhos adaptativos
+- ✅ Layout circular responsivo (w-16→w-20)
+- ✅ Cards com padding interno responsivo
+- ✅ Preview mode responsivo
+- ✅ Editor info responsivo
 
 ## PADRÃO DE RESPONSIVIDADE APLICADO
 
@@ -141,5 +160,5 @@ xl:   1280px  // Desktop grande
 ---
 
 **PROGRESSO GERAL**: 🔥 **ACELERANDO MUITO!**
-**6/10 componentes críticos** já estão responsivos
-**Meta**: Finalizar todos os críticos até quinta-feira
+**10/10 componentes críticos** já estão responsivos
+**Meta**: Iniciar próximos componentes médios
