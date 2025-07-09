@@ -287,12 +287,14 @@ const DynamicPricingBlock: React.FC<DynamicPricingBlockProps> = ({
 
       {/* Pricing Layout */}
       {layout === 'cards' && (
-        <div className={`grid gap-6 ${
-          plans.length === 1 ? 'grid-cols-1 max-w-md mx-auto' :
-          plans.length === 2 ? 'grid-cols-1 md:grid-cols-2' :
-          'grid-cols-1 md:grid-cols-2'
+        <div className={`flex flex-wrap gap-6 justify-center ${
+          plans.length === 1 ? 'max-w-md mx-auto' : 'max-w-4xl mx-auto'
         }`}>
-          {plans.map((plan, index) => renderPlanCard(plan, index))}
+          {plans.map((plan, index) => (
+            <div key={index} className={`flex-1 ${plans.length === 1 ? 'w-full' : 'min-w-[280px] max-w-md'}`}>
+              {renderPlanCard(plan, index)}
+            </div>
+          ))}
         </div>
       )}
 
