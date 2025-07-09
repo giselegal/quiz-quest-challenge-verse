@@ -74,19 +74,31 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
 
   // Handlers
   const handleComponentSelect = (type: string) => {
+    console.log('🎯 handleComponentSelect called:', { type, currentPage: !!currentPage, currentPageId });
+    
     const definition = blockDefinitions.find(def => def.type === type);
-    if (definition && currentPage) {
-      const defaultProperties: Record<string, any> = {};
-      definition.propertiesSchema?.forEach(prop => {
-        if (prop.defaultValue !== undefined) {
-          defaultProperties[prop.key] = prop.defaultValue;
-        }
-      });
-      addBlock({
-        type,
-        properties: defaultProperties
-      });
+    if (!definition) {
+      console.error('❌ Block definition not found for type:', type);
+      return;
     }
+    
+    if (!currentPage) {
+      console.error('❌ No current page selected for adding block');
+      return;
+    }
+    
+    const defaultProperties: Record<string, any> = {};
+    definition.propertiesSchema?.forEach(prop => {
+      if (prop.defaultValue !== undefined) {
+        defaultProperties[prop.key] = prop.defaultValue;
+      }
+    });
+    
+    console.log('✅ Adding block with properties:', { type, defaultProperties });
+    addBlock({
+      type,
+      properties: defaultProperties
+    });
   };
 
   const handleBlockPropertyChange = (key: string, value: any) => {
@@ -120,8 +132,10 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
   };
 
   const handleInlineEdit = (blockId: string, updates: Partial<any>) => {
+    console.log('🔄 handleInlineEdit called:', { blockId, updates });
     if (updates.properties) {
       updateBlock(blockId, updates);
+      console.log('✅ Block updated via handleInlineEdit');
     }
   };
 
@@ -129,10 +143,27 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
     saveFunnel(true);
   };
 
+  const handleTestReload = () => {
+    console.log('🔄 Testing reload - current funnel:', funnel?.id);
+    if (funnel?.id) {
+      localStorage.setItem('test-reload-funnel-id', funnel.id);
+      window.location.reload();
+    }
+  };
+
   // Auto-create funnel se necessário
   useEffect(() => {
     if (!funnel && !isLoading && !funnelId) {
+      console.log('🆕 Creating new funnel automatically');
       createNewFunnel();
+    } else if (funnel) {
+      // console.log('✅ Funnel loaded in editor:', { 
+      //   id: funnel.id, 
+      //   pages: funnel.pages.length, 
+      //   currentPageId, 
+      //   currentPageBlocks: currentPage?.blocks.length,
+      //   lastModified: funnel.lastModified
+      // });
     }
   }, [funnel, isLoading, funnelId, createNewFunnel]);
 
