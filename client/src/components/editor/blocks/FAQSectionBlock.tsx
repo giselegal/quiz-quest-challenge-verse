@@ -1,7 +1,24 @@
-import React, { useState } from 'react';
-import { InlineEditableText } from './InlineEditableText';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { cn } from '@/lib/utils';
+import InlineBaseWrapper from './base/InlineBaseWrapper';
+import InlineEditableText from './base/InlineEditableText';
 import type { BlockComponentProps } from '@/types/blocks';
+import { 
+  getPersonalizedText, 
+  trackComponentView, 
+  trackComponentClick,
+  RESPONSIVE_PATTERNS,
+  INLINE_ANIMATIONS
+} from '@/utils/inlineComponentUtils';
+import { 
+  BRAND_COLORS,
+  TYPOGRAPHY,
+  ANIMATIONS,
+  EFFECTS,
+  SPACING
+} from '@/utils/brandDesignSystem';
+import { ChevronDown, ChevronUp, Plus, Trash2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const FAQSectionBlock: React.FC<BlockComponentProps> = ({ 
   block,
