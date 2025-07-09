@@ -372,13 +372,13 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
         
         {/* Central Canvas - LARGURAS ESPECÍFICAS POR DISPOSITIVO */}
         <div className={`
-          flex-1 flex flex-col overflow-hidden bg-gray-50
+          flex-1 flex flex-col overflow-hidden bg-gray-50 editor-main-content
           ${deviceView === 'mobile' && (showLeftSidebar || showRightSidebar) ? 'blur-sm' : ''}
         `}>
-          <div className="flex-1 overflow-auto flex justify-center">
+          <div className="flex-1 overflow-auto flex justify-center editor-canvas-area">
             <div className={`
               ${deviceView === 'mobile' 
-                ? 'w-full max-w-sm mx-auto p-2' 
+                ? 'w-full px-2' 
                 : deviceView === 'tablet'
                 ? 'w-full max-w-2xl mx-auto p-4'
                 : 'w-full max-w-4xl mx-auto p-6'
@@ -386,8 +386,8 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
             `}>
               {/* CANVAS MOBILE - Largura de smartphone real */}
               {deviceView === 'mobile' ? (
-                <div className="w-full max-w-sm bg-white rounded-lg shadow-sm min-h-[calc(100vh-120px)] mx-auto">
-                  <div className="p-4">
+                <div className="mobile-canvas-container">
+                  <div className="p-3">
                     <DroppableCanvas
                       blocks={currentPage?.blocks || []}
                       selectedBlockId={selectedBlockId || undefined}

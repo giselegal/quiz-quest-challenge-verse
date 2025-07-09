@@ -89,6 +89,39 @@
   .mobile-properties-panel .card-content {
     @apply p-2 space-y-2;
   }
+  
+  /* Layout fix para mobile - força flex-column */
+  @media (max-width: 768px) {
+    .editor-mobile-layout {
+      width: 100% !important;
+      height: 100vh !important;
+      overflow: hidden !important;
+    }
+    
+    .editor-main-content {
+      flex: 1 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      overflow: hidden !important;
+    }
+    
+    .editor-canvas-area {
+      flex: 1 !important;
+      width: 100% !important;
+      overflow-y: auto !important;
+      padding: 8px !important;
+    }
+    
+    .mobile-canvas-container {
+      width: 100% !important;
+      max-width: 390px !important;
+      margin: 0 auto !important;
+      background: white !important;
+      border-radius: 12px !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+      min-height: calc(100vh - 120px) !important;
+    }
+  }
 }
 
 /* Mobile Preview Device Frames */
