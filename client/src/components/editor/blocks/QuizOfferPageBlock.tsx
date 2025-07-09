@@ -81,13 +81,13 @@ const QuizOfferPageBlock: React.FC<QuizOfferPageBlockProps> = ({
   className
 }) => {
   const {
-    offerTitle = "Etapa 21: Oferta Exclusiva Para Seu Estilo!",
-    offerSubtitle = "Leve sua transformação de estilo para o próximo nível",
-    originalPrice = "R$ 297,00",
-    discountPrice = "R$ 97,00",
-    discountPercentage = 67,
-    ctaText = "Sim! Quero Meu Guia Completo de Estilo",
-    ctaUrl = "#",
+    offerTitle = "Etapa 21: Descubra Seu Estilo Predominante",
+    offerSubtitle = "Transformação Completa - Tudo que você precisa para descobrir e aplicar seu estilo",
+    originalPrice = "R$ 175,00",
+    discountPrice = "R$ 39,90",
+    discountPercentage = 77,
+    ctaText = "Garantir Minha Transformação",
+    ctaUrl = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
     backgroundColor = tokens.colors.background,
     textColor = tokens.colors.text,
     showTimer = true,
@@ -95,33 +95,28 @@ const QuizOfferPageBlock: React.FC<QuizOfferPageBlockProps> = ({
     showBonuses = true,
     bonuses = [
       {
-        title: "Guia de Looks Completo",
-        description: "50+ combinações prontas para seu estilo",
-        value: "R$ 97,00"
+        title: "Guia Personalizado",
+        description: "Para seu estilo específico",
+        value: "Incluído"
       },
       {
-        title: "Cartela de Cores Personalizada",
-        description: "Cores que mais valorizam sua beleza natural",
-        value: "R$ 67,00"
+        title: "Bônus: Peças-Chave",
+        description: "Guarda-roupa funcional",
+        value: "Incluído"
       },
       {
-        title: "Guia de Compras Consciente",
-        description: "Lista do que comprar primeiro para transformar seu guarda-roupa",
-        value: "R$ 47,00"
-      },
-      {
-        title: "Consultoria de Estilo por WhatsApp",
-        description: "30 dias de suporte direto com nossa especialista",
-        value: "R$ 197,00"
+        title: "Bônus: Visagismo",
+        description: "Valorize seus traços",
+        value: "Incluído"
       }
     ],
-    urgencyText = "Oferta disponível apenas para os próximos participantes do quiz!",
+    urgencyText = "Oferta por tempo limitado - 77% OFF - Economia de R$ 135,10",
     benefits = [
-      "✓ Acesso vitalício ao conteúdo completo",
-      "✓ Atualizações gratuitas por 1 ano",
-      "✓ Garantia de 7 dias - 100% do seu dinheiro de volta",
-      "✓ Suporte especializado via WhatsApp por 30 dias",
-      "✓ Comunidade exclusiva de pessoas com seu estilo"
+      "✓ Método preciso para identificar seu estilo entre os 7 estilos universais",
+      "✓ Guia personalizado completo",
+      "✓ Tenha finalmente um guarda-roupa que funciona 100%",
+      "✓ 7 Dias de Garantia - 100% do seu dinheiro de volta",
+      "✓ Acesso imediato após o pagamento"
     ]
   } = block.properties;
 
@@ -284,13 +279,17 @@ const QuizOfferPageBlock: React.FC<QuizOfferPageBlockProps> = ({
                 value={discountPrice}
                 onSave={(value) => handlePropertyChange('discountPrice', value)}
                 disabled={disabled}
-                className="text-4xl lg:text-6xl font-extrabold bg-gradient-to-r from-[#4CAF50] to-[#43a047] bg-clip-text text-transparent mb-4"
+                className="text-4xl lg:text-6xl font-extrabold bg-gradient-to-r from-[#4CAF50] to-[#43a047] bg-clip-text text-transparent mb-2"
               />
+              
+              <p className="text-lg text-[#5D4A3A] mb-4">
+                ou <strong>5x de R$ 8,83</strong>
+              </p>
 
               <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#4CAF50]/10 to-[#43a047]/10 px-4 py-2 rounded-full border border-[#4CAF50]/20">
                 <TrendingUp className="w-4 h-4 text-[#4CAF50]" />
                 <span className="text-sm font-bold text-[#4CAF50]">
-                  {discountPercentage}% de desconto
+                  {discountPercentage}% OFF - Economia de R$ 135,10
                 </span>
               </div>
             </div>

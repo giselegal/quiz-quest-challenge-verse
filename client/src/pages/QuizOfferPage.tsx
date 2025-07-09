@@ -367,15 +367,15 @@ const QuizOfferPage: React.FC = () => {
                                 <span className="text-sm font-semibold text-green-700">3000+ mulheres transformadas</span>
                             </div>
 
-                            {/* Headline simplificada */}
+                            {/* Headline simplificada - DADOS REAIS ETAPA 21 */}
                             <h1 className="text-hierarchy-1 text-[var(--text-dark)] mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
-                                Descubra Seu <span className="text-[var(--primary)]">Estilo Predominante</span>
-                                <br />em 5 Minutos
+                                Etapa 21: <span className="text-[var(--primary)]">Oferta Exclusiva</span>
+                                <br />Para Seu Estilo!
                             </h1>
                             
-                            {/* Subheadline focada */}
+                            {/* Subheadline focada - BASEADA NO RESULTADO DO QUIZ */}
                             <p className="text-body text-[var(--text-medium)] mb-8 max-w-2xl mx-auto">
-                                Tenha finalmente um guarda-roupa que <strong>funciona 100%</strong>, onde tudo combina e reflete sua personalidade
+                                Leve sua transformação de estilo para o próximo nível com nosso <strong>Guia Completo personalizado</strong> para seu resultado
                             </p>
 
                             {/* Hero image otimizada */}
@@ -389,16 +389,16 @@ const QuizOfferPage: React.FC = () => {
                                 />
                             </div>
 
-                            {/* CTA principal único */}
+                            {/* CTA principal único - TEXTO REAL DA ETAPA 21 */}
                             <button
                                 onClick={() => {
-                                    handleCtaClick('hero_cta', 'Descobrir Meu Estilo');
+                                    handleCtaClick('hero_cta', 'Sim! Quero Garantir Meu Acesso');
                                     window.open("https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912", "_blank");
                                 }}
                                 className="btn-primary-clean mb-6"
                             >
                                 <ArrowRight size={20} />
-                                Descobrir Meu Estilo Agora
+                                Sim! Quero Garantir Meu Acesso
                             </button>
                             
                             {/* Trust elements simples */}
