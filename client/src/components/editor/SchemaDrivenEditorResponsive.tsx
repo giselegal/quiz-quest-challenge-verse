@@ -53,52 +53,24 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
     createNewFunnel,
     isLoading,
     isSaving,
-    autoSaveState
-  } = useSchemaEditor(funnelId);
-  
-  // Monitor online status
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
-
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, []);
+    isOnline
+  } = useSchemaEditor({ funnelId });
 
   // Handlers
   const handleComponentSelect = (type: string) => {
-    console.log('🎯 handleComponentSelect called:', { type, currentPage: !!currentPage, currentPageId });
-    
     const definition = blockDefinitions.find(def => def.type === type);
-    if (!definition) {
-      console.error('❌ Block definition not found for type:', type);
-      return;
+    if (definition && currentPage) {
+      const defaultProperties: Record<string, any> = {};
+      definition.propertiesSchema?.forEach(prop => {
+        if (prop.defaultValue !== undefined) {
+          defaultProperties[prop.key] = prop.defaultValue;
+        }
+      });
+      addBlock({
+        type,
+        properties: defaultProperties
+      });
     }
-    
-    if (!currentPage) {
-      console.error('❌ No current page selected for adding block');
-      return;
-    }
-    
-    const defaultProperties: Record<string, any> = {};
-    definition.propertiesSchema?.forEach(prop => {
-      if (prop.defaultValue !== undefined) {
-        defaultProperties[prop.key] = prop.defaultValue;
-      }
-    });
-    
-    console.log('✅ Adding block with properties:', { type, defaultProperties });
-    addBlock({
-      type,
-      properties: defaultProperties
-    });
   };
 
   const handleBlockPropertyChange = (key: string, value: any) => {
@@ -132,10 +104,8 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
   };
 
   const handleInlineEdit = (blockId: string, updates: Partial<any>) => {
-    console.log('🔄 handleInlineEdit called:', { blockId, updates });
     if (updates.properties) {
       updateBlock(blockId, updates);
-      console.log('✅ Block updated via handleInlineEdit');
     }
   };
 
@@ -143,27 +113,10 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
     saveFunnel(true);
   };
 
-  const handleTestReload = () => {
-    console.log('🔄 Testing reload - current funnel:', funnel?.id);
-    if (funnel?.id) {
-      localStorage.setItem('test-reload-funnel-id', funnel.id);
-      window.location.reload();
-    }
-  };
-
   // Auto-create funnel se necessário
   useEffect(() => {
     if (!funnel && !isLoading && !funnelId) {
-      console.log('🆕 Creating new funnel automatically');
       createNewFunnel();
-    } else if (funnel) {
-      // console.log('✅ Funnel loaded in editor:', { 
-      //   id: funnel.id, 
-      //   pages: funnel.pages.length, 
-      //   currentPageId, 
-      //   currentPageBlocks: currentPage?.blocks.length,
-      //   lastModified: funnel.lastModified
-      // });
     }
   }, [funnel, isLoading, funnelId, createNewFunnel]);
 
@@ -252,20 +205,6 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
                 {isSaving ? 'Salvando...' : isOnline ? 'Online' : 'Offline'}
               </span>
             </div>
-
-            {/* Auto-save Debug Info */}
-            {autoSaveState && (
-              <div className="hidden lg:flex items-center space-x-2 text-xs">
-                <div className={`w-2 h-2 rounded-full ${
-                  autoSaveState.isEnabled ? 'bg-blue-500' : 'bg-gray-400'
-                }`} />
-                <span className="text-gray-500">
-                  Auto: {autoSaveState.isEnabled ? 'ON' : 'OFF'} | 
-                  {autoSaveState.pendingChanges ? ' Pendente' : ' Salvo'} |
-                  {autoSaveState.lastSave ? ` ${autoSaveState.lastSave.toLocaleTimeString()}` : ' --:--'}
-                </span>
-              </div>
-            )}
 
             {/* Botões Mobile - SEMPRE VISÍVEIS EM MÓBILE */}
             <div className="flex space-x-2 md:hidden">
@@ -427,7 +366,7 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
                   // A sidebar agora permanece aberta para melhor experiência do usuário
                 }}
                 activeTab={activeTab}
-                onTabChange={(tab) => setActiveTab(tab as 'components' | 'pages')}
+                onTabChange={setActiveTab}
                 funnelPages={funnel?.pages || []}
                 currentPageId={currentPageId ?? undefined}
                 setCurrentPage={setCurrentPage}
@@ -641,7 +580,7 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
                 selectedBlock={selectedBlock}
                 funnelConfig={funnel}
                 onBlockPropertyChange={handleBlockPropertyChange}
-                onNestedPropertyChange={(path, value) => handleNestedPropertyChange(path.split('.'), value)}
+                onNestedPropertyChange={handleNestedPropertyChange}
                 onFunnelConfigChange={updateFunnelConfig}
               />
             </div>
