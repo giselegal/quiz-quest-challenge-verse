@@ -16,16 +16,17 @@ import {
   Award,
   Hourglass,
   TrendingUp,
+  Lock,
 } from "lucide-react";
 import { trackButtonClick } from "@/utils/analytics";
 
-// Design tokens modernos
+// Design tokens fiéis ao funil real
 const tokens = {
   colors: {
     primary: "#B89B7A",
     secondary: "#aa6b5d",
     background: "#fffaf7",
-    text: "#2C1810",
+    text: "#432818",
     textSecondary: "#5D4A3A",
     success: "#4CAF50",
   },
@@ -53,12 +54,18 @@ interface ResultPageBlockProps {
       resultDescription?: string;
       recommendations?: string[];
       ctaText?: string;
+      ctaSecondaryText?: string;
       ctaUrl?: string;
       backgroundColor?: string;
       textColor?: string;
       showTimer?: boolean;
       showGuarantees?: boolean;
       finalPrice?: string;
+      originalPrice?: string;
+      guidePrice?: string;
+      bonusPrice1?: string;
+      bonusPrice2?: string;
+      logoUrl?: string;
     };
   };
   isSelected?: boolean;
@@ -76,6 +83,7 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
   disabled = false,
   className
 }) => {
+  // Dados fiéis ao funil real com valores corretos
   const {
     userName = "Visitante",
     primaryStyle = { category: "Elegante", percentage: 85 },
@@ -90,39 +98,21 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
       "Guarda-roupa funcional, sem compras por impulso"
     ],
     ctaText = 'Quero meu Guia de Estilo Agora',
+    ctaSecondaryText = 'Garantir Meu Guia + Bônus Especiais',
     ctaUrl = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
     backgroundColor = tokens.colors.background,
     textColor = tokens.colors.text,
     showTimer = false,
     showGuarantees = true,
-    finalPrice = "R$ 39,00"
+    finalPrice = "R$ 39,00",
+    originalPrice = "R$ 175,00",
+    guidePrice = "R$ 67,00",
+    bonusPrice1 = "R$ 79,00",
+    bonusPrice2 = "R$ 29,00",
+    logoUrl = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
   } = block.properties;
 
-  const [timer, setTimer] = useState({
-    hours: 2,
-    minutes: 59,
-    seconds: 59,
-  });
-
-  useEffect(() => {
-    if (!showTimer) return;
-    
-    const countdownInterval = setInterval(() => {
-      setTimer((prevTimer) => {
-        if (prevTimer.seconds > 0) {
-          return { ...prevTimer, seconds: prevTimer.seconds - 1 };
-        } else if (prevTimer.minutes > 0) {
-          return { ...prevTimer, minutes: prevTimer.minutes - 1, seconds: 59 };
-        } else if (prevTimer.hours > 0) {
-          return { hours: prevTimer.hours - 1, minutes: 59, seconds: 59 };
-        } else {
-          return { hours: 2, minutes: 59, seconds: 59 };
-        }
-      });
-    }, 1000);
-
-    return () => clearInterval(countdownInterval);
-  }, [showTimer]);
+  const [isButtonHovered, setIsButtonHovered] = useState(false);
 
   const handlePropertyChange = (key: string, value: any) => {
     if (onPropertyChange) {
@@ -145,7 +135,7 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
   return (
     <div
       className={cn(
-        'relative w-full min-h-[600px] rounded-lg border-2',
+        'relative w-full min-h-[800px] rounded-lg border-2',
         isSelected ? 'border-blue-500 ring-2 ring-blue-200' : 'border-gray-300',
         'cursor-pointer hover:border-gray-400 transition-all duration-300',
         className
@@ -153,19 +143,20 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
       onClick={onClick}
       style={{ backgroundColor, color: textColor }}
     >
-      {/* Background decorativo */}
+      {/* Background decorativo fiel ao funil real */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-lg">
-        <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-br from-[#B89B7A]/8 to-transparent rounded-full blur-2xl transform translate-x-1/4 -translate-y-1/4"></div>
-        <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-gradient-to-tr from-[#aa6b5d]/6 to-transparent rounded-full blur-xl transform -translate-x-1/4 translate-y-1/4"></div>
+        <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#B89B7A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
       </div>
 
-      {/* Main Content */}
-      <div className="relative z-10 p-6 lg:p-8">
-        {/* Header com Logo e Saudação - Fiel ao funil real */}
+      {/* Main Content Container - Fiel ao funil real */}
+      <div className="relative z-10 container mx-auto px-4 py-6 max-w-4xl">
+        
+        {/* Header com Logo - Exatamente como no funil real */}
         <div className="text-center mb-8">
           <div className="flex justify-center w-full mb-6">
             <img 
-              src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
+              src={logoUrl}
               alt="Logo Gisele Galvão"
               className="h-20 w-auto"
               loading="eager"
@@ -206,124 +197,230 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
           />
         </div>
 
-        {/* Result Card Principal */}
-        <Card
-          className="relative overflow-hidden bg-gradient-to-br from-white/95 to-[#fff7f3]/95 border border-[#B89B7A]/15 rounded-xl p-6 lg:p-8 mb-8"
-          style={{ boxShadow: tokens.shadows.lg }}
-        >
-          <div className="text-center mb-6">
-            <div className="text-4xl mb-4">✨</div>
-            
-            {/* Progress bar de compatibilidade */}
-            <div className="max-w-md mx-auto mb-6">
-              <div className="flex items-center justify-between text-sm font-medium text-[#5D4A3A] mb-2">
-                <span>Seu estilo predominante</span>
-                <span className="font-bold text-[#B89B7A]">
-                  {primaryStyle.percentage}%
-                </span>
+        {/* Card Principal de Resultado - Fiel ao funil real */}
+        <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
+          <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 card-elegant">
+            <div className="text-center mb-8">
+              <div className="max-w-md mx-auto mb-6">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-[#8F7A6A]">
+                    Seu estilo predominante
+                  </span>
+                  <span className="text-[#aa6b5d] font-medium">{primaryStyle.percentage}%</span>
+                </div>
+                <Progress 
+                  value={primaryStyle.percentage} 
+                  className="h-2 bg-[#F3E8E6]" 
+                  style={{
+                    '--progress-background': 'linear-gradient(to right, #B89B7A, #aa6b5d)'
+                  } as React.CSSProperties}
+                />
               </div>
-              <Progress
-                value={primaryStyle.percentage}
-                className="h-2 bg-gradient-to-r from-[#f5f2ec] to-[#f0ebe3] rounded-full"
-                style={{ boxShadow: tokens.shadows.sm }}
-              />
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="space-y-4">
+                <InlineEditText
+                  as="p"
+                  value={resultDescription}
+                  onSave={(value) => handlePropertyChange('resultDescription', value)}
+                  placeholder="Descrição detalhada do resultado..."
+                  disabled={disabled}
+                  multiline={true}
+                  className="text-[#432818] leading-relaxed"
+                />
+                
+                {/* Estilos Secundários - Simulando estrutura real */}
+                <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10 glass-panel">
+                  <h3 className="text-lg font-medium text-[#432818] mb-2">Estilos que Também Influenciam Você</h3>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-[#432818]">Romântico</span>
+                      <span className="text-sm font-semibold text-[#aa6b5d]">20%</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-[#432818]">Natural</span>
+                      <span className="text-sm font-semibold text-[#aa6b5d]">15%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Imagem do Estilo - 238px como no funil real */}
+              <div className="max-w-[238px] mx-auto relative">
+                <img 
+                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744992677/estilo-elegante-preview.jpg"
+                  alt={`Estilo ${primaryStyle.category}`}
+                  className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+                  loading="eager"
+                  width="238"
+                  height="auto"
+                />
+                <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
+                <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>
+              </div>
             </div>
             
-            <InlineEditText
-              as="p"
-              value={resultDescription}
-              onSave={(value) => handlePropertyChange('resultDescription', value)}
-              placeholder="Descrição detalhada do resultado..."
-              disabled={disabled}
-              multiline={true}
-              className="text-base lg:text-lg mb-6 opacity-90 leading-relaxed"
-              style={{ color: textColor }}
-            />
-          </div>
-
-          {/* Benefícios do Guia - Fiéis ao funil real */}
-          {recommendations.length > 0 && (
-            <div className="text-left max-w-2xl mx-auto mb-6">
-              <h3 className="text-lg font-semibold mb-4 text-[#aa6b5d]">
-                O que você receberá:
-              </h3>
-              <ul className="space-y-3">
-                {recommendations.map((rec, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-[#4CAF50] mt-0.5 flex-shrink-0" />
-                    <InlineEditText
-                      as="span"
-                      value={rec}
-                      onSave={(value) => {
-                        const newRecs = [...recommendations];
-                        newRecs[index] = value;
-                        handlePropertyChange('recommendations', newRecs);
-                      }}
-                      disabled={disabled}
-                      className="text-sm lg:text-base"
-                      style={{ color: textColor }}
-                    />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* Badge "Exclusivo" como no funil real */}
-          <div className="text-center mb-6">
-            <div className="relative inline-block">
+            {/* Imagem do Guia - 540px como no funil real */}
+            <div className="mt-8 max-w-[540px] mx-auto relative">
               <img 
                 src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744992677/guia-de-estilo-preview.jpg"
-                alt="Guia de Estilo Preview"
-                className="w-full max-w-md mx-auto rounded-lg shadow-md"
+                alt={`Guia de Estilo ${primaryStyle.category}`}
                 loading="lazy"
+                className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+                width="540"
+                height="auto"
               />
               <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
                 Exclusivo
               </div>
             </div>
+          </Card>
+        </AnimatedWrapper>
+
+        {/* Seções Intermediárias Placeholder - Como no funil real */}
+        <div className="space-y-8 mb-10">
+          {/* Before/After Placeholder */}
+          <Card className="p-6 bg-gradient-to-br from-white to-[#fff7f3] border border-[#B89B7A]/15">
+            <h3 className="text-lg font-medium text-[#aa6b5d] mb-2">🔄 Transformação Antes/Depois</h3>
+            <p className="text-sm text-[#8F7A6A]">Seção editável no modo avançado</p>
+          </Card>
+
+          {/* Motivation Placeholder */}
+          <Card className="p-6 bg-gradient-to-br from-white to-[#fff7f3] border border-[#B89B7A]/15">
+            <h3 className="text-lg font-medium text-[#aa6b5d] mb-2">💪 Seção Motivacional</h3>
+            <p className="text-sm text-[#8F7A6A]">Seção editável no modo avançado</p>
+          </Card>
+
+          {/* Bonus Placeholder */}
+          <Card className="p-6 bg-gradient-to-br from-white to-[#fff7f3] border border-[#B89B7A]/15">
+            <h3 className="text-lg font-medium text-[#aa6b5d] mb-2">🎁 Seção de Bônus</h3>
+            <p className="text-sm text-[#8F7A6A]">Seção editável no modo avançado</p>
+          </Card>
+
+          {/* Testimonials Placeholder */}
+          <Card className="p-6 bg-gradient-to-br from-white to-[#fff7f3] border border-[#B89B7A]/15">
+            <h3 className="text-lg font-medium text-[#aa6b5d] mb-2">💬 Depoimentos</h3>
+            <p className="text-sm text-[#8F7A6A]">Seção editável no modo avançado</p>
+          </Card>
+        </div>
+
+        {/* CTA Principal Verde - Exato como no funil real */}
+        <AnimatedWrapper animation="fade" show={true} duration={400} delay={950}>
+          <div className="text-center my-10">
+            <div className="bg-[#f9f4ef] p-6 rounded-lg border border-[#B89B7A]/10 mb-6">
+              <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">
+                Descubra Como Aplicar Seu Estilo na Prática
+              </h3>
+              <div className="flex justify-center">
+                <ArrowDown className="w-8 h-8 text-[#B89B7A] animate-bounce" />
+              </div>
+            </div>
+            
+            <Button 
+              onClick={handleCTAClick} 
+              disabled={disabled}
+              className="text-white py-4 px-6 rounded-md mb-4"
+              onMouseEnter={() => setIsButtonHovered(true)} 
+              onMouseLeave={() => setIsButtonHovered(false)} 
+              style={{
+                background: "linear-gradient(to right, #4CAF50, #45a049)",
+                boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
+              }}
+            >
+              <span className="flex items-center justify-center gap-2">
+                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
+                <InlineEditText
+                  as="span"
+                  value={ctaText}
+                  onSave={(value) => handlePropertyChange('ctaText', value)}
+                  placeholder="Texto do CTA principal..."
+                  disabled={disabled}
+                  className="text-white font-bold"
+                />
+              </span>
+            </Button>
+            
+            <div className="mt-2 inline-block bg-[#aa6b5d]/10 px-3 py-1 rounded-full">
+              <p className="text-sm text-[#aa6b5d] font-medium flex items-center justify-center gap-1">
+                <Shield className="w-3 h-3" />
+                Pagamento 100% Seguro
+              </p>
+            </div>
           </div>
-        </Card>
+        </AnimatedWrapper>
 
-        {/* Seção de Value Stack e CTA - Fiel ao funil real */}
-        <Card
-          className="relative overflow-hidden bg-gradient-to-br from-white via-[#fff7f3] to-[#f9f4ef] border border-[#B89B7A]/20 rounded-xl p-6 lg:p-8 text-center"
-          style={{ boxShadow: tokens.shadows.xl }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-[#B89B7A]/3 via-transparent to-[#aa6b5d]/3 pointer-events-none"></div>
-
-          <div className="relative z-10">
-            {/* Título da seção */}
+        {/* Value Stack e CTA Final - 100% Fiel ao funil real */}
+        <AnimatedWrapper animation="fade" show={true} duration={400} delay={1100}>
+          <div className="text-center mt-10">
             <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
               Vista-se de Você — na Prática
             </h2>
             <div className="w-20 h-0.5 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] mx-auto mb-6"></div>
-            
             <p className="text-[#432818] mb-6 max-w-xl mx-auto">
-              Agora que você conhece seu estilo, é hora de aplicá-lo com clareza e intenção.
+              Agora que você conhece seu estilo, é hora de aplicá-lo com clareza e intenção. 
+              O Guia da Gisele Galvão foi criado para mulheres como você — que querem se vestir 
+              com autenticidade e transformar sua imagem em ferramenta de poder.
             </p>
 
-            {/* Value Stack detalhado - Preços reais do funil */}
+            <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] p-6 rounded-lg mb-6 border border-[#B89B7A]/10">
+              <h3 className="text-xl font-medium text-[#aa6b5d] mb-4">O Guia de Estilo e Imagem + Bônus Exclusivos</h3>
+              <ul className="space-y-3 text-left max-w-xl mx-auto text-[#432818]">
+                {recommendations.map((item, index) => (
+                  <li key={index} className="flex items-start">
+                    <div className="flex-shrink-0 h-5 w-5 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white mr-2 mt-0.5">
+                      <CheckCircle className="h-3 w-3" />
+                    </div>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Value Stack com preços reais do funil */}
             <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 mb-8 max-w-md mx-auto">
               <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">O Que Você Recebe Hoje</h3>
               
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
                   <span>Guia Principal</span>
-                  <span className="font-medium">R$ 67,00</span>
+                  <InlineEditText
+                    as="span"
+                    value={guidePrice}
+                    onSave={(value) => handlePropertyChange('guidePrice', value)}
+                    disabled={disabled}
+                    className="font-medium"
+                  />
                 </div>
                 <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
                   <span>Bônus - Peças-chave</span>
-                  <span className="font-medium">R$ 79,00</span>
+                  <InlineEditText
+                    as="span"
+                    value={bonusPrice1}
+                    onSave={(value) => handlePropertyChange('bonusPrice1', value)}
+                    disabled={disabled}
+                    className="font-medium"
+                  />
                 </div>
                 <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
                   <span>Bônus - Visagismo Facial</span>
-                  <span className="font-medium">R$ 29,00</span>
+                  <InlineEditText
+                    as="span"
+                    value={bonusPrice2}
+                    onSave={(value) => handlePropertyChange('bonusPrice2', value)}
+                    disabled={disabled}
+                    className="font-medium"
+                  />
                 </div>
                 <div className="flex justify-between items-center p-2 pt-3 font-bold">
                   <span>Valor Total</span>
                   <div className="relative">
-                    <span>R$ 175,00</span>
+                    <InlineEditText
+                      as="span"
+                      value={originalPrice}
+                      onSave={(value) => handlePropertyChange('originalPrice', value)}
+                      disabled={disabled}
+                    />
                     <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#ff5a5a] transform -translate-y-1/2 -rotate-3"></div>
                   </div>
                 </div>
@@ -342,73 +439,73 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
               </div>
             </div>
 
-            {/* CTA Button */}
+            {/* CTA Secundário - Exato como no funil real */}
             <Button
               onClick={handleCTAClick}
               disabled={disabled}
-              size="lg"
-              className="group relative font-bold py-4 px-8 lg:px-12 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105 mb-6"
-              style={{
-                background: "linear-gradient(135deg, #4CAF50 0%, #43a047 50%, #388e3c 100%)",
-                boxShadow: "0 10px 25px rgba(76, 175, 80, 0.3)",
-              }}
-            >
-              <span className="flex items-center justify-center gap-2">
-                <ShoppingCart className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
-                <InlineEditText
-                  as="span"
-                  value={ctaText}
-                  onSave={(value) => handlePropertyChange('ctaText', value)}
-                  placeholder="Texto do botão de ação..."
-                  disabled={disabled}
-                  className="text-white font-bold"
-                />
-                <ArrowDown className="w-4 h-4 animate-bounce" />
-              </span>
-            </Button>
-
-            {/* CTA Secundário como no funil real */}
-            <Button
-              onClick={handleCTAClick}
-              disabled={disabled}
-              size="lg"
-              className="group relative font-bold py-5 px-8 rounded-md shadow-md transition-all duration-300 mb-4 w-full max-w-md mx-auto block"
+              className="text-white py-5 px-8 rounded-md shadow-md transition-colors mb-2 w-full max-w-md mx-auto"
               style={{
                 background: "linear-gradient(to right, #4CAF50, #45a049)",
                 boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
+                fontSize: "1rem"
               }}
+              onMouseEnter={() => setIsButtonHovered(true)} 
+              onMouseLeave={() => setIsButtonHovered(false)}
             >
-              <span className="flex items-center justify-center gap-2 text-white">
-                <ShoppingCart className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
-                <span>Garantir Meu Guia + Bônus Especiais</span>
+              <span className="flex items-center justify-center gap-2">
+                <ShoppingCart className={`w-4 h-4 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
+                <InlineEditText
+                  as="span"
+                  value={ctaSecondaryText}
+                  onSave={(value) => handlePropertyChange('ctaSecondaryText', value)}
+                  placeholder="Texto do CTA secundário..."
+                  disabled={disabled}
+                  className="text-white font-bold"
+                />
               </span>
             </Button>
 
-            {/* Garantias */}
-            {showGuarantees && (
-              <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-[#8F7A6A]">
-                <div className="flex items-center gap-1">
-                  <Shield className="w-4 h-4 text-[#B89B7A]" />
-                  <span>Pagamento Seguro</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <CheckCircle className="w-4 h-4 text-[#B89B7A]" />
-                  <span>Acesso Imediato</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Award className="w-4 h-4 text-[#B89B7A]" />
-                  <span>Garantia 7 Dias</span>
-                </div>
+            {/* Elementos de segurança */}
+            <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-[#8F7A6A] mt-4">
+              <div className="flex items-center gap-1">
+                <Shield className="w-4 h-4 text-[#B89B7A]" />
+                <span>Pagamento Seguro</span>
               </div>
-            )}
+              <div className="flex items-center gap-1">
+                <CheckCircle className="w-4 h-4 text-[#B89B7A]" />
+                <span>Acesso Imediato</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Award className="w-4 h-4 text-[#B89B7A]" />
+                <span>Garantia 7 Dias</span>
+              </div>
+            </div>
+
+            <p className="text-sm text-[#aa6b5d] mt-2 flex items-center justify-center gap-1">
+              <Lock className="w-3 h-3" />
+              <span>Oferta exclusiva nesta página</span>
+            </p>
           </div>
-        </Card>
+        </AnimatedWrapper>
+
+        {/* Placeholders para seções de confiança */}
+        <div className="space-y-6 mt-10">
+          <Card className="p-6 bg-gradient-to-br from-white to-[#fff7f3] border border-[#B89B7A]/15">
+            <h3 className="text-lg font-medium text-[#aa6b5d] mb-2">🛡️ Seção de Garantias</h3>
+            <p className="text-sm text-[#8F7A6A]">Seção editável no modo avançado</p>
+          </Card>
+
+          <Card className="p-6 bg-gradient-to-br from-white to-[#fff7f3] border border-[#B89B7A]/15">
+            <h3 className="text-lg font-medium text-[#aa6b5d] mb-2">👨‍🏫 Seção de Mentoria</h3>
+            <p className="text-sm text-[#8F7A6A]">Seção editável no modo avançado</p>
+          </Card>
+        </div>
       </div>
 
       {/* Selected indicator */}
       {isSelected && (
         <div className="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded z-50">
-          Página de Resultado
+          Etapa 20 - Página de Resultado
         </div>
       )}
     </div>
