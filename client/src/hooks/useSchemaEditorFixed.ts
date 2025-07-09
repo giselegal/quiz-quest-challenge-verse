@@ -266,12 +266,17 @@ export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorR
 
   // Ações de bloco
   const addBlock = useCallback((blockData: Omit<BlockData, 'id'>) => {
-    if (!currentPageId) return;
+    if (!currentPageId) {
+      console.warn('❌ Cannot add block: no current page selected');
+      return;
+    }
     
     const newBlock: BlockData = {
       ...blockData,
       id: `block-${Date.now()}`,
     };
+
+    console.log('➕ Adding block:', { currentPageId, blockType: blockData.type, blockId: newBlock.id });
 
     updateFunnelState(prev => ({
       ...prev,
@@ -284,6 +289,8 @@ export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorR
   }, [currentPageId, updateFunnelState]);
 
   const updateBlock = useCallback((blockId: string, updates: Partial<BlockData>) => {
+    console.log('🔄 Updating block:', { blockId, updates });
+    
     updateFunnelState(prev => ({
       ...prev,
       pages: prev.pages.map(page => ({

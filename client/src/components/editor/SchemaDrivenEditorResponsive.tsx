@@ -74,19 +74,31 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
 
   // Handlers
   const handleComponentSelect = (type: string) => {
+    console.log('🎯 handleComponentSelect called:', { type, currentPage: !!currentPage, currentPageId });
+    
     const definition = blockDefinitions.find(def => def.type === type);
-    if (definition && currentPage) {
-      const defaultProperties: Record<string, any> = {};
-      definition.propertiesSchema?.forEach(prop => {
-        if (prop.defaultValue !== undefined) {
-          defaultProperties[prop.key] = prop.defaultValue;
-        }
-      });
-      addBlock({
-        type,
-        properties: defaultProperties
-      });
+    if (!definition) {
+      console.error('❌ Block definition not found for type:', type);
+      return;
     }
+    
+    if (!currentPage) {
+      console.error('❌ No current page selected for adding block');
+      return;
+    }
+    
+    const defaultProperties: Record<string, any> = {};
+    definition.propertiesSchema?.forEach(prop => {
+      if (prop.defaultValue !== undefined) {
+        defaultProperties[prop.key] = prop.defaultValue;
+      }
+    });
+    
+    console.log('✅ Adding block with properties:', { type, defaultProperties });
+    addBlock({
+      type,
+      properties: defaultProperties
+    });
   };
 
   const handleBlockPropertyChange = (key: string, value: any) => {
