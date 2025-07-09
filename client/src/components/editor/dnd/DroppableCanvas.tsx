@@ -63,30 +63,16 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
           </p>
         </div>
       ) : (
-        /* Canvas com Layout Flexbox Inline - Todos os componentes em linha */
-        <div className="w-full mx-auto max-w-7xl">
-          {/* Container Flexbox - TODOS OS COMPONENTES INLINE HORIZONTALMENTE */}
-          <div className="flex flex-wrap gap-3 md:gap-4 w-full justify-start items-stretch">
+        /* LAYOUT HORIZONTAL PURO - 100% LARGURA - SEM AGRUPAMENTO VERTICAL */
+        <div className="w-full overflow-x-auto">
+          {/* Container Flexbox HORIZONTAL - LARGURA 100% - RESPONSIVO */}
+          <div className="flex gap-6 w-full min-w-max items-start h-auto">
             {blocks.map((block, index) => {
-              // TODOS os componentes são tratados como inline agora
-              const isInlineComponent = true;
-              
-              // Larguras padrão responsivas - mobile-first, máximo 2 colunas
+              // LARGURA 100% RESPONSIVA - MÁXIMO 2 COLUNAS INTERNAS POR COMPONENTE
               const getResponsiveWidth = () => {
-                // Componentes grandes que precisam de mais espaço
-                if (['faq-section', 'video-player', 'quiz-question', 'quiz-start-page', 
-                     'result-page', 'quiz-offer-page', 'testimonials-grid', 'value-stack'].includes(block.type)) {
-                  return "w-full min-w-0 flex-[1_1_100%]"; // Largura total
-                }
-                
-                // Componentes pequenos (botões, badges, stats)
-                if (['button', 'badge', 'stat', 'loader', 'notification'].includes(block.type) || 
-                    block.type?.includes('button') || block.type?.includes('badge')) {
-                  return "w-full sm:w-auto md:w-auto lg:w-auto flex-[0_1_auto] min-w-[200px]";
-                }
-                
-                // Componentes padrão - 50% em desktop, 100% em mobile
-                return "w-full sm:w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(50%-0.5rem)] flex-[1_1_calc(50%-0.5rem)] min-w-[300px]";
+                // Todos os componentes ocupam largura fixa mas responsiva
+                // LARGURA UNIFICADA para layout horizontal consistente
+                return "w-[350px] min-w-[300px] max-w-[450px] flex-shrink-0";
               };
 
               return (

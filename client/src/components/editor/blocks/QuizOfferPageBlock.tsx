@@ -81,12 +81,12 @@ const QuizOfferPageBlock: React.FC<QuizOfferPageBlockProps> = ({
   className
 }) => {
   const {
-    offerTitle = "Oferta Especial Baseada no Seu Resultado!",
-    offerSubtitle = "Transforme seu estilo com nosso guia personalizado",
-    originalPrice = "R$ 197,00",
-    discountPrice = "R$ 39,90",
-    discountPercentage = 80,
-    ctaText = "Quero Aproveitar Esta Oferta",
+    offerTitle = "Etapa 21: Oferta Exclusiva Para Seu Estilo!",
+    offerSubtitle = "Leve sua transformação de estilo para o próximo nível",
+    originalPrice = "R$ 297,00",
+    discountPrice = "R$ 97,00",
+    discountPercentage = 67,
+    ctaText = "Sim! Quero Meu Guia Completo de Estilo",
     ctaUrl = "#",
     backgroundColor = tokens.colors.background,
     textColor = tokens.colors.text,
@@ -95,22 +95,33 @@ const QuizOfferPageBlock: React.FC<QuizOfferPageBlockProps> = ({
     showBonuses = true,
     bonuses = [
       {
-        title: "Guia de Combinações",
-        description: "Manual completo com 50+ looks prontos",
+        title: "Guia de Looks Completo",
+        description: "50+ combinações prontas para seu estilo",
+        value: "R$ 97,00"
+      },
+      {
+        title: "Cartela de Cores Personalizada",
+        description: "Cores que mais valorizam sua beleza natural",
         value: "R$ 67,00"
       },
       {
-        title: "Consultoria Express",
-        description: "1 sessão de 30min para tirar dúvidas",
-        value: "R$ 89,00"
+        title: "Guia de Compras Consciente",
+        description: "Lista do que comprar primeiro para transformar seu guarda-roupa",
+        value: "R$ 47,00"
+      },
+      {
+        title: "Consultoria de Estilo por WhatsApp",
+        description: "30 dias de suporte direto com nossa especialista",
+        value: "R$ 197,00"
       }
     ],
-    urgencyText = "Oferta válida apenas pelos próximos",
+    urgencyText = "Oferta disponível apenas para os próximos participantes do quiz!",
     benefits = [
-      "Acesso imediato após o pagamento",
-      "Guia personalizado para seu estilo",
-      "Suporte durante 30 dias",
-      "Garantia de satisfação"
+      "✓ Acesso vitalício ao conteúdo completo",
+      "✓ Atualizações gratuitas por 1 ano",
+      "✓ Garantia de 7 dias - 100% do seu dinheiro de volta",
+      "✓ Suporte especializado via WhatsApp por 30 dias",
+      "✓ Comunidade exclusiva de pessoas com seu estilo"
     ]
   } = block.properties;
 

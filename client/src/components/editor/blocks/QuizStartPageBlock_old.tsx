@@ -39,17 +39,17 @@ const QuizStartPageBlock: React.FC<QuizStartPageBlockProps> = ({
   style
 }) => {
   const {
-    title = 'Etapa 1: Descubra Seu Estilo Pessoal Único',
+    title = 'Descubra Seu Estilo Pessoal',
     subtitle = 'Chega de guarda-roupa lotado e sensação de "não tenho nada para vestir"',
-    description = 'Um quiz personalizado que vai te ajudar a descobrir seu estilo predominante e como aplicá-lo no dia a dia com confiança.',
-    buttonText = 'Começar Meu Quiz de Estilo',
+    description = 'Um quiz personalizado que vai te ajudar a descobrir seu estilo único e como aplicá-lo no dia a dia com confiança.',
+    buttonText = 'Quero descobrir meu estilo',
     benefits = [
-      '✓ Descubra seu estilo predominante em apenas 5 minutos',
-      '✓ Receba dicas personalizadas para seu perfil único',
-      '✓ Aprenda a criar looks que combinam 100% com você',
-      '✓ Ganhe confiança para se vestir todos os dias'
+      'Descubra seu estilo predominante em 5 minutos',
+      'Receba dicas personalizadas para seu perfil',
+      'Aprenda a criar looks que combinam com você',
+      'Ganhe confiança para se vestir todos os dias'
     ],
-    nameInputPlaceholder = 'Digite seu primeiro nome aqui...',
+    nameInputPlaceholder = 'Digite seu nome aqui...',
     showNameInput = true,
     imageUrl,
     backgroundColor = '#fffaf7',
@@ -66,8 +66,7 @@ const QuizStartPageBlock: React.FC<QuizStartPageBlockProps> = ({
     <div
       className={cn(
         'relative w-full h-full flex flex-col bg-white rounded-lg border border-gray-200',
-        // LAYOUT HORIZONTAL RESPONSIVO - LARGURA 100% - MÁXIMO 2 COLUNAS INTERNAS
-        'p-4 md:p-6 min-h-[300px] max-w-full', 
+        'p-4 md:p-6 max-w-[500px] min-w-[300px]', // Largura fixa responsiva
         isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : '',
         'cursor-pointer hover:shadow-md transition-all duration-200',
         className
@@ -77,8 +76,8 @@ const QuizStartPageBlock: React.FC<QuizStartPageBlockProps> = ({
     >
       {/* Header */}
       <div className="text-center mb-4">
-        <Badge variant="outline" className="mb-3 text-xs bg-[#B89B7A] text-white border-[#B89B7A]">
-          Etapa 1 - Quiz de Estilo Pessoal
+        <Badge variant="outline" className="mb-3 text-xs">
+          Quiz de Estilo Pessoal
         </Badge>
 
         {/* Title */}
@@ -89,6 +88,7 @@ const QuizStartPageBlock: React.FC<QuizStartPageBlockProps> = ({
           placeholder="Título do quiz..."
           disabled={disabled}
           className="text-lg md:text-xl font-bold mb-2 leading-tight"
+          style={{ color: textColor }}
         />
 
         {/* Subtitle */}
@@ -99,6 +99,7 @@ const QuizStartPageBlock: React.FC<QuizStartPageBlockProps> = ({
           placeholder="Subtítulo do quiz..."
           disabled={disabled}
           className="text-sm mb-3 opacity-80 leading-relaxed"
+          style={{ color: textColor }}
         />
       </div>
 
@@ -110,6 +111,7 @@ const QuizStartPageBlock: React.FC<QuizStartPageBlockProps> = ({
         placeholder="Descrição do quiz..."
         disabled={disabled}
         className="text-xs md:text-sm mb-4 opacity-75 text-center leading-relaxed"
+        style={{ color: textColor }}
       />
 
       {/* Benefits List */}
@@ -119,7 +121,7 @@ const QuizStartPageBlock: React.FC<QuizStartPageBlockProps> = ({
             {benefits.map((benefit, index) => (
               <li key={index} className="flex items-start gap-2 text-xs">
                 <span className="text-green-500 mt-0.5">✓</span>
-                <span>{benefit}</span>
+                <span style={{ color: textColor }}>{benefit}</span>
               </li>
             ))}
           </ul>
@@ -150,10 +152,69 @@ const QuizStartPageBlock: React.FC<QuizStartPageBlockProps> = ({
 
       {/* Footer Info */}
       <div className="text-center mt-3">
-        <p className="text-xs opacity-60">
+        <p className="text-xs opacity-60" style={{ color: textColor }}>
           ⏱️ Leva apenas 5 minutos • 100% gratuito
         </p>
       </div>
+          placeholder="Descrição do quiz..."
+          disabled={disabled}
+          multiline={true}
+          className="text-lg mb-8 opacity-70"
+          style={{ color: textColor }}
+        />
+
+        {/* Benefits */}
+        {benefits.length > 0 && (
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold mb-4" style={{ color: textColor }}>
+              O que você vai descobrir:
+            </h3>
+            <ul className="space-y-2 text-left max-w-md mx-auto">
+              {benefits.map((benefit, index) => (
+                <li key={index} className="flex items-start">
+                  <span className="text-green-500 mr-2">✓</span>
+                  <span style={{ color: textColor }}>{benefit}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Image */}
+        {imageUrl && (
+          <div className="mb-8">
+            <img
+              src={imageUrl}
+              alt="Quiz Preview"
+              className="w-full max-w-md mx-auto rounded-lg shadow-lg"
+            />
+          </div>
+        )}
+
+        {/* CTA Button */}
+        <Button
+          size="lg"
+          className="text-lg px-8 py-3 bg-primary hover:bg-primary/90"
+          disabled={disabled}
+        >
+          <InlineEditText
+            as="span"
+            value={buttonText}
+            onSave={(newValue) => handlePropertyChange('buttonText', newValue)}
+            placeholder="Texto do botão..."
+            disabled={disabled}
+            className="inline-block"
+            style={{ color: 'white' }}
+          />
+        </Button>
+      </div>
+
+      {/* Selected indicator */}
+      {isSelected && (
+        <div className="absolute top-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded">
+          Página Inicial
+        </div>
+      )}
     </div>
   );
 };

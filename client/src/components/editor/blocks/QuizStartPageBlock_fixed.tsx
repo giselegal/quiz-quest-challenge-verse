@@ -39,17 +39,17 @@ const QuizStartPageBlock: React.FC<QuizStartPageBlockProps> = ({
   style
 }) => {
   const {
-    title = 'Etapa 1: Descubra Seu Estilo Pessoal Único',
+    title = 'Descubra Seu Estilo Pessoal',
     subtitle = 'Chega de guarda-roupa lotado e sensação de "não tenho nada para vestir"',
-    description = 'Um quiz personalizado que vai te ajudar a descobrir seu estilo predominante e como aplicá-lo no dia a dia com confiança.',
-    buttonText = 'Começar Meu Quiz de Estilo',
+    description = 'Um quiz personalizado que vai te ajudar a descobrir seu estilo único e como aplicá-lo no dia a dia com confiança.',
+    buttonText = 'Quero descobrir meu estilo',
     benefits = [
-      '✓ Descubra seu estilo predominante em apenas 5 minutos',
-      '✓ Receba dicas personalizadas para seu perfil único',
-      '✓ Aprenda a criar looks que combinam 100% com você',
-      '✓ Ganhe confiança para se vestir todos os dias'
+      'Descubra seu estilo predominante em 5 minutos',
+      'Receba dicas personalizadas para seu perfil',
+      'Aprenda a criar looks que combinam com você',
+      'Ganhe confiança para se vestir todos os dias'
     ],
-    nameInputPlaceholder = 'Digite seu primeiro nome aqui...',
+    nameInputPlaceholder = 'Digite seu nome aqui...',
     showNameInput = true,
     imageUrl,
     backgroundColor = '#fffaf7',
@@ -66,8 +66,7 @@ const QuizStartPageBlock: React.FC<QuizStartPageBlockProps> = ({
     <div
       className={cn(
         'relative w-full h-full flex flex-col bg-white rounded-lg border border-gray-200',
-        // LAYOUT HORIZONTAL RESPONSIVO - LARGURA 100% - MÁXIMO 2 COLUNAS INTERNAS
-        'p-4 md:p-6 min-h-[300px] max-w-full', 
+        'p-4 md:p-6 max-w-[500px] min-w-[300px]', // Largura fixa responsiva
         isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : '',
         'cursor-pointer hover:shadow-md transition-all duration-200',
         className
@@ -77,8 +76,8 @@ const QuizStartPageBlock: React.FC<QuizStartPageBlockProps> = ({
     >
       {/* Header */}
       <div className="text-center mb-4">
-        <Badge variant="outline" className="mb-3 text-xs bg-[#B89B7A] text-white border-[#B89B7A]">
-          Etapa 1 - Quiz de Estilo Pessoal
+        <Badge variant="outline" className="mb-3 text-xs">
+          Quiz de Estilo Pessoal
         </Badge>
 
         {/* Title */}
