@@ -53,6 +53,7 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
     createNewFunnel,
     isLoading,
     isSaving,
+    autoSaveState,
     isOnline
   } = useSchemaEditor({ funnelId });
 
@@ -205,6 +206,20 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
                 {isSaving ? 'Salvando...' : isOnline ? 'Online' : 'Offline'}
               </span>
             </div>
+
+            {/* Auto-save Debug Info */}
+            {autoSaveState && (
+              <div className="hidden lg:flex items-center space-x-2 text-xs">
+                <div className={`w-2 h-2 rounded-full ${
+                  autoSaveState.isEnabled ? 'bg-blue-500' : 'bg-gray-400'
+                }`} />
+                <span className="text-gray-500">
+                  Auto: {autoSaveState.isEnabled ? 'ON' : 'OFF'} | 
+                  {autoSaveState.pendingChanges ? ' Pendente' : ' Salvo'} |
+                  {autoSaveState.lastSave ? ` ${autoSaveState.lastSave.toLocaleTimeString()}` : ' --:--'}
+                </span>
+              </div>
+            )}
 
             {/* Botões Mobile - SEMPRE VISÍVEIS EM MÓBILE */}
             <div className="flex space-x-2 md:hidden">
@@ -366,7 +381,7 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
                   // A sidebar agora permanece aberta para melhor experiência do usuário
                 }}
                 activeTab={activeTab}
-                onTabChange={setActiveTab}
+                onTabChange={(tab) => setActiveTab(tab as 'components' | 'pages')}
                 funnelPages={funnel?.pages || []}
                 currentPageId={currentPageId ?? undefined}
                 setCurrentPage={setCurrentPage}
