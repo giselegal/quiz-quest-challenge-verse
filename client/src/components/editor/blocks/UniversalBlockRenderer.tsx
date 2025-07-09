@@ -356,62 +356,28 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'FunnelPainBlock':
         return <UnifiedFunnelBlock {...commonProps} />;
 
-      // ETAPA 20 COMPLETA - PÁGINA DE RESULTADO
+      // ETAPA 20 - USAR COMPONENTES INDIVIDUAIS DA CATEGORIA "RESULTADO"
       case 'quiz-resultado-completo':
         return (
-          <div className="space-y-6 w-full max-w-4xl mx-auto p-6 bg-white rounded-lg border border-[#B89B7A]/20">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-[#432818] mb-2">
-                Página de Resultado (Etapa 20)
-              </h2>
-              <p className="text-[#6B4F43] text-sm">
-                Esta etapa contém os 7 componentes reais editáveis da página de resultado
-              </p>
+          <div className="p-6 bg-blue-50 border-2 border-dashed border-blue-300 rounded-lg text-center">
+            <h3 className="font-bold text-blue-800 mb-2">
+              🎯 Etapa 20 - Resultado
+            </h3>
+            <p className="text-blue-600 text-sm mb-4">
+              Use os 7 componentes individuais da categoria "Resultado" na sidebar:
+            </p>
+            <div className="text-left text-xs text-blue-700 space-y-1">
+              <div>• result-header - Cabeçalho de Resultado</div>
+              <div>• style-card - Card do Estilo</div>
+              <div>• before-after - Antes e Depois</div>
+              <div>• bonus-section - Seção de Bônus</div>
+              <div>• testimonials-real - Depoimentos Reais</div>
+              <div>• guarantee-section - Seção de Garantia</div>
+              <div>• mentor-section - Seção da Mentora</div>
             </div>
-            
-            <div className="space-y-8">
-              {/* 1. Cabeçalho de Resultado */}
-              <div className="border-l-4 border-[#B89B7A] pl-4">
-                <h3 className="text-lg font-semibold text-[#432818] mb-2">1. Cabeçalho de Resultado</h3>
-                <ResultHeaderInlineBlock {...commonProps} />
-              </div>
-              
-              {/* 2. Card do Estilo */}
-              <div className="border-l-4 border-[#B89B7A] pl-4">
-                <h3 className="text-lg font-semibold text-[#432818] mb-2">2. Card do Estilo</h3>
-                <StyleCardInlineBlock {...commonProps} />
-              </div>
-              
-              {/* 3. Antes e Depois */}
-              <div className="border-l-4 border-[#B89B7A] pl-4">
-                <h3 className="text-lg font-semibold text-[#432818] mb-2">3. Antes e Depois</h3>
-                <BeforeAfterBlock {...commonProps} />
-              </div>
-              
-              {/* 4. Seção de Bônus */}
-              <div className="border-l-4 border-[#B89B7A] pl-4">
-                <h3 className="text-lg font-semibold text-[#432818] mb-2">4. Seção de Bônus</h3>
-                <BonusInlineBlock {...commonProps} />
-              </div>
-              
-              {/* 5. Depoimentos Reais */}
-              <div className="border-l-4 border-[#B89B7A] pl-4">
-                <h3 className="text-lg font-semibold text-[#432818] mb-2">5. Depoimentos Reais</h3>
-                <TestimonialInlineBlock {...commonProps} />
-              </div>
-              
-              {/* 6. Seção de Garantia */}
-              <div className="border-l-4 border-[#B89B7A] pl-4">
-                <h3 className="text-lg font-semibold text-[#432818] mb-2">6. Seção de Garantia</h3>
-                <GuaranteeBlock {...commonProps} />
-              </div>
-              
-              {/* 7. Seção da Mentora */}
-              <div className="border-l-4 border-[#B89B7A] pl-4">
-                <h3 className="text-lg font-semibold text-[#432818] mb-2">7. Seção da Mentora</h3>
-                <MentorBlock {...commonProps} />
-              </div>
-            </div>
+            <p className="text-blue-600 text-xs mt-4">
+              Arraste cada componente individualmente da sidebar para criar a etapa 20.
+            </p>
           </div>
         );
 
