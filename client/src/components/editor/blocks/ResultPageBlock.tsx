@@ -79,23 +79,23 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
   const {
     userName = "Visitante",
     primaryStyle = { category: "Elegante", percentage: 85 },
-    title = 'Etapa 20: Seu Resultado Personalizado',
-    description = 'Baseado em suas respostas, identificamos seu estilo predominante',
-    resultTitle = 'Seu Estilo: Elegante',
+    title = 'Olá',
+    description = 'seu Estilo Predominante é:',
+    resultTitle = 'Elegante',
     resultDescription = 'Você tem um estilo elegante, refinado e atemporal. Prefere peças de qualidade, cortes clássicos e looks que transmitem sofisticação.',
     recommendations = [
-      "✓ Invista em peças atemporais de qualidade superior",
-      "✓ Prefira cores neutras, sóbrias e tons terrosos",
-      "✓ Escolha acessórios discretos e elegantes",
-      "✓ Priorize tecidos nobres e caimentos clássicos"
+      "Looks com intenção e identidade",
+      "Cores, modelagens e tecidos a seu favor", 
+      "Imagem alinhada aos seus objetivos",
+      "Guarda-roupa funcional, sem compras por impulso"
     ],
-    ctaText = 'Quero Meu Guia Completo de Estilo',
-    ctaUrl = "#",
+    ctaText = 'Quero meu Guia de Estilo Agora',
+    ctaUrl = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
     backgroundColor = tokens.colors.background,
     textColor = tokens.colors.text,
-    showTimer = true,
+    showTimer = false,
     showGuarantees = true,
-    finalPrice = "R$ 97,00"
+    finalPrice = "R$ 39,00"
   } = block.properties;
 
   const [timer, setTimer] = useState({
