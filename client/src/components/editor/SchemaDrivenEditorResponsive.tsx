@@ -131,10 +131,27 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
     saveFunnel(true);
   };
 
+  const handleTestReload = () => {
+    console.log('🔄 Testing reload - current funnel:', funnel?.id);
+    if (funnel?.id) {
+      localStorage.setItem('test-reload-funnel-id', funnel.id);
+      window.location.reload();
+    }
+  };
+
   // Auto-create funnel se necessário
   useEffect(() => {
     if (!funnel && !isLoading && !funnelId) {
+      console.log('🆕 Creating new funnel automatically');
       createNewFunnel();
+    } else if (funnel) {
+      console.log('✅ Funnel loaded in editor:', { 
+        id: funnel.id, 
+        pages: funnel.pages.length, 
+        currentPageId, 
+        currentPageBlocks: currentPage?.blocks.length,
+        lastModified: funnel.lastModified
+      });
     }
   }, [funnel, isLoading, funnelId, createNewFunnel]);
 
