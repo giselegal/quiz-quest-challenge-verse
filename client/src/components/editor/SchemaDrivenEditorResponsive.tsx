@@ -52,9 +52,8 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
     saveFunnel,
     createNewFunnel,
     isLoading,
-    isSaving,
-    isOnline
-  } = useSchemaEditor({ funnelId });
+    isSaving
+  } = useSchemaEditor(funnelId || undefined);
 
   // Handlers
   const handleComponentSelect = (type: string) => {
@@ -86,19 +85,20 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
     updateBlock(selectedBlockId, { properties: newProperties });
   };
 
-  const handleNestedPropertyChange = (path: string[], value: any) => {
+  const handleNestedPropertyChange = (path: string, value: any) => {
     if (!selectedBlockId) return;
     const selectedBlock = currentPage?.blocks.find(b => b.id === selectedBlockId);
     if (!selectedBlock) return;
 
     const newProperties = { ...selectedBlock.properties };
+    const pathArray = path.split('.');
     let current = newProperties;
     
-    for (let i = 0; i < path.length - 1; i++) {
-      if (!current[path[i]]) current[path[i]] = {};
-      current = current[path[i]];
+    for (let i = 0; i < pathArray.length - 1; i++) {
+      if (!current[pathArray[i]]) current[pathArray[i]] = {};
+      current = current[pathArray[i]];
     }
-    current[path[path.length - 1]] = value;
+    current[pathArray[pathArray.length - 1]] = value;
 
     updateBlock(selectedBlockId, { properties: newProperties });
   };
@@ -198,11 +198,10 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
             {/* Status */}
             <div className="hidden sm:flex items-center space-x-2">
               <div className={`w-2 h-2 rounded-full ${
-                isSaving ? 'bg-yellow-500 animate-pulse' : 
-                isOnline ? 'bg-green-500' : 'bg-red-500'
+                isSaving ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'
               }`} />
               <span className="text-xs text-gray-600">
-                {isSaving ? 'Salvando...' : isOnline ? 'Online' : 'Offline'}
+                {isSaving ? 'Salvando...' : 'Online'}
               </span>
             </div>
 
@@ -366,7 +365,7 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
                   // A sidebar agora permanece aberta para melhor experiência do usuário
                 }}
                 activeTab={activeTab}
-                onTabChange={setActiveTab}
+                onTabChange={(tab: string) => setActiveTab(tab as "pages" | "components")}
                 funnelPages={funnel?.pages || []}
                 currentPageId={currentPageId ?? undefined}
                 setCurrentPage={setCurrentPage}

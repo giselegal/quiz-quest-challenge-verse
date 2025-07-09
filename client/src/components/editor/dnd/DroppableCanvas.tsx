@@ -87,52 +87,132 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
             const shouldEndGroup = isInlineComponent && !nextIsInline;
             const isInGroup = isInlineComponent && (prevIsInline || nextIsInline);
             
-            return (
-              <React.Fragment key={block.id}>
-                {/* Drop Zone Between Blocks */}
-                <DropZoneBetween
-                  position={index}
-                  isVisible={isDraggingFromSidebar}
-                />
-                
-                {/* Início do grupo horizontal */}
-                {shouldStartGroup && (
-                  <div className="flex flex-wrap gap-4 w-full mb-4 p-2 border border-dashed border-blue-200 rounded-lg bg-blue-50/30">
-                )}
-                
-                {/* Block Item - Layout flexível */}
-                <div className={cn(
-                  isInlineComponent ? "flex-1 min-w-0 max-w-none" : "w-full mb-4",
-                  isInGroup && "flex-1 min-w-[200px] max-w-[400px]" // Limitar largura em grupos
-                )}>
-                  <SortableBlockItem
-                    block={block}
-                    isSelected={block.id === selectedBlockId}
-                    onSelect={() => onBlockSelect(block.id)}
-                    onDelete={() => onBlockDelete(block.id)}
-                    onDuplicate={() => onBlockDuplicate(block.id)}
-                    onToggleVisibility={() => onBlockToggleVisibility(block.id)}
-                    onSaveInline={onSaveInline}
-                    disabled={disabled}
-                    className={cn(
-                      "w-full transition-all duration-200",
-                      isInlineComponent && "h-auto min-h-[120px]",
-                      isInGroup && "border border-gray-200 rounded-md shadow-sm bg-white"
-                    )}
+            // Renderizar diferentes estruturas baseadas no tipo de layout
+            if (shouldStartGroup) {
+              // Início de um grupo inline
+              return (
+                <React.Fragment key={block.id}>
+                  {/* Drop Zone Between Blocks */}
+                  <DropZoneBetween
+                    position={index}
+                    isVisible={isDraggingFromSidebar}
                   />
-                </div>
-                
-                {/* Fim do grupo horizontal */}
-                {shouldEndGroup && (
+                  
+                  {/* Início do grupo horizontal */}
+                  <div className="flex flex-wrap gap-4 w-full mb-4 p-2 border border-dashed border-blue-200 rounded-lg bg-blue-50/30">
+                    <div className={cn(
+                      "flex-1 min-w-[200px] max-w-[400px]"
+                    )}>
+                      <SortableBlockItem
+                        block={block}
+                        isSelected={block.id === selectedBlockId}
+                        onSelect={() => onBlockSelect(block.id)}
+                        onDelete={() => onBlockDelete(block.id)}
+                        onDuplicate={() => onBlockDuplicate(block.id)}
+                        onToggleVisibility={() => onBlockToggleVisibility(block.id)}
+                        onSaveInline={onSaveInline}
+                        disabled={disabled}
+                        className={cn(
+                          "w-full transition-all duration-200 h-auto min-h-[120px]",
+                          "border border-gray-200 rounded-md shadow-sm bg-white"
+                        )}
+                      />
+                    </div>
                   </div>
-                )}
-                
-                {/* Componentes não-inline mantêm layout vertical */}
-                {!isInlineComponent && !isInGroup && (
-                  <div className="mb-4" />
-                )}
-              </React.Fragment>
-            );
+                </React.Fragment>
+              );
+            } else if (shouldEndGroup) {
+              // Final de um grupo inline
+              return (
+                <React.Fragment key={block.id}>
+                  {/* Drop Zone Between Blocks */}
+                  <DropZoneBetween
+                    position={index}
+                    isVisible={isDraggingFromSidebar}
+                  />
+                  
+                  <div className={cn(
+                    "flex-1 min-w-[200px] max-w-[400px]"
+                  )}>
+                    <SortableBlockItem
+                      block={block}
+                      isSelected={block.id === selectedBlockId}
+                      onSelect={() => onBlockSelect(block.id)}
+                      onDelete={() => onBlockDelete(block.id)}
+                      onDuplicate={() => onBlockDuplicate(block.id)}
+                      onToggleVisibility={() => onBlockToggleVisibility(block.id)}
+                      onSaveInline={onSaveInline}
+                      disabled={disabled}
+                      className={cn(
+                        "w-full transition-all duration-200 h-auto min-h-[120px]",
+                        "border border-gray-200 rounded-md shadow-sm bg-white"
+                      )}
+                    />
+                  </div>
+                </React.Fragment>
+              );
+            } else if (isInGroup) {
+              // Meio de um grupo inline
+              return (
+                <React.Fragment key={block.id}>
+                  {/* Drop Zone Between Blocks */}
+                  <DropZoneBetween
+                    position={index}
+                    isVisible={isDraggingFromSidebar}
+                  />
+                  
+                  <div className={cn(
+                    "flex-1 min-w-[200px] max-w-[400px]"
+                  )}>
+                    <SortableBlockItem
+                      block={block}
+                      isSelected={block.id === selectedBlockId}
+                      onSelect={() => onBlockSelect(block.id)}
+                      onDelete={() => onBlockDelete(block.id)}
+                      onDuplicate={() => onBlockDuplicate(block.id)}
+                      onToggleVisibility={() => onBlockToggleVisibility(block.id)}
+                      onSaveInline={onSaveInline}
+                      disabled={disabled}
+                      className={cn(
+                        "w-full transition-all duration-200 h-auto min-h-[120px]",
+                        "border border-gray-200 rounded-md shadow-sm bg-white"
+                      )}
+                    />
+                  </div>
+                </React.Fragment>
+              );
+            } else {
+              // Componente standalone (não-inline ou inline isolado)
+              return (
+                <React.Fragment key={block.id}>
+                  {/* Drop Zone Between Blocks */}
+                  <DropZoneBetween
+                    position={index}
+                    isVisible={isDraggingFromSidebar}
+                  />
+                  
+                  {/* Block Item - Layout padrão */}
+                  <div className={cn(
+                    isInlineComponent ? "w-full mb-4" : "w-full mb-4"
+                  )}>
+                    <SortableBlockItem
+                      block={block}
+                      isSelected={block.id === selectedBlockId}
+                      onSelect={() => onBlockSelect(block.id)}
+                      onDelete={() => onBlockDelete(block.id)}
+                      onDuplicate={() => onBlockDuplicate(block.id)}
+                      onToggleVisibility={() => onBlockToggleVisibility(block.id)}
+                      onSaveInline={onSaveInline}
+                      disabled={disabled}
+                      className={cn(
+                        "w-full transition-all duration-200",
+                        isInlineComponent && "h-auto min-h-[120px]"
+                      )}
+                    />
+                  </div>
+                </React.Fragment>
+              );
+            }
           })}
           
           {/* Final Drop Zone */}
