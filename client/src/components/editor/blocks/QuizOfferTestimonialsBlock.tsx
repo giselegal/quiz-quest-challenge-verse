@@ -71,7 +71,7 @@ const QuizOfferTestimonialsBlock: React.FC<BlockComponentProps> = ({
             {title}
           </h3>
           
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 gap-8">
             {testimonials.map((testimonial: any, index: number) => (
               <Card key={index} className="shadow-lg border-0">
                 <CardContent className="p-6 text-center">

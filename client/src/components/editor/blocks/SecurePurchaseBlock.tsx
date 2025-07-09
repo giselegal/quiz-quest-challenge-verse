@@ -47,7 +47,7 @@ const SecurePurchaseBlock: React.FC<SecurePurchaseBlockProps> = ({
           </h3>
           
           {showFeatures && (
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-3 sm:mb-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-3 sm:mb-4">
               {securityFeatures.map((feature, index) => (
                 <div key={index} className="flex flex-col items-center gap-1 sm:gap-2">
                   <div className="w-7 h-7 sm:w-8 sm:h-8 bg-white rounded-full flex items-center justify-center text-[#B89B7A] shadow-sm">

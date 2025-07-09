@@ -66,7 +66,7 @@ const TransformationInlineBlock: React.FC<BlockComponentProps> = ({
         </div>
 
         {/* Before/After Comparison */}
-        <div className="grid md:grid-cols-3 gap-6 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
           {/* ANTES */}
           <div className="text-center space-y-4">
             <div className="relative">

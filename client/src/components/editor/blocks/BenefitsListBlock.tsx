@@ -186,7 +186,7 @@ const BenefitsListBlock: React.FC<BenefitsListBlockProps> = ({
   const getLayoutClasses = () => {
     switch (layout) {
       case 'grid':
-        return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
+        return 'grid grid-cols-1 md:grid-cols-2';
       case 'columns':
         return 'grid grid-cols-1 lg:grid-cols-2';
       case 'comparison':

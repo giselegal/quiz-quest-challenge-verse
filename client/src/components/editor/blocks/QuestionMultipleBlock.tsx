@@ -99,7 +99,7 @@ const QuestionMultipleBlock: React.FC<QuestionMultipleBlockProps> = ({
       {/* Options Grid */}
       <div className={cn(
         'grid gap-4 max-w-4xl mx-auto',
-        showImages ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1 max-w-2xl'
+        showImages ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 max-w-2xl'
       )}>
         {options.map((option) => (
           <div

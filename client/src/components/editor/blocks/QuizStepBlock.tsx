@@ -141,8 +141,8 @@ export const QuizStepBlock: React.FC<QuizStepBlockProps> = ({
     switch (layout) {
       case '1-column': return 'grid-cols-1';
       case '2-columns': return 'grid-cols-1 md:grid-cols-2';
-      case '3-columns': return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
-      case '4-columns': return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4';
+      case '3-columns': return 'grid-cols-1 md:grid-cols-2';
+      case '4-columns': return 'grid-cols-1 md:grid-cols-2';
       default: return 'grid-cols-1 md:grid-cols-2';
     }
   };

@@ -97,7 +97,7 @@ const QuizResultSecondaryStylesBlock: React.FC<BlockComponentProps> = ({
               </p>
             </CardHeader>
             <CardContent>
-              <div className="grid md:grid-cols-3 gap-6">
+              <div className="grid md:grid-cols-2 gap-6">
                 {secondaryStyles.map(([key, style]) => {
                   const SecondaryIcon = style.icon;
                   return (

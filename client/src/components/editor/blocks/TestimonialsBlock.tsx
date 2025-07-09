@@ -63,7 +63,7 @@ const TestimonialsBlock: React.FC<TestimonialsBlockProps> = ({
       
       <div className={cn(
         "max-w-6xl mx-auto",
-        layout === 'grid' ? "grid md:grid-cols-3 gap-6" : "flex overflow-x-auto gap-6 pb-4 snap-x snap-mandatory"
+        layout === 'grid' ? "grid md:grid-cols-2 gap-6" : "flex overflow-x-auto gap-6 pb-4 snap-x snap-mandatory"
       )}>
         {testimonials.map((item, index) => (
           <div

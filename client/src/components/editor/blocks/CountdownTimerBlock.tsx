@@ -412,7 +412,7 @@ const CountdownTimerBlock: React.FC<CountdownTimerBlockProps> = ({
         ) : (
           <div className={cn(
             'grid gap-3 sm:gap-4 justify-center',
-            layout === 'circular' ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-2 sm:grid-cols-4'
+            layout === 'circular' ? 'grid-cols-2' : 'grid-cols-2'
           )}>
             {units.map((unit, index) => renderTimeUnit(unit, index))}
           </div>
