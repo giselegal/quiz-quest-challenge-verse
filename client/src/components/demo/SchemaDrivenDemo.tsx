@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DynamicPropertiesPanel } from '../editor/panels/DynamicPropertiesPanel';
 import { BlockRenderer, BlockData } from '../editor/blocks';
-import { blockDefinitions, getCategories, getBlocksByCategory } from '@/config/blockDefinitions';
+import { blockDefinitions, getCategories, getBlocksByCategory } from '@/config/blockDefinitionsClean';
 import { Type, Image, ArrowRight, CheckCircle, Target, Play, Star, FileText, ShoppingCart, Clock, MessageSquare, HelpCircle, Shield, Video } from 'lucide-react';
 
 // Mock de dados para demonstração

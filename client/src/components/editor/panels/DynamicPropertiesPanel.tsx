@@ -3,7 +3,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { PropertyInput } from './block-properties/PropertyInput';
-import { blockDefinitions, findBlockDefinition, type PropertySchema } from '@/config/blockDefinitions';
+import { blockDefinitions, getBlockDefinition, type PropertySchema } from '@/config/blockDefinitionsClean';
 import { type BlockData } from '@/components/editor/blocks';
 
 interface DynamicPropertiesPanelProps {
@@ -116,7 +116,7 @@ export const DynamicPropertiesPanel: React.FC<DynamicPropertiesPanelProps> = ({
   }
 
   // Encontrar a definição do bloco selecionado
-  const blockDefinition = findBlockDefinition(selectedBlock.type);
+  const blockDefinition = getBlockDefinition(selectedBlock.type);
   
   if (!blockDefinition) {
     return (

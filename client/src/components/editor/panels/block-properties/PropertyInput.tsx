@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { useDropzone } from 'react-dropzone';
 import { Plus, Trash2, Type, Image, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Upload } from 'lucide-react';
-import { PropertySchema } from '@/config/blockDefinitions';
+import { PropertySchema } from '@/config/blockDefinitionsClean';
 
 interface PropertyInputProps {
   schema: PropertySchema;

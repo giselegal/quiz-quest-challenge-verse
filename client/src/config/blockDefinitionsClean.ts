@@ -4,6 +4,22 @@
 
 import type { BlockDefinition } from '@/types/blocks';
 
+// Interface para PropertySchema
+export interface PropertySchema {
+  key: string;
+  label: string;
+  type: 'text-input' | 'textarea' | 'select' | 'number-input' | 'boolean-switch' | 'image-url' | 'video-url' | 'array-editor' | 'text-area';
+  placeholder?: string;
+  options?: { label: string; value: string }[];
+  defaultValue?: any;
+  rows?: number;
+  min?: number;
+  max?: number;
+  description?: string;
+  nestedPath?: string;
+  itemSchema?: PropertySchema[];
+}
+
 export const blockDefinitions: BlockDefinition[] = [
   // === COMPONENTES BÁSICOS FUNCIONAIS ===
   {
