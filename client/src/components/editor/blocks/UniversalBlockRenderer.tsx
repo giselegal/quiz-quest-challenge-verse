@@ -71,6 +71,8 @@ import GuaranteeInlineBlock from './GuaranteeInlineBlock';
 import TransformationInlineBlock from './TransformationInlineBlock';
 import FinalValuePropositionInlineBlock from './FinalValuePropositionInlineBlock';
 import TwoColumnsInlineBlock from './TwoColumnsInlineBlock';
+import TestimonialsRealInlineBlock from './TestimonialsRealInlineBlock';
+import MentorSectionInlineBlock from './MentorSectionInlineBlock';
 
 export interface BlockRendererProps {
   block: BlockData;
@@ -232,11 +234,11 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'bonus-section':
         return <InlineWrapper blockType={blockType}><BonusInlineBlock {...commonProps} /></InlineWrapper>;
       case 'testimonials-real':
-        return <InlineWrapper blockType={blockType}><TestimonialInlineBlock {...commonProps} /></InlineWrapper>;
+        return <InlineWrapper blockType={blockType}><TestimonialsRealInlineBlock {...commonProps} /></InlineWrapper>;
       case 'guarantee-section':
         return <InlineWrapper blockType={blockType}><GuaranteeBlock {...commonProps} /></InlineWrapper>;
       case 'mentor-section':
-        return <InlineWrapper blockType={blockType}><MentorBlock {...commonProps} /></InlineWrapper>;
+        return <InlineWrapper blockType={blockType}><MentorSectionInlineBlock {...commonProps} /></InlineWrapper>;
       case 'secure-purchase':
         return <InlineWrapper blockType={blockType}><SecurePurchaseBlock {...commonProps} /></InlineWrapper>;
       case 'value-stack':

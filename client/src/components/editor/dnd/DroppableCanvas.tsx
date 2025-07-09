@@ -63,33 +63,44 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
           </p>
         </div>
       ) : (
-        /* Blocks List - LAYOUT HORIZONTAL FLEXBOX para componentes inline */
+        /* Canvas com Layout Flexbox Responsivo - Mobile-First, máximo 2 colunas */
         <div className="w-full mx-auto">
-          {blocks.map((block, index) => {
-            // Verificar se é um componente inline para agrupar horizontalmente
-            const isInlineComponent = block.type?.includes('-inline') || 
-              ['header', 'text', 'image', 'button', 'style-card', 'before-after', 
-               'bonus-section', 'testimonials-real', 'guarantee-section', 'mentor-section'].includes(block.type);
-            
-            // Verificar se o próximo bloco também é inline para agrupar
-            const nextBlock = blocks[index + 1];
-            const nextIsInline = nextBlock && (nextBlock.type?.includes('-inline') || 
-              ['header', 'text', 'image', 'button', 'style-card', 'before-after', 
-               'bonus-section', 'testimonials-real', 'guarantee-section', 'mentor-section'].includes(nextBlock.type));
-            
-            // Verificar se o bloco anterior também é inline para continuar agrupamento
-            const prevBlock = blocks[index - 1];
-            const prevIsInline = prevBlock && (prevBlock.type?.includes('-inline') || 
-              ['header', 'text', 'image', 'button', 'style-card', 'before-after', 
-               'bonus-section', 'testimonials-real', 'guarantee-section', 'mentor-section'].includes(prevBlock.type));
-            
-            const shouldStartGroup = isInlineComponent && !prevIsInline;
-            const shouldEndGroup = isInlineComponent && !nextIsInline;
-            const isInGroup = isInlineComponent && (prevIsInline || nextIsInline);
-            
-            // Renderizar diferentes estruturas baseadas no tipo de layout
-            if (shouldStartGroup) {
-              // Início de um grupo inline
+          {/* Container Flexbox Responsivo para todos os blocos */}
+          <div className="flex flex-wrap gap-3 md:gap-4 w-full">
+            {blocks.map((block, index) => {
+              // Definir se é um componente inline baseado no tipo
+              const isInlineComponent = block.type?.includes('-inline') || 
+                ['header', 'text', 'image', 'button', 'style-card', 'before-after', 
+                 'bonus-section', 'testimonials-real', 'guarantee-section', 'mentor-section'].includes(block.type);
+              
+              // Definir larguras responsivas baseadas no tipo de componente
+              const getResponsiveWidth = () => {
+                if (!isInlineComponent) {
+                  // Componentes não-inline ocupam largura total
+                  return "w-full";
+                }
+                
+                // Componentes inline: mobile 100%, tablet+ até 2 colunas
+                switch (block.type) {
+                  case 'style-card':
+                  case 'before-after':
+                  case 'bonus-section':
+                    return "w-full sm:w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(50%-0.5rem)]";
+                  case 'testimonials-real':
+                  case 'guarantee-section':
+                  case 'mentor-section':
+                    return "w-full sm:w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(50%-0.5rem)]";
+                  case 'header':
+                  case 'text':
+                    return "w-full sm:w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(50%-0.5rem)]";
+                  case 'image':
+                  case 'button':
+                    return "w-full sm:w-[calc(50%-0.375rem)] md:w-[calc(50%-0.5rem)] lg:w-[calc(50%-0.5rem)]";
+                  default:
+                    return "w-full sm:w-[calc(50%-0.375rem)] md:w-[calc(50%-0.5rem)] lg:w-[calc(50%-0.5rem)]";
+                }
+              };
+
               return (
                 <React.Fragment key={block.id}>
                   {/* Drop Zone Between Blocks */}
@@ -98,41 +109,12 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
                     isVisible={isDraggingFromSidebar}
                   />
                   
-                  {/* Início do grupo horizontal */}
-                  <div className="flex flex-wrap gap-4 w-full mb-4 p-2 border border-dashed border-blue-200 rounded-lg bg-blue-50/30">
-                    <div className={cn(
-                      "flex-1 min-w-[200px] max-w-[400px]"
-                    )}>
-                      <SortableBlockItem
-                        block={block}
-                        isSelected={block.id === selectedBlockId}
-                        onSelect={() => onBlockSelect(block.id)}
-                        onDelete={() => onBlockDelete(block.id)}
-                        onDuplicate={() => onBlockDuplicate(block.id)}
-                        onToggleVisibility={() => onBlockToggleVisibility(block.id)}
-                        onSaveInline={onSaveInline}
-                        disabled={disabled}
-                        className={cn(
-                          "w-full transition-all duration-200 h-auto min-h-[120px]",
-                          "border border-gray-200 rounded-md shadow-sm bg-white"
-                        )}
-                      />
-                    </div>
-                  </div>
-                </React.Fragment>
-              );
-            } else if (shouldEndGroup) {
-              // Final de um grupo inline
-              return (
-                <React.Fragment key={block.id}>
-                  {/* Drop Zone Between Blocks */}
-                  <DropZoneBetween
-                    position={index}
-                    isVisible={isDraggingFromSidebar}
-                  />
-                  
+                  {/* Block Item Container Responsivo */}
                   <div className={cn(
-                    "flex-1 min-w-[200px] max-w-[400px]"
+                    getResponsiveWidth(),
+                    "min-h-[120px] transition-all duration-200",
+                    // Para componentes não-inline, quebra a linha
+                    !isInlineComponent && "basis-full"
                   )}>
                     <SortableBlockItem
                       block={block}
@@ -144,76 +126,16 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
                       onSaveInline={onSaveInline}
                       disabled={disabled}
                       className={cn(
-                        "w-full transition-all duration-200 h-auto min-h-[120px]",
-                        "border border-gray-200 rounded-md shadow-sm bg-white"
+                        "w-full h-full transition-all duration-200",
+                        isInlineComponent && "border border-gray-200 rounded-md shadow-sm bg-white min-h-[120px]",
+                        !isInlineComponent && "border border-gray-300 rounded-lg shadow-md bg-white min-h-[200px]"
                       )}
                     />
                   </div>
                 </React.Fragment>
               );
-            } else if (isInGroup) {
-              // Meio de um grupo inline
-              return (
-                <React.Fragment key={block.id}>
-                  {/* Drop Zone Between Blocks */}
-                  <DropZoneBetween
-                    position={index}
-                    isVisible={isDraggingFromSidebar}
-                  />
-                  
-                  <div className={cn(
-                    "flex-1 min-w-[200px] max-w-[400px]"
-                  )}>
-                    <SortableBlockItem
-                      block={block}
-                      isSelected={block.id === selectedBlockId}
-                      onSelect={() => onBlockSelect(block.id)}
-                      onDelete={() => onBlockDelete(block.id)}
-                      onDuplicate={() => onBlockDuplicate(block.id)}
-                      onToggleVisibility={() => onBlockToggleVisibility(block.id)}
-                      onSaveInline={onSaveInline}
-                      disabled={disabled}
-                      className={cn(
-                        "w-full transition-all duration-200 h-auto min-h-[120px]",
-                        "border border-gray-200 rounded-md shadow-sm bg-white"
-                      )}
-                    />
-                  </div>
-                </React.Fragment>
-              );
-            } else {
-              // Componente standalone (não-inline ou inline isolado)
-              return (
-                <React.Fragment key={block.id}>
-                  {/* Drop Zone Between Blocks */}
-                  <DropZoneBetween
-                    position={index}
-                    isVisible={isDraggingFromSidebar}
-                  />
-                  
-                  {/* Block Item - Layout padrão */}
-                  <div className={cn(
-                    isInlineComponent ? "w-full mb-4" : "w-full mb-4"
-                  )}>
-                    <SortableBlockItem
-                      block={block}
-                      isSelected={block.id === selectedBlockId}
-                      onSelect={() => onBlockSelect(block.id)}
-                      onDelete={() => onBlockDelete(block.id)}
-                      onDuplicate={() => onBlockDuplicate(block.id)}
-                      onToggleVisibility={() => onBlockToggleVisibility(block.id)}
-                      onSaveInline={onSaveInline}
-                      disabled={disabled}
-                      className={cn(
-                        "w-full transition-all duration-200",
-                        isInlineComponent && "h-auto min-h-[120px]"
-                      )}
-                    />
-                  </div>
-                </React.Fragment>
-              );
-            }
-          })}
+            })}
+          </div>
           
           {/* Final Drop Zone */}
           <DropZoneBetween
