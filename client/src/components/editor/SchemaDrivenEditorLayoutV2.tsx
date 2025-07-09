@@ -70,24 +70,8 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
     };
   }, []);
 
-  // Handler para adicionar novo bloco - apenas componentes inline funcionais
-  const handleComponentSelect = (blockType: string) => {        // Lista de tipos inline funcionais permitidos
-        const allowedInlineTypes = [
-          'main-heading-inline', 'text-inline', 'image-inline', 'button-inline',
-          'style-card-inline', 'testimonial-inline', 'bonus-inline', 'cta-inline',
-          'progress-inline', 'badge-inline', 'stat-inline', 'pricing-inline',
-          'loader-inline', 'comparison-inline', 'notification-inline',
-          'comparison-table', 'advanced-cta',
-          // Novos componentes inline para etapa 20 (ResultPage)
-          'result-header-inline', 'value-stack-inline', 'cta-section-inline',
-          'guarantee-inline', 'transformation-inline', 'final-value-proposition-inline'
-        ];
-
-    // Só processa se for um tipo permitido
-    if (!allowedInlineTypes.includes(blockType)) {
-      console.warn(`Tipo de bloco ${blockType} não é permitido (apenas componentes inline funcionais)`);
-      return;
-    }
+  // Handler para adicionar novo bloco - TODOS os componentes agora funcionais
+  const handleComponentSelect = (blockType: string) => {
 
     const definition = blockDefinitions.find(def => def.type === blockType);
     if (!definition) return;
@@ -198,16 +182,8 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
         }
       }}
       onBlockAdd={(blockType) => {
-        // Filtrar apenas blocos inline funcionais
-        const inlineTypes = [
-          'main-heading-inline', 'text-inline', 'image-inline', 'button-inline',
-          'style-card-inline', 'testimonial-inline', 'bonus-inline', 'cta-inline',
-          'progress-inline', 'badge-inline', 'stat-inline', 'pricing-inline',
-          'loader-inline', 'comparison-inline', 'notification-inline',
-          'comparison-table', 'advanced-cta'
-        ];
-        
-        if (currentPage && inlineTypes.includes(blockType)) {
+        // TODOS os blocos agora são permitidos
+        if (currentPage) {
           const definition = blockDefinitions.find(def => def.type === blockType);
           if (definition) {
             const defaultProperties: Record<string, any> = {};
@@ -426,35 +402,22 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                     <div className="p-2">
                       <div className="text-xs text-gray-600 font-medium mb-2 text-center">Componentes</div>
                       <div className="space-y-2">
-                        {blockDefinitions.filter(def => 
-                        ['main-heading-inline', 'text-inline', 'image-inline', 'button-inline',
-                         'style-card-inline', 'testimonial-inline', 'cta-inline', 'pricing-inline']
-                        .includes(def.type)
-                      ).slice(0, 8).map((definition) => (
+                        {blockDefinitions.slice(0, 8).map((definition) => (
                           <div
                             key={definition.type}
                             className="w-16 h-14 bg-gray-100 rounded text-xs flex flex-col items-center justify-center cursor-pointer hover:bg-gray-200"
                             onMouseDown={() => {
-                              // Apenas adicionar se for componente inline funcional
-                              const inlineTypes = [
-                                'main-heading-inline', 'text-inline', 'image-inline', 'button-inline',
-                                'style-card-inline', 'testimonial-inline', 'bonus-inline', 'cta-inline',
-                                'progress-inline', 'badge-inline', 'stat-inline', 'pricing-inline',
-                                'loader-inline', 'comparison-inline', 'notification-inline'
-                              ];
-                              
-                              if (inlineTypes.includes(definition.type)) {
-                                const defaultProperties: Record<string, any> = {};
-                                definition.propertiesSchema?.forEach(prop => {
-                                  if (prop.defaultValue !== undefined) {
-                                    defaultProperties[prop.key] = prop.defaultValue;
-                                  }
-                                });
-                                addBlock({
-                                  type: definition.type,
-                                  properties: defaultProperties
-                                });
-                              }
+                              // TODOS os componentes são permitidos agora
+                              const defaultProperties: Record<string, any> = {};
+                              definition.propertiesSchema?.forEach(prop => {
+                                if (prop.defaultValue !== undefined) {
+                                  defaultProperties[prop.key] = prop.defaultValue;
+                                }
+                              });
+                              addBlock({
+                                type: definition.type,
+                                properties: defaultProperties
+                              });
                             }}
                           >
                             <span className="text-sm mb-1">{definition.icon}</span>
@@ -505,35 +468,19 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                           }}
                           onSaveInline={handleInlineEdit}
                           onAddBlock={(blockType) => {
-                            // Filtrar apenas tipos inline funcionais
-                            const inlineTypes = [
-                              'main-heading-inline', 'text-inline', 'image-inline', 'button-inline',
-                              'style-card-inline', 'testimonial-inline', 'bonus-inline', 'cta-inline',
-                              'progress-inline', 'badge-inline', 'stat-inline', 'pricing-inline',
-                              'loader-inline', 'comparison-inline', 'notification-inline',
-                              'comparison-table', 'advanced-cta',
-                              // Novos componentes inline para etapa 20 (ResultPage)
-                              'result-header-inline', 'value-stack-inline', 'cta-section-inline',
-                              'guarantee-inline', 'transformation-inline', 'final-value-proposition-inline',
-                              // Novos componentes inline para etapa 20 (ResultPage)
-                              'result-header-inline', 'value-stack-inline', 'cta-section-inline',
-                              'guarantee-inline', 'transformation-inline', 'final-value-proposition-inline'
-                            ];
-                            
-                            if (inlineTypes.includes(blockType)) {
-                              const definition = blockDefinitions.find(def => def.type === blockType);
-                              if (definition) {
-                                const defaultProperties: Record<string, any> = {};
-                                definition.propertiesSchema?.forEach(prop => {
-                                  if (prop.defaultValue !== undefined) {
-                                    defaultProperties[prop.key] = prop.defaultValue;
-                                  }
-                                });
-                                addBlock({
-                                  type: blockType,
-                                  properties: defaultProperties
-                                });
-                              }
+                            // TODOS os componentes são permitidos agora
+                            const definition = blockDefinitions.find(def => def.type === blockType);
+                            if (definition) {
+                              const defaultProperties: Record<string, any> = {};
+                              definition.propertiesSchema?.forEach(prop => {
+                                if (prop.defaultValue !== undefined) {
+                                  defaultProperties[prop.key] = prop.defaultValue;
+                                }
+                              });
+                              addBlock({
+                                type: blockType,
+                                properties: defaultProperties
+                              });
                             }
                           }}
                           className="mobile-canvas p-2"
@@ -609,29 +556,19 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                       }}
                       onSaveInline={handleInlineEdit}
                       onAddBlock={(blockType) => {
-                        // Filtrar apenas tipos inline funcionais
-                        const inlineTypes = [
-                          'main-heading-inline', 'text-inline', 'image-inline', 'button-inline',
-                          'style-card-inline', 'testimonial-inline', 'bonus-inline', 'cta-inline',
-                          'progress-inline', 'badge-inline', 'stat-inline', 'pricing-inline',
-                          'loader-inline', 'comparison-inline', 'notification-inline',
-                          'comparison-table', 'advanced-cta'
-                        ];
-                        
-                        if (inlineTypes.includes(blockType)) {
-                          const definition = blockDefinitions.find(def => def.type === blockType);
-                          if (definition) {
-                            const defaultProperties: Record<string, any> = {};
-                            definition.propertiesSchema?.forEach(prop => {
-                              if (prop.defaultValue !== undefined) {
-                                defaultProperties[prop.key] = prop.defaultValue;
-                              }
-                            });
-                            addBlock({
-                              type: blockType,
-                              properties: defaultProperties
-                            });
-                          }
+                        // TODOS os componentes são permitidos agora
+                        const definition = blockDefinitions.find(def => def.type === blockType);
+                        if (definition) {
+                          const defaultProperties: Record<string, any> = {};
+                          definition.propertiesSchema?.forEach(prop => {
+                            if (prop.defaultValue !== undefined) {
+                              defaultProperties[prop.key] = prop.defaultValue;
+                            }
+                          });
+                          addBlock({
+                            type: blockType,
+                            properties: defaultProperties
+                          });
                         }
                       }}
                       className=""
@@ -685,29 +622,19 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                     }}
                     onSaveInline={handleInlineEdit}
                     onAddBlock={(blockType) => {
-                      // Filtrar apenas tipos inline funcionais
-                      const inlineTypes = [
-                        'main-heading-inline', 'text-inline', 'image-inline', 'button-inline',
-                        'style-card-inline', 'testimonial-inline', 'bonus-inline', 'cta-inline',
-                        'progress-inline', 'badge-inline', 'stat-inline', 'pricing-inline',
-                        'loader-inline', 'comparison-inline', 'notification-inline',
-                        'comparison-table', 'advanced-cta'
-                      ];
-                      
-                      if (inlineTypes.includes(blockType)) {
-                        const definition = blockDefinitions.find(def => def.type === blockType);
-                        if (definition) {
-                          const defaultProperties: Record<string, any> = {};
-                          definition.propertiesSchema?.forEach(prop => {
-                            if (prop.defaultValue !== undefined) {
-                              defaultProperties[prop.key] = prop.defaultValue;
-                            }
-                          });
-                          addBlock({
-                            type: blockType,
-                            properties: defaultProperties
-                          });
-                        }
+                      // TODOS os componentes são permitidos agora
+                      const definition = blockDefinitions.find(def => def.type === blockType);
+                      if (definition) {
+                        const defaultProperties: Record<string, any> = {};
+                        definition.propertiesSchema?.forEach(prop => {
+                          if (prop.defaultValue !== undefined) {
+                            defaultProperties[prop.key] = prop.defaultValue;
+                          }
+                        });
+                        addBlock({
+                          type: blockType,
+                          properties: defaultProperties
+                        });
                       }
                     }}
                     className=""
