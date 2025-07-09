@@ -425,6 +425,11 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'example-inline':
         return <ExampleInlineBlock {...commonProps} />;
 
+      // DEMONSTRAÇÃO DE LAYOUT: Componente lado a lado responsivo
+      case 'inline-demo-layout':
+      case 'demo-layout':
+        return <InlineDemoLayoutBlock {...commonProps} />;
+
       // Fallback para tipos não reconhecidos
       default:
         console.warn(`Block type "${block.type}" not recognized`);
