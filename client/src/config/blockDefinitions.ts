@@ -2529,7 +2529,7 @@ export const blockDefinitions: BlockDefinition[] = [
   {
     type: 'cta-inline',
     name: 'CTA (Inline)',
-    description: 'Call-to-action inline editável com preço e botão',
+    description: 'Call-to-action moderno inline com personalização e analytics',
     icon: 'Target',
     category: 'Inline',
     propertiesSchema: [
@@ -2556,6 +2556,97 @@ export const blockDefinitions: BlockDefinition[] = [
         label: 'Mostrar Preço',
         type: 'boolean-switch',
         defaultValue: true
+      },
+      {
+        key: 'buttonStyle',
+        label: 'Estilo do Botão',
+        type: 'select',
+        options: [
+          { label: 'Principal', value: 'primary' },
+          { label: 'Marca', value: 'brand' },
+          { label: 'Sucesso', value: 'success' },
+          { label: 'Atenção', value: 'warning' },
+          { label: 'Perigo', value: 'danger' },
+        ],
+        defaultValue: 'brand',
+      },
+      {
+        key: 'icon',
+        label: 'Ícone',
+        type: 'select',
+        options: [
+          { label: 'Carrinho', value: 'shopping-cart' },
+          { label: 'Seta', value: 'arrow-right' },
+          { label: 'Raio', value: 'zap' },
+          { label: 'Estrela', value: 'star' },
+          { label: 'Relógio', value: 'clock' },
+          { label: 'Presente', value: 'gift' },
+          { label: 'Tendência', value: 'trending-up' },
+        ],
+        defaultValue: 'shopping-cart',
+      },
+      {
+        key: 'showIcon',
+        label: 'Mostrar Ícone',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'useUsername',
+        label: 'Usar Nome do Usuário',
+        type: 'boolean-switch',
+        defaultValue: false
+      },
+      {
+        key: 'usernamePattern',
+        label: 'Padrão de Personalização',
+        type: 'text-input',
+        placeholder: 'Clique aqui {{username}}!',
+        defaultValue: 'Clique aqui {{username}}!'
+      },
+      {
+        key: 'trackingEnabled',
+        label: 'Habilitar Analytics',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'conversionValue',
+        label: 'Valor de Conversão',
+        type: 'number-input',
+        defaultValue: 100
+      },
+      {
+        key: 'redirectUrl',
+        label: 'URL de Redirecionamento',
+        type: 'text-input',
+        placeholder: 'https://...',
+        defaultValue: '#'
+      },
+      {
+        key: 'showUrgency',
+        label: 'Mostrar Urgência',
+        type: 'boolean-switch',
+        defaultValue: false
+      },
+      {
+        key: 'urgencyText',
+        label: 'Texto de Urgência',
+        type: 'text-input',
+        placeholder: 'Oferta limitada!',
+        defaultValue: 'Últimas unidades!'
+      },
+      {
+        key: 'animation',
+        label: 'Animação',
+        type: 'select',
+        options: [
+          { label: 'Scale In', value: 'scaleIn' },
+          { label: 'Fade In', value: 'fadeIn' },
+          { label: 'Slide da Esquerda', value: 'slideInFromLeft' },
+          { label: 'Slide da Direita', value: 'slideInFromRight' },
+        ],
+        defaultValue: 'scaleIn',
       }
     ]
   },
@@ -2645,7 +2736,7 @@ export const blockDefinitions: BlockDefinition[] = [
   {
     type: 'stat-inline',
     name: 'Estatística (Inline)',
-    description: 'Estatística inline editável com valor e descrição',
+    description: 'Estatística moderna inline com animações e personalização',
     icon: 'Users',
     category: 'Inline',
     propertiesSchema: [
@@ -2662,22 +2753,85 @@ export const blockDefinitions: BlockDefinition[] = [
         defaultValue: 'Clientes Satisfeitas'
       },
       {
-        key: 'type',
-        label: 'Tipo',
+        key: 'icon',
+        label: 'Ícone',
         type: 'select',
-        defaultValue: 'users',
         options: [
           { label: 'Usuários', value: 'users' },
-          { label: 'Crescimento', value: 'growth' },
-          { label: 'Satisfação', value: 'satisfaction' },
-          { label: 'Tempo', value: 'time' }
-        ]
+          { label: 'Tendência', value: 'trending-up' },
+          { label: 'Coração', value: 'heart' },
+          { label: 'Relógio', value: 'clock' },
+          { label: 'Estrela', value: 'star' },
+          { label: 'Prêmio', value: 'award' },
+          { label: 'Alvo', value: 'target' },
+          { label: 'Raio', value: 'zap' },
+          { label: 'Gráfico', value: 'bar-chart' },
+        ],
+        defaultValue: 'users'
       },
       {
         key: 'showIcon',
         label: 'Mostrar Ícone',
         type: 'boolean-switch',
         defaultValue: true
+      },
+      {
+        key: 'animatedCounter',
+        label: 'Contador Animado',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'size',
+        label: 'Tamanho',
+        type: 'select',
+        options: [
+          { label: 'Pequeno', value: 'small' },
+          { label: 'Médio', value: 'medium' },
+          { label: 'Grande', value: 'large' },
+        ],
+        defaultValue: 'medium'
+      },
+      {
+        key: 'layout',
+        label: 'Layout',
+        type: 'select',
+        options: [
+          { label: 'Horizontal', value: 'horizontal' },
+          { label: 'Vertical', value: 'vertical' },
+        ],
+        defaultValue: 'horizontal'
+      },
+      {
+        key: 'useUsername',
+        label: 'Usar Nome do Usuário',
+        type: 'boolean-switch',
+        defaultValue: false
+      },
+      {
+        key: 'usernamePattern',
+        label: 'Padrão de Personalização',
+        type: 'text-input',
+        placeholder: '{{username}}, você será a próxima!',
+        defaultValue: '{{username}}, você será a próxima!'
+      },
+      {
+        key: 'trackingEnabled',
+        label: 'Habilitar Analytics',
+        type: 'boolean-switch',
+        defaultValue: false
+      },
+      {
+        key: 'animation',
+        label: 'Animação',
+        type: 'select',
+        options: [
+          { label: 'Scale In', value: 'scaleIn' },
+          { label: 'Fade In', value: 'fadeIn' },
+          { label: 'Slide da Esquerda', value: 'slideInFromLeft' },
+          { label: 'Slide da Direita', value: 'slideInFromRight' },
+        ],
+        defaultValue: 'scaleIn',
       }
     ]
   },
