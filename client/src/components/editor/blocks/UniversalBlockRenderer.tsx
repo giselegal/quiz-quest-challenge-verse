@@ -2,6 +2,10 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import type { BlockData } from '@/types/blocks';
 
+// Componentes Base do Padrão Inline
+import InlineBaseWrapper from './base/InlineBaseWrapper';
+import InlineEditableText from './base/InlineEditableText';
+
 // Componentes que ainda são utilizados (não inline)
 import { SpacerBlock } from './SpacerBlock';
 import FAQSectionBlock from './FAQSectionBlock';
