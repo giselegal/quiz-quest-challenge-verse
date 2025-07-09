@@ -1428,6 +1428,80 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Schema-driven funnel editor API routes
+  // GET all funnels
+  app.get("/api/schema-driven/funnels", async (req, res) => {
+    try {
+      const funnels = await storage.getAllFunnels();
+      res.json({ success: true, data: funnels });
+    } catch (error) {
+      console.error("Error fetching funnels:", error);
+      res.status(500).json({ success: false, error: "Failed to fetch funnels" });
+    }
+  });
+
+  // GET single funnel
+  app.get("/api/schema-driven/funnels/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const funnel = await storage.getFunnelById(id);
+      
+      if (!funnel) {
+        return res.status(404).json({ success: false, error: "Funnel not found" });
+      }
+      
+      res.json({ success: true, data: funnel });
+    } catch (error) {
+      console.error("Error fetching funnel:", error);
+      res.status(500).json({ success: false, error: "Failed to fetch funnel" });
+    }
+  });
+
+  // POST create new funnel
+  app.post("/api/schema-driven/funnels", async (req, res) => {
+    try {
+      const validatedData = insertFunnelSchema.parse(req.body);
+      const funnel = await storage.createFunnel(validatedData);
+      res.status(201).json({ success: true, data: funnel });
+    } catch (error) {
+      console.error("Error creating funnel:", error);
+      res.status(500).json({ success: false, error: "Failed to create funnel" });
+    }
+  });
+
+  // PUT update funnel
+  app.put("/api/schema-driven/funnels/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const updates = req.body;
+      
+      // Verificar se o funil existe
+      const existingFunnel = await storage.getFunnelById(id);
+      if (!existingFunnel) {
+        return res.status(404).json({ success: false, error: "Funnel not found" });
+      }
+      
+      // Atualizar o funil
+      const updatedFunnel = await storage.updateFunnel(id, updates);
+      res.json({ success: true, data: updatedFunnel });
+    } catch (error) {
+      console.error("Error updating funnel:", error);
+      res.status(500).json({ success: false, error: "Failed to update funnel" });
+    }
+  });
+
+  // DELETE funnel
+  app.delete("/api/schema-driven/funnels/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      await storage.deleteFunnel(id);
+      res.json({ success: true, message: "Funnel deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting funnel:", error);
+      res.status(500).json({ success: false, error: "Failed to delete funnel" });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;

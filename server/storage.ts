@@ -42,6 +42,7 @@ export interface IStorage {
   
   // Funnel operations
   createFunnel(funnel: InsertFunnel): Promise<Funnel>;
+  getAllFunnels(): Promise<Funnel[]>;
   getFunnelsByUserId(userId: number): Promise<Funnel[]>;
   getFunnelById(id: string): Promise<Funnel | undefined>;
   updateFunnel(id: string, updates: Partial<InsertFunnel>): Promise<Funnel | undefined>;
@@ -120,6 +121,10 @@ export class DatabaseStorage implements IStorage {
     };
     const result = await db.insert(funnels).values(funnelWithId).returning();
     return result[0];
+  }
+
+  async getAllFunnels(): Promise<Funnel[]> {
+    return await db.select().from(funnels).orderBy(desc(funnels.createdAt));
   }
 
   async getFunnelsByUserId(userId: number): Promise<Funnel[]> {
