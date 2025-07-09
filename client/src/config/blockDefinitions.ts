@@ -2946,7 +2946,7 @@ export const blockDefinitions: BlockDefinition[] = [
     type: 'notification-inline',
     name: 'Notificações (Inline)',
     description: 'Lista de notificações inline editável estilo profissional',
-    icon: 'MessageCircle',
+    icon: 'MessageSquare',
     category: 'Inline',
     propertiesSchema: [
       {
