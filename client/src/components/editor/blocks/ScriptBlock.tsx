@@ -20,7 +20,7 @@ const ScriptBlock: React.FC<BlockComponentProps> = ({
       className={`
         py-6 bg-gray-800 text-white rounded-lg p-4 font-mono text-sm overflow-auto max-h-48 cursor-pointer transition-all duration-200
         ${isSelected 
-          ? 'outline-2 outline-blue-500 outline-offset-2' 
+          ? 'ring-1 ring-gray-400/40 bg-gray-50/30' 
           : 'hover:shadow-sm'
         }
         ${className}

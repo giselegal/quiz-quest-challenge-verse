@@ -67,8 +67,8 @@ export const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
     >
       {/* Controls Overlay - Top Right */}
       <div className={cn(
-        'absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-10 bg-white/90 backdrop-blur-sm rounded-md p-1 shadow-sm',
-        isSelected && 'opacity-100',
+        'absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-90 transition-opacity z-10 bg-white/80 backdrop-blur-sm rounded-md p-1 shadow-sm',
+        isSelected && 'opacity-70',
         // Mobile optimizations
         'md:gap-1 gap-0.5',
         'md:p-1 p-0.5'

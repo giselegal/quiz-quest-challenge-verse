@@ -358,7 +358,7 @@ const CountdownTimerBlock: React.FC<CountdownTimerBlockProps> = ({
     <div
       className={cn(
         'py-4 sm:py-6 md:py-8 px-4 cursor-pointer transition-all duration-200 w-full',
-        isSelected && 'outline-2 outline-[#B89B7A] outline-offset-2',
+        isSelected && 'ring-1 ring-gray-400/40 bg-gray-50/30',
         !isSelected && 'hover:shadow-sm',
         themeClasses.container,
         className

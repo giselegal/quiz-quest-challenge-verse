@@ -43,7 +43,7 @@ const AlertBlock: React.FC<BlockComponentProps> = ({
         p-4 rounded-lg border flex items-start gap-3 cursor-pointer transition-all duration-200
         ${variantClasses[variant || 'info']}
         ${isSelected 
-          ? 'outline-2 outline-blue-500 outline-offset-2' 
+          ? 'ring-1 ring-gray-400/40 bg-gray-50/30' 
           : 'hover:shadow-md'
         }
         ${className}

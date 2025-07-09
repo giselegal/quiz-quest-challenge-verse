@@ -108,7 +108,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
         className={`
           bg-gray-100 p-4 sm:p-6 md:p-8 rounded-lg text-gray-500 flex flex-col items-center justify-center min-h-[120px] sm:min-h-[150px] cursor-pointer transition-all duration-200
           ${isSelected 
-            ? 'outline-2 outline-[#B89B7A] outline-offset-2' 
+            ? 'ring-1 ring-gray-400/40 bg-gray-50/30' 
             : 'hover:shadow-sm'
           }
           ${className}
@@ -128,7 +128,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
       className={`
         py-2 sm:py-3 md:py-4 text-center space-y-3 sm:space-y-4 cursor-pointer transition-all duration-200 w-full
         ${isSelected 
-          ? 'outline-2 outline-[#B89B7A] outline-offset-2' 
+          ? 'ring-1 ring-gray-400/40 bg-gray-50/30' 
           : 'hover:shadow-sm'
         }
         ${className}

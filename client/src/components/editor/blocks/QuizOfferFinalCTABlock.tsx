@@ -42,7 +42,7 @@ const QuizOfferFinalCTABlock: React.FC<BlockComponentProps> = ({
       className={`
         w-full py-16 px-4 text-center transition-all duration-200
         ${isSelected 
-          ? 'outline-2 outline-[#B89B7A] outline-offset-2' 
+          ? 'ring-1 ring-gray-400/40 bg-gray-50/30' 
           : 'hover:shadow-sm'
         }
         ${className}

@@ -29,7 +29,7 @@ const ChartAreaBlock: React.FC<BlockComponentProps> = ({
       className={`
         py-6 text-center bg-gray-100 rounded-lg border border-gray-200 cursor-pointer transition-all duration-200
         ${isSelected 
-          ? 'outline-2 outline-blue-500 outline-offset-2' 
+          ? 'ring-1 ring-gray-400/40 bg-gray-50/30' 
           : 'hover:shadow-sm'
         }
         ${className}

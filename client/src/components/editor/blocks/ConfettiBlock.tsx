@@ -36,7 +36,7 @@ const ConfettiBlock: React.FC<BlockComponentProps> = ({
       className={`
         py-12 text-center bg-purple-50 rounded-lg border border-purple-200 cursor-pointer transition-all duration-200
         ${isSelected 
-          ? 'outline-2 outline-blue-500 outline-offset-2' 
+          ? 'ring-1 ring-gray-400/40 bg-gray-50/30' 
           : 'hover:shadow-sm hover:bg-purple-100'
         }
         ${className}

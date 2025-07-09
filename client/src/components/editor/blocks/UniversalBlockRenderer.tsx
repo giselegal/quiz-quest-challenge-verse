@@ -134,7 +134,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
 
       // Blocos de resultado - INLINE
       case 'result-header':
-        return <HeadingInlineBlock {...commonProps} />;
+        return <ResultHeaderInlineBlock {...commonProps} />;
       case 'result-description':
         return <TextInlineBlock {...commonProps} />;
 

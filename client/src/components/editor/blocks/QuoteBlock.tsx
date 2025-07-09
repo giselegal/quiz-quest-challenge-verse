@@ -27,7 +27,7 @@ const QuoteBlock: React.FC<BlockComponentProps> = ({
       className={`
         py-6 px-4 bg-gray-50 rounded-lg shadow-sm border border-gray-100 max-w-lg mx-auto space-y-3 cursor-pointer transition-all duration-200
         ${isSelected 
-          ? 'outline-2 outline-blue-500 outline-offset-2' 
+          ? 'ring-1 ring-gray-400/40 bg-gray-50/30' 
           : 'hover:shadow-md'
         }
         ${className}

@@ -34,7 +34,7 @@ const CarouselBlock: React.FC<BlockComponentProps> = ({
         className={`
           bg-gray-100 p-8 rounded-lg text-gray-500 flex flex-col items-center justify-center min-h-[200px] cursor-pointer transition-all duration-200
           ${isSelected 
-            ? 'outline-2 outline-blue-500 outline-offset-2' 
+            ? 'ring-1 ring-gray-400/40 bg-gray-50/30' 
             : 'hover:shadow-sm'
           }
           ${className}
@@ -56,7 +56,7 @@ const CarouselBlock: React.FC<BlockComponentProps> = ({
       className={`
         relative w-full overflow-hidden rounded-lg shadow-md cursor-pointer transition-all duration-200
         ${isSelected 
-          ? 'outline-2 outline-blue-500 outline-offset-2' 
+          ? 'ring-1 ring-gray-400/40 bg-gray-50/30' 
           : 'hover:shadow-lg'
         }
         ${className}
