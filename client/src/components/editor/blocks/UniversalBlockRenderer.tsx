@@ -312,7 +312,5 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
     </div>
   );
 };
-  );
-};
 
 export default UniversalBlockRenderer;

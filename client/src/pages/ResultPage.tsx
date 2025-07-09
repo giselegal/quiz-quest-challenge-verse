@@ -80,6 +80,27 @@ const ResultPage: React.FC = () => {
     }
   }, [primaryStyle]);
 
+  // Adaptar dados para compatibilidade com os componentes
+  const styleData = {
+    category: 'Natural' as keyof typeof styleConfig, // Default fallback
+    percentage: 85,
+    score: 0
+  };
+  
+  // Se primaryStyle existe e tem dados válidos, usar esses dados
+  if (primaryStyle) {
+    if (typeof primaryStyle === 'string') {
+      styleData.category = primaryStyle as keyof typeof styleConfig;
+    } else if (typeof primaryStyle === 'object') {
+      // Verificar se é StyleResult ou outro formato
+      if ('category' in primaryStyle) {
+        styleData.category = (primaryStyle as any).category || 'Natural';
+        styleData.percentage = (primaryStyle as any).percentage || 85;
+        styleData.score = (primaryStyle as any).score || 0;
+      }
+    }
+  }
+
   useEffect(() => {
     if (!primaryStyle) return;
     window.scrollTo(0, 0);
@@ -117,27 +138,6 @@ const ResultPage: React.FC = () => {
   }, [imagesLoaded, completeLoading]);
   if (!primaryStyle) return <ErrorState />;
   if (isLoading) return <ResultSkeleton />;
-  
-  // Adaptar dados para compatibilidade com os componentes
-  const styleData = {
-    category: 'Natural' as keyof typeof styleConfig, // Default fallback
-    percentage: 85,
-    score: 0
-  };
-  
-  // Se primaryStyle existe e tem dados válidos, usar esses dados
-  if (primaryStyle) {
-    if (typeof primaryStyle === 'string') {
-      styleData.category = primaryStyle as keyof typeof styleConfig;
-    } else if (typeof primaryStyle === 'object') {
-      // Verificar se é StyleResult ou outro formato
-      if ('category' in primaryStyle) {
-        styleData.category = (primaryStyle as any).category || 'Natural';
-        styleData.percentage = (primaryStyle as any).percentage || 85;
-        styleData.score = (primaryStyle as any).score || 0;
-      }
-    }
-  }
   
   console.log('StyleData processado:', styleData);
   console.log('PrimaryStyle original:', primaryStyle);
