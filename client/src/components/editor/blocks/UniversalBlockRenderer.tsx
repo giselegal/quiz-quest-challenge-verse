@@ -82,9 +82,10 @@ export interface BlockRendererProps {
 }
 
 /**
- * Universal Block Renderer for Schema-Driven Editor (ALL INLINE)
+ * Universal Block Renderer for Schema-Driven Editor (ALL INLINE HORIZONTAL)
  * Renders any block type based on its type property
- * All components are now inline-editable for better UX
+ * All components are now inline-editable with horizontal flexbox layout
+ * Implements responsive, mobile-first design with max 2 columns
  */
 export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
   block,
@@ -110,193 +111,226 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
     },
     disabled,
     className: cn(
-      'block-renderer-item transition-all duration-200',
+      'block-renderer-item transition-all duration-200 w-full',
+      'flex-1 min-w-0', // Flex item que pode shrink
       isSelected && 'ring-2 ring-blue-500 bg-blue-50',
       !disabled && 'cursor-pointer hover:bg-gray-50',
       className
     )
   };
 
-  // Render do bloco baseado no tipo
+  // Determinar se o bloco deve ser inline horizontal
+  const isInlineBlock = (blockType: string): boolean => {
+    const inlineTypes = [
+      'header', 'text', 'image', 'button', 'spacer',
+      'result-header', 'style-card', 'before-after', 'bonus-section',
+      'testimonials-real', 'guarantee-section', 'mentor-section',
+      'cta-inline', 'pricing-inline', 'badge-inline', 'stat-inline',
+      'notification-inline', 'testimonial-inline', 'loader-inline'
+    ];
+    return inlineTypes.includes(blockType) || blockType.includes('-inline');
+  };
+
+  // Wrapper para componentes não-inline
+  const InlineWrapper: React.FC<{ children: React.ReactNode; blockType: string }> = ({ 
+    children, 
+    blockType 
+  }) => {
+    if (isInlineBlock(blockType)) {
+      return <>{children}</>;
+    }
+    
+    // Wrapper para tornar componentes não-inline compatíveis com layout horizontal
+    return (
+      <div className="w-full min-w-0 flex-1 p-2 border border-gray-200 rounded-lg bg-white">
+        <div className="text-xs text-gray-500 mb-1 font-medium">{blockType}</div>
+        <div className="w-full">{children}</div>
+      </div>
+    );
+  };
+
+  // Render do bloco baseado no tipo com wrapper inline
   const renderBlock = () => {
-    switch (block.type) {
+    const blockType = block.type;
+    
+    switch (blockType) {
       // Blocos básicos - TODOS INLINE
       case 'header':
-        return <HeadingInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></InlineWrapper>;
       case 'text':
-        return <TextInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></InlineWrapper>;
       case 'image':
-        return <ImageInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ImageInlineBlock {...commonProps} /></InlineWrapper>;
       case 'button':
-        return <ButtonInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ButtonInlineBlock {...commonProps} /></InlineWrapper>;
       case 'spacer':
-        return <SpacerBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><SpacerBlock {...commonProps} /></InlineWrapper>;
 
       // Blocos de resultado - INLINE
       case 'result-header':
-        return <ResultHeaderInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ResultHeaderInlineBlock {...commonProps} /></InlineWrapper>;
       case 'result-description':
-        return <TextInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></InlineWrapper>;
 
       // Blocos de oferta - INLINE
       case 'product-offer':
-        return <PricingInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><PricingInlineBlock {...commonProps} /></InlineWrapper>;
       case 'urgency-timer':
-        return <LoaderInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><LoaderInlineBlock {...commonProps} /></InlineWrapper>;
 
-      // Blocos de credibilidade - INLINE
+      // Blocos de credibilidade - INLINE com wrapper
       case 'faq-section':
-        return <FAQSectionBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><FAQSectionBlock {...commonProps} /></InlineWrapper>;
       case 'testimonials':
-        return <TestimonialInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><TestimonialInlineBlock {...commonProps} /></InlineWrapper>;
       case 'guarantee':
-        return <GuaranteeBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><GuaranteeBlock {...commonProps} /></InlineWrapper>;
 
-      // Blocos de mídia
+      // Blocos de mídia - COM WRAPPER
       case 'video-player':
-        return <VideoPlayerBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><VideoPlayerBlock {...commonProps} /></InlineWrapper>;
       case 'audio':
-        return <AudioBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><AudioBlock {...commonProps} /></InlineWrapper>;
 
       // Blocos UI/Avançados - INLINE
       case 'alert':
-        return <NotificationInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><NotificationInlineBlock {...commonProps} /></InlineWrapper>;
       case 'arguments':
-        return <ArgumentsBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ArgumentsBlock {...commonProps} /></InlineWrapper>;
       case 'carousel':
-        return <ProductCarouselBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ProductCarouselBlock {...commonProps} /></InlineWrapper>;
       case 'loader':
-        return <LoaderInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><LoaderInlineBlock {...commonProps} /></InlineWrapper>;
       case 'compare':
-        return <ComparisonInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ComparisonInlineBlock {...commonProps} /></InlineWrapper>;
       case 'confetti':
-        return <ConfettiBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ConfettiBlock {...commonProps} /></InlineWrapper>;
       case 'quote':
-        return <TestimonialInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><TestimonialInlineBlock {...commonProps} /></InlineWrapper>;
       case 'form-input':
-        return <FormInputBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><FormInputBlock {...commonProps} /></InlineWrapper>;
       case 'chart-area':
-        return <StatInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><StatInlineBlock {...commonProps} /></InlineWrapper>;
       case 'chart-level':
-        return <ProgressInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ProgressInlineBlock {...commonProps} /></InlineWrapper>;
       case 'list':
-        return <ListBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ListBlock {...commonProps} /></InlineWrapper>;
       case 'marquee':
-        return <MarqueeBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><MarqueeBlock {...commonProps} /></InlineWrapper>;
       case 'options-grid':
-        return <OptionsGridBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><OptionsGridBlock {...commonProps} /></InlineWrapper>;
       case 'script':
-        return <ScriptBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ScriptBlock {...commonProps} /></InlineWrapper>;
       case 'terms':
-        return <TermsBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><TermsBlock {...commonProps} /></InlineWrapper>;
 
-      // Componentes modulares reais da ResultPage - INLINE e EDITÁVEIS
+      // Componentes modulares reais da ResultPage - INLINE e EDITÁVEIS (ETAPA 20)
       case 'style-card':
-        return <StyleCardInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><StyleCardInlineBlock {...commonProps} /></InlineWrapper>;
       case 'before-after':
-        return <BeforeAfterBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><BeforeAfterBlock {...commonProps} /></InlineWrapper>;
       case 'bonus-section':
-        return <BonusInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><BonusInlineBlock {...commonProps} /></InlineWrapper>;
       case 'testimonials-real':
-        return <TestimonialInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><TestimonialInlineBlock {...commonProps} /></InlineWrapper>;
       case 'guarantee-section':
-        return <GuaranteeBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><GuaranteeBlock {...commonProps} /></InlineWrapper>;
       case 'mentor-section':
-        return <MentorBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><MentorBlock {...commonProps} /></InlineWrapper>;
       case 'secure-purchase':
-        return <SecurePurchaseBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><SecurePurchaseBlock {...commonProps} /></InlineWrapper>;
       case 'value-stack':
-        return <ValueStackBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ValueStackBlock {...commonProps} /></InlineWrapper>;
       case 'final-cta':
-        return <CTAInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><CTAInlineBlock {...commonProps} /></InlineWrapper>;
 
-      // Componentes modulares reais do Quiz
+      // Componentes modulares reais do Quiz - COM WRAPPER
       case 'quiz-question':
-        return <QuizQuestionBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><QuizQuestionBlock {...commonProps} /></InlineWrapper>;
       case 'quiz-progress':
-        return <QuizProgressBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><QuizProgressBlock {...commonProps} /></InlineWrapper>;
 
       // NOVOS COMPONENTES INLINE EDITÁVEIS E RESPONSIVOS
       case 'style-card-inline':
-        return <StyleCardInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><StyleCardInlineBlock {...commonProps} /></InlineWrapper>;
       case 'testimonial-inline':
-        return <TestimonialInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><TestimonialInlineBlock {...commonProps} /></InlineWrapper>;
       case 'bonus-inline':
-        return <BonusInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><BonusInlineBlock {...commonProps} /></InlineWrapper>;
       case 'cta-inline':
-        return <CTAInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><CTAInlineBlock {...commonProps} /></InlineWrapper>;
       case 'progress-inline':
-        return <ProgressInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ProgressInlineBlock {...commonProps} /></InlineWrapper>;
       case 'badge-inline':
-        return <BadgeInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><BadgeInlineBlock {...commonProps} /></InlineWrapper>;
       case 'stat-inline':
-        return <StatInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><StatInlineBlock {...commonProps} /></InlineWrapper>;
       case 'pricing-inline':
-        return <PricingInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><PricingInlineBlock {...commonProps} /></InlineWrapper>;
       case 'loader-inline':
-        return <LoaderInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><LoaderInlineBlock {...commonProps} /></InlineWrapper>;
       case 'comparison-inline':
-        return <ComparisonInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ComparisonInlineBlock {...commonProps} /></InlineWrapper>;
       case 'notification-inline':
-        return <NotificationInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><NotificationInlineBlock {...commonProps} /></InlineWrapper>;
       case 'product-carousel':
-        return <ProductCarouselBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ProductCarouselBlock {...commonProps} /></InlineWrapper>;
       
-      // Componentes que estavam causando erro - CORRIGIDOS
+      // Componentes que estavam causando erro - CORRIGIDOS COM WRAPPER
       case 'testimonials-grid':
-        return <TestimonialsGridBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><TestimonialsGridBlock {...commonProps} /></InlineWrapper>;
       case 'social-proof':
-        return <SocialProofBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><SocialProofBlock {...commonProps} /></InlineWrapper>;
       case 'value-anchoring':
-        return <ValueAnchoringBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ValueAnchoringBlock {...commonProps} /></InlineWrapper>;
 
-      // BLOCOS ESPECÍFICOS DO QUIZ - DADOS REAIS
+      // BLOCOS ESPECÍFICOS DO QUIZ - DADOS REAIS COM WRAPPER
       case 'QuizStartPageBlock':
-        return <QuizStartPageBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><QuizStartPageBlock {...commonProps} /></InlineWrapper>;
       case 'QuizQuestionBlock':
-        return <QuizQuestionBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><QuizQuestionBlock {...commonProps} /></InlineWrapper>;
       case 'QuestionMultipleBlock':
-        return <QuestionMultipleBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><QuestionMultipleBlock {...commonProps} /></InlineWrapper>;
       case 'StrategicQuestionBlock':
-        return <StrategicQuestionBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><StrategicQuestionBlock {...commonProps} /></InlineWrapper>;
       case 'QuizTransitionBlock':
-        return <QuizTransitionBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><QuizTransitionBlock {...commonProps} /></InlineWrapper>;
       case 'ResultPageBlock':
-        return <ResultPageBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ResultPageBlock {...commonProps} /></InlineWrapper>;
       case 'QuizOfferPageBlock':
-        return <QuizOfferPageBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><QuizOfferPageBlock {...commonProps} /></InlineWrapper>;
 
-      // BLOCOS ESPECÍFICOS DE QUIZ/FUNNEL - SCHEMA DRIVEN
+      // BLOCOS ESPECÍFICOS DE QUIZ/FUNNEL - SCHEMA DRIVEN COM WRAPPER
       case 'quiz-intro-page':
-        return <QuizStartPageBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><QuizStartPageBlock {...commonProps} /></InlineWrapper>;
       case 'quiz-transition-page':
-        return <QuizTransitionBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><QuizTransitionBlock {...commonProps} /></InlineWrapper>;
       case 'result-page':
-        return <ResultPageBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ResultPageBlock {...commonProps} /></InlineWrapper>;
       case 'offer-page':
-        return <QuizOfferPageBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><QuizOfferPageBlock {...commonProps} /></InlineWrapper>;
 
-      // BLOCOS ESPECÍFICOS DO QUIZ - MODULARES E SCHEMA-DRIVEN
+      // BLOCOS ESPECÍFICOS DO QUIZ - MODULARES E SCHEMA-DRIVEN COM WRAPPER
       case 'quiz-intro-header':
-        return <QuizIntroHeaderBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><QuizIntroHeaderBlock {...commonProps} /></InlineWrapper>;
       case 'quiz-title':
-        return <QuizTitleBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><QuizTitleBlock {...commonProps} /></InlineWrapper>;
       case 'quiz-name-input':
-        return <QuizNameInputBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><QuizNameInputBlock {...commonProps} /></InlineWrapper>;
       case 'quiz-question-main':
-        return <QuestionMultipleBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><QuestionMultipleBlock {...commonProps} /></InlineWrapper>;
       case 'quiz-transition-main':
-        return <QuizTransitionBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><QuizTransitionBlock {...commonProps} /></InlineWrapper>;
       case 'quiz-question-strategic':
-        return <StrategicQuestionBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><StrategicQuestionBlock {...commonProps} /></InlineWrapper>;
       case 'quiz-transition-final':
-        return <QuizTransitionBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><QuizTransitionBlock {...commonProps} /></InlineWrapper>;
       
-      // NOVOS COMPONENTES ESPECÍFICOS DE PÁGINAS (Etapas 20 e 21)
+      // NOVOS COMPONENTES ESPECÍFICOS DE PÁGINAS (Etapas 20 e 21) COM WRAPPER
       case 'modern-result-page':
-        return <ModernResultPageBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ModernResultPageBlock {...commonProps} /></InlineWrapper>;
       case 'quiz-offer-page':
-        return <QuizOfferPageBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><QuizOfferPageBlock {...commonProps} /></InlineWrapper>;
       
       // BLOCOS DE RESULTADO ANTIGOS (mantidos para compatibilidade) - INLINE
       case 'quiz-result-header':

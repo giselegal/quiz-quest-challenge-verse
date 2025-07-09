@@ -10,7 +10,8 @@ import {
   Monitor, 
   Save, 
   Eye,
-  Plus
+  Plus,
+  Upload
 } from 'lucide-react';
 import { useSchemaEditorFixed as useSchemaEditor } from '@/hooks/useSchemaEditorFixed';
 import { SchemaDrivenComponentsSidebar } from './sidebar/SchemaDrivenComponentsSidebar';
