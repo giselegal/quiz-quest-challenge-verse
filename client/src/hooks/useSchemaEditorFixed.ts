@@ -85,7 +85,17 @@ export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorR
     setFunnel(prev => {
       if (!prev) return null;
       const updated = updater(prev);
+      console.log('🔄 Funnel state updated, triggering auto-save:', updated.lastModified);
       saveToLocal(updated);
+      
+      // Marcar que há mudanças pendentes para o auto-save
+      schemaDrivenFunnelService.markPendingChanges();
+      
+      // Trigger auto-save imediato para mudanças importantes
+      setTimeout(() => {
+        saveFunnel(false);
+      }, 1000);
+      
       return updated;
     });
   }, [saveToLocal]);
@@ -223,12 +233,18 @@ export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorR
   }, [updateFunnelState]);
 
   const updatePage = useCallback((pageId: string, updates: Partial<SchemaDrivenPageData>) => {
-    updateFunnelState(prev => ({
-      ...prev,
-      pages: prev.pages.map(page =>
-        page.id === pageId ? { ...page, ...updates } : page
-      )
-    }));
+    console.log('🔄 updatePage called:', { pageId, updates });
+    updateFunnelState(prev => {
+      const updatedFunnel = {
+        ...prev,
+        pages: prev.pages.map(page =>
+          page.id === pageId ? { ...page, ...updates } : page
+        ),
+        lastModified: new Date()
+      };
+      console.log('📝 Page updated in funnel state:', updatedFunnel);
+      return updatedFunnel;
+    });
   }, [updateFunnelState]);
 
   const deletePage = useCallback((pageId: string) => {

@@ -120,8 +120,10 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
   };
 
   const handleInlineEdit = (blockId: string, updates: Partial<any>) => {
+    console.log('🔄 handleInlineEdit called:', { blockId, updates });
     if (updates.properties) {
       updateBlock(blockId, updates);
+      console.log('✅ Block updated via handleInlineEdit');
     }
   };
 
