@@ -620,6 +620,7 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                 onFunnelConfigChange={updateFunnelConfig}
               />
             </div>
+          </div>
         )}
         
         {/* Mobile Overlay */}
@@ -633,6 +634,7 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
           />
         )}
       </div>
+    </div>
     </DndProvider>
   );
 };
