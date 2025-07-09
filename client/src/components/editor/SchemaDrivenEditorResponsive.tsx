@@ -29,9 +29,9 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
   funnelId,
   className = ''
 }) => {
-  const [deviceView, setDeviceView] = useState<DeviceView>('desktop');
-  const [showLeftSidebar, setShowLeftSidebar] = useState(true);
-  const [showRightSidebar, setShowRightSidebar] = useState(true);
+  const [deviceView, setDeviceView] = useState<DeviceView>('mobile'); // Debug: Começar em mobile
+  const [showLeftSidebar, setShowLeftSidebar] = useState(false); // Móbile: começar fechado
+  const [showRightSidebar, setShowRightSidebar] = useState(false); // Móbile: começar fechado
   const [activeTab, setActiveTab] = useState<'components' | 'pages'>('components');
 
   // Hook principal do editor
@@ -119,6 +119,16 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
     }
   }, [funnel, isLoading, funnelId, createNewFunnel]);
 
+  // DEBUG: Log estado das sidebars
+  useEffect(() => {
+    console.log('🔍 DEBUG Estado:', { 
+      deviceView, 
+      showLeftSidebar, 
+      showRightSidebar,
+      windowWidth: window.innerWidth 
+    });
+  }, [deviceView, showLeftSidebar, showRightSidebar]);
+
   // Loading state
   if (isLoading) {
     return (
@@ -186,32 +196,34 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
               </span>
             </div>
 
-            {/* Botões Mobile */}
-            <div className="flex space-x-2 lg:hidden">
+            {/* Botões Mobile - SEMPRE VISÍVEIS EM MÓBILE */}
+            <div className="flex space-x-2 md:hidden">
               <Button
                 variant="default"
                 size="sm"
                 onClick={() => {
+                  console.log('🔄 Toggleing left sidebar:', !showLeftSidebar);
                   setShowLeftSidebar(!showLeftSidebar);
                   if (showRightSidebar) setShowRightSidebar(false);
                 }}
-                className={`text-white text-xs px-2 py-1 ${
+                className={`text-white text-xs px-3 py-2 ${
                   showLeftSidebar 
                     ? 'bg-blue-700 hover:bg-blue-800' 
                     : 'bg-blue-600 hover:bg-blue-700'
                 }`}
               >
                 <Menu className="w-4 h-4 mr-1" />
-                Menu
+                Componentes
               </Button>
               <Button
                 variant="default" 
                 size="sm"
                 onClick={() => {
+                  console.log('🔄 Toggleing right sidebar:', !showRightSidebar);
                   setShowRightSidebar(!showRightSidebar);
                   if (showLeftSidebar) setShowLeftSidebar(false);
                 }}
-                className={`text-white text-xs px-2 py-1 ${
+                className={`text-white text-xs px-3 py-2 ${
                   showRightSidebar 
                     ? 'bg-green-700 hover:bg-green-800' 
                     : 'bg-green-600 hover:bg-green-700'
@@ -303,17 +315,19 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
             />
           )}
 
-          {/* Left Sidebar */}
+          {/* Left Sidebar - DEBUG: Sempre visível quando showLeftSidebar = true */}
           {showLeftSidebar && (
             <div className={`
               ${deviceView === 'mobile' 
-                ? 'fixed top-14 left-0 bottom-0 w-72 z-50 bg-white shadow-xl border-r border-gray-300' 
+                ? 'fixed top-14 left-0 bottom-0 w-80 z-50 bg-white shadow-2xl border-r border-gray-300' 
                 : deviceView === 'tablet'
                 ? 'relative w-64 bg-white border-r border-gray-200'
                 : 'relative w-80 bg-white border-r border-gray-200'
               } 
               flex flex-col
-            `}>
+            `} 
+            style={{ display: showLeftSidebar ? 'flex' : 'none' }} // DEBUG: Força exibição
+          >
               <div className="flex items-center justify-between p-3 border-b border-gray-200">
                 <h2 className="font-semibold text-gray-900">Componentes</h2>
                 {deviceView === 'mobile' && (
@@ -509,17 +523,19 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
             </div>
           </div>
           
-          {/* Right Sidebar */}
+          {/* Right Sidebar - DEBUG: Sempre visível quando showRightSidebar = true */}
           {showRightSidebar && (
             <div className={`
               ${deviceView === 'mobile' 
-                ? 'fixed top-14 right-0 bottom-0 w-72 z-50 bg-white shadow-xl border-l border-gray-300' 
+                ? 'fixed top-14 right-0 bottom-0 w-80 z-50 bg-white shadow-2xl border-l border-gray-300' 
                 : deviceView === 'tablet'
                 ? 'relative w-64 bg-white border-l border-gray-200'
                 : 'relative w-80 bg-white border-l border-gray-200'
               } 
               flex flex-col
-            `}>
+            `}
+            style={{ display: showRightSidebar ? 'flex' : 'none' }} // DEBUG: Força exibição
+          >
               <div className="flex items-center justify-between p-3 border-b border-gray-200">
                 <h2 className="font-semibold text-gray-900">Propriedades</h2>
                 {deviceView === 'mobile' && (
