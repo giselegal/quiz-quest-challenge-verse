@@ -2052,7 +2052,7 @@ export const blockDefinitions: BlockDefinition[] = [
     type: 'comparison-table',
     name: 'Lista de Benefícios',
     description: 'Lista de benefícios real do funil - O que está incluído',
-    icon: 'Check',
+    icon: 'CheckCircle',
     category: 'Vendas',
     propertiesSchema: [
       {
@@ -2308,83 +2308,7 @@ export const blockDefinitions: BlockDefinition[] = [
     ]
   },
 
-  {
-    type: 'secure-purchase',
-    name: 'Compra Segura',
-    description: 'Elemento real de compra segura da ResultPage',
-    icon: 'Shield',
-    category: 'Resultado',
-    propertiesSchema: [
-      {
-        key: 'title',
-        label: 'Título',
-        type: 'text-input',
-        defaultValue: 'Compra 100% Segura e Protegida'
-      },
-      {
-        key: 'showFeatures',
-        label: 'Mostrar Recursos',
-        type: 'boolean-switch',
-        defaultValue: true
-      }
-    ]
-  },
 
-  {
-    type: 'value-stack',
-    name: 'Ancoragem de Valor',
-    description: 'Tabela real de valor da ResultPage com preços e economia',
-    icon: 'CircleDollarSign',
-    category: 'Resultado',
-    propertiesSchema: [
-      {
-        key: 'title',
-        label: 'Título',
-        type: 'text-input',
-        defaultValue: 'O Que Você Recebe Hoje'
-      },
-      {
-        key: 'showPricing',
-        label: 'Mostrar Preços',
-        type: 'boolean-switch',
-        defaultValue: true
-      }
-    ]
-  },
-
-  {
-    type: 'final-cta',
-    name: 'CTA Final',
-    description: 'Call-to-action final real da ResultPage com link de pagamento',
-    icon: 'Target',
-    category: 'Resultado',
-    propertiesSchema: [
-      {
-        key: 'mainText',
-        label: 'Texto Principal',
-        type: 'text-input',
-        defaultValue: 'Descubra Como Aplicar Seu Estilo na Prática'
-      },
-      {
-        key: 'buttonText',
-        label: 'Texto do Botão',
-        type: 'text-input',
-        defaultValue: 'Quero meu Guia de Estilo Agora'
-      },
-      {
-        key: 'showGuarantee',
-        label: 'Mostrar Garantia',
-        type: 'boolean-switch',
-        defaultValue: true
-      },
-      {
-        key: 'showSecurityBadge',
-        label: 'Mostrar Badge de Segurança',
-        type: 'boolean-switch',
-        defaultValue: true
-      }
-    ]
-  },
 
   // === BLOCOS DE QUIZ (extraídos do QuizPage real) ===
   {
@@ -3022,7 +2946,7 @@ export const blockDefinitions: BlockDefinition[] = [
     type: 'notification-inline',
     name: 'Notificações (Inline)',
     description: 'Lista de notificações inline editável estilo profissional',
-    icon: 'Bell',
+    icon: 'MessageCircle',
     category: 'Inline',
     propertiesSchema: [
       {
