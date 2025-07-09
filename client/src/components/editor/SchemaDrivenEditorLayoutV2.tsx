@@ -358,7 +358,8 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
               <SchemaDrivenComponentsSidebar 
                 onComponentSelect={(type) => {
                   handleComponentSelect(type);
-                  if (deviceView === 'mobile') setShowLeftSidebar(false);
+                  // Removida lógica que fechava sidebar automaticamente no mobile
+                  // A sidebar agora permanece aberta para melhor experiência do usuário
                 }}
                 activeTab={activeTab}
                 onTabChange={setActiveTab}
