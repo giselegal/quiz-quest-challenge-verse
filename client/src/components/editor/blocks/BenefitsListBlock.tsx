@@ -186,11 +186,11 @@ const BenefitsListBlock: React.FC<BenefitsListBlockProps> = ({
   const getLayoutClasses = () => {
     switch (layout) {
       case 'grid':
-        return 'grid grid-cols-1 md:grid-cols-2';
+        return 'flex flex-wrap gap-6 justify-center';
       case 'columns':
-        return 'grid grid-cols-1 lg:grid-cols-2';
+        return 'flex flex-wrap gap-6 justify-center';
       case 'comparison':
-        return 'grid grid-cols-1 md:grid-cols-2';
+        return 'flex flex-wrap gap-6 justify-center';
       case 'list':
       default:
         return 'space-y-4';

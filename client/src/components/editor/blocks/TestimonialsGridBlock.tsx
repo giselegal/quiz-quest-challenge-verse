@@ -104,7 +104,7 @@ const TestimonialsGridBlock: React.FC<TestimonialsGridBlockProps> = ({
           </p>
         </div>
         
-        <div className={`grid ${getGridColumns()} gap-8`}>
+        <div className="flex flex-wrap gap-8 justify-center">
           {finalTestimonials.map((testimonial: {
             id: string;
             name: string;
@@ -115,7 +115,7 @@ const TestimonialsGridBlock: React.FC<TestimonialsGridBlockProps> = ({
           }) => (
             <div
               key={testimonial.id}
-              className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300"
+              className="flex-1 min-w-[300px] max-w-md bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300"
             >
               {/* Rating */}
               {finalShowRating && (
