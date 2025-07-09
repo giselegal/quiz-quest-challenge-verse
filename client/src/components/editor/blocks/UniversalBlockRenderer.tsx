@@ -334,61 +334,61 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       
       // BLOCOS DE RESULTADO ANTIGOS (mantidos para compatibilidade) - INLINE
       case 'quiz-result-header':
-        return <HeadingInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></InlineWrapper>;
       case 'quiz-result-card':
-        return <ResultPageBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ResultPageBlock {...commonProps} /></InlineWrapper>;
       case 'quiz-offer-title':
-        return <HeadingInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></InlineWrapper>;
       case 'quiz-offer-countdown':
-        return <LoaderInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><LoaderInlineBlock {...commonProps} /></InlineWrapper>;
       case 'quiz-offer-pricing':
-        return <PricingInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><PricingInlineBlock {...commonProps} /></InlineWrapper>;
       case 'quiz-offer-faq':
-        return <FAQSectionBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><FAQSectionBlock {...commonProps} /></InlineWrapper>;
 
       // COMPONENTES INLINE BÁSICOS
       case 'main-heading-inline':
-        return <HeadingInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></InlineWrapper>;
       case 'text-inline':
-        return <TextInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></InlineWrapper>;
       case 'image-inline':
-        return <ImageInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ImageInlineBlock {...commonProps} /></InlineWrapper>;
       case 'button-inline':
-        return <ButtonInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ButtonInlineBlock {...commonProps} /></InlineWrapper>;
       case 'comparison-table':
-        return <ComparisonTableInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ComparisonTableInlineBlock {...commonProps} /></InlineWrapper>;
       case 'advanced-cta':
-        return <AdvancedCTAInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><AdvancedCTAInlineBlock {...commonProps} /></InlineWrapper>;
 
       // COMPONENTES INLINE ESPECÍFICOS DA ETAPA 20 (RESULT PAGE) 
       case 'result-header-inline':
-        return <ResultHeaderInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ResultHeaderInlineBlock {...commonProps} /></InlineWrapper>;
       case 'value-stack-inline':
-        return <ValueStackInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ValueStackInlineBlock {...commonProps} /></InlineWrapper>;
       case 'cta-section-inline':
-        return <CTASectionInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><CTASectionInlineBlock {...commonProps} /></InlineWrapper>;
       case 'guarantee-inline':
-        return <GuaranteeInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><GuaranteeInlineBlock {...commonProps} /></InlineWrapper>;
       case 'transformation-inline':
-        return <TransformationInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><TransformationInlineBlock {...commonProps} /></InlineWrapper>;
       case 'final-value-proposition-inline':
-        return <FinalValuePropositionInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><FinalValuePropositionInlineBlock {...commonProps} /></InlineWrapper>;
       case 'two-columns-inline':
-        return <TwoColumnsInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><TwoColumnsInlineBlock {...commonProps} /></InlineWrapper>;
 
       // BLOCOS AVANÇADOS RESTANTES - INLINE
       case 'main-heading':
-        return <HeadingInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></InlineWrapper>;
       case 'chart-compare':
-        return <ComparisonInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><ComparisonInlineBlock {...commonProps} /></InlineWrapper>;
       case 'sales-offer':
-        return <PricingInlineBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><PricingInlineBlock {...commonProps} /></InlineWrapper>;
 
 
-      // BLOCOS UNIFICADOS DO FUNIL - Componentes reutilizáveis que garantem fidelidade visual
+      // BLOCOS UNIFICADOS DO FUNIL - Componentes reutilizáveis que garantem fidelidade visual COM WRAPPER
       case 'FunnelHeroBlock':
       case 'FunnelPainBlock':
-        return <UnifiedFunnelBlock {...commonProps} />;
+        return <InlineWrapper blockType={blockType}><UnifiedFunnelBlock {...commonProps} /></InlineWrapper>;
 
       // ETAPA 20 - USAR COMPONENTES INDIVIDUAIS DA CATEGORIA "RESULTADO"
       case 'quiz-resultado-completo':
@@ -439,7 +439,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
   return (
     <div
       className={cn(
-        'relative group',
+        'relative group w-full flex-1 min-w-0',
         className
       )}
       onClick={onClick}
@@ -448,9 +448,9 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
     >
       {renderBlock()}
       
-      {/* Overlay de seleção */}
+      {/* Overlay de seleção mais discreto */}
       {isSelected && (
-        <div className="absolute inset-0 pointer-events-none ring-2 ring-blue-500 ring-opacity-50 bg-blue-500 bg-opacity-5 rounded" />
+        <div className="absolute inset-0 pointer-events-none ring-1 ring-blue-400 ring-opacity-60 bg-blue-500 bg-opacity-[0.02] rounded-md" />
       )}
     </div>
   );

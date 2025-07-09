@@ -63,11 +63,29 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
           </p>
         </div>
       ) : (
-        /* Blocks List */
-        <div className="space-y-4 w-full mx-auto">
+        /* Blocks List - LAYOUT HORIZONTAL FLEXBOX para componentes inline */
+        <div className="w-full mx-auto">
           {blocks.map((block, index) => {
-            // Verificar se é um componente inline para centralizar
-            const isInlineComponent = block.type?.includes('-inline');
+            // Verificar se é um componente inline para agrupar horizontalmente
+            const isInlineComponent = block.type?.includes('-inline') || 
+              ['header', 'text', 'image', 'button', 'style-card', 'before-after', 
+               'bonus-section', 'testimonials-real', 'guarantee-section', 'mentor-section'].includes(block.type);
+            
+            // Verificar se o próximo bloco também é inline para agrupar
+            const nextBlock = blocks[index + 1];
+            const nextIsInline = nextBlock && (nextBlock.type?.includes('-inline') || 
+              ['header', 'text', 'image', 'button', 'style-card', 'before-after', 
+               'bonus-section', 'testimonials-real', 'guarantee-section', 'mentor-section'].includes(nextBlock.type));
+            
+            // Verificar se o bloco anterior também é inline para continuar agrupamento
+            const prevBlock = blocks[index - 1];
+            const prevIsInline = prevBlock && (prevBlock.type?.includes('-inline') || 
+              ['header', 'text', 'image', 'button', 'style-card', 'before-after', 
+               'bonus-section', 'testimonials-real', 'guarantee-section', 'mentor-section'].includes(prevBlock.type));
+            
+            const shouldStartGroup = isInlineComponent && !prevIsInline;
+            const shouldEndGroup = isInlineComponent && !nextIsInline;
+            const isInGroup = isInlineComponent && (prevIsInline || nextIsInline);
             
             return (
               <React.Fragment key={block.id}>
@@ -77,10 +95,15 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
                   isVisible={isDraggingFromSidebar}
                 />
                 
-                {/* Block Item - Largura total para componentes inline */}
+                {/* Início do grupo horizontal */}
+                {shouldStartGroup && (
+                  <div className="flex flex-wrap gap-4 w-full mb-4 p-2 border border-dashed border-blue-200 rounded-lg bg-blue-50/30">
+                )}
+                
+                {/* Block Item - Layout flexível */}
                 <div className={cn(
-                  "w-full",
-                  isInlineComponent && "w-full min-w-full"
+                  isInlineComponent ? "flex-1 min-w-0 max-w-none" : "w-full mb-4",
+                  isInGroup && "flex-1 min-w-[200px] max-w-[400px]" // Limitar largura em grupos
                 )}>
                   <SortableBlockItem
                     block={block}
@@ -92,11 +115,22 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
                     onSaveInline={onSaveInline}
                     disabled={disabled}
                     className={cn(
-                      "w-full",
-                      isInlineComponent && "w-full !max-w-none"
+                      "w-full transition-all duration-200",
+                      isInlineComponent && "h-auto min-h-[120px]",
+                      isInGroup && "border border-gray-200 rounded-md shadow-sm bg-white"
                     )}
                   />
                 </div>
+                
+                {/* Fim do grupo horizontal */}
+                {shouldEndGroup && (
+                  </div>
+                )}
+                
+                {/* Componentes não-inline mantêm layout vertical */}
+                {!isInlineComponent && !isInGroup && (
+                  <div className="mb-4" />
+                )}
               </React.Fragment>
             );
           })}

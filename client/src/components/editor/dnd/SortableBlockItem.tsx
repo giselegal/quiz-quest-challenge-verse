@@ -16,6 +16,7 @@ interface SortableBlockItemProps {
   onToggleVisibility: () => void;
   onSaveInline: (blockId: string, updates: Partial<BlockData>) => void;
   disabled?: boolean;
+  className?: string;
 }
 
 export const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
@@ -26,7 +27,8 @@ export const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
   onDuplicate,
   onToggleVisibility,
   onSaveInline,
-  disabled = false
+  disabled = false,
+  className
 }) => {
   const {
     attributes,
@@ -58,10 +60,12 @@ export const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
       style={style}
       className={cn(
         'group relative w-full rounded-lg transition-all duration-200',
+        'flex flex-col', // Layout flexível vertical
         isDragging && 'opacity-50 scale-105 z-50',
         isOver && 'ring-1 ring-blue-300/50',
         isSelected && 'ring-1 ring-blue-400/60 shadow-sm',
-        isHidden && 'opacity-60'
+        isHidden && 'opacity-60',
+        className
       )}
       onClick={onSelect}
     >
@@ -130,7 +134,7 @@ export const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
 
       {/* Block Content */}
       <div className={cn(
-        'relative w-full',
+        'relative w-full flex-1', // Flex item que cresce
         isHidden && 'pointer-events-none'
       )}>
         <UniversalBlockRenderer
@@ -140,7 +144,7 @@ export const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
           onSaveInline={onSaveInline}
           disabled={disabled}
           className={cn(
-            'w-full transition-all duration-200',
+            'w-full h-full transition-all duration-200',
             isDragging && 'pointer-events-none'
           )}
         />
