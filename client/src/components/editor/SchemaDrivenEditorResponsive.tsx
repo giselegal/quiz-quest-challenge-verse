@@ -53,9 +53,24 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
     createNewFunnel,
     isLoading,
     isSaving,
-    autoSaveState,
-    isOnline
-  } = useSchemaEditor({ funnelId });
+    autoSaveState
+  } = useSchemaEditor(funnelId);
+  
+  // Monitor online status
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   // Handlers
   const handleComponentSelect = (type: string) => {
