@@ -2,7 +2,7 @@
  * Blocos Reutilizáveis para Editor Visual
  * 
  * Todos os componentes são 100% editáveis via props e 
- * podem ser usados no /advanced-editor
+ * podem ser usados no /editor
  */
 
 // Blocos de Quiz (Etapas 1-19) - IMPLEMENTADOS ✅

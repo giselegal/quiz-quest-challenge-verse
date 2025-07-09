@@ -1,7 +1,7 @@
 /**
  * Componentes de Quiz Reutilizáveis - ETAPAS 1-19 DO FUNIL COMPLETO
  * 
- * Blocos 100% editáveis para uso no editor visual /advanced-editor
+ * Blocos 100% editáveis para uso no editor visual /editor
  * Cada componente é totalmente configurável via props e pode ser usado
  * independentemente ou integrado com o DynamicBlockRenderer.
  * 

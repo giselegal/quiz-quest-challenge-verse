@@ -356,6 +356,65 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'FunnelPainBlock':
         return <UnifiedFunnelBlock {...commonProps} />;
 
+      // ETAPA 20 COMPLETA - PÁGINA DE RESULTADO
+      case 'quiz-resultado-completo':
+        return (
+          <div className="space-y-6 w-full max-w-4xl mx-auto p-6 bg-white rounded-lg border border-[#B89B7A]/20">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-[#432818] mb-2">
+                Página de Resultado (Etapa 20)
+              </h2>
+              <p className="text-[#6B4F43] text-sm">
+                Esta etapa contém os 7 componentes reais editáveis da página de resultado
+              </p>
+            </div>
+            
+            <div className="space-y-8">
+              {/* 1. Cabeçalho de Resultado */}
+              <div className="border-l-4 border-[#B89B7A] pl-4">
+                <h3 className="text-lg font-semibold text-[#432818] mb-2">1. Cabeçalho de Resultado</h3>
+                <ResultHeaderInlineBlock {...commonProps} />
+              </div>
+              
+              {/* 2. Card do Estilo */}
+              <div className="border-l-4 border-[#B89B7A] pl-4">
+                <h3 className="text-lg font-semibold text-[#432818] mb-2">2. Card do Estilo</h3>
+                <StyleCardInlineBlock {...commonProps} />
+              </div>
+              
+              {/* 3. Antes e Depois */}
+              <div className="border-l-4 border-[#B89B7A] pl-4">
+                <h3 className="text-lg font-semibold text-[#432818] mb-2">3. Antes e Depois</h3>
+                <BeforeAfterBlock {...commonProps} />
+              </div>
+              
+              {/* 4. Seção de Bônus */}
+              <div className="border-l-4 border-[#B89B7A] pl-4">
+                <h3 className="text-lg font-semibold text-[#432818] mb-2">4. Seção de Bônus</h3>
+                <BonusInlineBlock {...commonProps} />
+              </div>
+              
+              {/* 5. Depoimentos Reais */}
+              <div className="border-l-4 border-[#B89B7A] pl-4">
+                <h3 className="text-lg font-semibold text-[#432818] mb-2">5. Depoimentos Reais</h3>
+                <TestimonialInlineBlock {...commonProps} />
+              </div>
+              
+              {/* 6. Seção de Garantia */}
+              <div className="border-l-4 border-[#B89B7A] pl-4">
+                <h3 className="text-lg font-semibold text-[#432818] mb-2">6. Seção de Garantia</h3>
+                <GuaranteeBlock {...commonProps} />
+              </div>
+              
+              {/* 7. Seção da Mentora */}
+              <div className="border-l-4 border-[#B89B7A] pl-4">
+                <h3 className="text-lg font-semibold text-[#432818] mb-2">7. Seção da Mentora</h3>
+                <MentorBlock {...commonProps} />
+              </div>
+            </div>
+          </div>
+        );
+
       // Fallback para tipos não reconhecidos
       default:
         console.warn(`Block type "${block.type}" not recognized`);
