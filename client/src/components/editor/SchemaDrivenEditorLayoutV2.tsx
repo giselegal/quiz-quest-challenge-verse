@@ -327,199 +327,57 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
         </div>
       </div>
 
-      {/* Main Content - Mobile Responsive Layout */}
-      <div className="flex-1 flex flex-col sm:flex-row overflow-hidden">
-        {/* Left Sidebar - Mobile: Show/Hide with toggle */}
-        <div className={`
-          ${deviceView === 'mobile' ? (showLeftSidebar ? 'block absolute left-0 top-0 bottom-0 z-50 bg-white shadow-lg' : 'hidden') : 'block'} 
-          w-full sm:w-80 lg:w-96 h-full border-r border-gray-200 bg-white flex flex-col
-        `}>
-          {/* Close button for mobile */}
-          {deviceView === 'mobile' && showLeftSidebar && (
-            <div className="flex justify-end p-2 border-b">
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={() => setShowLeftSidebar(false)}
-                className="h-8 w-8 p-0"
-              >
-                ×
-              </Button>
+      {/* Main Content - Mobile First Layout */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Left Sidebar - Responsive */}
+        {showLeftSidebar && (
+          <div className={`
+            ${deviceView === 'mobile' ? 'fixed inset-y-0 left-0 z-50 w-80 bg-white shadow-xl' : 'relative w-80 lg:w-96'} 
+            border-r border-gray-200 bg-white flex flex-col
+          `}>
+            {/* Header with close button for mobile */}
+            <div className="flex items-center justify-between p-3 border-b border-gray-200">
+              <h2 className="font-semibold text-gray-900">Componentes</h2>
+              {deviceView === 'mobile' && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => setShowLeftSidebar(false)}
+                  className="h-8 w-8 p-0"
+                >
+                  ×
+                </Button>
+              )}
             </div>
-          )}
-          <div className="flex-1 overflow-hidden">
-            <SchemaDrivenComponentsSidebar 
-              onComponentSelect={(type) => {
-                handleComponentSelect(type);
-                if (deviceView === 'mobile') setShowLeftSidebar(false);
-              }}
-              activeTab={activeTab}
-              onTabChange={setActiveTab}
-              funnelPages={funnel.pages}
-              currentPageId={currentPageId ?? undefined}
-              setCurrentPage={setCurrentPage}
-            />
+            <div className="flex-1 overflow-hidden">
+              <SchemaDrivenComponentsSidebar 
+                onComponentSelect={(type) => {
+                  handleComponentSelect(type);
+                  if (deviceView === 'mobile') setShowLeftSidebar(false);
+                }}
+                activeTab={activeTab}
+                onTabChange={setActiveTab}
+                funnelPages={funnel.pages}
+                currentPageId={currentPageId ?? undefined}
+                setCurrentPage={setCurrentPage}
+              />
+            </div>
           </div>
-        </div>
+        )}
         
-        {/* Central Canvas - Mobile Optimized */}
-        <div className="flex-1 h-full overflow-auto bg-gray-50">
-          <div className={`flex justify-center ${
-            deviceView === 'mobile' ? 'p-2' :
-            deviceView === 'tablet' ? 'p-4' :
-            'p-8'
-          }`}>
-            {/* Mobile/Tablet Preview - Show Full Editor Layout */}
-            {deviceView === 'mobile' ? (
-              <div className="w-[480px] min-h-[854px] bg-white shadow-lg overflow-hidden">
-                {/* Full Editor Layout scaled for mobile */}
-                <div className="h-full flex">
-                  {/* Left Sidebar - Steps Panel */}
-                  <div className="w-14 bg-gray-50 border-r overflow-hidden">
-                    <div className="p-2 text-xs">
-                      <div className="mb-3 text-center">
-                        <span className="text-gray-600 font-bold text-sm">
-                          {(funnel?.pages || []).findIndex(p => p.id === currentPage?.id) + 1 || 1}
-                        </span>
-                        <div className="text-gray-500 text-xs">de {(funnel?.pages || []).length || 0}</div>
-                      </div>
-                      {(funnel?.pages || []).slice(0, 10).map((page, index) => (
-                        <div 
-                          key={page.id}
-                          className={`w-8 h-8 mb-1 mx-auto rounded text-xs flex items-center justify-center cursor-pointer ${
-                            page.id === currentPage?.id ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600'
-                          }`}
-                          onClick={() => setCurrentPage(page.id)}
-                        >
-                          {index + 1}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  {/* Middle - Components Sidebar */}
-                  <div className="w-20 bg-white border-r overflow-hidden">
-                    <div className="p-2">
-                      <div className="text-xs text-gray-600 font-medium mb-2 text-center">Componentes</div>
-                      <div className="space-y-2">
-                        {blockDefinitions.slice(0, 8).map((definition) => (
-                          <div
-                            key={definition.type}
-                            className="w-16 h-14 bg-gray-100 rounded text-xs flex flex-col items-center justify-center cursor-pointer hover:bg-gray-200"
-                            onMouseDown={() => {
-                              // TODOS os componentes são permitidos agora
-                              const defaultProperties: Record<string, any> = {};
-                              definition.propertiesSchema?.forEach(prop => {
-                                if (prop.defaultValue !== undefined) {
-                                  defaultProperties[prop.key] = prop.defaultValue;
-                                }
-                              });
-                              addBlock({
-                                type: definition.type,
-                                properties: defaultProperties
-                              });
-                            }}
-                          >
-                            <span className="text-sm mb-1">{definition.icon}</span>
-                            <span className="text-xs text-center leading-tight">{(definition.name || '').slice(0, 8)}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Canvas Area */}
-                  <div className="flex-1 bg-gray-50 overflow-auto">
-                    <div className="p-2">
-                      <div className="bg-white rounded min-h-full">
-                        <DroppableCanvas
-                          blocks={currentPage?.blocks || []}
-                          selectedBlockId={selectedBlockId || undefined}
-                          onBlockSelect={(blockId) => setSelectedBlock(blockId)}
-                          onBlockDelete={deleteBlock}
-                          onBlockDuplicate={(blockId) => {
-                            const block = currentPage?.blocks.find(b => b.id === blockId);
-                            if (block && currentPage) {
-                              const newBlock = {
-                                ...block,
-                                id: `${block.type}-${Date.now()}`
-                              };
-                              const blockIndex = currentPage.blocks.findIndex(b => b.id === blockId);
-                              const newBlocks = [...currentPage.blocks];
-                              newBlocks.splice(blockIndex + 1, 0, newBlock);
-                              updatePage(currentPage.id, { blocks: newBlocks });
-                            }
-                          }}
-                          onBlockToggleVisibility={(blockId) => {
-                            const block = currentPage?.blocks.find(b => b.id === blockId);
-                            if (block && currentPage) {
-                              const updatedBlock = {
-                                ...block,
-                                properties: {
-                                  ...block.properties,
-                                  hidden: !block.properties?.hidden
-                                }
-                              };
-                              const newBlocks = currentPage.blocks.map(b => 
-                                b.id === blockId ? updatedBlock : b
-                              );
-                              updatePage(currentPage.id, { blocks: newBlocks });
-                            }
-                          }}
-                          onSaveInline={handleInlineEdit}
-                          onAddBlock={(blockType) => {
-                            // TODOS os componentes são permitidos agora
-                            const definition = blockDefinitions.find(def => def.type === blockType);
-                            if (definition) {
-                              const defaultProperties: Record<string, any> = {};
-                              definition.propertiesSchema?.forEach(prop => {
-                                if (prop.defaultValue !== undefined) {
-                                  defaultProperties[prop.key] = prop.defaultValue;
-                                }
-                              });
-                              addBlock({
-                                type: blockType,
-                                properties: defaultProperties
-                              });
-                            }
-                          }}
-                          className="mobile-canvas p-2"
-                        />
-                        
-                        {!currentPage && (
-                          <div className="text-center py-8 text-gray-500">
-                            <h3 className="text-sm font-medium mb-2">Nenhuma página selecionada</h3>
-                            <p className="text-xs">Selecione uma página para começar a editar</p>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Right Sidebar - Properties */}
-                  <div className="w-16 bg-white border-l overflow-hidden">
-                    <div className="p-2">
-                      <div className="text-xs text-gray-600 font-medium mb-2 text-center">Props</div>
-                      {selectedBlockId && (
-                        <div className="space-y-2">
-                          <div className="w-12 h-8 bg-gray-100 rounded text-xs flex items-center justify-center">
-                            Texto
-                          </div>
-                          <div className="w-12 h-8 bg-gray-100 rounded text-xs flex items-center justify-center">
-                            Cor
-                          </div>
-                          <div className="w-12 h-8 bg-gray-100 rounded text-xs flex items-center justify-center">
-                            Estilo
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ) : deviceView === 'tablet' ? (
-              <div className="w-[768px] min-h-[1024px] bg-white shadow-lg overflow-hidden">
-                <div className="p-6">
+        {/* Central Canvas - Responsive */}
+        <div className="flex-1 flex flex-col overflow-hidden bg-gray-50">
+          {/* Canvas Content */}
+          <div className="flex-1 overflow-auto">
+            <div className={`${
+              deviceView === 'mobile' ? 'p-2' :
+              deviceView === 'tablet' ? 'p-4' :
+              'p-6'
+            }`}>
+              {/* Mobile: Full width canvas */}
+              {deviceView === 'mobile' ? (
+                <div className="w-full bg-white rounded-lg shadow-sm min-h-[calc(100vh-200px)]">
+                  <div className="p-4">
                     <DroppableCanvas
                       blocks={currentPage?.blocks || []}
                       selectedBlockId={selectedBlockId || undefined}
@@ -571,115 +429,188 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                           });
                         }
                       }}
-                      className=""
+                      className="mobile-canvas"
                     />
                     
                     {!currentPage && (
-                      <div className="text-center py-16 text-gray-500">
-                        <h3 className="text-lg font-medium mb-2">Nenhuma página selecionada</h3>
-                        <p className="text-sm">Selecione uma página para começar a editar.</p>
+                      <div className="text-center py-8 text-gray-500">
+                        <h3 className="text-sm font-medium mb-2">Nenhuma página selecionada</h3>
+                        <p className="text-xs">Selecione uma página para começar a editar</p>
                       </div>
                     )}
                   </div>
                 </div>
-            ) : (
-              /* Desktop View */
-              <div className="bg-white shadow-lg rounded-lg max-w-4xl min-h-[800px] w-full">
-                <div className="p-6">
-                  <DroppableCanvas
-                    blocks={currentPage?.blocks || []}
-                    selectedBlockId={selectedBlockId || undefined}
-                    onBlockSelect={(blockId) => setSelectedBlock(blockId)}
-                    onBlockDelete={deleteBlock}
-                    onBlockDuplicate={(blockId) => {
-                      const block = currentPage?.blocks.find(b => b.id === blockId);
-                      if (block && currentPage) {
-                        const newBlock = {
-                          ...block,
-                          id: `${block.type}-${Date.now()}`
-                        };
-                        const blockIndex = currentPage.blocks.findIndex(b => b.id === blockId);
-                        const newBlocks = [...currentPage.blocks];
-                        newBlocks.splice(blockIndex + 1, 0, newBlock);
-                        updatePage(currentPage.id, { blocks: newBlocks });
-                      }
-                    }}
-                    onBlockToggleVisibility={(blockId) => {
-                      const block = currentPage?.blocks.find(b => b.id === blockId);
-                      if (block && currentPage) {
-                        const updatedBlock = {
-                          ...block,
-                          properties: {
-                            ...block.properties,
-                            hidden: !block.properties?.hidden
+              ) : deviceView === 'tablet' ? (
+                <div className="flex justify-center">
+                  <div className="w-[768px] bg-white rounded-lg shadow-lg min-h-[1024px]">
+                    <div className="p-6">
+                      <DroppableCanvas
+                        blocks={currentPage?.blocks || []}
+                        selectedBlockId={selectedBlockId || undefined}
+                        onBlockSelect={(blockId) => setSelectedBlock(blockId)}
+                        onBlockDelete={deleteBlock}
+                        onBlockDuplicate={(blockId) => {
+                          const block = currentPage?.blocks.find(b => b.id === blockId);
+                          if (block && currentPage) {
+                            const newBlock = {
+                              ...block,
+                              id: `${block.type}-${Date.now()}`
+                            };
+                            const blockIndex = currentPage.blocks.findIndex(b => b.id === blockId);
+                            const newBlocks = [...currentPage.blocks];
+                            newBlocks.splice(blockIndex + 1, 0, newBlock);
+                            updatePage(currentPage.id, { blocks: newBlocks });
                           }
-                        };
-                        const newBlocks = currentPage.blocks.map(b => 
-                          b.id === blockId ? updatedBlock : b
-                        );
-                        updatePage(currentPage.id, { blocks: newBlocks });
-                      }
-                    }}
-                    onSaveInline={handleInlineEdit}
-                    onAddBlock={(blockType) => {
-                      // TODOS os componentes são permitidos agora
-                      const definition = blockDefinitions.find(def => def.type === blockType);
-                      if (definition) {
-                        const defaultProperties: Record<string, any> = {};
-                        definition.propertiesSchema?.forEach(prop => {
-                          if (prop.defaultValue !== undefined) {
-                            defaultProperties[prop.key] = prop.defaultValue;
+                        }}
+                        onBlockToggleVisibility={(blockId) => {
+                          const block = currentPage?.blocks.find(b => b.id === blockId);
+                          if (block && currentPage) {
+                            const updatedBlock = {
+                              ...block,
+                              properties: {
+                                ...block.properties,
+                                hidden: !block.properties?.hidden
+                              }
+                            };
+                            const newBlocks = currentPage.blocks.map(b => 
+                              b.id === blockId ? updatedBlock : b
+                            );
+                            updatePage(currentPage.id, { blocks: newBlocks });
                           }
-                        });
-                        addBlock({
-                          type: blockType,
-                          properties: defaultProperties
-                        });
-                      }
-                    }}
-                    className=""
-                  />
-                  
-                  {!currentPage && (
-                    <div className="text-center py-16 text-gray-500">
-                      <h3 className="text-lg font-medium mb-2">Nenhuma página selecionada</h3>
-                      <p className="text-sm">Selecione uma página para começar a editar.</p>
+                        }}
+                        onSaveInline={handleInlineEdit}
+                        onAddBlock={(blockType) => {
+                          // TODOS os componentes são permitidos agora
+                          const definition = blockDefinitions.find(def => def.type === blockType);
+                          if (definition) {
+                            const defaultProperties: Record<string, any> = {};
+                            definition.propertiesSchema?.forEach(prop => {
+                              if (prop.defaultValue !== undefined) {
+                                defaultProperties[prop.key] = prop.defaultValue;
+                              }
+                            });
+                            addBlock({
+                              type: blockType,
+                              properties: defaultProperties
+                            });
+                          }
+                        }}
+                        className=""
+                      />
+                      
+                      {!currentPage && (
+                        <div className="text-center py-16 text-gray-500">
+                          <h3 className="text-lg font-medium mb-2">Nenhuma página selecionada</h3>
+                          <p className="text-sm">Selecione uma página para começar a editar.</p>
+                        </div>
+                      )}
                     </div>
-                  )}
+                  </div>
                 </div>
-              </div>
-            )}
+              ) : (
+                /* Desktop View */
+                <div className="flex justify-center">
+                  <div className="bg-white shadow-lg rounded-lg max-w-4xl min-h-[800px] w-full">
+                    <div className="p-6">
+                      <DroppableCanvas
+                        blocks={currentPage?.blocks || []}
+                        selectedBlockId={selectedBlockId || undefined}
+                        onBlockSelect={(blockId) => setSelectedBlock(blockId)}
+                        onBlockDelete={deleteBlock}
+                        onBlockDuplicate={(blockId) => {
+                          const block = currentPage?.blocks.find(b => b.id === blockId);
+                          if (block && currentPage) {
+                            const newBlock = {
+                              ...block,
+                              id: `${block.type}-${Date.now()}`
+                            };
+                            const blockIndex = currentPage.blocks.findIndex(b => b.id === blockId);
+                            const newBlocks = [...currentPage.blocks];
+                            newBlocks.splice(blockIndex + 1, 0, newBlock);
+                            updatePage(currentPage.id, { blocks: newBlocks });
+                          }
+                        }}
+                        onBlockToggleVisibility={(blockId) => {
+                          const block = currentPage?.blocks.find(b => b.id === blockId);
+                          if (block && currentPage) {
+                            const updatedBlock = {
+                              ...block,
+                              properties: {
+                                ...block.properties,
+                                hidden: !block.properties?.hidden
+                              }
+                            };
+                            const newBlocks = currentPage.blocks.map(b => 
+                              b.id === blockId ? updatedBlock : b
+                            );
+                            updatePage(currentPage.id, { blocks: newBlocks });
+                          }
+                        }}
+                        onSaveInline={handleInlineEdit}
+                        onAddBlock={(blockType) => {
+                          // TODOS os componentes são permitidos agora
+                          const definition = blockDefinitions.find(def => def.type === blockType);
+                          if (definition) {
+                            const defaultProperties: Record<string, any> = {};
+                            definition.propertiesSchema?.forEach(prop => {
+                              if (prop.defaultValue !== undefined) {
+                                defaultProperties[prop.key] = prop.defaultValue;
+                              }
+                            });
+                            addBlock({
+                              type: blockType,
+                              properties: defaultProperties
+                            });
+                          }
+                        }}
+                        className=""
+                      />
+                      
+                      {!currentPage && (
+                        <div className="text-center py-16 text-gray-500">
+                          <h3 className="text-lg font-medium mb-2">Nenhuma página selecionada</h3>
+                          <p className="text-sm">Selecione uma página para começar a editar.</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
         
-        {/* Right Sidebar - Properties Panel - Mobile: Show/Hide with toggle */}
-        <div className={`
-          ${deviceView === 'mobile' ? (showRightSidebar ? 'block absolute right-0 top-0 bottom-0 z-50 bg-white shadow-lg' : 'hidden') : 'block'} 
-          w-full sm:w-80 lg:w-96 h-full border-l border-gray-200 bg-white flex flex-col
-        `}>
-          {/* Close button for mobile */}
-          {deviceView === 'mobile' && showRightSidebar && (
-            <div className="flex justify-start p-2 border-b">
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={() => setShowRightSidebar(false)}
-                className="h-8 w-8 p-0"
-              >
-                ×
-              </Button>
+        {/* Right Sidebar - Properties Panel - Responsive */}
+        {showRightSidebar && (
+          <div className={`
+            ${deviceView === 'mobile' ? 'fixed inset-y-0 right-0 z-50 w-80 bg-white shadow-xl' : 'relative w-80 lg:w-96'} 
+            border-l border-gray-200 bg-white flex flex-col
+          `}>
+            {/* Header with close button for mobile */}
+            <div className="flex items-center justify-between p-3 border-b border-gray-200">
+              <h2 className="font-semibold text-gray-900">Propriedades</h2>
+              {deviceView === 'mobile' && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => setShowRightSidebar(false)}
+                  className="h-8 w-8 p-0"
+                >
+                  ×
+                </Button>
+              )}
             </div>
-          )}
-          <div className="flex-1 overflow-hidden">
-            <DynamicPropertiesPanel
-              selectedBlock={selectedBlock}
-              funnelConfig={funnel}
-              onBlockPropertyChange={handleBlockPropertyChange}
-              onNestedPropertyChange={handleNestedPropertyChange}
-              onFunnelConfigChange={updateFunnelConfig}
-            />
+            <div className="flex-1 overflow-hidden">
+              <DynamicPropertiesPanel
+                selectedBlock={selectedBlock}
+                funnelConfig={funnel}
+                onBlockPropertyChange={handleBlockPropertyChange}
+                onNestedPropertyChange={handleNestedPropertyChange}
+                onFunnelConfigChange={updateFunnelConfig}
+              />
+            </div>
           </div>
-        </div>
+        )}
         
         {/* Mobile Overlay */}
         {deviceView === 'mobile' && (showLeftSidebar || showRightSidebar) && (
