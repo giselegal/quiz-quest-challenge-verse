@@ -104,8 +104,8 @@ const App = () => {
                     </AdminAuthProvider>
                   )}
                 </Route>
-                {/* 404 */}
-                <Route component={NotFoundPage} />
+                {/* 404 - Fallback para rotas não encontradas */}
+                <Route path="*" component={NotFoundPage} />
               </Switch>
             </Suspense>
           </Router>
