@@ -161,33 +161,48 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
 
       {/* Main Content */}
       <div className="relative z-10 p-6 lg:p-8">
-        {/* Header */}
+        {/* Header com Logo e Saudação - Fiel ao funil real */}
         <div className="text-center mb-8">
-          <Badge variant="outline" className="mb-4 bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border-[#B89B7A]/20">
-            Resultado do Quiz
-          </Badge>
-
-          {/* Título principal editável */}
+          <div className="flex justify-center w-full mb-6">
+            <img 
+              src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
+              alt="Logo Gisele Galvão"
+              className="h-20 w-auto"
+              loading="eager"
+            />
+          </div>
+          
           <InlineEditText
             as="h1"
-            value={title}
-            onSave={(value) => handlePropertyChange('title', value)}
-            placeholder="Título do resultado..."
+            value={`${title} ${userName}, ${description}`}
+            onSave={(value) => {
+              const parts = value.split(',');
+              if (parts.length >= 2) {
+                const titleUserPart = parts[0].trim();
+                const descPart = parts.slice(1).join(',').trim();
+                const titleParts = titleUserPart.split(' ');
+                if (titleParts.length >= 2) {
+                  const newTitle = titleParts[0];
+                  const newUserName = titleParts.slice(1).join(' ');
+                  handlePropertyChange('title', newTitle);
+                  handlePropertyChange('userName', newUserName);
+                  handlePropertyChange('description', descPart);
+                }
+              }
+            }}
+            placeholder="Olá Nome, seu estilo predominante é:"
             disabled={disabled}
-            className="text-2xl md:text-3xl font-bold mb-4 font-playfair"
+            className="text-xl md:text-2xl font-playfair mb-4"
             style={{ color: textColor }}
           />
-
-          {/* Descrição editável */}
+          
           <InlineEditText
-            as="p"
-            value={description}
-            onSave={(value) => handlePropertyChange('description', value)}
-            placeholder="Descrição do resultado..."
+            as="h2"
+            value={primaryStyle.category}
+            onSave={(value) => handlePropertyChange('primaryStyle', { ...primaryStyle, category: value })}
+            placeholder="Nome do estilo..."
             disabled={disabled}
-            multiline={true}
-            className="text-base lg:text-lg mb-6 opacity-80"
-            style={{ color: textColor }}
+            className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent"
           />
         </div>
 
@@ -196,38 +211,13 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
           className="relative overflow-hidden bg-gradient-to-br from-white/95 to-[#fff7f3]/95 border border-[#B89B7A]/15 rounded-xl p-6 lg:p-8 mb-8"
           style={{ boxShadow: tokens.shadows.lg }}
         >
-          {/* Saudação personalizada */}
-          {userName && (
-            <div className="text-center mb-6">
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] px-4 py-2 rounded-full border border-[#B89B7A]/15">
-                <InlineEditText
-                  as="span"
-                  value={`Parabéns, ${userName}!`}
-                  onSave={(value) => handlePropertyChange('userName', value.replace('Parabéns, ', '').replace('!', ''))}
-                  disabled={disabled}
-                  className="font-semibold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent"
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Estilo principal */}
           <div className="text-center mb-6">
             <div className="text-4xl mb-4">✨</div>
             
-            <InlineEditText
-              as="h2"
-              value={primaryStyle.category}
-              onSave={(value) => handlePropertyChange('primaryStyle', { ...primaryStyle, category: value })}
-              placeholder="Nome do estilo..."
-              disabled={disabled}
-              className="text-xl md:text-2xl font-bold mb-4 font-playfair bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent"
-            />
-
             {/* Progress bar de compatibilidade */}
             <div className="max-w-md mx-auto mb-6">
               <div className="flex items-center justify-between text-sm font-medium text-[#5D4A3A] mb-2">
-                <span>Compatibilidade</span>
+                <span>Seu estilo predominante</span>
                 <span className="font-bold text-[#B89B7A]">
                   {primaryStyle.percentage}%
                 </span>
@@ -251,11 +241,11 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
             />
           </div>
 
-          {/* Recomendações */}
+          {/* Benefícios do Guia - Fiéis ao funil real */}
           {recommendations.length > 0 && (
             <div className="text-left max-w-2xl mx-auto mb-6">
               <h3 className="text-lg font-semibold mb-4 text-[#aa6b5d]">
-                Recomendações para você:
+                O que você receberá:
               </h3>
               <ul className="space-y-3">
                 {recommendations.map((rec, index) => (
@@ -278,9 +268,24 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
               </ul>
             </div>
           )}
+
+          {/* Badge "Exclusivo" como no funil real */}
+          <div className="text-center mb-6">
+            <div className="relative inline-block">
+              <img 
+                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744992677/guia-de-estilo-preview.jpg"
+                alt="Guia de Estilo Preview"
+                className="w-full max-w-md mx-auto rounded-lg shadow-md"
+                loading="lazy"
+              />
+              <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
+                Exclusivo
+              </div>
+            </div>
+          </div>
         </Card>
 
-        {/* Seção de Oferta/CTA */}
+        {/* Seção de Value Stack e CTA - Fiel ao funil real */}
         <Card
           className="relative overflow-hidden bg-gradient-to-br from-white via-[#fff7f3] to-[#f9f4ef] border border-[#B89B7A]/20 rounded-xl p-6 lg:p-8 text-center"
           style={{ boxShadow: tokens.shadows.xl }}
@@ -288,35 +293,52 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
           <div className="absolute inset-0 bg-gradient-to-br from-[#B89B7A]/3 via-transparent to-[#aa6b5d]/3 pointer-events-none"></div>
 
           <div className="relative z-10">
-            {/* Timer (se habilitado) */}
-            {showTimer && (
-              <div className="mb-6">
-                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 px-4 py-2 rounded-full border border-[#B89B7A]/20">
-                  <Clock className="w-4 h-4 text-[#aa6b5d]" />
-                  <span className="text-sm font-medium text-[#aa6b5d]">
-                    Oferta expira em: {timer.hours.toString().padStart(2, '0')}:{timer.minutes.toString().padStart(2, '0')}:{timer.seconds.toString().padStart(2, '0')}
-                  </span>
+            {/* Título da seção */}
+            <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
+              Vista-se de Você — na Prática
+            </h2>
+            <div className="w-20 h-0.5 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] mx-auto mb-6"></div>
+            
+            <p className="text-[#432818] mb-6 max-w-xl mx-auto">
+              Agora que você conhece seu estilo, é hora de aplicá-lo com clareza e intenção.
+            </p>
+
+            {/* Value Stack detalhado - Preços reais do funil */}
+            <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 mb-8 max-w-md mx-auto">
+              <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">O Que Você Recebe Hoje</h3>
+              
+              <div className="space-y-3 mb-6">
+                <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
+                  <span>Guia Principal</span>
+                  <span className="font-medium">R$ 67,00</span>
+                </div>
+                <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
+                  <span>Bônus - Peças-chave</span>
+                  <span className="font-medium">R$ 79,00</span>
+                </div>
+                <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
+                  <span>Bônus - Visagismo Facial</span>
+                  <span className="font-medium">R$ 29,00</span>
+                </div>
+                <div className="flex justify-between items-center p-2 pt-3 font-bold">
+                  <span>Valor Total</span>
+                  <div className="relative">
+                    <span>R$ 175,00</span>
+                    <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#ff5a5a] transform -translate-y-1/2 -rotate-3"></div>
+                  </div>
                 </div>
               </div>
-            )}
-
-            {/* Preço */}
-            <div className="mb-8">
-              <p className="text-lg font-semibold text-[#5D4A3A] mb-2">
-                Transforme seu estilo por apenas:
-              </p>
-              <InlineEditText
-                as="p"
-                value={finalPrice}
-                onSave={(value) => handlePropertyChange('finalPrice', value)}
-                disabled={disabled}
-                className="text-3xl lg:text-4xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent mb-4"
-              />
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#4CAF50]/10 to-[#43a047]/10 px-3 py-1 rounded-full">
-                <TrendingUp className="w-4 h-4 text-[#4CAF50]" />
-                <span className="text-sm font-semibold text-[#4CAF50]">
-                  77% de desconto
-                </span>
+              
+              <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
+                <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
+                <InlineEditText
+                  as="p"
+                  value={finalPrice}
+                  onSave={(value) => handlePropertyChange('finalPrice', value)}
+                  disabled={disabled}
+                  className="text-4xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent mb-1"
+                />
+                <p className="text-xs text-[#3a3a3a]/60">Pagamento único</p>
               </div>
             </div>
 
@@ -342,6 +364,23 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
                   className="text-white font-bold"
                 />
                 <ArrowDown className="w-4 h-4 animate-bounce" />
+              </span>
+            </Button>
+
+            {/* CTA Secundário como no funil real */}
+            <Button
+              onClick={handleCTAClick}
+              disabled={disabled}
+              size="lg"
+              className="group relative font-bold py-5 px-8 rounded-md shadow-md transition-all duration-300 mb-4 w-full max-w-md mx-auto block"
+              style={{
+                background: "linear-gradient(to right, #4CAF50, #45a049)",
+                boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
+              }}
+            >
+              <span className="flex items-center justify-center gap-2 text-white">
+                <ShoppingCart className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
+                <span>Garantir Meu Guia + Bônus Especiais</span>
               </span>
             </Button>
 
