@@ -232,7 +232,9 @@ const StatsMetricsBlock: React.FC<StatsBlockProps> = ({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.1 }}
-        className="w-full"
+        className={`
+          ${layout === 'vertical' ? 'w-full' : 'flex-1 min-w-[200px] max-w-sm'}
+        `}
       >
         <Card className={getCardStyleClasses()}>
           <CardHeader className="pb-2">
