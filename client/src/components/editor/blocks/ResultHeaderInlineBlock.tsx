@@ -85,7 +85,7 @@ const ResultHeaderInlineBlock: React.FC<BlockComponentProps> = ({
             </p>
           </div>
           
-          <div className="max-w-[238px] mx-auto relative">
+          <div className="max-w-xs sm:max-w-sm mx-auto relative">
             <img 
               src={imageUrl}
               alt="Estilo"
@@ -101,7 +101,7 @@ const ResultHeaderInlineBlock: React.FC<BlockComponentProps> = ({
           </div>
         </div>
 
-        <div className="mt-8 max-w-[540px] mx-auto relative">
+        <div className="mt-8 max-w-lg mx-auto relative">
           <img 
             src={guideImageUrl}
             alt="Guia de Estilo"

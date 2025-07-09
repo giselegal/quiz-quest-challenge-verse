@@ -51,7 +51,7 @@ const BonusBlock: React.FC<BonusBlockProps> = ({
                   <img 
                     src={`${bonus.image}?q=auto:best&f=auto&w=300`}
                     alt={bonus.title}
-                    className="w-full max-w-[300px] h-auto rounded-lg shadow-sm hover:scale-105 transition-transform duration-300" 
+                    className="w-full max-w-xs sm:max-w-sm h-auto rounded-lg shadow-sm hover:scale-105 transition-transform duration-300" 
                     loading="lazy"
                     width={300}
                     height={420}

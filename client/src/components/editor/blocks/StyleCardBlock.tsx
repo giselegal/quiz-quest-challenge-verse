@@ -62,7 +62,7 @@ const StyleCardBlock: React.FC<StyleCardBlockProps> = ({
         </div>
         
         {showImage && (
-          <div className="max-w-[238px] mx-auto relative">
+          <div className="max-w-xs sm:max-w-sm mx-auto relative">
             <img 
               src={`${image}?q=auto:best&f=auto&w=238`} 
               alt={`Estilo ${category}`} 
