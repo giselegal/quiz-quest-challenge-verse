@@ -394,6 +394,14 @@ export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorR
     } else {
       console.log('🆕 Creating default funnel');
       const defaultFunnel = schemaDrivenFunnelService.createDefaultFunnel();
+      console.log('🔍 DEBUG - Funnel criado:', {
+        id: defaultFunnel.id,
+        name: defaultFunnel.name,
+        pagesCount: defaultFunnel.pages.length,
+        pageNames: defaultFunnel.pages.map(p => p.name),
+        firstPageBlocks: defaultFunnel.pages[0]?.blocks?.length || 0
+      });
+      
       setFunnel(defaultFunnel);
       setCurrentPageId(defaultFunnel.pages[0]?.id || null);
       

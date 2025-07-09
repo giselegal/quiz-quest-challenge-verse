@@ -570,6 +570,7 @@ class SchemaDrivenFunnelService {
    * Cada página é composta por blocos independentes e editáveis via painel
    */
   private createModularPages(): SchemaDrivenPageData[] {
+    console.log('🏗️ Iniciando criação das páginas modulares...');
     const pages: SchemaDrivenPageData[] = [];
 
     // ETAPA 1: Introdução - QuizIntro (Coleta do nome)
@@ -672,7 +673,9 @@ class SchemaDrivenFunnelService {
     });
 
     // ETAPAS 2-11: Questões principais (10 questões) - MODULARES COM CABEÇALHO
+    console.log('🔍 REAL_QUIZ_QUESTIONS:', REAL_QUIZ_QUESTIONS?.length || 'undefined');
     REAL_QUIZ_QUESTIONS.forEach((questionData, index) => {
+      console.log(`🎯 Criando questão ${index + 1}:`, questionData.question);
       const currentProgress = 5 + (index + 1) * 5;
       pages.push({
         id: `etapa-${index + 2}-questao-${index + 1}`,
