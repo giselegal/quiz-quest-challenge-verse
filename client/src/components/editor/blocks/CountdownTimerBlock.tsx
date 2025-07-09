@@ -212,7 +212,7 @@ const CountdownTimerBlock: React.FC<CountdownTimerBlockProps> = ({
         return (
           <div key={unit.label} className="flex flex-col items-center">
             <div className={cn(
-              'bg-black/80 text-green-400 px-3 py-2 rounded font-mono text-2xl md:text-3xl font-bold border',
+              'bg-black/80 text-green-400 px-2 py-1 sm:px-3 sm:py-2 rounded font-mono text-xl sm:text-2xl md:text-3xl font-bold border',
               'border-green-400/30 shadow-lg',
               pulseAnimation && isUrgent && 'animate-pulse'
             )}>
@@ -229,8 +229,8 @@ const CountdownTimerBlock: React.FC<CountdownTimerBlockProps> = ({
 
         return (
           <div key={unit.label} className="flex flex-col items-center">
-            <div className="relative w-20 h-20">
-              <svg className="w-20 h-20 transform -rotate-90" viewBox="0 0 100 100">
+            <div className="relative w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20">
+              <svg className="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 transform -rotate-90" viewBox="0 0 100 100">
                 <circle
                   cx="50"
                   cy="50"
