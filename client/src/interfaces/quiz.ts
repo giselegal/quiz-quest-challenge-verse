@@ -81,7 +81,18 @@ export interface SimpleComponent {
     | "guarantee"
     | "bonus"
     | "faq"
-    | "social-proof";
+    | "social-proof"
+    | "text-inline"
+    | "badge-inline"
+    | "stat-inline"
+    | "progress-inline"
+    | "image-display"
+    | "style-card"
+    | "pricing-card"
+    | "testimonial-card"
+    | "result-card"
+    | "countdown-inline"
+    | "pricing-inline";
   data: {
     text?: string;
     src?: string;
