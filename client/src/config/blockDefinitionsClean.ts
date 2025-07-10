@@ -779,7 +779,7 @@ export const blockDefinitions: BlockDefinition[] = [
     type: 'button-inline',
     name: 'Botão Inline',
     description: 'Botão modular e responsivo',
-    icon: 'ArrowRight',
+    icon: 'Play',
     category: 'Inline',
     propertiesSchema: [
       {
@@ -825,7 +825,7 @@ export const blockDefinitions: BlockDefinition[] = [
     type: 'options-grid',
     name: 'Grade de Opções',
     description: 'Grid de opções para questões do quiz',
-    icon: 'Grid',
+    icon: 'Rows3',
     category: 'Quiz',
     propertiesSchema: [
       {
@@ -893,7 +893,7 @@ export const blockDefinitions: BlockDefinition[] = [
     type: 'loading-animation',
     name: 'Animação de Carregamento',
     description: 'Animação de loading para transições',
-    icon: 'RotateCw',
+    icon: 'Refresh',
     category: 'Quiz',
     propertiesSchema: [
       {
@@ -1003,7 +1003,7 @@ export const blockDefinitions: BlockDefinition[] = [
     type: 'style-card-inline',
     name: 'Card de Estilo',
     description: 'Card para exibir estilos secundários',
-    icon: 'Palette',
+    icon: 'Crown',
     category: 'Quiz',
     propertiesSchema: [
       {

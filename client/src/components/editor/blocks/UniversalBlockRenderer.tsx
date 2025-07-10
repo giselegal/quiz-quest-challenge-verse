@@ -284,25 +284,17 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <UnifiedWrapper blockType={blockType}><BadgeInlineBlock {...commonProps} /></UnifiedWrapper>;
       case 'result-header-inline':
         return <UnifiedWrapper blockType={blockType}><ResultHeaderInlineBlock {...commonProps} /></UnifiedWrapper>;
-        return <UnifiedWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></UnifiedWrapper>;
-      case 'heading-inline':
+
+      // === CASOS ADICIONAIS (sem duplicação) ===
       case 'main-heading-inline':
         return <UnifiedWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></UnifiedWrapper>;
       case 'image-inline':
         return <UnifiedWrapper blockType={blockType}><ImageDisplayInlineBlock {...commonProps} /></UnifiedWrapper>;
-      case 'style-card-inline':
-        return <UnifiedWrapper blockType={blockType}><StyleCardInlineBlock {...commonProps} /></UnifiedWrapper>;
       case 'stat-inline':
         return <UnifiedWrapper blockType={blockType}><StatInlineBlock {...commonProps} /></UnifiedWrapper>;
-      case 'badge-inline':
-        return <UnifiedWrapper blockType={blockType}><BadgeInlineBlock {...commonProps} /></UnifiedWrapper>;
-      case 'progress-inline':
-        return <UnifiedWrapper blockType={blockType}><ProgressInlineBlock {...commonProps} /></UnifiedWrapper>;
-      case 'pricing-inline':
       case 'pricing-card-inline':
         return <UnifiedWrapper blockType={blockType}><PricingCardInlineBlock {...commonProps} /></UnifiedWrapper>;
       case 'testimonial-inline':
-      case 'testimonial-card-inline':
         return <UnifiedWrapper blockType={blockType}><TestimonialCardInlineBlock {...commonProps} /></UnifiedWrapper>;
 
       // Componentes modulares reais do Quiz - COM WRAPPER
@@ -332,8 +324,6 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <UnifiedWrapper blockType={blockType}><ResultPageBlock {...commonProps} /></UnifiedWrapper>;
 
       // BLOCOS ESPECÍFICOS DO QUIZ - MODULARES E SCHEMA-DRIVEN COM WRAPPER
-      case 'quiz-intro-header':
-        return <UnifiedWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></UnifiedWrapper>;
       case 'quiz-title':
         return <UnifiedWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></UnifiedWrapper>;
       case 'quiz-name-input':
