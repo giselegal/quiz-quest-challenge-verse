@@ -318,8 +318,6 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <UnifiedWrapper blockType={blockType}><PricingInlineBlock {...commonProps} /></UnifiedWrapper>;
       case 'quiz-offer-faq':
         return <UnifiedWrapper blockType={blockType}><FAQSectionBlock {...commonProps} /></UnifiedWrapper>;
-      case 'quiz-transition-final':
-        return <UnifiedWrapper blockType={blockType}><QuizTransitionBlock {...commonProps} /></UnifiedWrapper>;
         
       // FALLBACK PARA COMPONENTES GENÉRICOS
       default:
