@@ -3,7 +3,17 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { blockDefinitions, getCategories, getBlocksByCategory } from '@/config/blockDefinitionsClean';
+import { blockDefinitions } from '@/config/blockDefinitions';
+
+// Funções auxiliares locais
+const getCategories = (): string[] => {
+  const categorySet = new Set(blockDefinitions.map(block => block.category));
+  const categories = Array.from(categorySet);
+  return categories.sort();
+};
+
+const getBlocksByCategory = (category: string) => 
+  blockDefinitions.filter(block => block.category === category);
 import { Type, Image, ArrowRight, CheckCircle, Target, Play, Star, FileText, ShoppingCart, Clock, MessageSquare, HelpCircle, Shield, Video, AlertTriangle, Zap, Volume2, RotateCcw, Loader, BarChart3, Quote, FormInput, List, TrendingUp, Grid, FileCode, BookOpen, Palette, Sparkles, Gift, Award } from 'lucide-react';
 
 interface SchemaDrivenComponentsSidebarProps {
@@ -130,7 +140,7 @@ export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSideb
                     <div className="space-y-0.5 sm:space-y-1">
                       {categoryBlocks.map((block, blockIndex) => (
                         <Button
-                          key={`${block.id}-${blockIndex}`}
+                          key={`${block.type}-${blockIndex}`}
                           variant="ghost"
                           className="w-full justify-start p-2 sm:p-3 h-auto hover:bg-[#FAF9F7] transition-colors mobile-component-item"
                           onClick={() => onComponentSelect(block.type)}

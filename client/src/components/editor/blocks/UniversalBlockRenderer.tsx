@@ -253,7 +253,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'heading-inline':
         return <ElegantWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'button-inline':
-        return <ElegantWrapper blockType={blockType}><ButtonInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><ButtonInlineBlock {...commonProps} /></ElegantWrapper;
       case 'result-card-inline':
         return <ElegantWrapper blockType={blockType}><ResultCardInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'countdown-inline':
@@ -278,6 +278,35 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <ElegantWrapper blockType={blockType}><TestimonialCardInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'badge-inline':
         return <ElegantWrapper blockType={blockType}><BadgeInlineBlock {...commonProps} /></ElegantWrapper>;
+
+      // === COMPONENTES MODULARES DA ETAPA 21 (ES7+) ===
+      // Cada componente é independente e pode ser usado sozinho
+      case 'hero-badge-inline':
+        return <ElegantWrapper blockType={blockType}><BadgeInlineBlock {...commonProps} /></ElegantWrapper>;
+      case 'hero-title-inline':
+        return <ElegantWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></ElegantWrapper>;
+      case 'problem-list-inline':
+        return <ElegantWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ElegantWrapper>;
+      case 'highlight-box-inline':
+        return <ElegantWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ElegantWrapper>;
+      case 'product-card-inline':
+        return <ElegantWrapper blockType={blockType}><ImageDisplayInlineBlock {...commonProps} /></ElegantWrapper>;
+      case 'price-highlight-inline':
+        return <ElegantWrapper blockType={blockType}><PricingInlineBlock {...commonProps} /></ElegantWrapper>;
+      case 'cta-button-inline':
+        return <ElegantWrapper blockType={blockType}><ButtonInlineBlock {...commonProps} /></ElegantWrapper>;
+      case 'trust-elements-inline':
+        return <ElegantWrapper blockType={blockType}><BadgeInlineBlock {...commonProps} /></ElegantWrapper>;
+      case 'countdown-timer-inline':
+        return <ElegantWrapper blockType={blockType}><CountdownInlineBlock {...commonProps} /></ElegantWrapper>;
+      case 'guarantee-seal-inline':
+        return <ElegantWrapper blockType={blockType}><BadgeInlineBlock {...commonProps} /></ElegantWrapper>;
+      case 'faq-item-inline':
+        return <ElegantWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ElegantWrapper>;
+      case 'section-header-inline':
+        return <ElegantWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></ElegantWrapper>;
+      case 'sticky-header-inline':
+        return <ElegantWrapper blockType={blockType}><QuizIntroHeaderBlock {...commonProps} /></ElegantWrapper>;
 
       // === CASOS ADICIONAIS (sem duplicação) ===
       case 'main-heading-inline':
