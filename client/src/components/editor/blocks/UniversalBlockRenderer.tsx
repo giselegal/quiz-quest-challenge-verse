@@ -161,7 +161,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
   const renderBlock = () => {
     const blockType = block.type;
     
-    // ES7+ Switch com arrow functions e destructuring
+    // ES7+ Switch com arrow functions e destructuring - TODOS OS BLOCOS
     const blockMap = {
       // === COMPONENTES BÁSICOS INLINE ES7+ ===
       header: () => <ResponsiveFlexWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
@@ -203,6 +203,91 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       'options-grid': () => <ResponsiveFlexWrapper blockType={blockType}><OptionsGridBlock {...commonProps} /></ResponsiveFlexWrapper>,
       script: () => <ResponsiveFlexWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
       terms: () => <ResponsiveFlexWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+
+      // === COMPONENTES MODULARES ETAPA 20 ES7+ ===
+      'style-card': () => <ResponsiveFlexWrapper blockType={blockType}><StyleCardInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'before-after': () => <ResponsiveFlexWrapper blockType={blockType}><ImageDisplayInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'bonus-section': () => <ResponsiveFlexWrapper blockType={blockType}><BonusListInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'testimonials-real': () => <ResponsiveFlexWrapper blockType={blockType}><TestimonialsGridBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'guarantee-section': () => <ResponsiveFlexWrapper blockType={blockType}><GuaranteeBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'mentor-section': () => <ResponsiveFlexWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'secure-purchase': () => <ResponsiveFlexWrapper blockType={blockType}><ButtonInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'value-stack': () => <ResponsiveFlexWrapper blockType={blockType}><PricingCardInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'final-cta': () => <ResponsiveFlexWrapper blockType={blockType}><CTAInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+
+      // === COMPONENTES INLINE FUNCIONAIS ES7+ ===
+      'text-inline': () => <ResponsiveFlexWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'heading-inline': () => <ResponsiveFlexWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'button-inline': () => <ResponsiveFlexWrapper blockType={blockType}><ButtonInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'result-card-inline': () => <ResponsiveFlexWrapper blockType={blockType}><ResultCardInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'countdown-inline': () => <ResponsiveFlexWrapper blockType={blockType}><CountdownInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'quiz-offer-pricing-inline': () => <ResponsiveFlexWrapper blockType={blockType}><QuizOfferPricingInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'pricing-inline': () => <ResponsiveFlexWrapper blockType={blockType}><PricingCardInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+
+      // === COMPONENTES ESPECIALIZADOS QUIZ ES7+ ===
+      'quiz-intro-header': () => <ResponsiveFlexWrapper blockType={blockType}><QuizIntroHeaderBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'progress-inline': () => <ResponsiveFlexWrapper blockType={blockType}><ProgressInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'loading-animation': () => <ResponsiveFlexWrapper blockType={blockType}><LoadingAnimationBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'image-display-inline': () => <ResponsiveFlexWrapper blockType={blockType}><ImageDisplayInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'style-card-inline': () => <ResponsiveFlexWrapper blockType={blockType}><StyleCardInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'testimonial-card-inline': () => <ResponsiveFlexWrapper blockType={blockType}><TestimonialCardInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'badge-inline': () => <ResponsiveFlexWrapper blockType={blockType}><BadgeInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+
+      // === COMPONENTES MODULARES ETAPA 21 ES7+ ===
+      'hero-badge-inline': () => <ResponsiveFlexWrapper blockType={blockType}><BadgeInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'hero-title-inline': () => <ResponsiveFlexWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'problem-list-inline': () => <ResponsiveFlexWrapper blockType={blockType}><ListBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'highlight-box-inline': () => <ResponsiveFlexWrapper blockType={blockType}><BadgeInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'product-card-inline': () => <ResponsiveFlexWrapper blockType={blockType}><PricingCardInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'price-highlight-inline': () => <ResponsiveFlexWrapper blockType={blockType}><PricingCardInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'cta-button-inline': () => <ResponsiveFlexWrapper blockType={blockType}><ButtonInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'trust-elements-inline': () => <ResponsiveFlexWrapper blockType={blockType}><TestimonialsGridBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'countdown-timer-inline': () => <ResponsiveFlexWrapper blockType={blockType}><CountdownInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'guarantee-seal-inline': () => <ResponsiveFlexWrapper blockType={blockType}><BadgeInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'faq-item-inline': () => <ResponsiveFlexWrapper blockType={blockType}><FAQSectionBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'section-header-inline': () => <ResponsiveFlexWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'sticky-header-inline': () => <ResponsiveFlexWrapper blockType={blockType}><QuizIntroHeaderBlock {...commonProps} /></ResponsiveFlexWrapper>,
+
+      // === COMPONENTES QUIZ REAIS ES7+ ===
+      'quiz-question': () => <ResponsiveFlexWrapper blockType={blockType}><QuizQuestionBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'quiz-progress': () => <ResponsiveFlexWrapper blockType={blockType}><QuizProgressBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'testimonials-grid': () => <ResponsiveFlexWrapper blockType={blockType}><TestimonialsGridBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'social-proof': () => <ResponsiveFlexWrapper blockType={blockType}><TestimonialsGridBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'value-anchoring': () => <ResponsiveFlexWrapper blockType={blockType}><PricingCardInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+
+      // === COMPONENTES ADICIONAIS ES7+ ===
+      'main-heading-inline': () => <ResponsiveFlexWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'image-inline': () => <ResponsiveFlexWrapper blockType={blockType}><ImageDisplayInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'stat-inline': () => <ResponsiveFlexWrapper blockType={blockType}><StatInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'pricing-card-inline': () => <ResponsiveFlexWrapper blockType={blockType}><PricingCardInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'testimonial-inline': () => <ResponsiveFlexWrapper blockType={blockType}><TestimonialCardInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+
+      // === BLOCOS QUIZ ESPECÍFICOS ES7+ ===
+      QuizQuestionBlock: () => <ResponsiveFlexWrapper blockType={blockType}><QuizQuestionBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      QuestionMultipleBlock: () => <ResponsiveFlexWrapper blockType={blockType}><QuestionMultipleBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      StrategicQuestionBlock: () => <ResponsiveFlexWrapper blockType={blockType}><StrategicQuestionBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      QuizTransitionBlock: () => <ResponsiveFlexWrapper blockType={blockType}><QuizTransitionBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      ResultPageBlock: () => <ResponsiveFlexWrapper blockType={blockType}><ResultPageBlock {...commonProps} /></ResponsiveFlexWrapper>,
+
+      // === SCHEMA SERVICE MAPPINGS ES7+ ===
+      'quiz-title': () => <ResponsiveFlexWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'quiz-name-input': () => <ResponsiveFlexWrapper blockType={blockType}><FormInputBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'quiz-question-main': () => <ResponsiveFlexWrapper blockType={blockType}><QuestionMultipleBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'quiz-transition-main': () => <ResponsiveFlexWrapper blockType={blockType}><QuizTransitionBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'quiz-question-strategic': () => <ResponsiveFlexWrapper blockType={blockType}><StrategicQuestionBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'quiz-transition-final': () => <ResponsiveFlexWrapper blockType={blockType}><QuizTransitionBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'quiz-result-header': () => <ResponsiveFlexWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'quiz-result-card': () => <ResponsiveFlexWrapper blockType={blockType}><PricingCardInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'quiz-offer-title': () => <ResponsiveFlexWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'quiz-offer-countdown': () => <ResponsiveFlexWrapper blockType={blockType}><CountdownInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'quiz-offer-faq': () => <ResponsiveFlexWrapper blockType={blockType}><FAQSectionBlock {...commonProps} /></ResponsiveFlexWrapper>,
+
+      // === NOVOS COMPONENTES MODULARES ETAPAS 20/21 ES7+ ===
+      'result-header-inline': () => <ResponsiveFlexWrapper blockType={blockType}><ResultHeaderInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'testimonials-result': () => <ResponsiveFlexWrapper blockType={blockType}><TestimonialsInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'quiz-offer-pricing': () => <ResponsiveFlexWrapper blockType={blockType}><QuizOfferPricingInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'countdown-timer': () => <ResponsiveFlexWrapper blockType={blockType}><CountdownInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'bonus-list': () => <ResponsiveFlexWrapper blockType={blockType}><BonusListInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
     };
 
     // ES7+ Return com fallback usando optional chaining
