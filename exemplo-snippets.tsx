@@ -425,6 +425,514 @@ const useThrottle = <T>(value: T, delay: number): T => {
   return throttledValue;
 };
 
+// ===== SNIPPETS PARA API E DADOS =====
+
+// 1. FETCH HOOK (Digite "useFetch" + Tab):
+interface FetchState<T> {
+  data: T | null;
+  loading: boolean;
+  error: string | null;
+}
+
+const useFetch = <T>(url: string): FetchState<T> => {
+  const [state, setState] = React.useState<FetchState<T>>({
+    data: null,
+    loading: true,
+    error: null
+  });
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setState(prev => ({ ...prev, loading: true, error: null }));
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        setState({ data, loading: false, error: null });
+      } catch (error) {
+        setState({ 
+          data: null, 
+          loading: false, 
+          error: error instanceof Error ? error.message : 'Erro desconhecido' 
+        });
+      }
+    };
+
+    fetchData();
+  }, [url]);
+
+  return state;
+};
+
+// 2. LOCAL STORAGE HOOK (Digite "useLocalStorage" + Tab):
+const useLocalStorage = <T>(key: string, initialValue: T) => {
+  const [storedValue, setStoredValue] = React.useState<T>(() => {
+    try {
+      const item = window.localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      console.error(`Error reading localStorage key "${key}":`, error);
+      return initialValue;
+    }
+  });
+
+  const setValue = React.useCallback((value: T | ((val: T) => T)) => {
+    try {
+      const valueToStore = value instanceof Function ? value(storedValue) : value;
+      setStoredValue(valueToStore);
+      window.localStorage.setItem(key, JSON.stringify(valueToStore));
+    } catch (error) {
+      console.error(`Error setting localStorage key "${key}":`, error);
+    }
+  }, [key, storedValue]);
+
+  return [storedValue, setValue] as const;
+};
+
+// 3. PREVIOUS VALUE HOOK (Digite "usePrevious" + Tab):
+const usePrevious = <T>(value: T): T | undefined => {
+  const ref = React.useRef<T>();
+  
+  React.useEffect(() => {
+    ref.current = value;
+  });
+  
+  return ref.current;
+};
+
+// 4. TOGGLE HOOK (Digite "useToggle" + Tab):
+const useToggle = (initialValue = false) => {
+  const [value, setValue] = React.useState(initialValue);
+  
+  const toggle = React.useCallback(() => {
+    setValue(prev => !prev);
+  }, []);
+  
+  const setTrue = React.useCallback(() => {
+    setValue(true);
+  }, []);
+  
+  const setFalse = React.useCallback(() => {
+    setValue(false);
+  }, []);
+  
+  return [value, { toggle, setTrue, setFalse }] as const;
+};
+
+// 5. INTERVAL HOOK (Digite "useInterval" + Tab):
+const useInterval = (callback: () => void, delay: number | null) => {
+  const savedCallback = React.useRef<() => void>();
+
+  React.useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  React.useEffect(() => {
+    const tick = () => {
+      savedCallback.current?.();
+    };
+    
+    if (delay !== null) {
+      const id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+};
+
+// ===== SNIPPETS PARA FORMULÁRIOS =====
+
+// 1. FORM HOOK (Digite "useForm" + Tab):
+interface FormState<T> {
+  values: T;
+  errors: Partial<Record<keyof T, string>>;
+  touched: Partial<Record<keyof T, boolean>>;
+}
+
+const useForm = <T extends Record<string, any>>(
+  initialValues: T,
+  validate?: (values: T) => Partial<Record<keyof T, string>>
+) => {
+  const [state, setState] = React.useState<FormState<T>>({
+    values: initialValues,
+    errors: {},
+    touched: {}
+  });
+
+  const handleChange = React.useCallback((name: keyof T, value: any) => {
+    setState(prev => ({
+      ...prev,
+      values: { ...prev.values, [name]: value },
+      touched: { ...prev.touched, [name]: true }
+    }));
+  }, []);
+
+  const handleBlur = React.useCallback((name: keyof T) => {
+    setState(prev => ({
+      ...prev,
+      touched: { ...prev.touched, [name]: true }
+    }));
+  }, []);
+
+  const handleSubmit = React.useCallback((onSubmit: (values: T) => void) => {
+    return (e: React.FormEvent) => {
+      e.preventDefault();
+      
+      const errors = validate ? validate(state.values) : {};
+      
+      setState(prev => ({
+        ...prev,
+        errors,
+        touched: Object.keys(prev.values).reduce((acc, key) => ({
+          ...acc,
+          [key]: true
+        }), {})
+      }));
+
+      if (Object.keys(errors).length === 0) {
+        onSubmit(state.values);
+      }
+    };
+  }, [state.values, validate]);
+
+  const reset = React.useCallback(() => {
+    setState({
+      values: initialValues,
+      errors: {},
+      touched: {}
+    });
+  }, [initialValues]);
+
+  return {
+    values: state.values,
+    errors: state.errors,
+    touched: state.touched,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    reset
+  };
+};
+
+// 2. INPUT COMPONENT (Digite "input" + Tab):
+interface InputProps {
+  label: string;
+  name: string;
+  type?: string;
+  value: string;
+  onChange: (name: string, value: string) => void;
+  onBlur?: (name: string) => void;
+  error?: string;
+  touched?: boolean;
+  placeholder?: string;
+  required?: boolean;
+}
+
+const Input: React.FC<InputProps> = ({
+  label,
+  name,
+  type = 'text',
+  value,
+  onChange,
+  onBlur,
+  error,
+  touched,
+  placeholder,
+  required
+}) => {
+  const handleChange = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    onChange(name, e.target.value);
+  }, [name, onChange]);
+
+  const handleBlur = React.useCallback(() => {
+    onBlur?.(name);
+  }, [name, onBlur]);
+
+  return (
+    <div className="form-group">
+      <label htmlFor={name} className="form-label">
+        {label}
+        {required && <span className="required">*</span>}
+      </label>
+      <input
+        id={name}
+        name={name}
+        type={type}
+        value={value}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        placeholder={placeholder}
+        className={`form-input ${error && touched ? 'error' : ''}`}
+      />
+      {error && touched && (
+        <span className="error-message">{error}</span>
+      )}
+    </div>
+  );
+};
+
+// ===== EXEMPLO PRÁTICO: QUIZ FORM =====
+
+// 1. QUIZ FORM COMPONENT (Digite "rafce" + Tab):
+interface QuizFormData {
+  name: string;
+  email: string;
+  age: string;
+  style: string;
+}
+
+const QuizForm: React.FC = () => {
+  // Digite "useForm" + Tab:
+  const validateForm = React.useCallback((values: QuizFormData) => {
+    const errors: Partial<Record<keyof QuizFormData, string>> = {};
+    
+    if (!values.name.trim()) {
+      errors.name = 'Nome é obrigatório';
+    }
+    
+    if (!values.email.trim()) {
+      errors.email = 'Email é obrigatório';
+    } else if (!/\S+@\S+\.\S+/.test(values.email)) {
+      errors.email = 'Email inválido';
+    }
+    
+    if (!values.age.trim()) {
+      errors.age = 'Idade é obrigatória';
+    } else if (parseInt(values.age) < 16) {
+      errors.age = 'Idade deve ser maior que 16 anos';
+    }
+    
+    return errors;
+  }, []);
+
+  const {
+    values,
+    errors,
+    touched,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    reset
+  } = useForm<QuizFormData>(
+    {
+      name: '',
+      email: '',
+      age: '',
+      style: ''
+    },
+    validateForm
+  );
+
+  // Digite "useLocalStorage" + Tab:
+  const [savedAnswers, setSavedAnswers] = useLocalStorage<QuizFormData | null>('quiz-answers', null);
+
+  // Digite "useEffect" + Tab:
+  React.useEffect(() => {
+    if (savedAnswers) {
+      Object.entries(savedAnswers).forEach(([key, value]) => {
+        handleChange(key as keyof QuizFormData, value);
+      });
+    }
+  }, [savedAnswers, handleChange]);
+
+  // Digite "useCallback" + Tab:
+  const handleFormSubmit = React.useCallback((formValues: QuizFormData) => {
+    console.log('Form submitted:', formValues);
+    setSavedAnswers(formValues);
+    
+    // Aqui você pode fazer a chamada para API
+    // trackButtonClick('quiz_form_submit', 'Quiz Form Submitted', 'quiz_page');
+  }, [setSavedAnswers]);
+
+  const handleReset = React.useCallback(() => {
+    reset();
+    setSavedAnswers(null);
+  }, [reset, setSavedAnswers]);
+
+  return (
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="quiz-form">
+      <h2>Descobrir Seu Estilo</h2>
+      
+      <Input
+        label="Nome"
+        name="name"
+        value={values.name}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        error={errors.name}
+        touched={touched.name}
+        placeholder="Digite seu nome"
+        required
+      />
+      
+      <Input
+        label="Email"
+        name="email"
+        type="email"
+        value={values.email}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        error={errors.email}
+        touched={touched.email}
+        placeholder="Digite seu email"
+        required
+      />
+      
+      <Input
+        label="Idade"
+        name="age"
+        type="number"
+        value={values.age}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        error={errors.age}
+        touched={touched.age}
+        placeholder="Digite sua idade"
+        required
+      />
+      
+      <div className="form-group">
+        <label htmlFor="style" className="form-label">
+          Estilo Preferido
+        </label>
+        <select
+          id="style"
+          name="style"
+          value={values.style}
+          onChange={(e) => handleChange('style', e.target.value)}
+          className="form-select"
+        >
+          <option value="">Selecione um estilo</option>
+          <option value="elegante">Elegante</option>
+          <option value="casual">Casual</option>
+          <option value="romantico">Romântico</option>
+          <option value="moderno">Moderno</option>
+        </select>
+      </div>
+      
+      <div className="form-actions">
+        <button type="submit" className="btn btn-primary">
+          Descobrir Meu Estilo
+        </button>
+        <button type="button" onClick={handleReset} className="btn btn-secondary">
+          Limpar
+        </button>
+      </div>
+    </form>
+  );
+};
+
+// ===== SNIPPETS PARA ANIMAÇÕES =====
+
+// 1. FADE IN ANIMATION (Digite "useFadeIn" + Tab):
+const useFadeIn = (duration = 300) => {
+  const [isVisible, setIsVisible] = React.useState(false);
+  
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 50);
+    
+    return () => clearTimeout(timer);
+  }, []);
+  
+  return {
+    opacity: isVisible ? 1 : 0,
+    transition: `opacity ${duration}ms ease-in-out`
+  };
+};
+
+// 2. SLIDE IN ANIMATION (Digite "useSlideIn" + Tab):
+const useSlideIn = (direction: 'left' | 'right' | 'up' | 'down' = 'left', duration = 300) => {
+  const [isVisible, setIsVisible] = React.useState(false);
+  
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 50);
+    
+    return () => clearTimeout(timer);
+  }, []);
+  
+  const getTransform = () => {
+    if (!isVisible) {
+      switch (direction) {
+        case 'left': return 'translateX(-100%)';
+        case 'right': return 'translateX(100%)';
+        case 'up': return 'translateY(-100%)';
+        case 'down': return 'translateY(100%)';
+        default: return 'translateX(-100%)';
+      }
+    }
+    return 'translateX(0)';
+  };
+  
+  return {
+    transform: getTransform(),
+    transition: `transform ${duration}ms ease-in-out`
+  };
+};
+
+// ===== EXEMPLO PRÁTICO: ANIMATED CARD =====
+
+// 1. ANIMATED CARD COMPONENT (Digite "rafce" + Tab):
+interface AnimatedCardProps {
+  title: string;
+  description: string;
+  image?: string;
+  delay?: number;
+}
+
+const AnimatedCard: React.FC<AnimatedCardProps> = ({ 
+  title, 
+  description, 
+  image, 
+  delay = 0 
+}) => {
+  const fadeInStyle = useFadeIn(500);
+  const slideInStyle = useSlideIn('up', 400);
+  
+  // Digite "useState" + Tab:
+  const [isHovered, setIsHovered] = React.useState(false);
+  
+  // Digite "useCallback" + Tab:
+  const handleMouseEnter = React.useCallback(() => {
+    setIsHovered(true);
+  }, []);
+  
+  const handleMouseLeave = React.useCallback(() => {
+    setIsHovered(false);
+  }, []);
+  
+  return (
+    <div 
+      className="animated-card"
+      style={{
+        ...fadeInStyle,
+        ...slideInStyle,
+        transitionDelay: `${delay}ms`,
+        transform: `${slideInStyle.transform} ${isHovered ? 'scale(1.05)' : 'scale(1)'}`,
+        transition: `${slideInStyle.transition}, transform 200ms ease-in-out`
+      }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {image && (
+        <div className="card-image">
+          <img src={image} alt={title} />
+        </div>
+      )}
+      <div className="card-content">
+        <h3 className="card-title">{title}</h3>
+        <p className="card-description">{description}</p>
+      </div>
+    </div>
+  );
+};
+
 export { 
   ExemploSnippets, 
   AdvancedExample, 
