@@ -17,17 +17,26 @@ import StrategicQuestionBlock from './StrategicQuestionBlock';
 import QuizTransitionBlock from './QuizTransitionBlock';
 import OptionsGridBlock from './OptionsGridBlock';
 
-// Componentes modulares inline das etapas 20 e 21
+// === COMPONENTES INLINE MODULARES (ES7+) ===
+// Importação corrigida e otimizada dos componentes inline
 import {
+  TextInlineBlock,
+  StyleCardInlineBlock,
+  StatInlineBlock,
+  BadgeInlineBlock,
+  ProgressInlineBlock,
+  ResultCardInlineBlock,
+  ImageDisplayInlineBlock,
+  PricingCardInlineBlock,
+  TestimonialCardInlineBlock,
+  // Etapa 20 (Resultado)
   ResultHeaderInlineBlock,
   TestimonialsInlineBlock,
+  // Etapa 21 (Oferta)
   QuizOfferPricingInlineBlock,
   CountdownInlineBlock,
   BonusListInlineBlock
 } from './inline';
-
-// Novos blocos inline modulares criados (ES7+)
-import ResultCardInlineBlock from './inline/ResultCardInlineBlock';
 
 // Componentes básicos (funcionais)
 import { SpacerBlock } from './SpacerBlock';
@@ -35,9 +44,8 @@ import { VideoPlayerBlock } from './VideoPlayerBlock';
 import FormInputBlock from './FormInputBlock';
 import ListBlock from './ListBlock';
 
-// Componentes inline mais usados (funcionais)
+// Componentes inline básicos e funcionais
 import HeadingInlineBlock from './HeadingInlineBlock';
-import TextInlineBlock from './TextInlineBlock';
 import ImageInlineBlock from './ImageInlineBlock';
 import ButtonInlineBlock from './ButtonInlineBlock';
 import TestimonialInlineBlock from './TestimonialInlineBlock';
@@ -240,6 +248,29 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <UnifiedWrapper blockType={blockType}><CountdownInlineBlock {...commonProps} /></UnifiedWrapper>;
       case 'button-inline':
         return <UnifiedWrapper blockType={blockType}><ButtonInlineBlock {...commonProps} /></UnifiedWrapper>;
+
+      // === COMPONENTES INLINE ADICIONAIS FUNCIONAIS (ES7+) ===
+      case 'text-inline':
+        return <UnifiedWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'heading-inline':
+      case 'main-heading-inline':
+        return <UnifiedWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'image-inline':
+        return <UnifiedWrapper blockType={blockType}><ImageDisplayInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'style-card-inline':
+        return <UnifiedWrapper blockType={blockType}><StyleCardInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'stat-inline':
+        return <UnifiedWrapper blockType={blockType}><StatInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'badge-inline':
+        return <UnifiedWrapper blockType={blockType}><BadgeInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'progress-inline':
+        return <UnifiedWrapper blockType={blockType}><ProgressInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'pricing-inline':
+      case 'pricing-card-inline':
+        return <UnifiedWrapper blockType={blockType}><PricingCardInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'testimonial-inline':
+      case 'testimonial-card-inline':
+        return <UnifiedWrapper blockType={blockType}><TestimonialCardInlineBlock {...commonProps} /></UnifiedWrapper>;
 
       // Componentes modulares reais do Quiz - COM WRAPPER
       case 'quiz-question':
