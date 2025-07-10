@@ -105,40 +105,16 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
           </div>
         </div>
       ) : (
-        /* LAYOUT HORIZONTAL RESPONSIVO - CORRIGIDO PARA ETAPA 20/21 */
+        /* LAYOUT VERTICAL CENTRALIZADO - CONFORME ESPECIFICAÇÕES */
         <div className="w-full bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          {/* Container Flexbox HORIZONTAL - WRAP RESPONSIVO */}
-          <div className="flex flex-wrap items-start gap-4 w-full">
+          {/* Container Flexbox VERTICAL - CENTRALIZADO - RESPONSIVO */}
+          <div className="flex flex-col items-center gap-6 w-full max-w-2xl mx-auto">
             {blocks.map((block, index) => {
-              // LARGURAS RESPONSIVAS BASEADAS NO TIPO DE COMPONENTE
+              // LARGURA 100% RESPONSIVA - CENTRALIZADA CONFORME ESPECIFICAÇÕES
               const getResponsiveWidth = () => {
-                // Componentes que devem ocupar largura total
-                const fullWidthComponents = [
-                  'quiz-intro-header', 'result-header-inline', 'sticky-header-inline',
-                  'section-header-inline', 'divider-inline'
-                ];
-                
-                // Componentes pequenos (badges, buttons)
-                const smallComponents = [
-                  'badge-inline', 'hero-badge-inline', 'button-inline', 'cta-button-inline'
-                ];
-                
-                // Componentes médios (cards, imagens)
-                const mediumComponents = [
-                  'style-card-inline', 'product-card-inline', 'testimonial-card-inline',
-                  'image-display-inline', 'pricing-card-inline'
-                ];
-                
-                if (fullWidthComponents.includes(block.type)) {
-                  return "w-full basis-full";
-                } else if (smallComponents.includes(block.type)) {
-                  return "w-full sm:w-auto sm:flex-1 sm:min-w-[200px] sm:max-w-sm";
-                } else if (mediumComponents.includes(block.type)) {
-                  return "w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.75rem)] min-w-[280px]";
-                }
-                
-                // Padrão: componentes adaptativos
-                return "w-full sm:w-[calc(50%-0.5rem)] min-w-[250px]";
+                // Todos os componentes ocupam largura total do canvas centralizado
+                // LARGURA UNIFICADA para layout vertical consistente
+                return "w-full max-w-full";
               };
 
               return (

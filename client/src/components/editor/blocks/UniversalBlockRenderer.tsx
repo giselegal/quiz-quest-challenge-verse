@@ -38,10 +38,6 @@ import {
   LoadingAnimationBlock
 } from './inline';
 
-// Novos componentes para Etapa 20
-import CharacteristicsListInlineBlock from './inline/CharacteristicsListInlineBlock';
-import SecondaryStylesInlineBlock from './inline/SecondaryStylesInlineBlock';
-
 // Componentes básicos (funcionais)
 import { SpacerBlock } from './SpacerBlock';
 import { VideoPlayerBlock } from './VideoPlayerBlock';
@@ -271,15 +267,13 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       // === ETAPA 20 - COMPONENTES RESULTADO MODULARES ES7+ (novos) ===
       'before-after-inline': () => <ImageDisplayInlineBlock {...commonProps} />,
       'divider-inline': () => <SpacerBlock {...commonProps} />,
-      'characteristics-list-inline': () => <CharacteristicsListInlineBlock {...commonProps} />,
-      'secondary-styles-inline': () => <SecondaryStylesInlineBlock {...commonProps} />,
 
       // === ETAPA 21 - COMPONENTES FALTANTES ES7+ (únicos) ===
       // Removidas duplicatas, mantidos apenas os únicos
     };
 
     // ES7+ Return com fallback usando optional chaining
-    return componentMap[block.type as keyof typeof componentMap]?.() ?? 
+    return componentMap[blockType as keyof typeof componentMap]?.() ?? 
            <TextInlineBlock {...commonProps} />;
   };
 
