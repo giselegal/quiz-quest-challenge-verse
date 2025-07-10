@@ -278,8 +278,6 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <ElegantWrapper blockType={blockType}><TestimonialCardInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'badge-inline':
         return <ElegantWrapper blockType={blockType}><BadgeInlineBlock {...commonProps} /></ElegantWrapper>;
-      case 'result-header-inline':
-        return <ElegantWrapper blockType={blockType}><ResultHeaderInlineBlock {...commonProps} /></ElegantWrapper>;
 
       // === CASOS ADICIONAIS (sem duplicação) ===
       case 'main-heading-inline':
