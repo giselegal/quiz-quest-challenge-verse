@@ -1,5 +1,7 @@
 // Exemplo de uso dos snippets ES7 React
 import React from 'react';
+import ReactDOM from 'react-dom';
+import { render, fireEvent } from '@testing-library/react';
 
 // 1. Digite "rafce" e pressione Tab para criar este componente:
 interface ExemploSnippetsProps {

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+// Usando snippet "imd" para imports com destructuring
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -38,6 +39,78 @@ const tokens = {
   },
 };
 
+// Usando snippet "uch" + Tab para criar custom hook
+const useAnimatedCounter = (target: number, duration: number = 2000) => {
+  const [count, setCount] = useState(0);
+  
+  useEffect(() => {
+    if (target === 0) return;
+    
+    const increment = target / (duration / 16);
+    let current = 0;
+    
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(current));
+      }
+    }, 16);
+    
+    return () => clearInterval(timer);
+  }, [target, duration]);
+  
+  return count;
+};
+
+// Usando snippet "uch" + Tab para criar hook de hover
+const useHoverAnimation = () => {
+  const [isHovered, setIsHovered] = useState(false);
+  
+  const handleMouseEnter = useCallback(() => {
+    setIsHovered(true);
+  }, []);
+  
+  const handleMouseLeave = useCallback(() => {
+    setIsHovered(false);
+  }, []);
+  
+  return {
+    isHovered,
+    hoverProps: {
+      onMouseEnter: handleMouseEnter,
+      onMouseLeave: handleMouseLeave,
+    },
+  };
+};
+
+// Usando snippet "uch" + Tab para criar hook de scroll
+const useScrollAnimation = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+    
+    const element = document.getElementById('result-page-block');
+    if (element) {
+      observer.observe(element);
+    }
+    
+    return () => observer.disconnect();
+  }, []);
+  
+  return isVisible;
+};
+
 interface ResultPageBlockProps {
   block: {
     id: string;
@@ -75,7 +148,8 @@ interface ResultPageBlockProps {
   className?: string;
 }
 
-const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
+// Usando snippet "memo" + Tab para otimizar performance
+const ResultPageBlock: React.FC<ResultPageBlockProps> = React.memo(({
   block,
   isSelected = false,
   onClick,
@@ -83,7 +157,7 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
   disabled = false,
   className
 }) => {
-  // Dados fiéis ao funil real com valores corretos
+  // Usando snippet "dob" + Tab para destructuring
   const {
     userName = "Visitante",
     primaryStyle = { category: "Elegante", percentage: 85 },
@@ -112,15 +186,17 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
     logoUrl = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
   } = block.properties;
 
-  const [isButtonHovered, setIsButtonHovered] = useState(false);
+  // Usando custom hooks criados com snippets ES7
+  const animatedPercentage = useAnimatedCounter(primaryStyle.percentage, 2000);
+  const { isHovered, hoverProps } = useHoverAnimation();
+  const isVisible = useScrollAnimation();
 
-  const handlePropertyChange = (key: string, value: any) => {
-    if (onPropertyChange) {
-      onPropertyChange(key, value);
-    }
-  };
+  // Usando snippet "useCallback" + Tab para otimizar callbacks
+  const handlePropertyChange = useCallback((key: string, value: any) => {
+    onPropertyChange?.(key, value);
+  }, [onPropertyChange]);
 
-  const handleCTAClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleCTAClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
     
@@ -130,10 +206,23 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
         window.open(ctaUrl, "_blank");
       }
     }
-  };
+  }, [disabled, ctaUrl]);
+
+  // Usando snippet "useMemo" + Tab para otimizar cálculos
+  const progressValue = useMemo(() => {
+    return isVisible ? animatedPercentage : 0;
+  }, [isVisible, animatedPercentage]);
+
+  const containerStyles = useMemo(() => ({
+    backgroundColor,
+    color: textColor,
+    transform: isHovered ? 'scale(1.02)' : 'scale(1)',
+    transition: 'all 0.3s ease-in-out',
+  }), [backgroundColor, textColor, isHovered]);
 
   return (
     <div
+      id="result-page-block"
       className={cn(
         'relative w-full min-h-[800px] rounded-lg border-2',
         isSelected ? 'border-blue-500 ring-2 ring-blue-200' : 'border-gray-300',
@@ -141,7 +230,8 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
         className
       )}
       onClick={onClick}
-      style={{ backgroundColor, color: textColor }}
+      style={containerStyles}
+      {...hoverProps}
     >
       {/* Background decorativo fiel ao funil real */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-lg">
@@ -206,13 +296,14 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
                   <span className="text-sm text-[#8F7A6A]">
                     Seu estilo predominante
                   </span>
-                  <span className="text-[#aa6b5d] font-medium">{primaryStyle.percentage}%</span>
+                  <span className="text-[#aa6b5d] font-medium">{animatedPercentage}%</span>
                 </div>
                 <Progress 
-                  value={primaryStyle.percentage} 
+                  value={progressValue} 
                   className="h-2 bg-[#F3E8E6]" 
                   style={{
-                    '--progress-background': 'linear-gradient(to right, #B89B7A, #aa6b5d)'
+                    '--progress-background': 'linear-gradient(to right, #B89B7A, #aa6b5d)',
+                    transition: 'all 0.3s ease-in-out'
                   } as React.CSSProperties}
                 />
               </div>
@@ -321,15 +412,14 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
               onClick={handleCTAClick} 
               disabled={disabled}
               className="text-white py-4 px-6 rounded-md mb-4"
-              onMouseEnter={() => setIsButtonHovered(true)} 
-              onMouseLeave={() => setIsButtonHovered(false)} 
+              {...hoverProps}
               style={{
                 background: "linear-gradient(to right, #4CAF50, #45a049)",
                 boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
               }}
             >
               <span className="flex items-center justify-center gap-2">
-                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
+                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isHovered ? 'scale-110' : ''}`} />
                 <InlineEditText
                   as="span"
                   value={ctaText}
@@ -449,11 +539,10 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
                 boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
                 fontSize: "1rem"
               }}
-              onMouseEnter={() => setIsButtonHovered(true)} 
-              onMouseLeave={() => setIsButtonHovered(false)}
+              {...hoverProps}
             >
               <span className="flex items-center justify-center gap-2">
-                <ShoppingCart className={`w-4 h-4 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
+                <ShoppingCart className={`w-4 h-4 transition-transform duration-300 ${isHovered ? 'scale-110' : ''}`} />
                 <InlineEditText
                   as="span"
                   value={ctaSecondaryText}
@@ -510,6 +599,9 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = ({
       )}
     </div>
   );
-};
+});
+
+// Usando snippet para definir displayName
+ResultPageBlock.displayName = 'ResultPageBlock';
 
 export default ResultPageBlock;
