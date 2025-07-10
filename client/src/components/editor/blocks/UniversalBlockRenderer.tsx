@@ -271,13 +271,15 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       // === ETAPA 20 - COMPONENTES RESULTADO MODULARES ES7+ (novos) ===
       'before-after-inline': () => <ImageDisplayInlineBlock {...commonProps} />,
       'divider-inline': () => <SpacerBlock {...commonProps} />,
+      'characteristics-list-inline': () => <CharacteristicsListInlineBlock {...commonProps} />,
+      'secondary-styles-inline': () => <SecondaryStylesInlineBlock {...commonProps} />,
 
       // === ETAPA 21 - COMPONENTES FALTANTES ES7+ (únicos) ===
       // Removidas duplicatas, mantidos apenas os únicos
     };
 
     // ES7+ Return com fallback usando optional chaining
-    return componentMap[blockType as keyof typeof componentMap]?.() ?? 
+    return componentMap[block.type as keyof typeof componentMap]?.() ?? 
            <TextInlineBlock {...commonProps} />;
   };
 
