@@ -247,17 +247,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'bonus-list':
         return <ElegantWrapper blockType={blockType}><BonusListInlineBlock {...commonProps} /></ElegantWrapper>;
 
-      // NOVOS BLOCOS INLINE MODULARES - ES7+ PADRÃO (Etapas 20 e 21)
-      case 'result-card-inline':
-        return <ElegantWrapper blockType={blockType}><ResultCardInlineBlock {...commonProps} /></ElegantWrapper>;
-      case 'quiz-offer-pricing-inline':
-        return <ElegantWrapper blockType={blockType}><QuizOfferPricingInlineBlock {...commonProps} /></ElegantWrapper>;
-      case 'countdown-inline':
-        return <ElegantWrapper blockType={blockType}><CountdownInlineBlock {...commonProps} /></ElegantWrapper>;
-      case 'button-inline':
-        return <ElegantWrapper blockType={blockType}><ButtonInlineBlock {...commonProps} /></ElegantWrapper>;
-
-      // === COMPONENTES INLINE ADICIONAIS FUNCIONAIS (ES7+) ===
+      // === COMPONENTES INLINE FUNCIONAIS (ES7+) ===
       case 'text-inline':
         return <ElegantWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'heading-inline':
@@ -276,8 +266,6 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       // === COMPONENTES ESPECIALIZADOS PARA QUIZ ===
       case 'quiz-intro-header':
         return <ElegantWrapper blockType={blockType}><QuizIntroHeaderBlock {...commonProps} /></ElegantWrapper>;
-      case 'options-grid':
-        return <ElegantWrapper blockType={blockType}><OptionsGridBlock {...commonProps} /></ElegantWrapper>;
       case 'progress-inline':
         return <ElegantWrapper blockType={blockType}><ProgressInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'loading-animation':
