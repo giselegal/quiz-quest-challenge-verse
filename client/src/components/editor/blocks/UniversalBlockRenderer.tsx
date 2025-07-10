@@ -50,17 +50,6 @@ import ImageInlineBlock from './ImageInlineBlock';
 import ButtonInlineBlock from './ButtonInlineBlock';
 import CTAInlineBlock from './CTAInlineBlock';
 
-// Componentes inline necessários (importados do diretório inline)
-import { 
-  PricingCardInlineBlock,
-  ImageDisplayInlineBlock,
-  BadgeInlineBlock,
-  StyleCardInlineBlock,
-  BonusListInlineBlock,
-  CountdownInlineBlock,
-  TestimonialCardInlineBlock
-} from './inline';
-
 // Componentes modernos (funcionais)
 import TestimonialsGridBlock from './TestimonialsGridBlock';
 import FAQSectionBlock from './FAQSectionBlock';
@@ -266,7 +255,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'quiz-offer-pricing-inline':
         return <ElegantWrapper blockType={blockType}><QuizOfferPricingInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'pricing-inline':
-        return <ElegantWrapper blockType={blockType}><PricingInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><PricingCardInlineBlock {...commonProps} /></ElegantWrapper>;
       
       // === COMPONENTES ESPECIALIZADOS PARA QUIZ ===
       case 'quiz-intro-header':
@@ -369,7 +358,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'quiz-result-header':
         return <ElegantWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'quiz-result-card':
-        return <ElegantWrapper blockType={blockType}><PricingInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><PricingCardInlineBlock {...commonProps} /></ElegantWrapper>;
 
       // NOVOS MAPEAMENTOS PARA TIPOS DO SCHEMA SERVICE
       case 'quiz-offer-title':
