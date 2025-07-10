@@ -38,6 +38,10 @@ import {
   LoadingAnimationBlock
 } from './inline';
 
+// Novos componentes para Etapa 20
+import CharacteristicsListInlineBlock from './inline/CharacteristicsListInlineBlock';
+import SecondaryStylesInlineBlock from './inline/SecondaryStylesInlineBlock';
+
 // Componentes básicos (funcionais)
 import { SpacerBlock } from './SpacerBlock';
 import { VideoPlayerBlock } from './VideoPlayerBlock';
