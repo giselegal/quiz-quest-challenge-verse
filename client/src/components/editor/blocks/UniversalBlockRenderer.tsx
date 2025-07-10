@@ -4,8 +4,6 @@ import type { BlockData } from '@/types/blocks';
 
 // === COMPONENTES PRINCIPAIS DO SISTEMA ===
 // Componentes de página completa (funcionais)
-import QuizStartPageBlock from './QuizStartPageBlock';
-import QuizOfferPageBlock from './QuizOfferPageBlock';
 import ResultPageBlock from './ResultPageBlock';
 
 // Componentes de quiz (funcionais)
@@ -286,8 +284,6 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <UnifiedWrapper blockType={blockType}><ValueAnchoringBlock {...commonProps} /></UnifiedWrapper>;
 
       // BLOCOS ESPECÍFICOS DO QUIZ - DADOS REAIS COM WRAPPER
-      case 'QuizStartPageBlock':
-        return <UnifiedWrapper blockType={blockType}><QuizStartPageBlock {...commonProps} /></UnifiedWrapper>;
       case 'QuizQuestionBlock':
         return <UnifiedWrapper blockType={blockType}><QuizQuestionBlock {...commonProps} /></UnifiedWrapper>;
       case 'QuestionMultipleBlock':
@@ -298,18 +294,6 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <UnifiedWrapper blockType={blockType}><QuizTransitionBlock {...commonProps} /></UnifiedWrapper>;
       case 'ResultPageBlock':
         return <UnifiedWrapper blockType={blockType}><ResultPageBlock {...commonProps} /></UnifiedWrapper>;
-      case 'QuizOfferPageBlock':
-        return <UnifiedWrapper blockType={blockType}><QuizOfferPageBlock {...commonProps} /></UnifiedWrapper>;
-
-      // BLOCOS ESPECÍFICOS DE QUIZ/FUNNEL - SCHEMA DRIVEN COM WRAPPER
-      case 'quiz-intro-page':
-        return <UnifiedWrapper blockType={blockType}><QuizStartPageBlock {...commonProps} /></UnifiedWrapper>;
-      case 'quiz-transition-page':
-        return <UnifiedWrapper blockType={blockType}><QuizTransitionBlock {...commonProps} /></UnifiedWrapper>;
-      case 'result-page':
-        return <UnifiedWrapper blockType={blockType}><ResultPageBlock {...commonProps} /></UnifiedWrapper>;
-      case 'offer-page':
-        return <UnifiedWrapper blockType={blockType}><QuizOfferPageBlock {...commonProps} /></UnifiedWrapper>;
 
       // BLOCOS ESPECÍFICOS DO QUIZ - MODULARES E SCHEMA-DRIVEN COM WRAPPER
       case 'quiz-intro-header':
