@@ -253,7 +253,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'heading-inline':
         return <ElegantWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'button-inline':
-        return <ElegantWrapper blockType={blockType}><ButtonInlineBlock {...commonProps} /></ElegantWrapper;
+        return <ElegantWrapper blockType={blockType}><ButtonInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'result-card-inline':
         return <ElegantWrapper blockType={blockType}><ResultCardInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'countdown-inline':

@@ -3,8 +3,12 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { PropertyInput } from './block-properties/PropertyInput';
-import { blockDefinitions, getBlockDefinition, type PropertySchema } from '@/config/blockDefinitionsClean';
+import { blockDefinitions, type PropertySchema as OriginalPropertySchema } from '@/config/blockDefinitions';
 import { type BlockData } from '@/components/editor/blocks';
+
+// Função auxiliar local
+const getBlockDefinition = (type: string) => 
+  blockDefinitions.find(block => block.type === type);
 
 interface DynamicPropertiesPanelProps {
   selectedBlock: BlockData | null;
@@ -33,7 +37,7 @@ export const DynamicPropertiesPanel: React.FC<DynamicPropertiesPanelProps> = ({
   };
 
   // Handler para mudanças de propriedades
-  const handlePropertyChange = (schema: PropertySchema, value: any) => {
+  const handlePropertyChange = (schema: OriginalPropertySchema, value: any) => {
     if (schema.nestedPath) {
       onNestedPropertyChange(schema.nestedPath, value);
     } else {
@@ -42,7 +46,7 @@ export const DynamicPropertiesPanel: React.FC<DynamicPropertiesPanelProps> = ({
   };
 
   // Handler para arrays
-  const handleArrayAdd = (schema: PropertySchema) => {
+  const handleArrayAdd = (schema: OriginalPropertySchema) => {
     const currentValue = selectedBlock?.properties?.[schema.key] || [];
     const newItem = schema.itemSchema?.reduce((item, itemProp) => {
       item[itemProp.key] = itemProp.defaultValue || '';
@@ -52,7 +56,7 @@ export const DynamicPropertiesPanel: React.FC<DynamicPropertiesPanelProps> = ({
     onBlockPropertyChange(schema.key, [...currentValue, newItem]);
   };
 
-  const handleArrayRemove = (schema: PropertySchema, index: number) => {
+  const handleArrayRemove = (schema: OriginalPropertySchema, index: number) => {
     const currentValue = selectedBlock?.properties?.[schema.key] || [];
     const newValue = currentValue.filter((_: any, i: number) => i !== index);
     onBlockPropertyChange(schema.key, newValue);
