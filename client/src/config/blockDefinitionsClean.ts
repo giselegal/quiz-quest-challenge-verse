@@ -116,6 +116,205 @@ export const blockDefinitions: BlockDefinition[] = [
     ]
   },
 
+  // === COMPONENTES INLINE MODULARES (ES7+) ===
+  {
+    type: 'text-inline',
+    name: 'Texto Inline',
+    description: 'Texto modular e responsivo',
+    icon: 'Type',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'content',
+        label: 'Conteúdo',
+        type: 'textarea',
+        defaultValue: 'Seu texto aqui...',
+        rows: 3
+      },
+      {
+        key: 'fontSize',
+        label: 'Tamanho da Fonte',
+        type: 'select',
+        options: [
+          { label: 'Pequeno', value: 'text-sm' },
+          { label: 'Normal', value: 'text-base' },
+          { label: 'Grande', value: 'text-lg' },
+          { label: 'Extra Grande', value: 'text-xl' }
+        ],
+        defaultValue: 'text-base'
+      },
+      {
+        key: 'textAlign',
+        label: 'Alinhamento',
+        type: 'select',
+        options: [
+          { label: 'Esquerda', value: 'text-left' },
+          { label: 'Centro', value: 'text-center' },
+          { label: 'Direita', value: 'text-right' }
+        ],
+        defaultValue: 'text-left'
+      }
+    ]
+  },
+  {
+    type: 'heading-inline',
+    name: 'Título Inline',
+    description: 'Título modular e configurável',
+    icon: 'Heading',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'content',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Título Principal'
+      },
+      {
+        key: 'level',
+        label: 'Nível do Título',
+        type: 'select',
+        options: [
+          { label: 'H1', value: 'h1' },
+          { label: 'H2', value: 'h2' },
+          { label: 'H3', value: 'h3' },
+          { label: 'H4', value: 'h4' }
+        ],
+        defaultValue: 'h2'
+      },
+      {
+        key: 'textAlign',
+        label: 'Alinhamento',
+        type: 'select',
+        options: [
+          { label: 'Esquerda', value: 'text-left' },
+          { label: 'Centro', value: 'text-center' },
+          { label: 'Direita', value: 'text-right' }
+        ],
+        defaultValue: 'text-center'
+      }
+    ]
+  },
+  {
+    type: 'button-inline',
+    name: 'Botão Inline',
+    description: 'Botão modular e responsivo',
+    icon: 'MousePointer',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'text',
+        label: 'Texto do Botão',
+        type: 'text-input',
+        defaultValue: 'Clique Aqui'
+      },
+      {
+        key: 'href',
+        label: 'Link',
+        type: 'text-input',
+        defaultValue: '#'
+      },
+      {
+        key: 'variant',
+        label: 'Estilo',
+        type: 'select',
+        options: [
+          { label: 'Primário', value: 'primary' },
+          { label: 'Secundário', value: 'secondary' },
+          { label: 'Sucesso', value: 'success' },
+          { label: 'Perigo', value: 'danger' }
+        ],
+        defaultValue: 'primary'
+      },
+      {
+        key: 'size',
+        label: 'Tamanho',
+        type: 'select',
+        options: [
+          { label: 'Pequeno', value: 'small' },
+          { label: 'Médio', value: 'medium' },
+          { label: 'Grande', value: 'large' }
+        ],
+        defaultValue: 'medium'
+      }
+    ]
+  },
+  {
+    type: 'result-card-inline',
+    name: 'Card de Resultado',
+    description: 'Card de resultado do quiz',
+    icon: 'Award',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título do Resultado',
+        type: 'text-input',
+        defaultValue: 'Seu Estilo Pessoal'
+      },
+      {
+        key: 'description',
+        label: 'Descrição',
+        type: 'textarea',
+        defaultValue: 'Descrição do resultado...',
+        rows: 3
+      },
+      {
+        key: 'imageUrl',
+        label: 'Imagem do Resultado',
+        type: 'image-url',
+        defaultValue: 'https://via.placeholder.com/300x200'
+      },
+      {
+        key: 'percentage',
+        label: 'Porcentagem de Match',
+        type: 'number-input',
+        defaultValue: 85,
+        min: 0,
+        max: 100
+      }
+    ]
+  },
+  {
+    type: 'countdown-inline',
+    name: 'Contador Regressivo',
+    description: 'Timer de urgência modular',
+    icon: 'Clock',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Oferta por tempo limitado!'
+      },
+      {
+        key: 'targetMinutes',
+        label: 'Minutos para expirar',
+        type: 'number-input',
+        defaultValue: 15,
+        min: 1,
+        max: 60
+      },
+      {
+        key: 'showLabels',
+        label: 'Mostrar Labels',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'urgencyColor',
+        label: 'Cor de Urgência',
+        type: 'select',
+        options: [
+          { label: 'Vermelho', value: 'red' },
+          { label: 'Laranja', value: 'orange' },
+          { label: 'Amarelo', value: 'yellow' }
+        ],
+        defaultValue: 'red'
+      }
+    ]
+  },
+
   // === COMPONENTES DE QUIZ FUNCIONAIS ===
   {
     type: 'quiz-start-page',

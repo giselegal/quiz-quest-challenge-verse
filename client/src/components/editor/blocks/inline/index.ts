@@ -2,6 +2,8 @@
 // MODULAR | REUTILIZÁVEL | RESPONSIVO | INDEPENDENTE
 
 export { default as TextInlineBlock } from './TextInlineBlock';
+export { default as HeadingInlineBlock } from '../HeadingInlineBlock';
+export { default as ButtonInlineBlock } from '../ButtonInlineBlock';
 export { default as StyleCardInlineBlock } from './StyleCardInlineBlock';
 export { default as StatInlineBlock } from './StatInlineBlock';
 export { default as BadgeInlineBlock } from './BadgeInlineBlock';
