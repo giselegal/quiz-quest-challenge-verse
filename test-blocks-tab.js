@@ -7,8 +7,12 @@
 console.log('🧪 TESTANDO ABA "BLOCOS" DO EDITOR VISUAL\n');
 
 // Importar as definições de blocos
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Caminho para o arquivo de definições
 const blockDefsPath = path.join(__dirname, 'client', 'src', 'config', 'blockDefinitionsClean.ts');
