@@ -17,7 +17,7 @@ import { useSchemaEditorFixed as useSchemaEditor } from '@/hooks/useSchemaEditor
 import { SchemaDrivenComponentsSidebar } from './sidebar/SchemaDrivenComponentsSidebar';
 import { DynamicPropertiesPanel } from './panels/DynamicPropertiesPanel';
 import { DroppableCanvas } from './dnd/DroppableCanvas';
-import { blockDefinitions } from '@/config/blockDefinitionsClean';
+import { blockDefinitions } from '@/config/blockDefinitions';
 
 interface SchemaDrivenEditorResponsiveProps {
   funnelId?: string;
