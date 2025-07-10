@@ -299,7 +299,10 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'quiz-result-header':
         return <UnifiedWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></UnifiedWrapper>;
       case 'quiz-result-card':
-        return <UnifiedWrapper blockType={blockType}><PricingInlineBlock {...commonProps} /></UnifiedWrapper>;
+        return <UnifiedWrapper bloc
+        
+        
+        kType={blockType}><PricingInlineBlock {...commonProps} /></UnifiedWrapper>;
 
       // NOVOS MAPEAMENTOS PARA TIPOS DO SCHEMA SERVICE
       case 'quiz-offer-title':
