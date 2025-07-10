@@ -28,8 +28,8 @@ const StyleCardInlineBlock: React.FC<BlockComponentProps> = ({
 
   // Tamanhos modulares responsivos
   const sizeClasses = {
-    small: 'p-3 sm:p-4 min-h-[160px] w-full sm:w-64 md:w-72',
-    medium: 'p-4 sm:p-6 min-h-[200px] w-full sm:w-72 md:w-80 lg:w-96',
+    small: 'p-3 sm:p-4 min-h-[160px] w-full max-w-xs',
+    medium: 'p-4 sm:p-6 min-h-[200px] w-full max-w-sm',
     large: 'p-6 sm:p-8 min-h-[240px] w-full sm:w-80 md:w-96 lg:w-[28rem]'
   };
 

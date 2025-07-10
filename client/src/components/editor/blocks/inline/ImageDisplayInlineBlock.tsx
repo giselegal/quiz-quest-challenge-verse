@@ -27,7 +27,7 @@ const ImageDisplayInlineBlock: React.FC<BlockComponentProps> = ({
   // Tamanhos modulares responsivos
   const sizeClasses = {
     small: 'w-full sm:w-48 md:w-56',
-    medium: 'w-full sm:w-64 md:w-72 lg:w-80',
+    medium: 'w-full max-w-md mx-auto',
     large: 'w-full sm:w-80 md:w-96 lg:w-[28rem]'
   };
 

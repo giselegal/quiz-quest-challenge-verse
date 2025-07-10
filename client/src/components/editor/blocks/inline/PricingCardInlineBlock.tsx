@@ -32,12 +32,12 @@ const PricingCardInlineBlock: React.FC<BlockComponentProps> = ({
   return (
     <div
       className={cn(
-        // Layout inline responsivo
-        'flex-shrink-0 w-full sm:w-72 md:w-80',
+        // Layout responsivo mobile-first - CORRIGIDO
+        'w-full max-w-sm mx-auto',
         // Visual baseado no estilo
         styleClasses[cardStyle as keyof typeof styleClasses],
         'rounded-xl border shadow-lg hover:shadow-xl',
-        'p-6 transition-all duration-300',
+        'p-4 sm:p-6 transition-all duration-300',
         // Estados
         isSelected && 'ring-2 ring-blue-500',
         'cursor-pointer hover:scale-105',

@@ -238,35 +238,35 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       'testimonial-inline': () => <TestimonialCardInlineBlock {...commonProps} />,
 
       // === BLOCOS QUIZ ESPECÍFICOS ES7+ ===
-      QuizQuestionBlock: () => <QuizQuestionBlock {...commonProps} /,
-      QuestionMultipleBlock: () => <QuestionMultipleBlock {...commonProps} /,
-      StrategicQuestionBlock: () => <StrategicQuestionBlock {...commonProps} /,
-      QuizTransitionBlock: () => <QuizTransitionBlock {...commonProps} /,
-      ResultPageBlock: () => <ResultPageBlock {...commonProps} /,
+      QuizQuestionBlock: () => <QuizQuestionBlock {...commonProps} />,
+      QuestionMultipleBlock: () => <QuestionMultipleBlock {...commonProps} />,
+      StrategicQuestionBlock: () => <StrategicQuestionBlock {...commonProps} />,
+      QuizTransitionBlock: () => <QuizTransitionBlock {...commonProps} />,
+      ResultPageBlock: () => <ResultPageBlock {...commonProps} />,
 
       // === SCHEMA SERVICE MAPPINGS ES7+ ===
-      'quiz-title': () => <HeadingInlineBlock {...commonProps} /,
-      'quiz-name-input': () => <FormInputBlock {...commonProps} /,
-      'quiz-question-main': () => <QuestionMultipleBlock {...commonProps} /,
-      'quiz-transition-main': () => <QuizTransitionBlock {...commonProps} /,
-      'quiz-question-strategic': () => <StrategicQuestionBlock {...commonProps} /,
-      'quiz-transition-final': () => <QuizTransitionBlock {...commonProps} /,
-      'quiz-result-header': () => <HeadingInlineBlock {...commonProps} /,
-      'quiz-result-card': () => <PricingCardInlineBlock {...commonProps} /,
-      'quiz-offer-title': () => <HeadingInlineBlock {...commonProps} /,
-      'quiz-offer-countdown': () => <CountdownInlineBlock {...commonProps} /,
-      'quiz-offer-faq': () => <FAQSectionBlock {...commonProps} /,
+      'quiz-title': () => <HeadingInlineBlock {...commonProps} />,
+      'quiz-name-input': () => <FormInputBlock {...commonProps} />,
+      'quiz-question-main': () => <QuestionMultipleBlock {...commonProps} />,
+      'quiz-transition-main': () => <QuizTransitionBlock {...commonProps} />,
+      'quiz-question-strategic': () => <StrategicQuestionBlock {...commonProps} />,
+      'quiz-transition-final': () => <QuizTransitionBlock {...commonProps} />,
+      'quiz-result-header': () => <HeadingInlineBlock {...commonProps} />,
+      'quiz-result-card': () => <PricingCardInlineBlock {...commonProps} />,
+      'quiz-offer-title': () => <HeadingInlineBlock {...commonProps} />,
+      'quiz-offer-countdown': () => <CountdownInlineBlock {...commonProps} />,
+      'quiz-offer-faq': () => <FAQSectionBlock {...commonProps} />,
 
       // === NOVOS COMPONENTES MODULARES ETAPAS 20/21 ES7+ ===
-      'result-header-inline': () => <ResultHeaderInlineBlock {...commonProps} /,
-      'testimonials-result': () => <TestimonialsInlineBlock {...commonProps} /,
-      'quiz-offer-pricing': () => <QuizOfferPricingInlineBlock {...commonProps} /,
-      'countdown-timer': () => <CountdownInlineBlock {...commonProps} /,
-      'bonus-list': () => <BonusListInlineBlock {...commonProps} /,
+      'result-header-inline': () => <ResultHeaderInlineBlock {...commonProps} />,
+      'testimonials-result': () => <TestimonialsInlineBlock {...commonProps} />,
+      'quiz-offer-pricing': () => <QuizOfferPricingInlineBlock {...commonProps} />,
+      'countdown-timer': () => <CountdownInlineBlock {...commonProps} />,
+      'bonus-list': () => <BonusListInlineBlock {...commonProps} />,
 
       // === ETAPA 20 - COMPONENTES RESULTADO MODULARES ES7+ (novos) ===
-      'before-after-inline': () => <ImageDisplayInlineBlock {...commonProps} /,
-      'divider-inline': () => <SpacerBlock {...commonProps} /,
+      'before-after-inline': () => <ImageDisplayInlineBlock {...commonProps} />,
+      'divider-inline': () => <SpacerBlock {...commonProps} />,
 
       // === ETAPA 21 - COMPONENTES FALTANTES ES7+ (únicos) ===
       // Removidas duplicatas, mantidos apenas os únicos
@@ -274,7 +274,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
 
     // ES7+ Return com fallback usando optional chaining
     return componentMap[blockType as keyof typeof componentMap]?.() ?? 
-           <TextInlineBlock {...commonProps} /;
+           <TextInlineBlock {...commonProps} />;
   };
 
   return (
