@@ -572,22 +572,23 @@ class SchemaDrivenFunnelService {
   }
 
   /**
-   * Cria todas as 21 páginas usando blocos modulares e schema-driven
-   * Cada página é composta por blocos independentes e editáveis via painel
+   * Cria todas as 21 páginas usando APENAS componentes inline modulares ES7+
+   * Arquitetura 100% modular com componentes independentes e responsivos
    */
   private createModularPages(): SchemaDrivenPageData[] {
-    console.log('🏗️ Iniciando criação das páginas modulares...');
+    console.log('🏗️ [ES7+] Iniciando criação das 21 etapas modulares...');
     console.log('🔍 DEBUG: REAL_QUIZ_QUESTIONS length:', REAL_QUIZ_QUESTIONS?.length);
     console.log('🔍 DEBUG: STRATEGIC_QUESTIONS length:', STRATEGIC_QUESTIONS?.length);
-    console.log('🔍 DEBUG: TRANSITIONS keys:', Object.keys(TRANSITIONS || {}));
     
     const pages: SchemaDrivenPageData[] = [];
 
-    // ETAPA 1: Introdução - QuizIntro (Coleta do nome)
+    // ==========================================
+    // ETAPA 1: INTRODUÇÃO (COLETA DO NOME)
+    // ==========================================
     pages.push({
       id: 'etapa-1-intro',
       name: 'Introdução',
-      title: 'Etapa 1: Introdução (Coleta do Nome)',
+      title: 'Etapa 1: Introdução - Coleta do Nome',
       type: 'intro',
       order: 1,
       blocks: [
@@ -605,7 +606,7 @@ class SchemaDrivenFunnelService {
           }
         },
         {
-          id: 'intro-decorative-bar',
+          id: 'intro-decorative-spacer',
           type: 'spacer',
           properties: {
             height: 4,
@@ -615,19 +616,20 @@ class SchemaDrivenFunnelService {
           }
         },
         {
-          id: 'intro-main-title',
-          type: 'quiz-title',
+          id: 'intro-main-heading',
+          type: 'text-inline',
           properties: {
-            title: '<span style="color: #B89B7A">Chega</span> de um guarda-roupa lotado e da sensação de que nada combina com você.',
+            content: '<span style="color: #B89B7A; font-weight: 700;">Chega</span> de um guarda-roupa lotado e da sensação de que nada combina com você.',
             fontSize: 'text-3xl',
             fontWeight: 'font-bold',
             textAlign: 'text-center',
-            color: '#432818'
+            color: '#432818',
+            marginBottom: 24
           }
         },
         {
-          id: 'intro-image',
-          type: 'image',
+          id: 'intro-hero-image',
+          type: 'image-display-inline',
           properties: {
             src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp',
             alt: 'Transforme seu guarda-roupa',
@@ -638,7 +640,7 @@ class SchemaDrivenFunnelService {
         },
         {
           id: 'intro-subtitle',
-          type: 'text',
+          type: 'text-inline',
           properties: {
             content: 'Em poucos minutos, descubra seu Estilo Predominante — e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.',
             fontSize: 'text-lg',
@@ -650,25 +652,27 @@ class SchemaDrivenFunnelService {
         },
         {
           id: 'intro-name-input',
-          type: 'quiz-name-input',
+          type: 'form-input',
           properties: {
             label: 'NOME',
             placeholder: 'Digite seu nome aqui...',
             required: true,
             inputType: 'text',
-            helperText: ''
+            helperText: '',
+            name: 'userName'
           }
         },
         {
           id: 'intro-cta-button',
-          type: 'button',
+          type: 'button-inline',
           properties: {
             text: 'Quero Descobrir meu Estilo Agora!',
             variant: 'primary',
-            size: 'lg',
+            size: 'large',
             fullWidth: true,
             backgroundColor: '#B89B7A',
-            textColor: '#ffffff'
+            textColor: '#ffffff',
+            requiresValidInput: true
           }
         }
       ],
@@ -682,11 +686,14 @@ class SchemaDrivenFunnelService {
       }
     });
 
-    // ETAPAS 2-11: Questões principais (10 questões) - MODULARES COM CABEÇALHO
-    console.log('🔍 REAL_QUIZ_QUESTIONS:', REAL_QUIZ_QUESTIONS?.length || 'undefined');
+    // ==========================================
+    // ETAPAS 2-11: QUESTÕES PRINCIPAIS (10 QUESTÕES)
+    // Componentes: quiz-intro-header + heading-inline + text-inline + options-grid + button-inline
+    // ==========================================
     REAL_QUIZ_QUESTIONS.forEach((questionData, index) => {
-      console.log(`🎯 Criando questão ${index + 1}:`, questionData.question);
-      const currentProgress = 5 + (index + 1) * 5;
+      console.log(`🎯 [ES7+] Criando questão ${index + 1}:`, questionData.question);
+      const currentProgress = 5 + (index + 1) * 5; // 5%, 10%, 15%... até 55%
+      
       pages.push({
         id: `etapa-${index + 2}-questao-${index + 1}`,
         name: `Questão ${index + 1}`,
@@ -694,7 +701,7 @@ class SchemaDrivenFunnelService {
         type: 'question',
         order: index + 2,
         blocks: [
-          // 1. Cabeçalho com logo e progresso
+          // 1. Cabeçalho modular com logo e progresso
           {
             id: `question-${index + 1}-header`,
             type: 'quiz-intro-header',
@@ -708,22 +715,24 @@ class SchemaDrivenFunnelService {
               showBackButton: true
             }
           },
-          // 2. Título da questão
+          // 2. Título da questão (componente inline)
           {
             id: `question-${index + 1}-title`,
-            type: 'quiz-title',
+            type: 'heading-inline',
             properties: {
-              title: questionData.question,
+              content: questionData.question,
+              level: 'h2',
               fontSize: 'text-2xl',
               fontWeight: 'font-bold',
               textAlign: 'text-center',
-              color: '#432818'
+              color: '#432818',
+              marginBottom: 8
             }
           },
-          // 3. Indicador de progresso textual
+          // 3. Indicador de progresso textual (componente inline)
           {
             id: `question-${index + 1}-progress-label`,
-            type: 'text',
+            type: 'text-inline',
             properties: {
               content: `Questão ${index + 1} de 10`,
               fontSize: 'text-sm',
@@ -732,7 +741,7 @@ class SchemaDrivenFunnelService {
               marginBottom: 24
             }
           },
-          // 4. Grade de opções (2 colunas para imagens)
+          // 4. Grid de opções responsivo (máx 2 colunas)
           {
             id: `question-${index + 1}-options`,
             type: 'options-grid',
@@ -746,26 +755,27 @@ class SchemaDrivenFunnelService {
               })),
               columns: questionData.type === 'both' ? 2 : 1,
               showImages: questionData.type === 'both' || questionData.type === undefined,
-              imageSize: 'large', // Imagens maiores
+              imageSize: 'large',
               multipleSelection: questionData.multipleSelection || false,
               maxSelections: questionData.maxSelections || 1,
               minSelections: 1,
               validationMessage: `Selecione ${questionData.maxSelections || 1} opç${(questionData.maxSelections || 1) > 1 ? 'ões' : 'ão'}`,
-              gridGap: 16
+              gridGap: 16,
+              responsiveColumns: true // Força máximo 2 colunas
             }
           },
-          // 5. Botão de continuar (com validação)
+          // 5. Botão continuar modular (componente inline)
           {
             id: `question-${index + 1}-continue`,
-            type: 'button',
+            type: 'button-inline',
             properties: {
               text: 'Continuar',
               variant: 'primary',
-              size: 'lg',
+              size: 'large',
               fullWidth: true,
               backgroundColor: '#B89B7A',
               textColor: '#ffffff',
-              disabled: true, // Disabled até seleção válida
+              disabled: true,
               requiresValidSelection: true
             }
           }
@@ -781,7 +791,10 @@ class SchemaDrivenFunnelService {
       });
     });
 
-    // ETAPA 12: Transição principal - MODULAR COM CABEÇALHO
+    // ==========================================
+    // ETAPA 12: TRANSIÇÃO PRINCIPAL
+    // Componentes: quiz-intro-header + heading-inline + text-inline + progress-inline + button-inline
+    // ==========================================
     pages.push({
       id: 'etapa-12-transicao-principal',
       name: 'Transição Principal',
@@ -789,7 +802,7 @@ class SchemaDrivenFunnelService {
       type: 'custom',
       order: 12,
       blocks: [
-        // 1. Cabeçalho com logo e progresso
+        // 1. Cabeçalho modular com logo e progresso
         {
           id: 'transition-main-header',
           type: 'quiz-intro-header',
@@ -803,69 +816,172 @@ class SchemaDrivenFunnelService {
             showBackButton: true
           }
         },
-        // 2. Título da transição
+        // 2. Título da transição (componente inline)
         {
           id: 'transition-main-title',
-          type: 'quiz-title',
+          type: 'heading-inline',
           properties: {
-            title: TRANSITIONS.mainTransition.title,
-            fontSize: 'text-3xl',
+            content: 'Agora vamos conhecer você melhor',
+            level: 'h2',
+            fontSize: 'text-2xl',
             fontWeight: 'font-bold',
             textAlign: 'text-center',
-            color: '#432818'
+            color: '#432818',
+            marginBottom: 16
           }
         },
-        // 3. Mensagem principal
+        // 3. Texto motivacional (componente inline)
         {
-          id: 'transition-main-message',
-          type: 'text',
+          id: 'transition-motivation',
+          type: 'text-inline',
           properties: {
-            content: TRANSITIONS.mainTransition.message,
+            content: 'Suas escolhas até agora já revelam muito sobre seu estilo. Agora vamos aprofundar para criar um perfil ainda mais preciso.',
             fontSize: 'text-lg',
             textAlign: 'text-center',
-            color: '#432818',
-            marginBottom: 24
-          }
-        },
-        // 4. Submensagem
-        {
-          id: 'transition-main-submessage',
-          type: 'text',
-          properties: {
-            content: TRANSITIONS.mainTransition.submessage,
-            fontSize: 'text-base',
-            textAlign: 'text-center',
             color: '#6B7280',
-            marginBottom: 24
-          }
-        },
-        // 5. Mensagem adicional
-        {
-          id: 'transition-main-additional',
-          type: 'text',
-          properties: {
-            content: TRANSITIONS.mainTransition.additionalMessage,
-            fontSize: 'text-base',
-            textAlign: 'text-center',
-            color: '#B89B7A',
-            fontWeight: 'font-medium',
             marginBottom: 32
           }
         },
-        // 6. Botão continuar
+        // 4. Barra de progresso visual (componente inline)
         {
-          id: 'transition-main-continue',
-          type: 'button',
+          id: 'transition-progress-bar',
+          type: 'progress-inline',
           properties: {
-            text: 'Continuar',
+            progressValue: 60,
+            progressMax: 100,
+            showPercentage: true,
+            color: '#B89B7A',
+            backgroundColor: '#F5F5F5',
+            height: 8,
+            marginBottom: 32
+          }
+        },
+        // 5. Botão continuar (componente inline)
+        {
+          id: 'transition-continue',
+          type: 'button-inline',
+          properties: {
+            text: 'Continuar Análise',
             variant: 'primary',
-            size: 'lg',
+            size: 'large',
             fullWidth: true,
             backgroundColor: '#B89B7A',
             textColor: '#ffffff'
           }
         }
       ],
+      settings: {
+        showProgress: true,
+        progressValue: 60,
+        backgroundColor: '#ffffff',
+        textColor: '#432818',
+        maxWidth: 'max-w-4xl',
+        padding: 'p-6'
+      }
+    });
+
+    // ==========================================
+    // ETAPAS 13-18: QUESTÕES ESTRATÉGICAS (6 QUESTÕES)
+    // Componentes: quiz-intro-header + heading-inline + text-inline + options-grid + button-inline
+    // ==========================================
+    STRATEGIC_QUESTIONS.forEach((questionData, index) => {
+      console.log(`🎯 [ES7+] Criando questão estratégica ${index + 1}:`, questionData.question);
+      const currentProgress = 65 + (index * 5); // 65%, 70%, 75%... até 90%
+      
+      pages.push({
+        id: `etapa-${index + 13}-estrategica-${index + 1}`,
+        name: `Questão Estratégica ${index + 1}`,
+        title: `Etapa ${index + 13}: ${questionData.question}`,
+        type: 'question',
+        order: index + 13,
+        blocks: [
+          // 1. Cabeçalho modular com logo e progresso
+          {
+            id: `strategic-${index + 1}-header`,
+            type: 'quiz-intro-header',
+            properties: {
+              logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+              logoAlt: 'Logo Gisele Galvão',
+              logoWidth: 96,
+              logoHeight: 96,
+              progressValue: currentProgress,
+              progressMax: 100,
+              showBackButton: true
+            }
+          },
+          // 2. Título da questão estratégica (componente inline)
+          {
+            id: `strategic-${index + 1}-title`,
+            type: 'heading-inline',
+            properties: {
+              content: questionData.question,
+              level: 'h2',
+              fontSize: 'text-2xl',
+              fontWeight: 'font-bold',
+              textAlign: 'text-center',
+              color: '#432818',
+              marginBottom: 8
+            }
+          },
+          // 3. Indicador de progresso (componente inline)
+          {
+            id: `strategic-${index + 1}-progress-label`,
+            type: 'text-inline',
+            properties: {
+              content: `Questão estratégica ${index + 1} de 6`,
+              fontSize: 'text-sm',
+              textAlign: 'text-center',
+              color: '#6B7280',
+              marginBottom: 24
+            }
+          },
+          // 4. Grid de opções (estilo simplificado)
+          {
+            id: `strategic-${index + 1}-options`,
+            type: 'options-grid',
+            properties: {
+              options: questionData.options.map(opt => ({
+                id: opt.id,
+                text: opt.text,
+                value: opt.value || opt.id,
+                category: (opt as any).category || opt.value || opt.id
+              })),
+              columns: 1,
+              showImages: false,
+              multipleSelection: false,
+              maxSelections: 1,
+              minSelections: 1,
+              validationMessage: 'Selecione uma opção',
+              gridGap: 12,
+              responsiveColumns: true
+            }
+          },
+          // 5. Botão continuar (componente inline)
+          {
+            id: `strategic-${index + 1}-continue`,
+            type: 'button-inline',
+            properties: {
+              text: 'Continuar',
+              variant: 'primary',
+              size: 'large',
+              fullWidth: true,
+              backgroundColor: '#B89B7A',
+              textColor: '#ffffff',
+              disabled: true,
+              requiresValidSelection: true
+            }
+          }
+        ],
+        settings: {
+          showProgress: true,
+          progressValue: currentProgress,
+          backgroundColor: '#ffffff',
+          textColor: '#432818',
+          maxWidth: 'max-w-4xl',
+          padding: 'p-6'
+        }
+      });
+    });
       settings: {
         showProgress: true,
         progressValue: 60,
