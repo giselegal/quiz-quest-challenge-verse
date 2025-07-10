@@ -44,6 +44,7 @@ export interface QuizOption {
   weight?: number;
   value?: string;
   category?: string;
+  points?: number; // Adicionado para compatibilidade
 }
 
 export interface QuizResponse {
@@ -52,6 +53,12 @@ export interface QuizResponse {
   selectedOptionId?: string; // Para compatibilidade com código antigo
   selectedStyles?: StyleType[]; // Estilos das opções selecionadas
   selectedStyle?: StyleType; // Para compatibilidade com código antigo
+  timestamp: Date;
+}
+
+export interface UserResponse {
+  questionId: string;
+  selectedOptions: string[];
   timestamp: Date;
 }
 
@@ -82,6 +89,8 @@ export interface QuizResult {
 
 // Alias para compatibilidade
 export interface StyleResult extends StyleScore {
+  category: string;
+  score: number;
   description?: string;
   imageUrl?: string;
   guideImageUrl?: string;

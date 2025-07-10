@@ -337,7 +337,7 @@ const ModernResultPageBlock: React.FC<ModernResultPageBlockProps> = ({
                     <InlineEditText
                       as="span"
                       value={`Parabéns, ${userName}!`}
-                      onSave={(value) => handlePropertyChange('userName', value.replace('Parabéns, ', '').replace('!', ''))}
+                      onChange={(value) => handlePropertyChange('userName', value.replace('Parabéns, ', '').replace('!', ''))}
                       disabled={disabled}
                       className="text-lg lg:text-xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent"
                     />
@@ -351,7 +351,7 @@ const ModernResultPageBlock: React.FC<ModernResultPageBlockProps> = ({
                   <InlineEditText
                     as="span"
                     value={primaryStyle.category}
-                    onSave={(value) => handlePropertyChange('primaryStyle', { ...primaryStyle, category: value })}
+                    onChange={(value) => handlePropertyChange('primaryStyle', { ...primaryStyle, category: value })}
                     disabled={disabled}
                     className="text-3xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] bg-clip-text text-transparent mt-2 block"
                   />
@@ -487,7 +487,7 @@ const ModernResultPageBlock: React.FC<ModernResultPageBlockProps> = ({
                           <InlineEditText
                             as="span"
                             value={product.badge}
-                            onSave={(value) => {
+                            onChange={(value) => {
                               const newProducts = [...products];
                               newProducts[index] = { ...product, badge: value };
                               handlePropertyChange('products', newProducts);
@@ -510,7 +510,7 @@ const ModernResultPageBlock: React.FC<ModernResultPageBlockProps> = ({
                         <InlineEditText
                           as="h4"
                           value={product.title}
-                          onSave={(value) => {
+                          onChange={(value) => {
                             const newProducts = [...products];
                             newProducts[index] = { ...product, title: value };
                             handlePropertyChange('products', newProducts);
@@ -522,7 +522,7 @@ const ModernResultPageBlock: React.FC<ModernResultPageBlockProps> = ({
                         <InlineEditText
                           as="p"
                           value={product.subtitle}
-                          onSave={(value) => {
+                          onChange={(value) => {
                             const newProducts = [...products];
                             newProducts[index] = { ...product, subtitle: value };
                             handlePropertyChange('products', newProducts);
@@ -540,7 +540,7 @@ const ModernResultPageBlock: React.FC<ModernResultPageBlockProps> = ({
                             <InlineEditText
                               as="span"
                               value={product.originalPrice}
-                              onSave={(value) => {
+                              onChange={(value) => {
                                 const newProducts = [...products];
                                 newProducts[index] = { ...product, originalPrice: value };
                                 handlePropertyChange('products', newProducts);
@@ -580,7 +580,7 @@ const ModernResultPageBlock: React.FC<ModernResultPageBlockProps> = ({
                       <InlineEditText
                         as="p"
                         value="R$ 39,90"
-                        onSave={(value) => handlePropertyChange('finalPrice', value)}
+                        onChange={(value) => handlePropertyChange('finalPrice', value)}
                         disabled={disabled}
                         className="text-4xl lg:text-5xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent"
                       />
@@ -627,7 +627,7 @@ const ModernResultPageBlock: React.FC<ModernResultPageBlockProps> = ({
                     <InlineEditText
                       as="span"
                       value={ctaText}
-                      onSave={(value) => handlePropertyChange('ctaText', value)}
+                      onChange={(value) => handlePropertyChange('ctaText', value)}
                       disabled={disabled}
                       className="leading-tight text-white"
                     />

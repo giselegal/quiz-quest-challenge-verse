@@ -346,20 +346,18 @@ const PriceComparisonBlock: React.FC<PriceComparisonBlockProps> = ({
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             <InlineEditableText
               value={title}
-              onSave={(value: string) => handlePropertyChange('title', value)}
+              onChange={(value: string) => handlePropertyChange('title', value)}
               className="inline-block"
               placeholder="Título dos preços"
-              tag="h2"
             />
           </h2>
           {subtitle && (
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               <InlineEditableText
                 value={subtitle}
-                onSave={(value: string) => handlePropertyChange('subtitle', value)}
+                onChange={(value: string) => handlePropertyChange('subtitle', value)}
                 className="inline-block"
                 placeholder="Subtítulo dos preços"
-                tag="p"
               />
             </p>
           )}

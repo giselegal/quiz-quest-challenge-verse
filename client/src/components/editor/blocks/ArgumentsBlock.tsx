@@ -52,10 +52,9 @@ const ArgumentsBlock: React.FC<BlockComponentProps> = ({
       <h3 className="text-xl font-bold text-center text-[#432818]">
         <InlineEditableText
           value={title}
-          onSave={(value: string) => handlePropertyChange('title', value)}
+          onChange={(value: string) => handlePropertyChange('title', value)}
           className="inline-block"
           placeholder="Título dos argumentos"
-          tag="h3"
         />
       </h3>
       <div className="space-y-3">

@@ -81,10 +81,9 @@ const UrgencyTimerBlock: React.FC<BlockComponentProps> = ({
               <Clock className="w-5 h-5 text-red-500 animate-pulse" />
               <InlineEditableText
                 value={title}
-                onSave={(value: string) => handlePropertyChange('title', value)}
+                onChange={(value: string) => handlePropertyChange('title', value)}
                 className="text-lg font-semibold text-[#432818]"
                 placeholder="Título do timer de urgência"
-                tag="h3"
               />
             </div>
             
@@ -102,10 +101,9 @@ const UrgencyTimerBlock: React.FC<BlockComponentProps> = ({
             <div className="bg-gray-100 rounded-lg py-4 px-6">
               <InlineEditableText
                 value={expiredMessage}
-                onSave={(value: string) => handlePropertyChange('expiredMessage', value)}
+                onChange={(value: string) => handlePropertyChange('expiredMessage', value)}
                 className="text-gray-600 font-medium"
                 placeholder="Mensagem quando o timer expira"
-                tag="div"
               />
             </div>
           )

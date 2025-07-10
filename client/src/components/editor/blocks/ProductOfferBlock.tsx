@@ -57,27 +57,24 @@ const ProductOfferBlock: React.FC<BlockComponentProps> = ({
           {/* Nome do Produto */}
           <InlineEditableText
             value={productName}
-            onSave={(value: string) => handlePropertyChange('productName', value)}
+            onChange={(value: string) => handlePropertyChange('productName', value)}
             className="text-xl font-bold text-[#432818] mb-4"
             placeholder="Nome do produto"
-            tag="h3"
           />
           
           {/* Preços */}
           <div className="flex items-center space-x-3 mb-4">
             <InlineEditableText
               value={originalPrice}
-              onSave={(value: string) => handlePropertyChange('originalPrice', value)}
+              onChange={(value: string) => handlePropertyChange('originalPrice', value)}
               className="text-sm text-gray-500 line-through"
               placeholder="Preço original"
-              tag="span"
             />
             <InlineEditableText
               value={discountPrice}
-              onSave={(value: string) => handlePropertyChange('discountPrice', value)}
+              onChange={(value: string) => handlePropertyChange('discountPrice', value)}
               className="text-2xl font-bold text-[#B89B7A]"
               placeholder="Preço com desconto"
-              tag="span"
             />
           </div>
           
@@ -90,7 +87,7 @@ const ProductOfferBlock: React.FC<BlockComponentProps> = ({
                   {isEditing ? (
                     <InlineEditableText
                       value={feature.text}
-                      onSave={(value: string) => {
+                      onChange={(value: string) => {
                         const updatedFeatures = features.map((feat: any, i: number) => 
                           i === index ? { ...feat, text: value } : feat
                         );
@@ -98,7 +95,6 @@ const ProductOfferBlock: React.FC<BlockComponentProps> = ({
                       }}
                       className="text-sm text-gray-700"
                       placeholder="Benefício do produto"
-                      tag="span"
                     />
                   ) : (
                     <span className="text-sm text-gray-700">{feature.text}</span>
@@ -115,10 +111,9 @@ const ProductOfferBlock: React.FC<BlockComponentProps> = ({
             <ShoppingCart className="w-5 h-5" />
             <InlineEditableText
               value={buttonText}
-              onSave={(value: string) => handlePropertyChange('buttonText', value)}
+              onChange={(value: string) => handlePropertyChange('buttonText', value)}
               className="text-white font-bold"
               placeholder="Texto do botão"
-              tag="span"
             />
           </button>
         </div>

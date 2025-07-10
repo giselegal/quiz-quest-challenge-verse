@@ -55,10 +55,9 @@ const ChartLevelBlock: React.FC<BlockComponentProps> = ({
       <p className="text-lg text-[#432818]">
         <InlineEditableText
           value={label}
-          onSave={(value: string) => handlePropertyChange('label', value)}
+          onChange={(value: string) => handlePropertyChange('label', value)}
           className="inline-block"
           placeholder="Rótulo do nível"
-          tag="span"
         />
       </p>
       <div className="text-sm text-gray-500">

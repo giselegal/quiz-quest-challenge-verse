@@ -80,7 +80,7 @@ const QuestionMultipleBlock: React.FC<QuestionMultipleBlockProps> = ({
       <div className="text-center mb-8">
         <InlineEditText
           value={question}
-          onSave={(newValue) => onPropertyChange?.('question', newValue)}
+          onChange={(newValue) => onPropertyChange?.('question', newValue)}
           placeholder="Digite a pergunta..."
           disabled={disabled}
           multiline={true}

@@ -40,20 +40,18 @@ const QuoteBlock: React.FC<BlockComponentProps> = ({
       <blockquote className="text-[#432818] italic text-center text-base md:text-lg">
         "<InlineEditableText
           value={text}
-          onSave={(value: string) => handlePropertyChange('text', value)}
+          onChange={(value: string) => handlePropertyChange('text', value)}
           className="inline-block w-full"
           placeholder="Texto da citação"
-          tag="span"
         />"
       </blockquote>
       {author && (
         <p className="text-sm text-gray-600 text-right">
           - <InlineEditableText
             value={author}
-            onSave={(value: string) => handlePropertyChange('author', value)}
+            onChange={(value: string) => handlePropertyChange('author', value)}
             className="inline-block"
             placeholder="Autor da citação"
-            tag="span"
           />
         </p>
       )}

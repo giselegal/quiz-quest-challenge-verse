@@ -347,20 +347,18 @@ const BenefitsListBlock: React.FC<BenefitsListBlockProps> = ({
           <h2 className="text-2xl md:text-3xl font-bold mb-2">
             <InlineEditableText
               value={title}
-              onSave={(value: string) => handlePropertyChange('title', value)}
+              onChange={(value: string) => handlePropertyChange('title', value)}
               className="inline-block"
               placeholder="Título dos benefícios"
-              tag="h2"
             />
           </h2>
           {subtitle && (
             <p className="text-lg text-opacity-80 max-w-2xl mx-auto">
               <InlineEditableText
                 value={subtitle}
-                onSave={(value: string) => handlePropertyChange('subtitle', value)}
+                onChange={(value: string) => handlePropertyChange('subtitle', value)}
                 className="inline-block"
                 placeholder="Subtítulo dos benefícios"
-                tag="p"
               />
             </p>
           )}

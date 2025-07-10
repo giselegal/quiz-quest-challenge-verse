@@ -41,10 +41,9 @@ const ChartAreaBlock: React.FC<BlockComponentProps> = ({
       <h3 className="text-xl font-bold text-[#432818] mb-4">
         <InlineEditableText
           value={title}
-          onSave={(value: string) => handlePropertyChange('title', value)}
+          onChange={(value: string) => handlePropertyChange('title', value)}
           className="inline-block"
           placeholder="Título do gráfico"
-          tag="h3"
         />
       </h3>
       <div className="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500 text-sm rounded-md">

@@ -55,10 +55,9 @@ const MarqueeBlock: React.FC<BlockComponentProps> = ({
         <span className="px-4">
           <InlineEditableText
             value={text}
-            onSave={(value: string) => handlePropertyChange('text', value)}
+            onChange={(value: string) => handlePropertyChange('text', value)}
             className="inline-block"
             placeholder="Texto da marquise"
-            tag="span"
           />
         </span>
         {/* Duplica o texto para um loop contínuo */}

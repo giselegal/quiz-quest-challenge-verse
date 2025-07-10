@@ -46,10 +46,9 @@ const ResultDescriptionBlock: React.FC<BlockComponentProps> = ({
         <div className="flex-1">
           <InlineEditableText
             value={content}
-            onSave={(value: string) => handlePropertyChange('content', value)}
+            onChange={(value: string) => handlePropertyChange('content', value)}
             className="text-gray-700 leading-relaxed"
             placeholder="Descrição detalhada do resultado baseado nas respostas do quiz"
-            tag="div"
           />
         </div>
       </div>

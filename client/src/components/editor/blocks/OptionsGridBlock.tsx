@@ -141,10 +141,9 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
         <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#432818] mb-3 sm:mb-4 md:mb-6 px-1 sm:px-2">
           <InlineEditableText
             value={title}
-            onSave={(value: string) => handlePropertyChange('title', value)}
+            onChange={(value: string) => handlePropertyChange('title', value)}
             className="inline-block"
             placeholder="Título das opções"
-            tag="h3"
           />
         </h3>
       )}

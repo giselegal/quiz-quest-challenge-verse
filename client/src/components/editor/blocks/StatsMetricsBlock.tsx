@@ -359,20 +359,18 @@ const StatsMetricsBlock: React.FC<StatsBlockProps> = ({
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               <InlineEditableText
                 value={title}
-                onSave={(value: string) => handlePropertyChange('title', value)}
+                onChange={(value: string) => handlePropertyChange('title', value)}
                 className="inline-block"
                 placeholder="Título das estatísticas"
-                tag="h2"
               />
             </h2>
             {subtitle && (
               <p className="text-lg text-opacity-80 max-w-3xl mx-auto">
                 <InlineEditableText
                   value={subtitle}
-                  onSave={(value: string) => handlePropertyChange('subtitle', value)}
+                  onChange={(value: string) => handlePropertyChange('subtitle', value)}
                   className="inline-block"
                   placeholder="Subtítulo das estatísticas"
-                  tag="p"
                 />
               </p>
             )}

@@ -41,20 +41,18 @@ const TermsBlock: React.FC<BlockComponentProps> = ({
         <h3 className="text-xl font-bold text-[#432818] text-center">
           <InlineEditableText
             value={title}
-            onSave={(value: string) => handlePropertyChange('title', value)}
+            onChange={(value: string) => handlePropertyChange('title', value)}
             className="inline-block"
             placeholder="Título dos termos"
-            tag="span"
           />
         </h3>
       </div>
       <div className="text-sm text-gray-700 leading-relaxed">
         <InlineEditableText
           value={content}
-          onSave={(value: string) => handlePropertyChange('content', value)}
+          onChange={(value: string) => handlePropertyChange('content', value)}
           className="inline-block w-full"
           placeholder="Conteúdo dos termos e condições"
-          tag="div"
         />
       </div>
     </div>

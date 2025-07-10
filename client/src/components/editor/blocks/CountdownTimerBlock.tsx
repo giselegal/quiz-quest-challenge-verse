@@ -4,7 +4,7 @@ import {
   Clock, 
   Zap, 
   AlertTriangle, 
-  Fire,
+  Flame,
   Timer,
   Calendar
 } from 'lucide-react';
@@ -324,7 +324,7 @@ const CountdownTimerBlock: React.FC<CountdownTimerBlockProps> = ({
           transition={{ duration: 1, repeat: Infinity }}
           className="flex items-center justify-center gap-2 text-red-500 font-bold"
         >
-          <Fire className="w-5 h-5" />
+          <Flame className="w-5 h-5" />
           Últimos minutos!
         </motion.div>
       );
@@ -374,10 +374,9 @@ const CountdownTimerBlock: React.FC<CountdownTimerBlockProps> = ({
           <h2 className={cn('text-xl sm:text-2xl md:text-3xl font-bold mb-2', themeClasses.text)}>
             <InlineEditableText
               value={title}
-              onSave={(value: string) => handlePropertyChange('title', value)}
+              onChange={(value: string) => handlePropertyChange('title', value)}
               className="inline-block"
               placeholder="Título do countdown"
-              tag="h2"
             />
           </h2>
         )}
@@ -385,10 +384,9 @@ const CountdownTimerBlock: React.FC<CountdownTimerBlockProps> = ({
           <p className={cn('text-base sm:text-lg mb-3 sm:mb-4', themeClasses.accent)}>
             <InlineEditableText
               value={subtitle}
-              onSave={(value: string) => handlePropertyChange('subtitle', value)}
+              onChange={(value: string) => handlePropertyChange('subtitle', value)}
               className="inline-block"
               placeholder="Subtítulo do countdown"
-              tag="p"
             />
           </p>
         )}

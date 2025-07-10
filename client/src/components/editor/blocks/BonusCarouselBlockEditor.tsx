@@ -18,12 +18,12 @@ export const BonusCarouselBlockEditor: React.FC<BlockEditorProps> = ({
   };
 
   const removeImage = (index: number) => {
-    const newImages = bonusImages.filter((_, i) => i !== index);
+    const newImages = bonusImages.filter((_: any, i: number) => i !== index);
     onUpdate({ bonusImages: newImages });
   };
 
   const updateImage = (index: number, field: 'url' | 'alt' | 'title', value: string) => {
-    const newImages = bonusImages.map((img, i) => 
+    const newImages = bonusImages.map((img: any, i: number) => 
       i === index ? { ...img, [field]: value } : img
     );
     onUpdate({ bonusImages: newImages });
@@ -44,7 +44,7 @@ export const BonusCarouselBlockEditor: React.FC<BlockEditorProps> = ({
 
       <div className="space-y-4">
         <Label>Imagens dos Bônus</Label>
-        {bonusImages.map((image, index) => (
+        {bonusImages.map((image: any, index: number) => (
           <div key={index} className="space-y-2 p-4 border rounded-lg bg-[#FAF9F7]">
             <div className="flex justify-between items-center">
               <Label>Bônus {index + 1}</Label>

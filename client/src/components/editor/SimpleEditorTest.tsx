@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SchemaDrivenComponentsSidebar } from './sidebar/SchemaDrivenComponentsSidebar';
-import { BlockRenderer, BlockData } from './blocks';
+import { UniversalBlockRenderer, BlockData } from './blocks';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { Button } from '@/components/ui/button';
 import { useSimpleEditor } from '@/hooks/useSimpleEditor';
@@ -113,7 +113,7 @@ const SimpleEditorTest: React.FC = () => {
                       ) : (
                         currentPage.blocks.map((block) => (
                           <div key={block.id} className="group relative">
-                            <BlockRenderer
+                            <UniversalBlockRenderer
                               block={block}
                               isSelected={block.id === selectedBlockId}
                               onClick={() => setSelectedBlock(block.id)}

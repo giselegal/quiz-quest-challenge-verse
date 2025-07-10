@@ -78,10 +78,9 @@ const LoaderBlock: React.FC<BlockComponentProps> = ({
         <span className="text-[#432818] text-lg font-medium">
           <InlineEditableText
             value={message}
-            onSave={(value: string) => handlePropertyChange('message', value)}
+            onChange={(value: string) => handlePropertyChange('message', value)}
             className="inline-block"
             placeholder="Mensagem de carregamento"
-            tag="span"
           />
         </span>
         {duration && (

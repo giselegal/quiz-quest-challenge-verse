@@ -50,10 +50,9 @@ const CompareBlock: React.FC<BlockComponentProps> = ({
       <h3 className="text-xl font-bold text-[#432818]">
         <InlineEditableText
           value={title}
-          onSave={(value: string) => handlePropertyChange('title', value)}
+          onChange={(value: string) => handlePropertyChange('title', value)}
           className="inline-block"
           placeholder="Título da comparação"
-          tag="h3"
         />
       </h3>
       <div className="flex w-full max-w-md mx-auto h-8 rounded-lg overflow-hidden shadow-md">
