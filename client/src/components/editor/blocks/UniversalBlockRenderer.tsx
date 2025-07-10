@@ -26,6 +26,11 @@ import {
   BonusListInlineBlock
 } from './inline';
 
+// Novos blocos inline modulares criados (ES7+)
+import ResultCardInlineBlock from './inline/ResultCardInlineBlock';
+import QuizOfferPricingInlineBlock from './inline/QuizOfferPricingInlineBlock';
+import CountdownInlineBlock from './inline/CountdownInlineBlock';
+
 // Componentes básicos (funcionais)
 import { SpacerBlock } from './SpacerBlock';
 import { VideoPlayerBlock } from './VideoPlayerBlock';

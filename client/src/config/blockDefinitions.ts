@@ -2718,6 +2718,337 @@ export const blockDefinitions: BlockDefinition[] = [
         ]
       }
     ]
+  },
+
+  // =====================================================================
+  // NOVOS BLOCOS INLINE MODULARES ETAPAS 20 E 21 - ES7+ PADRÃO
+  // =====================================================================
+  
+  {
+    type: 'result-card-inline',
+    name: 'Card de Resultado (Inline)',
+    description: 'Card modular com o resultado do quiz personalizado',
+    icon: 'Award',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'resultTitle',
+        label: 'Título do Resultado',
+        type: 'text-input',
+        defaultValue: 'Seu Estilo Único'
+      },
+      {
+        key: 'resultSubtitle',
+        label: 'Subtítulo',
+        type: 'text-input',
+        defaultValue: 'Descoberto através do quiz'
+      },
+      {
+        key: 'resultDescription',
+        label: 'Descrição',
+        type: 'textarea',
+        rows: 4,
+        defaultValue: 'Características principais do seu perfil de estilo pessoal descoberto.'
+      },
+      {
+        key: 'showImage',
+        label: 'Mostrar Imagem',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'imageUrl',
+        label: 'URL da Imagem',
+        type: 'image-url',
+        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'
+      },
+      {
+        key: 'backgroundColor',
+        label: 'Cor de Fundo',
+        type: 'color-picker',
+        defaultValue: '#ffffff'
+      },
+      {
+        key: 'textColor',
+        label: 'Cor do Texto',
+        type: 'color-picker',
+        defaultValue: '#432818'
+      },
+      {
+        key: 'accentColor',
+        label: 'Cor de Destaque',
+        type: 'color-picker',
+        defaultValue: '#B89B7A'
+      },
+      {
+        key: 'gridColumns',
+        label: 'Colunas no Grid',
+        type: 'number-input',
+        defaultValue: 1,
+        min: 1,
+        max: 2
+      },
+      {
+        key: 'spacing',
+        label: 'Espaçamento',
+        type: 'select',
+        options: [
+          { label: 'Nenhum', value: 'none' },
+          { label: 'Pequeno', value: 'sm' },
+          { label: 'Médio', value: 'md' },
+          { label: 'Grande', value: 'lg' },
+          { label: 'Extra Grande', value: 'xl' }
+        ],
+        defaultValue: 'lg'
+      }
+    ]
+  },
+
+  {
+    type: 'quiz-offer-pricing-inline',
+    name: 'Preços da Oferta (Inline)',
+    description: 'Seção modular de preços para a página de oferta',
+    icon: 'CircleDollarSign',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'originalPrice',
+        label: 'Preço Original',
+        type: 'text-input',
+        defaultValue: 'R$ 175,00'
+      },
+      {
+        key: 'finalPrice',
+        label: 'Preço Final',
+        type: 'text-input',
+        defaultValue: 'R$ 39,90'
+      },
+      {
+        key: 'paymentOptions',
+        label: 'Opções de Pagamento',
+        type: 'text-input',
+        defaultValue: 'ou 5x de R$ 8,83'
+      },
+      {
+        key: 'discountText',
+        label: 'Texto do Desconto',
+        type: 'text-input',
+        defaultValue: 'Economia de R$ 135,10 (77% OFF)'
+      },
+      {
+        key: 'ctaText',
+        label: 'Texto do Botão',
+        type: 'text-input',
+        defaultValue: 'QUERO DESCOBRIR MEU ESTILO AGORA'
+      },
+      {
+        key: 'ctaUrl',
+        label: 'URL do Botão',
+        type: 'text-input',
+        defaultValue: '#checkout'
+      },
+      {
+        key: 'backgroundColor',
+        label: 'Cor de Fundo',
+        type: 'color-picker',
+        defaultValue: '#ffffff'
+      },
+      {
+        key: 'textColor',
+        label: 'Cor do Texto',
+        type: 'color-picker',
+        defaultValue: '#432818'
+      },
+      {
+        key: 'accentColor',
+        label: 'Cor de Destaque',
+        type: 'color-picker',
+        defaultValue: '#B89B7A'
+      },
+      {
+        key: 'gridColumns',
+        label: 'Colunas no Grid',
+        type: 'number-input',
+        defaultValue: 1,
+        min: 1,
+        max: 2
+      },
+      {
+        key: 'spacing',
+        label: 'Espaçamento',
+        type: 'select',
+        options: [
+          { label: 'Nenhum', value: 'none' },
+          { label: 'Pequeno', value: 'sm' },
+          { label: 'Médio', value: 'md' },
+          { label: 'Grande', value: 'lg' },
+          { label: 'Extra Grande', value: 'xl' }
+        ],
+        defaultValue: 'md'
+      }
+    ]
+  },
+
+  {
+    type: 'countdown-inline',
+    name: 'Contador Regressivo (Inline)',
+    description: 'Contador regressivo modular para urgência',
+    icon: 'Clock',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Oferta expira em:'
+      },
+      {
+        key: 'hours',
+        label: 'Horas',
+        type: 'number-input',
+        defaultValue: 2,
+        min: 0,
+        max: 24
+      },
+      {
+        key: 'minutes',
+        label: 'Minutos',
+        type: 'number-input',
+        defaultValue: 30,
+        min: 0,
+        max: 59
+      },
+      {
+        key: 'showTitle',
+        label: 'Mostrar Título',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'backgroundColor',
+        label: 'Cor de Fundo',
+        type: 'color-picker',
+        defaultValue: '#dc2626'
+      },
+      {
+        key: 'textColor',
+        label: 'Cor do Texto',
+        type: 'color-picker',
+        defaultValue: '#ffffff'
+      },
+      {
+        key: 'gridColumns',
+        label: 'Colunas no Grid',
+        type: 'number-input',
+        defaultValue: 1,
+        min: 1,
+        max: 2
+      },
+      {
+        key: 'spacing',
+        label: 'Espaçamento',
+        type: 'select',
+        options: [
+          { label: 'Nenhum', value: 'none' },
+          { label: 'Pequeno', value: 'sm' },
+          { label: 'Médio', value: 'md' },
+          { label: 'Grande', value: 'lg' },
+          { label: 'Extra Grande', value: 'xl' }
+        ],
+        defaultValue: 'md'
+      }
+    ]
+  },
+
+  {
+    type: 'button-inline',
+    name: 'Botão (Inline)',
+    description: 'Botão modular personalizável para CTAs',
+    icon: 'RectangleHorizontal',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'text',
+        label: 'Texto do Botão',
+        type: 'text-input',
+        defaultValue: 'Clique Aqui'
+      },
+      {
+        key: 'url',
+        label: 'URL/Link',
+        type: 'text-input',
+        defaultValue: '#'
+      },
+      {
+        key: 'size',
+        label: 'Tamanho',
+        type: 'select',
+        options: [
+          { label: 'Pequeno', value: 'sm' },
+          { label: 'Médio', value: 'md' },
+          { label: 'Grande', value: 'lg' },
+          { label: 'Extra Grande', value: 'xl' }
+        ],
+        defaultValue: 'lg'
+      },
+      {
+        key: 'variant',
+        label: 'Variação',
+        type: 'select',
+        options: [
+          { label: 'Sólido', value: 'solid' },
+          { label: 'Contorno', value: 'outline' },
+          { label: 'Fantasma', value: 'ghost' },
+          { label: 'Gradiente', value: 'gradient' }
+        ],
+        defaultValue: 'solid'
+      },
+      {
+        key: 'backgroundColor',
+        label: 'Cor de Fundo',
+        type: 'color-picker',
+        defaultValue: '#B89B7A'
+      },
+      {
+        key: 'textColor',
+        label: 'Cor do Texto',
+        type: 'color-picker',
+        defaultValue: '#ffffff'
+      },
+      {
+        key: 'fullWidth',
+        label: 'Largura Total',
+        type: 'boolean-switch',
+        defaultValue: false
+      },
+      {
+        key: 'openInNewTab',
+        label: 'Abrir em Nova Aba',
+        type: 'boolean-switch',
+        defaultValue: false
+      },
+      {
+        key: 'gridColumns',
+        label: 'Colunas no Grid',
+        type: 'number-input',
+        defaultValue: 1,
+        min: 1,
+        max: 2
+      },
+      {
+        key: 'spacing',
+        label: 'Espaçamento',
+        type: 'select',
+        options: [
+          { label: 'Nenhum', value: 'none' },
+          { label: 'Pequeno', value: 'sm' },
+          { label: 'Médio', value: 'md' },
+          { label: 'Grande', value: 'lg' },
+          { label: 'Extra Grande', value: 'xl' }
+        ],
+        defaultValue: 'md'
+      }
+    ]
   }
 
 ];
