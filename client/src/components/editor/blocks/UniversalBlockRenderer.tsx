@@ -300,6 +300,18 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <UnifiedWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></UnifiedWrapper>;
       case 'quiz-result-card':
         return <UnifiedWrapper blockType={blockType}><PricingInlineBlock {...commonProps} /></UnifiedWrapper>;
+
+      // NOVOS MAPEAMENTOS PARA TIPOS DO SCHEMA SERVICE
+      case 'quiz-offer-title':
+        return <UnifiedWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'quiz-offer-countdown':
+        return <UnifiedWrapper blockType={blockType}><TestimonialInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'quiz-offer-pricing':
+        return <UnifiedWrapper blockType={blockType}><PricingInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'quiz-offer-faq':
+        return <UnifiedWrapper blockType={blockType}><FAQSectionBlock {...commonProps} /></UnifiedWrapper>;
+      case 'quiz-transition-final':
+        return <UnifiedWrapper blockType={blockType}><QuizTransitionBlock {...commonProps} /></UnifiedWrapper>;
         
       // FALLBACK PARA COMPONENTES GENÉRICOS
       default:
