@@ -288,6 +288,13 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       'quiz-offer-pricing': () => <ResponsiveFlexWrapper blockType={blockType}><QuizOfferPricingInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
       'countdown-timer': () => <ResponsiveFlexWrapper blockType={blockType}><CountdownInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
       'bonus-list': () => <ResponsiveFlexWrapper blockType={blockType}><BonusListInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+
+      // === ETAPA 20 - COMPONENTES RESULTADO MODULARES ES7+ (novos) ===
+      'before-after-inline': () => <ResponsiveFlexWrapper blockType={blockType}><ImageDisplayInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'divider-inline': () => <ResponsiveFlexWrapper blockType={blockType}><SpacerBlock {...commonProps} /></ResponsiveFlexWrapper>,
+
+      // === ETAPA 21 - COMPONENTES FALTANTES ES7+ (únicos) ===
+      // Removidas duplicatas, mantidos apenas os únicos
     };
 
     // ES7+ Return com fallback usando optional chaining
