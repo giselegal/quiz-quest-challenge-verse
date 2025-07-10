@@ -987,67 +987,496 @@ class SchemaDrivenFunnelService {
     // ETAPA 19: TRANSIÇÃO FINAL 
     // Componentes: quiz-intro-header + heading-inline + progress-inline + text-inline + loading-animation + button-inline
     // ==========================================
-
-    // ETAPA 19: Transição final
+    // ==========================================
+    // ETAPA 19: TRANSIÇÃO FINAL 
+    // Componentes: quiz-intro-header + heading-inline + progress-inline + text-inline + loading-animation + button-inline
+    // ==========================================
     pages.push({
       id: 'etapa-19-transicao-final',
       name: 'Transição Final',
-      title: 'Etapa 19: Preparando seu resultado',
+      title: 'Etapa 19: Preparando seu resultado personalizado',
       type: 'custom',
       order: 19,
       blocks: [
+        // 1. Cabeçalho com progresso completo
         {
-          id: 'transition-final-block',
-          type: 'quiz-transition-final',
+          id: 'final-transition-header',
+          type: 'quiz-intro-header',
           properties: {
-            title: TRANSITIONS.finalTransition.title,
-            message: TRANSITIONS.finalTransition.message,
-            showLoading: TRANSITIONS.finalTransition.showLoading || true,
-            duration: TRANSITIONS.finalTransition.duration || 3000,
-            progressValue: 95
+            logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+            logoAlt: 'Logo Gisele Galvão',
+            logoWidth: 96,
+            logoHeight: 96,
+            progressValue: 95,
+            progressMax: 100,
+            showBackButton: false
+          }
+        },
+        // 2. Título da transição final
+        {
+          id: 'final-transition-title',
+          type: 'heading-inline',
+          properties: {
+            content: 'Analisando suas respostas...',
+            level: 'h2',
+            fontSize: 'text-2xl',
+            fontWeight: 'font-bold',
+            textAlign: 'text-center',
+            color: '#432818',
+            marginBottom: 16
+          }
+        },
+        // 3. Barra de carregamento animada
+        {
+          id: 'final-transition-progress',
+          type: 'progress-inline',
+          properties: {
+            progressValue: 95,
+            progressMax: 100,
+            showPercentage: true,
+            animated: true,
+            color: '#B89B7A',
+            backgroundColor: '#F5F5F5',
+            height: 12,
+            marginBottom: 24
+          }
+        },
+        // 4. Texto de aguardo
+        {
+          id: 'final-transition-message',
+          type: 'text-inline',
+          properties: {
+            content: 'Estamos criando seu perfil personalizado baseado nas suas 18 respostas...',
+            fontSize: 'text-lg',
+            textAlign: 'text-center',
+            color: '#6B7280',
+            marginBottom: 32
+          }
+        },
+        // 5. Loading animation placeholder
+        {
+          id: 'final-transition-loading',
+          type: 'loading-animation',
+          properties: {
+            type: 'spinner',
+            size: 'large',
+            color: '#B89B7A',
+            duration: 3000
+          }
+        },
+        // 6. Botão que aparece após 3 segundos
+        {
+          id: 'final-transition-reveal',
+          type: 'button-inline',
+          properties: {
+            text: 'Ver Meu Resultado Personalizado',
+            variant: 'primary',
+            size: 'large',
+            fullWidth: true,
+            backgroundColor: '#B89B7A',
+            textColor: '#ffffff',
+            delayShow: 3000 // Aparece após 3 segundos
           }
         }
       ],
       settings: {
         showProgress: true,
         progressValue: 95,
-        backgroundColor: '#f9f4ef',
+        backgroundColor: '#ffffff',
         textColor: '#432818',
         maxWidth: 'max-w-4xl',
         padding: 'p-6'
       }
     });
 
-    // ETAPA 20: Resultado (/resultado) - Teste A
+    // ==========================================
+    // ETAPA 20: PÁGINA DE RESULTADO PERSONALIZADO
+    // Componentes inline específicos para resultado
+    // ==========================================
     pages.push({
       id: 'etapa-20-resultado',
-      name: 'Resultado',
-      title: 'Etapa 20: Seu Estilo Predominante',
+      name: 'Resultado Personalizado',
+      title: 'Etapa 20: Seu Estilo Predominante Identificado',
       type: 'result',
       order: 20,
       blocks: [
+        // 1. Header de resultado com logo e nome do usuário
         {
-          id: 'modern-result-page-block',
-          type: 'modern-result-page',
-          properties: {
-            title: 'Parabéns! Descobrimos seu estilo',
-            subtitle: 'Aqui está seu resultado personalizado',
-            resultStyle: 'Elegante',
-            description: 'Você tem um estilo único que combina elegância com modernidade...',
-            imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp',
-            guideImageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
-            percentage: 85,
-            showSecondaryStyles: true
-          }
-        },
-        {
-          id: 'result-header-block',
-          type: 'quiz-result-header',
+          id: 'result-header-inline',
+          type: 'result-header-inline',
           properties: {
             logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
             logoAlt: 'Logo Gisele Galvão',
-            logoHeight: '60px',
-            userName: 'Seu Nome',
+            logoWidth: 96,
+            logoHeight: 96,
+            userName: 'dinamicUserName', // Será preenchido dinamicamente
+            showProgress: false
+          }
+        },
+        // 2. Card principal do resultado (85% match)
+        {
+          id: 'result-main-card',
+          type: 'result-card-inline',
+          properties: {
+            title: 'Seu Estilo Predominante',
+            styleName: 'dinamicStyleName', // Será preenchido dinamicamente
+            percentage: 85,
+            description: 'Baseado nas suas respostas, identificamos que você tem características predominantes do estilo...',
+            imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp',
+            showMatch: true,
+            animateReveal: true
+          }
+        },
+        // 3. Características do estilo (lista com ícones)
+        {
+          id: 'result-characteristics',
+          type: 'text-inline',
+          properties: {
+            content: `
+              <div class="characteristics-list">
+                <h3 class="text-xl font-semibold mb-4 text-[#432818]">Suas principais características:</h3>
+                <ul class="space-y-3">
+                  <li class="flex items-center">
+                    <span class="w-6 h-6 bg-[#B89B7A] rounded-full flex items-center justify-center text-white text-sm mr-3">✓</span>
+                    Elegância natural e sofisticação
+                  </li>
+                  <li class="flex items-center">
+                    <span class="w-6 h-6 bg-[#B89B7A] rounded-full flex items-center justify-center text-white text-sm mr-3">✓</span>
+                    Preferência por peças atemporais
+                  </li>
+                  <li class="flex items-center">
+                    <span class="w-6 h-6 bg-[#B89B7A] rounded-full flex items-center justify-center text-white text-sm mr-3">✓</span>
+                    Valoriza qualidade sobre quantidade
+                  </li>
+                </ul>
+              </div>
+            `,
+            fontSize: 'text-base',
+            textAlign: 'text-left',
+            color: '#432818',
+            marginBottom: 32
+          }
+        },
+        // 4. Imagem de transformação/guia
+        {
+          id: 'result-transformation-image',
+          type: 'image-display-inline',
+          properties: {
+            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
+            alt: 'Guia de transformação do seu estilo',
+            width: 600,
+            height: 400,
+            className: 'object-cover w-full h-auto rounded-lg mx-auto shadow-lg'
+          }
+        },
+        // 5. Título dos estilos secundários
+        {
+          id: 'result-secondary-title',
+          type: 'heading-inline',
+          properties: {
+            content: 'Seus Estilos Secundários',
+            level: 'h3',
+            fontSize: 'text-xl',
+            fontWeight: 'font-semibold',
+            textAlign: 'text-center',
+            color: '#432818',
+            marginTop: 32,
+            marginBottom: 16
+          }
+        },
+        // 6-8. Cards dos estilos secundários (3 cards)
+        {
+          id: 'result-secondary-1',
+          type: 'style-card-inline',
+          properties: {
+            styleName: 'Moderno',
+            percentage: 20,
+            description: 'Traços modernos na sua personalidade',
+            imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_moderno.webp',
+            compact: true
+          }
+        },
+        {
+          id: 'result-secondary-2',
+          type: 'style-card-inline',
+          properties: {
+            styleName: 'Casual',
+            percentage: 15,
+            description: 'Praticidade em situações do dia a dia',
+            imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_casual.webp',
+            compact: true
+          }
+        },
+        {
+          id: 'result-secondary-3',
+          type: 'style-card-inline',
+          properties: {
+            styleName: 'Romântico',
+            percentage: 10,
+            description: 'Toques delicados e femininos',
+            imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_romantico.webp',
+            compact: true
+          }
+        },
+        // 9. Motivação/transição para oferta
+        {
+          id: 'result-transition-text',
+          type: 'text-inline',
+          properties: {
+            content: 'Agora que você conhece seu estilo predominante, é hora de aplicar esse conhecimento no seu guarda-roupa e criar looks que realmente refletem sua essência.',
+            fontSize: 'text-lg',
+            textAlign: 'text-center',
+            color: '#432818',
+            marginTop: 32,
+            marginBottom: 24
+          }
+        },
+        // 10. CTA principal
+        {
+          id: 'result-main-cta',
+          type: 'button-inline',
+          properties: {
+            text: 'QUERO TRANSFORMAR MEU GUARDA-ROUPA AGORA',
+            variant: 'primary',
+            size: 'large',
+            fullWidth: true,
+            backgroundColor: '#B89B7A',
+            textColor: '#ffffff',
+            pulse: true // Animação de destaque
+          }
+        }
+      ],
+      settings: {
+        showProgress: false,
+        progressValue: 100,
+        backgroundColor: '#ffffff',
+        textColor: '#432818',
+        maxWidth: 'max-w-4xl',
+        padding: 'p-6'
+      }
+    });
+
+    // ==========================================
+    // ETAPA 21: PÁGINA DE OFERTA COMERCIAL
+    // Componentes inline específicos para conversão
+    // ==========================================
+    pages.push({
+      id: 'etapa-21-oferta',
+      name: 'Oferta Especial',
+      title: 'Etapa 21: Oferta Personalizada Para Você',
+      type: 'offer',
+      order: 21,
+      blocks: [
+        // 1. Título da oferta especial
+        {
+          id: 'offer-main-title',
+          type: 'heading-inline',
+          properties: {
+            content: 'Oferta Especial Para Você!',
+            level: 'h1',
+            fontSize: 'text-3xl',
+            fontWeight: 'font-bold',
+            textAlign: 'text-center',
+            color: '#432818',
+            marginBottom: 16
+          }
+        },
+        // 2. Subtítulo personalizado com estilo
+        {
+          id: 'offer-subtitle',
+          type: 'text-inline',
+          properties: {
+            content: 'Como você tem o estilo <strong class="text-[#B89B7A]">ELEGANTE</strong> predominante, criei uma oferta especial para você transformar seu guarda-roupa.',
+            fontSize: 'text-lg',
+            textAlign: 'text-center',
+            color: '#432818',
+            marginBottom: 24
+          }
+        },
+        // 3. Imagem do produto/guia
+        {
+          id: 'offer-product-image',
+          type: 'image-display-inline',
+          properties: {
+            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_COMPLETO_PRODUTO.webp',
+            alt: 'Guia Completo do Seu Estilo',
+            width: 500,
+            height: 400,
+            className: 'object-cover w-full h-auto rounded-lg mx-auto shadow-xl'
+          }
+        },
+        // 4. Timer de urgência (15 minutos)
+        {
+          id: 'offer-countdown',
+          type: 'countdown-inline',
+          properties: {
+            title: 'Esta oferta expira em:',
+            targetMinutes: 15,
+            showLabels: true,
+            urgencyColor: 'red',
+            size: 'large',
+            centerAlign: true,
+            onExpire: 'redirect' // Redireciona quando expirar
+          }
+        },
+        // 5. Bloco de preços com desconto
+        {
+          id: 'offer-pricing',
+          type: 'quiz-offer-pricing-inline',
+          properties: {
+            originalPrice: 197,
+            discountedPrice: 97,
+            discountPercentage: 51,
+            currency: 'BRL',
+            installments: {
+              number: 12,
+              value: 8.83
+            },
+            features: [
+              'Guia Completo do Seu Estilo (PDF)',
+              'Análise Personalizada Detalhada',
+              'Dicas de Combinações',
+              'Lista de Compras Estratégicas',
+              'Suporte por 30 dias'
+            ],
+            highlighted: true
+          }
+        },
+        // 6. Lista de benefícios
+        {
+          id: 'offer-benefits-title',
+          type: 'heading-inline',
+          properties: {
+            content: 'O que você vai receber:',
+            level: 'h3',
+            fontSize: 'text-xl',
+            fontWeight: 'font-semibold',
+            textAlign: 'text-center',
+            color: '#432818',
+            marginTop: 32,
+            marginBottom: 16
+          }
+        },
+        {
+          id: 'offer-benefits-list',
+          type: 'text-inline',
+          properties: {
+            content: `
+              <div class="benefits-grid grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="benefit-item flex items-start p-4 bg-gray-50 rounded-lg">
+                  <span class="text-2xl mr-3">📚</span>
+                  <div>
+                    <h4 class="font-semibold text-[#432818]">Guia Completo</h4>
+                    <p class="text-sm text-gray-600">Manual com todas as dicas do seu estilo</p>
+                  </div>
+                </div>
+                <div class="benefit-item flex items-start p-4 bg-gray-50 rounded-lg">
+                  <span class="text-2xl mr-3">🎯</span>
+                  <div>
+                    <h4 class="font-semibold text-[#432818]">Análise Personalizada</h4>
+                    <p class="text-sm text-gray-600">Baseada nas suas 18 respostas</p>
+                  </div>
+                </div>
+                <div class="benefit-item flex items-start p-4 bg-gray-50 rounded-lg">
+                  <span class="text-2xl mr-3">👗</span>
+                  <div>
+                    <h4 class="font-semibold text-[#432818]">Dicas de Looks</h4>
+                    <p class="text-sm text-gray-600">Combinações práticas para o dia a dia</p>
+                  </div>
+                </div>
+                <div class="benefit-item flex items-start p-4 bg-gray-50 rounded-lg">
+                  <span class="text-2xl mr-3">📝</span>
+                  <div>
+                    <h4 class="font-semibold text-[#432818]">Lista de Compras</h4>
+                    <p class="text-sm text-gray-600">Peças estratégicas para o seu estilo</p>
+                  </div>
+                </div>
+              </div>
+            `,
+            fontSize: 'text-base',
+            textAlign: 'text-left',
+            color: '#432818',
+            marginBottom: 32
+          }
+        },
+        // 8. Depoimento/prova social
+        {
+          id: 'offer-testimonial',
+          type: 'testimonial-card-inline',
+          properties: {
+            name: 'Ana Carolina',
+            location: 'São Paulo, SP',
+            text: 'Depois do quiz descobri que sou do estilo Elegante e o guia me ajudou a reorganizar todo meu guarda-roupa. Agora me visto com muito mais confiança!',
+            rating: 5,
+            avatar: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/avatar-ana.webp',
+            compact: false
+          }
+        },
+        // 9. Badge de garantia
+        {
+          id: 'offer-guarantee',
+          type: 'badge-inline',
+          properties: {
+            text: '7 DIAS DE GARANTIA',
+            subtext: 'Se não gostar, devolvemos seu dinheiro',
+            icon: 'shield',
+            color: 'green',
+            size: 'large',
+            centered: true
+          }
+        },
+        // 10. CTA principal
+        {
+          id: 'offer-main-cta',
+          type: 'button-inline',
+          properties: {
+            text: 'QUERO MEU GUIA PERSONALIZADO',
+            variant: 'primary',
+            size: 'large',
+            fullWidth: true,
+            backgroundColor: '#B89B7A',
+            textColor: '#ffffff',
+            pulse: true,
+            urgency: true // Estilo de urgência
+          }
+        },
+        // 11. Informações de segurança
+        {
+          id: 'offer-security-info',
+          type: 'text-inline',
+          properties: {
+            content: `
+              <div class="security-info text-center">
+                <div class="flex items-center justify-center space-x-4 mb-2">
+                  <span class="text-green-600">🔒</span>
+                  <span class="text-sm font-medium">Compra 100% Segura</span>
+                  <span class="text-green-600">✓</span>
+                </div>
+                <p class="text-xs text-gray-500">
+                  Aceitamos PIX, Cartão de Crédito e Boleto<br>
+                  Dados protegidos com certificado SSL
+                </p>
+              </div>
+            `,
+            fontSize: 'text-sm',
+            textAlign: 'text-center',
+            color: '#6B7280',
+            marginTop: 24
+          }
+        }
+      ],
+      settings: {
+        showProgress: false,
+        progressValue: 100,
+        backgroundColor: '#ffffff',
+        textColor: '#432818',
+        maxWidth: 'max-w-4xl',
+        padding: 'p-6'
+      }
+    });
+
+    console.log(`✅ [ES7+] Criadas ${pages.length} etapas modulares (1-21)`);
+    return pages;
             primaryStyle: 'elegante'
           }
         },
