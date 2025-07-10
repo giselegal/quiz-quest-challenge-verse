@@ -78,9 +78,9 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
   disabled = false,
   className
 }) => {
-  // Props comuns para todos os blocos com larguras responsivas
+  // ES7+ Props comuns padronizados para flexbox inline responsivo
   const commonProps = {
-    block: block,
+    block,
     isSelected,
     onClick,
     onPropertyChange: (key: string, value: any) => {
@@ -94,14 +94,16 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
     },
     disabled,
     className: cn(
-      // Container único elegante e minimalista
-      'block-renderer-elegant w-full transition-all duration-300 ease-out',
-      'flex flex-col min-h-[80px] bg-white', 
-      // Seleção elegante com cor da marca (marrom) e bordas discretas
-      isSelected && 'ring-1 ring-[#B89B7A]/40 bg-[#B89B7A]/5 shadow-sm',
-      !disabled && 'cursor-pointer hover:bg-gray-50/50 hover:shadow-sm',
-      // Responsividade
-      'rounded-md overflow-hidden',
+      // ES7+ Flexbox container responsivo padronizado
+      'flex flex-wrap items-start gap-2 sm:gap-4',
+      'w-full min-h-[60px] transition-all duration-300 ease-out',
+      // Background e padding responsivos
+      'bg-white p-2 sm:p-3 md:p-4 rounded-lg',
+      // Estados visuais modernos
+      isSelected && 'ring-2 ring-blue-500/50 bg-blue-50/30 shadow-md',
+      !disabled && 'hover:bg-gray-50/80 hover:shadow-sm cursor-pointer',
+      // Responsividade avançada
+      'max-w-full overflow-hidden',
       className
     )
   };
@@ -111,103 +113,102 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
     return true; // Todos são inline agora
   };
 
-  // Wrapper elegante único - removido container duplo
-  const ElegantWrapper: React.FC<{ children: React.ReactNode; blockType: string }> = ({ 
+  // ES7+ Wrapper flexbox responsivo padronizado
+  const ResponsiveFlexWrapper: React.FC<{ children: React.ReactNode; blockType: string }> = ({ 
     children, 
     blockType 
-  }) => {
-    return (
-      <div className="relative w-full h-full">
-        {/* Header opcional discreto */}
-        {isSelected && (
-          <div className="absolute top-1 right-1 z-10">
-            <span className="text-xs bg-[#B89B7A] text-white px-2 py-1 rounded-sm font-medium">
-              {blockType}
-            </span>
-          </div>
-        )}
-        {/* Conteúdo direto - sem container adicional */}
-        <div className="w-full h-full p-3">
-          {children}
+  }) => (
+    <div className={cn(
+      // ES7+ Flexbox container principal
+      'flex flex-col sm:flex-row items-start justify-start',
+      'w-full min-h-[60px] gap-2 sm:gap-4',
+      // Background e espaçamento responsivos
+      'bg-gradient-to-r from-white to-gray-50/30',
+      'p-3 sm:p-4 md:p-6 rounded-xl',
+      // Bordas e sombras modernas
+      'border border-gray-100 shadow-sm',
+      // Hover states ES7+
+      'hover:shadow-md hover:border-gray-200 transition-all duration-300',
+      // Responsividade mobile-first
+      'max-w-full overflow-hidden'
+    )}>
+      {/* ES7+ Header opcional com tipografia moderna */}
+      {isSelected && (
+        <div className="absolute -top-2 -right-2 z-20">
+          <span className={cn(
+            'inline-flex items-center px-2 py-1',
+            'bg-blue-600 text-white text-xs font-medium',
+            'rounded-full shadow-lg border-2 border-white',
+            'transform -translate-y-1 translate-x-1'
+          )}>
+            {blockType}
+          </span>
         </div>
+      )}
+      
+      {/* ES7+ Conteúdo flex responsivo */}
+      <div className={cn(
+        'flex-1 w-full',
+        'flex flex-col sm:flex-row items-start gap-2 sm:gap-4',
+        'min-h-[40px]'
+      )}>
+        {children}
       </div>
-    );
-  };
+    </div>
+  );
 
-  // Render do bloco baseado no tipo com wrapper unificado
+  // ES7+ Render engine com mapeamento padronizado flexbox
   const renderBlock = () => {
     const blockType = block.type;
     
-    switch (blockType) {
-      // Blocos básicos - TODOS INLINE
-      case 'header':
-        return <ElegantWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></ElegantWrapper>;
-      case 'text':
-        return <ElegantWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ElegantWrapper>;
-      case 'image':
-        return <ElegantWrapper blockType={blockType}><ImageInlineBlock {...commonProps} /></ElegantWrapper>;
-      case 'button':
-        return <ElegantWrapper blockType={blockType}><ButtonInlineBlock {...commonProps} /></ElegantWrapper>;
-      case 'spacer':
-        return <ElegantWrapper blockType={blockType}><SpacerBlock {...commonProps} /></ElegantWrapper>;
+    // ES7+ Switch com arrow functions e destructuring
+    const blockMap = {
+      // === COMPONENTES BÁSICOS INLINE ES7+ ===
+      header: () => <ResponsiveFlexWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      text: () => <ResponsiveFlexWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      image: () => <ResponsiveFlexWrapper blockType={blockType}><ImageInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      button: () => <ResponsiveFlexWrapper blockType={blockType}><ButtonInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      spacer: () => <ResponsiveFlexWrapper blockType={blockType}><SpacerBlock {...commonProps} /></ResponsiveFlexWrapper>,
 
-      // Blocos de resultado - INLINE
-      case 'result-header':
-        return <ElegantWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></ElegantWrapper>;
-      case 'result-description':
-        return <ElegantWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ElegantWrapper>;
+      // === COMPONENTES DE RESULTADO ES7+ ===
+      'result-header': () => <ResponsiveFlexWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'result-description': () => <ResponsiveFlexWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
 
-      // Blocos de oferta - INLINE
-      case 'product-offer':
-        return <ElegantWrapper blockType={blockType}><PricingCardInlineBlock {...commonProps} /></ElegantWrapper>;
-      case 'urgency-timer':
-        return <ElegantWrapper blockType={blockType}><CountdownInlineBlock {...commonProps} /></ElegantWrapper>;
+      // === COMPONENTES DE OFERTA ES7+ ===
+      'product-offer': () => <ResponsiveFlexWrapper blockType={blockType}><PricingCardInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'urgency-timer': () => <ResponsiveFlexWrapper blockType={blockType}><CountdownInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
 
-      // Blocos de credibilidade - INLINE
-      case 'faq-section':
-        return <ElegantWrapper blockType={blockType}><FAQSectionBlock {...commonProps} /></ElegantWrapper>;
-      case 'testimonials':
-        return <ElegantWrapper blockType={blockType}><TestimonialsGridBlock {...commonProps} /></ElegantWrapper>;
-      case 'guarantee':
-        return <ElegantWrapper blockType={blockType}><GuaranteeBlock {...commonProps} /></ElegantWrapper>;
+      // === COMPONENTES DE CREDIBILIDADE ES7+ ===
+      'faq-section': () => <ResponsiveFlexWrapper blockType={blockType}><FAQSectionBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      testimonials: () => <ResponsiveFlexWrapper blockType={blockType}><TestimonialsGridBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      guarantee: () => <ResponsiveFlexWrapper blockType={blockType}><GuaranteeBlock {...commonProps} /></ResponsiveFlexWrapper>,
 
-      // Blocos de mídia - INLINE
-      case 'video-player':
-        return <ElegantWrapper blockType={blockType}><VideoPlayerBlock {...commonProps} /></ElegantWrapper>;
-      case 'audio':
-        return <ElegantWrapper blockType={blockType}><TestimonialCardInlineBlock {...commonProps} /></ElegantWrapper>;
+      // === COMPONENTES DE MÍDIA ES7+ ===
+      'video-player': () => <ResponsiveFlexWrapper blockType={blockType}><VideoPlayerBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      audio: () => <ResponsiveFlexWrapper blockType={blockType}><TestimonialCardInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
 
-      // Blocos UI/Avançados - INLINE com componentes mais específicos
-      case 'alert':
-        return <ElegantWrapper blockType={blockType}><BadgeInlineBlock {...commonProps} /></ElegantWrapper>;
-      case 'arguments':
-        return <ElegantWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></ElegantWrapper>;
-      case 'carousel':
-        return <ElegantWrapper blockType={blockType}><ImageDisplayInlineBlock {...commonProps} /></ElegantWrapper>;
-      case 'loader':
-        return <ElegantWrapper blockType={blockType}><LoadingAnimationBlock {...commonProps} /></ElegantWrapper>;
-      case 'compare':
-        return <ElegantWrapper blockType={blockType}><PricingCardInlineBlock {...commonProps} /></ElegantWrapper>;
-      case 'confetti':
-        return <ElegantWrapper blockType={blockType}><BadgeInlineBlock {...commonProps} /></ElegantWrapper>;
-      case 'quote':
-        return <ElegantWrapper blockType={blockType}><TestimonialCardInlineBlock {...commonProps} /></ElegantWrapper>;
-      case 'form-input':
-        return <ElegantWrapper blockType={blockType}><FormInputBlock {...commonProps} /></ElegantWrapper>;
-      case 'chart-area':
-        return <ElegantWrapper blockType={blockType}><ImageInlineBlock {...commonProps} /></ElegantWrapper>;
-      case 'chart-level':
-        return <ElegantWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ElegantWrapper>;
-      case 'list':
-        return <ElegantWrapper blockType={blockType}><ListBlock {...commonProps} /></ElegantWrapper>;
-      case 'marquee':
-        return <ElegantWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ElegantWrapper>;
-      case 'options-grid':
-        return <ElegantWrapper blockType={blockType}><OptionsGridBlock {...commonProps} /></ElegantWrapper>;
-      case 'script':
-        return <ElegantWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ElegantWrapper>;
-      case 'terms':
-        return <ElegantWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ElegantWrapper>;
+      // === COMPONENTES UI AVANÇADOS ES7+ ===
+      alert: () => <ResponsiveFlexWrapper blockType={blockType}><BadgeInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      arguments: () => <ResponsiveFlexWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      carousel: () => <ResponsiveFlexWrapper blockType={blockType}><ImageDisplayInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      loader: () => <ResponsiveFlexWrapper blockType={blockType}><LoadingAnimationBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      compare: () => <ResponsiveFlexWrapper blockType={blockType}><PricingCardInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      confetti: () => <ResponsiveFlexWrapper blockType={blockType}><BadgeInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      quote: () => <ResponsiveFlexWrapper blockType={blockType}><TestimonialCardInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'form-input': () => <ResponsiveFlexWrapper blockType={blockType}><FormInputBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'chart-area': () => <ResponsiveFlexWrapper blockType={blockType}><ImageInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'chart-level': () => <ResponsiveFlexWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      list: () => <ResponsiveFlexWrapper blockType={blockType}><ListBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      marquee: () => <ResponsiveFlexWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      'options-grid': () => <ResponsiveFlexWrapper blockType={blockType}><OptionsGridBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      script: () => <ResponsiveFlexWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+      terms: () => <ResponsiveFlexWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ResponsiveFlexWrapper>,
+    };
+
+    // ES7+ Return com fallback usando optional chaining
+    return blockMap[blockType as keyof typeof blockMap]?.() ?? 
+           <ResponsiveFlexWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ResponsiveFlexWrapper>;
+  };
 
       // Componentes modulares reais da ResultPage - INLINE e EDITÁVEIS (ETAPA 20)
       case 'style-card':
