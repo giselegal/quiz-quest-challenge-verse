@@ -11,5 +11,14 @@ export { default as ImageDisplayInlineBlock } from './ImageDisplayInlineBlock';
 export { default as PricingCardInlineBlock } from './PricingCardInlineBlock';
 export { default as TestimonialCardInlineBlock } from './TestimonialCardInlineBlock';
 
+// Componentes específicos da Etapa 20 (Resultado)
+export { default as ResultHeaderInlineBlock } from './ResultHeaderInlineBlock';
+export { default as TestimonialsInlineBlock } from './TestimonialsInlineBlock';
+
+// Componentes específicos da Etapa 21 (Oferta)
+export { default as QuizOfferPricingInlineBlock } from './QuizOfferPricingInlineBlock';
+export { default as CountdownInlineBlock } from './CountdownInlineBlock';
+export { default as BonusListInlineBlock } from './BonusListInlineBlock';
+
 // Tipos base
 export type { BlockComponentProps } from '@/types/blocks';

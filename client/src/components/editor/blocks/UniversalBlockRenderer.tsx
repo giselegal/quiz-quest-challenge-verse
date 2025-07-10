@@ -17,6 +17,15 @@ import StrategicQuestionBlock from './StrategicQuestionBlock';
 import QuizTransitionBlock from './QuizTransitionBlock';
 import OptionsGridBlock from './OptionsGridBlock';
 
+// Componentes modulares inline das etapas 20 e 21
+import {
+  ResultHeaderInlineBlock,
+  TestimonialsInlineBlock,
+  QuizOfferPricingInlineBlock,
+  CountdownInlineBlock,
+  BonusListInlineBlock
+} from './inline';
+
 // Componentes básicos (funcionais)
 import { SpacerBlock } from './SpacerBlock';
 import { VideoPlayerBlock } from './VideoPlayerBlock';
@@ -207,6 +216,18 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'final-cta':
         return <UnifiedWrapper blockType={blockType}><CTAInlineBlock {...commonProps} /></UnifiedWrapper>;
 
+      // Componentes modulares das Etapas 20 e 21 - INLINE e MODULARES
+      case 'result-header-inline':
+        return <UnifiedWrapper blockType={blockType}><ResultHeaderInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'testimonials-result':
+        return <UnifiedWrapper blockType={blockType}><TestimonialsInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'quiz-offer-pricing':
+        return <UnifiedWrapper blockType={blockType}><QuizOfferPricingInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'countdown-timer':
+        return <UnifiedWrapper blockType={blockType}><CountdownInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'bonus-list':
+        return <UnifiedWrapper blockType={blockType}><BonusListInlineBlock {...commonProps} /></UnifiedWrapper>;
+
       // Componentes modulares reais do Quiz - COM WRAPPER
       case 'quiz-question':
         return <UnifiedWrapper blockType={blockType}><QuizQuestionBlock {...commonProps} /></UnifiedWrapper>;
@@ -305,9 +326,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'quiz-offer-title':
         return <UnifiedWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></UnifiedWrapper>;
       case 'quiz-offer-countdown':
-        return <UnifiedWrapper blockType={blockType}><TestimonialInlineBlock {...commonProps} /></UnifiedWrapper>;
-      case 'quiz-offer-pricing':
-        return <UnifiedWrapper blockType={blockType}><PricingInlineBlock {...commonProps} /></UnifiedWrapper>;
+        return <UnifiedWrapper blockType={blockType}><CountdownInlineBlock {...commonProps} /></UnifiedWrapper>;
       case 'quiz-offer-faq':
         return <UnifiedWrapper blockType={blockType}><FAQSectionBlock {...commonProps} /></UnifiedWrapper>;
         

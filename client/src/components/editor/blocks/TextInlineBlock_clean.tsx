@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { cn } from '@/lib/utils';
 import type { BlockComponentProps } from '@/types/blocks';
 
@@ -6,6 +6,7 @@ import type { BlockComponentProps } from '@/types/blocks';
  * TextInlineBlock - Componente modular inline horizontal
  * Texto responsivo e configurável
  * MODULAR | REUTILIZÁVEL | RESPONSIVO | INDEPENDENTE
+ * Utiliza funcionalidades modernas do ES7+: destructuring, optional chaining, nullish coalescing
  */
 const TextInlineBlock: React.FC<BlockComponentProps> = ({
   block,
@@ -13,6 +14,7 @@ const TextInlineBlock: React.FC<BlockComponentProps> = ({
   onClick,
   className = ''
 }) => {
+  // ES7+ Destructuring com default values e optional chaining
   const {
     content = 'Texto exemplo',
     fontSize = 'medium',
@@ -26,9 +28,9 @@ const TextInlineBlock: React.FC<BlockComponentProps> = ({
     // Propriedades do grid system
     gridColumns = 'auto', // 'auto', 'half', 'full'
     spacing = 'normal'
-  } = block.properties;
+  } = block?.properties ?? {};
 
-  // Tamanhos de fonte
+  // ES7+ Object property shorthand e computed property names
   const fontSizeClasses = {
     xs: 'text-xs',
     sm: 'text-sm',
@@ -37,42 +39,51 @@ const TextInlineBlock: React.FC<BlockComponentProps> = ({
     xl: 'text-xl',
     '2xl': 'text-2xl',
     '3xl': 'text-3xl'
-  };
+  } as const;
 
-  // Pesos de fonte
+  // ES7+ Object spread com type assertion
   const fontWeightClasses = {
     light: 'font-light',
     normal: 'font-normal',
     medium: 'font-medium',
     semibold: 'font-semibold',
     bold: 'font-bold'
-  };
+  } as const;
 
-  // Alinhamentos
+  // ES7+ Template literals implícitos nas keys
   const textAlignClasses = {
     left: 'text-left',
     center: 'text-center',
     right: 'text-right',
     justify: 'text-justify'
-  };
+  } as const;
 
-  // Sistema de grid responsivo seguindo o padrão do canvas
+  // ES7+ Arrow functions e object shorthand
   const gridClasses = {
     auto: 'w-full md:w-[calc(50%-0.5rem)]', // Máximo 2 colunas em MD+
     half: 'w-full md:w-[calc(50%-0.5rem)]',  // Força 2 colunas
     full: 'w-full'  // Largura total
-  };
+  } as const;
 
   const spacingClasses = {
     tight: 'p-2',
     normal: 'p-4',
     loose: 'p-6'
-  };
+  } as const;
 
-  // Personalização de conteúdo (username)
-  const personalizedContent = useUsername && usernamePattern
-    ? content.replace(usernamePattern, 'Usuário')
-    : content;
+  // ES7+ useMemo para otimização de performance
+  const personalizedContent = useMemo(() => {
+    // ES7+ Optional chaining e nullish coalescing
+    if (useUsername && usernamePattern) {
+      return content?.replace?.(usernamePattern, 'Usuário') ?? content;
+    }
+    return content;
+  }, [content, useUsername, usernamePattern]);
+
+  // ES7+ useCallback para otimização de re-renders
+  const handleClick = useCallback(() => {
+    onClick?.();
+  }, [onClick]);
 
   return (
     <div
