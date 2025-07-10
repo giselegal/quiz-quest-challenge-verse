@@ -278,32 +278,6 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'quiz-progress':
         return <UnifiedWrapper blockType={blockType}><QuizProgressBlock {...commonProps} /></UnifiedWrapper>;
 
-      // NOVOS COMPONENTES INLINE EDITÁVEIS E RESPONSIVOS
-      case 'style-card-inline':
-        return <UnifiedWrapper blockType={blockType}><PricingInlineBlock {...commonProps} /></UnifiedWrapper>;
-      case 'testimonial-inline':
-        return <UnifiedWrapper blockType={blockType}><TestimonialInlineBlock {...commonProps} /></UnifiedWrapper>;
-      case 'bonus-inline':
-        return <UnifiedWrapper blockType={blockType}><TestimonialInlineBlock {...commonProps} /></UnifiedWrapper>;
-      case 'cta-inline':
-        return <UnifiedWrapper blockType={blockType}><CTAInlineBlock {...commonProps} /></UnifiedWrapper>;
-      case 'progress-inline':
-        return <UnifiedWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></UnifiedWrapper>;
-      case 'badge-inline':
-        return <UnifiedWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></UnifiedWrapper>;
-      case 'stat-inline':
-        return <UnifiedWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></UnifiedWrapper>;
-      case 'pricing-inline':
-        return <UnifiedWrapper blockType={blockType}><PricingInlineBlock {...commonProps} /></UnifiedWrapper>;
-      case 'loader-inline':
-        return <UnifiedWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></UnifiedWrapper>;
-      case 'comparison-inline':
-        return <UnifiedWrapper blockType={blockType}><PricingInlineBlock {...commonProps} /></UnifiedWrapper>;
-      case 'notification-inline':
-        return <UnifiedWrapper blockType={blockType}><TestimonialInlineBlock {...commonProps} /></UnifiedWrapper>;
-      case 'product-carousel':
-        return <UnifiedWrapper blockType={blockType}><ImageInlineBlock {...commonProps} /></UnifiedWrapper>;
-      
       // Componentes que estavam causando erro - CORRIGIDOS COM WRAPPER
       case 'testimonials-grid':
         return <UnifiedWrapper blockType={blockType}><TestimonialsGridBlock {...commonProps} /></UnifiedWrapper>;
