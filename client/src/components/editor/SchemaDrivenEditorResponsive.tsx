@@ -57,10 +57,10 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
 
   // Handlers
   const handleComponentSelect = (type: string) => {
-    const definition = blockDefinitions.find(def => def.type === type);
+    const definition = blockDefinitions.find((def: any) => def.type === type);
     if (definition && currentPage) {
       const defaultProperties: Record<string, any> = {};
-      definition.propertiesSchema?.forEach(prop => {
+      definition.propertiesSchema?.forEach((prop: any) => {
         if (prop.defaultValue !== undefined) {
           defaultProperties[prop.key] = prop.defaultValue;
         }

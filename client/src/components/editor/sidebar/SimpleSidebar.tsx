@@ -7,15 +7,15 @@ interface SimpleSidebarProps {
 }
 
 export const SimpleSidebar: React.FC<SimpleSidebarProps> = ({ onComponentSelect }) => {
-  console.log('SimpleSidebar - Total blocks:', blockDefinitions.length);
+  console.log('SimpleSidebar - Total blocks:', blockDefinitionsDefault.length);
 
   return (
     <div className="h-full p-4 bg-white border-r">
       <h2 className="font-bold text-lg mb-4">Blocos Disponíveis</h2>
-      <p className="text-sm text-gray-600 mb-4">Total: {blockDefinitions.length} blocos</p>
+      <p className="text-sm text-gray-600 mb-4">Total: {blockDefinitionsDefault.length} blocos</p>
       
       <div className="space-y-2 max-h-96 overflow-y-auto">
-        {blockDefinitions.slice(0, 10).map(block => (
+        {blockDefinitionsDefault.slice(0, 10).map((block: any) => (
           <Button
             key={block.id}
             variant="outline"
@@ -27,9 +27,9 @@ export const SimpleSidebar: React.FC<SimpleSidebarProps> = ({ onComponentSelect 
         ))}
       </div>
       
-      {blockDefinitions.length > 10 && (
+      {blockDefinitionsDefault.length > 10 && (
         <p className="text-xs text-gray-500 mt-2">
-          Mostrando apenas os primeiros 10 blocos de {blockDefinitions.length}
+          Mostrando apenas os primeiros 10 blocos de {blockDefinitionsDefault.length}
         </p>
       )}
     </div>
