@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense, lazy, useCallback } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
 import { InlineEditText } from './InlineEditText';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
 import ProgressiveImage from '@/components/ui/progressive-image';
@@ -17,25 +18,89 @@ import {
   TrendingUp,
   Star,
   Gift,
+  Target,
+  Zap,
+  Crown,
+  Flame,
+  Eye,
 } from "lucide-react";
 import { trackButtonClick } from "@/utils/analytics";
 
-// Design tokens modernos para ofertas
+// Design tokens fiéis ao funil real moderno - Sistema APRIMORADO
 const tokens = {
   colors: {
     primary: "#B89B7A",
+    primaryDark: "#A1835D",
+    primaryLight: "#D4B79F",
     secondary: "#aa6b5d",
+    secondaryDark: "#8F5A4D",
+    secondaryLight: "#C28A7D",
     background: "#fffaf7",
-    text: "#2C1810",
-    textSecondary: "#5D4A3A",
+    backgroundAlt: "#f9f4ef",
+    backgroundCard: "#ffffff",
+    text: "#2C1810", // Mais escuro para melhor contraste
+    textSecondary: "#5D4A3A", // Melhor hierarquia
+    textMuted: "#8F7A6A",
+    textLight: "#B5A394",
     success: "#4CAF50",
+    successDark: "#45a049",
     warning: "#FF6B35",
+    border: "rgba(184, 155, 122, 0.15)",
+    borderLight: "rgba(184, 155, 122, 0.08)",
+    overlay: "rgba(44, 24, 16, 0.02)",
   },
+  // SISTEMA DE SPACING REFINADO E PADRONIZADO
+  spacing: {
+    xs: "0.25rem", // 4px
+    sm: "0.5rem", // 8px
+    md: "0.75rem", // 12px
+    lg: "1rem", // 16px
+    xl: "1.5rem", // 24px
+    "2xl": "2rem", // 32px
+    "3xl": "3rem", // 48px
+    "4xl": "4rem", // 64px
+    "5xl": "6rem", // 96px
+    "6xl": "7rem", // 112px
+  },
+  // SHADOWS MAIS SUTIS E ELEGANTES
   shadows: {
+    xs: "0 1px 2px rgba(184, 155, 122, 0.05)",
     sm: "0 2px 4px rgba(184, 155, 122, 0.08)",
     md: "0 4px 12px rgba(184, 155, 122, 0.12)",
     lg: "0 8px 24px rgba(184, 155, 122, 0.15)",
     xl: "0 16px 40px rgba(184, 155, 122, 0.18)",
+    cta: "0 8px 32px rgba(76, 175, 80, 0.25)",
+    inner: "inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+  },
+  // BORDER RADIUS HARMONIOSO
+  radius: {
+    xs: "0.25rem", // 4px
+    sm: "0.5rem", // 8px
+    md: "0.75rem", // 12px
+    lg: "1rem", // 16px
+    xl: "1.25rem", // 20px
+    "2xl": "1.5rem", // 24px
+    full: "9999px",
+  },
+  // TIPOGRAFIA MELHORADA
+  typography: {
+    fontSizes: {
+      xs: "0.75rem", // 12px
+      sm: "0.875rem", // 14px
+      base: "1rem", // 16px
+      lg: "1.125rem", // 18px
+      xl: "1.25rem", // 20px
+      "2xl": "1.5rem", // 24px
+      "3xl": "1.875rem", // 30px
+      "4xl": "2.25rem", // 36px
+      "5xl": "3rem", // 48px
+    },
+    lineHeights: {
+      tight: "1.25",
+      normal: "1.5",
+      relaxed: "1.625",
+      loose: "2",
+    },
   },
 };
 

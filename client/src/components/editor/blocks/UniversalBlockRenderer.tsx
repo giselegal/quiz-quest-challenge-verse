@@ -302,6 +302,11 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <UnifiedWrapper bloc
         
         
+        
+        
+        
+        
+        
         kType={blockType}><PricingInlineBlock {...commonProps} /></UnifiedWrapper>;
 
       // NOVOS MAPEAMENTOS PARA TIPOS DO SCHEMA SERVICE
