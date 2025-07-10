@@ -422,12 +422,168 @@ export const blockDefinitions: BlockDefinition[] = [
         defaultValue: ['Item 1', 'Item 2', 'Item 3']
       }
     ]
+  },
+
+  // === ETAPAS 20 E 21 - COMPONENTES ESPECÍFICOS ===
+  {
+    type: 'modern-result-page',
+    name: 'Página de Resultado Moderna (Etapa 20)',
+    description: 'Página de resultado com design moderno e completo',
+    icon: 'Award',
+    category: 'Quiz',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título Principal',
+        type: 'text-input',
+        defaultValue: 'Parabéns! Descobrimos seu estilo'
+      },
+      {
+        key: 'subtitle',
+        label: 'Subtítulo',
+        type: 'text-input',
+        defaultValue: 'Aqui está seu resultado personalizado'
+      },
+      {
+        key: 'resultStyle',
+        label: 'Estilo do Resultado',
+        type: 'text-input',
+        defaultValue: 'Elegante'
+      },
+      {
+        key: 'description',
+        label: 'Descrição do Resultado',
+        type: 'textarea',
+        defaultValue: 'Você tem um estilo único que combina elegância com modernidade...'
+      },
+      {
+        key: 'imageUrl',
+        label: 'Imagem do Resultado',
+        type: 'image-url',
+        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp'
+      },
+      {
+        key: 'guideImageUrl',
+        label: 'Imagem do Guia',
+        type: 'image-url',
+        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp'
+      },
+      {
+        key: 'percentage',
+        label: 'Porcentagem do Resultado',
+        type: 'number-input',
+        defaultValue: 85,
+        min: 0,
+        max: 100
+      },
+      {
+        key: 'showSecondaryStyles',
+        label: 'Mostrar Estilos Secundários',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+  {
+    type: 'quiz-offer-page',
+    name: 'Página de Oferta do Quiz (Etapa 21)',
+    description: 'Página de oferta com conversão otimizada',
+    icon: 'ShoppingCart',
+    category: 'Quiz',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título da Oferta',
+        type: 'text-input',
+        defaultValue: 'Oferta Especial Para Você'
+      },
+      {
+        key: 'subtitle',
+        label: 'Subtítulo da Oferta',
+        type: 'text-input',
+        defaultValue: 'Baseado no seu resultado personalizado'
+      },
+      {
+        key: 'productTitle',
+        label: 'Nome do Produto',
+        type: 'text-input',
+        defaultValue: 'Consultoria de Estilo Personalizada'
+      },
+      {
+        key: 'originalPrice',
+        label: 'Preço Original',
+        type: 'text-input',
+        defaultValue: 'R$ 497,00'
+      },
+      {
+        key: 'offerPrice',
+        label: 'Preço da Oferta',
+        type: 'text-input',
+        defaultValue: 'R$ 197,00'
+      },
+      {
+        key: 'discount',
+        label: 'Desconto',
+        type: 'text-input',
+        defaultValue: '60% OFF'
+      },
+      {
+        key: 'ctaText',
+        label: 'Texto do Botão',
+        type: 'text-input',
+        defaultValue: 'QUERO MINHA CONSULTORIA'
+      },
+      {
+        key: 'ctaUrl',
+        label: 'Link do Botão',
+        type: 'text-input',
+        defaultValue: 'https://pay.hotmart.com/exemplo'
+      },
+      {
+        key: 'urgencyText',
+        label: 'Texto de Urgência',
+        type: 'text-input',
+        defaultValue: 'Oferta válida por tempo limitado!'
+      },
+      {
+        key: 'showCountdown',
+        label: 'Mostrar Timer',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'countdownMinutes',
+        label: 'Minutos do Timer',
+        type: 'number-input',
+        defaultValue: 15,
+        min: 1,
+        max: 60
+      },
+      {
+        key: 'showTestimonials',
+        label: 'Mostrar Depoimentos',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'showGuarantee',
+        label: 'Mostrar Garantia',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'showFAQ',
+        label: 'Mostrar FAQ',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
   }
 ];
 
 // Helper functions
 export const getCategories = (): string[] => {
-  const categories = [...new Set(blockDefinitions.map(block => block.category))];
+  const categories = Array.from(new Set(blockDefinitions.map(block => block.category)));
   return categories.sort();
 };
 

@@ -1021,6 +1021,20 @@ class SchemaDrivenFunnelService {
       order: 20,
       blocks: [
         {
+          id: 'modern-result-page-block',
+          type: 'modern-result-page',
+          properties: {
+            title: 'Parabéns! Descobrimos seu estilo',
+            subtitle: 'Aqui está seu resultado personalizado',
+            resultStyle: 'Elegante',
+            description: 'Você tem um estilo único que combina elegância com modernidade...',
+            imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp',
+            guideImageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
+            percentage: 85,
+            showSecondaryStyles: true
+          }
+        },
+        {
           id: 'result-header-block',
           type: 'quiz-result-header',
           properties: {
@@ -1108,6 +1122,26 @@ class SchemaDrivenFunnelService {
       type: 'offer',
       order: 21,
       blocks: [
+        {
+          id: 'quiz-offer-page-block',
+          type: 'quiz-offer-page',
+          properties: {
+            title: 'Oferta Especial Para Você',
+            subtitle: 'Baseado no seu resultado personalizado',
+            productTitle: 'Consultoria de Estilo Personalizada',
+            originalPrice: 'R$ 497,00',
+            offerPrice: 'R$ 197,00',
+            discount: '60% OFF',
+            ctaText: 'QUERO MINHA CONSULTORIA',
+            ctaUrl: 'https://pay.hotmart.com/exemplo',
+            urgencyText: 'Oferta válida por tempo limitado!',
+            showCountdown: true,
+            countdownMinutes: 15,
+            showTestimonials: true,
+            showGuarantee: true,
+            showFAQ: true
+          }
+        },
         {
           id: 'offer-title-block',
           type: 'quiz-offer-title',

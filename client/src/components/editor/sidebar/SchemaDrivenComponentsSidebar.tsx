@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { blockDefinitions, getCategories, getBlocksByCategory } from '@/config/blockDefinitionsClean';
-import { Type, Image, ArrowRight, CheckCircle, Target, Play, Star, FileText, ShoppingCart, Clock, MessageSquare, HelpCircle, Shield, Video, AlertTriangle, Zap, Volume2, RotateCcw, Loader, BarChart3, Quote, FormInput, List, TrendingUp, Grid, FileCode, BookOpen, Palette, Sparkles, Gift } from 'lucide-react';
+import { Type, Image, ArrowRight, CheckCircle, Target, Play, Star, FileText, ShoppingCart, Clock, MessageSquare, HelpCircle, Shield, Video, AlertTriangle, Zap, Volume2, RotateCcw, Loader, BarChart3, Quote, FormInput, List, TrendingUp, Grid, FileCode, BookOpen, Palette, Sparkles, Gift, Award } from 'lucide-react';
 
 interface SchemaDrivenComponentsSidebarProps {
   onComponentSelect: (type: string) => void;
@@ -46,7 +46,8 @@ const iconMap: { [key: string]: React.ReactNode } = {
   'BookOpen': <BookOpen className="w-4 h-4" />,
   'Palette': <Palette className="w-4 h-4" />,
   'Sparkles': <Sparkles className="w-4 h-4" />,
-  'Gift': <Gift className="w-4 h-4" />
+  'Gift': <Gift className="w-4 h-4" />,
+  'Award': <Award className="w-4 h-4" />
 };
 
 export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSidebarProps> = ({
