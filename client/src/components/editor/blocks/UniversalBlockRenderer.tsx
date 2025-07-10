@@ -15,6 +15,9 @@ import QuizProgressBlock from './QuizProgressBlock';
 import QuestionMultipleBlock from './QuestionMultipleBlock';
 import StrategicQuestionBlock from './StrategicQuestionBlock';
 import QuizTransitionBlock from './QuizTransitionBlock';
+import OptionsGridBlock from './OptionsGridBlock';
+import CountdownTimerBlock from './CountdownTimerBlock';
+import UrgencyTimerBlock from './UrgencyTimerBlock';
 
 // Componentes básicos (funcionais)
 import { SpacerBlock } from './SpacerBlock';
@@ -180,7 +183,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'marquee':
         return <UnifiedWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></UnifiedWrapper>;
       case 'options-grid':
-        return <UnifiedWrapper blockType={blockType}><ButtonInlineBlock {...commonProps} /></UnifiedWrapper>;
+        return <UnifiedWrapper blockType={blockType}><OptionsGridBlock {...commonProps} /></UnifiedWrapper>;
       case 'script':
         return <UnifiedWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></UnifiedWrapper>;
       case 'terms':
@@ -299,6 +302,18 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <UnifiedWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></UnifiedWrapper>;
       case 'quiz-result-card':
         return <UnifiedWrapper blockType={blockType}><PricingInlineBlock {...commonProps} /></UnifiedWrapper>;
+        
+      // BLOCOS DE OFERTA ESPECÍFICOS
+      case 'quiz-offer-title':
+        return <UnifiedWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'quiz-offer-countdown':
+        return <UnifiedWrapper blockType={blockType}><UrgencyTimerBlock {...commonProps} /></UnifiedWrapper>;
+      case 'quiz-offer-pricing':
+        return <UnifiedWrapper blockType={blockType}><PricingInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'quiz-offer-faq':
+        return <UnifiedWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'quiz-transition-final':
+        return <UnifiedWrapper blockType={blockType}><QuizTransitionBlock {...commonProps} /></UnifiedWrapper>;
         
       // FALLBACK PARA COMPONENTES GENÉRICOS
       default:

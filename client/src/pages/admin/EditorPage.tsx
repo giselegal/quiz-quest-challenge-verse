@@ -47,6 +47,7 @@ const EditorPage: React.FC = () => {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-[#432818]">Editor Visual</h1>
+
           <p className="text-[#8F7A6A] mt-2">
             Edite e personalize seus quizzes e páginas
           </p>
