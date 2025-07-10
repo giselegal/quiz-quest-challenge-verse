@@ -62,7 +62,7 @@ export const DynamicPropertiesPanel: React.FC<DynamicPropertiesPanelProps> = ({
     onBlockPropertyChange(schema.key, newValue);
   };
 
-  const handleArrayUpdate = (schema: PropertySchema, index: number, field: string, value: any) => {
+  const handleArrayUpdate = (schema: OriginalPropertySchema, index: number, field: string, value: any) => {
     const currentValue = selectedBlock?.properties?.[schema.key] || [];
     const newValue = currentValue.map((item: any, i: number) => 
       i === index ? { ...item, [field]: value } : item
@@ -175,7 +175,7 @@ export const DynamicPropertiesPanel: React.FC<DynamicPropertiesPanelProps> = ({
                 return (
                   <PropertyInput
                     key={schema.key}
-                    schema={schema}
+                    schema={schema as any}
                     currentValue={currentValue}
                     onValueChange={(value) => handlePropertyChange(schema, value)}
                     onAddItem={() => handleArrayAdd(schema)}
