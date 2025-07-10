@@ -28,8 +28,6 @@ import {
 
 // Novos blocos inline modulares criados (ES7+)
 import ResultCardInlineBlock from './inline/ResultCardInlineBlock';
-import QuizOfferPricingInlineBlock from './inline/QuizOfferPricingInlineBlock';
-import CountdownInlineBlock from './inline/CountdownInlineBlock';
 
 // Componentes básicos (funcionais)
 import { SpacerBlock } from './SpacerBlock';
@@ -232,6 +230,16 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <UnifiedWrapper blockType={blockType}><CountdownInlineBlock {...commonProps} /></UnifiedWrapper>;
       case 'bonus-list':
         return <UnifiedWrapper blockType={blockType}><BonusListInlineBlock {...commonProps} /></UnifiedWrapper>;
+
+      // NOVOS BLOCOS INLINE MODULARES - ES7+ PADRÃO (Etapas 20 e 21)
+      case 'result-card-inline':
+        return <UnifiedWrapper blockType={blockType}><ResultCardInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'quiz-offer-pricing-inline':
+        return <UnifiedWrapper blockType={blockType}><QuizOfferPricingInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'countdown-inline':
+        return <UnifiedWrapper blockType={blockType}><CountdownInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'button-inline':
+        return <UnifiedWrapper blockType={blockType}><ButtonInlineBlock {...commonProps} /></UnifiedWrapper>;
 
       // Componentes modulares reais do Quiz - COM WRAPPER
       case 'quiz-question':
