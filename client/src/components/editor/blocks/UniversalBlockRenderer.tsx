@@ -48,18 +48,23 @@ import ListBlock from './ListBlock';
 import HeadingInlineBlock from './HeadingInlineBlock';
 import ImageInlineBlock from './ImageInlineBlock';
 import ButtonInlineBlock from './ButtonInlineBlock';
-import TestimonialInlineBlock from './TestimonialInlineBlock';
-import PricingInlineBlock from './PricingInlineBlock';
 import CTAInlineBlock from './CTAInlineBlock';
-import AdvancedCTAInlineBlock from './AdvancedCTAInlineBlock';
+
+// Componentes inline necessários (importados do diretório inline)
+import { 
+  PricingCardInlineBlock,
+  ImageDisplayInlineBlock,
+  BadgeInlineBlock,
+  StyleCardInlineBlock,
+  BonusListInlineBlock,
+  CountdownInlineBlock,
+  TestimonialCardInlineBlock
+} from './inline';
 
 // Componentes modernos (funcionais)
 import TestimonialsGridBlock from './TestimonialsGridBlock';
-import SocialProofBlock from './SocialProofBlock';
-import ValueAnchoringBlock from './ValueAnchoringBlock';
 import FAQSectionBlock from './FAQSectionBlock';
 import GuaranteeBlock from './GuaranteeBlock';
-import BeforeAfterBlock from './BeforeAfterBlock';
 
 export interface BlockRendererProps {
   block: BlockData;
@@ -165,15 +170,15 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
 
       // Blocos de oferta - INLINE
       case 'product-offer':
-        return <ElegantWrapper blockType={blockType}><PricingInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><PricingCardInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'urgency-timer':
-        return <ElegantWrapper blockType={blockType}><TestimonialInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><CountdownInlineBlock {...commonProps} /></ElegantWrapper>;
 
       // Blocos de credibilidade - INLINE
       case 'faq-section':
         return <ElegantWrapper blockType={blockType}><FAQSectionBlock {...commonProps} /></ElegantWrapper>;
       case 'testimonials':
-        return <ElegantWrapper blockType={blockType}><TestimonialInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><TestimonialsGridBlock {...commonProps} /></ElegantWrapper>;
       case 'guarantee':
         return <ElegantWrapper blockType={blockType}><GuaranteeBlock {...commonProps} /></ElegantWrapper>;
 
@@ -181,23 +186,23 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'video-player':
         return <ElegantWrapper blockType={blockType}><VideoPlayerBlock {...commonProps} /></ElegantWrapper>;
       case 'audio':
-        return <ElegantWrapper blockType={blockType}><TestimonialInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><TestimonialCardInlineBlock {...commonProps} /></ElegantWrapper>;
 
-      // Blocos UI/Avançados - INLINE
+      // Blocos UI/Avançados - INLINE com componentes mais específicos
       case 'alert':
-        return <ElegantWrapper blockType={blockType}><TestimonialInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><BadgeInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'arguments':
-        return <ElegantWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'carousel':
-        return <ElegantWrapper blockType={blockType}><ImageInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><ImageDisplayInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'loader':
-        return <ElegantWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><LoadingAnimationBlock {...commonProps} /></ElegantWrapper>;
       case 'compare':
-        return <ElegantWrapper blockType={blockType}><PricingInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><PricingCardInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'confetti':
-        return <ElegantWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><BadgeInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'quote':
-        return <ElegantWrapper blockType={blockType}><TestimonialInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><TestimonialCardInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'form-input':
         return <ElegantWrapper blockType={blockType}><FormInputBlock {...commonProps} /></ElegantWrapper>;
       case 'chart-area':
@@ -217,13 +222,13 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
 
       // Componentes modulares reais da ResultPage - INLINE e EDITÁVEIS (ETAPA 20)
       case 'style-card':
-        return <ElegantWrapper blockType={blockType}><PricingInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><StyleCardInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'before-after':
-        return <ElegantWrapper blockType={blockType}><BeforeAfterBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><ImageDisplayInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'bonus-section':
-        return <ElegantWrapper blockType={blockType}><TestimonialInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><BonusListInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'testimonials-real':
-        return <ElegantWrapper blockType={blockType}><TestimonialInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><TestimonialsGridBlock {...commonProps} /></ElegantWrapper>;
       case 'guarantee-section':
         return <ElegantWrapper blockType={blockType}><GuaranteeBlock {...commonProps} /></ElegantWrapper>;
       case 'mentor-section':
@@ -231,7 +236,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'secure-purchase':
         return <ElegantWrapper blockType={blockType}><ButtonInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'value-stack':
-        return <ElegantWrapper blockType={blockType}><PricingInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><PricingCardInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'final-cta':
         return <ElegantWrapper blockType={blockType}><CTAInlineBlock {...commonProps} /></ElegantWrapper>;
 
@@ -286,23 +291,23 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'hero-title-inline':
         return <ElegantWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'problem-list-inline':
-        return <ElegantWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><ListBlock {...commonProps} /></ElegantWrapper>;
       case 'highlight-box-inline':
-        return <ElegantWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><BadgeInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'product-card-inline':
-        return <ElegantWrapper blockType={blockType}><ImageDisplayInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><PricingCardInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'price-highlight-inline':
-        return <ElegantWrapper blockType={blockType}><PricingInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><PricingCardInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'cta-button-inline':
         return <ElegantWrapper blockType={blockType}><ButtonInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'trust-elements-inline':
-        return <ElegantWrapper blockType={blockType}><BadgeInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><TestimonialsGridBlock {...commonProps} /></ElegantWrapper>;
       case 'countdown-timer-inline':
         return <ElegantWrapper blockType={blockType}><CountdownInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'guarantee-seal-inline':
         return <ElegantWrapper blockType={blockType}><BadgeInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'faq-item-inline':
-        return <ElegantWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><FAQSectionBlock {...commonProps} /></ElegantWrapper>;
       case 'section-header-inline':
         return <ElegantWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></ElegantWrapper>;
       case 'sticky-header-inline':
@@ -330,9 +335,9 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       case 'testimonials-grid':
         return <ElegantWrapper blockType={blockType}><TestimonialsGridBlock {...commonProps} /></ElegantWrapper>;
       case 'social-proof':
-        return <ElegantWrapper blockType={blockType}><SocialProofBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><TestimonialsGridBlock {...commonProps} /></ElegantWrapper>;
       case 'value-anchoring':
-        return <ElegantWrapper blockType={blockType}><ValueAnchoringBlock {...commonProps} /></ElegantWrapper>;
+        return <ElegantWrapper blockType={blockType}><PricingCardInlineBlock {...commonProps} /></ElegantWrapper>;
 
       // BLOCOS ESPECÍFICOS DO QUIZ - DADOS REAIS COM WRAPPER
       case 'QuizQuestionBlock':
