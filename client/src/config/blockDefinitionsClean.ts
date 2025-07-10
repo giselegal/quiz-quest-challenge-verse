@@ -2,7 +2,7 @@
 // CLEAN BLOCK DEFINITIONS - ONLY FUNCTIONAL COMPONENTS
 // =====================================================================
 
-import type { BlockDefinition } from '@/types/blocks';
+import type { BlockDefinition } from '@/config/blockDefinitions';
 
 // Interface para PropertySchema
 export interface PropertySchema {
@@ -27,7 +27,7 @@ export const blockDefinitions: BlockDefinition[] = [
     name: 'Cabeçalho',
     description: 'Título principal da página',
     icon: 'Type',
-    category: 'Básico',
+    category: 'content',
     propertiesSchema: [
       {
         key: 'title',
@@ -48,7 +48,7 @@ export const blockDefinitions: BlockDefinition[] = [
     name: 'Texto',
     description: 'Bloco de texto editável',
     icon: 'Type',
-    category: 'Básico',
+    category: 'content',
     propertiesSchema: [
       {
         key: 'content',
@@ -63,7 +63,7 @@ export const blockDefinitions: BlockDefinition[] = [
     name: 'Imagem',
     description: 'Imagem com configurações',
     icon: 'Image',
-    category: 'Básico',
+    category: 'content',
     propertiesSchema: [
       {
         key: 'imageUrl',
@@ -83,8 +83,8 @@ export const blockDefinitions: BlockDefinition[] = [
     type: 'button',
     name: 'Botão',
     description: 'Botão de ação',
-    icon: 'ArrowRight',
-    category: 'Básico',
+    icon: 'ArrowRightLeft',
+    category: 'content',
     propertiesSchema: [
       {
         key: 'text',
@@ -105,13 +105,594 @@ export const blockDefinitions: BlockDefinition[] = [
     name: 'Espaçador',
     description: 'Espaço em branco',
     icon: 'RectangleHorizontal',
-    category: 'Básico',
+    category: 'layout',
     propertiesSchema: [
       {
         key: 'height',
         label: 'Altura',
         type: 'number-input',
         defaultValue: 40
+      }
+    ]
+  },
+
+  // === COMPONENTES INLINE ESPECIALIZADOS PARA QUIZ ===
+  {
+    type: 'quiz-intro-header',
+    name: 'Cabeçalho do Quiz',
+    description: 'Header com logo e barra de progresso',
+    icon: 'Rows3',
+    category: 'quiz',
+    propertiesSchema: [
+      {
+        key: 'logoUrl',
+        label: 'URL do Logo',
+        type: 'image-url',
+        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'
+      },
+      {
+        key: 'logoAlt',
+        label: 'Texto Alternativo do Logo',
+        type: 'text-input',
+        defaultValue: 'Logo da Marca'
+      },
+      {
+        key: 'logoWidth',
+        label: 'Largura do Logo',
+        type: 'number-input',
+        defaultValue: 96,
+        min: 50,
+        max: 200
+      },
+      {
+        key: 'logoHeight',
+        label: 'Altura do Logo',
+        type: 'number-input',
+        defaultValue: 96,
+        min: 50,
+        max: 200
+      },
+      {
+        key: 'progressValue',
+        label: 'Valor do Progresso',
+        type: 'number-input',
+        defaultValue: 0,
+        min: 0,
+        max: 100
+      },
+      {
+        key: 'progressMax',
+        label: 'Máximo do Progresso',
+        type: 'number-input',
+        defaultValue: 100,
+        min: 100,
+        max: 100
+      },
+      {
+        key: 'showBackButton',
+        label: 'Mostrar Botão Voltar',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+  {
+    type: 'options-grid',
+    name: 'Grid de Opções',
+    description: 'Grid responsivo para questões do quiz',
+    icon: 'Rows3',
+    category: 'quiz',
+    propertiesSchema: [
+      {
+        key: 'options',
+        label: 'Opções',
+        type: 'array-editor',
+        defaultValue: [
+          { id: 'opcao1', text: 'Opção 1', value: 'opcao1' },
+          { id: 'opcao2', text: 'Opção 2', value: 'opcao2' }
+        ]
+      },
+      {
+        key: 'columns',
+        label: 'Número de Colunas',
+        type: 'number-input',
+        defaultValue: 2,
+        min: 1,
+        max: 3
+      },
+      {
+        key: 'showImages',
+        label: 'Mostrar Imagens',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'imageSize',
+        label: 'Tamanho da Imagem',
+        type: 'select',
+        options: [
+          { label: 'Pequeno', value: 'small' },
+          { label: 'Médio', value: 'medium' },
+          { label: 'Grande', value: 'large' }
+        ],
+        defaultValue: 'medium'
+      },
+      {
+        key: 'multipleSelection',
+        label: 'Seleção Múltipla',
+        type: 'boolean-switch',
+        defaultValue: false
+      },
+      {
+        key: 'maxSelections',
+        label: 'Máximo de Seleções',
+        type: 'number-input',
+        defaultValue: 1,
+        min: 1,
+        max: 10
+      },
+      {
+        key: 'responsiveColumns',
+        label: 'Colunas Responsivas',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+  {
+    type: 'progress-inline',
+    name: 'Barra de Progresso',
+    description: 'Barra de progresso animada',
+    icon: 'TrendingUp',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'progressValue',
+        label: 'Valor do Progresso',
+        type: 'number-input',
+        defaultValue: 50,
+        min: 0,
+        max: 100
+      },
+      {
+        key: 'progressMax',
+        label: 'Valor Máximo',
+        type: 'number-input',
+        defaultValue: 100,
+        min: 100,
+        max: 100
+      },
+      {
+        key: 'showPercentage',
+        label: 'Mostrar Porcentagem',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'animated',
+        label: 'Animado',
+        type: 'boolean-switch',
+        defaultValue: false
+      },
+      {
+        key: 'color',
+        label: 'Cor',
+        type: 'text-input',
+        defaultValue: '#B89B7A'
+      },
+      {
+        key: 'backgroundColor',
+        label: 'Cor de Fundo',
+        type: 'text-input',
+        defaultValue: '#F5F5F5'
+      },
+      {
+        key: 'height',
+        label: 'Altura',
+        type: 'number-input',
+        defaultValue: 8,
+        min: 4,
+        max: 20
+      }
+    ]
+  },
+  {
+    type: 'loading-animation',
+    name: 'Animação de Carregamento',
+    description: 'Spinner ou loading para transições',
+    icon: 'Loader2',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'type',
+        label: 'Tipo de Animação',
+        type: 'select',
+        options: [
+          { label: 'Spinner', value: 'spinner' },
+          { label: 'Dots', value: 'dots' },
+          { label: 'Pulse', value: 'pulse' }
+        ],
+        defaultValue: 'spinner'
+      },
+      {
+        key: 'size',
+        label: 'Tamanho',
+        type: 'select',
+        options: [
+          { label: 'Pequeno', value: 'small' },
+          { label: 'Médio', value: 'medium' },
+          { label: 'Grande', value: 'large' }
+        ],
+        defaultValue: 'medium'
+      },
+      {
+        key: 'color',
+        label: 'Cor',
+        type: 'text-input',
+        defaultValue: '#B89B7A'
+      },
+      {
+        key: 'duration',
+        label: 'Duração (ms)',
+        type: 'number-input',
+        defaultValue: 3000,
+        min: 1000,
+        max: 10000
+      }
+    ]
+  },
+  {
+    type: 'image-display-inline',
+    name: 'Exibição de Imagem',
+    description: 'Imagem otimizada e responsiva',
+    icon: 'Image',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'src',
+        label: 'URL da Imagem',
+        type: 'image-url',
+        defaultValue: 'https://via.placeholder.com/600x400'
+      },
+      {
+        key: 'alt',
+        label: 'Texto Alternativo',
+        type: 'text-input',
+        defaultValue: 'Imagem'
+      },
+      {
+        key: 'width',
+        label: 'Largura',
+        type: 'number-input',
+        defaultValue: 600,
+        min: 100,
+        max: 1200
+      },
+      {
+        key: 'height',
+        label: 'Altura',
+        type: 'number-input',
+        defaultValue: 400,
+        min: 100,
+        max: 800
+      },
+      {
+        key: 'className',
+        label: 'Classes CSS',
+        type: 'text-input',
+        defaultValue: 'object-cover w-full h-auto rounded-lg mx-auto'
+      }
+    ]
+  },
+  {
+    type: 'quiz-offer-pricing-inline',
+    name: 'Preços da Oferta',
+    description: 'Bloco de preços para ofertas comerciais',
+    icon: 'DollarSign',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'originalPrice',
+        label: 'Preço Original',
+        type: 'number-input',
+        defaultValue: 197,
+        min: 1
+      },
+      {
+        key: 'discountedPrice',
+        label: 'Preço com Desconto',
+        type: 'number-input',
+        defaultValue: 97,
+        min: 1
+      },
+      {
+        key: 'discountPercentage',
+        label: 'Porcentagem de Desconto',
+        type: 'number-input',
+        defaultValue: 51,
+        min: 1,
+        max: 99
+      },
+      {
+        key: 'currency',
+        label: 'Moeda',
+        type: 'select',
+        options: [
+          { label: 'Real (BRL)', value: 'BRL' },
+          { label: 'Dólar (USD)', value: 'USD' },
+          { label: 'Euro (EUR)', value: 'EUR' }
+        ],
+        defaultValue: 'BRL'
+      },
+      {
+        key: 'installments',
+        label: 'Parcelamento',
+        type: 'text-input',
+        defaultValue: '{ "number": 12, "value": 8.83 }'
+      },
+      {
+        key: 'features',
+        label: 'Lista de Recursos',
+        type: 'array-editor',
+        defaultValue: [
+          'Guia Completo do Seu Estilo (PDF)',
+          'Análise Personalizada Detalhada',
+          'Dicas de Combinações',
+          'Lista de Compras Estratégicas',
+          'Suporte por 30 dias'
+        ]
+      },
+      {
+        key: 'highlighted',
+        label: 'Destacado',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+  {
+    type: 'style-card-inline',
+    name: 'Card de Estilo',
+    description: 'Card para estilos secundários',
+    icon: 'Palette',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'styleName',
+        label: 'Nome do Estilo',
+        type: 'text-input',
+        defaultValue: 'Moderno'
+      },
+      {
+        key: 'percentage',
+        label: 'Porcentagem',
+        type: 'number-input',
+        defaultValue: 20,
+        min: 0,
+        max: 100
+      },
+      {
+        key: 'description',
+        label: 'Descrição',
+        type: 'textarea',
+        defaultValue: 'Traços modernos na sua personalidade',
+        rows: 2
+      },
+      {
+        key: 'imageUrl',
+        label: 'Imagem do Estilo',
+        type: 'image-url',
+        defaultValue: 'https://via.placeholder.com/200x150'
+      },
+      {
+        key: 'compact',
+        label: 'Layout Compacto',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+  {
+    type: 'testimonial-card-inline',
+    name: 'Card de Depoimento',
+    description: 'Card de depoimento com foto e rating',
+    icon: 'MessageSquare',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'name',
+        label: 'Nome',
+        type: 'text-input',
+        defaultValue: 'Ana Carolina'
+      },
+      {
+        key: 'location',
+        label: 'Localização',
+        type: 'text-input',
+        defaultValue: 'São Paulo, SP'
+      },
+      {
+        key: 'text',
+        label: 'Texto do Depoimento',
+        type: 'textarea',
+        defaultValue: 'Depois do quiz descobri que sou do estilo Elegante e o guia me ajudou a reorganizar todo meu guarda-roupa. Agora me visto com muito mais confiança!',
+        rows: 3
+      },
+      {
+        key: 'rating',
+        label: 'Avaliação (1-5)',
+        type: 'number-input',
+        defaultValue: 5,
+        min: 1,
+        max: 5
+      },
+      {
+        key: 'avatar',
+        label: 'Foto do Cliente',
+        type: 'image-url',
+        defaultValue: 'https://via.placeholder.com/80x80'
+      },
+      {
+        key: 'compact',
+        label: 'Layout Compacto',
+        type: 'boolean-switch',
+        defaultValue: false
+      }
+    ]
+  },
+  {
+    type: 'badge-inline',
+    name: 'Badge',
+    description: 'Badge de garantia ou destaque',
+    icon: 'Award',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'text',
+        label: 'Texto Principal',
+        type: 'text-input',
+        defaultValue: '7 DIAS DE GARANTIA'
+      },
+      {
+        key: 'subtext',
+        label: 'Texto Secundário',
+        type: 'text-input',
+        defaultValue: 'Se não gostar, devolvemos seu dinheiro'
+      },
+      {
+        key: 'icon',
+        label: 'Ícone',
+        type: 'select',
+        options: [
+          { label: 'Escudo', value: 'shield' },
+          { label: 'Estrela', value: 'star' },
+          { label: 'Verificado', value: 'check' },
+          { label: 'Prêmio', value: 'award' }
+        ],
+        defaultValue: 'shield'
+      },
+      {
+        key: 'color',
+        label: 'Cor do Badge',
+        type: 'select',
+        options: [
+          { label: 'Verde', value: 'green' },
+          { label: 'Azul', value: 'blue' },
+          { label: 'Dourado', value: 'gold' },
+          { label: 'Vermelho', value: 'red' }
+        ],
+        defaultValue: 'green'
+      },
+      {
+        key: 'size',
+        label: 'Tamanho',
+        type: 'select',
+        options: [
+          { label: 'Pequeno', value: 'small' },
+          { label: 'Médio', value: 'medium' },
+          { label: 'Grande', value: 'large' }
+        ],
+        defaultValue: 'medium'
+      },
+      {
+        key: 'centered',
+        label: 'Centralizado',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+  {
+    type: 'result-header-inline',
+    name: 'Cabeçalho de Resultado',
+    description: 'Header personalizado para página de resultado',
+    icon: 'Crown',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'logoUrl',
+        label: 'URL do Logo',
+        type: 'image-url',
+        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'
+      },
+      {
+        key: 'logoAlt',
+        label: 'Texto Alternativo do Logo',
+        type: 'text-input',
+        defaultValue: 'Logo da Marca'
+      },
+      {
+        key: 'logoWidth',
+        label: 'Largura do Logo',
+        type: 'number-input',
+        defaultValue: 96,
+        min: 50,
+        max: 200
+      },
+      {
+        key: 'logoHeight',
+        label: 'Altura do Logo',
+        type: 'number-input',
+        defaultValue: 96,
+        min: 50,
+        max: 200
+      },
+      {
+        key: 'userName',
+        label: 'Nome do Usuário',
+        type: 'text-input',
+        defaultValue: 'dinamicUserName'
+      },
+      {
+        key: 'showProgress',
+        label: 'Mostrar Progresso',
+        type: 'boolean-switch',
+        defaultValue: false
+      }
+    ]
+  },
+
+  // === COMPONENTES ESSENCIAIS DO QUIZ (Header com Logo + Progresso) ===
+  {
+    type: 'quiz-intro-header',
+    name: 'Header do Quiz (Logo + Progresso)',
+    description: 'Cabeçalho com logotipo e barra de progresso para todas as etapas',
+    icon: 'Crown',
+    category: 'Quiz',
+    propertiesSchema: [
+      {
+        key: 'logoUrl',
+        label: 'URL do Logo',
+        type: 'image-url',
+        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'
+      },
+      {
+        key: 'logoAlt',
+        label: 'Texto Alternativo do Logo',
+        type: 'text-input',
+        defaultValue: 'Logo da Marca'
+      },
+      {
+        key: 'logoWidth',
+        label: 'Largura do Logo (px)',
+        type: 'number-input',
+        defaultValue: 96,
+        min: 50,
+        max: 200
+      },
+      {
+        key: 'progressValue',
+        label: 'Valor do Progresso (%)',
+        type: 'number-input',
+        defaultValue: 0,
+        min: 0,
+        max: 100
+      },
+      {
+        key: 'showBackButton',
+        label: 'Mostrar Botão Voltar',
+        type: 'boolean-switch',
+        defaultValue: false
       }
     ]
   },
@@ -160,7 +741,7 @@ export const blockDefinitions: BlockDefinition[] = [
     type: 'heading-inline',
     name: 'Título Inline',
     description: 'Título modular e configurável',
-    icon: 'Heading',
+    icon: 'Type',
     category: 'Inline',
     propertiesSchema: [
       {
@@ -198,7 +779,7 @@ export const blockDefinitions: BlockDefinition[] = [
     type: 'button-inline',
     name: 'Botão Inline',
     description: 'Botão modular e responsivo',
-    icon: 'MousePointer',
+    icon: 'ArrowRight',
     category: 'Inline',
     propertiesSchema: [
       {
@@ -235,6 +816,339 @@ export const blockDefinitions: BlockDefinition[] = [
           { label: 'Grande', value: 'large' }
         ],
         defaultValue: 'medium'
+      }
+    ]
+  },
+
+  // === COMPONENTES ESPECÍFICOS DAS ETAPAS 20 E 21 ===
+  {
+    type: 'options-grid',
+    name: 'Grade de Opções',
+    description: 'Grid de opções para questões do quiz',
+    icon: 'Grid',
+    category: 'Quiz',
+    propertiesSchema: [
+      {
+        key: 'options',
+        label: 'Opções',
+        type: 'array-editor',
+        defaultValue: ['Opção 1', 'Opção 2', 'Opção 3', 'Opção 4']
+      },
+      {
+        key: 'columns',
+        label: 'Número de Colunas',
+        type: 'select',
+        options: [
+          { label: '1 Coluna', value: '1' },
+          { label: '2 Colunas', value: '2' },
+          { label: '3 Colunas', value: '3' },
+          { label: '4 Colunas', value: '4' }
+        ],
+        defaultValue: '2'
+      },
+      {
+        key: 'allowMultiple',
+        label: 'Permitir Múltipla Seleção',
+        type: 'boolean-switch',
+        defaultValue: false
+      }
+    ]
+  },
+  {
+    type: 'progress-inline',
+    name: 'Barra de Progresso',
+    description: 'Barra de progresso responsiva',
+    icon: 'TrendingUp',
+    category: 'Quiz',
+    propertiesSchema: [
+      {
+        key: 'value',
+        label: 'Valor (%)',
+        type: 'number-input',
+        defaultValue: 50,
+        min: 0,
+        max: 100
+      },
+      {
+        key: 'showLabel',
+        label: 'Mostrar Rótulo',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'color',
+        label: 'Cor',
+        type: 'select',
+        options: [
+          { label: 'Primária', value: 'primary' },
+          { label: 'Sucesso', value: 'success' },
+          { label: 'Aviso', value: 'warning' },
+          { label: 'Perigo', value: 'danger' }
+        ],
+        defaultValue: 'primary'
+      }
+    ]
+  },
+  {
+    type: 'loading-animation',
+    name: 'Animação de Carregamento',
+    description: 'Animação de loading para transições',
+    icon: 'RotateCw',
+    category: 'Quiz',
+    propertiesSchema: [
+      {
+        key: 'type',
+        label: 'Tipo de Animação',
+        type: 'select',
+        options: [
+          { label: 'Spinner', value: 'spinner' },
+          { label: 'Dots', value: 'dots' },
+          { label: 'Pulse', value: 'pulse' },
+          { label: 'Bounce', value: 'bounce' }
+        ],
+        defaultValue: 'spinner'
+      },
+      {
+        key: 'size',
+        label: 'Tamanho',
+        type: 'select',
+        options: [
+          { label: 'Pequeno', value: 'small' },
+          { label: 'Médio', value: 'medium' },
+          { label: 'Grande', value: 'large' }
+        ],
+        defaultValue: 'medium'
+      },
+      {
+        key: 'message',
+        label: 'Mensagem',
+        type: 'text-input',
+        defaultValue: 'Carregando...'
+      }
+    ]
+  },
+  {
+    type: 'image-display-inline',
+    name: 'Imagem Display Inline',
+    description: 'Imagem responsiva com configurações avançadas',
+    icon: 'Image',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'src',
+        label: 'URL da Imagem',
+        type: 'image-url',
+        defaultValue: 'https://via.placeholder.com/400x300'
+      },
+      {
+        key: 'alt',
+        label: 'Texto Alternativo',
+        type: 'text-input',
+        defaultValue: 'Imagem'
+      },
+      {
+        key: 'width',
+        label: 'Largura',
+        type: 'number-input',
+        defaultValue: 400,
+        min: 100,
+        max: 1200
+      },
+      {
+        key: 'height',
+        label: 'Altura',
+        type: 'number-input',
+        defaultValue: 300,
+        min: 100,
+        max: 800
+      },
+      {
+        key: 'className',
+        label: 'Classes CSS',
+        type: 'text-input',
+        defaultValue: 'object-cover w-full h-auto rounded-lg'
+      }
+    ]
+  },
+
+  // === COMPONENTES DA ETAPA 20 (RESULTADO) ===
+  {
+    type: 'result-header-inline',
+    name: 'Header de Resultado',
+    description: 'Cabeçalho personalizado para página de resultado',
+    icon: 'Award',
+    category: 'Quiz',
+    propertiesSchema: [
+      {
+        key: 'logoUrl',
+        label: 'URL do Logo',
+        type: 'image-url',
+        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'
+      },
+      {
+        key: 'userName',
+        label: 'Nome do Usuário',
+        type: 'text-input',
+        defaultValue: 'dinamicUserName'
+      },
+      {
+        key: 'showProgress',
+        label: 'Mostrar Progresso',
+        type: 'boolean-switch',
+        defaultValue: false
+      }
+    ]
+  },
+  {
+    type: 'style-card-inline',
+    name: 'Card de Estilo',
+    description: 'Card para exibir estilos secundários',
+    icon: 'Palette',
+    category: 'Quiz',
+    propertiesSchema: [
+      {
+        key: 'styleName',
+        label: 'Nome do Estilo',
+        type: 'text-input',
+        defaultValue: 'Elegante'
+      },
+      {
+        key: 'percentage',
+        label: 'Porcentagem',
+        type: 'number-input',
+        defaultValue: 85,
+        min: 0,
+        max: 100
+      },
+      {
+        key: 'description',
+        label: 'Descrição',
+        type: 'textarea',
+        defaultValue: 'Descrição do estilo...'
+      },
+      {
+        key: 'imageUrl',
+        label: 'Imagem do Estilo',
+        type: 'image-url',
+        defaultValue: 'https://via.placeholder.com/300x200'
+      },
+      {
+        key: 'compact',
+        label: 'Modo Compacto',
+        type: 'boolean-switch',
+        defaultValue: false
+      }
+    ]
+  },
+  {
+    type: 'testimonial-card-inline',
+    name: 'Card de Depoimento',
+    description: 'Card individual de depoimento',
+    icon: 'Quote',
+    category: 'Vendas',
+    propertiesSchema: [
+      {
+        key: 'name',
+        label: 'Nome',
+        type: 'text-input',
+        defaultValue: 'Cliente Satisfeito'
+      },
+      {
+        key: 'text',
+        label: 'Depoimento',
+        type: 'textarea',
+        defaultValue: 'Excelente produto! Recomendo.',
+        rows: 3
+      },
+      {
+        key: 'rating',
+        label: 'Avaliação (1-5)',
+        type: 'number-input',
+        defaultValue: 5,
+        min: 1,
+        max: 5
+      },
+      {
+        key: 'avatarUrl',
+        label: 'Foto do Cliente',
+        type: 'image-url',
+        defaultValue: 'https://via.placeholder.com/64x64'
+      }
+    ]
+  },
+  {
+    type: 'badge-inline',
+    name: 'Badge',
+    description: 'Etiqueta/selo inline',
+    icon: 'Shield',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'text',
+        label: 'Texto',
+        type: 'text-input',
+        defaultValue: 'Novo'
+      },
+      {
+        key: 'variant',
+        label: 'Variante',
+        type: 'select',
+        options: [
+          { label: 'Padrão', value: 'default' },
+          { label: 'Primário', value: 'primary' },
+          { label: 'Sucesso', value: 'success' },
+          { label: 'Aviso', value: 'warning' },
+          { label: 'Perigo', value: 'danger' }
+        ],
+        defaultValue: 'default'
+      }
+    ]
+  },
+
+  // === COMPONENTES DA ETAPA 21 (OFERTA) ===
+  {
+    type: 'quiz-offer-pricing-inline',
+    name: 'Preços da Oferta',
+    description: 'Bloco de preços otimizado para conversão',
+    icon: 'CircleDollarSign',
+    category: 'Vendas',
+    propertiesSchema: [
+      {
+        key: 'originalPrice',
+        label: 'Preço Original',
+        type: 'number-input',
+        defaultValue: 197
+      },
+      {
+        key: 'discountedPrice',
+        label: 'Preço com Desconto',
+        type: 'number-input',
+        defaultValue: 97
+      },
+      {
+        key: 'discountPercentage',
+        label: 'Porcentagem de Desconto',
+        type: 'number-input',
+        defaultValue: 51,
+        min: 0,
+        max: 100
+      },
+      {
+        key: 'currency',
+        label: 'Moeda',
+        type: 'select',
+        options: [
+          { label: 'Real (BRL)', value: 'BRL' },
+          { label: 'Dólar (USD)', value: 'USD' },
+          { label: 'Euro (EUR)', value: 'EUR' }
+        ],
+        defaultValue: 'BRL'
+      },
+      {
+        key: 'highlighted',
+        label: 'Destacado',
+        type: 'boolean-switch',
+        defaultValue: true
       }
     ]
   },

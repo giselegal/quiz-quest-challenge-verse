@@ -32,7 +32,10 @@ import {
   // Etapa 21 (Oferta)
   QuizOfferPricingInlineBlock,
   CountdownInlineBlock,
-  BonusListInlineBlock
+  BonusListInlineBlock,
+  // Componentes especializados para Quiz
+  QuizIntroHeaderBlock,
+  LoadingAnimationBlock
 } from './inline';
 
 // Componentes básicos (funcionais)
@@ -248,6 +251,39 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
 
       // === COMPONENTES INLINE ADICIONAIS FUNCIONAIS (ES7+) ===
       case 'text-inline':
+        return <UnifiedWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'heading-inline':
+        return <UnifiedWrapper blockType={blockType}><HeadingInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'button-inline':
+        return <UnifiedWrapper blockType={blockType}><ButtonInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'result-card-inline':
+        return <UnifiedWrapper blockType={blockType}><ResultCardInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'countdown-inline':
+        return <UnifiedWrapper blockType={blockType}><CountdownInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'quiz-offer-pricing-inline':
+        return <UnifiedWrapper blockType={blockType}><QuizOfferPricingInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'pricing-inline':
+        return <UnifiedWrapper blockType={blockType}><PricingInlineBlock {...commonProps} /></UnifiedWrapper>;
+      
+      // === COMPONENTES ESPECIALIZADOS PARA QUIZ ===
+      case 'quiz-intro-header':
+        return <UnifiedWrapper blockType={blockType}><QuizIntroHeaderBlock {...commonProps} /></UnifiedWrapper>;
+      case 'options-grid':
+        return <UnifiedWrapper blockType={blockType}><OptionsGridBlock {...commonProps} /></UnifiedWrapper>;
+      case 'progress-inline':
+        return <UnifiedWrapper blockType={blockType}><ProgressInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'loading-animation':
+        return <UnifiedWrapper blockType={blockType}><LoadingAnimationBlock {...commonProps} /></UnifiedWrapper>;
+      case 'image-display-inline':
+        return <UnifiedWrapper blockType={blockType}><ImageDisplayInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'style-card-inline':
+        return <UnifiedWrapper blockType={blockType}><StyleCardInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'testimonial-card-inline':
+        return <UnifiedWrapper blockType={blockType}><TestimonialCardInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'badge-inline':
+        return <UnifiedWrapper blockType={blockType}><BadgeInlineBlock {...commonProps} /></UnifiedWrapper>;
+      case 'result-header-inline':
+        return <UnifiedWrapper blockType={blockType}><ResultHeaderInlineBlock {...commonProps} /></UnifiedWrapper>;
         return <UnifiedWrapper blockType={blockType}><TextInlineBlock {...commonProps} /></UnifiedWrapper>;
       case 'heading-inline':
       case 'main-heading-inline':

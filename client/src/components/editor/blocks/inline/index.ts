@@ -22,5 +22,9 @@ export { default as QuizOfferPricingInlineBlock } from './QuizOfferPricingInline
 export { default as CountdownInlineBlock } from './CountdownInlineBlock';
 export { default as BonusListInlineBlock } from './BonusListInlineBlock';
 
+// Componentes especializados para Quiz (21 etapas)
+export { default as QuizIntroHeaderBlock } from './QuizIntroHeaderBlock';
+export { default as LoadingAnimationBlock } from './LoadingAnimationBlock';
+
 // Tipos base
 export type { BlockComponentProps } from '@/types/blocks';
