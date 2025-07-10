@@ -59,19 +59,17 @@ const AlertBlock: React.FC<BlockComponentProps> = ({
         <h4 className="font-semibold mb-1">
           <InlineEditableText
             value={title}
-            onSave={(value: string) => handlePropertyChange('title', value)}
+            onChange={(value: string) => handlePropertyChange('title', value)}
             className="inline-block"
             placeholder="Título do Alerta"
-            tag="h4"
           />
         </h4>
         <div className="text-sm">
           <InlineEditableText
             value={message}
-            onSave={(value: string) => handlePropertyChange('message', value)}
+            onChange={(value: string) => handlePropertyChange('message', value)}
             className="inline-block w-full"
             placeholder="Mensagem do alerta"
-            tag="div"
           />
         </div>
       </div>
