@@ -7,7 +7,6 @@ import type { BlockData } from '@/types/blocks';
 import QuizStartPageBlock from './QuizStartPageBlock';
 import QuizOfferPageBlock from './QuizOfferPageBlock';
 import ResultPageBlock from './ResultPageBlock';
-import ModernResultPageBlock from './ModernResultPageBlock';
 
 // Componentes de quiz (funcionais)
 import QuizQuestionBlock from './QuizQuestionBlock';
@@ -327,12 +326,6 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
         return <UnifiedWrapper blockType={blockType}><StrategicQuestionBlock {...commonProps} /></UnifiedWrapper>;
       case 'quiz-transition-final':
         return <UnifiedWrapper blockType={blockType}><QuizTransitionBlock {...commonProps} /></UnifiedWrapper>;
-      
-      // NOVOS COMPONENTES ESPECÍFICOS DE PÁGINAS (Etapas 20 e 21) COM WRAPPER
-      case 'modern-result-page':
-        return <UnifiedWrapper blockType={blockType}><ModernResultPageBlock {...commonProps} /></UnifiedWrapper>;
-      case 'quiz-offer-page':
-        return <UnifiedWrapper blockType={blockType}><QuizOfferPageBlock {...commonProps} /></UnifiedWrapper>;
       
       // BLOCOS DE RESULTADO ANTIGOS (mantidos para compatibilidade) - INLINE
       case 'quiz-result-header':
