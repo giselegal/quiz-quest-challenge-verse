@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { QuizQuestion, QuizResult, UserResponse } from '@/types/quiz';
 

@@ -1,17 +1,11 @@
-
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const GitHubSyncStatus: React.FC = () => {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>GitHub Sync Status</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p className="text-sm text-gray-600">GitHub sync status component</p>
-      </CardContent>
-    </Card>
+    <div className="p-4 border rounded">
+      <h3 className="text-lg font-semibold">GitHub Sync Status</h3>
+      <p className="text-gray-600">No sync configured</p>
+    </div>
   );
 };
 

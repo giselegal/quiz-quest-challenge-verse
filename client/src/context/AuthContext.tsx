@@ -1,6 +1,11 @@
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { User } from '@/types/auth';
+interface User {
+  id: string;
+  email: string;
+  name?: string;
+  userName?: string;
+}
 
 interface AuthContextType {
   user: User | null;
@@ -11,29 +16,36 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
 
-  useEffect(() => {
-    // Check for existing session
-    const savedUser = localStorage.getItem('user');
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-    setLoading(false);
-  }, []);
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const login = async (email: string, password: string) => {
-    // Mock login - replace with real authentication
-    const mockUser: User = { id: '1', email, name: 'Test User', userName: 'testuser' };
-    setUser(mockUser);
-    localStorage.setItem('user', JSON.stringify(mockUser));
+    setLoading(true);
+    try {
+      // Mock login - replace with actual authentication
+      setUser({ id: '1', email, name: 'Test User', userName: 'testuser' });
+    } catch (error) {
+      console.error('Login failed:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('user');
   };
 
   return (
@@ -41,12 +53,4 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
 };
