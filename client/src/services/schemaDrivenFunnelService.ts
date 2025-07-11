@@ -1272,30 +1272,28 @@ class SchemaDrivenFunnelService {
             }
           }
         },
-        // 3. Características do estilo (lista flexível e editável)
+        // 3. Características do estilo (lista corrigida)
         {
           id: 'result-characteristics',
           type: 'text-inline',
           properties: {
-            content: `
-              <div class="characteristics-list" style="display: flex; flex-direction: column; gap: 16px;">
-                <h3 class="text-xl font-semibold mb-4 text-[#432818]">Suas principais características:</h3>
-                <ul class="space-y-3" style="display: flex; flex-direction: column; gap: 12px;">
-                  <li class="flex items-center" style="display: flex; align-items: center; gap: 12px;">
-                    <span class="w-6 h-6 bg-[#B89B7A] rounded-full flex items-center justify-center text-white text-sm">✓</span>
-                    <span>Elegância natural e sofisticação</span>
-                  </li>
-                  <li class="flex items-center" style="display: flex; align-items: center; gap: 12px;">
-                    <span class="w-6 h-6 bg-[#B89B7A] rounded-full flex items-center justify-center text-white text-sm">✓</span>
-                    <span>Preferência por peças atemporais</span>
-                  </li>
-                  <li class="flex items-center" style="display: flex; align-items: center; gap: 12px;">
-                    <span class="w-6 h-6 bg-[#B89B7A] rounded-full flex items-center justify-center text-white text-sm">✓</span>
-                    <span>Valoriza qualidade sobre quantidade</span>
-                  </li>
-                </ul>
-              </div>
-            `,
+            content: `<div style="display: flex; flex-direction: column; gap: 16px;">
+              <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 16px; color: #432818;">Suas principais características:</h3>
+              <ul style="display: flex; flex-direction: column; gap: 12px;">
+                <li style="display: flex; align-items: center; gap: 12px;">
+                  <span style="width: 24px; height: 24px; background-color: #B89B7A; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px;">✓</span>
+                  <span>Elegância natural e sofisticação</span>
+                </li>
+                <li style="display: flex; align-items: center; gap: 12px;">
+                  <span style="width: 24px; height: 24px; background-color: #B89B7A; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px;">✓</span>
+                  <span>Preferência por peças atemporais</span>
+                </li>
+                <li style="display: flex; align-items: center; gap: 12px;">
+                  <span style="width: 24px; height: 24px; background-color: #B89B7A; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px;">✓</span>
+                  <span>Valoriza qualidade sobre quantidade</span>
+                </li>
+              </ul>
+            </div>`,
             fontSize: 'text-base',
             textAlign: 'text-left',
             color: '#432818',
@@ -1335,24 +1333,8 @@ class SchemaDrivenFunnelService {
             editableFields: ['src', 'alt', 'width', 'height', 'className']
           }
         },
-        // 5. Container flexbox para estilos secundários
-        {
-          id: 'result-secondary-container',
-          type: 'flex-container-inline',
-          properties: {
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 24,
-            marginTop: 32,
-            marginBottom: 32,
-            // Responsividade
-            responsive: {
-              mobile: { gap: 16 },
-              tablet: { gap: 20 },
-              desktop: { gap: 24 }
-            }
-          }
-        },
+        // 5. Container dos estilos secundários (removido - desnecessário)
+        
         // 6. Título dos estilos secundários
         {
           id: 'result-secondary-title',
@@ -1370,37 +1352,18 @@ class SchemaDrivenFunnelService {
             editableFields: ['content', 'fontSize', 'fontWeight', 'textAlign', 'color']
           }
         },
-        // 7. Grid flexível dos estilos secundários
+        // 7. Grid dos estilos secundários (usando div simples)
         {
           id: 'result-secondary-grid',
-          type: 'flex-grid-inline',
+          type: 'text-inline',
           properties: {
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: 16,
-            justifyContent: 'center',
-            alignItems: 'stretch',
-            // Grid responsivo
-            gridColumns: {
-              mobile: 1,
-              tablet: 2,
-              desktop: 3
-            },
-            // Responsividade
-            responsive: {
-              mobile: { 
-                flexDirection: 'column',
-                gap: 12
-              },
-              tablet: { 
-                flexDirection: 'row',
-                gap: 14
-              },
-              desktop: { 
-                flexDirection: 'row',
-                gap: 16
-              }
-            }
+            content: `
+              <div style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; align-items: stretch; margin: 24px 0;">
+
+              <!-- Grid responsivo será renderizado aqui -->
+              </div>
+            `,
+            marginBottom: 24
           }
         },
         // 8-10. Cards dos estilos secundários (flexbox independentes)
