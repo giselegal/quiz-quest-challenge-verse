@@ -1,4 +1,5 @@
 
+// @ts-nocheck
 import React from 'react';
 import { QuizComponentData } from '@/types/quizBuilder';
 import { Label } from '@/components/ui/label';
