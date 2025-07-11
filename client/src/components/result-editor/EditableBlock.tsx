@@ -1,55 +1,34 @@
 
-// @ts-nocheck
 import React from 'react';
-import { Block, BlockType } from '@/types/editor';
+import { Block } from '@/types/editor';
 
 interface EditableBlockProps {
   block: Block;
   isSelected: boolean;
   onSelect: () => void;
-  onUpdate?: (content: any) => void;
-  onDelete?: () => void;
+  onEdit: () => void;
 }
 
 export const EditableBlock: React.FC<EditableBlockProps> = ({
   block,
   isSelected,
   onSelect,
-  onUpdate,
-  onDelete
+  onEdit
 }) => {
-  const renderBlockContent = () => {
-    const validBlockTypes: BlockType[] = [
-      'headline', 'text', 'image', 'benefits', 'testimonials', 
-      'pricing', 'guarantee', 'cta', 'header', 'hero', 'bonus-carousel'
-    ];
-
-    if (!validBlockTypes.includes(block.type as BlockType)) {
-      return (
-        <div className="p-4 border border-gray-300 rounded">
-          <p>Unsupported block type: {block.type}</p>
-        </div>
-      );
-    }
-
-    switch (block.type as BlockType) {
-      case 'headline':
-        return <h2 className="text-2xl font-bold">{block.content.title || 'Headline'}</h2>;
-      case 'text':
-        return <p>{block.content.text || 'Text content'}</p>;
-      case 'image':
-        return <img src={block.content.src || ''} alt={block.content.alt || ''} />;
-      default:
-        return <div>Block: {block.type}</div>;
-    }
-  };
-
   return (
-    <div 
-      className={`p-4 border rounded cursor-pointer ${isSelected ? 'border-blue-500' : 'border-gray-300'}`}
+    <div
+      className={`border rounded-lg p-4 cursor-pointer ${
+        isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
+      }`}
       onClick={onSelect}
+      onDoubleClick={onEdit}
     >
-      {renderBlockContent()}
+      <div className="text-sm text-gray-500 mb-2">{block.type}</div>
+      <div className="text-base">
+        {block.content.title || block.content.text || 'Empty block'}
+      </div>
     </div>
   );
 };
+
+export default EditableBlock;

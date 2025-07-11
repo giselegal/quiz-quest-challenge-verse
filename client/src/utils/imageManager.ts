@@ -1,28 +1,35 @@
 
-export interface OptimizedImageOptions {
-  quality?: number;
-  width?: number;
-  height?: number;
-}
-
-export interface ImageMetadata {
-  width?: number;
-  height?: number;
-  title?: string;
-}
-
-export const isImagePreloaded = (url: string): boolean => {
-  return false;
+// Image management utilities
+export const preloadImage = (src: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve();
+    img.onerror = reject;
+    img.src = src;
+  });
 };
 
-export const getOptimizedImage = (url: string, options: OptimizedImageOptions = {}): string => {
-  return url;
+export const preloadCriticalImages = async (urls: string[]): Promise<void> => {
+  try {
+    await Promise.all(urls.map(preloadImage));
+  } catch (error) {
+    console.warn('Failed to preload some images:', error);
+  }
 };
 
-export const getImageMetadata = (url: string): ImageMetadata | null => {
+export const preloadImagesByUrls = async (urls: string[]): Promise<void> => {
+  return preloadCriticalImages(urls);
+};
+
+export const optimizeImage = async (
+  src: string,
+  options: { width?: number; height?: number; alt?: string } = {}
+): Promise<{ src: string; width?: number; height?: number; alt?: string }> => {
+  // Simple optimization - in a real app, this would use a service like Cloudinary
   return {
-    width: 400,
-    height: 300,
-    title: 'Image'
+    src,
+    width: options.width,
+    height: options.height,
+    alt: options.alt
   };
 };

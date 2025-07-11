@@ -1,22 +1,13 @@
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-export const SupabaseConnectionTest: React.FC = () => {
+const SupabaseConnectionTest: React.FC = () => {
   return (
-    <div className="min-h-screen bg-background p-8">
-      <div className="max-w-2xl mx-auto">
-        <Card>
-          <CardHeader>
-            <CardTitle>Teste de Conexão Supabase</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground">
-              Testando conexão com Supabase...
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+    <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+      <h3 className="text-green-800 font-medium">Supabase Connection</h3>
+      <p className="text-green-600 text-sm">Connection test component</p>
     </div>
   );
 };
+
+export default SupabaseConnectionTest;

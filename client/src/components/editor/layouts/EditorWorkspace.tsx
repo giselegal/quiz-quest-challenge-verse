@@ -3,9 +3,10 @@ import React, { useState } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ComponentsSidebar } from '../sidebar/ComponentsSidebar';
 import { EditPreview } from '../preview/EditPreview';
-import PropertiesPanel from '../properties/PropertiesPanel';
+import { PropertiesPanel } from '../properties/PropertiesPanel';
 import { cn } from '@/lib/utils';
 import { useEditor } from '@/hooks/useEditor';
+import { EditableContent } from '@/types/editor';
 
 interface EditorWorkspaceProps {
   className?: string;
@@ -15,6 +16,19 @@ export function EditorWorkspace({ className }: EditorWorkspaceProps) {
   const [isPreviewing, setIsPreviewing] = useState(false);
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
   const { config, addBlock, updateBlock, deleteBlock } = useEditor();
+
+  const handleUpdateBlock = (content: EditableContent) => {
+    if (selectedComponentId) {
+      updateBlock(selectedComponentId, content);
+    }
+  };
+
+  const handleDeleteBlock = () => {
+    if (selectedComponentId) {
+      deleteBlock(selectedComponentId);
+      setSelectedComponentId(null);
+    }
+  };
 
   return (
     <div className={cn("h-screen flex flex-col bg-[#FAF9F7]", className)}>
@@ -46,20 +60,11 @@ export function EditorWorkspace({ className }: EditorWorkspaceProps) {
         {/* Properties Panel */}
         <ResizablePanel defaultSize={25}>
           <PropertiesPanel
-            selectedComponentId={selectedComponentId}
+            selectedBlockId={selectedComponentId}
             onClose={() => setSelectedComponentId(null)}
             blocks={config.blocks}
-            onUpdate={(content) => {
-              if (selectedComponentId) {
-                updateBlock(selectedComponentId, content);
-              }
-            }}
-            onDelete={() => {
-              if (selectedComponentId) {
-                deleteBlock(selectedComponentId);
-                setSelectedComponentId(null);
-              }
-            }}
+            onUpdate={handleUpdateBlock}
+            onDelete={handleDeleteBlock}
           />
         </ResizablePanel>
       </ResizablePanelGroup>

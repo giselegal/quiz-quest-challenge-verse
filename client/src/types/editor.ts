@@ -52,6 +52,23 @@ export interface EditableContent {
     text: string;
     imageUrl?: string;
   }>;
+  // New properties to fix the errors
+  animationType?: string;
+  animationDuration?: string;
+  animationDelay?: string;
+  animationTrigger?: string;
+  image?: string;
+  size?: string;
+  color?: string;
+  position?: string;
+  width?: string;
+  borderRadius?: string;
+  height?: string;
+  testimonialsImage?: string;
+  caption?: string;
+  responsive?: Record<string, any>;
+  // Add index signature to allow dynamic property access
+  [key: string]: any;
 }
 
 export type BlockType = 
@@ -77,7 +94,16 @@ export type BlockType =
   | 'testimonials'
   | 'guarantee'
   | 'hero'
-  | 'bonus-carousel';
+  | 'bonus-carousel'
+  | 'button'
+  | 'spacer'
+  | 'divider'
+  | 'testimonial'
+  | 'offer'
+  | 'hero-section'
+  | 'secondary-styles'
+  | 'products'
+  | 'component-reference';
 
 export interface Block {
   id: string;

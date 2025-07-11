@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ComponentsSidebar } from './sidebar/ComponentsSidebar';
 import { StyleResult } from '@/types/quiz';
-import PropertiesPanel from './properties/PropertiesPanel';
+import { PropertiesPanel } from './properties/PropertiesPanel';
 import { EditorToolbar } from './toolbar/EditorToolbar';
 import { useUnifiedEditor } from '@/hooks/useUnifiedEditor';
 import ResultEditorPanel from '@/components/unified-editor/panels/ResultEditorPanel';
