@@ -238,6 +238,11 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       'quiz-result-header': () => <QuizResultHeaderBlock {...commonProps} />,
       'quiz-result-card': () => <QuizResultMainCardBlock {...commonProps} />,
       
+      // ETAPA 20 - Resultado (componentes inline)
+      'result-header-inline': () => <ResultHeaderInlineBlock {...commonProps} />,
+      'result-card-inline': () => <ResultCardInlineBlock {...commonProps} />,
+      'style-card-inline': () => <StyleCardInlineBlock {...commonProps} />,
+      
       // ETAPA 21 - Oferta (componentes específicos)
       'quiz-offer-title': () => <HeadingInlineBlock {...commonProps} />,
       'quiz-offer-countdown': () => <QuizOfferCountdownBlock {...commonProps} />,
