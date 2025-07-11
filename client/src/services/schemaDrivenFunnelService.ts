@@ -106,10 +106,13 @@ class SchemaDrivenFunnelService {
   constructor() {
     // Limpeza imediata na inicialização para resolver problemas órfãos
     this.performEmergencyCleanup();
-    // Aplicar limpeza de funnels órfãos
-    LocalStorageFixer.cleanOrphanFunnels().catch(error => {
-      console.warn('⚠️ Failed to clean orphan funnels:', error);
-    });
+    
+    // Aplicar limpeza de funnels órfãos de forma assíncrona e tolerante a falhas
+    setTimeout(() => {
+      LocalStorageFixer.cleanOrphanFunnels().catch(error => {
+        console.debug('ℹ️ Limpeza de órfãos adiada (backend pode não estar pronto):', error?.message || 'erro desconhecido');
+      });
+    }, 2000); // Aguarda 2s para o backend estar pronto
   }
 
   // Auto-save management

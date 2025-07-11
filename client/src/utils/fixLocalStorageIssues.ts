@@ -62,9 +62,17 @@ export class LocalStorageFixer {
     try {
       // Buscar funnels no backend
       const response = await fetch('/api/schema-driven/funnels');
-      if (!response.ok) throw new Error('Backend não disponível');
+      if (!response.ok) {
+        console.warn('⚠️ Backend não disponível para verificação de órfãos');
+        return [];
+      }
       
       const result = await response.json();
+      if (!result.success || !Array.isArray(result.data)) {
+        console.warn('⚠️ Resposta inválida do backend');
+        return [];
+      }
+      
       const backendFunnelIds = result.data.map((f: any) => f.id);
       
       // Verificar localStorage
@@ -78,11 +86,17 @@ export class LocalStorageFixer {
         }
       }
       
-      console.log('🔍 Funnels órfãos encontrados:', orphanIds);
+      if (orphanIds.length > 0) {
+        console.log('🔍 Funnels órfãos encontrados:', orphanIds);
+      } else {
+        console.log('✅ Nenhum funnel órfão encontrado');
+      }
       return orphanIds;
       
     } catch (error) {
-      console.error('❌ Erro ao verificar funnels órfãos:', error);
+      // Melhor tratamento de erro com detalhes
+      const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
+      console.warn('⚠️ Erro ao verificar funnels órfãos:', errorMessage);
       return [];
     }
   }
@@ -91,26 +105,39 @@ export class LocalStorageFixer {
    * Remove funnels órfãos do localStorage
    */
   static async cleanOrphanFunnels(): Promise<void> {
-    const orphanIds = await this.checkOrphanFunnels();
-    
-    orphanIds.forEach(id => {
-      const versionKey = `schemaDrivenFunnelVersionHistory-${id}`;
-      localStorage.removeItem(versionKey);
-      console.log(`✅ Removido funnel órfão: ${id}`);
-    });
-    
-    // Verificar se o funnel atual é órfão
-    const currentFunnel = localStorage.getItem(this.STORAGE_KEYS.FUNNEL);
-    if (currentFunnel) {
-      try {
-        const funnelData = JSON.parse(currentFunnel);
-        if (orphanIds.includes(funnelData.id)) {
-          localStorage.removeItem(this.STORAGE_KEYS.FUNNEL);
-          console.log(`✅ Removido funnel atual órfão: ${funnelData.id}`);
-        }
-      } catch (error) {
-        console.error('❌ Erro ao verificar funnel atual:', error);
+    try {
+      const orphanIds = await this.checkOrphanFunnels();
+      
+      if (orphanIds.length === 0) {
+        console.debug('ℹ️ Nenhum funnel órfão para limpar');
+        return;
       }
+      
+      orphanIds.forEach(id => {
+        const versionKey = `schemaDrivenFunnelVersionHistory-${id}`;
+        localStorage.removeItem(versionKey);
+        console.log(`✅ Removido funnel órfão: ${id}`);
+      });
+      
+      // Verificar se o funnel atual é órfão
+      const currentFunnel = localStorage.getItem(this.STORAGE_KEYS.FUNNEL);
+      if (currentFunnel) {
+        try {
+          const funnelData = JSON.parse(currentFunnel);
+          if (orphanIds.includes(funnelData.id)) {
+            localStorage.removeItem(this.STORAGE_KEYS.FUNNEL);
+            console.log(`✅ Removido funnel atual órfão: ${funnelData.id}`);
+          }
+        } catch (error) {
+          console.warn('⚠️ Erro ao verificar funnel atual:', error);
+        }
+      }
+      
+      console.log(`🧹 Limpeza concluída: ${orphanIds.length} funnels órfãos removidos`);
+      
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
+      console.debug('ℹ️ Limpeza de órfãos não realizada:', errorMessage);
     }
   }
 }
