@@ -10,25 +10,18 @@ export { default as ModernQuizEditor } from './ModernQuizEditor';
 export { default as ModularQuizEditor } from './ModularQuizEditor';
 export { default as EditorLayout } from './EditorLayout';
 export { default as QuizEditorSteps } from './QuizEditorSteps';
-export { default as PropertyPanel } from './PropertyPanel';
-export { default as ModernPropertyPanel } from './ModernPropertyPanel';
 
-// Componentes de bloco
+// Componentes com named exports
+export { PropertyPanel } from './PropertyPanel';
+export { ModernPropertyPanel } from './ModernPropertyPanel';
 export { BlockRenderer } from './BlockRenderer';
-export { default as EditorBlockItem } from './EditorBlockItem';
-export { default as AddBlockButton } from './AddBlockButton';
+export { EditorBlockItem } from './EditorBlockItem';
+export { AddBlockButton } from './AddBlockButton';
+export { EmptyEditor } from './EmptyEditor';
+export { EditBlockContent } from './EditBlockContent';
+export { PageEditor } from './PageEditor';
+export { UnifiedEditorLayout } from './UnifiedEditorLayout';
 
-// Outros componentes
-export { default as EmptyEditor } from './EmptyEditor';
-export { default as EditBlockContent } from './EditBlockContent';
-export { default as PageEditor } from './PageEditor';
-export { default as SalesPageEditor } from './SalesPageEditor';
-export { default as UnifiedEditorLayout } from './UnifiedEditorLayout';
-
-// Layouts específicos
-export { default as SchemaDrivenEditorLayoutV2 } from './SchemaDrivenEditorLayoutV2';
-export { default as SchemaDrivenEditorResponsive } from './SchemaDrivenEditorResponsive';
-
-// Testes
+// Testes e outros
 export { default as EditorTestPage } from './EditorTestPage';
 export { default as SimpleEditorTest } from './SimpleEditorTest';
