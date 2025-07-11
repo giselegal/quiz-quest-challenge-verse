@@ -103,8 +103,12 @@ class SchemaDrivenFunnelService {
   };
 
   constructor() {
-    // Limpeza imediata na inicialização
+    // Limpeza imediata na inicialização para resolver problemas órfãos
     this.performEmergencyCleanup();
+    // Aplicar limpeza de funnels órfãos
+    LocalStorageFixer.cleanOrphanFunnels().catch(error => {
+      console.warn('⚠️ Failed to clean orphan funnels:', error);
+    });
   }
 
   // Auto-save management
@@ -375,6 +379,12 @@ class SchemaDrivenFunnelService {
 
   // Backend operations
   async saveFunnel(funnel: SchemaDrivenFunnelData, isAutoSave: boolean = false): Promise<SchemaDrivenFunnelData> {
+    // Validação crítica de ID antes da requisição
+    if (!funnel.id || typeof funnel.id !== 'string' || funnel.id === '[object Object]' || funnel.id.includes('undefined')) {
+      console.warn('⚠️ Invalid funnel ID detected:', funnel.id, '- creating new funnel instead');
+      return this.createFunnel(funnel);
+    }
+
     try {
       // Tentar salvar no backend primeiro
       const response = await fetch(`${this.baseUrl}/funnels/${funnel.id}`, {
@@ -432,7 +442,7 @@ class SchemaDrivenFunnelService {
 
   async loadFunnel(funnelId: string): Promise<SchemaDrivenFunnelData | null> {
     // Validar funnelId para evitar requisições inválidas
-    if (!funnelId || typeof funnelId !== 'string' || funnelId === '[object Object]') {
+    if (!funnelId || typeof funnelId !== 'string' || funnelId === '[object Object]' || funnelId.includes('undefined') || funnelId.includes('null')) {
       console.error('❌ Invalid funnelId provided to loadFunnel:', funnelId);
       return null;
     }
@@ -457,6 +467,8 @@ class SchemaDrivenFunnelService {
         }
         console.log('☁️ Funnel loaded from backend');
         return funnel;
+      } else {
+        console.warn(`⚠️ Backend returned ${response.status} for funnel ${funnelId}`);
       }
     } catch (error) {
       console.warn('⚠️ Backend unavailable, trying local storage:', error);
