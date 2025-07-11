@@ -1,23 +1,41 @@
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { QuizResult } from '@/types/quiz';
+
+interface QuizQuestion {
+  id: string;
+  title: string;
+  type: 'single' | 'multiple' | 'text' | 'image' | 'both' | 'strategic';
+  options?: QuizOption[];
+  required_selections?: number;
+}
+
+interface QuizOption {
+  id: string;
+  text: string;
+  points: { [styleType: string]: number };
+  image_url?: string;
+  style_code?: string;
+}
+
+interface UserResponse {
+  questionId: string;
+  selectedOptions: string[];
+  timestamp: number;
+}
 
 interface QuizContextType {
-  quizResult: QuizResult | null;
-  setQuizResult: (result: QuizResult | null) => void;
+  currentQuestionIndex: number;
+  questions: QuizQuestion[];
+  responses: UserResponse[];
+  isCompleted: boolean;
+  nextQuestion: () => void;
+  previousQuestion: () => void;
+  addResponse: (response: UserResponse) => void;
+  resetQuiz: () => void;
+  setQuestions: (questions: QuizQuestion[]) => void;
 }
 
 const QuizContext = createContext<QuizContextType | undefined>(undefined);
-
-export const QuizProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [quizResult, setQuizResult] = useState<QuizResult | null>(null);
-
-  return (
-    <QuizContext.Provider value={{ quizResult, setQuizResult }}>
-      {children}
-    </QuizContext.Provider>
-  );
-};
 
 export const useQuiz = () => {
   const context = useContext(QuizContext);
@@ -25,4 +43,65 @@ export const useQuiz = () => {
     throw new Error('useQuiz must be used within a QuizProvider');
   }
   return context;
+};
+
+interface QuizProviderProps {
+  children: ReactNode;
+}
+
+export const QuizProvider: React.FC<QuizProviderProps> = ({ children }) => {
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
+  const [responses, setResponses] = useState<UserResponse[]>([]);
+  const [isCompleted, setIsCompleted] = useState(false);
+
+  const nextQuestion = () => {
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex(prev => prev + 1);
+    } else {
+      setIsCompleted(true);
+    }
+  };
+
+  const previousQuestion = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(prev => prev - 1);
+    }
+  };
+
+  const addResponse = (response: UserResponse) => {
+    setResponses(prev => {
+      const existing = prev.findIndex(r => r.questionId === response.questionId);
+      if (existing >= 0) {
+        const updated = [...prev];
+        updated[existing] = response;
+        return updated;
+      }
+      return [...prev, response];
+    });
+  };
+
+  const resetQuiz = () => {
+    setCurrentQuestionIndex(0);
+    setResponses([]);
+    setIsCompleted(false);
+  };
+
+  const value: QuizContextType = {
+    currentQuestionIndex,
+    questions,
+    responses,
+    isCompleted,
+    nextQuestion,
+    previousQuestion,
+    addResponse,
+    resetQuiz,
+    setQuestions
+  };
+
+  return (
+    <QuizContext.Provider value={value}>
+      {children}
+    </QuizContext.Provider>
+  );
 };

@@ -1,17 +1,17 @@
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 interface User {
-  name: string;
-  userName: string;
-  email?: string;
+  id: string;
+  email: string;
+  name?: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (name: string, email?: string) => void;
+  login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
-  isAuthenticated: boolean;
+  isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -30,19 +30,60 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const login = (name: string, email?: string) => {
-    setUser({ name, userName: name, email });
+  useEffect(() => {
+    // Check if user is already logged in
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (error) {
+        console.error('Error parsing saved user:', error);
+        localStorage.removeItem('user');
+      }
+    }
+    setIsLoading(false);
+  }, []);
+
+  const login = async (email: string, password: string): Promise<boolean> => {
+    setIsLoading(true);
+    try {
+      // Mock authentication - replace with real authentication
+      if (email && password) {
+        const mockUser: User = {
+          id: '1',
+          email,
+          name: email.split('@')[0]
+        };
+        setUser(mockUser);
+        localStorage.setItem('user', JSON.stringify(mockUser));
+        setIsLoading(false);
+        return true;
+      }
+      setIsLoading(false);
+      return false;
+    } catch (error) {
+      console.error('Login error:', error);
+      setIsLoading(false);
+      return false;
+    }
   };
 
   const logout = () => {
     setUser(null);
+    localStorage.removeItem('user');
   };
 
-  const isAuthenticated = user !== null;
+  const value: AuthContextType = {
+    user,
+    login,
+    logout,
+    isLoading
+  };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

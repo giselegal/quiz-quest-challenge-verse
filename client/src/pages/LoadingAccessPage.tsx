@@ -1,26 +1,22 @@
 
-import React, { useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Loader2 } from 'lucide-react';
 
 const LoadingAccessPage: React.FC = () => {
-  const { route } = useParams<{ route: string }>();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // Simulate loading and redirect
-    const timer = setTimeout(() => {
-      navigate(`/${route || ''}`);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, [route, navigate]);
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#FAF9F7]">
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#B89B7A] mx-auto mb-4"></div>
-        <p className="text-[#432818] text-lg">Carregando...</p>
-      </div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <Card className="w-full max-w-md">
+        <CardContent className="pt-6">
+          <div className="text-center space-y-4">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto text-blue-600" />
+            <h2 className="text-xl font-semibold">Carregando...</h2>
+            <p className="text-gray-600">
+              Preparando sua experiência personalizada.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

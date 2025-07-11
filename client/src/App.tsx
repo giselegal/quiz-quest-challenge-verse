@@ -7,7 +7,7 @@ import { QuizProvider } from '@/context/QuizContext';
 import QuizPage from '@/components/QuizPage';
 import ResultPage from '@/pages/ResultPage';
 import LoadingAccessPage from '@/pages/LoadingAccessPage';
-import SupabaseConnectionTest from '@/components/SupabaseConnectionTest';
+import { SupabaseConnectionTest } from '@/components/SupabaseConnectionTest';
 
 function App() {
   return (
