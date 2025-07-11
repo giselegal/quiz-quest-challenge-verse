@@ -14,6 +14,8 @@ interface QuizContentProps {
   currentQuestion: any;
   currentAnswers: string[];
   handleAnswerSubmit: (response: UserResponse) => void;
+  handleNextClick: () => void;
+  handlePrevious: () => void;
 }
 
 export const QuizContent: React.FC<QuizContentProps> = ({
@@ -25,6 +27,8 @@ export const QuizContent: React.FC<QuizContentProps> = ({
   currentQuestion,
   currentAnswers,
   handleAnswerSubmit,
+  handleNextClick,
+  handlePrevious,
 }) => {
   // Get user name from localStorage if not provided in props
   const userName = user?.userName || localStorage.getItem('userName') || '';
@@ -34,6 +38,11 @@ export const QuizContent: React.FC<QuizContentProps> = ({
   
   // Check if we have enough selections to proceed
   const canProceed = currentAnswers?.length === requiredSelections;
+
+  // Create a proper answers object for strategic questions
+  const strategicAnswers = showingStrategicQuestions && currentQuestion?.id ? {
+    [currentQuestion.id]: currentAnswers
+  } : {};
 
   return (
     <>
@@ -49,7 +58,7 @@ export const QuizContent: React.FC<QuizContentProps> = ({
         {showingStrategicQuestions ? (
           <StrategicQuestions
             currentQuestionIndex={currentStrategicQuestionIndex}
-            answers={{}}
+            answers={strategicAnswers}
             onAnswer={handleAnswerSubmit}
           />
         ) : (
@@ -58,7 +67,6 @@ export const QuizContent: React.FC<QuizContentProps> = ({
             onAnswer={handleAnswerSubmit}
             currentAnswers={currentAnswers || []}
             showQuestionImage={true}
-            autoAdvance={true}
           />
         )}
       </div>

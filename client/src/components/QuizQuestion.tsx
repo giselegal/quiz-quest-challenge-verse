@@ -76,6 +76,10 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     return isMobile ? "grid-cols-2 gap-1 px-0.5" : "grid-cols-2 gap-3 px-2";
   };
   
+  // Fixed: Filter out invalid question types
+  const validTypes: Array<'text' | 'both' | 'image'> = ['text', 'both', 'image'];
+  const questionType = validTypes.includes(question.type as any) ? question.type as 'text' | 'both' | 'image' : 'text';
+  
   return (
     <div className={cn("w-full max-w-6xl mx-auto pb-5 relative", 
       isMobile && "px-2", 
@@ -127,7 +131,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
               option={option} 
               isSelected={currentAnswers.includes(option.id)} 
               onSelect={handleOptionSelect}
-              type={question.type}
+              type={questionType}
               questionId={question.id}
               isDisabled={
                 (isStrategicQuestion && currentAnswers.length > 0 && !currentAnswers.includes(option.id)) || 

@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import FacebookPixelCard from '@/components/analytics/integrations/FacebookPixelCard';
-import GoogleAnalyticsCard from '@/components/analytics/integrations/GoogleAnalyticsCard';
+import { GoogleAnalyticsCard } from '@/components/analytics/integrations/GoogleAnalyticsCard';
 import ZapierCard from '@/components/analytics/integrations/ZapierCard';
 import { ExternalLink, Settings, Zap, BarChart3 } from 'lucide-react';
 

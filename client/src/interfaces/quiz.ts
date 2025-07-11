@@ -39,10 +39,27 @@ export interface QuizFunnel {
 }
 
 export interface QuizConfig {
+  id?: string;
+  name?: string;
   theme?: any;
   settings?: any;
   branding?: any;
   domain?: string;
+  seo?: {
+    title?: string;
+    description?: string;
+    keywords?: string[];
+  };
+  analytics?: {
+    googleAnalyticsId?: string;
+    facebookPixelId?: string;
+    zapierWebhook?: string;
+  };
+  integrations?: {
+    email?: any;
+    crm?: any;
+    webhooks?: any[];
+  };
 }
 
 export interface SimplePage {
@@ -53,4 +70,12 @@ export interface SimplePage {
   progress?: number;
   showHeader?: boolean;
   showProgress?: boolean;
+}
+
+export interface Version {
+  id: string;
+  version: number;
+  createdAt: string;
+  changes: string[];
+  data: any;
 }
