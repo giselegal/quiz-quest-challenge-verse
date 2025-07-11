@@ -11,10 +11,11 @@ const TextInlineBlock: React.FC<BlockComponentProps> = ({
   block,
   isSelected = false,
   onClick,
+  onPropertyChange,
   className = ''
 }) => {
   const {
-    content = 'Texto exemplo',
+    content = 'Texto exemplo - clique para editar',
     fontSize = 'medium',
     fontWeight = 'normal',
     textAlign = 'left',
@@ -23,7 +24,8 @@ const TextInlineBlock: React.FC<BlockComponentProps> = ({
     maxWidth = 'auto',
     useUsername = false,
     usernamePattern = '{userName}',
-    userName = 'Usuário'
+    userName = 'Usuário',
+    isEditable = true
   } = block.properties;
 
   // Processar texto com username se habilitado
@@ -71,8 +73,11 @@ const TextInlineBlock: React.FC<BlockComponentProps> = ({
     <div
       className={cn(
         // INLINE HORIZONTAL: Flexível e quebra linha automaticamente
-        'flex-shrink-0 flex-grow-0',
-        // Container responsivo
+        'flex-shrink-0 flex-grow-0 relative group',
+        // Container responsivo e editável
+        'p-2 sm:p-3 rounded-lg border border-transparent',
+        'hover:border-gray-200 hover:bg-gray-50/50 transition-all duration-200',
+        isSelected && 'border-blue-500 bg-blue-50/30',
         maxWidthClasses[maxWidth as keyof typeof maxWidthClasses] || maxWidthClasses.auto,
         // Estados do editor
         isSelected && 'ring-2 ring-blue-500 ring-offset-2 rounded-md p-1',

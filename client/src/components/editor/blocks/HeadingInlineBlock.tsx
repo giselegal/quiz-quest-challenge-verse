@@ -1,211 +1,180 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { Type, Edit3 } from 'lucide-react';
 import type { BlockComponentProps } from '@/types/blocks';
 
 /**
- * HeadingInlineBlock - Componente de título responsivo
- * Visualização: Canvas responsivo
- * Edição: Painel de propriedades (lado direito)
- * Utiliza funcionalidades modernas do ES7+
+ * HeadingInlineBlock - Componente modular inline horizontal
+ * Título/cabeçalho responsivo e configurável
+ * MODULAR | REUTILIZÁVEL | RESPONSIVO | INDEPENDENTE
  */
-const HeadingInlineBlock: React.FC<BlockComponentProps> = ({ 
+const HeadingInlineBlock: React.FC<BlockComponentProps> = ({
   block,
   isSelected = false,
   onClick,
+  onPropertyChange,
   className = ''
 }) => {
-  // ES7+ Destructuring com optional chaining e nullish coalescing
-  const { 
-    content = 'Seu Título Aqui',
-    title = 'Título Principal',
-    subtitle = '',
-    level = 'h2',
-    size = 'large',
-    titleSize = 'large',
-    subtitleSize = 'medium',
-    alignment = 'center',
-    showSubtitle = false,
-    useUsername = false,
-    usernamePattern = 'Olá {{username}}!',
-    theme = 'primary',
-    textColor = 'text-gray-900',
+  const {
+    content = 'Título Principal',
+    level = 'h2', // h1, h2, h3, h4, h5, h6
+    textAlign = 'left',
+    color = '#1f2937',
     backgroundColor = 'transparent',
-    padding = 'medium',
-    borderRadius = 'none'
-  } = block?.properties ?? {};
+    fontWeight = 'bold',
+    maxWidth = 'full',
+    responsive = true,
+    isEditable = true
+  } = block.properties;
 
-  // Get username from context (placeholder)
-  const username = 'Usuário';
+  const [isEditing, setIsEditing] = useState(false);
+  const [editValue, setEditValue] = useState(content);
 
-  // ES7+ useMemo para personalização do conteúdo com performance otimizada
-  const personalizedTitle = useMemo(() => {
-    const text = content || title;
-    if (useUsername && usernamePattern && username) {
-      // ES7+ Optional chaining e nullish coalescing
-      return text?.replace?.('{{username}}', username) ?? text;
+  // Tamanhos responsivos por nível
+  const levelClasses = {
+    h1: 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl',
+    h2: 'text-xl sm:text-2xl md:text-3xl lg:text-4xl',
+    h3: 'text-lg sm:text-xl md:text-2xl lg:text-3xl',
+    h4: 'text-base sm:text-lg md:text-xl lg:text-2xl',
+    h5: 'text-sm sm:text-base md:text-lg lg:text-xl',
+    h6: 'text-xs sm:text-sm md:text-base lg:text-lg'
+  };
+
+  // Alinhamentos
+  const textAlignClasses = {
+    left: 'text-left',
+    center: 'text-center',
+    right: 'text-right'
+  };
+
+  // Pesos de fonte
+  const fontWeightClasses = {
+    light: 'font-light',
+    normal: 'font-normal',
+    medium: 'font-medium',
+    semibold: 'font-semibold',
+    bold: 'font-bold',
+    extrabold: 'font-extrabold'
+  };
+
+  // Larguras máximas
+  const maxWidthClasses = {
+    sm: 'max-w-sm',
+    md: 'max-w-md',
+    lg: 'max-w-lg',
+    xl: 'max-w-xl',
+    '2xl': 'max-w-2xl',
+    full: 'max-w-full'
+  };
+
+  const handleSave = () => {
+    if (onPropertyChange) {
+      onPropertyChange('content', editValue);
     }
-    return text;
-  }, [content, title, useUsername, usernamePattern, username]);
-
-  // ES7+ Const assertions para readonly objects
-  const titleSizeClasses = {
-    'small': 'text-lg sm:text-xl lg:text-2xl',
-    'medium': 'text-xl sm:text-2xl lg:text-3xl',
-    'large': 'text-2xl sm:text-3xl lg:text-4xl xl:text-5xl',
-    'xlarge': 'text-3xl sm:text-4xl lg:text-5xl xl:text-6xl'
-  } as const;
-
-  const subtitleSizeClasses = {
-    'small': 'text-sm sm:text-base',
-    'medium': 'text-base sm:text-lg',
-    'large': 'text-lg sm:text-xl lg:text-2xl'
+    setIsEditing(false);
   };
 
-  // Classes de alinhamento
-  const alignmentClasses = {
-    'left': 'text-left',
-    'center': 'text-center',
-    'right': 'text-right'
+  const handleCancel = () => {
+    setEditValue(content);
+    setIsEditing(false);
   };
 
-  // Classes de padding
-  const paddingClasses = {
-    'none': 'p-0',
-    'small': 'p-2 sm:p-3',
-    'medium': 'p-4 sm:p-6 lg:p-8',
-    'large': 'p-6 sm:p-8 lg:p-12'
-  };
-
-  // Classes de tema
-  const themeClasses = {
-    'primary': 'text-[#432818]',
-    'secondary': 'text-[#B89B7A]',
-    'accent': 'text-blue-600',
-    'dark': 'text-gray-900',
-    'light': 'text-gray-100'
-  };
-
-  // Componente de título baseado no level
-  const TitleComponent = level as keyof JSX.IntrinsicElements;
-
-  // ES7+ useCallback para otimização de performance
-  const handleClick = useCallback(() => {
-    onClick?.();
-  }, [onClick]);
-
-  // ES7+ Template literal para criação de data attributes
-  const dataAttributes = useMemo(() => ({
-    'data-block-id': block?.id,
-    'data-block-type': block?.type,
-    'data-heading-level': level
-  }), [block?.id, block?.type, level]);
+  const HeadingTag = level as keyof JSX.IntrinsicElements;
 
   return (
     <div
       className={cn(
-        // Layout responsivo base
-        'w-full h-full flex flex-col',
-        // Responsividade horizontal com quebra
-        'sm:flex-row sm:flex-wrap',
-        // Largura máxima e centralização
-        'max-w-full mx-auto',
-        // Padding responsivo
-        paddingClasses[padding as keyof typeof paddingClasses] || paddingClasses.medium,
-        // Background
-        backgroundColor !== 'transparent' && backgroundColor,
-        // Alinhamento
-        alignmentClasses[alignment as keyof typeof alignmentClasses] || alignmentClasses.center,
-        // Estados visuais
-        'transition-all duration-200',
-        isSelected && 'ring-2 ring-blue-500 bg-blue-50',
-        'cursor-pointer hover:bg-gray-50',
+        // INLINE HORIZONTAL: Flexível e quebra linha automaticamente
+        'flex-shrink-0 flex-grow-0 relative group w-full',
+        // Container editável
+        'p-2 sm:p-3 rounded-lg border border-transparent',
+        'hover:border-gray-200 hover:bg-gray-50/30 transition-all duration-200',
+        isSelected && 'border-blue-500 bg-blue-50/30',
         className
       )}
-      onClick={handleClick}
-      {...dataAttributes}
+      onClick={onClick}
     >
-      <div className="w-full space-y-2 sm:space-y-3">
-        {/* Título Principal */}
-        <TitleComponent
-          className={cn(
-            // Tamanho responsivo
-            titleSizeClasses[titleSize as keyof typeof titleSizeClasses] || titleSizeClasses.large,
-            // Tema de cor
-            themeClasses[theme as keyof typeof themeClasses] || themeClasses.primary,
-            // Cor personalizada se especificada
-            textColor !== 'text-gray-900' && textColor,
-            // Tipografia
-            'font-bold leading-tight tracking-tight',
-            // Quebra de texto
-            'break-words'
-          )}
-        >
-          {personalizedTitle}
-        </TitleComponent>
-
-        {/* Subtítulo (se habilitado) */}
-        {showSubtitle && subtitle && (
-          <p
+      {isEditing ? (
+        <div className="w-full space-y-2">
+          <input
+            type="text"
+            value={editValue}
+            onChange={(e) => setEditValue(e.target.value)}
+            className={cn(
+              'w-full bg-transparent border-b-2 border-blue-500 outline-none',
+              levelClasses[level as keyof typeof levelClasses],
+              textAlignClasses[textAlign as keyof typeof textAlignClasses],
+              fontWeightClasses[fontWeight as keyof typeof fontWeightClasses]
+            )}
+            style={{ color }}
+            autoFocus
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleSave();
+              if (e.key === 'Escape') handleCancel();
+            }}
+          />
+          <div className="flex gap-2">
+            <button
+              onClick={handleSave}
+              className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600"
+            >
+              Salvar
+            </button>
+            <button
+              onClick={handleCancel}
+              className="px-3 py-1 bg-gray-500 text-white rounded text-sm hover:bg-gray-600"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      ) : (
+        <>
+          <HeadingTag
             className={cn(
               // Tamanho responsivo
-              subtitleSizeClasses[subtitleSize as keyof typeof subtitleSizeClasses] || subtitleSizeClasses.medium,
-              // Cor mais suave
-              'text-gray-600',
-              // Tipografia
-              'font-medium leading-relaxed',
-              // Quebra de texto
-              'break-words'
+              levelClasses[level as keyof typeof levelClasses],
+              // Alinhamento
+              textAlignClasses[textAlign as keyof typeof textAlignClasses],
+              // Peso da fonte
+              fontWeightClasses[fontWeight as keyof typeof fontWeightClasses],
+              // Largura máxima
+              maxWidthClasses[maxWidth as keyof typeof maxWidthClasses],
+              // Visual
+              'leading-tight tracking-tight transition-colors duration-200',
+              // Cursor editável
+              isEditable && 'cursor-text hover:opacity-80'
             )}
+            style={{
+              color,
+              backgroundColor: backgroundColor === 'transparent' ? undefined : backgroundColor
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (isEditable) setIsEditing(true);
+            }}
           >
-            {subtitle}
-          </p>
-        )}
-      </div>
+            {content || 'Título Principal'}
+          </HeadingTag>
+
+          {/* Indicador de edição */}
+          {isEditable && isSelected && (
+            <div className="absolute -top-2 -right-2 bg-blue-500 text-white rounded-full p-1">
+              <Edit3 className="w-3 h-3" />
+            </div>
+          )}
+
+          {/* Empty state */}
+          {!content && (
+            <div className="absolute inset-0 flex items-center justify-center bg-gray-100/80 rounded-lg text-gray-500">
+              <Type className="w-6 h-6 mr-2" />
+              <span className="text-sm">Clique para adicionar título</span>
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 };
 
-// ES7+ Export com named exports e default
 export default HeadingInlineBlock;
-
-// ES7+ Type exports para reutilização
-export type HeadingLevel = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
-export type HeadingSize = 'small' | 'medium' | 'large' | 'xlarge';
-export type HeadingTheme = 'primary' | 'secondary' | 'accent' | 'dark' | 'light';
-export type HeadingAlignment = 'left' | 'center' | 'right';
-
-// ES7+ Const assertions para arrays readonly
-export const HEADING_LEVELS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const;
-export const HEADING_SIZES = ['small', 'medium', 'large', 'xlarge'] as const;
-export const HEADING_THEMES = ['primary', 'secondary', 'accent', 'dark', 'light'] as const;
-
-// ES7+ Factory function com advanced TypeScript features
-export const createHeadingBlock = (
-  title: string,
-  options: Partial<{
-    level: HeadingLevel;
-    size: HeadingSize;
-    theme: HeadingTheme;
-    alignment: HeadingAlignment;
-    subtitle?: string;
-  }> = {}
-) => ({
-  id: crypto.randomUUID?.() ?? Math.random().toString(36),
-  type: 'heading-inline',
-  properties: {
-    title,
-    showSubtitle: Boolean(options.subtitle),
-    ...options
-  }
-});
-
-// ES7+ Utility function com template literals
-export const formatHeadingText = (
-  text: string, 
-  username?: string,
-  pattern: string = '{{username}}'
-): string => {
-  if (!username) return text;
-  // ES7+ String methods com fallback
-  return text.replace(new RegExp(pattern.replace(/[{}]/g, '\\$&'), 'g'), username);
-};

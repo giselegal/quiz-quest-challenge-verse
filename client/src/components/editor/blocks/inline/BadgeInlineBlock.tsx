@@ -12,6 +12,7 @@ const BadgeInlineBlock: React.FC<BlockComponentProps> = ({
   block,
   isSelected = false,
   onClick,
+  onPropertyChange,
   className = ''
 }) => {
   const {
@@ -20,7 +21,8 @@ const BadgeInlineBlock: React.FC<BlockComponentProps> = ({
     variant = 'default', // default, success, warning, error, info
     size = 'medium',
     showIcon = true,
-    animated = true
+    animated = true,
+    isEditable = true
   } = block.properties;
 
   // Ícones disponíveis

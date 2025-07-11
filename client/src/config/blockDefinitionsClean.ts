@@ -162,25 +162,53 @@ export const blockDefinitions: BlockDefinition[] = [
         defaultValue: 'h2'
       },
       {
-        key: 'fontFamily',
-        label: 'Fonte',
+        key: 'fontWeight',
+        label: 'Peso da Fonte',
         type: 'select',
         options: [
-          { label: 'Playfair Display (Elegante)', value: 'Playfair Display' },
-          { label: 'Inter (Moderna)', value: 'Inter' }
+          { label: 'Normal', value: 'normal' },
+          { label: 'Médio', value: 'medium' },
+          { label: 'Semi-Negrito', value: 'semibold' },
+          { label: 'Negrito', value: 'bold' },
+          { label: 'Extra Negrito', value: 'extrabold' }
         ],
-        defaultValue: 'Playfair Display'
+        defaultValue: 'bold'
       },
       {
         key: 'textAlign',
         label: 'Alinhamento',
         type: 'select',
         options: [
-          { label: 'Esquerda', value: 'text-left' },
-          { label: 'Centro', value: 'text-center' },
-          { label: 'Direita', value: 'text-right' }
+          { label: 'Esquerda', value: 'left' },
+          { label: 'Centro', value: 'center' },
+          { label: 'Direita', value: 'right' }
         ],
-        defaultValue: 'text-center'
+        defaultValue: 'center'
+      },
+      {
+        key: 'color',
+        label: 'Cor do Texto',
+        type: 'color-picker',
+        defaultValue: '#1f2937'
+      },
+      {
+        key: 'backgroundColor',
+        label: 'Cor de Fundo',
+        type: 'color-picker',
+        defaultValue: 'transparent'
+      },
+      {
+        key: 'maxWidth',
+        label: 'Largura Máxima',
+        type: 'select',
+        options: [
+          { label: 'Pequena', value: 'sm' },
+          { label: 'Média', value: 'md' },
+          { label: 'Grande', value: 'lg' },
+          { label: 'Extra Grande', value: 'xl' },
+          { label: 'Completa', value: 'full' }
+        ],
+        defaultValue: 'full'
       }
     ]
   },
@@ -211,10 +239,11 @@ export const blockDefinitions: BlockDefinition[] = [
         label: 'Estilo',
         type: 'select',
         options: [
-          { label: 'Primário (Marrom)', value: 'primary' },
-          { label: 'Secundário (Outline)', value: 'secondary' },
-          { label: 'Elegante (Gradiente)', value: 'elegant' },
-          { label: 'Fantasma', value: 'ghost' }
+          { label: 'Primário', value: 'primary' },
+          { label: 'Secundário', value: 'secondary' },
+          { label: 'Outline', value: 'outline' },
+          { label: 'Fantasma', value: 'ghost' },
+          { label: 'Destrutivo', value: 'destructive' }
         ],
         defaultValue: 'primary'
       },
@@ -225,16 +254,44 @@ export const blockDefinitions: BlockDefinition[] = [
         options: [
           { label: 'Pequeno', value: 'small' },
           { label: 'Médio', value: 'medium' },
-          { label: 'Grande', value: 'large' },
-          { label: 'Extra Grande', value: 'xl' }
+          { label: 'Grande', value: 'large' }
         ],
-        defaultValue: 'large'
+        defaultValue: 'medium'
+      },
+      {
+        key: 'icon',
+        label: 'Ícone',
+        type: 'select',
+        options: [
+          { label: 'Nenhum', value: 'none' },
+          { label: 'Seta Direita', value: 'arrow-right' },
+          { label: 'Download', value: 'download' },
+          { label: 'Play', value: 'play' },
+          { label: 'Estrela', value: 'star' }
+        ],
+        defaultValue: 'none'
+      },
+      {
+        key: 'iconPosition',
+        label: 'Posição do Ícone',
+        type: 'select',
+        options: [
+          { label: 'Esquerda', value: 'left' },
+          { label: 'Direita', value: 'right' }
+        ],
+        defaultValue: 'right'
       },
       {
         key: 'fullWidth',
         label: 'Largura Total',
         type: 'boolean-switch',
-        defaultValue: true
+        defaultValue: false
+      },
+      {
+        key: 'disabled',
+        label: 'Desabilitado',
+        type: 'boolean-switch',
+        defaultValue: false
       }
     ]
   },
@@ -1981,6 +2038,164 @@ export const blockDefinitions: BlockDefinition[] = [
           { label: 'Moderno', value: 'modern' }
         ],
         defaultValue: 'elegant'
+      }
+    ]
+  },
+
+  // =====================================================================
+  // NOVOS COMPONENTES INLINE MODERNOS CRIADOS
+  // =====================================================================
+  {
+    type: 'result-header-inline',
+    name: 'Cabeçalho de Resultado',
+    description: 'Cabeçalho elegante para página de resultado com ícone',
+    icon: 'Award',
+    category: 'Resultado',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título Principal',
+        type: 'text-input',
+        defaultValue: 'Seu Estilo',
+        placeholder: 'Ex: Seu Estilo Elegante'
+      },
+      {
+        key: 'subtitle',
+        label: 'Subtítulo',
+        type: 'text-input',
+        defaultValue: 'Resultado Personalizado',
+        placeholder: 'Ex: Baseado em suas respostas'
+      },
+      {
+        key: 'icon',
+        label: 'Ícone',
+        type: 'select',
+        options: [
+          { label: 'Prêmio', value: 'award' },
+          { label: 'Coroa', value: 'crown' },
+          { label: 'Estrela', value: 'star' }
+        ],
+        defaultValue: 'award'
+      },
+      {
+        key: 'iconColor',
+        label: 'Cor do Ícone',
+        type: 'color-picker',
+        defaultValue: '#B89B7A'
+      },
+      {
+        key: 'centered',
+        label: 'Centralizado',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'showDecorations',
+        label: 'Mostrar Decorações',
+        type: 'boolean-switch',
+        defaultValue: true
+      }
+    ]
+  },
+
+  {
+    type: 'result-card-inline',
+    name: 'Card de Resultado',
+    description: 'Card compacto para mostrar resultado do quiz',
+    icon: 'CreditCard',
+    category: 'Resultado',
+    propertiesSchema: [
+      {
+        key: 'styleName',
+        label: 'Nome do Estilo',
+        type: 'text-input',
+        defaultValue: 'Elegante',
+        placeholder: 'Ex: Romântico, Clássico'
+      },
+      {
+        key: 'percentage',
+        label: 'Percentual (%)',
+        type: 'number-input',
+        defaultValue: 85,
+        min: 0,
+        max: 100
+      },
+      {
+        key: 'description',
+        label: 'Descrição',
+        type: 'textarea',
+        defaultValue: 'Você valoriza sofisticação e refinamento',
+        rows: 3
+      },
+      {
+        key: 'showProgress',
+        label: 'Mostrar Progresso',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'showIcon',
+        label: 'Mostrar Ícone',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'size',
+        label: 'Tamanho',
+        type: 'select',
+        options: [
+          { label: 'Pequeno', value: 'small' },
+          { label: 'Médio', value: 'medium' },
+          { label: 'Grande', value: 'large' }
+        ],
+        defaultValue: 'medium'
+      }
+    ]
+  },
+
+  {
+    type: 'bonus-list-inline',
+    name: 'Lista de Bônus',
+    description: 'Lista de bônus e benefícios inclusos',
+    icon: 'Gift',
+    category: 'Vendas',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Bônus Exclusivos',
+        placeholder: 'Ex: Bônus Limitados'
+      },
+      {
+        key: 'showValues',
+        label: 'Mostrar Valores',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'totalValue',
+        label: 'Valor Total',
+        type: 'text-input',
+        defaultValue: 'R$ 171',
+        placeholder: 'Ex: R$ 297'
+      },
+      {
+        key: 'highlightColor',
+        label: 'Cor de Destaque',
+        type: 'color-picker',
+        defaultValue: '#B89B7A'
+      },
+      {
+        key: 'variant',
+        label: 'Estilo',
+        type: 'select',
+        options: [
+          { label: 'Card', value: 'card' },
+          { label: 'Lista', value: 'list' },
+          { label: 'Minimalista', value: 'minimal' }
+        ],
+        defaultValue: 'card'
       }
     ]
   }

@@ -1,110 +1,107 @@
-import React, { useState, useEffect } from 'react';
-import { Award, Users } from 'lucide-react';
-import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
+import React from 'react';
+import { cn } from '@/lib/utils';
+import { Award, Crown, Star } from 'lucide-react';
 import type { BlockComponentProps } from '@/types/blocks';
 
 /**
- * ResultHeaderInlineBlock - Cabeçalho da página de resultado (modular)
- * Renderiza apenas o cabeçalho com logo e título
+ * ResultHeaderInlineBlock - Componente modular inline horizontal
+ * Cabeçalho de resultado com ícone e título
+ * MODULAR | REUTILIZÁVEL | RESPONSIVO | INDEPENDENTE
  */
 const ResultHeaderInlineBlock: React.FC<BlockComponentProps> = ({
   block,
   isSelected = false,
   onClick,
-  onPropertyChange,
   className = ''
 }) => {
   const {
-    logoUrl = 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
-    logoAlt = 'Logo Gisele Galvão',
-    logoHeight = '60px',
-    userName = 'Querida',
-    title = 'Parabéns, {userName}!',
-    subtitle = 'Seu resultado personalizado está pronto',
-    backgroundColor = '#FFFBF7',
-    textColor = '#432818',
-    showLogo = true,
-    // Propriedades de grid para responsividade
-    gridColumns = 1,
-    spacing = 'lg'
+    title = 'Seu Estilo',
+    subtitle = 'Resultado Personalizado',
+    icon = 'award',
+    iconColor = '#B89B7A',
+    backgroundColor = 'white',
+    textColor = '#1f2937',
+    centered = true,
+    showDecorations = true
   } = block.properties;
 
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
-
-  // Classes de espaçamento
-  const spacingClasses = {
-    none: 'p-0',
-    sm: 'p-4',
-    md: 'p-6',
-    lg: 'p-8',
-    xl: 'p-12'
+  // Ícones disponíveis
+  const iconMap = {
+    'award': Award,
+    'crown': Crown,
+    'star': Star
   };
 
-  // Classes de grid baseadas na propriedade gridColumns
-  const gridClasses = {
-    1: 'w-full',
-    2: 'w-full md:w-1/2'
-  };
-
-  const handlePropertyChange = (key: string, value: any) => {
-    if (onPropertyChange) {
-      onPropertyChange(key, value);
-    }
-  };
-
-  const formattedTitle = title.replace('{userName}', userName);
+  const IconComponent = iconMap[icon as keyof typeof iconMap] || Award;
 
   return (
     <div
-      className={`
-        ${gridClasses[gridColumns as keyof typeof gridClasses] || gridClasses[1]}
-        ${spacingClasses[spacing as keyof typeof spacingClasses] || spacingClasses.lg}
-        transition-all duration-200
-        ${isSelected 
-          ? 'ring-1 ring-blue-500 bg-blue-50/30' 
-          : 'hover:shadow-sm'
-        }
-        ${className}
-      `}
+      className={cn(
+        // INLINE HORIZONTAL: Flexível e quebra linha automaticamente
+        'flex-shrink-0 flex-grow-0',
+        // Container responsivo
+        'w-full p-4 sm:p-6 md:p-8',
+        // Alinhamento
+        centered ? 'text-center' : 'text-left',
+        // Estados do editor
+        isSelected && 'ring-2 ring-blue-500 ring-offset-2',
+        'cursor-pointer transition-all duration-200',
+        className
+      )}
       style={{ backgroundColor }}
       onClick={onClick}
-      data-block-id={block.id}
-      data-block-type={block.type}
     >
-      <AnimatedWrapper show={isLoaded}>
-        <div className="max-w-4xl mx-auto text-center">
-          {/* Logo */}
-          {showLogo && logoUrl && (
-            <img 
-              src={logoUrl} 
-              alt={logoAlt}
-              style={{ height: logoHeight }}
-              className="mx-auto mb-6"
-            />
-          )}
-
-          {/* Título */}
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4" style={{ color: textColor }}>
-            {formattedTitle}
-          </h1>
-          
-          {/* Subtítulo */}
-          <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
-            {subtitle}
-          </p>
-
-          {/* Linha decorativa */}
-          <div className="flex items-center justify-center gap-4 mt-8">
-            <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-current to-transparent opacity-30" />
-            <Award className="w-6 h-6 opacity-50" style={{ color: textColor }} />
-            <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-current to-transparent opacity-30" />
+      {/* Decorações */}
+      {showDecorations && (
+        <div className="flex justify-center mb-4 sm:mb-6">
+          <div className="flex space-x-1">
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={i}
+                className="w-2 h-2 rounded-full bg-gradient-to-r from-[#B89B7A] to-[#A1835D] opacity-60"
+              />
+            ))}
           </div>
         </div>
-      </AnimatedWrapper>
+      )}
+
+      {/* Ícone principal */}
+      <div className="flex justify-center mb-4 sm:mb-6">
+        <div 
+          className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full"
+          style={{ 
+            background: `linear-gradient(135deg, ${iconColor}, ${iconColor}dd)`,
+            boxShadow: '0 8px 32px rgba(184, 155, 122, 0.3)'
+          }}
+        >
+          <IconComponent 
+            className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white"
+          />
+        </div>
+      </div>
+
+      {/* Título principal */}
+      <h1 
+        className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-2 sm:mb-3"
+        style={{ color: textColor }}
+      >
+        {title}
+      </h1>
+
+      {/* Subtítulo */}
+      <p 
+        className="text-base sm:text-lg md:text-xl opacity-80 font-medium"
+        style={{ color: textColor }}
+      >
+        {subtitle}
+      </p>
+
+      {/* Decorações inferiores */}
+      {showDecorations && (
+        <div className="flex justify-center mt-4 sm:mt-6">
+          <div className="w-24 sm:w-32 h-1 bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent rounded-full" />
+        </div>
+      )}
     </div>
   );
 };

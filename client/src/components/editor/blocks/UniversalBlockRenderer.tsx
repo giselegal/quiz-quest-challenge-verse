@@ -170,6 +170,9 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       'image-display-inline': () => <ImageDisplayInlineBlock {...commonProps} />,
       'style-card-inline': () => <StyleCardInlineBlock {...commonProps} />,
       'result-card-inline': () => <ResultCardInlineBlock {...commonProps} />,
+      'result-header-inline': () => <ResultHeaderInlineBlock {...commonProps} />,
+      'before-after-inline': () => <BeforeAfterInlineBlock {...commonProps} />,
+      'bonus-list-inline': () => <BonusListInlineBlock {...commonProps} />,
       'testimonial-card-inline': () => <TestimonialCardInlineBlock {...commonProps} />,
       'countdown-inline': () => <CountdownInlineBlock {...commonProps} />,
       'stat-inline': () => <StatInlineBlock {...commonProps} />,
@@ -182,11 +185,8 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       'quiz-question': () => <QuizQuestionBlock {...commonProps} />,
       'quiz-progress': () => <QuizProgressBlock {...commonProps} />,
       
-      // === COMPONENTES ETAPA 20/21 ===
-      'result-header-inline': () => <ResultHeaderInlineBlock {...commonProps} />,
+      // === COMPONENTES ETAPA 20/21 (sem duplicação) ===
       'quiz-offer-pricing-inline': () => <QuizOfferPricingInlineBlock {...commonProps} />,
-      'bonus-list-inline': () => <BonusListInlineBlock {...commonProps} />,
-      'before-after-inline': () => <ImageDisplayInlineBlock {...commonProps} />,
       'divider-inline': () => <SpacerBlock {...commonProps} />,
       
       // === COMPONENTES ETAPA 21 ESPECÍFICOS ===
