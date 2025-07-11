@@ -1479,7 +1479,7 @@ class SchemaDrivenFunnelService {
             editableFields: ['styleName', 'percentage', 'description', 'imageUrl', 'padding', 'borderRadius']
           }
         },
-        // 9. Motivação/transição para oferta
+        // 11. Motivação/transição para oferta (flexbox editável)
         {
           id: 'result-transition-text',
           type: 'text-inline',
@@ -1489,10 +1489,24 @@ class SchemaDrivenFunnelService {
             textAlign: 'text-center',
             color: '#432818',
             marginTop: 32,
-            marginBottom: 24
+            marginBottom: 24,
+            // Layout flexbox
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: 20,
+            // Editabilidade
+            editable: true,
+            editableFields: ['content', 'fontSize', 'textAlign', 'color', 'padding'],
+            // Responsividade
+            responsive: {
+              mobile: { fontSize: 'text-base', padding: 16 },
+              tablet: { fontSize: 'text-lg', padding: 18 },
+              desktop: { fontSize: 'text-lg', padding: 20 }
+            }
           }
         },
-        // 10. CTA principal
+        // 12. CTA principal (botão flexível e editável)
         {
           id: 'result-main-cta',
           type: 'button-inline',
@@ -1503,7 +1517,32 @@ class SchemaDrivenFunnelService {
             fullWidth: true,
             backgroundColor: '#B89B7A',
             textColor: '#ffffff',
-            pulse: true // Animação de destaque
+            pulse: true, // Animação de destaque
+            // Layout flexbox
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: 8,
+            padding: '16px 32px',
+            borderRadius: 8,
+            // Editabilidade
+            editable: true,
+            editableFields: ['text', 'backgroundColor', 'textColor', 'padding', 'borderRadius'],
+            // Responsividade
+            responsive: {
+              mobile: { 
+                padding: '12px 24px',
+                fontSize: 'text-sm'
+              },
+              tablet: { 
+                padding: '14px 28px',
+                fontSize: 'text-base'
+              },
+              desktop: { 
+                padding: '16px 32px',
+                fontSize: 'text-lg'
+              }
+            }
           }
         }
       ],
