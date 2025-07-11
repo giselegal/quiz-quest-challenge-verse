@@ -8,7 +8,7 @@ import { SupabaseConnectionTest } from '@/components/SupabaseConnectionTest';
 
 // Import pages
 import QuizPage from '@/components/QuizPage';
-import QuizResult from '@/pages/QuizResultPage';
+import QuizResultPage from '@/pages/QuizResultPage';
 import LoadingAccessPage from '@/pages/LoadingAccessPage';
 
 function App() {
@@ -24,7 +24,7 @@ function App() {
             
             <Routes>
               <Route path="/" element={<QuizPage />} />
-              <Route path="/resultado" element={<QuizResult />} />
+              <Route path="/resultado" element={<QuizResultPage />} />
               <Route path="/loading/:route" element={<LoadingAccessPage />} />
               <Route path="*" element={<QuizPage />} />
             </Routes>

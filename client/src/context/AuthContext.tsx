@@ -1,62 +1,64 @@
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface User {
+  id: string;
   userName: string;
-  email?: string; // Added email as optional property
-  role?: string;  // Added role property for admin access
+  email?: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (name: string, email?: string) => void;
+  setUser: (user: User | null) => void;
+  login: (userData: User) => void;
   logout: () => void;
+  isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(() => {
-    const savedName = localStorage.getItem('userName');
-    const savedEmail = localStorage.getItem('userEmail');
-    const savedRole = localStorage.getItem('userRole');
-    
-    return savedName ? { 
-      userName: savedName,
-      ...(savedEmail && { email: savedEmail }),
-      ...(savedRole && { role: savedRole })
-    } : null;
-  });
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const login = (name: string, email?: string) => {
-    const userData: User = { 
-      userName: name 
-    };
+  useEffect(() => {
+    // Recuperar dados do usuário do localStorage
+    const savedUser = localStorage.getItem('user');
+    const userName = localStorage.getItem('userName');
     
-    if (email) {
-      userData.email = email;
-      localStorage.setItem('userEmail', email);
+    if (savedUser) {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (error) {
+        console.error('Error parsing saved user:', error);
+      }
+    } else if (userName) {
+      setUser({ id: 'temp', userName });
     }
     
-    // Preservar o status de admin caso exista
-    const savedRole = localStorage.getItem('userRole');
-    if (savedRole) {
-      userData.role = savedRole;
-    }
-    
+    setIsLoading(false);
+  }, []);
+
+  const login = (userData: User) => {
     setUser(userData);
-    localStorage.setItem('userName', name);
+    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem('userName', userData.userName);
   };
 
   const logout = () => {
     setUser(null);
+    localStorage.removeItem('user');
     localStorage.removeItem('userName');
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('userRole');
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{
+      user,
+      setUser,
+      login,
+      logout,
+      isLoading
+    }}>
       {children}
     </AuthContext.Provider>
   );
