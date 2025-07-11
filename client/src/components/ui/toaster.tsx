@@ -1,6 +1,11 @@
 import React from 'react';
 import { Toast, ToastProvider, ToastViewport } from './toast';
-import { useToast } from '@/hooks/use-toast';
+
+// Simple hook for now - can be expanded later
+const useToast = () => {
+  const [toasts, setToasts] = React.useState<any[]>([]);
+  return { toasts };
+};
 
 export function Toaster() {
   const { toasts } = useToast();
