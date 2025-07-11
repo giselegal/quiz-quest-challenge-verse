@@ -27,7 +27,7 @@ export class QuizCalculationEngine implements StyleCalculationEngine {
     // Filtrar apenas respostas de questões normais
     const normalResponses = responses.filter(response => {
       const question = normalQuestions.find(q => q.id === response.questionId);
-      return question?.type === 'normal';
+      return question?.type === 'strategic';
     });
 
     if (normalResponses.length === 0) {

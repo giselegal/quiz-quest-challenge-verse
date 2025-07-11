@@ -10,6 +10,7 @@ export interface QuizOption {
   styleCategory?: string;
   weight?: number;
   style?: string; // Add style property for mapping
+  value?: string; // Add value property
 }
 
 export interface QuizQuestion {
@@ -33,6 +34,7 @@ export interface UserResponse {
   answers?: string[];
   styleCategories?: string[];
   selectedStyles?: string[]; // Added for engine compatibility
+  selectedStyle?: string; // Add selectedStyle property
 }
 
 export interface StyleResult {
@@ -51,8 +53,10 @@ export interface QuizResult {
   primaryStyle: StyleResult;
   secondaryStyles: StyleResult[];
   responses: UserResponse[];
-  completedAt: Date;
-  participantName?: string; // Add optional participant name
+  completedAt: number;
+  participantName?: string;
+  styleScores?: StyleScore[]; // Add styleScores property
+  predominantStyle?: StyleResult; // Add predominantStyle property
 }
 
 export interface Quiz {
@@ -67,5 +71,19 @@ export interface Quiz {
 export type StyleType = 'natural' | 'classico' | 'contemporaneo' | 'elegante' | 'romantico' | 'sensual' | 'dramatico' | 'criativo';
 export type Style = StyleResult;
 export type QuizResponse = UserResponse;
-export type StyleScore = Record<StyleType, number>;
+export interface StyleScore {
+  style: StyleType;
+  points: number;
+  percentage: number;
+  rank: number;
+}
 export type StyleCalculationEngine = any; // Placeholder type
+
+// Add QuizComponentData export for unifiedEditor
+export interface QuizComponentData {
+  id: string;
+  type: string;
+  content: any;
+  data: any; // Add data property
+  order: number;
+}
