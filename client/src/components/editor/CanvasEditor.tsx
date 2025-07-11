@@ -44,6 +44,8 @@ interface ComponentInstance {
   props: Record<string, any>;
   visible: boolean;
   order: number;
+  type?: 'original' | 'flex'; // Tipo do componente
+  flexType?: string; // Para componentes flexíveis
 }
 
 interface EditorState {
@@ -80,7 +82,7 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({ className }) => {
     });
   }, []);
 
-  // Adicionar componente
+  // Adicionar componente original
   const handleAddComponent = useCallback((componentConfig: EditableComponentConfig & { path: string }) => {
     const newComponent: ComponentInstance = {
       id: `${componentConfig.componentName.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`,
@@ -88,7 +90,25 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({ className }) => {
       componentName: componentConfig.componentName,
       props: componentConfig.defaultProps || {},
       visible: true,
-      order: editorState.components.length
+      order: editorState.components.length,
+      type: 'original'
+    };
+
+    const newComponents = [...editorState.components, newComponent];
+    saveToHistory(newComponents);
+  }, [editorState.components, saveToHistory]);
+
+  // Adicionar componente flexível
+  const handleAddFlexComponent = useCallback((componentConfig: FlexComponentConfig) => {
+    const newComponent: ComponentInstance = {
+      id: `${componentConfig.type}-${Date.now()}`,
+      componentPath: componentConfig.type, // Usar o tipo como path para componentes flexíveis
+      componentName: componentConfig.name,
+      props: componentConfig.defaultProps || {},
+      visible: true,
+      order: editorState.components.length,
+      type: 'flex',
+      flexType: componentConfig.type
     };
 
     const newComponents = [...editorState.components, newComponent];
@@ -326,7 +346,10 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({ className }) => {
 
         {/* Renderizar o componente real */}
         <div className={cn(!isVisible && "pointer-events-none")}>
-          {editableComponentsService.renderEditableComponent(component.componentPath, component.props)}
+          {component.type === 'flex' && component.flexType 
+            ? renderFlexComponent(component.flexType as any, component.props)
+            : editableComponentsService.renderEditableComponent(component.componentPath, component.props)
+          }
         </div>
       </div>
     );
@@ -344,7 +367,10 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({ className }) => {
     <div className={cn("flex h-screen bg-gray-50", className)}>
       {/* Sidebar da Biblioteca de Componentes */}
       <div className="w-80 border-r bg-white overflow-y-auto">
-        <ComponentLibrarySidebar onAddComponent={handleAddComponent} />
+        <ComponentLibrarySidebar 
+          onAddComponent={handleAddComponent} 
+          onAddFlexComponent={handleAddFlexComponent}
+        />
       </div>
 
       {/* Canvas Principal */}
