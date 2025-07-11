@@ -16,7 +16,7 @@ export const useUnifiedEditor = (primaryStyle: StyleResult) => {
   // Initialize the individual editors
   const quizBuilder = useQuizBuilder();
   const resultPageEditor = useResultPageEditor(primaryStyle.category);
-  const salesPageEditor = useSalesPageEditor(primaryStyle.category);
+  const salesPageEditor = useSalesPageEditor();
   
   // Initialization log
   useEffect(() => {

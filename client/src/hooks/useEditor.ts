@@ -39,11 +39,18 @@ export const useEditor = () => {
 
   const reorderBlocks = () => {};
 
+  const saveConfig = async () => {
+    // Mock save functionality
+    console.log('Saving config...');
+    return true;
+  };
+
   return {
     config,
     addBlock,
     updateBlock,
     deleteBlock,
-    reorderBlocks
+    reorderBlocks,
+    saveConfig
   };
 };

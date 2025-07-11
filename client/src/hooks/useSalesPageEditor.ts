@@ -34,6 +34,18 @@ export const useSalesPageEditor = () => {
 
   const selectedBlock = blocks.find(block => block.id === selectedBlockId) || null;
 
+  const handleSave = async () => {
+    // Mock save functionality
+    console.log('Saving sales page...');
+    return true;
+  };
+
+  const loadTemplate = (templateBlocks: any[]) => {
+    // Mock template loading
+    console.log('Loading template:', templateBlocks);
+    return true;
+  };
+
   return {
     blocks,
     selectedBlock,
@@ -41,6 +53,8 @@ export const useSalesPageEditor = () => {
     setSelectedBlockId,
     addBlock,
     updateBlock,
-    deleteBlock
+    deleteBlock,
+    handleSave,
+    loadTemplate
   };
 };
