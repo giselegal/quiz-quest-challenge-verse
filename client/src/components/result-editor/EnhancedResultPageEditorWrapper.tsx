@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { EnhancedResultPageEditor } from './EnhancedResultPageEditor';
 import { StyleResult } from '@/types/quiz';

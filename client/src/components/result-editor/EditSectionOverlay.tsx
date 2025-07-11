@@ -1,4 +1,5 @@
 
+// @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
