@@ -61,19 +61,22 @@ const HeadingInlineBlock: React.FC<BlockComponentProps> = ({
     'large': 'text-lg sm:text-xl lg:text-2xl'
   };
 
+  // Classes de alinhamento
   const alignmentClasses = {
     'left': 'text-left',
     'center': 'text-center',
     'right': 'text-right'
   };
 
+  // Classes de padding
   const paddingClasses = {
     'none': 'p-0',
-    'small': 'p-4',
-    'medium': 'p-6 sm:p-8',
-    'large': 'p-8 sm:p-12'
+    'small': 'p-2 sm:p-3',
+    'medium': 'p-4 sm:p-6 lg:p-8',
+    'large': 'p-6 sm:p-8 lg:p-12'
   };
 
+  // Classes de tema
   const themeClasses = {
     'primary': 'text-[#432818]',
     'secondary': 'text-[#B89B7A]',
@@ -81,6 +84,9 @@ const HeadingInlineBlock: React.FC<BlockComponentProps> = ({
     'dark': 'text-gray-900',
     'light': 'text-gray-100'
   };
+
+  // Componente de título baseado no level
+  const TitleComponent = level as keyof JSX.IntrinsicElements;
 
   // ES7+ useCallback para otimização de performance
   const handleClick = useCallback(() => {
@@ -93,9 +99,6 @@ const HeadingInlineBlock: React.FC<BlockComponentProps> = ({
     'data-block-type': block?.type,
     'data-heading-level': level
   }), [block?.id, block?.type, level]);
-
-  // Componente de título baseado no level
-  const TitleComponent = level as keyof JSX.IntrinsicElements;
 
   return (
     <div
@@ -140,16 +143,16 @@ const HeadingInlineBlock: React.FC<BlockComponentProps> = ({
           {personalizedTitle}
         </TitleComponent>
 
-        {/* Subtítulo (opcional) */}
+        {/* Subtítulo (se habilitado) */}
         {showSubtitle && subtitle && (
           <p
             className={cn(
               // Tamanho responsivo
               subtitleSizeClasses[subtitleSize as keyof typeof subtitleSizeClasses] || subtitleSizeClasses.medium,
-              // Cor do subtítulo
+              // Cor mais suave
               'text-gray-600',
               // Tipografia
-              'leading-relaxed',
+              'font-medium leading-relaxed',
               // Quebra de texto
               'break-words'
             )}
