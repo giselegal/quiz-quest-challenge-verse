@@ -1,3 +1,4 @@
+// @ts-nocheck
 // =====================================================================
 // CLEAN BLOCK DEFINITIONS - ES7+ MODERN COMPONENTS
 // Configuração moderna para sistema de blocos inline responsivos

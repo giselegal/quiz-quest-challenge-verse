@@ -97,7 +97,7 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({
         <EditorPreview
           blocks={blocks}
           selectedBlockId={selectedBlockId}
-          onSelectBlock={handleBlockSelect}
+          onSelectBlock={(id: string | null) => id && handleBlockSelect(id)}
           isPreviewing={isPreviewing}
           primaryStyle={primaryStyle}
           onReorderBlocks={blockActions.handleReorderBlocks}

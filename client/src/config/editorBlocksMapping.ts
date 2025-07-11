@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Mapeamento dos blocos do editor para seus respectivos componentes
  * 

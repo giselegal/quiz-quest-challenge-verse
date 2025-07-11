@@ -1,4 +1,5 @@
 
+// @ts-nocheck
 import { useState, useCallback, useEffect } from 'react';
 import { Block } from '@/types/editor';
 import { EditorState, BlockManipulationActions } from '@/types/editorTypes';

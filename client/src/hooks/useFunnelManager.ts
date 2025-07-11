@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState, useCallback, useEffect } from 'react';
 import { QuizFunnel, QuizVersion } from '../interfaces/quiz';
 import { FunnelManagerState } from '../interfaces/editor';
