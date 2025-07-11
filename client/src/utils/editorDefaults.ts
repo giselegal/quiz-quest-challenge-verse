@@ -13,13 +13,15 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
           { id: '3', text: 'Natural e autêntico', imageUrl: 'https://res.cloudinary.com/dtx0k4ue6/image/upload/v1710847236/estilo-natural_wnxkdi.jpg' },
           { id: '4', text: 'Casual e descontraído' }
         ],
-        allowMultiple: true,
+        multipleSelection: true,
         showImages: true,
         maxSelections: 3,
-        autoAdvance: true,
-        autoAdvanceDelay: 1500,
+        minSelections: 1,
         progressPercent: 15,
         logoUrl: 'https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png',
+        showBackButton: true,
+        optionLayout: 'grid',
+        alignment: 'center',
         style: {
           backgroundColor: '#ffffff',
           color: '#432818',

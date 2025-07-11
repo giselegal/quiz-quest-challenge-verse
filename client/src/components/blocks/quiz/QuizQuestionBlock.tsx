@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 
 /**
  * QuizQuestionBlock - Componente de pergunta de quiz 100% reutilizável e editável
@@ -50,6 +51,12 @@ export interface QuizQuestionBlockProps {
   description?: string;
   options: QuestionOption[];
 
+  // Header properties
+  logoUrl?: string;
+  showBackButton?: boolean;
+  onBack?: () => void;
+  progressPercent?: number;
+
   // Configurações de seleção
   multipleSelection?: boolean;
   maxSelections?: number;
@@ -64,6 +71,11 @@ export interface QuizQuestionBlockProps {
   // Callbacks
   onAnswer?: (answers: string[]) => void;
   onValidationError?: (error: string) => void;
+  
+  // Editor integration props
+  onClick?: () => void;
+  isSelected?: boolean;
+  block?: any;
 
   // Estados
   selectedAnswers?: string[];
@@ -77,6 +89,14 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
   question,
   description,
   options = [],
+  
+  // Header props
+  logoUrl = 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+  showBackButton = false,
+  onBack,
+  progressPercent = 0,
+  
+  // Selection props
   multipleSelection = false,
   maxSelections = 1,
   minSelections = 1,
@@ -87,7 +107,12 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
   onAnswer,
   onValidationError,
   selectedAnswers = [],
-  disabled = false
+  disabled = false,
+  
+  // Editor integration props
+  onClick,
+  isSelected = false,
+  block
 }) => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>(selectedAnswers);
   const [validationError, setValidationError] = useState<string>('');
@@ -158,10 +183,59 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
 
   return (
     <div 
-      className={`quiz-question-block ${className}`}
+      className={`quiz-question-block ${className} ${isSelected ? 'ring-2 ring-blue-500' : ''}`}
       style={style}
       data-block-id={blockId}
+      onClick={onClick}
     >
+      {/* Vertical Canvas Header */}
+      <div className="flex flex-row w-full h-auto justify-center relative mb-6" data-sentry-component="VerticalCanvasHeader">
+        {/* Back Button */}
+        {showBackButton && onBack && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onBack}
+            className="absolute left-0 h-10 w-10 hover:bg-primary hover:text-foreground"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+        )}
+        
+        {/* Logo and Progress Container */}
+        <div className="flex flex-col w-full customizable-width justify-start items-center gap-4">
+          {/* Logo */}
+          {logoUrl && (
+            <img 
+              width="96" 
+              height="96" 
+              className="max-w-24 object-cover rounded-lg" 
+              alt="Logo" 
+              src={logoUrl}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+          )}
+          
+          {/* Progress Bar */}
+          {progressPercent > 0 && (
+            <div 
+              className="relative w-full overflow-hidden rounded-full bg-zinc-300 h-2"
+              role="progressbar"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={progressPercent}
+            >
+              <div 
+                className="progress h-full w-full flex-1 bg-[#B89B7A] transition-all duration-500"
+                style={{ transform: `translateX(-${100 - progressPercent}%)` }}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
       <div className="py-6">
         <div className="space-y-6">
           {/* Pergunta */}

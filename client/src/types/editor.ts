@@ -49,13 +49,14 @@ export interface EditableContent {
   // Quiz Question properties
   question?: string;
   options?: Array<{ id: string; text: string; imageUrl?: string }>;
-  allowMultiple?: boolean;
+  multipleSelection?: boolean;
   showImages?: boolean;
   maxSelections?: number;
-  autoAdvance?: boolean;
-  autoAdvanceDelay?: number;
+  minSelections?: number;
   progressPercent?: number;
   logoUrl?: string;
+  showBackButton?: boolean;
+  optionLayout?: 'vertical' | 'horizontal' | 'grid';
   alignment?: 'left' | 'center' | 'right';
   
   style?: {
