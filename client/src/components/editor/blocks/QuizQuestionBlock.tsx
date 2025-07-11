@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { CheckCircle, Heart, ArrowRight } from 'lucide-react';
+import { CheckCircle, Heart, ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { 
   OptionsGridUtils, 
@@ -20,7 +20,9 @@ interface QuizQuestionBlockProps {
   autoAdvance?: boolean;
   autoAdvanceDelay?: number;
   onNext?: () => void;
+  onBack?: () => void;
   progressPercent?: number;
+  logoUrl?: string;
   className?: string;
   block?: any;
   isSelected?: boolean;
@@ -41,7 +43,9 @@ const QuizQuestionBlock = ({
   autoAdvance = true, // AUTO-AVANÇO ATIVADO por padrão
   autoAdvanceDelay = 1500, // 1.5 segundos de delay
   onNext,
+  onBack,
   progressPercent = 0,
+  logoUrl = 'https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png',
   className,
   block,
   isSelected = false,
@@ -106,8 +110,57 @@ const QuizQuestionBlock = ({
       isSelected && "ring-2 ring-blue-500 bg-blue-50",
       className
     )}>
-      {/* Progress Bar */}
-      {progressPercent > 0 && (
+      
+      {/* Vertical Canvas Header */}
+      <div className="flex flex-row w-full h-auto justify-center relative mb-6" data-sentry-component="VerticalCanvasHeader">
+        {/* Back Button */}
+        {onBack && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onBack}
+            className="absolute left-0 h-10 w-10 hover:bg-primary hover:text-foreground"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+        )}
+        
+        {/* Logo and Progress Container */}
+        <div className="flex flex-col w-full customizable-width justify-start items-center gap-4">
+          {/* Logo */}
+          {logoUrl && (
+            <img 
+              width="96" 
+              height="96" 
+              className="max-w-24 object-cover rounded-lg" 
+              alt="Logo" 
+              src={logoUrl}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+          )}
+          
+          {/* Progress Bar */}
+          {progressPercent > 0 && (
+            <div 
+              className="relative w-full overflow-hidden rounded-full bg-zinc-300 h-2"
+              role="progressbar"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={progressPercent}
+            >
+              <div 
+                className="progress h-full w-full flex-1 bg-[#B89B7A] transition-all duration-500"
+                style={{ transform: `translateX(-${100 - progressPercent}%)` }}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Progress Bar - Versão alternativa se não houver logo */}
+      {!logoUrl && progressPercent > 0 && (
         <div className="mb-4">
           <div className="flex justify-between items-center mb-2">
             <span className="text-xs text-gray-500">Progresso</span>
