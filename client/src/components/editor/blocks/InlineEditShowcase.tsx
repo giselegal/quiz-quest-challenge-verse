@@ -41,7 +41,7 @@ export const InlineEditShowcase: React.FC = () => {
           <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
             <InlineEditText
               value={data.title}
-              onChange={(value) => updateData('title', value)}
+              onSave={(value: string) => updateData('title', value)}
               placeholder="Clique para editar título"
               as="h1"
               className="text-3xl font-bold text-center text-blue-600"
@@ -50,7 +50,7 @@ export const InlineEditShowcase: React.FC = () => {
             
             <InlineEditText
               value={data.subtitle}
-              onChange={(value) => updateData('subtitle', value)}
+              onSave={(value: string) => updateData('subtitle', value)}
               placeholder="Clique para editar subtítulo"
               as="h2"
               className="text-xl text-center text-gray-600"
@@ -65,7 +65,7 @@ export const InlineEditShowcase: React.FC = () => {
           <div className="p-4 bg-gray-50 rounded-lg">
             <InlineEditText
               value={data.description}
-              onChange={(value) => updateData('description', value)}
+              onSave={(value: string) => updateData('description', value)}
               placeholder="Clique para editar descrição..."
               as="p"
               className="text-gray-700 leading-relaxed"
@@ -86,7 +86,7 @@ export const InlineEditShowcase: React.FC = () => {
               <Badge variant="secondary" className="cursor-pointer">
                 <InlineEditText
                   value={data.badge}
-                  onChange={(value) => updateData('badge', value)}
+                  onSave={(value: string) => updateData('badge', value)}
                   placeholder="Badge"
                   as="span"
                   className="text-xs font-medium"
@@ -101,7 +101,7 @@ export const InlineEditShowcase: React.FC = () => {
               <div className="space-y-2">
                 <InlineEditText
                   value={data.label}
-                  onChange={(value) => updateData('label', value)}
+                  onSave={(value: string) => updateData('label', value)}
                   placeholder="Label do campo"
                   as="label"
                   className="text-sm font-medium text-gray-700"
@@ -123,7 +123,7 @@ export const InlineEditShowcase: React.FC = () => {
                 <span className="text-sm text-gray-600">Progresso:</span>
                 <InlineEditText
                   value={data.progress}
-                  onChange={(value) => updateData('progress', value)}
+                  onSave={(value: string) => updateData('progress', value)}
                   placeholder="0%"
                   as="span"
                   className="text-sm font-medium text-blue-600"
@@ -138,7 +138,7 @@ export const InlineEditShowcase: React.FC = () => {
               <h4 className="font-medium mb-3">Categoria:</h4>
               <InlineEditText
                 value={data.category}
-                onChange={(value) => updateData('category', value)}
+                onSave={(value: string) => updateData('category', value)}
                 placeholder="Nome da categoria"
                 as="span"
                 className="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
@@ -190,7 +190,7 @@ export const InlineEditShowcase: React.FC = () => {
               <h4 className="font-medium mb-2">Estado Normal</h4>
               <InlineEditText
                 value="Clique para editar"
-                onChange={() => {}}
+              onSave={() => {}}
                 placeholder="Placeholder"
                 as="p"
                 className="text-gray-700 border-2 border-dashed border-gray-300 p-2 rounded"
@@ -201,7 +201,7 @@ export const InlineEditShowcase: React.FC = () => {
               <h4 className="font-medium mb-2">Estado Desabilitado</h4>
               <InlineEditText
                 value="Texto desabilitado"
-                onChange={() => {}}
+              onSave={() => {}}
                 placeholder="Não editável"
                 as="p"
                 className="text-gray-500 p-2 rounded"
@@ -213,7 +213,7 @@ export const InlineEditShowcase: React.FC = () => {
               <h4 className="font-medium mb-2">Com Validação</h4>
               <InlineEditText
                 value="teste@email.com"
-                onChange={() => {}}
+                onSave={() => {}}
                 placeholder="Email válido"
                 as="p"
                 className="text-yellow-700 p-2 rounded border border-yellow-300"
