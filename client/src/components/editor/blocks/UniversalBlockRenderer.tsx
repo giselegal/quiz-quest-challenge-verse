@@ -324,7 +324,13 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
             {renderedComponent}
           </div>
         );
-      }
+      },
+      // === COMPONENTES BOXFLEX MODULARES ===
+      'flex-container': () => <FlexContainer {...commonProps} />,
+      'flex-card': () => <FlexCard {...commonProps} />,
+      'flex-text': () => <FlexText {...commonProps} />,
+      'flex-button': () => <FlexButton {...commonProps} />,
+      'flex-image': () => <FlexImage {...commonProps} />,
     };
 
     // ES7+ Return com fallback usando optional chaining
