@@ -82,10 +82,10 @@ export const QuizBuilder: React.FC = () => {
     }
   }, []);
 
-  const handleComponentSelect = (type: QuizComponentType) => {
-    const newComponentId = addComponent(type, activeStageId);
-    setSelectedComponentId(newComponentId);
-  };
+   const handleComponentSelect = (type: QuizComponentType) => {
+     const newComponentId = addComponent(type, activeStageId || undefined);
+     setSelectedComponentId(newComponentId);
+   };
 
   const handleSave = () => {
     const success = saveCurrentState();
@@ -109,31 +109,16 @@ export const QuizBuilder: React.FC = () => {
       }
     }
     
-    const previewResult: QuizResult = {
-      primaryStyle: {
-        category: 'Elegante',
-        score: 12,
-        percentage: 40
-      },
-      secondaryStyles: [
-        {
-          category: 'Romântico',
-          score: 9,
-          percentage: 30
-        },
-        {
-          category: 'Clássico',
-          score: 6,
-          percentage: 20
-        },
-        {
-          category: 'Contemporâneo',
-          score: 3,
-          percentage: 10
-        }
-      ],
-      totalSelections: 30
-    };
+     const previewResult: QuizResult = {
+       id: 'preview-result',
+       participantName: 'Preview User',
+       responses: [],
+       styleScores: [],
+       predominantStyle: 'elegante',
+       complementaryStyles: ['romantico', 'classico'],
+       totalNormalQuestions: 10,
+       calculatedAt: new Date()
+     };
     
     setPreviewResult(previewResult);
   };
@@ -219,10 +204,10 @@ export const QuizBuilder: React.FC = () => {
             components={components}
             stages={stages}
             activeStageId={activeStageId}
-            selectedComponentId={selectedComponentId}
-            activeStage={activeStage}
-            isPreviewing={isPreviewing}
-            onComponentSelect={handleComponentSelect}
+             selectedComponentId={selectedComponentId}
+             activeStage={activeStage ?? null}
+             isPreviewing={isPreviewing}
+             onComponentSelect={handleComponentSelect}
             onStageAdd={addStage}
             onStageSelect={setActiveStage}
             onComponentMove={moveComponent}

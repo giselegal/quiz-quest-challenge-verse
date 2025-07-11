@@ -112,24 +112,24 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label>Título Principal</Label>
-                    <Input 
-                      value={component.data.title || ''} 
-                      onChange={(e) => onUpdate(component.id, { 
-                        data: { ...component.data, title: e.target.value } 
-                      })}
-                      placeholder="Título principal"
-                    />
+                     <Input 
+                       value={component.data?.title || ''} 
+                       onChange={(e) => onUpdate(component.id, { 
+                         data: { ...component.data, title: e.target.value } 
+                       })}
+                       placeholder="Título principal"
+                     />
                   </div>
                   
                   <div className="space-y-2">
                     <Label>Subtítulo</Label>
-                    <Input 
-                      value={component.data.subtitle || ''} 
-                      onChange={(e) => onUpdate(component.id, { 
-                        data: { ...component.data, subtitle: e.target.value } 
-                      })}
-                      placeholder="Subtítulo opcional"
-                    />
+                     <Input 
+                       value={component.data?.subtitle || ''} 
+                       onChange={(e) => onUpdate(component.id, { 
+                         data: { ...component.data, subtitle: e.target.value } 
+                       })}
+                       placeholder="Subtítulo opcional"
+                     />
                   </div>
                 </div>
               )}
@@ -138,13 +138,13 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label>Texto do Título</Label>
-                    <Input 
-                      value={component.data.title || ''} 
-                      onChange={(e) => onUpdate(component.id, { 
-                        data: { ...component.data, title: e.target.value } 
-                      })}
-                      placeholder="Título da seção"
-                    />
+                     <Input 
+                       value={component.data?.title || ''} 
+                       onChange={(e) => onUpdate(component.id, { 
+                         data: { ...component.data, title: e.target.value } 
+                       })}
+                       placeholder="Título da seção"
+                     />
                   </div>
                 </div>
               )}
@@ -153,14 +153,14 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label>Conteúdo do Texto</Label>
-                    <Textarea 
-                      value={component.data.text || ''} 
-                      onChange={(e) => onUpdate(component.id, { 
-                        data: { ...component.data, text: e.target.value } 
-                      })}
-                      className="min-h-[200px]"
-                      placeholder="Digite seu texto aqui"
-                    />
+                     <Textarea 
+                       value={component.data?.text || ''} 
+                       onChange={(e) => onUpdate(component.id, { 
+                         data: { ...component.data, text: e.target.value } 
+                       })}
+                       className="min-h-[200px]"
+                       placeholder="Digite seu texto aqui"
+                     />
                   </div>
                 </div>
               )}
@@ -176,23 +176,23 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label>Pergunta</Label>
-                    <Input 
-                      value={component.data.question || ''} 
-                      onChange={(e) => onUpdate(component.id, { 
-                        data: { ...component.data, question: e.target.value } 
-                      })}
-                      placeholder="Digite a pergunta"
-                    />
+                     <Input 
+                       value={component.data?.question || ''} 
+                       onChange={(e) => onUpdate(component.id, { 
+                         data: { ...component.data, question: e.target.value } 
+                       })}
+                       placeholder="Digite a pergunta"
+                     />
                   </div>
                   
                   <div className="space-y-2">
                     <Label>Opções</Label>
-                    {component.data.options && component.data.options.map((option, index) => (
+                    {component.data?.options && component.data.options.map((option, index) => (
                       <div key={index} className="flex gap-2 mb-2">
                         <Input 
                           value={option} 
                           onChange={(e) => {
-                            const newOptions = [...(component.data.options || [])];
+                             const newOptions = [...(component.data?.options || [])];
                             newOptions[index] = e.target.value;
                             onUpdate(component.id, { 
                               data: { ...component.data, options: newOptions } 
@@ -204,7 +204,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                           variant="destructive" 
                           size="icon"
                           onClick={() => {
-                            const newOptions = [...(component.data.options || [])];
+                            const newOptions = [...(component.data?.options || [])];
                             newOptions.splice(index, 1);
                             onUpdate(component.id, { 
                               data: { ...component.data, options: newOptions } 
@@ -217,7 +217,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                     ))}
                     <Button
                       onClick={() => {
-                        const newOptions = [...(component.data.options || []), ''];
+                        const newOptions = [...(component.data?.options || []), ''];
                         onUpdate(component.id, { 
                           data: { ...component.data, options: newOptions } 
                         });

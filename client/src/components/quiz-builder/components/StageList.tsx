@@ -30,7 +30,7 @@ export const StageList: React.FC<StageListProps> = ({
     onStageUpdate(id, { title });
   };
 
-  const handleDragEnd = (result) => {
+  const handleDragEnd = (result: any) => {
     if (!result.destination) return;
     
     const sourceId = stages[result.source.index].id;
