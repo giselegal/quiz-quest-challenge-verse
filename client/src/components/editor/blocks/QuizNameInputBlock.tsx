@@ -47,7 +47,7 @@ const QuizNameInputBlock: React.FC<QuizNameInputBlockProps> = ({
         <div className="flex items-center">
           <InlineEditText
             value={label}
-            onChange={(value) => handlePropertyChange('label', value)}
+            onSave={(value: string) => handlePropertyChange('label', value)}
             placeholder="Label do campo"
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             disabled={disabled}
@@ -86,7 +86,7 @@ const QuizNameInputBlock: React.FC<QuizNameInputBlockProps> = ({
           <span className="font-medium">Placeholder: </span>
           <InlineEditText
             value={placeholder}
-            onChange={(value) => handlePropertyChange('placeholder', value)}
+            onSave={(value: string) => handlePropertyChange('placeholder', value)}
             placeholder="Digite o placeholder..."
             className="inline"
             disabled={disabled}
@@ -97,7 +97,7 @@ const QuizNameInputBlock: React.FC<QuizNameInputBlockProps> = ({
         {helperText && (
           <InlineEditText
             value={helperText}
-            onChange={(value) => handlePropertyChange('helperText', value)}
+            onSave={(value: string) => handlePropertyChange('helperText', value)}
             placeholder="Texto de ajuda"
             className="text-xs text-gray-500 mt-1"
             disabled={disabled}

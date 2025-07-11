@@ -85,7 +85,7 @@ const QuizStartPageBlock: React.FC<QuizStartPageBlockProps> = ({
         <InlineEditText
           as="h1"
           value={title}
-          onChange={(newValue) => handlePropertyChange('title', newValue)}
+          onSave={(newValue: string) => handlePropertyChange('title', newValue)}
           placeholder="Título do quiz..."
           disabled={disabled}
           className="text-lg md:text-xl font-bold mb-2 leading-tight"
@@ -95,7 +95,7 @@ const QuizStartPageBlock: React.FC<QuizStartPageBlockProps> = ({
         <InlineEditText
           as="p"
           value={subtitle}
-          onChange={(newValue) => handlePropertyChange('subtitle', newValue)}
+          onSave={(newValue: string) => handlePropertyChange('subtitle', newValue)}
           placeholder="Subtítulo do quiz..."
           disabled={disabled}
           className="text-sm mb-3 opacity-80 leading-relaxed"
@@ -106,7 +106,7 @@ const QuizStartPageBlock: React.FC<QuizStartPageBlockProps> = ({
       <InlineEditText
         as="p"
         value={description}
-        onChange={(newValue) => handlePropertyChange('description', newValue)}
+        onSave={(newValue: string) => handlePropertyChange('description', newValue)}
         placeholder="Descrição do quiz..."
         disabled={disabled}
         className="text-xs md:text-sm mb-4 opacity-75 text-center leading-relaxed"
