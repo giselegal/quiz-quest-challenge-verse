@@ -830,22 +830,17 @@ const ModularQuizEditor: React.FC = () => {
             
             <TabsContent value="funis" className="mt-0">
               <FunnelManagementPanel
-                funnels={funnels}
-                currentFunnel={currentFunnel}
-                handleLoadFunnel={handleLoadFunnel}
-                handleDeleteFunnel={handleDeleteFunnel}
-                isLoading={isLoading.funnels}
+                funnel={currentFunnel}
+                onFunnelUpdate={(funnel) => setCurrentFunnel(funnel)}
+                onPageSelect={setCurrentPageIndex}
+                selectedPageIndex={currentPageIndex}
               />
             </TabsContent>
             
             <TabsContent value="historico" className="mt-0">
               <VersioningPanel
-                versions={versions}
-                currentVersionId={versionMetadata?.currentVersion}
-                loadVersion={(version: any) => loadVersion(version)}
-                deleteVersion={() => {}}  // Implementar função deleteVersion
-                clearHistory={clearHistory}
-                isLoading={isLoading.versions}
+                funnel={currentFunnel}
+                onFunnelUpdate={(funnel) => setCurrentFunnel(funnel)}
               />
             </TabsContent>
           </div>
