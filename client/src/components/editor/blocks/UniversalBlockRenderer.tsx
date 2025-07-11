@@ -50,6 +50,13 @@ import { VideoPlayerBlock } from './VideoPlayerBlock';
 import FormInputBlock from './FormInputBlock';
 import ListBlock from './ListBlock';
 
+// === COMPONENTES BOXFLEX MODULARES ===
+import FlexContainer from '../flexible/FlexContainer';
+import FlexCard from '../flexible/FlexCard';
+import FlexText from '../flexible/FlexText';
+import FlexButton from '../flexible/FlexButton';
+import FlexImage from '../flexible/FlexImage';
+
 // Componentes inline básicos e funcionais
 import HeadingInlineBlock from './HeadingInlineBlock';
 import ImageInlineBlock from './ImageInlineBlock';
