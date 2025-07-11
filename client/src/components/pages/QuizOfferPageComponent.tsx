@@ -206,7 +206,7 @@ const QuizOfferPageComponent: React.FC<QuizOfferPageComponentProps> = ({
                       O que você vai receber:
                     </h3>
                     <div className="space-y-4">
-                      {benefits.map((benefit, index) => (
+                      {benefits.map((benefit: any, index: number) => (
                         <div key={index} className="flex items-start gap-3">
                           <CheckCircle className="w-6 h-6 mt-0.5 flex-shrink-0" style={{ color: accentColor }} />
                           <span className="text-gray-700">{benefit}</span>
@@ -261,7 +261,7 @@ const QuizOfferPageComponent: React.FC<QuizOfferPageComponentProps> = ({
               </h3>
               
               <div className="grid md:grid-cols-3 gap-8">
-                {testimonials.map((testimonial, index) => (
+                {testimonials.map((testimonial: any, index: number) => (
                   <Card key={index} className="shadow-lg border-0">
                     <CardContent className="p-6 text-center">
                       <div className="flex justify-center mb-4">
@@ -307,7 +307,7 @@ const QuizOfferPageComponent: React.FC<QuizOfferPageComponentProps> = ({
               </h3>
               
               <div className="space-y-6">
-                {faqItems.map((item, index) => (
+                {faqItems.map((item: any, index: number) => (
                   <Card key={index} className="shadow-lg border-0">
                     <CardContent className="p-6">
                       <h4 className="text-xl font-semibold mb-3" style={{ color: textColor }}>
