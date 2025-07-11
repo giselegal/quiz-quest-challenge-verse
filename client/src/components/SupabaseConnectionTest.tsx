@@ -6,6 +6,12 @@ interface ConnectionStatus {
   connected: boolean;
   tablesFound: string[];
   error?: string;
+  details?: {
+    quizzes: number;
+    questions: number;
+    participants: number;
+    styleTypes: number;
+  };
 }
 
 export const SupabaseConnectionTest: React.FC = () => {
@@ -20,7 +26,7 @@ export const SupabaseConnectionTest: React.FC = () => {
       try {
         console.log('🔍 Testando conexão Supabase...');
         
-        // Test basic connection
+        // Test basic connection with quizzes
         const { data: quizzes, error: quizzesError } = await supabase
           .from('quizzes')
           .select('id, title')
@@ -30,31 +36,53 @@ export const SupabaseConnectionTest: React.FC = () => {
           throw quizzesError;
         }
 
-        // Test other tables
-        const tables = ['quiz_questions', 'quiz_participants', 'style_types', 'participant_answers'];
-        const tableTests = await Promise.allSettled(
-          tables.map(async (table) => {
-            const { error } = await supabase
-              .from(table)
-              .select('*')
-              .limit(1);
-            
-            if (error) throw new Error(`${table}: ${error.message}`);
-            return table;
-          })
-        );
+        // Test other critical tables
+        const [questionsResult, participantsResult, styleTypesResult] = await Promise.allSettled([
+          supabase.from('quiz_questions').select('id').limit(1),
+          supabase.from('quiz_participants').select('id').limit(1),
+          supabase.from('style_types').select('id').limit(1)
+        ]);
 
-        const successfulTables = tableTests
-          .filter((result): result is PromiseFulfilledResult<string> => result.status === 'fulfilled')
-          .map(result => result.value);
+        const tableTests = [
+          { name: 'quiz_questions', result: questionsResult },
+          { name: 'quiz_participants', result: participantsResult }, 
+          { name: 'style_types', result: styleTypesResult }
+        ];
+
+        const successfulTables = ['quizzes'];
+        const details = {
+          quizzes: quizzes?.length || 0,
+          questions: 0,
+          participants: 0,
+          styleTypes: 0
+        };
+
+        tableTests.forEach(({ name, result }) => {
+          if (result.status === 'fulfilled' && !result.value.error) {
+            successfulTables.push(name);
+            
+            switch (name) {
+              case 'quiz_questions':
+                details.questions = result.value.data?.length || 0;
+                break;
+              case 'quiz_participants':
+                details.participants = result.value.data?.length || 0;
+                break;
+              case 'style_types':
+                details.styleTypes = result.value.data?.length || 0;
+                break;
+            }
+          }
+        });
 
         setStatus({
           connected: true,
-          tablesFound: ['quizzes', ...successfulTables]
+          tablesFound: successfulTables,
+          details
         });
 
         console.log('✅ Supabase conectado com sucesso!');
-        console.log('📊 Tabelas encontradas:', ['quizzes', ...successfulTables]);
+        console.log('📊 Tabelas encontradas:', successfulTables);
 
       } catch (error) {
         console.error('❌ Erro na conexão Supabase:', error);
@@ -107,12 +135,24 @@ export const SupabaseConnectionTest: React.FC = () => {
               <li key={table}>{table}</li>
             ))}
           </ul>
+          {status.details && (
+            <div className="mt-2 p-2 bg-green-100 rounded text-xs">
+              <p>Detalhes das tabelas:</p>
+              <ul className="mt-1">
+                <li>Quizzes: {status.details.quizzes} registro(s)</li>
+                <li>Questões: {status.details.questions} registro(s)</li>
+                <li>Participantes: {status.details.participants} registro(s)</li>
+                <li>Tipos de Estilo: {status.details.styleTypes} registro(s)</li>
+              </ul>
+            </div>
+          )}
         </div>
       )}
       
       {status.error && (
         <div className="text-sm text-red-600 mt-2">
           <p><strong>Erro:</strong> {status.error}</p>
+          <p className="text-xs mt-1">Verifique se as tabelas existem e as políticas RLS estão configuradas.</p>
         </div>
       )}
     </div>

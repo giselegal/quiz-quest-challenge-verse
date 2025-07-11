@@ -17,7 +17,7 @@ function App() {
       <QuizProvider>
         <Router>
           <div className="min-h-screen bg-background">
-            {/* Connection Test - Temporary */}
+            {/* Connection Test - Melhorado com mais informações */}
             <div className="fixed top-4 right-4 z-50 max-w-sm">
               <SupabaseConnectionTest />
             </div>

@@ -1,6 +1,6 @@
 
 import { QuizQuestion, StyleResult } from '@/types/quiz';
-import { supabase } from '../../../src/integrations/supabase/client';
+import { supabase } from '@/integrations/supabase/client';
 
 export const fetchQuizQuestions = async (quizId: string = 'default') => {
   try {
