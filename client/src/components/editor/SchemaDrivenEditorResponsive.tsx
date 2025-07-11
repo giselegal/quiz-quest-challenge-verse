@@ -30,6 +30,8 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
   funnelId,
   className = ''
 }) => {
+  console.log('SchemaDrivenEditorResponsive: Component mounted with funnelId:', funnelId);
+  
   const [deviceView, setDeviceView] = useState<DeviceView>('desktop'); // Voltar ao padrão
   const [showLeftSidebar, setShowLeftSidebar] = useState(true); 
   const [showRightSidebar, setShowRightSidebar] = useState(true);

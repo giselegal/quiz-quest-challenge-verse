@@ -51,6 +51,8 @@ interface UseSchemaEditorReturn {
 }
 
 export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorReturn => {
+  console.log('useSchemaEditorFixed: Hook initialized with initialFunnelId:', initialFunnelId);
+  
   const [funnel, setFunnel] = useState<SchemaDrivenFunnelData | null>(null);
   const [currentPageId, setCurrentPageId] = useState<string | null>(null);
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
