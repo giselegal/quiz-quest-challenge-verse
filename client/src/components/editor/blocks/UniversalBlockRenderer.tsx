@@ -273,7 +273,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
     };
 
     // ES7+ Return com fallback usando optional chaining
-    return componentMap[blockType as keyof typeof componentMap]?.() ?? 
+    return componentMap[block.type as keyof typeof componentMap]?.() ?? 
            <TextInlineBlock {...commonProps} />;
   };
 
