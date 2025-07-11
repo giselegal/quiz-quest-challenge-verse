@@ -22,17 +22,14 @@ import {
   StatInlineBlock,
   BadgeInlineBlock,
   ProgressInlineBlock,
-  ResultCardInlineBlock,
   ImageDisplayInlineBlock,
   PricingCardInlineBlock,
   TestimonialCardInlineBlock,
   // Etapa 20 (Resultado)
-  ResultHeaderInlineBlock,
   TestimonialsInlineBlock,
   // Etapa 21 (Oferta)
   QuizOfferPricingInlineBlock,
   CountdownInlineBlock,
-  BonusListInlineBlock,
   // Componentes especializados para Quiz
   QuizIntroHeaderBlock,
   LoadingAnimationBlock
@@ -49,6 +46,13 @@ import HeadingInlineBlock from './HeadingInlineBlock';
 import ImageInlineBlock from './ImageInlineBlock';
 import ButtonInlineBlock from './ButtonInlineBlock';
 import CTAInlineBlock from './CTAInlineBlock';
+
+// Novos componentes inline criados
+import ResultHeaderInlineBlock from './inline/ResultHeaderInlineBlock';
+import ResultCardInlineBlock from './inline/ResultCardInlineBlock';
+import BeforeAfterInlineBlock from './inline/BeforeAfterInlineBlock';
+import BonusListInlineBlock from './inline/BonusListInlineBlock';
+import StepHeaderInlineBlock from './inline/StepHeaderInlineBlock';
 
 // Componentes modernos (funcionais)
 import TestimonialsGridBlock from './TestimonialsGridBlock';
@@ -173,6 +177,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       'result-header-inline': () => <ResultHeaderInlineBlock {...commonProps} />,
       'before-after-inline': () => <BeforeAfterInlineBlock {...commonProps} />,
       'bonus-list-inline': () => <BonusListInlineBlock {...commonProps} />,
+      'step-header-inline': () => <StepHeaderInlineBlock {...commonProps} />,
       'testimonial-card-inline': () => <TestimonialCardInlineBlock {...commonProps} />,
       'countdown-inline': () => <CountdownInlineBlock {...commonProps} />,
       'stat-inline': () => <StatInlineBlock {...commonProps} />,

@@ -2198,6 +2198,114 @@ export const blockDefinitions: BlockDefinition[] = [
         defaultValue: 'card'
       }
     ]
+  },
+
+  {
+    type: 'step-header-inline',
+    name: 'Cabeçalho de Etapa',
+    description: 'Cabeçalho com logo e barra de progresso para etapas do quiz',
+    icon: 'Navigation',
+    category: 'Quiz',
+    propertiesSchema: [
+      {
+        key: 'logoUrl',
+        label: 'URL do Logo',
+        type: 'image-url',
+        defaultValue: 'https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png'
+      },
+      {
+        key: 'logoWidth',
+        label: 'Largura do Logo (px)',
+        type: 'number-input',
+        defaultValue: 96,
+        min: 40,
+        max: 200
+      },
+      {
+        key: 'logoHeight',
+        label: 'Altura do Logo (px)',
+        type: 'number-input',
+        defaultValue: 96,
+        min: 40,
+        max: 200
+      },
+      {
+        key: 'logoAlt',
+        label: 'Texto Alternativo do Logo',
+        type: 'text-input',
+        defaultValue: 'Logo',
+        placeholder: 'Ex: Logo da empresa'
+      },
+      {
+        key: 'progressValue',
+        label: 'Valor do Progresso (%)',
+        type: 'number-input',
+        defaultValue: 0,
+        min: 0,
+        max: 100
+      },
+      {
+        key: 'progressMax',
+        label: 'Valor Máximo do Progresso',
+        type: 'number-input',
+        defaultValue: 100,
+        min: 1,
+        max: 100
+      },
+      {
+        key: 'showProgress',
+        label: 'Mostrar Barra de Progresso',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'progressColor',
+        label: 'Cor da Barra de Progresso',
+        type: 'color-picker',
+        defaultValue: '#B89B7A'
+      },
+      {
+        key: 'containerWidth',
+        label: 'Largura do Container',
+        type: 'select',
+        options: [
+          { label: 'Completa', value: 'full' },
+          { label: 'Pequena', value: 'sm' },
+          { label: 'Média', value: 'md' },
+          { label: 'Grande', value: 'lg' },
+          { label: 'Extra Grande', value: 'xl' }
+        ],
+        defaultValue: 'full'
+      },
+      {
+        key: 'alignment',
+        label: 'Alinhamento',
+        type: 'select',
+        options: [
+          { label: 'Esquerda', value: 'left' },
+          { label: 'Centro', value: 'center' },
+          { label: 'Direita', value: 'right' }
+        ],
+        defaultValue: 'center'
+      },
+      {
+        key: 'spacing',
+        label: 'Espaçamento entre Elementos',
+        type: 'select',
+        options: [
+          { label: 'Pequeno (2)', value: 2 },
+          { label: 'Médio (4)', value: 4 },
+          { label: 'Grande (6)', value: 6 }
+        ],
+        defaultValue: 4
+      },
+      {
+        key: 'backgroundColor',
+        label: 'Cor de Fundo',
+        type: 'color-picker',
+        defaultValue: 'transparent'
+      }
+    ]
   }
 ];
 
