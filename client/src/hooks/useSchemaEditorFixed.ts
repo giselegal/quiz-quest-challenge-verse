@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { schemaDrivenFunnelService, type SchemaDrivenFunnelData, type SchemaDrivenPageData, type AutoSaveState } from '@/services/schemaDrivenFunnelService';
 import { type BlockData } from '@/components/editor/blocks';
 import { useToast } from '@/hooks/use-toast';
@@ -63,8 +63,21 @@ export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorR
   const { toast } = useToast();
   const initializedRef = useRef(false);
 
-  // Computed values
-  const currentPage = funnel?.pages?.find(page => page.id === currentPageId) || null;
+  // Computed values com dados dinâmicos
+  const currentPage = useMemo(() => {
+    if (!funnel?.pages || !currentPageId) return null;
+    
+    const page = funnel.pages.find(page => page.id === currentPageId);
+    if (!page) return null;
+    
+    // Aplicar dados dinâmicos especialmente para etapa 20
+    if (currentPageId === 'etapa-20-resultado') {
+      return schemaDrivenFunnelService.getPageWithDynamicData(currentPageId);
+    }
+    
+    return page;
+  }, [funnel?.pages, currentPageId]);
+  
   const selectedBlock = currentPage?.blocks?.find(block => block.id === selectedBlockId) || null;
 
   // Salvar funil localmente com controle de quota
