@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { useEditor } from '../core/EditorContext';
-import BlockRenderer from '../BlockRenderer'; // Usar o renderer existente
+import BlockItemRenderer from './BlockItemRenderer';
 
 const Canvas: React.FC = () => {
   const { state, selectBlock, deselectBlock } = useEditor();
@@ -100,7 +100,7 @@ const Canvas: React.FC = () => {
 
                   {/* Render do bloco */}
                   <div className="p-4">
-                    <BlockRenderer
+                    <BlockItemRenderer
                       block={block}
                       isSelected={state.selectedBlockId === block.id}
                       isEditing={state.isEditing}
