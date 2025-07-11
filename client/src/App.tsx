@@ -8,7 +8,7 @@ import { SupabaseConnectionTest } from '@/components/SupabaseConnectionTest';
 
 // Import pages
 import QuizPage from '@/components/QuizPage';
-import QuizResult from '@/pages/QuizResultPage';
+import QuizResult from '@/pages/ResultPage';
 import LoadingAccessPage from '@/pages/LoadingAccessPage';
 
 function App() {
