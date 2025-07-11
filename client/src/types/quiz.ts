@@ -1,13 +1,5 @@
 
-export interface StyleResult {
-  style: string;
-  category: string;
-  points: number;
-  percentage: number;
-  rank: number;
-  score: number;
-}
-
+// Core quiz types
 export interface QuizQuestion {
   id: string;
   text: string;
@@ -27,12 +19,54 @@ export interface QuizOption {
   image?: string;
   imageUrl?: string;
   styleCategory?: string;
+  style?: string;
+  description?: string;
 }
 
 export interface UserResponse {
   questionId: string;
   selectedOptions: string[];
   timestamp: number;
+}
+
+export interface StyleResult {
+  style: string;
+  category: string;
+  points: number;
+  percentage: number;
+  rank: number;
+  score: number;
+}
+
+export interface QuizResult {
+  primaryStyle: StyleResult;
+  secondaryStyles: StyleResult[];
+  predominantStyle?: string;
+  complementaryStyles?: string[];
+  styleScores?: { [key: string]: number };
+  participantName?: string;
+  totalNormalQuestions?: number;
+}
+
+// Additional types for compatibility
+export interface QuizResponse {
+  questionId: string;
+  selectedOptions: string[];
+  timestamp: number;
+}
+
+export interface StyleType {
+  id: string;
+  name: string;
+  description?: string;
+  color_primary?: string;
+  color_secondary?: string;
+}
+
+export interface BlockType {
+  id: string;
+  type: string;
+  content: any;
 }
 
 export interface ResultPageConfig {
@@ -47,13 +81,7 @@ export interface ResultPageConfig {
   };
 }
 
-// Adicionar QuizResult que estava faltando
-export interface QuizResult {
-  primaryStyle: StyleResult;
-  secondaryStyles: StyleResult[];
-}
-
-// Tipos específicos do Supabase
+// Supabase types
 export interface SupabaseQuizQuestion {
   id: string;
   quiz_id?: string;

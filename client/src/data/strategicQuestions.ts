@@ -1,16 +1,27 @@
 
-import { QuizQuestion } from '../types/quiz';
-import { selfPerceptionQuestions } from './questions/selfPerceptionQuestions';
-import { styleExperienceQuestions } from './questions/styleExperienceQuestions';
-import { purchaseIntentQuestions } from './questions/purchaseIntentQuestions';
-import { desiredOutcomesQuestions } from './questions/desiredOutcomesQuestions';
+import { QuizQuestion } from '@/types/quiz';
 
-// Concatenate all strategic questions in the correct order
 export const strategicQuestions: QuizQuestion[] = [
-  ...selfPerceptionQuestions,
-  ...styleExperienceQuestions,
-  ...purchaseIntentQuestions,
-  ...desiredOutcomesQuestions
+  {
+    id: 'strategic-1',
+    title: 'Qual dessas situações mais combina com você?',
+    type: 'strategic',
+    options: [
+      {
+        id: 'strategic-1a',
+        text: 'Prefiro ocasiões formais e elegantes',
+        points: { elegante: 5, classico: 3 }
+      },
+      {
+        id: 'strategic-1b',
+        text: 'Gosto de eventos casuais e descontraídos',
+        points: { casual: 5, moderno: 3 }
+      },
+      {
+        id: 'strategic-1c',
+        text: 'Adoro festas e ocasiões especiais',
+        points: { dramatico: 5, sexy: 3 }
+      }
+    ]
+  }
 ];
-
-console.log('Strategic questions loaded:', strategicQuestions.length);

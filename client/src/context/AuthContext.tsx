@@ -1,15 +1,14 @@
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface User {
-  userName: string;
-  id?: string;
+  name: string;
   email?: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (userName: string) => void;
+  login: (name: string, email?: string) => void;
   logout: () => void;
   isAuthenticated: boolean;
 }
@@ -31,26 +30,15 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  useEffect(() => {
-    // Verificar se há um usuário salvo no localStorage
-    const savedUserName = localStorage.getItem('userName');
-    if (savedUserName) {
-      setUser({ userName: savedUserName });
-    }
-  }, []);
-
-  const login = (userName: string) => {
-    const newUser: User = { userName };
-    setUser(newUser);
-    localStorage.setItem('userName', userName);
+  const login = (name: string, email?: string) => {
+    setUser({ name, email });
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('userName');
   };
 
-  const isAuthenticated = !!user;
+  const isAuthenticated = user !== null;
 
   return (
     <AuthContext.Provider value={{ user, login, logout, isAuthenticated }}>
