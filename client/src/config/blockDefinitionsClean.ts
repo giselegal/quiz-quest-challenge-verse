@@ -1967,346 +1967,751 @@ export const blockDefinitions: BlockDefinition[] = [
   },
 
   // =====================================================================
-  // COMPONENTES BÁSICOS FUNCIONAIS
+  // COMPONENTES BOXFLEX MODULARES - 100% HORIZONTAL
   // =====================================================================
   {
-    type: 'spacer',
-    name: 'Espaçador',
-    description: 'Espaço em branco responsivo',
-    icon: 'RectangleHorizontal',
-    category: 'Básico',
+    type: 'flex-container',
+    name: 'Container Flexível',
+    description: 'Container BoxFlex modular - Horizontal 100% largura - INDEPENDENTE | MODULAR | RESPONSIVO',
+    icon: 'Layout',
+    category: 'BoxFlex',
     propertiesSchema: [
       {
-        key: 'height',
-        label: 'Altura (px)',
-        type: 'number-input',
-        defaultValue: 40,
-        min: 10,
-        max: 200
-      },
-      {
-        key: 'responsive',
-        label: 'Responsivo',
-        type: 'boolean-switch',
-        defaultValue: true,
-        description: 'Ajusta automaticamente no mobile'
-      }
-    ]
-  },
-
-  {
-    type: 'form-input',
-    name: 'Campo de Formulário',
-    description: 'Input elegante para captura de dados',
-    icon: 'Type',
-    category: 'Formulário',
-    propertiesSchema: [
-      {
-        key: 'label',
-        label: 'Label',
-        type: 'text-input',
-        defaultValue: 'Nome'
-      },
-      {
-        key: 'placeholder',
-        label: 'Placeholder',
-        type: 'text-input',
-        defaultValue: 'Digite seu nome...'
-      },
-      {
-        key: 'inputType',
-        label: 'Tipo',
+        key: 'direction',
+        label: 'Direção',
         type: 'select',
         options: [
-          { label: 'Texto', value: 'text' },
-          { label: 'Email', value: 'email' },
-          { label: 'Telefone', value: 'tel' },
-          { label: 'Número', value: 'number' }
+          { label: 'Horizontal (row)', value: 'row' },
+          { label: 'Vertical (column)', value: 'column' },
+          { label: 'Row Reverse', value: 'row-reverse' },
+          { label: 'Column Reverse', value: 'column-reverse' }
         ],
-        defaultValue: 'text'
+        defaultValue: 'row'
       },
       {
-        key: 'required',
-        label: 'Obrigatório',
-        type: 'boolean-switch',
-        defaultValue: false
-      },
-      {
-        key: 'style',
-        label: 'Estilo',
+        key: 'justify',
+        label: 'Justificação',
         type: 'select',
         options: [
-          { label: 'Elegante', value: 'elegant' },
-          { label: 'Minimalista', value: 'minimal' },
-          { label: 'Moderno', value: 'modern' }
+          { label: 'Início', value: 'flex-start' },
+          { label: 'Centro', value: 'center' },
+          { label: 'Fim', value: 'flex-end' },
+          { label: 'Espaço Entre', value: 'space-between' },
+          { label: 'Espaço Ao Redor', value: 'space-around' },
+          { label: 'Espaço Igual', value: 'space-evenly' }
         ],
-        defaultValue: 'elegant'
-      }
-    ]
-  },
-
-  // =====================================================================
-  // NOVOS COMPONENTES INLINE MODERNOS CRIADOS
-  // =====================================================================
-  {
-    type: 'result-header-inline',
-    name: 'Cabeçalho de Resultado',
-    description: 'Cabeçalho elegante para página de resultado com ícone',
-    icon: 'Award',
-    category: 'Resultado',
-    propertiesSchema: [
-      {
-        key: 'title',
-        label: 'Título Principal',
-        type: 'text-input',
-        defaultValue: 'Seu Estilo',
-        placeholder: 'Ex: Seu Estilo Elegante'
+        defaultValue: 'flex-start'
       },
       {
-        key: 'subtitle',
-        label: 'Subtítulo',
-        type: 'text-input',
-        defaultValue: 'Resultado Personalizado',
-        placeholder: 'Ex: Baseado em suas respostas'
-      },
-      {
-        key: 'icon',
-        label: 'Ícone',
-        type: 'select',
-        options: [
-          { label: 'Prêmio', value: 'award' },
-          { label: 'Coroa', value: 'crown' },
-          { label: 'Estrela', value: 'star' }
-        ],
-        defaultValue: 'award'
-      },
-      {
-        key: 'iconColor',
-        label: 'Cor do Ícone',
-        type: 'color-picker',
-        defaultValue: '#B89B7A'
-      },
-      {
-        key: 'centered',
-        label: 'Centralizado',
-        type: 'boolean-switch',
-        defaultValue: true
-      },
-      {
-        key: 'showDecorations',
-        label: 'Mostrar Decorações',
-        type: 'boolean-switch',
-        defaultValue: true
-      }
-    ]
-  },
-
-  {
-    type: 'result-card-inline',
-    name: 'Card de Resultado',
-    description: 'Card compacto para mostrar resultado do quiz',
-    icon: 'CreditCard',
-    category: 'Resultado',
-    propertiesSchema: [
-      {
-        key: 'styleName',
-        label: 'Nome do Estilo',
-        type: 'text-input',
-        defaultValue: 'Elegante',
-        placeholder: 'Ex: Romântico, Clássico'
-      },
-      {
-        key: 'percentage',
-        label: 'Percentual (%)',
-        type: 'number-input',
-        defaultValue: 85,
-        min: 0,
-        max: 100
-      },
-      {
-        key: 'description',
-        label: 'Descrição',
-        type: 'textarea',
-        defaultValue: 'Você valoriza sofisticação e refinamento',
-        rows: 3
-      },
-      {
-        key: 'showProgress',
-        label: 'Mostrar Progresso',
-        type: 'boolean-switch',
-        defaultValue: true
-      },
-      {
-        key: 'showIcon',
-        label: 'Mostrar Ícone',
-        type: 'boolean-switch',
-        defaultValue: true
-      },
-      {
-        key: 'size',
-        label: 'Tamanho',
-        type: 'select',
-        options: [
-          { label: 'Pequeno', value: 'small' },
-          { label: 'Médio', value: 'medium' },
-          { label: 'Grande', value: 'large' }
-        ],
-        defaultValue: 'medium'
-      }
-    ]
-  },
-
-  {
-    type: 'bonus-list-inline',
-    name: 'Lista de Bônus',
-    description: 'Lista de bônus e benefícios inclusos',
-    icon: 'Gift',
-    category: 'Vendas',
-    propertiesSchema: [
-      {
-        key: 'title',
-        label: 'Título',
-        type: 'text-input',
-        defaultValue: 'Bônus Exclusivos',
-        placeholder: 'Ex: Bônus Limitados'
-      },
-      {
-        key: 'showValues',
-        label: 'Mostrar Valores',
-        type: 'boolean-switch',
-        defaultValue: true
-      },
-      {
-        key: 'totalValue',
-        label: 'Valor Total',
-        type: 'text-input',
-        defaultValue: 'R$ 171',
-        placeholder: 'Ex: R$ 297'
-      },
-      {
-        key: 'highlightColor',
-        label: 'Cor de Destaque',
-        type: 'color-picker',
-        defaultValue: '#B89B7A'
-      },
-      {
-        key: 'variant',
-        label: 'Estilo',
-        type: 'select',
-        options: [
-          { label: 'Card', value: 'card' },
-          { label: 'Lista', value: 'list' },
-          { label: 'Minimalista', value: 'minimal' }
-        ],
-        defaultValue: 'card'
-      }
-    ]
-  },
-
-  {
-    type: 'step-header-inline',
-    name: 'Cabeçalho de Etapa',
-    description: 'Cabeçalho com logo e barra de progresso para etapas do quiz',
-    icon: 'Navigation',
-    category: 'Quiz',
-    propertiesSchema: [
-      {
-        key: 'logoUrl',
-        label: 'URL do Logo',
-        type: 'image-url',
-        defaultValue: 'https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png'
-      },
-      {
-        key: 'logoWidth',
-        label: 'Largura do Logo (px)',
-        type: 'number-input',
-        defaultValue: 96,
-        min: 40,
-        max: 200
-      },
-      {
-        key: 'logoHeight',
-        label: 'Altura do Logo (px)',
-        type: 'number-input',
-        defaultValue: 96,
-        min: 40,
-        max: 200
-      },
-      {
-        key: 'logoAlt',
-        label: 'Texto Alternativo do Logo',
-        type: 'text-input',
-        defaultValue: 'Logo',
-        placeholder: 'Ex: Logo da empresa'
-      },
-      {
-        key: 'progressValue',
-        label: 'Valor do Progresso (%)',
-        type: 'number-input',
-        defaultValue: 0,
-        min: 0,
-        max: 100
-      },
-      {
-        key: 'progressMax',
-        label: 'Valor Máximo do Progresso',
-        type: 'number-input',
-        defaultValue: 100,
-        min: 1,
-        max: 100
-      },
-      {
-        key: 'showProgress',
-        label: 'Mostrar Barra de Progresso',
-        type: 'boolean-switch',
-        defaultValue: true
-      },
-      {
-        key: 'progressColor',
-        label: 'Cor da Barra de Progresso',
-        type: 'color-picker',
-        defaultValue: '#B89B7A'
-      },
-      {
-        key: 'containerWidth',
-        label: 'Largura do Container',
-        type: 'select',
-        options: [
-          { label: 'Completa', value: 'full' },
-          { label: 'Pequena', value: 'sm' },
-          { label: 'Média', value: 'md' },
-          { label: 'Grande', value: 'lg' },
-          { label: 'Extra Grande', value: 'xl' }
-        ],
-        defaultValue: 'full'
-      },
-      {
-        key: 'alignment',
+        key: 'align',
         label: 'Alinhamento',
         type: 'select',
         options: [
-          { label: 'Esquerda', value: 'left' },
+          { label: 'Início', value: 'flex-start' },
           { label: 'Centro', value: 'center' },
-          { label: 'Direita', value: 'right' }
+          { label: 'Fim', value: 'flex-end' },
+          { label: 'Esticar', value: 'stretch' },
+          { label: 'Baseline', value: 'baseline' }
         ],
-        defaultValue: 'center'
+        defaultValue: 'flex-start'
       },
       {
-        key: 'spacing',
-        label: 'Espaçamento entre Elementos',
+        key: 'wrap',
+        label: 'Quebra de Linha',
         type: 'select',
         options: [
-          { label: 'Pequeno (2)', value: 2 },
-          { label: 'Médio (4)', value: 4 },
-          { label: 'Grande (6)', value: 6 }
+          { label: 'Não Quebrar', value: 'nowrap' },
+          { label: 'Quebrar', value: 'wrap' },
+          { label: 'Quebrar Reverso', value: 'wrap-reverse' }
         ],
-        defaultValue: 4
+        defaultValue: 'wrap'
+      },
+      {
+        key: 'gap',
+        label: 'Espaçamento (Gap)',
+        type: 'select',
+        options: [
+          { label: 'Nenhum', value: '0' },
+          { label: 'Pequeno (8px)', value: '8px' },
+          { label: 'Médio (16px)', value: '16px' },
+          { label: 'Grande (24px)', value: '24px' },
+          { label: 'Extra Grande (32px)', value: '32px' }
+        ],
+        defaultValue: '16px'
+      },
+      {
+        key: 'padding',
+        label: 'Preenchimento Interno',
+        type: 'select',
+        options: [
+          { label: 'Nenhum', value: '0' },
+          { label: 'Pequeno (8px)', value: '8px' },
+          { label: 'Médio (16px)', value: '16px' },
+          { label: 'Grande (24px)', value: '24px' },
+          { label: 'Extra Grande (32px)', value: '32px' }
+        ],
+        defaultValue: '16px'
       },
       {
         key: 'backgroundColor',
         label: 'Cor de Fundo',
         type: 'color-picker',
         defaultValue: 'transparent'
+      },
+      {
+        key: 'minHeight',
+        label: 'Altura Mínima',
+        type: 'select',
+        options: [
+          { label: 'Automático', value: 'auto' },
+          { label: '100px', value: '100px' },
+          { label: '200px', value: '200px' },
+          { label: '300px', value: '300px' },
+          { label: 'Altura da Tela', value: '100vh' }
+        ],
+        defaultValue: 'auto'
+      },
+      {
+        key: 'borderRadius',
+        label: 'Borda Arredondada',
+        type: 'select',
+        options: [
+          { label: 'Nenhuma', value: '0' },
+          { label: 'Pequena (4px)', value: '4px' },
+          { label: 'Média (8px)', value: '8px' },
+          { label: 'Grande (12px)', value: '12px' },
+          { label: 'Extra Grande (16px)', value: '16px' },
+          { label: 'Circular', value: '50%' }
+        ],
+        defaultValue: '0'
+      },
+      {
+        key: 'shadow',
+        label: 'Sombra',
+        type: 'select',
+        options: [
+          { label: 'Nenhuma', value: 'none' },
+          { label: 'Pequena', value: '0 1px 3px rgba(0,0,0,0.1)' },
+          { label: 'Média', value: '0 4px 6px rgba(0,0,0,0.1)' },
+          { label: 'Grande', value: '0 10px 15px rgba(0,0,0,0.1)' },
+          { label: 'Extra Grande', value: '0 20px 25px rgba(0,0,0,0.1)' }
+        ],
+        defaultValue: 'none'
+      }
+    ]
+  },
+
+  {
+    type: 'flex-card',
+    name: 'Card Flexível',
+    description: 'Card BoxFlex modular - Horizontal inline - INDEPENDENTE | MODULAR | RESPONSIVO',
+    icon: 'Square',
+    category: 'BoxFlex',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Card Flexível',
+        placeholder: 'Digite o título do card'
+      },
+      {
+        key: 'content',
+        label: 'Conteúdo',
+        type: 'textarea',
+        defaultValue: 'Conteúdo do card flexível e responsivo.',
+        rows: 3,
+        placeholder: 'Digite o conteúdo do card'
+      },
+      {
+        key: 'imageUrl',
+        label: 'URL da Imagem',
+        type: 'image-url',
+        defaultValue: '',
+        placeholder: 'URL opcional da imagem'
+      },
+      {
+        key: 'imagePosition',
+        label: 'Posição da Imagem',
+        type: 'select',
+        options: [
+          { label: 'Topo', value: 'top' },
+          { label: 'Esquerda', value: 'left' },
+          { label: 'Direita', value: 'right' },
+          { label: 'Fundo', value: 'bottom' }
+        ],
+        defaultValue: 'top'
+      },
+      {
+        key: 'padding',
+        label: 'Preenchimento',
+        type: 'select',
+        options: [
+          { label: 'Pequeno (12px)', value: '12px' },
+          { label: 'Médio (16px)', value: '16px' },
+          { label: 'Grande (24px)', value: '24px' },
+          { label: 'Extra Grande (32px)', value: '32px' }
+        ],
+        defaultValue: '16px'
+      },
+      {
+        key: 'backgroundColor',
+        label: 'Cor de Fundo',
+        type: 'color-picker',
+        defaultValue: '#FFFFFF'
+      },
+      {
+        key: 'borderColor',
+        label: 'Cor da Borda',
+        type: 'color-picker',
+        defaultValue: '#E5E5E5'
+      },
+      {
+        key: 'borderWidth',
+        label: 'Largura da Borda',
+        type: 'select',
+        options: [
+          { label: 'Nenhuma', value: '0' },
+          { label: 'Fina (1px)', value: '1px' },
+          { label: 'Média (2px)', value: '2px' },
+          { label: 'Grossa (3px)', value: '3px' }
+        ],
+        defaultValue: '1px'
+      },
+      {
+        key: 'borderRadius',
+        label: 'Borda Arredondada',
+        type: 'select',
+        options: [
+          { label: 'Nenhuma', value: '0' },
+          { label: 'Pequena (4px)', value: '4px' },
+          { label: 'Média (8px)', value: '8px' },
+          { label: 'Grande (12px)', value: '12px' },
+          { label: 'Extra Grande (16px)', value: '16px' }
+        ],
+        defaultValue: '8px'
+      },
+      {
+        key: 'shadow',
+        label: 'Sombra',
+        type: 'select',
+        options: [
+          { label: 'Nenhuma', value: 'none' },
+          { label: 'Suave', value: '0 2px 4px rgba(0,0,0,0.1)' },
+          { label: 'Média', value: '0 4px 8px rgba(0,0,0,0.15)' },
+          { label: 'Forte', value: '0 8px 16px rgba(0,0,0,0.2)' }
+        ],
+        defaultValue: '0 2px 4px rgba(0,0,0,0.1)'
+      },
+      {
+        key: 'textAlign',
+        label: 'Alinhamento do Texto',
+        type: 'select',
+        options: [
+          { label: 'Esquerda', value: 'left' },
+          { label: 'Centro', value: 'center' },
+          { label: 'Direita', value: 'right' }
+        ],
+        defaultValue: 'left'
+      },
+      {
+        key: 'flex',
+        label: 'Comportamento Flex',
+        type: 'select',
+        options: [
+          { label: 'Automático', value: '1' },
+          { label: 'Fixo', value: '0 0 auto' },
+          { label: 'Crescer', value: '1 0 0%' },
+          { label: 'Encolher', value: '0 1 auto' }
+        ],
+        defaultValue: '1'
+      }
+    ]
+  },
+
+  {
+    type: 'flex-text',
+    name: 'Texto Flexível',
+    description: 'Texto BoxFlex modular - Horizontal inline - INDEPENDENTE | MODULAR | RESPONSIVO',
+    icon: 'Type',
+    category: 'BoxFlex',
+    propertiesSchema: [
+      {
+        key: 'content',
+        label: 'Conteúdo',
+        type: 'textarea',
+        defaultValue: 'Texto flexível e responsivo',
+        rows: 4,
+        placeholder: 'Digite o texto'
+      },
+      {
+        key: 'tag',
+        label: 'Elemento HTML',
+        type: 'select',
+        options: [
+          { label: 'Parágrafo (p)', value: 'p' },
+          { label: 'Título H1', value: 'h1' },
+          { label: 'Título H2', value: 'h2' },
+          { label: 'Título H3', value: 'h3' },
+          { label: 'Título H4', value: 'h4' },
+          { label: 'Span', value: 'span' },
+          { label: 'Div', value: 'div' }
+        ],
+        defaultValue: 'p'
+      },
+      {
+        key: 'fontSize',
+        label: 'Tamanho da Fonte',
+        type: 'select',
+        options: [
+          { label: 'Muito Pequeno (12px)', value: '12px' },
+          { label: 'Pequeno (14px)', value: '14px' },
+          { label: 'Normal (16px)', value: '16px' },
+          { label: 'Médio (18px)', value: '18px' },
+          { label: 'Grande (20px)', value: '20px' },
+          { label: 'Muito Grande (24px)', value: '24px' },
+          { label: 'Extra Grande (28px)', value: '28px' },
+          { label: 'Hero (32px)', value: '32px' }
+        ],
+        defaultValue: '16px'
+      },
+      {
+        key: 'fontWeight',
+        label: 'Peso da Fonte',
+        type: 'select',
+        options: [
+          { label: 'Leve (300)', value: '300' },
+          { label: 'Normal (400)', value: '400' },
+          { label: 'Médio (500)', value: '500' },
+          { label: 'Semibold (600)', value: '600' },
+          { label: 'Negrito (700)', value: '700' },
+          { label: 'Extra Negrito (800)', value: '800' }
+        ],
+        defaultValue: '400'
+      },
+      {
+        key: 'fontFamily',
+        label: 'Família da Fonte',
+        type: 'select',
+        options: [
+          { label: 'Inter (Sistema)', value: 'Inter, system-ui, sans-serif' },
+          { label: 'Playfair Display (Elegante)', value: 'Playfair Display, serif' },
+          { label: 'System UI', value: 'system-ui, sans-serif' },
+          { label: 'Monospace', value: 'monospace' }
+        ],
+        defaultValue: 'Inter, system-ui, sans-serif'
+      },
+      {
+        key: 'color',
+        label: 'Cor do Texto',
+        type: 'color-picker',
+        defaultValue: '#333333'
+      },
+      {
+        key: 'textAlign',
+        label: 'Alinhamento',
+        type: 'select',
+        options: [
+          { label: 'Esquerda', value: 'left' },
+          { label: 'Centro', value: 'center' },
+          { label: 'Direita', value: 'right' },
+          { label: 'Justificado', value: 'justify' }
+        ],
+        defaultValue: 'left'
+      },
+      {
+        key: 'lineHeight',
+        label: 'Altura da Linha',
+        type: 'select',
+        options: [
+          { label: 'Compacto (1.2)', value: '1.2' },
+          { label: 'Normal (1.5)', value: '1.5' },
+          { label: 'Relaxado (1.6)', value: '1.6' },
+          { label: 'Amplo (1.8)', value: '1.8' },
+          { label: 'Extra Amplo (2.0)', value: '2.0' }
+        ],
+        defaultValue: '1.5'
+      },
+      {
+        key: 'margin',
+        label: 'Margem Externa',
+        type: 'select',
+        options: [
+          { label: 'Nenhuma', value: '0' },
+          { label: 'Pequena (8px)', value: '8px' },
+          { label: 'Média (16px)', value: '16px' },
+          { label: 'Grande (24px)', value: '24px' },
+          { label: 'Extra Grande (32px)', value: '32px' }
+        ],
+        defaultValue: '0'
+      },
+      {
+        key: 'padding',
+        label: 'Preenchimento Interno',
+        type: 'select',
+        options: [
+          { label: 'Nenhum', value: '0' },
+          { label: 'Pequeno (8px)', value: '8px' },
+          { label: 'Médio (16px)', value: '16px' },
+          { label: 'Grande (24px)', value: '24px' },
+          { label: 'Extra Grande (32px)', value: '32px' }
+        ],
+        defaultValue: '0'
+      },
+      {
+        key: 'backgroundColor',
+        label: 'Cor de Fundo',
+        type: 'color-picker',
+        defaultValue: 'transparent'
+      },
+      {
+        key: 'borderRadius',
+        label: 'Borda Arredondada',
+        type: 'select',
+        options: [
+          { label: 'Nenhuma', value: '0' },
+          { label: 'Pequena (4px)', value: '4px' },
+          { label: 'Média (8px)', value: '8px' },
+          { label: 'Grande (12px)', value: '12px' }
+        ],
+        defaultValue: '0'
+      },
+      {
+        key: 'maxWidth',
+        label: 'Largura Máxima',
+        type: 'select',
+        options: [
+          { label: 'Nenhuma', value: 'none' },
+          { label: 'Pequena (300px)', value: '300px' },
+          { label: 'Média (500px)', value: '500px' },
+          { label: 'Grande (700px)', value: '700px' },
+          { label: 'Extra Grande (900px)', value: '900px' },
+          { label: 'Completa', value: '100%' }
+        ],
+        defaultValue: 'none'
+      }
+    ]
+  },
+
+  {
+    type: 'flex-button',
+    name: 'Botão Flexível',
+    description: 'Botão BoxFlex modular - Horizontal inline - INDEPENDENTE | MODULAR | RESPONSIVO',
+    icon: 'MousePointer',
+    category: 'BoxFlex',
+    propertiesSchema: [
+      {
+        key: 'text',
+        label: 'Texto do Botão',
+        type: 'text-input',
+        defaultValue: 'Clique Aqui',
+        placeholder: 'Digite o texto do botão'
+      },
+      {
+        key: 'href',
+        label: 'Link/URL',
+        type: 'text-input',
+        defaultValue: '#',
+        placeholder: 'URL ou ação do botão'
+      },
+      {
+        key: 'variant',
+        label: 'Estilo',
+        type: 'select',
+        options: [
+          { label: 'Primário', value: 'primary' },
+          { label: 'Secundário', value: 'secondary' },
+          { label: 'Outline', value: 'outline' },
+          { label: 'Fantasma', value: 'ghost' },
+          { label: 'Sucesso', value: 'success' },
+          { label: 'Perigo', value: 'danger' },
+          { label: 'Elegante', value: 'elegant' }
+        ],
+        defaultValue: 'primary'
+      },
+      {
+        key: 'size',
+        label: 'Tamanho',
+        type: 'select',
+        options: [
+          { label: 'Muito Pequeno', value: 'xs' },
+          { label: 'Pequeno', value: 'sm' },
+          { label: 'Médio', value: 'md' },
+          { label: 'Grande', value: 'lg' },
+          { label: 'Extra Grande', value: 'xl' }
+        ],
+        defaultValue: 'md'
+      },
+      {
+        key: 'fullWidth',
+        label: 'Largura Completa',
+        type: 'boolean-switch',
+        defaultValue: false
+      },
+      {
+        key: 'disabled',
+        label: 'Desabilitado',
+        type: 'boolean-switch',
+        defaultValue: false
+      },
+      {
+        key: 'icon',
+        label: 'Ícone',
+        type: 'select',
+        options: [
+          { label: 'Nenhum', value: 'none' },
+          { label: 'Seta Direita', value: 'arrow-right' },
+          { label: 'Seta Esquerda', value: 'arrow-left' },
+          { label: 'Download', value: 'download' },
+          { label: 'Upload', value: 'upload' },
+          { label: 'Play', value: 'play' },
+          { label: 'Pause', value: 'pause' },
+          { label: 'Verificar', value: 'check' },
+          { label: 'Fechar', value: 'close' },
+          { label: 'Plus', value: 'plus' },
+          { label: 'Menos', value: 'minus' },
+          { label: 'Coração', value: 'heart' },
+          { label: 'Estrela', value: 'star' },
+          { label: 'Carrinho', value: 'cart' },
+          { label: 'Usuário', value: 'user' }
+        ],
+        defaultValue: 'none'
+      },
+      {
+        key: 'iconPosition',
+        label: 'Posição do Ícone',
+        type: 'select',
+        options: [
+          { label: 'Esquerda', value: 'left' },
+          { label: 'Direita', value: 'right' }
+        ],
+        defaultValue: 'left'
+      },
+      {
+        key: 'borderRadius',
+        label: 'Borda Arredondada',
+        type: 'select',
+        options: [
+          { label: 'Nenhuma', value: '0' },
+          { label: 'Pequena (4px)', value: '4px' },
+          { label: 'Média (8px)', value: '8px' },
+          { label: 'Grande (12px)', value: '12px' },
+          { label: 'Extra Grande (16px)', value: '16px' },
+          { label: 'Circular', value: '9999px' }
+        ],
+        defaultValue: '8px'
+      },
+      {
+        key: 'animation',
+        label: 'Animação',
+        type: 'select',
+        options: [
+          { label: 'Nenhuma', value: 'none' },
+          { label: 'Hover Suave', value: 'hover' },
+          { label: 'Pulse', value: 'pulse' },
+          { label: 'Bounce', value: 'bounce' },
+          { label: 'Shake', value: 'shake' }
+        ],
+        defaultValue: 'hover'
+      },
+      {
+        key: 'shadow',
+        label: 'Sombra',
+        type: 'select',
+        options: [
+          { label: 'Nenhuma', value: 'none' },
+          { label: 'Pequena', value: '0 1px 3px rgba(0,0,0,0.1)' },
+          { label: 'Média', value: '0 4px 6px rgba(0,0,0,0.15)' },
+          { label: 'Grande', value: '0 10px 15px rgba(0,0,0,0.2)' }
+        ],
+        defaultValue: '0 4px 6px rgba(0,0,0,0.15)'
+      },
+      {
+        key: 'customBackgroundColor',
+        label: 'Cor de Fundo Personalizada',
+        type: 'color-picker',
+        defaultValue: '#B89B7A'
+      },
+      {
+        key: 'customTextColor',
+        label: 'Cor do Texto Personalizada',
+        type: 'color-picker',
+        defaultValue: '#FFFFFF'
+      }
+    ]
+  },
+
+  {
+    type: 'flex-image',
+    name: 'Imagem Flexível',
+    description: 'Imagem BoxFlex modular - Horizontal inline - INDEPENDENTE | MODULAR | RESPONSIVO',
+    icon: 'Image',
+    category: 'BoxFlex',
+    propertiesSchema: [
+      {
+        key: 'src',
+        label: 'URL da Imagem',
+        type: 'image-url',
+        defaultValue: 'https://via.placeholder.com/400x300',
+        placeholder: 'URL da imagem'
+      },
+      {
+        key: 'alt',
+        label: 'Texto Alternativo',
+        type: 'text-input',
+        defaultValue: 'Imagem flexível',
+        placeholder: 'Descrição da imagem para acessibilidade'
+      },
+      {
+        key: 'width',
+        label: 'Largura',
+        type: 'select',
+        options: [
+          { label: 'Automática', value: 'auto' },
+          { label: '100px', value: '100px' },
+          { label: '150px', value: '150px' },
+          { label: '200px', value: '200px' },
+          { label: '250px', value: '250px' },
+          { label: '300px', value: '300px' },
+          { label: '400px', value: '400px' },
+          { label: '50%', value: '50%' },
+          { label: '100%', value: '100%' }
+        ],
+        defaultValue: 'auto'
+      },
+      {
+        key: 'height',
+        label: 'Altura',
+        type: 'select',
+        options: [
+          { label: 'Automática', value: 'auto' },
+          { label: '100px', value: '100px' },
+          { label: '150px', value: '150px' },
+          { label: '200px', value: '200px' },
+          { label: '250px', value: '250px' },
+          { label: '300px', value: '300px' },
+          { label: '400px', value: '400px' }
+        ],
+        defaultValue: 'auto'
+      },
+      {
+        key: 'objectFit',
+        label: 'Ajuste da Imagem',
+        type: 'select',
+        options: [
+          { label: 'Cobrir (cover)', value: 'cover' },
+          { label: 'Conter (contain)', value: 'contain' },
+          { label: 'Preencher (fill)', value: 'fill' },
+          { label: 'Escalar (scale-down)', value: 'scale-down' },
+          { label: 'Nenhum', value: 'none' }
+        ],
+        defaultValue: 'cover'
+      },
+      {
+        key: 'borderRadius',
+        label: 'Borda Arredondada',
+        type: 'select',
+        options: [
+          { label: 'Nenhuma', value: '0' },
+          { label: 'Pequena (4px)', value: '4px' },
+          { label: 'Média (8px)', value: '8px' },
+          { label: 'Grande (12px)', value: '12px' },
+          { label: 'Extra Grande (16px)', value: '16px' },
+          { label: 'Circular', value: '50%' }
+        ],
+        defaultValue: '8px'
+      },
+      {
+        key: 'shadow',
+        label: 'Sombra',
+        type: 'select',
+        options: [
+          { label: 'Nenhuma', value: 'none' },
+          { label: 'Suave', value: '0 2px 4px rgba(0,0,0,0.1)' },
+          { label: 'Média', value: '0 4px 8px rgba(0,0,0,0.15)' },
+          { label: 'Forte', value: '0 8px 16px rgba(0,0,0,0.2)' },
+          { label: 'Elegante', value: '0 10px 20px rgba(185,155,122,0.3)' }
+        ],
+        defaultValue: 'none'
+      },
+      {
+        key: 'border',
+        label: 'Borda',
+        type: 'select',
+        options: [
+          { label: 'Nenhuma', value: 'none' },
+          { label: 'Fina (1px)', value: '1px solid #E5E5E5' },
+          { label: 'Média (2px)', value: '2px solid #E5E5E5' },
+          { label: 'Grossa (3px)', value: '3px solid #E5E5E5' },
+          { label: 'Elegante', value: '2px solid #B89B7A' }
+        ],
+        defaultValue: 'none'
+      },
+      {
+        key: 'aspectRatio',
+        label: 'Proporção',
+        type: 'select',
+        options: [
+          { label: 'Nenhuma', value: 'auto' },
+          { label: '1:1 (Quadrado)', value: '1/1' },
+          { label: '4:3 (Clássico)', value: '4/3' },
+          { label: '16:9 (Widescreen)', value: '16/9' },
+          { label: '3:2 (Foto)', value: '3/2' },
+          { label: '2:3 (Retrato)', value: '2/3' }
+        ],
+        defaultValue: 'auto'
+      },
+      {
+        key: 'maxWidth',
+        label: 'Largura Máxima',
+        type: 'select',
+        options: [
+          { label: 'Nenhuma', value: 'none' },
+          { label: '200px', value: '200px' },
+          { label: '300px', value: '300px' },
+          { label: '400px', value: '400px' },
+          { label: '500px', value: '500px' },
+          { label: '100%', value: '100%' }
+        ],
+        defaultValue: 'none'
+      },
+      {
+        key: 'loading',
+        label: 'Carregamento',
+        type: 'select',
+        options: [
+          { label: 'Lazy (Sob demanda)', value: 'lazy' },
+          { label: 'Eager (Imediato)', value: 'eager' }
+        ],
+        defaultValue: 'lazy'
+      },
+      {
+        key: 'filter',
+        label: 'Filtro',
+        type: 'select',
+        options: [
+          { label: 'Nenhum', value: 'none' },
+          { label: 'Sépia', value: 'sepia(1)' },
+          { label: 'Preto e Branco', value: 'grayscale(1)' },
+          { label: 'Blur Suave', value: 'blur(1px)' },
+          { label: 'Saturação Alta', value: 'saturate(1.5)' },
+          { label: 'Contraste Alto', value: 'contrast(1.2)' },
+          { label: 'Brilho Baixo', value: 'brightness(0.8)' }
+        ],
+        defaultValue: 'none'
+      },
+      {
+        key: 'hoverEffect',
+        label: 'Efeito no Hover',
+        type: 'select',
+        options: [
+          { label: 'Nenhum', value: 'none' },
+          { label: 'Zoom Suave', value: 'zoom' },
+          { label: 'Rotação Leve', value: 'rotate' },
+          { label: 'Sombra Expandida', value: 'shadow' },
+          { label: 'Opacidade', value: 'opacity' }
+        ],
+        defaultValue: 'none'
       }
     ]
   }
