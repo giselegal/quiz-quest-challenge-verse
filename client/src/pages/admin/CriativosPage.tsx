@@ -11,12 +11,10 @@ const CriativosPage: React.FC = () => {
         
         <Card>
           <CardHeader>
-            <CardTitle>Biblioteca de Criativos</CardTitle>
+            <CardTitle>Creative Assets</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">
-              Gerencie seus criativos e materiais visuais aqui.
-            </p>
+            <p className="text-muted-foreground">Creative management tools coming soon.</p>
           </CardContent>
         </Card>
       </div>

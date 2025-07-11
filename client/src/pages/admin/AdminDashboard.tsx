@@ -9,31 +9,31 @@ const AdminDashboard: React.FC = () => {
       <div className="space-y-6">
         <h1 className="text-3xl font-bold">Dashboard</h1>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <Card>
             <CardHeader>
-              <CardTitle>Total de Quizzes</CardTitle>
+              <CardTitle>Total Quizzes</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold">12</p>
+              <div className="text-2xl font-bold">0</div>
             </CardContent>
           </Card>
           
           <Card>
             <CardHeader>
-              <CardTitle>Participantes</CardTitle>
+              <CardTitle>Active Users</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold">1,234</p>
+              <div className="text-2xl font-bold">0</div>
             </CardContent>
           </Card>
           
           <Card>
             <CardHeader>
-              <CardTitle>Taxa de Conversão</CardTitle>
+              <CardTitle>Completed Results</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold">23.5%</p>
+              <div className="text-2xl font-bold">0</div>
             </CardContent>
           </Card>
         </div>

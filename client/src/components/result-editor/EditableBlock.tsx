@@ -1,31 +1,33 @@
 
 import React from 'react';
-import { Block } from '@/types/editor';
+import { EditorBlock } from '@/types/editor';
 
-interface EditableBlockProps {
-  block: Block;
+export interface EditableBlockProps {
+  block: EditorBlock;
   isSelected: boolean;
-  onSelect: () => void;
-  onEdit: () => void;
+  onClick: () => void;
+  isPreviewMode: boolean;
+  onReorderBlocks: (sourceIndex: number, destinationIndex: number) => void;
+  primaryStyle: any;
 }
 
 export const EditableBlock: React.FC<EditableBlockProps> = ({
   block,
   isSelected,
-  onSelect,
-  onEdit
+  onClick,
+  isPreviewMode,
+  primaryStyle
 }) => {
   return (
     <div
-      className={`border rounded-lg p-4 cursor-pointer ${
-        isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
+      className={`p-4 border rounded cursor-pointer transition-colors ${
+        isSelected ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
       }`}
-      onClick={onSelect}
-      onDoubleClick={onEdit}
+      onClick={onClick}
     >
-      <div className="text-sm text-gray-500 mb-2">{block.type}</div>
-      <div className="text-base">
-        {block.content.title || block.content.text || 'Empty block'}
+      <div className="font-medium capitalize">{block.type}</div>
+      <div className="text-sm text-muted-foreground">
+        {block.content.text || 'Empty block'}
       </div>
     </div>
   );

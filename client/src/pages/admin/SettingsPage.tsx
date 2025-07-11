@@ -7,16 +7,14 @@ const SettingsPage: React.FC = () => {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold">Configurações</h1>
+        <h1 className="text-3xl font-bold">Settings</h1>
         
         <Card>
           <CardHeader>
-            <CardTitle>Configurações do Sistema</CardTitle>
+            <CardTitle>Application Settings</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">
-              Configure as opções do sistema aqui.
-            </p>
+            <p className="text-muted-foreground">Settings panel coming soon.</p>
           </CardContent>
         </Card>
       </div>

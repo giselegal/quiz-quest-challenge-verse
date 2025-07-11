@@ -1,73 +1,75 @@
 
-import React, { useState } from 'react';
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
-import { ComponentsSidebar } from '../sidebar/ComponentsSidebar';
-import { EditPreview } from '../preview/EditPreview';
-import { PropertiesPanel } from '../properties/PropertiesPanel';
-import { cn } from '@/lib/utils';
-import { useEditor } from '@/hooks/useEditor';
-import { EditableContent } from '@/types/editor';
+import React from 'react';
+import { Card } from '@/components/ui/card';
+import { EditorBlock, EditableContent } from '@/types/editor';
+import { PropertiesPanel } from '@/components/editor/properties/PropertiesPanel';
 
 interface EditorWorkspaceProps {
-  className?: string;
+  blocks: EditorBlock[];
+  selectedBlockId: string | null;
+  onBlockSelect: (blockId: string | null) => void;
+  onBlockUpdate: (blockId: string, content: EditableContent) => void;
+  onBlockDelete: (blockId: string) => void;
 }
 
-export function EditorWorkspace({ className }: EditorWorkspaceProps) {
-  const [isPreviewing, setIsPreviewing] = useState(false);
-  const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
-  const { config, addBlock, updateBlock, deleteBlock } = useEditor();
+export const EditorWorkspace: React.FC<EditorWorkspaceProps> = ({
+  blocks,
+  selectedBlockId,
+  onBlockSelect,
+  onBlockUpdate,
+  onBlockDelete
+}) => {
+  const selectedBlock = blocks.find(b => b.id === selectedBlockId) || null;
 
-  const handleUpdateBlock = (content: EditableContent) => {
-    if (selectedComponentId) {
-      updateBlock(selectedComponentId, content);
+  const handleContentUpdate = (content: EditableContent) => {
+    if (selectedBlockId) {
+      onBlockUpdate(selectedBlockId, content);
     }
   };
 
-  const handleDeleteBlock = () => {
-    if (selectedComponentId) {
-      deleteBlock(selectedComponentId);
-      setSelectedComponentId(null);
+  const handleDelete = () => {
+    if (selectedBlockId) {
+      onBlockDelete(selectedBlockId);
+      onBlockSelect(null);
     }
   };
 
   return (
-    <div className={cn("h-screen flex flex-col bg-[#FAF9F7]", className)}>
-      <ResizablePanelGroup direction="horizontal">
-        {/* Components Sidebar */}
-        <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-          <ComponentsSidebar 
-            onComponentSelect={(type) => {
-              const id = addBlock(type);
-              setSelectedComponentId(id);
-            }} 
-          />
-        </ResizablePanel>
-
-        <ResizableHandle withHandle />
-
-        {/* Preview Area */}
-        <ResizablePanel defaultSize={55}>
-          <EditPreview 
-            isPreviewing={isPreviewing}
-            onPreviewToggle={() => setIsPreviewing(!isPreviewing)}
-            onSelectComponent={setSelectedComponentId}
-            selectedComponentId={selectedComponentId}
-          />
-        </ResizablePanel>
-
-        <ResizableHandle withHandle />
-
-        {/* Properties Panel */}
-        <ResizablePanel defaultSize={25}>
-          <PropertiesPanel
-            selectedBlockId={selectedComponentId}
-            onClose={() => setSelectedComponentId(null)}
-            blocks={config.blocks}
-            onUpdate={handleUpdateBlock}
-            onDelete={handleDeleteBlock}
-          />
-        </ResizablePanel>
-      </ResizablePanelGroup>
+    <div className="flex h-full gap-4">
+      <div className="flex-1">
+        <Card className="h-full p-4">
+          <h2 className="text-xl font-semibold mb-4">Canvas</h2>
+          <div className="space-y-2">
+            {blocks.map((block) => (
+              <div
+                key={block.id}
+                className={`p-3 border rounded cursor-pointer transition-colors ${
+                  selectedBlockId === block.id 
+                    ? 'border-primary bg-primary/5' 
+                    : 'border-border hover:border-primary/50'
+                }`}
+                onClick={() => onBlockSelect(block.id)}
+              >
+                <div className="font-medium capitalize">{block.type}</div>
+                <div className="text-sm text-muted-foreground">
+                  {block.content.text || 'Click to edit'}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+      
+      <div className="w-80">
+        <PropertiesPanel
+          selectedBlock={selectedBlock}
+          onClose={() => onBlockSelect(null)}
+          onUpdate={handleContentUpdate}
+          onDelete={handleDelete}
+        />
+      </div>
     </div>
   );
-}
+};
+
+export default EditorWorkspace;

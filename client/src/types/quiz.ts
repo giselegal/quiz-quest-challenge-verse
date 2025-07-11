@@ -2,59 +2,53 @@
 export interface QuizOption {
   id: string;
   text: string;
+  image?: string;
   imageUrl?: string;
+  description?: string;
   points?: Record<string, number>;
-  styleCategory?: string;
+  styleCode?: string;
 }
 
 export interface QuizQuestion {
   id: string;
   title: string;
-  text?: string;
-  type: 'single' | 'multiple' | 'strategic';
+  text: string;
+  type: 'multiple' | 'single';
+  imageUrl?: string;
   options: QuizOption[];
-  multiSelect?: number;
-  question?: string;
+  required?: boolean;
 }
 
 export interface UserResponse {
   questionId: string;
-  selectedOptions: string[];
+  selectedOptionId: string;
+  selectedOptionIds?: string[];
+  timestamp?: number;
   answers?: string[];
-}
-
-export interface QuizResponse {
-  questionId: string;
-  selectedOptions: string[];
-}
-
-export interface QuizResult {
-  primaryStyle: string;
-  secondaryStyles: string[];
-  scores: Record<string, number>;
+  styleCategories?: string[];
 }
 
 export interface StyleResult {
-  id: string;
-  name: string;
-  description: string;
+  style: string;
+  category: string;
+  points: number;
   percentage: number;
-  color: string;
+  rank: number;
+  score: number;
 }
 
-export interface SimpleComponent {
-  type: string;
-  props: Record<string, any>;
+export interface QuizResult {
+  id: string;
+  primaryStyle: StyleResult;
+  secondaryStyles: StyleResult[];
+  responses: UserResponse[];
+  completedAt: Date;
 }
 
-export interface OptimizedImageOptions {
-  width?: number;
-  height?: number;
-  alt?: string;
-}
-
-export interface ImageMetadata {
-  src: string;
-  width?: number;
-  height?: number;
+export interface Quiz {
+  id: string;
+  title: string;
+  description?: string;
+  questions: QuizQuestion[];
+  active: boolean;
 }

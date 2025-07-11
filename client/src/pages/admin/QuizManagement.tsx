@@ -8,19 +8,17 @@ const QuizManagement: React.FC = () => {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold">Gerenciar Quizzes</h1>
-          <Button>Novo Quiz</Button>
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold">Quiz Management</h1>
+          <Button>Create New Quiz</Button>
         </div>
         
         <Card>
           <CardHeader>
-            <CardTitle>Quizzes Ativos</CardTitle>
+            <CardTitle>Existing Quizzes</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">
-              Aqui você pode gerenciar todos os seus quizzes ativos.
-            </p>
+            <p className="text-muted-foreground">No quizzes created yet.</p>
           </CardContent>
         </Card>
       </div>

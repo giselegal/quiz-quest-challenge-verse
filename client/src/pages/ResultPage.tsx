@@ -8,12 +8,10 @@ const ResultPage: React.FC = () => {
       <div className="max-w-4xl mx-auto">
         <Card>
           <CardHeader>
-            <CardTitle>Resultado do Quiz</CardTitle>
+            <CardTitle>Results</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">
-              Aqui serão exibidos os resultados do quiz.
-            </p>
+            <p>Quiz results will be displayed here...</p>
           </CardContent>
         </Card>
       </div>

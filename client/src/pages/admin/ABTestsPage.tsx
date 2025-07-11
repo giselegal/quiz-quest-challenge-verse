@@ -7,16 +7,14 @@ const ABTestsPage: React.FC = () => {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold">Testes A/B</h1>
+        <h1 className="text-3xl font-bold">A/B Tests</h1>
         
         <Card>
           <CardHeader>
-            <CardTitle>Testes em Andamento</CardTitle>
+            <CardTitle>Test Configurations</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">
-              Configure e monitore seus testes A/B aqui.
-            </p>
+            <p className="text-muted-foreground">A/B testing functionality coming soon.</p>
           </CardContent>
         </Card>
       </div>

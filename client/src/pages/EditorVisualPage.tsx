@@ -5,15 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 const EditorVisualPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-background p-8">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <Card>
           <CardHeader>
-            <CardTitle>Editor Visual</CardTitle>
+            <CardTitle>Visual Editor</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">
-              Editor visual avançado em desenvolvimento.
-            </p>
+            <p>Visual editor functionality coming soon...</p>
           </CardContent>
         </Card>
       </div>

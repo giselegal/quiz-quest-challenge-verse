@@ -1,35 +1,66 @@
 
-// Image management utilities
-export const preloadImage = (src: string): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => resolve();
-    img.onerror = reject;
-    img.src = src;
-  });
+export interface OptimizedImageOptions {
+  width?: number;
+  height?: number;
+  quality?: number;
+  format?: 'webp' | 'jpeg' | 'png';
+}
+
+export interface ImageMetadata {
+  width: number;
+  height: number;
+  format: string;
+  size: number;
+  alt?: string;
+}
+
+// Cache for preloaded images
+const preloadedImages = new Set<string>();
+const imageMetadataCache = new Map<string, ImageMetadata>();
+
+export const preloadCriticalImages = (urls: string[]): Promise<void[]> => {
+  return Promise.all(urls.map(url => preloadImage(url)));
 };
 
-export const preloadCriticalImages = async (urls: string[]): Promise<void> => {
-  try {
-    await Promise.all(urls.map(preloadImage));
-  } catch (error) {
-    console.warn('Failed to preload some images:', error);
-  }
-};
-
-export const preloadImagesByUrls = async (urls: string[]): Promise<void> => {
+export const preloadImagesByUrls = (urls: string[]): Promise<void[]> => {
   return preloadCriticalImages(urls);
 };
 
-export const optimizeImage = async (
-  src: string,
-  options: { width?: number; height?: number; alt?: string } = {}
-): Promise<{ src: string; width?: number; height?: number; alt?: string }> => {
-  // Simple optimization - in a real app, this would use a service like Cloudinary
-  return {
-    src,
-    width: options.width,
-    height: options.height,
-    alt: options.alt
-  };
+export const preloadImage = (url: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    if (preloadedImages.has(url)) {
+      resolve();
+      return;
+    }
+
+    const img = new Image();
+    img.onload = () => {
+      preloadedImages.add(url);
+      resolve();
+    };
+    img.onerror = () => {
+      reject(new Error(`Failed to preload image: ${url}`));
+    };
+    img.src = url;
+  });
+};
+
+export const isImagePreloaded = (url: string): boolean => {
+  return preloadedImages.has(url);
+};
+
+export const optimizeImage = (url: string, options: OptimizedImageOptions = {}): string => {
+  // For now, return the original URL
+  // In a real implementation, this would apply optimizations
+  return url;
+};
+
+export const getOptimizedImage = optimizeImage;
+
+export const getImageMetadata = (url: string): ImageMetadata | null => {
+  return imageMetadataCache.get(url) || null;
+};
+
+export const setImageMetadata = (url: string, metadata: ImageMetadata): void => {
+  imageMetadataCache.set(url, metadata);
 };
