@@ -1,5 +1,5 @@
 import React from 'react';
-import { VisualEditor } from './index';
+import SimpleEditor from './SimpleEditor';
 import { EditorBlock } from './types/EditorTypes';
 
 // Dados de exemplo para testar o editor ES7
@@ -175,7 +175,7 @@ const ES7EditorTestPage: React.FC = () => {
         overflow: 'hidden',
         minHeight: '600px'
       }}>
-        <VisualEditor
+        <SimpleEditor
           initialBlocks={sampleBlocks}
           onSave={handleSave}
         />

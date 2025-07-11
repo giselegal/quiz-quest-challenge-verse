@@ -85,6 +85,7 @@ export type BlockType =
   | 'quiz-question'
   | 'quiz-intro'
   | 'quiz-result'
+  | 'quiz-header'
   | 'heading'
   | 'paragraph' 
   | 'image'
