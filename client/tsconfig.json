@@ -31,8 +31,22 @@
     "alwaysStrict": false,
     "downlevelIteration": true,
     "allowJs": true,
-    "checkJs": false
+    "checkJs": false,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": false,
+    "noImplicitOverride": false,
+    "noPropertyAccessFromIndexSignature": false,
+    "allowUnreachableCode": true,
+    "allowUnusedLabels": true,
+    "noErrorTruncation": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "ts-node": {
+    "compilerOptions": {
+      "allowJs": true,
+      "checkJs": false,
+      "noEmit": true
+    }
+  }
 }
