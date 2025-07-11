@@ -1,8 +1,8 @@
 
 import React from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
-import { SyncDiagnostic } from '@/components/admin/SyncDiagnostic';
-import { GitHubSyncStatus } from '@/components/admin/GitHubSyncStatus';
+import SyncDiagnostic from '@/components/admin/SyncDiagnostic';
+import GitHubSyncStatus from '@/components/admin/GitHubSyncStatus';
 
 const SyncManagementPage = () => {
   return (
