@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { Card, CardContent } from '@/components/ui/card';
 import { InlineEditText } from '@/components/editor/blocks/InlineEditText';
 import { LucideIcon } from 'lucide-react';
-import { getLucideIcon } from '@/utils/iconMap';
+import getLucideIcon from '@/utils/iconMap';
 
 export interface PainPoint {
   icon: LucideIcon | string; // Suporte para ícone como componente ou string

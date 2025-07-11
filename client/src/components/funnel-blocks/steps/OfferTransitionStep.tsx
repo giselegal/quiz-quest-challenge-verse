@@ -65,7 +65,7 @@ export const OfferTransitionStep: React.FC<FunnelStepProps> = ({
               <h3 className="text-lg font-semibold">Você vai ter acesso a:</h3>
               
               <ul className="space-y-3">
-                {benefits.map((benefit, index) => (
+                {benefits.map((benefit: any, index: number) => (
                   <li key={index} className="flex items-start">
                     <div className="flex-shrink-0 mr-3">
                       <div className="bg-green-500 rounded-full p-1">
