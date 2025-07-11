@@ -6,7 +6,7 @@ import type {
   StyleCalculationEngine 
 } from '@/types/quiz';
 import { getAllStyles } from '@/data/styles';
-import { getNormalQuestions } from '@/data/caktoquizQuestions';
+import { getAllQuestions } from '@/data/caktoquizQuestions';
 
 /**
  * Engine de cálculo de estilos para o CaktoQuiz REAL
@@ -22,7 +22,7 @@ export class QuizCalculationEngine implements StyleCalculationEngine {
    * Calcula os scores de todos os estilos baseado nas respostas
    */
   calculateStyleScores(responses: QuizResponse[]): StyleScore[] {
-    const normalQuestions = getNormalQuestions();
+    const normalQuestions = getAllQuestions();
     
     // Filtrar apenas respostas de questões normais
     const normalResponses = responses.filter(response => {
@@ -129,7 +129,7 @@ export class QuizCalculationEngine implements StyleCalculationEngine {
       .filter(score => score.points > 0) // Apenas estilos com pontuação
       .map(score => score.style);
 
-    const normalQuestions = getNormalQuestions();
+    const normalQuestions = getAllQuestions();
 
     return {
       id: crypto.randomUUID(),
@@ -156,7 +156,7 @@ export class QuizCalculationEngine implements StyleCalculationEngine {
   processMultipleSelections(
     questionId: string, 
     selectedOptionIds: string[], 
-    normalQuestions = getNormalQuestions()
+    normalQuestions = getAllQuestions()
   ): QuizResponse {
     const question = normalQuestions.find(q => q.id === questionId);
     
@@ -191,7 +191,7 @@ export class QuizCalculationEngine implements StyleCalculationEngine {
    * Valida se todas as questões normais foram respondidas
    */
   validateCompleteness(responses: QuizResponse[]): boolean {
-    const normalQuestions = getNormalQuestions();
+    const normalQuestions = getAllQuestions();
     const answeredQuestions = new Set(responses.map(r => r.questionId));
     
     return normalQuestions.every(q => answeredQuestions.has(q.id));

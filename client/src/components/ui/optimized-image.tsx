@@ -14,6 +14,7 @@ export interface OptimizedImageProps {
   onError?: () => void;
   placeholderColor?: string;
   loading?: 'lazy' | 'eager';
+  priority?: boolean;
 }
 
 const OptimizedImage: React.FC<OptimizedImageProps> = ({
@@ -94,4 +95,5 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   );
 };
 
+export { OptimizedImage };
 export default OptimizedImage;

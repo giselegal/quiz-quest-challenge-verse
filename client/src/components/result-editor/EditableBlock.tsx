@@ -13,7 +13,7 @@ export interface EditableBlockProps {
   primaryStyle: StyleResult;
 }
 
-export const EditableBlock: React.FC<EditableBlockProps> = ({
+const EditableBlock: React.FC<EditableBlockProps> = ({
   block,
   isSelected,
   onClick,
@@ -98,3 +98,5 @@ export const EditableBlock: React.FC<EditableBlockProps> = ({
     </div>
   );
 };
+
+export default EditableBlock;

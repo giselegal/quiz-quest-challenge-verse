@@ -1,11 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-
-interface User {
-  id: string;
-  email: string;
-  name?: string;
-}
+import { User } from '@/types/auth';
 
 interface AuthContextType {
   user: User | null;
@@ -31,7 +26,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, password: string) => {
     // Mock login - replace with real authentication
-    const mockUser = { id: '1', email, name: 'Test User' };
+    const mockUser: User = { id: '1', email, name: 'Test User', userName: 'testuser' };
     setUser(mockUser);
     localStorage.setItem('user', JSON.stringify(mockUser));
   };

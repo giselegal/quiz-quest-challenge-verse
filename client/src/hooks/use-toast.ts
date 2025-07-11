@@ -7,6 +7,7 @@ interface Toast {
   description?: string;
   variant?: 'default' | 'destructive';
   action?: React.ReactNode;
+  duration?: number;
 }
 
 interface ToastState {
@@ -30,7 +31,7 @@ export const useToast = () => {
     };
   });
 
-  const toast = useCallback(({ title, description, variant = 'default', action }: Omit<Toast, 'id'>) => {
+  const toast = useCallback(({ title, description, variant = 'default', action, duration = 5000 }: Omit<Toast, 'id'>) => {
     const id = Math.random().toString(36).substr(2, 9);
     const newToast: Toast = { id, title, description, variant, action };
     
@@ -40,13 +41,13 @@ export const useToast = () => {
     
     listeners.forEach(listener => listener());
 
-    // Auto remove toast after 5 seconds
+    // Auto remove toast after specified duration
     setTimeout(() => {
       toastState = {
         toasts: toastState.toasts.filter(t => t.id !== id)
       };
       listeners.forEach(listener => listener());
-    }, 5000);
+    }, duration);
 
     return {
       id,
@@ -75,7 +76,7 @@ export const useToast = () => {
 };
 
 // Export individual toast function for convenience
-export const toast = ({ title, description, variant = 'default', action }: Omit<Toast, 'id'>) => {
+export const toast = ({ title, description, variant = 'default', action, duration = 5000 }: Omit<Toast, 'id'>) => {
   const id = Math.random().toString(36).substr(2, 9);
   const newToast: Toast = { id, title, description, variant, action };
   
@@ -85,13 +86,13 @@ export const toast = ({ title, description, variant = 'default', action }: Omit<
   
   listeners.forEach(listener => listener());
 
-  // Auto remove toast after 5 seconds
+  // Auto remove toast after specified duration
   setTimeout(() => {
     toastState = {
       toasts: toastState.toasts.filter(t => t.id !== id)
     };
     listeners.forEach(listener => listener());
-  }, 5000);
+  }, duration || 5000);
 
   return {
     id,
