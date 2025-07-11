@@ -15,7 +15,8 @@ const CanvasEditor: React.FC = () => {
       id: `block-${Date.now()}`,
       type,
       content: {},
-      order: blocks.length
+      order: blocks.length,
+      visible: true // Add missing visible property
     };
     
     setBlocks(prev => [...prev, newBlock]);

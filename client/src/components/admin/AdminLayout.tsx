@@ -1,22 +1,24 @@
 
 import React, { ReactNode } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface AdminLayoutProps {
   children: ReactNode;
+  title?: string;
 }
 
-const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
+const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title = "Admin Panel" }) => {
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="flex">
-        <nav className="w-64 bg-white shadow-sm">
-          <div className="p-4">
-            <h2 className="text-lg font-semibold">Admin Panel</h2>
-          </div>
-        </nav>
-        <main className="flex-1 p-6">
-          {children}
-        </main>
+      <div className="container mx-auto p-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>{title}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {children}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

@@ -7,8 +7,8 @@ export interface EditableContent {
   buttonText?: string;
   backgroundColor?: string;
   textColor?: string;
-  caption?: string; // Add caption property
-  responsive?: ResponsiveConfig; // Add responsive property
+  caption?: string;
+  responsive?: ResponsiveConfig;
   animationType?: string;
   animationDuration?: number;
   animationDelay?: number;
@@ -21,13 +21,19 @@ export interface EditableContent {
   borderRadius?: number;
   height?: number;
   testimonialsImage?: string;
-  [key: string]: any; // Allow dynamic properties
+  properties?: Record<string, any>; // Add properties field
+  [key: string]: any;
 }
 
 export interface ResponsiveConfig {
   mobile?: EditableContent;
   tablet?: EditableContent;
   desktop?: EditableContent;
+  hideOnMobile?: boolean; // Add missing properties
+  hideOnTablet?: boolean;
+  hideOnDesktop?: boolean;
+  mobileWidth?: string;
+  tabletWidth?: string;
 }
 
 export interface Block {
@@ -35,8 +41,12 @@ export interface Block {
   type: BlockType;
   content: EditableContent;
   order: number;
-  visible: boolean;
+  visible: boolean; // Add missing visible property
+  properties?: Record<string, any>; // Add properties field
 }
+
+// Add EditorBlock as an alias for Block for backward compatibility
+export type EditorBlock = Block;
 
 export type BlockType = 
   | 'header' 
@@ -52,13 +62,21 @@ export type BlockType =
   | 'products' 
   | 'component-reference'
   | 'icon'
-  | 'guarantee';
+  | 'guarantee'
+  | 'headline' // Add missing types
+  | 'benefits'
+  | 'testimonials'
+  | 'pricing'
+  | 'cta'
+  | 'quiz-question'
+  | 'bonus-carousel'
+  | 'style-result';
 
 export interface EditorConfig {
   blocks: Block[];
   theme: EditorTheme;
-  globalStyles?: GlobalStyles; // Add globalStyles property
-  saveConfig?: () => void; // Add saveConfig method
+  globalStyles?: GlobalStyles;
+  saveConfig?: () => void;
 }
 
 export interface GlobalStyles {

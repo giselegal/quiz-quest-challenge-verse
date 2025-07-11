@@ -15,7 +15,8 @@ const PageEditor: React.FC = () => {
       id: `block-${Date.now()}`,
       type,
       content: {},
-      order: blocks.length
+      order: blocks.length,
+      visible: true // Add missing visible property
     };
     setBlocks([...blocks, newBlock]);
   };
@@ -42,8 +43,8 @@ const PageEditor: React.FC = () => {
             <Button onClick={() => addBlock('header')} className="w-full">
               Header
             </Button>
-            <Button onClick={() => addBlock('quiz-question')} className="w-full">
-              Quiz Question
+            <Button onClick={() => addBlock('headline')} className="w-full">
+              Headline
             </Button>
             <Button onClick={() => addBlock('text')} className="w-full">
               Text
@@ -78,8 +79,8 @@ const PageEditor: React.FC = () => {
                       {block.type === 'header' && (
                         <h1 className="text-2xl font-bold">{block.content.title || 'Header Title'}</h1>
                       )}
-                      {block.type === 'quiz-question' && (
-                        <p className="text-lg">{block.content.question || 'Quiz question goes here...'}</p>
+                      {block.type === 'headline' && (
+                        <h2 className="text-xl font-bold">{block.content.title || 'Headline'}</h2>
                       )}
                       {block.type === 'text' && (
                         <p>{block.content.text || 'Text content goes here...'}</p>
@@ -119,7 +120,7 @@ const PageEditor: React.FC = () => {
               <CardTitle>Edit {selectedBlock.type}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {selectedBlock.type === 'header' && (
+              {(selectedBlock.type === 'header' || selectedBlock.type === 'headline') && (
                 <div>
                   <label className="text-sm font-medium">Title</label>
                   <input 
@@ -129,19 +130,6 @@ const PageEditor: React.FC = () => {
                       content: { ...selectedBlock.content, title: e.target.value }
                     })}
                     className="w-full mt-1 px-3 py-2 border rounded-md"
-                  />
-                </div>
-              )}
-              {selectedBlock.type === 'quiz-question' && (
-                <div>
-                  <label className="text-sm font-medium">Question</label>
-                  <textarea 
-                    value={selectedBlock.content.question || ''} 
-                    onChange={(e) => updateBlock(selectedBlock.id, { 
-                      content: { ...selectedBlock.content, question: e.target.value }
-                    })}
-                    className="w-full mt-1 px-3 py-2 border rounded-md"
-                    rows={3}
                   />
                 </div>
               )}
