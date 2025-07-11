@@ -33,7 +33,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   }
 
   const handlePropChange = (key: string, value: any) => {
-    onComponentUpdate({
+    onComponentUpdate?.({
       data: {
         ...selectedComponent.data,
         [key]: value,
@@ -288,7 +288,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => onComponentDelete(selectedComponent.id)}
+            onClick={() => onComponentDelete?.(selectedComponent.id)}
             className="text-red-600 hover:text-red-700"
           >
             <Trash2 className="h-4 w-4" />

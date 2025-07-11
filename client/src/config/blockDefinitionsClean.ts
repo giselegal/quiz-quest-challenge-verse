@@ -10,7 +10,9 @@ export interface PropertySchema {
   key: string;
   label: string;
   type: 'text-input' | 'textarea' | 'select' | 'number-input' | 'boolean-switch' | 
-        'image-url' | 'video-url' | 'array-editor' | 'text-area' | 'color-picker';
+        'image-url' | 'video-url' | 'array-editor' | 'text-area' | 'color-picker' |
+        'font-size-slider' | 'font-weight-buttons' | 'text-style-buttons' | 'text-align-buttons' |
+        'content-type-buttons' | 'color-palette' | 'image-upload' | 'json-editor';
   placeholder?: string;
   options?: { label: string; value: string }[];
   defaultValue?: any;

@@ -195,7 +195,7 @@ export const PropertyInput: React.FC<PropertyInputProps> = ({
                 const styles = currentValue ? currentValue.split(' ') : [];
                 const hasItalic = styles.includes('italic');
                 const newStyles = hasItalic 
-                  ? styles.filter(s => s !== 'italic')
+                  ? styles.filter((s: string) => s !== 'italic')
                   : [...styles, 'italic'];
                 handleInputChange(newStyles.join(' '));
               }}
@@ -209,7 +209,7 @@ export const PropertyInput: React.FC<PropertyInputProps> = ({
                 const styles = currentValue ? currentValue.split(' ') : [];
                 const hasUnderline = styles.includes('underline');
                 const newStyles = hasUnderline 
-                  ? styles.filter(s => s !== 'underline')
+                  ? styles.filter((s: string) => s !== 'underline')
                   : [...styles, 'underline'];
                 handleInputChange(newStyles.join(' '));
               }}
