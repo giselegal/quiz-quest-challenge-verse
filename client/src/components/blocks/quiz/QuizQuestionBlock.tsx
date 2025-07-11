@@ -91,10 +91,10 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
   options = [],
   
   // Header props
-  logoUrl = 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
-  showBackButton = false,
+  logoUrl = '/api/placeholder/96/96',
+  showBackButton = true,
   onBack,
-  progressPercent = 0,
+  progressPercent = 65,
   
   // Selection props
   multipleSelection = false,
@@ -189,48 +189,56 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
       onClick={onClick}
     >
       {/* Vertical Canvas Header */}
-      <div className="flex flex-row w-full h-auto justify-center relative mb-6" data-sentry-component="VerticalCanvasHeader">
+      <div className="flex flex-row w-full h-auto justify-center relative mb-8 bg-white p-4 shadow-sm rounded-lg" data-sentry-component="VerticalCanvasHeader">
         {/* Back Button */}
         {showBackButton && onBack && (
           <Button
             variant="ghost"
             size="icon"
             onClick={onBack}
-            className="absolute left-0 h-10 w-10 hover:bg-primary hover:text-foreground"
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 h-10 w-10 hover:bg-primary hover:text-foreground bg-gray-100 border"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-5 w-5" />
           </Button>
         )}
         
         {/* Logo and Progress Container */}
-        <div className="flex flex-col w-full customizable-width justify-start items-center gap-4">
+        <div className="flex flex-col w-full max-w-md justify-start items-center gap-6">
           {/* Logo */}
           {logoUrl && (
-            <img 
-              width="96" 
-              height="96" 
-              className="max-w-24 object-cover rounded-lg" 
-              alt="Logo" 
-              src={logoUrl}
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-              }}
-            />
+            <div className="flex justify-center">
+              <img 
+                width="96" 
+                height="96" 
+                className="w-24 h-24 object-cover rounded-lg shadow-md border-2 border-gray-200" 
+                alt="Logo" 
+                src={logoUrl}
+                onError={(e) => {
+                  e.currentTarget.src = '/api/placeholder/96/96';
+                }}
+              />
+            </div>
           )}
           
           {/* Progress Bar */}
           {progressPercent > 0 && (
-            <div 
-              className="relative w-full overflow-hidden rounded-full bg-zinc-300 h-2"
-              role="progressbar"
-              aria-valuemin={0}
-              aria-valuemax={100}
-              aria-valuenow={progressPercent}
-            >
+            <div className="w-full max-w-xs">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm text-gray-600">Progresso</span>
+                <span className="text-sm font-medium text-[#B89B7A]">{progressPercent}%</span>
+              </div>
               <div 
-                className="progress h-full w-full flex-1 bg-[#B89B7A] transition-all duration-500"
-                style={{ transform: `translateX(-${100 - progressPercent}%)` }}
-              />
+                className="relative w-full overflow-hidden rounded-full bg-gray-200 h-3 shadow-inner"
+                role="progressbar"
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={progressPercent}
+              >
+                <div 
+                  className="progress h-full bg-gradient-to-r from-[#B89B7A] to-[#D4C4A8] transition-all duration-700 ease-out rounded-full"
+                  style={{ width: `${progressPercent}%` }}
+                />
+              </div>
             </div>
           )}
         </div>

@@ -17,8 +17,8 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
         showImages: true,
         maxSelections: 3,
         minSelections: 1,
-        progressPercent: 15,
-        logoUrl: 'https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png',
+        progressPercent: 5, // Primeira etapa de 21 = ~5%
+        logoUrl: '/api/placeholder/96/96',
         showBackButton: true,
         optionLayout: 'grid',
         alignment: 'center',
