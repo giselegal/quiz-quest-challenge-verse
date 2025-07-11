@@ -106,7 +106,8 @@ const CreativeAnalyticsDashboardNew: React.FC = () => {
     };
 
     loadCreativeData();
-    const interval = setInterval(loadCreativeData, 30000);
+    // Reduced polling frequency for better performance
+    const interval = setInterval(loadCreativeData, 60000); // 1 minute instead of 30 seconds
     return () => clearInterval(interval);
   }, [selectedPeriod]);
 
