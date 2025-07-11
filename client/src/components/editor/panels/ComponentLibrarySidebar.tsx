@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { getComponentsByCategory, type EditableComponentConfig } from '../services/editableComponentsService';
+import { getAllFlexComponents, type FlexComponentConfig, type FlexComponentType } from '../services/flexComponentsService';
 import { cn } from '@/lib/utils';
 import { 
   Gift, 
@@ -12,16 +13,22 @@ import {
   Lightbulb, 
   RefreshCw, 
   ShieldCheck,
-  Plus
+  Plus,
+  Package,
+  FileText,
+  MousePointer,
+  Image
 } from 'lucide-react';
 
 interface ComponentLibrarySidebarProps {
   onAddComponent?: (componentConfig: EditableComponentConfig & { path: string }) => void;
+  onAddFlexComponent?: (componentConfig: FlexComponentConfig) => void;
   className?: string;
 }
 
 const ComponentLibrarySidebar: React.FC<ComponentLibrarySidebarProps> = ({
   onAddComponent,
+  onAddFlexComponent,
   className
 }) => {
   // Ícones para diferentes tipos de componentes
@@ -33,6 +40,18 @@ const ComponentLibrarySidebar: React.FC<ComponentLibrarySidebarProps> = ({
     if (componentPath.includes('Testimonials')) return <MessageSquareQuote className="w-4 h-4" />;
     if (componentPath.includes('SecurePurchaseElement')) return <ShieldCheck className="w-4 h-4" />;
     return <Plus className="w-4 h-4" />;
+  };
+
+  // Ícones para componentes flexíveis
+  const getFlexComponentIcon = (type: FlexComponentType) => {
+    switch (type) {
+      case 'container': return <Package className="w-4 h-4" />;
+      case 'card': return <Plus className="w-4 h-4" />;
+      case 'text': return <FileText className="w-4 h-4" />;
+      case 'button': return <MousePointer className="w-4 h-4" />;
+      case 'image': return <Image className="w-4 h-4" />;
+      default: return <Plus className="w-4 h-4" />;
+    }
   };
 
   // Cores por categoria
@@ -52,11 +71,75 @@ const ComponentLibrarySidebar: React.FC<ComponentLibrarySidebarProps> = ({
   const interactionComponents = getComponentsByCategory('interaction');
   const contentComponents = getComponentsByCategory('content');
 
+  // Obter componentes flexíveis
+  const flexComponents = getAllFlexComponents();
+  const layoutFlexComponents = flexComponents.filter(c => c.category === 'layout');
+  const contentFlexComponents = flexComponents.filter(c => c.category === 'content');
+  const mediaFlexComponents = flexComponents.filter(c => c.category === 'media');
+  const interactiveFlexComponents = flexComponents.filter(c => c.category === 'interactive');
+
   const handleAddComponent = (component: EditableComponentConfig & { path: string }) => {
     onAddComponent?.(component);
   };
 
-  const renderComponentItem = (component: EditableComponentConfig & { path: string }) => (
+  const handleAddFlexComponent = (component: FlexComponentConfig) => {
+    onAddFlexComponent?.(component);
+  };
+
+  const renderFlexComponentItem = (component: FlexComponentConfig) => (
+    <Card 
+      key={component.type}
+      className="cursor-pointer hover:shadow-md transition-all duration-200 border-[#B89B7A]/20 hover:border-[#B89B7A]/40"
+    >
+      <CardContent className="p-4">
+        <div className="flex items-start gap-3">
+          <div className="w-8 h-8 rounded-lg bg-[#B89B7A]/10 flex items-center justify-center text-[#B89B7A]">
+            {getFlexComponentIcon(component.type)}
+          </div>
+          
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <h4 className="font-medium text-sm text-[#432818] truncate">
+                {component.name}
+              </h4>
+              <div className="text-lg">
+                {component.icon}
+              </div>
+              <Badge 
+                variant="outline" 
+                className={cn("text-xs", getCategoryColor(component.category))}
+              >
+                {component.category}
+              </Badge>
+            </div>
+            
+            {component.description && (
+              <p className="text-xs text-[#8F7A6A] line-clamp-2 mb-2">
+                {component.description}
+              </p>
+            )}
+            
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1 text-xs text-[#6B5B4E]">
+                <span className="w-2 h-2 rounded-full bg-green-400"></span>
+                {component.editableFields.length} campos
+              </div>
+              
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => handleAddFlexComponent(component)}
+                className="h-7 px-2 text-xs border-[#B89B7A]/30 text-[#B89B7A] hover:bg-[#B89B7A]/5"
+              >
+                <Plus className="w-3 h-3 mr-1" />
+                Adicionar
+              </Button>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
     <Card 
       key={component.path}
       className="cursor-pointer hover:shadow-md transition-all duration-200 border-[#B89B7A]/20 hover:border-[#B89B7A]/40"
