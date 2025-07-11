@@ -32,6 +32,7 @@ export interface UserResponse {
   timestamp?: number;
   answers?: string[];
   styleCategories?: string[];
+  selectedStyles?: string[]; // Added for engine compatibility
 }
 
 export interface StyleResult {
@@ -41,6 +42,8 @@ export interface StyleResult {
   percentage: number;
   rank: number;
   score: number;
+  id?: string; // Added for compatibility
+  name?: string; // Added for compatibility
 }
 
 export interface QuizResult {

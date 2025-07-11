@@ -14,7 +14,7 @@ export const BenefitsBlock: React.FC<BenefitsBlockProps> = ({ content, onClick }
         {content.title || 'Benefícios'}
       </h3>
       <div className="space-y-2">
-        {(content.items || ['Benefício 1', 'Benefício 2', 'Benefício 3']).map((item, index) => (
+        {(content.items || ['Benefício 1', 'Benefício 2', 'Benefício 3']).map((item: string, index: number) => (
           <div key={index} className="flex items-start gap-2">
             <div className="w-5 h-5 rounded-full bg-[#B89B7A] flex-shrink-0 mt-1" />
             <p>{item}</p>

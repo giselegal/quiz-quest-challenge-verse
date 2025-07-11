@@ -22,6 +22,7 @@ export interface EditableContent {
   height?: number;
   testimonialsImage?: string;
   properties?: Record<string, any>; // Add properties field
+  items?: string[]; // For benefits list
   [key: string]: any;
 }
 
@@ -29,7 +30,7 @@ export interface ResponsiveConfig {
   mobile?: EditableContent;
   tablet?: EditableContent;
   desktop?: EditableContent;
-  hideOnMobile?: boolean; // Add missing properties
+  hideOnMobile?: boolean;
   hideOnTablet?: boolean;
   hideOnDesktop?: boolean;
   mobileWidth?: string;
@@ -41,8 +42,8 @@ export interface Block {
   type: BlockType;
   content: EditableContent;
   order: number;
-  visible: boolean; // Add missing visible property
-  properties?: Record<string, any>; // Add properties field
+  visible: boolean;
+  properties?: Record<string, any>;
 }
 
 // Add EditorBlock as an alias for Block for backward compatibility
@@ -63,7 +64,7 @@ export type BlockType =
   | 'component-reference'
   | 'icon'
   | 'guarantee'
-  | 'headline' // Add missing types
+  | 'headline'
   | 'benefits'
   | 'testimonials'
   | 'pricing'

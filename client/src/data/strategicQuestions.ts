@@ -5,6 +5,7 @@ export const strategicQuestions: QuizQuestion[] = [
   {
     id: 'strategic-1',
     title: 'Qual dessas situações mais combina com você?',
+    text: 'Escolha a opção que melhor representa seu estilo:', // Added missing text property
     type: 'strategic',
     options: [
       {

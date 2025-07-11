@@ -17,7 +17,8 @@ const ComponentsDemo: React.FC = () => {
       title: 'Demo Title',
       subtitle: 'Demo Subtitle'
     },
-    order: 0
+    order: 0,
+    visible: true // Added missing visible property
   };
 
   const handleUpdate = (updates: Partial<Block>) => {

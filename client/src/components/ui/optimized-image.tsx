@@ -1,141 +1,96 @@
 
-import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { cn } from '@/lib/utils';
-import { 
-  optimizeImage, 
-  preloadImage, 
-  isImagePreloaded,
-  OptimizedImageOptions 
-} from '@/utils/imageManager';
+import React, { useState, useEffect } from 'react';
+import { getOptimizedImage, getImageMetadata } from '@/utils/imageManager';
 
-interface OptimizedImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+export interface OptimizedImageProps {
   src: string;
   alt: string;
+  className?: string;
   width?: number;
   height?: number;
   quality?: number;
   format?: 'webp' | 'jpeg' | 'png';
-  className?: string;
-  loading?: 'lazy' | 'eager';
-  placeholder?: string;
   onLoad?: () => void;
   onError?: () => void;
+  placeholderColor?: string;
+  loading?: 'lazy' | 'eager';
 }
 
-export const OptimizedImage: React.FC<OptimizedImageProps> = ({
+const OptimizedImage: React.FC<OptimizedImageProps> = ({
   src,
   alt,
+  className = '',
   width,
   height,
-  quality = 85,
+  quality = 80,
   format = 'webp',
-  className,
-  loading = 'lazy',
-  placeholder,
   onLoad,
   onError,
-  ...props
+  placeholderColor = '#f3f4f6',
+  loading = 'lazy'
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [isInView, setIsInView] = useState(loading === 'eager');
-  const imgRef = useRef<HTMLImageElement>(null);
-  const observerRef = useRef<IntersectionObserver | null>(null);
-
-  const handleIntersection = useCallback(
-    (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-          observerRef.current?.disconnect();
-          observerRef.current = null;
-        }
-      });
-    },
-    []
-  );
-
+  
   useEffect(() => {
-    if (loading === 'lazy' && !isInView) {
-      observerRef.current = new IntersectionObserver(handleIntersection, {
-        threshold: 0.2,
-      });
+    setIsLoaded(false);
+    setHasError(false);
+  }, [src]);
 
-      if (imgRef.current) {
-        observerRef.current.observe(imgRef.current);
-      }
-
-      return () => {
-        observerRef.current?.disconnect();
-        observerRef.current = null;
-      };
-    }
-  }, [handleIntersection, loading, isInView]);
-
-  const optimizedSrc = optimizeImage(src, {
-    width,
-    height,
+  const optimizedSrc = getOptimizedImage(src, {
     quality,
-    format
+    format: format === 'auto' ? 'webp' : format,
+    width,
+    height
   });
 
-  const handleLoad = useCallback(() => {
+  const metadata = getImageMetadata(src);
+  const finalAlt = metadata?.alt || alt;
+
+  const handleLoad = () => {
     setIsLoaded(true);
     onLoad?.();
-  }, [onLoad]);
+  };
 
-  const handleError = useCallback(() => {
+  const handleError = () => {
     setHasError(true);
     onError?.();
-  }, [onError]);
-
-  if (!isInView) {
-    return (
-      <div 
-        className={cn('bg-gray-200 animate-pulse', className)}
-        style={{ width, height }}
-        ref={imgRef}
-      />
-    );
-  }
+  };
 
   if (hasError) {
     return (
       <div 
-        className={cn('bg-gray-200 flex items-center justify-center text-gray-500', className)}
-        style={{ width, height }}
+        className={`flex items-center justify-center bg-gray-200 ${className}`}
+        style={{ 
+          backgroundColor: placeholderColor,
+          width: width || 'auto',
+          height: height || 'auto'
+        }}
       >
-        Failed to load image
+        <span className="text-gray-500 text-sm">Image failed to load</span>
       </div>
     );
   }
 
   return (
-    <>
-      {!isLoaded && placeholder && (
-        <img 
-          src={placeholder}
-          alt=""
-          className={cn('absolute inset-0 w-full h-full object-cover filter blur-sm', className)}
+    <div className={`relative ${className}`}>
+      {!isLoaded && (
+        <div 
+          className="absolute inset-0 animate-pulse"
+          style={{ backgroundColor: placeholderColor }}
         />
       )}
       <img
-        ref={imgRef}
         src={optimizedSrc}
-        alt={alt}
+        alt={finalAlt}
         width={width}
         height={height}
-        loading={loading}
+        className={`transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'} ${className}`}
         onLoad={handleLoad}
         onError={handleError}
-        className={cn(
-          'transition-opacity duration-300',
-          isLoaded ? 'opacity-100' : 'opacity-0',
-          className
-        )}
-        {...props}
+        loading={loading}
       />
-    </>
+    </div>
   );
 };
 

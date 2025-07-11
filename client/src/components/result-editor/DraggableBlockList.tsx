@@ -5,7 +5,6 @@ import { SortableBlock } from './SortableBlock';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { restrictToVerticalAxis, restrictToParentElement } from '@dnd-kit/modifiers';
-import { ResultPageBlock } from '@/types/quizResult';
 
 interface DraggableBlockListProps {
   blocks: Block[];
