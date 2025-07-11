@@ -1242,7 +1242,7 @@ class SchemaDrivenFunnelService {
             showProgress: false
           }
         },
-        // 2. Card principal do resultado (85% match)
+        // 2. Card principal do resultado (flexbox responsivo)
         {
           id: 'result-main-card',
           type: 'result-card-inline',
@@ -1253,29 +1253,45 @@ class SchemaDrivenFunnelService {
             description: 'dinamicStyleDescription', // Será preenchido dinamicamente
             imageUrl: 'dinamicStyleImage', // Será preenchido dinamicamente
             showMatch: true,
-            animateReveal: true
+            animateReveal: true,
+            // Propriedades de layout flexbox
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 16,
+            padding: 24,
+            borderRadius: 12,
+            backgroundColor: '#ffffff',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+            // Responsividade
+            responsive: {
+              mobile: { padding: 16, gap: 12 },
+              tablet: { padding: 20, gap: 14 },
+              desktop: { padding: 24, gap: 16 }
+            }
           }
         },
-        // 3. Características do estilo (lista com ícones)
+        // 3. Características do estilo (lista flexível e editável)
         {
           id: 'result-characteristics',
           type: 'text-inline',
           properties: {
             content: `
-              <div class="characteristics-list">
+              <div class="characteristics-list" style="display: flex; flex-direction: column; gap: 16px;">
                 <h3 class="text-xl font-semibold mb-4 text-[#432818]">Suas principais características:</h3>
-                <ul class="space-y-3">
-                  <li class="flex items-center">
-                    <span class="w-6 h-6 bg-[#B89B7A] rounded-full flex items-center justify-center text-white text-sm mr-3">✓</span>
-                    Elegância natural e sofisticação
+                <ul class="space-y-3" style="display: flex; flex-direction: column; gap: 12px;">
+                  <li class="flex items-center" style="display: flex; align-items: center; gap: 12px;">
+                    <span class="w-6 h-6 bg-[#B89B7A] rounded-full flex items-center justify-center text-white text-sm">✓</span>
+                    <span>Elegância natural e sofisticação</span>
                   </li>
-                  <li class="flex items-center">
-                    <span class="w-6 h-6 bg-[#B89B7A] rounded-full flex items-center justify-center text-white text-sm mr-3">✓</span>
-                    Preferência por peças atemporais
+                  <li class="flex items-center" style="display: flex; align-items: center; gap: 12px;">
+                    <span class="w-6 h-6 bg-[#B89B7A] rounded-full flex items-center justify-center text-white text-sm">✓</span>
+                    <span>Preferência por peças atemporais</span>
                   </li>
-                  <li class="flex items-center">
-                    <span class="w-6 h-6 bg-[#B89B7A] rounded-full flex items-center justify-center text-white text-sm mr-3">✓</span>
-                    Valoriza qualidade sobre quantidade
+                  <li class="flex items-center" style="display: flex; align-items: center; gap: 12px;">
+                    <span class="w-6 h-6 bg-[#B89B7A] rounded-full flex items-center justify-center text-white text-sm">✓</span>
+                    <span>Valoriza qualidade sobre quantidade</span>
                   </li>
                 </ul>
               </div>
@@ -1283,10 +1299,17 @@ class SchemaDrivenFunnelService {
             fontSize: 'text-base',
             textAlign: 'text-left',
             color: '#432818',
-            marginBottom: 32
+            marginBottom: 32,
+            // Propriedades editáveis
+            editable: true,
+            editableFields: ['content', 'fontSize', 'color', 'marginBottom'],
+            // Layout flexbox
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 16
           }
         },
-        // 4. Imagem de transformação/guia
+        // 4. Imagem de transformação/guia (responsiva e editável)
         {
           id: 'result-transformation-image',
           type: 'image-display-inline',
@@ -1295,10 +1318,42 @@ class SchemaDrivenFunnelService {
             alt: 'Guia de transformação do seu estilo',
             width: 600,
             height: 400,
-            className: 'object-cover w-full h-auto rounded-lg mx-auto shadow-lg'
+            className: 'object-cover w-full h-auto rounded-lg mx-auto shadow-lg',
+            // Propriedades de layout flexbox
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            maxWidth: '100%',
+            // Responsividade editável
+            responsive: {
+              mobile: { width: '100%', height: 'auto' },
+              tablet: { width: 500, height: 350 },
+              desktop: { width: 600, height: 400 }
+            },
+            // Editabilidade
+            editable: true,
+            editableFields: ['src', 'alt', 'width', 'height', 'className']
           }
         },
-        // 5. Título dos estilos secundários
+        // 5. Container flexbox para estilos secundários
+        {
+          id: 'result-secondary-container',
+          type: 'flex-container-inline',
+          properties: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 24,
+            marginTop: 32,
+            marginBottom: 32,
+            // Responsividade
+            responsive: {
+              mobile: { gap: 16 },
+              tablet: { gap: 20 },
+              desktop: { gap: 24 }
+            }
+          }
+        },
+        // 6. Título dos estilos secundários
         {
           id: 'result-secondary-title',
           type: 'heading-inline',
@@ -1309,11 +1364,46 @@ class SchemaDrivenFunnelService {
             fontWeight: 'font-semibold',
             textAlign: 'text-center',
             color: '#432818',
-            marginTop: 32,
-            marginBottom: 16
+            marginBottom: 16,
+            // Editabilidade
+            editable: true,
+            editableFields: ['content', 'fontSize', 'fontWeight', 'textAlign', 'color']
           }
         },
-        // 6-8. Cards dos estilos secundários (3 cards)
+        // 7. Grid flexível dos estilos secundários
+        {
+          id: 'result-secondary-grid',
+          type: 'flex-grid-inline',
+          properties: {
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 16,
+            justifyContent: 'center',
+            alignItems: 'stretch',
+            // Grid responsivo
+            gridColumns: {
+              mobile: 1,
+              tablet: 2,
+              desktop: 3
+            },
+            // Responsividade
+            responsive: {
+              mobile: { 
+                flexDirection: 'column',
+                gap: 12
+              },
+              tablet: { 
+                flexDirection: 'row',
+                gap: 14
+              },
+              desktop: { 
+                flexDirection: 'row',
+                gap: 16
+              }
+            }
+          }
+        },
+        // 8-10. Cards dos estilos secundários (flexbox independentes)
         {
           id: 'result-secondary-1',
           type: 'style-card-inline',
@@ -1322,7 +1412,21 @@ class SchemaDrivenFunnelService {
             percentage: 20,
             description: 'Traços modernos na sua personalidade',
             imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_moderno.webp',
-            compact: true
+            compact: true,
+            // Layout flexbox
+            display: 'flex',
+            flexDirection: 'column',
+            flex: '1 1 300px', // Flex-grow, flex-shrink, flex-basis
+            minWidth: 280,
+            maxWidth: 350,
+            gap: 12,
+            padding: 16,
+            borderRadius: 8,
+            backgroundColor: '#ffffff',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+            // Editabilidade
+            editable: true,
+            editableFields: ['styleName', 'percentage', 'description', 'imageUrl', 'padding', 'borderRadius']
           }
         },
         {
@@ -1333,7 +1437,21 @@ class SchemaDrivenFunnelService {
             percentage: 15,
             description: 'Praticidade em situações do dia a dia',
             imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_casual.webp',
-            compact: true
+            compact: true,
+            // Layout flexbox
+            display: 'flex',
+            flexDirection: 'column',
+            flex: '1 1 300px',
+            minWidth: 280,
+            maxWidth: 350,
+            gap: 12,
+            padding: 16,
+            borderRadius: 8,
+            backgroundColor: '#ffffff',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+            // Editabilidade
+            editable: true,
+            editableFields: ['styleName', 'percentage', 'description', 'imageUrl', 'padding', 'borderRadius']
           }
         },
         {
@@ -1344,7 +1462,21 @@ class SchemaDrivenFunnelService {
             percentage: 10,
             description: 'Toques delicados e femininos',
             imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_romantico.webp',
-            compact: true
+            compact: true,
+            // Layout flexbox
+            display: 'flex',
+            flexDirection: 'column',
+            flex: '1 1 300px',
+            minWidth: 280,
+            maxWidth: 350,
+            gap: 12,
+            padding: 16,
+            borderRadius: 8,
+            backgroundColor: '#ffffff',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+            // Editabilidade
+            editable: true,
+            editableFields: ['styleName', 'percentage', 'description', 'imageUrl', 'padding', 'borderRadius']
           }
         },
         // 9. Motivação/transição para oferta
