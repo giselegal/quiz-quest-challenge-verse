@@ -118,7 +118,6 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
                     <EditableBlock
                       key={block.id}
                       block={block}
-                      index={index}
                       isSelected={selectedBlockId === block.id}
                       onClick={() => onSelectBlock(block.id)}
                       isPreviewMode={isPreviewing}
