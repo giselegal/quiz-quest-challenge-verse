@@ -39,6 +39,11 @@ export const QuizContent: React.FC<QuizContentProps> = ({
   // Check if we have enough selections to proceed
   const canProceed = currentAnswers?.length === requiredSelections;
 
+  // Create a proper answers object for strategic questions
+  const strategicAnswers = showingStrategicQuestions && currentQuestion?.id ? {
+    [currentQuestion.id]: currentAnswers
+  } : {};
+
   return (
     <>
       <QuizHeader 
@@ -53,12 +58,7 @@ export const QuizContent: React.FC<QuizContentProps> = ({
         {showingStrategicQuestions ? (
           <StrategicQuestions
             currentQuestionIndex={currentStrategicQuestionIndex}
-            answers={showingStrategicQuestions ? currentAnswers.reduce((acc, optionId) => {
-              if (currentQuestion?.id) {
-                acc[currentQuestion.id] = [optionId];
-              }
-              return acc;
-            }, {}) : {}}
+            answers={strategicAnswers}
             onAnswer={handleAnswerSubmit}
           />
         ) : (

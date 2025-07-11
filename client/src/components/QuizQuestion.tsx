@@ -17,7 +17,7 @@ interface QuizQuestionProps {
   autoAdvance?: boolean;
   hideTitle?: boolean;
   showQuestionImage?: boolean;
-  isStrategicQuestion?: boolean; // Nova prop
+  isStrategicQuestion?: boolean;
 }
 
 const QuizQuestion: React.FC<QuizQuestionProps> = ({
@@ -30,7 +30,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   isStrategicQuestion = false
 }) => {
   const isMobile = useIsMobile();
-  const hasImageOptions = question.type !== 'text';
+  const hasImageOptions = question.type === 'image' || question.type === 'both';
   const [imageError, setImageError] = useState(false);
   const { scrollToQuestion } = useQuestionScroll();
 
@@ -87,8 +87,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             "font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal",
             isMobile ? "text-base" : "text-base sm:text-xl",
             isStrategicQuestion && "strategic-question-title text-[#432818] mb-6 font-bold whitespace-pre-line",
-            isStrategicQuestion && isMobile && "text-[1.25rem] sm:text-2xl", // Texto maior para questões estratégicas em mobile
-            question.type === 'text' && !isStrategicQuestion && ".text-only-question & " && "text-[1.15rem] sm:text-xl" // Texto maior para títulos em questões só texto
+            isStrategicQuestion && isMobile && "text-[1.25rem] sm:text-2xl",
+            question.type === 'text' && !isStrategicQuestion && "text-[1.15rem] sm:text-xl"
           )}>
             {highlightStrategicWords(question.title || question.question)}
           </h2>
@@ -143,4 +143,3 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 };
 
 export { QuizQuestion };
-
