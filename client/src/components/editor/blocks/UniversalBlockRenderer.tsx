@@ -245,7 +245,42 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       'quiz-offer-faq': () => <QuizOfferFAQBlock {...commonProps} />,
       
       // Componente de transição final
-      'quiz-transition-final': () => <QuizTransitionBlock {...commonProps} />
+      'quiz-transition-final': () => <QuizTransitionBlock {...commonProps} />,
+      
+      // === COMPONENTE REFERENCE SYSTEM ===
+      // Para renderizar componentes reais do projeto no editor
+      'component-reference': () => {
+        const { componentPath, componentName, props: componentProps } = block.properties;
+        
+        // Para o editor, renderizamos um placeholder informativo
+        return (
+          <div 
+            className={cn(
+              'w-full p-6 border-2 border-dashed border-blue-300 rounded-lg bg-blue-50',
+              'flex flex-col items-center justify-center gap-3',
+              'min-h-[120px] text-center',
+              isSelected && 'border-blue-500 bg-blue-100'
+            )}
+            onClick={onClick}
+          >
+            <div className="flex items-center gap-2 text-blue-700">
+              <span className="text-2xl">🧩</span>
+              <span className="font-semibold text-lg">{componentName}</span>
+            </div>
+            <p className="text-sm text-blue-600 max-w-md">
+              Componente real: <code className="bg-blue-200 px-2 py-1 rounded text-xs">{componentPath}</code>
+            </p>
+            <div className="text-xs text-blue-500 bg-blue-100 px-3 py-1 rounded-full">
+              ✅ Renderizado na visualização final
+            </div>
+            {isSelected && (
+              <div className="text-xs text-blue-700 mt-2 p-2 bg-blue-200 rounded">
+                Props: {JSON.stringify(componentProps, null, 2)}
+              </div>
+            )}
+          </div>
+        );
+      }
     };
 
     // ES7+ Return com fallback usando optional chaining

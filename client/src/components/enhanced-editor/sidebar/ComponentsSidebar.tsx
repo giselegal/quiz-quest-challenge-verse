@@ -16,7 +16,13 @@ import {
   Gift,
   LayoutTemplate,
   Quote,
-  ImagePlus
+  ImagePlus,
+  Star,
+  Heart,
+  TrendingUp,
+  Clock,
+  Users,
+  CheckCircle
 } from 'lucide-react';
 import { Block } from '@/types/editor';
 import { ComponentItem } from './ComponentItem';
@@ -25,7 +31,8 @@ interface ComponentsSidebarProps {
   onComponentSelect: (type: Block['type']) => void;
 }
 
-export function ComponentsSidebar({ onComponentSelect }: ComponentsSidebarProps) {
+// ES7+ Arrow function component with destructuring
+export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({ onComponentSelect }) => {
   // Group components by category
   const basicComponents = [
     { type: 'headline', label: 'Título', icon: Type, description: 'Título e subtítulo' },

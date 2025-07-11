@@ -1480,7 +1480,85 @@ class SchemaDrivenFunnelService {
             }
           }
         },
-        // 12. CTA principal (botão flexível e editável)
+        // 12. Seção Before/After Transformation (componente real do projeto)
+        {
+          id: 'result-before-after-section',
+          type: 'component-reference',
+          properties: {
+            componentPath: '@/components/result/BeforeAfterTransformation',
+            componentName: 'BeforeAfterTransformation',
+            props: {
+              primaryStyle: 'dinamicPrimaryStyle',
+              handleCTAClick: 'handleCTAClick'
+            },
+            editable: true,
+            editableFields: ['componentProps']
+          }
+        },
+        // 13. Seção de Motivação (componente real do projeto)
+        {
+          id: 'result-motivation-section',
+          type: 'component-reference',
+          properties: {
+            componentPath: '@/components/result/MotivationSection',
+            componentName: 'MotivationSection',
+            props: {},
+            editable: true
+          }
+        },
+        // 14. Seção de Bônus (componente real do projeto)
+        {
+          id: 'result-bonus-section',
+          type: 'component-reference',
+          properties: {
+            componentPath: '@/components/result/BonusSection',
+            componentName: 'BonusSection',
+            props: {},
+            editable: true
+          }
+        },
+        // 15. Seção de Depoimentos (componente real do projeto)
+        {
+          id: 'result-testimonials-section',
+          type: 'component-reference',
+          properties: {
+            componentPath: '@/components/quiz-result/sales/Testimonials',
+            componentName: 'Testimonials',
+            props: {
+              items: [
+                {
+                  name: "Mariangela",
+                  role: "Engenheira",
+                  text: "Antes, a roupa me vestia. Hoje, eu me visto com intenção. Essa jornada me reconectou com a mulher que sempre fui."
+                },
+                {
+                  name: "Patrícia Paranhos",
+                  role: "Advogada", 
+                  text: "Aprendi a reconhecer meu valor e refletir isso na forma como me apresento. As pessoas começaram a me enxergar diferente — porque eu estava diferente."
+                },
+                {
+                  name: "Sônia Spier",
+                  role: "Terapeuta",
+                  text: "Com a Gisele, entendi o poder da linguagem visual. Hoje eu escolho minhas roupas com consciência, propósito e leveza."
+                }
+              ]
+            },
+            editable: true,
+            editableFields: ['items']
+          }
+        },
+        // 16. Seção de Garantia (componente real do projeto)
+        {
+          id: 'result-guarantee-section',
+          type: 'component-reference',
+          properties: {
+            componentPath: '@/components/result/GuaranteeSection',
+            componentName: 'GuaranteeSection',
+            props: {},
+            editable: true
+          }
+        },
+        // 17. CTA principal melhorado (botão flexível e editável)
         {
           id: 'result-main-cta',
           type: 'button-inline',
@@ -1517,6 +1595,20 @@ class SchemaDrivenFunnelService {
                 fontSize: 'text-lg'
               }
             }
+          }
+        },
+        // 18. Elemento de compra segura (componente real do projeto)
+        {
+          id: 'result-secure-purchase',
+          type: 'component-reference',
+          properties: {
+            componentPath: '@/components/result/SecurePurchaseElement',
+            componentName: 'SecurePurchaseElement',
+            props: {
+              className: 'mt-4'
+            },
+            editable: true,
+            editableFields: ['className']
           }
         }
       ],
