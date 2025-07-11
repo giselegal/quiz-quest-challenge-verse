@@ -620,7 +620,7 @@ class SchemaDrivenFunnelService {
     
     // Obter dados do estilo do styleConfig
     const styleKey = primaryStyleName as keyof typeof styleConfig;
-    const styleData = styleConfig[styleKey] || styleConfig.Natural;
+    const styleData = styleConfig[styleKey] || styleConfig.Elegante || styleConfig.Natural;
     
     if (styleData) {
       primaryStyleImage = styleData.image || '';
@@ -628,18 +628,22 @@ class SchemaDrivenFunnelService {
       primaryStyleDescription = styleData.description || '';
     }
     
-    return {
-      userName: userName || user?.userName || 'Usuário',
+    // Se não há dados, usar valores padrão mais bonitos para o editor
+    const finalData = {
+      userName: userName || user?.userName || 'Maria Silva',
       primaryStyle,
       secondaryStyles,
       primaryStyleName,
       primaryStylePercentage,
-      primaryStyleImage,
-      primaryStyleGuideImage,
-      primaryStyleDescription,
+      primaryStyleImage: primaryStyleImage || 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp',
+      primaryStyleGuideImage: primaryStyleGuideImage || 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071342/GUIA_ELEGANTE_asez1q.webp',
+      primaryStyleDescription: primaryStyleDescription || 'Você tem um olhar refinado para detalhes sofisticados e peças de alta qualidade.',
       userEmail: user?.email || '',
       isLoggedIn: !!(userName || user?.userName)
     };
+    
+    console.log('🎨 Dados dinâmicos gerados:', finalData);
+    return finalData;
   }
 
   /**
@@ -1242,7 +1246,7 @@ class SchemaDrivenFunnelService {
             showProgress: false
           }
         },
-        // 2. Card principal do resultado (flexbox responsivo)
+        // 2. Card principal do resultado (flexbox responsivo com dados reais)
         {
           id: 'result-main-card',
           type: 'result-card-inline',
@@ -1251,9 +1255,14 @@ class SchemaDrivenFunnelService {
             styleName: 'dinamicStyleName', // Será preenchido dinamicamente
             percentage: 85, // Será substituído dinamicamente
             description: 'dinamicStyleDescription', // Será preenchido dinamicamente
-            imageUrl: 'dinamicStyleImage', // Será preenchido dinamicamente
             showMatch: true,
             animateReveal: true,
+            showProgress: true,
+            showIcon: true,
+            cardVariant: 'elevated',
+            size: 'large',
+            backgroundColor: '#ffffff',
+            accentColor: '#B89B7A',
             // Propriedades de layout flexbox
             display: 'flex',
             flexDirection: 'column',
@@ -1262,14 +1271,16 @@ class SchemaDrivenFunnelService {
             gap: 16,
             padding: 24,
             borderRadius: 12,
-            backgroundColor: '#ffffff',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
             // Responsividade
             responsive: {
-              mobile: { padding: 16, gap: 12 },
-              tablet: { padding: 20, gap: 14 },
-              desktop: { padding: 24, gap: 16 }
-            }
+              mobile: { padding: 16, gap: 12, size: 'medium' },
+              tablet: { padding: 20, gap: 14, size: 'large' },
+              desktop: { padding: 24, gap: 16, size: 'large' }
+            },
+            // Editabilidade
+            editable: true,
+            editableFields: ['styleName', 'percentage', 'description', 'cardVariant', 'size', 'accentColor']
           }
         },
         // 3. Características do estilo (lista corrigida)

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Injetar Dados de Teste</title>
+</head>
+<body>
+    <h1>Dados de Teste para o Editor</h1>
+    <button onclick="injectData()">Injetar Dados no LocalStorage</button>
+    <div id="status"></div>
+
+    <script>
+        function injectData() {
+            // Dados de teste
+            localStorage.setItem("userName", "Maria Silva");
+            localStorage.setItem("user", JSON.stringify({
+                userName: "Maria Silva",
+                email: "maria@example.com"
+            }));
+            localStorage.setItem("quizResult", JSON.stringify({
+                primaryStyle: {
+                    category: "Elegante",
+                    name: "Elegante", 
+                    percentage: 85,
+                    score: 85
+                },
+                secondaryStyles: [
+                    { category: "Moderno", percentage: 20 },
+                    { category: "Casual", percentage: 15 },
+                    { category: "Romântico", percentage: 10 }
+                ]
+            }));
+            
+            document.getElementById('status').innerHTML = '✅ Dados injetados! Agora vá para /editor e navegue até a etapa 20.';
+        }
+    </script>
+</body>
+</html>
