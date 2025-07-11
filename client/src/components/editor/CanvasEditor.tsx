@@ -29,6 +29,7 @@ import {
   validateComponentProps
 } from './services/editableComponentsService';
 import editableComponentsService from './services/editableComponentsService';
+import { type FlexComponentConfig, renderFlexComponent } from './services/flexComponentsService';
 
 interface CanvasEditorProps {
   className?: string;
