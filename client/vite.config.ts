@@ -20,6 +20,7 @@ export default defineConfig(({ mode }) => ({
     },
   },
   publicDir: path.resolve(import.meta.dirname, "public"),
+  root: import.meta.dirname,
   build: {
     outDir: path.resolve(import.meta.dirname, "..", "dist", "public"),
     emptyOutDir: true,
