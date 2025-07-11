@@ -95,29 +95,35 @@ const QuizIntroBlock: React.FC<QuizIntroBlockProps> = ({
   className = '',
   isEditing = false
 }) => {
+  const handleUpdate = (field: string, value: string) => {
+    if (onUpdate) {
+      onUpdate({ ...data, [field]: value });
+    }
+  };
+
   return (
     <div className={`quiz-intro-block ${className}`} data-block-id={blockId}>
       <div className="container mx-auto py-12">
         <div className="text-center">
           <InlineEditableText
-            value={data.title}
-            onChange={(value: string) => onUpdate({ ...data, title: value })}
+            value={data.title || ''}
+            onChange={(value: string) => handleUpdate('title', value)}
             className="text-2xl md:text-4xl font-bold mb-6 text-center"
             style={{ color: data.titleColor }}
             placeholder="Título principal do quiz"
           />
 
           <InlineEditableText
-            value={data.subtitle}
-            onChange={(value: string) => onUpdate({ ...data, subtitle: value })}
+            value={data.subtitle || ''}
+            onChange={(value: string) => handleUpdate('subtitle', value)}
             className="text-lg md:text-xl text-gray-600 mb-8 text-center max-w-2xl mx-auto"
             style={{ color: data.subtitleColor }}
             placeholder="Subtítulo ou descrição"
           />
 
           <InlineEditableText
-            value={data.description}
-            onChange={(value: string) => onUpdate({ ...data, description: value })}
+            value={data.description || ''}
+            onChange={(value: string) => handleUpdate('description', value)}
             className="text-base text-gray-700 mb-8 text-center max-w-xl mx-auto leading-relaxed"
             style={{ color: data.descriptionColor }}
             placeholder="Descrição detalhada do quiz"
@@ -132,8 +138,8 @@ const QuizIntroBlock: React.FC<QuizIntroBlockProps> = ({
             }}
           >
             <InlineEditableText
-              value={data.buttonText}
-              onChange={(value: string) => onUpdate({ ...data, buttonText: value })}
+              value={data.buttonText || ''}
+              onChange={(value: string) => handleUpdate('buttonText', value)}
               placeholder="Texto do botão"
               disabled={!isEditing}
             />

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { QuizQuestion as QuizQuestionType, UserResponse } from '../types/quiz';
@@ -29,7 +30,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   isStrategicQuestion = false
 }) => {
   const isMobile = useIsMobile();
-  // Fixed: Only check for valid image types
+  // Fixed: Only check for valid image types and exclude 'normal' and 'strategic'
   const hasImageOptions = question.type === 'image' || question.type === 'both';
   const [imageError, setImageError] = useState(false);
   const { scrollToQuestion } = useQuestionScroll();

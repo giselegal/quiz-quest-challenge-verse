@@ -1,12 +1,9 @@
+
 import React, { useEffect, useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { QuizWelcome } from './QuizWelcome';
 import { QuizContent } from './quiz/QuizContent';
 import QuizTransition from './QuizTransition';
-import { ResultPage } from './result/ResultPage';
-import { questions } from '../data/questions';
-import { strategicQuestions } from '../data/strategicQuestions';
-import { calculateResult } from '../utils/calculateResult';
 import { UserResponse } from '../types/quiz';
 import { useAuth } from '../context/AuthContext';
 import { preloadCriticalImages } from '../utils/imageManager';
@@ -26,7 +23,7 @@ interface StyleResult {
 }
 
 const QuizPage: React.FC = () => {
-  const navigate = useNavigate();
+  const location = useLocation();
   const [quizState, setQuizState] = useState(QuizState.Welcome);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [currentStrategicQuestionIndex, setCurrentStrategicQuestionIndex] = useState(0);
@@ -35,6 +32,34 @@ const QuizPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showingStrategicQuestions, setShowingStrategicQuestions] = useState(false);
   const { user } = useAuth();
+
+  // Mock questions for now
+  const questions = [
+    {
+      id: 'q1',
+      question: 'Qual é seu estilo preferido?',
+      options: [
+        { id: 'opt1', text: 'Clássico', styleCategory: 'classico' },
+        { id: 'opt2', text: 'Moderno', styleCategory: 'moderno' },
+        { id: 'opt3', text: 'Romântico', styleCategory: 'romantico' },
+      ],
+      type: 'text' as const,
+      multiSelect: 1
+    }
+  ];
+
+  const strategicQuestions = [
+    {
+      id: 'sq1',
+      question: 'O que mais te motiva?',
+      options: [
+        { id: 'sopt1', text: 'Sucesso profissional', value: 'success' },
+        { id: 'sopt2', text: 'Relacionamentos', value: 'relationships' },
+        { id: 'sopt3', text: 'Crescimento pessoal', value: 'growth' },
+      ],
+      type: 'text' as const
+    }
+  ];
 
   const totalQuestions = questions.length;
   const totalStrategicQuestions = strategicQuestions.length;
@@ -82,11 +107,15 @@ const QuizPage: React.FC = () => {
       } else {
         setIsLoading(true);
         setTimeout(() => {
-          const newQuizResult = calculateResult(userResponses);
-          setQuizResult(newQuizResult);
+          // Mock result calculation
+          const mockResult = [
+            { style: 'classico', points: 100, percentage: 85, rank: 1 }
+          ];
+          setQuizResult(mockResult);
           setQuizState(QuizState.Result);
           setIsLoading(false);
-          navigate('/result');
+          // Navigate to result page
+          window.location.href = '/resultado';
         }, 2000);
       }
     }
@@ -119,7 +148,7 @@ const QuizPage: React.FC = () => {
     setUserResponses([]);
     setQuizResult(null);
     setShowingStrategicQuestions(false);
-    navigate('/');
+    window.location.href = '/';
   };
 
   const getUserName = (): string => {
@@ -154,6 +183,8 @@ const QuizPage: React.FC = () => {
                 ?.selectedOptions || []
             }
             handleAnswerSubmit={handleAnswerSubmit}
+            handleNextClick={handleNextClick}
+            handlePrevious={handlePrevious}
           />
         );
       case QuizState.Transition:
@@ -168,7 +199,7 @@ const QuizPage: React.FC = () => {
           />
         );
       case QuizState.Result:
-        return <ResultPage quizResult={quizResult} onReset={resetQuiz} />;
+        return <div>Result Page Placeholder</div>;
       default:
         return <QuizWelcome onStart={() => setQuizState(QuizState.Quiz)} />;
     }
