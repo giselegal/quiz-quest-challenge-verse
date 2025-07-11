@@ -31,35 +31,21 @@ const QuizPage: React.FC = () => {
   const [quizResult, setQuizResult] = useState<StyleResult[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showingStrategicQuestions, setShowingStrategicQuestions] = useState(false);
+  const [questions, setQuestions] = useState<any[]>([]);
+  const [strategicQuestions, setStrategicQuestions] = useState<any[]>([]);
   const { user } = useAuth();
 
-  // Mock questions for now
-  const questions = [
-    {
-      id: 'q1',
-      question: 'Qual é seu estilo preferido?',
-      options: [
-        { id: 'opt1', text: 'Clássico', styleCategory: 'classico' },
-        { id: 'opt2', text: 'Moderno', styleCategory: 'moderno' },
-        { id: 'opt3', text: 'Romântico', styleCategory: 'romantico' },
-      ],
-      type: 'text' as const,
-      multiSelect: 1
-    }
-  ];
-
-  const strategicQuestions = [
-    {
-      id: 'sq1',
-      question: 'O que mais te motiva?',
-      options: [
-        { id: 'sopt1', text: 'Sucesso profissional', value: 'success' },
-        { id: 'sopt2', text: 'Relacionamentos', value: 'relationships' },
-        { id: 'sopt3', text: 'Crescimento pessoal', value: 'growth' },
-      ],
-      type: 'text' as const
-    }
-  ];
+  // Load real quiz questions from data source
+  useEffect(() => {
+    const loadQuestions = async () => {
+      const { quizQuestions } = await import('@/data/quizQuestions');
+      const normalQuestions = quizQuestions.filter(q => q.type !== 'strategic');
+      const strategicQs = quizQuestions.filter(q => q.type === 'strategic');
+      setQuestions(normalQuestions);
+      setStrategicQuestions(strategicQs);
+    };
+    loadQuestions();
+  }, []);
 
   const totalQuestions = questions.length;
   const totalStrategicQuestions = strategicQuestions.length;

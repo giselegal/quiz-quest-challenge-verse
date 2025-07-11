@@ -1,55 +1,99 @@
 
 import { QuizQuestion, StyleResult } from '@/types/quiz';
 
-// Note: Quiz questions are now hardcoded in the frontend for simplicity
-// This eliminates the need for complex dynamic quiz management
+import { supabase } from '../../../src/integrations/supabase/client';
+
 export const fetchQuizQuestions = async (quizId: string) => {
-  // Quiz questions are now statically defined in the application
-  // This simplifies the migration and improves performance
-  return [];
+  try {
+    const { data: questions, error } = await supabase
+      .from('quiz_questions')
+      .select(`
+        *,
+        question_options (*)
+      `)
+      .eq('quiz_id', quizId)
+      .eq('active', true)
+      .order('order_index');
+      
+    if (error) throw error;
+    return questions || [];
+  } catch (error) {
+    console.error('Error fetching quiz questions:', error);
+    // Fallback to local questions
+    const { quizQuestions } = await import('@/data/quizQuestions');
+    return quizQuestions;
+  }
 };
 
 export const saveParticipant = async (name: string, email: string, quizId: string) => {
-  const response = await fetch('/api/quiz-participants', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      name,
-      email,
-      quizId,
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+  try {
+    const { data, error } = await supabase
+      .from('quiz_participants')
+      .insert({
+        name,
+        email,
+        quiz_id: quizId,
+        utm_source: new URLSearchParams(window.location.search).get('utm_source'),
+        utm_medium: new URLSearchParams(window.location.search).get('utm_medium'),
+        utm_campaign: new URLSearchParams(window.location.search).get('utm_campaign'),
+      })
+      .select()
+      .single();
+      
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error('Error saving participant:', error);
+    throw error;
   }
-
-  const result = await response.json();
-  if (!result.success) {
-    throw new Error(result.error || 'Failed to save participant');
-  }
-
-  return result.data;
 };
 
 export const saveAnswers = async (
   participantId: string,
   answers: Array<{ questionId: string; optionId: string; points: number }>
 ) => {
-  // Quiz answers are now handled client-side for performance
-  // Results are calculated locally and don't need individual answer storage
-  console.log('Quiz answers processed locally:', answers.length);
-  return;
+  try {
+    const answerData = answers.map(answer => ({
+      participant_id: participantId,
+      question_id: answer.questionId,
+      option_id: answer.optionId,
+      points: answer.points
+    }));
+    
+    const { error } = await supabase
+      .from('participant_answers')
+      .insert(answerData);
+      
+    if (error) throw error;
+    console.log(`Saved ${answers.length} answers to database`);
+  } catch (error) {
+    console.error('Error saving answers:', error);
+    // Continue processing locally as fallback
+  }
 };
 
 export const saveResults = async (
   participantId: string,
   results: Array<StyleResult>
 ) => {
-  // Results are calculated and displayed client-side
-  // Storage can be implemented later if analytics are needed
-  console.log('Quiz results calculated for participant:', participantId, results);
-  return;
+  try {
+    const resultData = results.map((result, index) => ({
+      participant_id: participantId,
+      style_type_id: result.style,
+      points: result.points,
+      percentage: result.percentage,
+      rank: index + 1,
+      is_primary: index === 0
+    }));
+    
+    const { error } = await supabase
+      .from('style_results')
+      .insert(resultData);
+      
+    if (error) throw error;
+    console.log(`Saved ${results.length} style results to database`);
+  } catch (error) {
+    console.error('Error saving results:', error);
+    // Continue with local display as fallback
+  }
 };
