@@ -14,6 +14,15 @@ import StrategicQuestionBlock from './StrategicQuestionBlock';
 import QuizTransitionBlock from './QuizTransitionBlock';
 import OptionsGridBlock from './OptionsGridBlock';
 
+// Componentes específicos de Resultado (Etapa 20)
+import QuizResultHeaderBlock from './QuizResultHeaderBlock';
+import QuizResultMainCardBlock from './QuizResultMainCardBlock';
+
+// Componentes específicos de Oferta (Etapa 21)
+import QuizOfferCountdownBlock from './QuizOfferCountdownBlock';
+import QuizOfferPricingBlock from './QuizOfferPricingBlock';
+import QuizOfferFAQBlock from './QuizOfferFAQBlock';
+
 // === COMPONENTES INLINE MODULARES (ES7+) ===
 // Importação corrigida e otimizada dos componentes inline
 import {
@@ -221,14 +230,22 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       QuizTransitionBlock: () => <QuizTransitionBlock {...commonProps} />,
       ResultPageBlock: () => <ResultPageBlock {...commonProps} />,
       
-      // === MAPEAMENTOS ADICIONAIS ===
+      // === MAPEAMENTOS ESPECÍFICOS DAS ETAPAS 20 E 21 ===
       'quiz-title': () => <HeadingInlineBlock {...commonProps} />,
       'quiz-name-input': () => <FormInputBlock {...commonProps} />,
-      'quiz-result-header': () => <HeadingInlineBlock {...commonProps} />,
-      'quiz-result-card': () => <PricingCardInlineBlock {...commonProps} />,
+      
+      // ETAPA 20 - Resultado (componentes específicos)
+      'quiz-result-header': () => <QuizResultHeaderBlock {...commonProps} />,
+      'quiz-result-card': () => <QuizResultMainCardBlock {...commonProps} />,
+      
+      // ETAPA 21 - Oferta (componentes específicos)
       'quiz-offer-title': () => <HeadingInlineBlock {...commonProps} />,
-      'quiz-offer-countdown': () => <CountdownInlineBlock {...commonProps} />,
-      'quiz-offer-faq': () => <FAQSectionBlock {...commonProps} />
+      'quiz-offer-countdown': () => <QuizOfferCountdownBlock {...commonProps} />,
+      'quiz-offer-pricing': () => <QuizOfferPricingBlock {...commonProps} />,
+      'quiz-offer-faq': () => <QuizOfferFAQBlock {...commonProps} />,
+      
+      // Componente de transição final
+      'quiz-transition-final': () => <QuizTransitionBlock {...commonProps} />
     };
 
     // ES7+ Return com fallback usando optional chaining
