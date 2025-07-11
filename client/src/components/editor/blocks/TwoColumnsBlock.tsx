@@ -78,7 +78,7 @@ const TwoColumnsBlock: React.FC<TwoColumnsBlockProps> = ({
 
   const renderContent = (content: any) => {
     const getTextAlign = (alignment?: string) => {
-      const aligns = {
+      const aligns: Record<string, string> = {
         'left': 'text-left',
         'center': 'text-center',
         'right': 'text-right'
@@ -156,7 +156,7 @@ const TwoColumnsBlock: React.FC<TwoColumnsBlockProps> = ({
             )}
             {content.items && content.items.length > 0 && (
               <ul className="space-y-3">
-                {content.items.map((item, index) => (
+                {content.items.map((item: any, index: number) => (
                   <li 
                     key={index} 
                     className="flex items-start gap-3"

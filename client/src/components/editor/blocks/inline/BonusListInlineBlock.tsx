@@ -86,7 +86,7 @@ const BonusListInlineBlock: React.FC<BlockComponentProps> = ({
 
       {/* Lista de bônus */}
       <div className="space-y-4">
-        {bonusItems.map((bonus, index) => (
+        {bonusItems.map((bonus: any, index: number) => (
           <div key={index} className="flex items-start p-4 bg-gray-50 rounded-lg">
             <div className="flex-shrink-0 mr-4">
               <div 

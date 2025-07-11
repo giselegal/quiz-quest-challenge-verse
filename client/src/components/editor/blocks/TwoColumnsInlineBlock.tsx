@@ -95,14 +95,14 @@ const TwoColumnsInlineBlock: React.FC<BlockComponentProps> = ({
   };
 
   const updateItem = (id: string, field: keyof ReviewItem, value: any) => {
-    const updatedItems = items.map(item => 
+    const updatedItems = items.map((item: any) => 
       item.id === id ? { ...item, [field]: value } : item
     );
     handlePropertyChange('items', updatedItems);
   };
 
   const removeItem = (id: string) => {
-    const updatedItems = items.filter(item => item.id !== id);
+    const updatedItems = items.filter((item: any) => item.id !== id);
     handlePropertyChange('items', updatedItems);
   };
 
@@ -150,7 +150,7 @@ const TwoColumnsInlineBlock: React.FC<BlockComponentProps> = ({
     >
       <div className={cn(
         'w-full',
-        SPACING.section.y,
+        (SPACING as any).section?.y || 'py-8',
         alignmentClasses[alignment as keyof typeof alignmentClasses]
       )}>
         {/* Title */}
@@ -178,7 +178,7 @@ const TwoColumnsInlineBlock: React.FC<BlockComponentProps> = ({
           spacingClasses[spacing as keyof typeof spacingClasses],
           'w-full max-w-4xl mx-auto'
         )}>
-          {items.map((item, index) => (
+          {items.map((item: any, index: number) => (
             <div
               key={item.id}
               className={cn(
@@ -225,8 +225,8 @@ const TwoColumnsInlineBlock: React.FC<BlockComponentProps> = ({
                     onChange={(value) => updateItem(item.id, 'review', value)}
                     placeholder="Depoimento do cliente..."
                     className={cn(
-                      TYPOGRAPHY.body.base,
-                      `text-[${BRAND_COLORS.text.secondary}]`,
+                      (TYPOGRAPHY as any).body?.base || 'text-base',
+                      `text-[${(BRAND_COLORS as any).text?.secondary || '#666'}]`,
                       'italic leading-relaxed'
                     )}
                     textAlign={alignment as any}
@@ -259,7 +259,7 @@ const TwoColumnsInlineBlock: React.FC<BlockComponentProps> = ({
                       placeholder="@handle"
                       className={cn(
                         TYPOGRAPHY.body.small,
-                        `text-[${BRAND_COLORS.text.muted}]`
+                        `text-[${(BRAND_COLORS as any).text?.muted || '#888'}]`
                       )}
                       textAlign={alignment as any}
                     />
