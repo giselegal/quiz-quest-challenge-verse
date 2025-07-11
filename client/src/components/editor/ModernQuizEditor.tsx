@@ -41,7 +41,7 @@ const ModernQuizEditor: React.FC<ModernQuizEditorProps> = ({
   // State
   const [activeTab, setActiveTab] = useState<string>('editor');
   const [deviceView, setDeviceView] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
-  const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
+  const [selectedComponent, setSelectedComponent] = useState<SimpleComponent | null>(null);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
@@ -105,7 +105,7 @@ const ModernQuizEditor: React.FC<ModernQuizEditorProps> = ({
     setDeviceView(device);
   }, []);
 
-  const handleComponentSelect = useCallback((component: string | null) => {
+  const handleComponentSelect = useCallback((component: SimpleComponent | null) => {
     setSelectedComponent(component);
   }, []);
 
@@ -345,8 +345,13 @@ const ModernQuizEditor: React.FC<ModernQuizEditorProps> = ({
           <div className={styles.centerArea}>
             <PageEditorCanvas
               funnel={currentFunnel}
+              currentPage={currentFunnel?.pages?.[currentPageIndex] || null}
               deviceView={deviceView}
-              selectedComponent={selectedComponent}
+              selectedComponent={selectedComponent?.id || null}
+              setSelectedComponent={(id: string | null) => {
+                const component = currentFunnel?.pages?.[currentPageIndex]?.components?.find((c: SimpleComponent) => c.id === id);
+                handleComponentSelect(component || null);
+              }}
               onComponentSelect={handleComponentSelect}
               onFunnelUpdate={(updates: QuizFunnel) => {
                 if (funnelManager.activeFunnelId) {
@@ -354,6 +359,11 @@ const ModernQuizEditor: React.FC<ModernQuizEditorProps> = ({
                 }
               }}
               isDragging={isDragging}
+              handleDragOver={() => {}}
+              handleDrop={() => {}}
+              dragOverIndex={null}
+              deleteComponent={() => {}}
+              duplicateComponent={() => {}}
             />
           </div>
 

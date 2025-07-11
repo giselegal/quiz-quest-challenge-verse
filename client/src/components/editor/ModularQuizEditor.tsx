@@ -823,9 +823,8 @@ const ModularQuizEditor: React.FC = () => {
             
             <TabsContent value="config" className="mt-0">
               <ConfigPanel
-                quizConfig={quizConfig}
-                updateQuizConfig={updateQuizConfig}
-                updateConfig={updateConfig}
+                config={quizConfig}
+                onConfigUpdate={updateQuizConfig}
               />
             </TabsContent>
             

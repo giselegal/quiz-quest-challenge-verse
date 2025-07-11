@@ -7,7 +7,7 @@ import {
   Copy, Trash2, Move, Eye, EyeOff, 
   MoreVertical
 } from 'lucide-react';
-import { SimplePage, SimpleComponent } from '@/interfaces/quiz';
+import { SimplePage, SimpleComponent, QuizFunnel } from '@/interfaces/quiz';
 import styles from '@/styles/editor/editor-modular.module.css';
 
 // Import component renderers - Using modern inline blocks
@@ -35,10 +35,14 @@ import {
 } from '@/components/editor/blocks/inline';
 
 interface PageEditorCanvasProps {
+  funnel?: any;
   currentPage: SimplePage | null;
   deviceView: 'desktop' | 'tablet' | 'mobile';
   selectedComponent: string | null;
   setSelectedComponent: (componentId: string | null) => void;
+  onComponentSelect?: (component: SimpleComponent | null) => void;
+  onFunnelUpdate?: (updates: QuizFunnel) => void;
+  isDragging?: boolean;
   handleDragOver: (e: React.DragEvent, index: number) => void;
   handleDrop: (e: React.DragEvent, index: number) => void;
   dragOverIndex: number | null;

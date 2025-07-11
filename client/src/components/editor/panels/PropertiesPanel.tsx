@@ -10,8 +10,10 @@ import { SimpleComponent } from '@/interfaces/quiz';
 
 interface PropertiesPanelProps {
   selectedComponent: SimpleComponent | null;
-  onComponentUpdate: (updates: Partial<SimpleComponent>) => void;
-  onComponentDelete: (componentId: string) => void;
+  updateComponent?: (componentId: string, newData: Partial<any>) => void;
+  onComponentUpdate?: (updates: Partial<SimpleComponent>) => void;
+  deleteComponent?: (componentId: string) => void;
+  onComponentDelete?: (componentId: string) => void;
 }
 
 const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
