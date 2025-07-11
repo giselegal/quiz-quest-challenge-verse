@@ -1,67 +1,116 @@
 
-import React from 'react';
-import { QuizQuestion as QuizQuestionType, UserResponse } from '@/types/quiz';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import React, { useState, useEffect } from 'react';
+import { Card } from './ui/card';
+import { Button } from './ui/button';
+import { UserResponse, QuizQuestion as QuizQuestionType } from '@/types/quiz';
+import { AnimatedWrapper } from './ui/animated-wrapper';
 
-interface QuizQuestionProps {
+export interface QuizQuestionProps {
   question: QuizQuestionType;
   onAnswer: (response: UserResponse) => void;
   currentAnswers: string[];
+  showQuestionImage?: boolean;
+  autoAdvance?: boolean;
+  isStrategicQuestion?: boolean;
 }
 
-export const QuizQuestion: React.FC<QuizQuestionProps> = ({ 
-  question, 
-  onAnswer, 
-  currentAnswers 
+export const QuizQuestion: React.FC<QuizQuestionProps> = ({
+  question,
+  onAnswer,
+  currentAnswers,
+  showQuestionImage = false,
+  autoAdvance = false,
+  isStrategicQuestion = false
 }) => {
-  const handleOptionClick = (optionId: string) => {
-    const response: UserResponse = {
-      questionId: question.id,
-      selectedOptions: [optionId],
-      timestamp: Date.now()
-    };
-    onAnswer(response);
+  const [selectedOptions, setSelectedOptions] = useState<string[]>(currentAnswers);
+
+  useEffect(() => {
+    setSelectedOptions(currentAnswers);
+  }, [currentAnswers, question.id]);
+
+  const handleOptionSelect = (optionId: string) => {
+    let newSelection: string[];
+    
+    if (question.multiSelect && question.multiSelect > 1) {
+      if (selectedOptions.includes(optionId)) {
+        newSelection = selectedOptions.filter(id => id !== optionId);
+      } else if (selectedOptions.length < question.multiSelect) {
+        newSelection = [...selectedOptions, optionId];
+      } else {
+        return;
+      }
+    } else {
+      newSelection = [optionId];
+    }
+    
+    setSelectedOptions(newSelection);
+    
+    if (autoAdvance && newSelection.length === (question.multiSelect || 1)) {
+      setTimeout(() => {
+        onAnswer({
+          questionId: question.id,
+          selectedOptions: newSelection
+        });
+      }, 300);
+    }
   };
 
+  const handleSubmit = () => {
+    onAnswer({
+      questionId: question.id,
+      selectedOptions: selectedOptions
+    });
+  };
+
+  const canSubmit = selectedOptions.length === (question.multiSelect || 1);
+
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <Card className="max-w-2xl w-full p-6 space-y-6">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-foreground mb-2">
-            {question.title || question.text}
+    <AnimatedWrapper show={true}>
+      <Card className="p-8 space-y-6 bg-white shadow-md">
+        <div className="space-y-4">
+          <h2 className="text-2xl font-playfair text-[#432818] text-center">
+            {question.question}
           </h2>
-          {question.imageUrl && (
-            <img 
-              src={question.imageUrl} 
-              alt="Question" 
-              className="mx-auto mb-4 rounded-lg max-w-full h-auto"
-            />
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {question.options.map((option) => (
+              <Button
+                key={option.id}
+                variant={selectedOptions.includes(option.id) ? "default" : "outline"}
+                className={`p-4 h-auto text-left ${
+                  selectedOptions.includes(option.id) 
+                    ? 'bg-[#B89B7A] hover:bg-[#A38A69]' 
+                    : 'border-[#B89B7A] hover:bg-[#B89B7A]/10'
+                }`}
+                onClick={() => handleOptionSelect(option.id)}
+              >
+                <div className="space-y-2">
+                  {showQuestionImage && option.imageUrl && (
+                    <img 
+                      src={option.imageUrl} 
+                      alt={option.text}
+                      className="w-full h-32 object-cover rounded"
+                    />
+                  )}
+                  <span className="block">{option.text}</span>
+                </div>
+              </Button>
+            ))}
+          </div>
+          
+          {!autoAdvance && (
+            <div className="text-center">
+              <Button
+                onClick={handleSubmit}
+                disabled={!canSubmit}
+                className="bg-[#B89B7A] hover:bg-[#A38A69] text-white px-8 py-2"
+              >
+                Continuar
+              </Button>
+            </div>
           )}
         </div>
-        
-        <div className="space-y-3">
-          {question.options.map((option) => (
-            <Button
-              key={option.id}
-              variant={currentAnswers.includes(option.id) ? "default" : "outline"}
-              className="w-full text-left justify-start h-auto p-4"
-              onClick={() => handleOptionClick(option.id)}
-            >
-              <div className="flex items-center gap-3">
-                {option.imageUrl && (
-                  <img 
-                    src={option.imageUrl} 
-                    alt={option.text}
-                    className="w-12 h-12 rounded object-cover"
-                  />
-                )}
-                <span>{option.text}</span>
-              </div>
-            </Button>
-          ))}
-        </div>
       </Card>
-    </div>
+    </AnimatedWrapper>
   );
 };

@@ -1,237 +1,302 @@
-import React, { useState, useEffect } from 'react';
-import { Loader2 } from 'lucide-react';
-import { QuizComponentType, QuizStage, QuizBuilderState } from '@/types/quizBuilder';
-import { useQuizBuilder } from '@/hooks/useQuizBuilder';
-import { toast } from '@/components/ui/use-toast';
-import { QuizResult } from '@/types/quiz';
+import React, { useState, useCallback } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Button } from '@/components/ui/button';
-import BuilderLayout from './components/BuilderLayout';
-import BuilderToolbar from './components/BuilderToolbar';
-import QuizTemplateImporter from './components/QuizTemplateImporter';
-import QuizPreview from './preview/QuizPreview';
-import { ResultPageConfig } from '@/types/resultPageConfig';
-import { resultPageStorage } from '@/services/resultPageStorage';
-import { createBuilderStateFromQuiz, loadQuizResultConfig } from '@/services/quizBuilderService';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Card } from '@/components/ui/card';
+import { DragHandle } from './DragHandle';
+import { QuizQuestion } from '@/types/quiz';
+import { toast } from '@/components/ui/use-toast';
 
-export const QuizBuilder: React.FC = () => {
-  const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
-  const [activeView, setActiveView] = useState<'editor' | 'preview'>('editor');
-  const [isPreviewing, setIsPreviewing] = useState(false);
-  const [previewResult, setPreviewResult] = useState<QuizResult | null>(null);
-  const [isTemplateImporterOpen, setIsTemplateImporterOpen] = useState(false);
-  const [isImportingFromResult, setIsImportingFromResult] = useState(false);
-  
-  const { 
-    components, 
-    stages,
-    activeStageId,
-    addComponent, 
-    updateComponent, 
-    deleteComponent,
-    moveComponent,
-    addStage,
-    updateStage,
-    deleteStage,
-    moveStage,
-    setActiveStage,
-    saveCurrentState,
-    initializeStages,
-    initializeComponents,
-    loading
-  } = useQuizBuilder();
+interface QuizBuilderProps {
+  initialQuestions?: QuizQuestion[];
+  onSave: (questions: QuizQuestion[]) => void;
+  className?: string;
+}
 
-  useEffect(() => {
-    const currentPath = window.location.pathname;
-    if (currentPath === '/resultado' && !isImportingFromResult) {
-      setIsImportingFromResult(true);
-      
-      const styleTypes = [
-        'Elegante', 'Contemporâneo', 'Natural', 'Clássico', 
-        'Romântico', 'Sexy', 'Dramático', 'Criativo'
-      ];
-      
-      let foundConfig = false;
-      
-      for (const styleType of styleTypes) {
-        const config = loadQuizResultConfig(styleType);
-        
-        if (config) {
-          toast({
-            title: "Configuração de Resultado Encontrada",
-            description: `Encontramos uma configuração de página de resultado para o estilo ${styleType}. Deseja importar para o editor?`,
-            action: (
-              <Button 
-                onClick={() => handleImportResultPage(config)}
-                className="bg-[#9b87f5] hover:bg-[#7E69AB] text-white"
-              >
-                Importar
-              </Button>
-            ),
-            duration: 10000
-          });
-          
-          foundConfig = true;
-          break;
+const QuizBuilder: React.FC<QuizBuilderProps> = ({
+  initialQuestions = [],
+  onSave,
+  className = ""
+}) => {
+  const [questions, setQuestions] = useState<QuizQuestion[]>(initialQuestions);
+  const [selectedQuestionIndex, setSelectedQuestionIndex] = useState<number | null>(null);
+  const [previewMode, setPreviewMode] = useState(false);
+
+  const addQuestion = useCallback(() => {
+    const newQuestion: QuizQuestion = {
+      id: `question-${Date.now()}`,
+      title: 'Nova Pergunta',
+      type: 'text',
+      multiSelect: 1,
+      options: [
+        {
+          id: `option-${Date.now()}-1`,
+          text: 'Opção 1',
+          styleCategory: 'Natural',
+          points: 1
         }
-      }
-      
-      if (!foundConfig) {
-        setIsImportingFromResult(false);
-      }
+      ]
+    };
+    setQuestions([...questions, newQuestion]);
+    setSelectedQuestionIndex(questions.length);
+  }, [questions]);
+
+  const updateQuestion = useCallback((index: number, updatedQuestion: QuizQuestion) => {
+    const newQuestions = [...questions];
+    newQuestions[index] = updatedQuestion;
+    setQuestions(newQuestions);
+  }, [questions]);
+
+  const deleteQuestion = useCallback((index: number) => {
+    const newQuestions = [...questions];
+    newQuestions.splice(index, 1);
+    setQuestions(newQuestions);
+    setSelectedQuestionIndex(null);
+  }, [questions]);
+
+  const addOption = useCallback((questionIndex: number) => {
+    const newOption = {
+      id: `option-${Date.now()}`,
+      text: 'Nova Opção',
+      styleCategory: 'Natural',
+      points: 1
+    };
+    const newQuestions = [...questions];
+    if (newQuestions[questionIndex]) {
+      newQuestions[questionIndex].options = [...newQuestions[questionIndex].options, newOption];
+      setQuestions(newQuestions);
     }
-  }, []);
+  }, [questions]);
 
-   const handleComponentSelect = (type: QuizComponentType) => {
-     const newComponentId = addComponent(type, activeStageId || undefined);
-     setSelectedComponentId(newComponentId);
-   };
+  const updateOption = useCallback((questionIndex: number, optionIndex: number, updatedOption: any) => {
+    const newQuestions = [...questions];
+    if (newQuestions[questionIndex] && newQuestions[questionIndex].options[optionIndex]) {
+      newQuestions[questionIndex].options[optionIndex] = {
+        ...newQuestions[questionIndex].options[optionIndex],
+        ...updatedOption
+      };
+      setQuestions(newQuestions);
+    }
+  }, [questions]);
 
-  const handleSave = () => {
-    const success = saveCurrentState();
-    if (success) {
+  const deleteOption = useCallback((questionIndex: number, optionIndex: number) => {
+    const newQuestions = [...questions];
+    if (newQuestions[questionIndex]) {
+      newQuestions[questionIndex].options.splice(optionIndex, 1);
+      setQuestions(newQuestions);
+    }
+  }, [questions]);
+
+  const moveQuestion = useCallback((dragIndex: number, hoverIndex: number) => {
+    const draggedQuestion = questions[dragIndex];
+    const newQuestions = [...questions];
+    newQuestions.splice(dragIndex, 1);
+    newQuestions.splice(hoverIndex, 0, draggedQuestion);
+    setQuestions(newQuestions);
+    setSelectedQuestionIndex(hoverIndex);
+  }, [questions]);
+
+  const handleSave = useCallback(() => {
+    try {
+      onSave(questions);
       toast({
-        title: "Quiz salvo",
-        description: "Todas as alterações foram salvas com sucesso.",
+        title: "Quiz salvo com sucesso",
+        description: "As alterações foram salvas com sucesso."
+      });
+    } catch (error) {
+      console.error("Erro ao salvar o quiz:", error);
+      toast({
+        title: "Erro ao salvar",
+        description: "Ocorreu um erro ao salvar as alterações.",
+        variant: "destructive"
       });
     }
-  };
+  }, [questions, onSave, toast]);
 
-  const handlePreviewQuizResult = () => {
-    const savedResult = localStorage.getItem('quiz_result');
-    if (savedResult) {
-      try {
-        const parsedResult = JSON.parse(savedResult);
-        setPreviewResult(parsedResult);
-        return;
-      } catch (error) {
-        console.error('Error parsing saved quiz result:', error);
-      }
-    }
+  const calculateStyleScores = (questions: QuizQuestion[]) => {
+    const scores: { [key: string]: number } = {};
     
-     const previewResult: QuizResult = {
-       id: 'preview-result',
-       participantName: 'Preview User',
-       responses: [],
-       styleScores: [],
-       predominantStyle: 'elegante',
-       complementaryStyles: ['romantico', 'classico'],
-       totalNormalQuestions: 10,
-       calculatedAt: new Date()
-     };
-    
-    setPreviewResult(previewResult);
-  };
-
-  const handleImportTemplate = (template: QuizBuilderState) => {
-    initializeStages(template.stages);
-    initializeComponents(template.components);
-    
-    if (template.stages.length > 0) {
-      setActiveStage(template.stages[0].id);
-    }
-    
-    toast({
-      title: "Template importado",
-      description: "O template foi carregado com sucesso. Você pode começar a editar.",
-    });
-  };
-
-  const handleImportResultPage = (config: ResultPageConfig) => {
-    // Create a new stage for the result page
-    const resultStageId = `stage-${Date.now()}`;
-    
-    const resultStage: QuizStage = {
-      id: resultStageId,
-      title: 'Página de Resultado',
-      type: 'result',
-      order: 0
-    };
-    
-    // Create components based on blocks in the config
-    const resultComponents = config.blocks?.map((block, index) => ({
-      id: `component-${Date.now()}-${index}`,
-      type: 'headline' as QuizComponentType, // Default to headline, modify as needed
-      order: index,
-      stageId: resultStageId,
-      content: {
-        title: block.content.title || 'Sem título',
-        subtitle: block.content.subtitle || '',
-        alignment: block.content.alignment || 'center'
-      }
-    })) || [];
-    
-    initializeStages([resultStage]);
-    initializeComponents(resultComponents);
-    setActiveStage(resultStage.id);
-    
-    toast({
-      title: "Página de resultado importada",
-      description: "A configuração da página de resultado foi importada com sucesso.",
+    questions.forEach(question => {
+      question.options.forEach(option => {
+        if (option.styleCategory) {
+          scores[option.styleCategory] = (scores[option.styleCategory] || 0) + (option.points || 1);
+        }
+      });
     });
     
-    setIsImportingFromResult(false);
+    return scores;
   };
 
-  const activeStage = activeStageId
-    ? stages.find(s => s.id === activeStageId)
-    : null;
-
-  if (loading) {
-    return (
-      <div className="h-screen flex flex-col items-center justify-center bg-[#1A1F2C]">
-        <LoadingSpinner size="lg" color="#9b87f5" className="mb-4" />
-        <p className="text-white text-lg">Carregando construtor de quiz...</p>
-      </div>
-    );
-  }
+  const togglePreviewMode = () => {
+    setPreviewMode(!previewMode);
+  };
 
   return (
-    <div className="h-screen flex flex-col bg-[#1A1F2C]">
-      <BuilderToolbar
-        activeView={activeView}
-        isPreviewing={isPreviewing}
-        onViewChange={setActiveView}
-        onPreviewToggle={() => setIsPreviewing(!isPreviewing)}
-        onSave={handleSave}
-        onPreviewResultPage={handlePreviewQuizResult}
-        onImportQuizTemplate={() => setIsTemplateImporterOpen(true)}
-      />
-      
-      <div className="flex-1 overflow-hidden">
-        {activeView === 'editor' ? (
-          <BuilderLayout
-            components={components}
-            stages={stages}
-            activeStageId={activeStageId}
-             selectedComponentId={selectedComponentId}
-             activeStage={activeStage ?? null}
-             isPreviewing={isPreviewing}
-             onComponentSelect={handleComponentSelect}
-            onStageAdd={addStage}
-            onStageSelect={setActiveStage}
-            onComponentMove={moveComponent}
-            onStageMove={moveStage}
-            onStageUpdate={updateStage}
-            onStageDelete={deleteStage}
-            onComponentUpdate={updateComponent}
-            onComponentDelete={deleteComponent}
-            onSelectComponent={setSelectedComponentId}
-          />
-        ) : (
-          <QuizPreview 
-            stages={stages}
-            components={components}
-            previewResult={previewResult}
-          />
-        )}
+    <div className={className}>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">Editor de Quiz</h2>
+        <div>
+          <Button onClick={handleSave} className="mr-2">Salvar Quiz</Button>
+          <Button onClick={togglePreviewMode}>
+            {previewMode ? 'Voltar ao Editor' : 'Visualizar Quiz'}
+          </Button>
+        </div>
       </div>
-      
-      <QuizTemplateImporter 
-        isOpen={isTemplateImporterOpen}
-        onClose={() => setIsTemplateImporterOpen(false)}
-        onImportTemplate={handleImportTemplate}
-      />
+
+      {!previewMode ? (
+        <DndProvider backend={HTML5Backend}>
+          <div className="flex">
+            <div className="w-1/2 pr-4">
+              <h3 className="text-xl mb-2">Perguntas</h3>
+              {questions.map((question, index) => (
+                <Card
+                  key={question.id}
+                  className={`mb-2 p-4 cursor-move ${selectedQuestionIndex === index ? 'bg-gray-100' : ''}`}
+                >
+                  <div className="flex items-center">
+                    <DragHandle onMove={() => moveQuestion(index, index)} />
+                    <button
+                      className="flex-1 text-left"
+                      onClick={() => setSelectedQuestionIndex(index)}
+                    >
+                      {question.title}
+                    </button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => deleteQuestion(index)}
+                      className="text-red-500"
+                    >
+                      Excluir
+                    </Button>
+                  </div>
+                </Card>
+              ))}
+              <Button onClick={addQuestion}>Adicionar Pergunta</Button>
+            </div>
+
+            <div className="w-1/2">
+              {selectedQuestionIndex !== null && (
+                <>
+                  <h3 className="text-xl mb-2">Editar Pergunta</h3>
+                  <Card className="p-4">
+                    <div className="mb-2">
+                      <label className="block text-gray-700 text-sm font-bold mb-2">
+                        Título da Pergunta
+                      </label>
+                      <Input
+                        type="text"
+                        value={questions[selectedQuestionIndex].title}
+                        onChange={(e) => {
+                          const newQuestions = [...questions];
+                          newQuestions[selectedQuestionIndex].title = e.target.value;
+                          setQuestions(newQuestions);
+                        }}
+                      />
+                    </div>
+                    <div className="mb-2">
+                      <label className="block text-gray-700 text-sm font-bold mb-2">
+                        Tipo de Pergunta
+                      </label>
+                      <Input
+                        type="text"
+                        value={questions[selectedQuestionIndex].type}
+                        onChange={(e) => {
+                          const newQuestions = [...questions];
+                          newQuestions[selectedQuestionIndex].type = e.target.value;
+                          setQuestions(newQuestions);
+                        }}
+                      />
+                    </div>
+                    <div className="mb-2">
+                      <label className="block text-gray-700 text-sm font-bold mb-2">
+                        Multi Select
+                      </label>
+                      <Input
+                        type="number"
+                        value={questions[selectedQuestionIndex].multiSelect}
+                        onChange={(e) => {
+                          const newQuestions = [...questions];
+                          newQuestions[selectedQuestionIndex].multiSelect = parseInt(e.target.value);
+                          setQuestions(newQuestions);
+                        }}
+                      />
+                    </div>
+                    <h4 className="text-lg mt-4 mb-2">Opções</h4>
+                    {questions[selectedQuestionIndex].options.map((option, optionIndex) => (
+                      <Card key={option.id} className="mb-2 p-4">
+                        <div className="mb-2">
+                          <label className="block text-gray-700 text-sm font-bold mb-2">
+                            Texto da Opção
+                          </label>
+                          <Textarea
+                            value={option.text}
+                            onChange={(e) => {
+                              updateOption(selectedQuestionIndex, optionIndex, { text: e.target.value });
+                            }}
+                          />
+                        </div>
+                        <div className="mb-2">
+                          <label className="block text-gray-700 text-sm font-bold mb-2">
+                            Style Category
+                          </label>
+                          <Input
+                            type="text"
+                            value={option.styleCategory}
+                            onChange={(e) => {
+                              updateOption(selectedQuestionIndex, optionIndex, { styleCategory: e.target.value });
+                            }}
+                          />
+                        </div>
+                        <div className="mb-2">
+                          <label className="block text-gray-700 text-sm font-bold mb-2">
+                            Points
+                          </label>
+                          <Input
+                            type="number"
+                            value={option.points}
+                            onChange={(e) => {
+                              updateOption(selectedQuestionIndex, optionIndex, { points: parseInt(e.target.value) });
+                            }}
+                          />
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => deleteOption(selectedQuestionIndex, optionIndex)}
+                          className="text-red-500"
+                        >
+                          Excluir Opção
+                        </Button>
+                      </Card>
+                    ))}
+                    <Button onClick={() => addOption(selectedQuestionIndex)}>
+                      Adicionar Opção
+                    </Button>
+                  </Card>
+                </>
+              )}
+            </div>
+          </div>
+        </DndProvider>
+      ) : (
+        <div className="p-4">
+          <h3 className="text-xl mb-2">Visualização do Quiz</h3>
+          {questions.map((question) => (
+            <Card key={question.id} className="mb-4 p-4">
+              <h4 className="text-lg font-bold">{question.title}</h4>
+              <ul>
+                {question.options.map((option) => (
+                  <li key={option.id}>{option.text}</li>
+                ))}
+              </ul>
+            </Card>
+          ))}
+          <pre>{JSON.stringify(calculateStyleScores(questions), null, 2)}</pre>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,4 +1,3 @@
-
 import { QuizQuestion } from '@/types/quiz';
 
 export const caktoQuizQuestions: QuizQuestion[] = [
@@ -67,3 +66,41 @@ export const caktoQuizQuestions: QuizQuestion[] = [
     ]
   }
 ];
+
+// Export alias for backward compatibility
+export const caktoquizQuestions = caktoQuizQuestions;
+
+// Strategic questions (placeholder)
+export const strategicQuestions = [
+  {
+    id: 'strategic-1',
+    question: 'Como você se sente em relação ao seu estilo atual?',
+    type: 'single' as const,
+    multiSelect: 1,
+    options: [
+      {
+        id: 'str-1-1',
+        text: 'Muito satisfeita',
+        styleCategory: 'Satisfied',
+        points: 3
+      },
+      {
+        id: 'str-1-2', 
+        text: 'Parcialmente satisfeita',
+        styleCategory: 'Partial',
+        points: 2
+      },
+      {
+        id: 'str-1-3',
+        text: 'Insatisfeita',
+        styleCategory: 'Unsatisfied', 
+        points: 1
+      }
+    ]
+  }
+];
+
+// Get all questions function
+export const getAllQuestions = () => {
+  return [...caktoQuizQuestions, ...strategicQuestions];
+};
