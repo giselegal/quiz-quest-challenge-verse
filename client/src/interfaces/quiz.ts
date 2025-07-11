@@ -31,9 +31,10 @@ export interface QuizFunnel {
   id: string;
   name: string;
   description?: string;
-  pages: any[];
-  createdAt: string;
-  updatedAt: string;
+  pages: SimplePage[];
+  config?: QuizConfig;
+  createdAt: Date | string;
+  updatedAt: Date | string;
   isPublished?: boolean;
   version?: number;
 }
@@ -48,7 +49,34 @@ export interface QuizConfig {
   seo?: {
     title?: string;
     description?: string;
-    keywords?: string[];
+    keywords?: string[] | string;
+  };
+  pixel?: {
+    facebookPixelId?: string;
+    googleAnalyticsId?: string;
+  };
+  utm?: {
+    source?: string;
+    medium?: string;
+    campaign?: string;
+    content?: string;
+    term?: string;
+  };
+  scoring?: {
+    normalQuestionPoints?: number;
+    strategicQuestionPoints?: number;
+    autoAdvanceNormal?: boolean;
+    autoAdvanceStrategic?: boolean;
+    normalSelectionLimit?: number;
+    strategicSelectionLimit?: number;
+  };
+  results?: {
+    showUserName?: boolean;
+    showPrimaryStyle?: boolean;
+    showSecondaryStyles?: boolean;
+    showPercentages?: boolean;
+    showStyleImages?: boolean;
+    showStyleGuides?: boolean;
   };
   analytics?: {
     googleAnalyticsId?: string;

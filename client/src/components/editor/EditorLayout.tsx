@@ -43,9 +43,12 @@ const EditorLayout = ({ primaryStyle }: EditorLayoutProps) => {
         <ResizablePanel defaultSize={55}>
           <PagePreview
             primaryStyle={primaryStyle || {
-              category: 'Natural',
-              score: 0,
-              percentage: 100
+              style: 'natural',
+              points: 0,
+              percentage: 100,
+              rank: 1,
+              category: 'natural',
+              score: 0
             }}
             onSelectComponent={handleSelectComponent}
             blocks={config.blocks}

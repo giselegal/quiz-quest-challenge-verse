@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DynamicPropertiesPanel } from '../editor/panels/DynamicPropertiesPanel';
-import { BlockRenderer, BlockData } from '../editor/blocks';
+import { UniversalBlockRenderer as BlockRenderer, BlockData } from '../editor/blocks';
 import { blockDefinitions, getCategories, getBlocksByCategory } from '@/config/blockDefinitionsClean';
 import { Type, Image, ArrowRight, CheckCircle, Target, Play, Star, FileText, ShoppingCart, Clock, MessageSquare, HelpCircle, Shield, Video } from 'lucide-react';
 
@@ -172,7 +172,7 @@ export const SchemaDrivenDemo: React.FC = () => {
                   <div className="space-y-2">
                     {getBlocksByCategory(category).map(block => (
                       <Button
-                        key={block.id}
+                        key={block.type}
                         variant="ghost"
                         className="w-full justify-start p-3 h-auto"
                         onClick={() => addBlock(block.type)}

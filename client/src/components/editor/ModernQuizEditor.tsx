@@ -41,7 +41,7 @@ const ModernQuizEditor: React.FC<ModernQuizEditorProps> = ({
   // State
   const [activeTab, setActiveTab] = useState<string>('editor');
   const [deviceView, setDeviceView] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
-  const [selectedComponent, setSelectedComponent] = useState<SimpleComponent | null>(null);
+  const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
@@ -105,7 +105,7 @@ const ModernQuizEditor: React.FC<ModernQuizEditorProps> = ({
     setDeviceView(device);
   }, []);
 
-  const handleComponentSelect = useCallback((component: SimpleComponent | null) => {
+  const handleComponentSelect = useCallback((component: string | null) => {
     setSelectedComponent(component);
   }, []);
 
