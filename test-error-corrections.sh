@@ -15,8 +15,7 @@ fi
 
 # Testar APIs schema-driven
 echo "📡 2. Testando API Schema-driven..."
-RESPONSE=$(curl -s -w "%{http_code}" http://localhost:5000/api/schema-driven/funnels)
-HTTP_CODE=${RESPONSE: -3}
+HTTP_CODE=$(curl -s -w "%{http_code}" -o /dev/null http://localhost:5000/api/schema-driven/funnels)
 if [ "$HTTP_CODE" = "200" ]; then
     echo "✅ API Schema-driven funcionando (HTTP $HTTP_CODE)"
 else
