@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import QuizQuestionBlock from './blocks/QuizQuestionBlock';
+import QuizQuestionBlock from '@/components/blocks/quiz/QuizQuestionBlock';
 
 interface QuizStep {
   id: string;
@@ -346,7 +346,7 @@ const QuizEditorSteps = () => {
           multipleSelection={currentStepData.allowMultiple}
           showImages={currentStepData.showImages}
           maxSelections={currentStepData.maxSelections}
-          onAnswer={(answers) => handleStepResponse(currentStepData.id, answers)}
+          onAnswer={(answers: string[]) => handleStepResponse(currentStepData.id, answers)}
           onBack={currentStep > 0 ? handleBack : undefined}
           progressPercent={progressPercent}
           logoUrl="/api/placeholder/96/96"
