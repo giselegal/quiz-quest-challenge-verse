@@ -1,14 +1,28 @@
 import type { BlockData } from '@/components/editor/blocks';
-import { REAL_QUIZ_QUESTIONS, STRATEGIC_QUESTIONS, TRANSITIONS } from '@/components/visual-editor/realQuizData';
+import { REAL_QUIZ_QUESTIONS, STRATEGIC_QUESTIONS } from '@/data/realQuizQuestions';
 import { QuizDataAdapter } from './quizDataAdapter';
 import { LocalStorageFixer } from '@/utils/fixLocalStorageIssues';
 import { CloudinaryImageFixer } from '@/utils/cloudinaryImageFixer';
+import { styleConfig } from '@/config/styleConfig';
 
 // DEBUG: Verificar se os dados estão sendo importados corretamente
 console.log('🔍 DEBUG - Dados importados:');
 console.log('  REAL_QUIZ_QUESTIONS:', REAL_QUIZ_QUESTIONS?.length || 'UNDEFINED');
 console.log('  STRATEGIC_QUESTIONS:', STRATEGIC_QUESTIONS?.length || 'UNDEFINED');
-console.log('  TRANSITIONS:', TRANSITIONS ? 'OK' : 'UNDEFINED');
+
+// Interface para dados dinâmicos
+interface DynamicDataContext {
+  userName?: string;
+  primaryStyle?: any;
+  secondaryStyles?: any[];
+  primaryStyleName?: string;
+  primaryStylePercentage?: number;
+  primaryStyleImage?: string;
+  primaryStyleGuideImage?: string;
+  primaryStyleDescription?: string;
+  userEmail?: string;
+  isLoggedIn?: boolean;
+}
 
 // Tipos para o sistema schema-driven
 export interface SchemaDrivenFunnelData {
@@ -88,6 +102,20 @@ export interface AutoSaveState {
   lastSave: Date | null;
   pendingChanges: boolean;
   errorCount: number;
+}
+
+// Interface para dados dinâmicos
+interface DynamicDataContext {
+  userName?: string;
+  primaryStyle?: any;
+  secondaryStyles?: any[];
+  primaryStyleName?: string;
+  primaryStylePercentage?: number;
+  primaryStyleImage?: string;
+  primaryStyleGuideImage?: string;
+  primaryStyleDescription?: string;
+  userEmail?: string;
+  isLoggedIn?: boolean;
 }
 
 class SchemaDrivenFunnelService {
@@ -552,40 +580,126 @@ class SchemaDrivenFunnelService {
     }
   }
 
-  // Utility methods
-  createDefaultFunnel(): SchemaDrivenFunnelData {
-    const now = new Date();
+  /**
+   * Função para obter dados dinâmicos do quiz
+   */
+  private getDynamicDataContext(): DynamicDataContext {
+    // Obter dados do localStorage e contextos
+    const userName = localStorage.getItem('userName') || '';
+    const quizResultStr = localStorage.getItem('quizResult');
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    
+    let primaryStyle: any = null;
+    let secondaryStyles: any[] = [];
+    
+    // Tentar extrair dados do quiz
+    if (quizResultStr) {
+      try {
+        const quizResult = JSON.parse(quizResultStr);
+        primaryStyle = quizResult.primaryStyle;
+        secondaryStyles = quizResult.secondaryStyles || [];
+      } catch (e) {
+        console.warn('Erro ao parsear resultado do quiz:', e);
+      }
+    }
+    
+    // Determinar dados do estilo predominante
+    let primaryStyleName = 'Elegante'; // Default
+    let primaryStylePercentage = 85; // Default
+    let primaryStyleImage = '';
+    let primaryStyleGuideImage = '';
+    let primaryStyleDescription = '';
+    
+    if (primaryStyle) {
+      if (typeof primaryStyle === 'string') {
+        primaryStyleName = primaryStyle;
+      } else if (typeof primaryStyle === 'object') {
+        primaryStyleName = primaryStyle.category || primaryStyle.name || 'Elegante';
+        primaryStylePercentage = primaryStyle.percentage || primaryStyle.score || 85;
+      }
+    }
+    
+    // Obter dados do estilo do styleConfig
+    const styleKey = primaryStyleName as keyof typeof styleConfig;
+    const styleData = styleConfig[styleKey] || styleConfig.Natural;
+    
+    if (styleData) {
+      primaryStyleImage = styleData.image || '';
+      primaryStyleGuideImage = styleData.guideImage || '';
+      primaryStyleDescription = styleData.description || '';
+    }
     
     return {
-      id: `funnel-${Date.now()}`,
-      name: 'Quiz CaktoQuiz - Descubra Seu Estilo',
-      description: 'Funil completo para descoberta do estilo pessoal - 21 etapas modulares',
-      theme: 'caktoquiz',
-      isPublished: false,
-      pages: this.createModularPages(),
-      config: {
-        name: 'Quiz CaktoQuiz - Descubra Seu Estilo',
-        description: 'Funil completo para descoberta do estilo pessoal - 21 etapas modulares',
-        isPublished: false,
-        theme: 'caktoquiz',
-        primaryColor: '#B89B7A',
-        secondaryColor: '#432818',
-        fontFamily: 'Inter, sans-serif',
-        analytics: {
-          trackingId: 'FB_PIXEL_ID',
-          events: ['page_view', 'quiz_start', 'quiz_complete', 'conversion'],
-          conversionGoals: ['quiz_completion', 'purchase']
-        },
-        seo: {
-          title: 'Descubra Seu Estilo Pessoal - Quiz CaktoQuiz',
-          description: 'Descubra seu estilo pessoal em poucos minutos com nosso quiz especializado.',
-          keywords: ['estilo pessoal', 'moda', 'quiz', 'consultoria']
-        }
-      },
-      version: 1,
-      lastModified: now,
-      createdAt: now
+      userName: userName || user?.userName || 'Usuário',
+      primaryStyle,
+      secondaryStyles,
+      primaryStyleName,
+      primaryStylePercentage,
+      primaryStyleImage,
+      primaryStyleGuideImage,
+      primaryStyleDescription,
+      userEmail: user?.email || '',
+      isLoggedIn: !!(userName || user?.userName)
     };
+  }
+
+  /**
+   * Função para substituir placeholders dinâmicos em propriedades de blocos
+   */
+  private replaceDynamicPlaceholders(properties: any, dynamicData: DynamicDataContext): any {
+    if (!properties || typeof properties !== 'object') {
+      return properties;
+    }
+    
+    const result = { ...properties };
+    
+    // Substitui placeholders em todas as propriedades
+    Object.keys(result).forEach(key => {
+      const value = result[key];
+      
+      if (typeof value === 'string') {
+        // Substituir placeholders dinâmicos
+        result[key] = value
+          .replace(/dinamicUserName/g, dynamicData.userName || 'Usuário')
+          .replace(/dinamicStyleName/g, dynamicData.primaryStyleName || 'Elegante')
+          .replace(/dinamicStylePercentage/g, String(dynamicData.primaryStylePercentage || 85))
+          .replace(/dinamicStyleImage/g, dynamicData.primaryStyleImage || '')
+          .replace(/dinamicStyleGuideImage/g, dynamicData.primaryStyleGuideImage || '')
+          .replace(/dinamicStyleDescription/g, dynamicData.primaryStyleDescription || '');
+      } else if (typeof value === 'number' && key === 'percentage') {
+        // Substituir percentuais numéricos
+        result[key] = dynamicData.primaryStylePercentage || 85;
+      } else if (Array.isArray(value)) {
+        // Recursão para arrays
+        result[key] = value.map(item => this.replaceDynamicPlaceholders(item, dynamicData));
+      } else if (typeof value === 'object') {
+        // Recursão para objetos
+        result[key] = this.replaceDynamicPlaceholders(value, dynamicData);
+      }
+    });
+    
+    return result;
+  }
+
+  /**
+   * Função para aplicar dados dinâmicos a uma página específica
+   */
+  applyDynamicDataToPage(pageData: SchemaDrivenPageData): SchemaDrivenPageData {
+    const dynamicData = this.getDynamicDataContext();
+    
+    console.log('🔄 Aplicando dados dinâmicos à página:', pageData.id);
+    console.log('📊 Dados dinâmicos extraídos:', dynamicData);
+    
+    // Criar cópia da página
+    const updatedPage = { ...pageData };
+    
+    // Aplicar dados dinâmicos aos blocos
+    updatedPage.blocks = pageData.blocks.map(block => ({
+      ...block,
+      properties: this.replaceDynamicPlaceholders(block.properties, dynamicData)
+    }));
+    
+    return updatedPage;
   }
 
   /**
@@ -1137,9 +1251,9 @@ class SchemaDrivenFunnelService {
           properties: {
             title: 'Seu Estilo Predominante',
             styleName: 'dinamicStyleName', // Será preenchido dinamicamente
-            percentage: 85,
-            description: 'Baseado nas suas respostas, identificamos que você tem características predominantes do estilo...',
-            imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp',
+            percentage: 85, // Será substituído dinamicamente
+            description: 'dinamicStyleDescription', // Será preenchido dinamicamente
+            imageUrl: 'dinamicStyleImage', // Será preenchido dinamicamente
             showMatch: true,
             animateReveal: true
           }
@@ -1179,7 +1293,7 @@ class SchemaDrivenFunnelService {
           id: 'result-transformation-image',
           type: 'image-display-inline',
           properties: {
-            src: CloudinaryImageFixer.fixKnownProblematicUrls('https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp'),
+            src: 'dinamicStyleGuideImage', // Será preenchido dinamicamente
             alt: 'Guia de transformação do seu estilo',
             width: 600,
             height: 400,
@@ -1305,7 +1419,7 @@ class SchemaDrivenFunnelService {
           properties: {
             content: 'Como você tem o estilo <strong class="text-[#B89B7A]">ELEGANTE</strong> predominante, criei uma oferta especial para você transformar seu guarda-roupa.',
             fontSize: 'text-lg',
-            textAlign: 'text-center',
+            textAlign: 'center',
             color: '#432818',
             marginBottom: 24
           }
@@ -1503,6 +1617,40 @@ class SchemaDrivenFunnelService {
   createLegacyDefaultFunnel(): SchemaDrivenFunnelData {
     console.log('🔄 Creating legacy funnel using modular architecture...');
     return this.createDefaultFunnel();
+  }
+
+  /**
+   * Função pública para obter uma página com dados dinâmicos aplicados
+   */
+  getPageWithDynamicData(pageId: string): SchemaDrivenPageData | null {
+    const funnel = this.getLocalFunnel();
+    if (!funnel) return null;
+    
+    const page = funnel.pages.find(p => p.id === pageId);
+    if (!page) return null;
+    
+    // Aplicar dados dinâmicos especialmente para a etapa 20
+    if (pageId === 'etapa-20-resultado') {
+      return this.applyDynamicDataToPage(page);
+    }
+    
+    return page;
+  }
+
+  /**
+   * Função pública para obter todas as páginas com dados dinâmicos aplicados
+   */
+  getAllPagesWithDynamicData(): SchemaDrivenPageData[] {
+    const funnel = this.getLocalFunnel();
+    if (!funnel) return [];
+    
+    return funnel.pages.map(page => {
+      // Aplicar dados dinâmicos especialmente para a etapa 20
+      if (page.id === 'etapa-20-resultado') {
+        return this.applyDynamicDataToPage(page);
+      }
+      return page;
+    });
   }
 
   // Cleanup
