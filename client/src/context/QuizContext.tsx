@@ -4,35 +4,30 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 interface QuizQuestion {
   id: string;
   title: string;
-  type: 'single' | 'multiple' | 'text' | 'image' | 'both' | 'strategic';
-  options?: QuizOption[];
-  required_selections?: number;
+  type: 'single' | 'multiple';
+  options?: Array<{
+    id: string;
+    text: string;
+    points: Record<string, number>;
+  }>;
 }
 
-interface QuizOption {
-  id: string;
-  text: string;
-  points: { [styleType: string]: number };
-  image_url?: string;
-  style_code?: string;
-}
-
-interface UserResponse {
+interface QuizResponse {
   questionId: string;
   selectedOptions: string[];
   timestamp: number;
 }
 
 interface QuizContextType {
-  currentQuestionIndex: number;
   questions: QuizQuestion[];
-  responses: UserResponse[];
+  currentQuestionIndex: number;
+  responses: QuizResponse[];
   isCompleted: boolean;
+  setQuestions: (questions: QuizQuestion[]) => void;
   nextQuestion: () => void;
   previousQuestion: () => void;
-  addResponse: (response: UserResponse) => void;
+  addResponse: (response: QuizResponse) => void;
   resetQuiz: () => void;
-  setQuestions: (questions: QuizQuestion[]) => void;
 }
 
 const QuizContext = createContext<QuizContextType | undefined>(undefined);
@@ -50,16 +45,17 @@ interface QuizProviderProps {
 }
 
 export const QuizProvider: React.FC<QuizProviderProps> = ({ children }) => {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
-  const [responses, setResponses] = useState<UserResponse[]>([]);
-  const [isCompleted, setIsCompleted] = useState(false);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [responses, setResponses] = useState<QuizResponse[]>([]);
+
+  const isCompleted = currentQuestionIndex >= questions.length && questions.length > 0;
 
   const nextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
-      setIsCompleted(true);
+      setCurrentQuestionIndex(questions.length);
     }
   };
 
@@ -69,34 +65,28 @@ export const QuizProvider: React.FC<QuizProviderProps> = ({ children }) => {
     }
   };
 
-  const addResponse = (response: UserResponse) => {
+  const addResponse = (response: QuizResponse) => {
     setResponses(prev => {
-      const existing = prev.findIndex(r => r.questionId === response.questionId);
-      if (existing >= 0) {
-        const updated = [...prev];
-        updated[existing] = response;
-        return updated;
-      }
-      return [...prev, response];
+      const filtered = prev.filter(r => r.questionId !== response.questionId);
+      return [...filtered, response];
     });
   };
 
   const resetQuiz = () => {
     setCurrentQuestionIndex(0);
     setResponses([]);
-    setIsCompleted(false);
   };
 
   const value: QuizContextType = {
-    currentQuestionIndex,
     questions,
+    currentQuestionIndex,
     responses,
     isCompleted,
+    setQuestions,
     nextQuestion,
     previousQuestion,
     addResponse,
-    resetQuiz,
-    setQuestions
+    resetQuiz
   };
 
   return (
