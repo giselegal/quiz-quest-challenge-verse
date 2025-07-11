@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Block } from '@/types/editor';
 import { SortableBlock } from './SortableBlock';
@@ -49,6 +50,18 @@ export const DraggableBlockList: React.FC<DraggableBlockListProps> = ({
     }
   };
 
+  const handleDuplicate = (id: string) => {
+    if (onDuplicateBlock) {
+      onDuplicateBlock(id);
+    }
+  };
+
+  const handleDelete = (id: string) => {
+    if (onDeleteBlock) {
+      onDeleteBlock(id);
+    }
+  };
+
   return (
     <DndContext
       sensors={sensors}
@@ -68,8 +81,8 @@ export const DraggableBlockList: React.FC<DraggableBlockListProps> = ({
               isSelected={selectedBlockId === block.id}
               isPreviewing={isPreviewing}
               onSelect={() => onSelectBlock(block.id)}
-              onDuplicate={onDuplicateBlock ? () => onDuplicateBlock(block.id) : undefined}
-              onDelete={onDeleteBlock ? () => onDeleteBlock(block.id) : undefined}
+              onDuplicate={onDuplicateBlock ? () => handleDuplicate(block.id) : undefined}
+              onDelete={onDeleteBlock ? () => handleDelete(block.id) : undefined}
             />
           ))}
         </div>

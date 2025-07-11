@@ -21,8 +21,9 @@ const CaktoQuizFlow: React.FC<CaktoQuizFlowProps> = ({ questions, onComplete }) 
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
-      // Calculate result
+      // Calculate result with all required properties
       const calculatedResult: QuizResult = {
+        id: `result-${Date.now()}`,
         primaryStyle: {
           style: 'Natural',
           category: 'Natural',
@@ -31,7 +32,9 @@ const CaktoQuizFlow: React.FC<CaktoQuizFlowProps> = ({ questions, onComplete }) 
           rank: 1,
           score: 100
         },
-        secondaryStyles: []
+        secondaryStyles: [],
+        responses: answers,
+        completedAt: new Date()
       };
       setResult(calculatedResult);
       setIsCompleted(true);

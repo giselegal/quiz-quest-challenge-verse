@@ -1,4 +1,5 @@
-import React, { useState, useRef, useCallback } from 'react';
+
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { 
   optimizeImage, 
@@ -75,7 +76,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
     width,
     height,
     quality,
-    format: format === 'auto' ? 'webp' : format // Fix the auto format issue
+    format
   });
 
   const handleLoad = useCallback(() => {

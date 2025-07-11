@@ -1,53 +1,56 @@
 
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { QuizQuestion } from '@/types/quiz';
+import { Button } from '@/components/ui/button';
 
-export const QuizBuilder: React.FC = () => {
+interface QuizBuilderProps {
+  onSave?: (questions: QuizQuestion[]) => void;
+}
+
+const QuizBuilder: React.FC<QuizBuilderProps> = ({ onSave }) => {
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
-  const [currentQuestion, setCurrentQuestion] = useState<string>('');
 
   const addQuestion = () => {
-    if (currentQuestion.trim()) {
-      const newQuestion: QuizQuestion = {
-        id: `q-${Date.now()}`,
-        title: currentQuestion,
-        text: currentQuestion,
-        type: 'multiple',
-        options: []
-      };
-      setQuestions([...questions, newQuestion]);
-      setCurrentQuestion('');
+    const newQuestion: QuizQuestion = {
+      id: `question-${Date.now()}`,
+      title: 'Nova Pergunta',
+      text: 'Digite sua pergunta aqui',
+      type: 'multiple',
+      options: []
+    };
+    setQuestions([...questions, newQuestion]);
+  };
+
+  const handleSave = () => {
+    if (onSave) {
+      onSave(questions);
     }
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <Card>
-        <CardHeader>
-          <CardTitle>Quiz Builder</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex gap-2">
-            <Input
-              value={currentQuestion}
-              onChange={(e) => setCurrentQuestion(e.target.value)}
-              placeholder="Enter question text..."
-            />
-            <Button onClick={addQuestion}>Add Question</Button>
+    <div className="p-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Quiz Builder</h1>
+        <div className="space-x-2">
+          <Button onClick={addQuestion}>Adicionar Pergunta</Button>
+          <Button onClick={handleSave} variant="default">Salvar</Button>
+        </div>
+      </div>
+      
+      <div className="space-y-4">
+        {questions.map((question, index) => (
+          <div key={question.id} className="border p-4 rounded-lg">
+            <h3 className="font-medium">Pergunta {index + 1}</h3>
+            <p className="text-gray-600">{question.text}</p>
           </div>
-          
-          <div className="space-y-2">
-            {questions.map((question) => (
-              <div key={question.id} className="p-3 border rounded">
-                <p>{question.text}</p>
-              </div>
-            ))}
+        ))}
+        
+        {questions.length === 0 && (
+          <div className="text-center py-8 text-gray-500">
+            Nenhuma pergunta adicionada. Clique em "Adicionar Pergunta" para começar.
           </div>
-        </CardContent>
-      </Card>
+        )}
+      </div>
     </div>
   );
 };

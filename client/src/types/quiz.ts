@@ -9,6 +9,7 @@ export interface QuizOption {
   styleCode?: string;
   styleCategory?: string;
   weight?: number;
+  style?: string; // Add style property for mapping
 }
 
 export interface QuizQuestion {
@@ -48,6 +49,7 @@ export interface QuizResult {
   secondaryStyles: StyleResult[];
   responses: UserResponse[];
   completedAt: Date;
+  participantName?: string; // Add optional participant name
 }
 
 export interface Quiz {
@@ -57,3 +59,10 @@ export interface Quiz {
   questions: QuizQuestion[];
   active: boolean;
 }
+
+// Export additional types that are referenced in other files
+export type StyleType = 'natural' | 'classico' | 'contemporaneo' | 'elegante' | 'romantico' | 'sensual' | 'dramatico' | 'criativo';
+export type Style = StyleResult;
+export type QuizResponse = UserResponse;
+export type StyleScore = Record<StyleType, number>;
+export type StyleCalculationEngine = any; // Placeholder type
