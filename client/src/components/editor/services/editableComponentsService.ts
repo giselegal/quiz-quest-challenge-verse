@@ -266,17 +266,18 @@ export const getComponentsByCategory = (category: EditableComponentConfig['categ
     .map(([path, config]) => ({ path, ...config }));
 };
 
-// Função para validar props de um componente
-export const validateComponentProps = (
-  componentPath: string,
-  props: Record<string, any>
-): { valid: boolean; errors: string[] } => {
-  const config = getComponentConfig(componentPath);
-  
-  if (!config) {
-    return { valid: false, errors: [`Componente não encontrado: ${componentPath}`] };
-  }
+// Função para obter todos os componentes editáveis
+export const getAllEditableComponents = () => {
+  return Object.entries(EDITABLE_COMPONENTS_CONFIG)
+    .filter(([_, config]) => config.editable)
+    .map(([path, config]) => ({ path, ...config }));
+};
 
+// Função para validar props de um componente usando a configuração
+export const validateComponentProps = (
+  config: EditableComponentConfig,
+  props: Record<string, any>
+): { isValid: boolean; errors: string[] } => {
   const errors: string[] = [];
   
   // Verificar props obrigatórias
@@ -288,13 +289,30 @@ export const validateComponentProps = (
     }
   }
 
-  return { valid: errors.length === 0, errors };
+  return { isValid: errors.length === 0, errors };
+};
+
+// Função para validar props de um componente por path (mantendo compatibilidade)
+export const validateComponentPropsByPath = (
+  componentPath: string,
+  props: Record<string, any>
+): { valid: boolean; errors: string[] } => {
+  const config = getComponentConfig(componentPath);
+  
+  if (!config) {
+    return { valid: false, errors: [`Componente não encontrado: ${componentPath}`] };
+  }
+
+  const validation = validateComponentProps(config, props);
+  return { valid: validation.isValid, errors: validation.errors };
 };
 
 export default {
   renderEditableComponent,
   getComponentConfig,
   getComponentsByCategory,
+  getAllEditableComponents,
   validateComponentProps,
+  validateComponentPropsByPath,
   EDITABLE_COMPONENTS_CONFIG
 };

@@ -257,143 +257,66 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       'component-reference': () => {
         const { componentPath, componentName, props: componentProps = {} } = block.properties;
         
-        // Mapear componentes reais para renderização no editor
-        const getRealComponent = () => {
-          switch (componentPath) {
-            case '@/components/result/MotivationSection':
-              return (
-                <div className={cn(
-                  // Container do editor com identidade da marca
-                  'relative border-2 border-[#B89B7A]/30 rounded-xl overflow-hidden',
-                  'bg-white shadow-sm transition-all duration-300',
-                  isSelected && 'border-[#B89B7A] shadow-lg ring-2 ring-[#B89B7A]/20',
-                  'hover:border-[#B89B7A]/50 cursor-pointer'
-                )}
-                onClick={onClick}
-                >
-                  {/* Badge do editor */}
-                  <div className="absolute top-2 right-2 z-10 bg-[#B89B7A] text-white text-xs px-2 py-1 rounded-full font-medium">
-                    Editável
-                  </div>
-                  
-                  {/* Componente real renderizado */}
-                  <MotivationSection {...componentProps} />
+        // Obter configuração do componente
+        const componentConfig = getComponentConfig(componentPath);
+        
+        if (!componentConfig) {
+          // Fallback com design da marca
+          return (
+            <div className={cn(
+              'w-full p-6 border-2 border-dashed border-[#B89B7A]/40 rounded-xl',
+              'bg-gradient-to-br from-[#FAF9F7] to-[#F5F4F1]',
+              'flex flex-col items-center justify-center gap-3',
+              'min-h-[120px] text-center transition-all duration-300',
+              isSelected && 'border-[#B89B7A] bg-gradient-to-br from-[#B89B7A]/10 to-[#B89B7A]/5',
+              'cursor-pointer hover:border-[#B89B7A]/60'
+            )}
+            onClick={onClick}
+            >
+              <div className="flex items-center gap-3 text-[#432818]">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#B89B7A] to-[#aa6b5d] flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">G</span>
                 </div>
-              );
+                <span className="font-playfair font-semibold text-lg">{componentName || 'Componente'}</span>
+              </div>
+              <p className="text-sm text-[#8F7A6A]">
+                Componente não mapeado: <code className="bg-[#B89B7A]/10 px-2 py-1 rounded text-xs">{componentPath}</code>
+              </p>
+            </div>
+          );
+        }
 
-            case '@/components/result/BonusSection':
-              return (
-                <div className={cn(
-                  'relative border-2 border-[#B89B7A]/30 rounded-xl overflow-hidden',
-                  'bg-white shadow-sm transition-all duration-300',
-                  isSelected && 'border-[#B89B7A] shadow-lg ring-2 ring-[#B89B7A]/20',
-                  'hover:border-[#B89B7A]/50 cursor-pointer'
-                )}
-                onClick={onClick}
-                >
-                  <div className="absolute top-2 right-2 z-10 bg-[#B89B7A] text-white text-xs px-2 py-1 rounded-full font-medium">
-                    Editável
-                  </div>
-                  <BonusSection {...componentProps} />
-                </div>
-              );
+        // Renderizar componente real usando o serviço
+        const renderedComponent = renderEditableComponent(componentPath, componentProps, true);
+        
+        if (!renderedComponent) {
+          return (
+            <div className="w-full p-4 border border-red-300 rounded-lg bg-red-50 text-red-700">
+              <p className="font-medium">Erro ao renderizar componente</p>
+              <p className="text-sm">Caminho: {componentPath}</p>
+            </div>
+          );
+        }
 
-            case '@/components/result/GuaranteeSection':
-              return (
-                <div className={cn(
-                  'relative border-2 border-[#B89B7A]/30 rounded-xl overflow-hidden',
-                  'bg-white shadow-sm transition-all duration-300',
-                  isSelected && 'border-[#B89B7A] shadow-lg ring-2 ring-[#B89B7A]/20',
-                  'hover:border-[#B89B7A]/50 cursor-pointer'
-                )}
-                onClick={onClick}
-                >
-                  <div className="absolute top-2 right-2 z-10 bg-[#B89B7A] text-white text-xs px-2 py-1 rounded-full font-medium">
-                    Editável
-                  </div>
-                  <GuaranteeSection {...componentProps} />
-                </div>
-              );
-
-            case '@/components/result/BeforeAfterTransformation':
-              return (
-                <div className={cn(
-                  'relative border-2 border-[#B89B7A]/30 rounded-xl overflow-hidden',
-                  'bg-white shadow-sm transition-all duration-300',
-                  isSelected && 'border-[#B89B7A] shadow-lg ring-2 ring-[#B89B7A]/20',
-                  'hover:border-[#B89B7A]/50 cursor-pointer'
-                )}
-                onClick={onClick}
-                >
-                  <div className="absolute top-2 right-2 z-10 bg-[#B89B7A] text-white text-xs px-2 py-1 rounded-full font-medium">
-                    Editável
-                  </div>
-                  <BeforeAfterTransformation {...componentProps} />
-                </div>
-              );
-
-            case '@/components/quiz-result/sales/Testimonials':
-              return (
-                <div className={cn(
-                  'relative border-2 border-[#B89B7A]/30 rounded-xl overflow-hidden',
-                  'bg-white shadow-sm transition-all duration-300',
-                  isSelected && 'border-[#B89B7A] shadow-lg ring-2 ring-[#B89B7A]/20',
-                  'hover:border-[#B89B7A]/50 cursor-pointer'
-                )}
-                onClick={onClick}
-                >
-                  <div className="absolute top-2 right-2 z-10 bg-[#B89B7A] text-white text-xs px-2 py-1 rounded-full font-medium">
-                    Editável
-                  </div>
-                  <Testimonials {...componentProps} />
-                </div>
-              );
-
-            case '@/components/result/SecurePurchaseElement':
-              return (
-                <div className={cn(
-                  'relative border-2 border-[#B89B7A]/30 rounded-xl overflow-hidden',
-                  'bg-white shadow-sm transition-all duration-300 p-4',
-                  isSelected && 'border-[#B89B7A] shadow-lg ring-2 ring-[#B89B7A]/20',
-                  'hover:border-[#B89B7A]/50 cursor-pointer'
-                )}
-                onClick={onClick}
-                >
-                  <div className="absolute top-2 right-2 z-10 bg-[#B89B7A] text-white text-xs px-2 py-1 rounded-full font-medium">
-                    Editável
-                  </div>
-                  <SecurePurchaseElement {...componentProps} />
-                </div>
-              );
-
-            default:
-              // Fallback com design da marca
-              return (
-                <div className={cn(
-                  'w-full p-6 border-2 border-dashed border-[#B89B7A]/40 rounded-xl',
-                  'bg-gradient-to-br from-[#FAF9F7] to-[#F5F4F1]',
-                  'flex flex-col items-center justify-center gap-3',
-                  'min-h-[120px] text-center transition-all duration-300',
-                  isSelected && 'border-[#B89B7A] bg-gradient-to-br from-[#B89B7A]/10 to-[#B89B7A]/5',
-                  'cursor-pointer hover:border-[#B89B7A]/60'
-                )}
-                onClick={onClick}
-                >
-                  <div className="flex items-center gap-3 text-[#432818]">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#B89B7A] to-[#aa6b5d] flex items-center justify-center">
-                      <span className="text-white font-bold text-sm">G</span>
-                    </div>
-                    <span className="font-playfair font-semibold text-lg">{componentName || 'Componente'}</span>
-                  </div>
-                  <p className="text-sm text-[#8F7A6A]">
-                    Componente não mapeado: <code className="bg-[#B89B7A]/10 px-2 py-1 rounded text-xs">{componentPath}</code>
-                  </p>
-                </div>
-              );
-          }
-        };
-
-        return getRealComponent();
+        // Container do editor com identidade da marca
+        return (
+          <div className={cn(
+            'relative border-2 border-[#B89B7A]/30 rounded-xl overflow-hidden',
+            'bg-white shadow-sm transition-all duration-300',
+            isSelected && 'border-[#B89B7A] shadow-lg ring-2 ring-[#B89B7A]/20',
+            'hover:border-[#B89B7A]/50 cursor-pointer'
+          )}
+          onClick={onClick}
+          >
+            {/* Badge do editor */}
+            <div className="absolute top-2 right-2 z-10 bg-[#B89B7A] text-white text-xs px-2 py-1 rounded-full font-medium">
+              {componentConfig.editable ? 'Editável' : 'Componente'}
+            </div>
+            
+            {/* Componente real renderizado */}
+            {renderedComponent}
+          </div>
+        );
       }
     };
 
