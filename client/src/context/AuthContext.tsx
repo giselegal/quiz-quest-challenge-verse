@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface User {
   name: string;
+  userName: string;
   email?: string;
 }
 
@@ -31,7 +32,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
 
   const login = (name: string, email?: string) => {
-    setUser({ name, email });
+    setUser({ name, userName: name, email });
   };
 
   const logout = () => {

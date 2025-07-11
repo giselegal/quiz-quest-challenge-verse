@@ -1,53 +1,43 @@
 
-export interface ImageOptimizationOptions {
-  quality?: number;
+export interface OptimizedImageOptions {
   width?: number;
   height?: number;
-  format?: 'webp' | 'jpeg' | 'png' | 'auto';
-  crop?: boolean;
-}
-
-export interface PreloadOptions {
   quality?: number;
-  batchSize?: number;
-  onProgress?: (loaded: number, total: number) => void;
-  onComplete?: () => void;
-  format?: string;
-  timeout?: number;
 }
 
-export const getOptimizedImage = (url: string, options: ImageOptimizationOptions = {}) => {
-  // For now, just return the original URL
-  // In a real implementation, this would transform the URL for optimization
-  return url;
-};
-
-export const getImageMetadata = (url: string) => {
-  // Mock metadata - in real implementation would fetch actual metadata
+export const getOptimizedImage = async (
+  src: string, 
+  options: OptimizedImageOptions = {}
+): Promise<{ src: string; width?: number; height?: number; alt?: string }> => {
+  // For demo purposes, return the original image
+  // In a real implementation, this would optimize the image
   return {
-    url,
-    width: 500,
-    height: 600,
-    alt: 'Style image'
+    src,
+    width: options.width,
+    height: options.height,
+    alt: 'Optimized image'
   };
 };
 
-export const isImagePreloaded = (url: string): boolean => {
-  // Simple check - in real implementation would check preload cache
-  return false;
+export const getOptimizedImageUrl = (
+  src: string, 
+  options: OptimizedImageOptions = {}
+): string => {
+  // For demo purposes, return the original URL
+  // In a real implementation, this would return an optimized URL
+  return src;
 };
 
-export const preloadCriticalImages = (categories: string[], options: PreloadOptions = {}) => {
-  // Mock implementation - would preload images by category
-  console.log('Preloading images for categories:', categories);
+export const getLowQualityPlaceholder = (src: string): string => {
+  // Return a placeholder or the original image
+  return src;
 };
 
-export const preloadImagesByUrls = (urls: string[], options: PreloadOptions = {}) => {
-  // Mock implementation - would preload specific URLs
-  console.log('Preloading specific URLs:', urls);
-};
-
-export const getAllImages = () => {
-  // Mock implementation - would return image bank
-  return [];
+export const preloadImage = (src: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve();
+    img.onerror = reject;
+    img.src = src;
+  });
 };

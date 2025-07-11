@@ -21,6 +21,7 @@ export interface QuizOption {
   styleCategory?: string;
   style?: string;
   description?: string;
+  weight?: number;
 }
 
 export interface UserResponse {
