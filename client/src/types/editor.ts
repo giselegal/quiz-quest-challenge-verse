@@ -25,6 +25,28 @@ export interface EditableContent {
   textColor?: string;
   buttonColor?: string;
   buttonTextColor?: string;
+  // Additional properties for missing fields
+  logo?: string;
+  logoAlt?: string;
+  logoWidth?: string;
+  buttonText?: string;
+  alignment?: 'left' | 'center' | 'right';
+  heroImage?: string;
+  heroImageAlt?: string;
+  heroImage2?: string;
+  quote?: string;
+  quoteAuthor?: string;
+  urgencyText?: string;
+  items?: string[];
+  bonusImages?: Array<{
+    url: string;
+    alt: string;
+    title?: string;
+  }>;
+  useIcons?: boolean;
+  icon?: string;
+  iconColor?: string;
+  style?: Record<string, any>;
   options?: Array<{
     id: string;
     text: string;
@@ -49,7 +71,13 @@ export type BlockType =
   | 'faq'
   | 'carousel'
   | 'custom-code'
-  | 'animation-block';
+  | 'animation-block'
+  | 'headline'
+  | 'benefits'
+  | 'testimonials'
+  | 'guarantee'
+  | 'hero'
+  | 'bonus-carousel';
 
 export interface Block {
   id: string;
@@ -57,6 +85,7 @@ export interface Block {
   content: EditableContent;
   order: number;
   isSelected?: boolean;
+  properties?: Record<string, any>;
 }
 
 export interface EditorBlock extends Block {

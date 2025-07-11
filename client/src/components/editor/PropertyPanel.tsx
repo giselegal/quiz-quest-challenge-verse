@@ -37,8 +37,8 @@ export default function PropertyPanel({
   const updateProperty = (key: string, value: any) => {
     const updated = {
       ...selectedComponent,
-      properties: {
-        ...selectedComponent.properties,
+      content: {
+        ...selectedComponent.content,
         [key]: value
       }
     };
@@ -80,7 +80,7 @@ export default function PropertyPanel({
   const schema = getSchemaForBlock(selectedComponent.type);
 
   const renderPropertyInput = (prop: PropertySchema) => {
-    const currentValue = selectedComponent.properties?.[prop.key] || prop.default || '';
+    const currentValue = selectedComponent.content?.[prop.key] || prop.default || '';
 
     switch (prop.type) {
       case 'text':

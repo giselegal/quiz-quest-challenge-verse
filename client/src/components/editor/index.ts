@@ -20,9 +20,9 @@ export { EditorBlockItem } from './EditorBlockItem';
 export { EditBlockContent } from './EditBlockContent';
 export { EmptyEditor } from './EmptyEditor';
 
-// Painéis de propriedades (export default - fixing the import issue)
+// Painéis de propriedades (export both default and named)
 export { default as PropertyPanel } from './PropertyPanel';
-export { ModernPropertyPanel } from './ModernPropertyPanel';
+export { default as ModernPropertyPanel } from './ModernPropertyPanel';
 
 // Layouts responsivos (export default)
 export { default as SchemaDrivenEditorResponsive } from './SchemaDrivenEditorResponsive';

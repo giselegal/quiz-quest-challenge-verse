@@ -37,7 +37,7 @@ const ModernPropertyPanel: React.FC<ModernPropertyPanelProps> = ({ block, onUpda
         <CardTitle>Edit {block.type}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {block.type === 'header' && (
+        {(block.type === 'header' || block.type === 'headline') && (
           <>
             <div>
               <label className="text-sm font-medium">Title</label>
@@ -158,3 +158,4 @@ const ModernPropertyPanel: React.FC<ModernPropertyPanelProps> = ({ block, onUpda
 };
 
 export default ModernPropertyPanel;
+export { ModernPropertyPanel };
