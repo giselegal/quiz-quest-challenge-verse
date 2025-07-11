@@ -371,7 +371,7 @@ export const blockDefinitions: BlockDefinition[] = [
     type: 'loading-animation',
     name: 'Animação de Carregamento',
     description: 'Loading elegante para transições',
-    icon: 'Refresh',
+    icon: 'RotateCw',
     category: 'Quiz',
     propertiesSchema: [
       {

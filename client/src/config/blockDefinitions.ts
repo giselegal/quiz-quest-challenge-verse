@@ -39,7 +39,7 @@ export type IconType =
   | 'Brain'
   | 'Crown'
   | 'Layers'
-  | 'Refresh'
+  | 'RotateCw'
   | 'Heart'
   | 'Stack'
   | 'Users'
