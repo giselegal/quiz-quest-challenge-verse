@@ -15,7 +15,9 @@
     "lovable:prepare": "echo 'Preparando ambiente para desenvolvimento' && npm install",
     "lovable:dev": "vite --port 8080 --host :: --config vite.config.ts",
     "dev:local": "vite --config vite.config.simple.ts --port 8080 --host ::",
-    "dev:clean": "vite --config vite.config.simple.ts --port 8080 --host :: --force"
+    "dev:clean": "vite --config vite.config.simple.ts --port 8080 --host :: --force",
+    "dev:sqlite": "NODE_ENV=development npm run dev",
+    "dev:supabase": "DATABASE_URL='postgresql://postgres:[YOUR_PASSWORD]@db.txqljpitotmcxntprxiu.supabase.co:5432/postgres' npm run dev"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

@@ -11,16 +11,42 @@ neonConfig.webSocketConstructor = ws;
 
 let pool: Pool | null = null;
 let db: any = null;
+let dbType: 'postgres' | 'sqlite' = 'sqlite';
 
-// Use Supabase as primary database for consistency
+// Try PostgreSQL/Supabase first
 if (process.env.DATABASE_URL?.startsWith('postgres')) {
-  console.log("🔧 Usando PostgreSQL/Neon (Supabase)");
-  pool = new Pool({ connectionString: process.env.DATABASE_URL });
-  db = drizzlePg({ client: pool, schema });
-  console.log("✅ PostgreSQL/Neon conectado");
-} else {
-  console.warn("⚠️ DATABASE_URL não definida - funcionalidade limitada");
-  console.log("💡 Para funcionalidade completa, configure DATABASE_URL com Supabase");
+  try {
+    console.log("🔧 Tentando conectar com PostgreSQL/Supabase...");
+    pool = new Pool({ connectionString: process.env.DATABASE_URL });
+    db = drizzlePg({ client: pool, schema });
+    dbType = 'postgres';
+    console.log("✅ PostgreSQL/Supabase conectado com sucesso!");
+  } catch (error) {
+    console.warn("⚠️ Falha na conexão PostgreSQL:", error);
+    console.log("🔄 Usando SQLite como fallback...");
+    pool = null;
+    db = null;
+  }
 }
 
-export { pool, db };
+// Fallback to SQLite if PostgreSQL failed or not configured
+if (!db) {
+  try {
+    const dbPath = "./dev.db";
+    console.log("🗃️  Usando SQLite local:", dbPath);
+    const sqlite = new Database(dbPath);
+    db = drizzleSqlite({ client: sqlite, schema: schemaSqlite });
+    dbType = 'sqlite';
+    console.log("✅ SQLite conectado com sucesso!");
+  } catch (error) {
+    console.error("❌ Falha ao conectar com SQLite:", error);
+    throw new Error("Não foi possível conectar com nenhum banco de dados");
+  }
+}
+
+if (dbType === 'sqlite') {
+  console.log("💡 Para funcionalidade completa, configure DATABASE_URL com Supabase");
+  console.log("🔗 Exemplo: DATABASE_URL='postgresql://user:pass@host:5432/db'");
+}
+
+export { pool, db, dbType };
