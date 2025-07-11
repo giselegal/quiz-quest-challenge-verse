@@ -330,7 +330,7 @@ const ComponentPropertiesPanel: React.FC<ComponentPropertiesPanelProps> = ({
           </Button>
           <Button
             variant="outline"
-            onClick={() => setEditedProps(selectedBlock.properties.props || {})}
+            onClick={() => setEditedProps(selectedBlock?.properties.props || {})}
             className="border-[#B89B7A]/30 text-[#B89B7A] hover:bg-[#B89B7A]/5"
           >
             Resetar

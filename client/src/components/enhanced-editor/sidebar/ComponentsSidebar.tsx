@@ -70,7 +70,7 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({ onComponen
 
   // ES7+ Render function with modern array methods
   const renderComponentList = (components: typeof componentCategories.basic) => 
-    components.map(({ type, label, icon, description, componentPath }) => (
+    components.map(({ type, label, icon, description, ...rest }) => (
       <ComponentItem
         key={type}
         type={type as Block['type']}
@@ -78,7 +78,7 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({ onComponen
         icon={icon}
         description={description}
         onSelect={onComponentSelect}
-        {...(componentPath && { componentPath })}
+        {...rest}
       />
     ));
   
