@@ -645,7 +645,7 @@ class SchemaDrivenFunnelService {
           id: 'intro-hero-image',
           type: 'image-display-inline',
           properties: {
-            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp',
+            src: CloudinaryImageFixer.fixKnownProblematicUrls('https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp'),
             alt: 'Transforme seu guarda-roupa',
             width: 600,
             height: 400,
@@ -720,7 +720,7 @@ class SchemaDrivenFunnelService {
             id: `question-${index + 1}-header`,
             type: 'quiz-intro-header',
             properties: {
-              logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+              logoUrl: CloudinaryImageFixer.fixKnownProblematicUrls('https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'),
               logoAlt: 'Logo Gisele Galvão',
               logoWidth: 96,
               logoHeight: 96,
@@ -821,7 +821,7 @@ class SchemaDrivenFunnelService {
           id: 'transition-main-header',
           type: 'quiz-intro-header',
           properties: {
-            logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+            logoUrl: CloudinaryImageFixer.fixKnownProblematicUrls('https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'),
             logoAlt: 'Logo Gisele Galvão',
             logoWidth: 96,
             logoHeight: 96,
@@ -914,7 +914,7 @@ class SchemaDrivenFunnelService {
             id: `strategic-${index + 1}-header`,
             type: 'quiz-intro-header',
             properties: {
-              logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+              logoUrl: CloudinaryImageFixer.fixKnownProblematicUrls('https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'),
               logoAlt: 'Logo Gisele Galvão',
               logoWidth: 96,
               logoHeight: 96,
@@ -1017,7 +1017,7 @@ class SchemaDrivenFunnelService {
           id: 'final-transition-header',
           type: 'quiz-intro-header',
           properties: {
-            logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+            logoUrl: CloudinaryImageFixer.fixKnownProblematicUrls('https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'),
             logoAlt: 'Logo Gisele Galvão',
             logoWidth: 96,
             logoHeight: 96,
@@ -1119,7 +1119,7 @@ class SchemaDrivenFunnelService {
           id: 'result-header-inline',
           type: 'result-header-inline',
           properties: {
-            logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+            logoUrl: CloudinaryImageFixer.fixKnownProblematicUrls('https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'),
             logoAlt: 'Logo Gisele Galvão',
             logoWidth: 96,
             logoHeight: 96,
@@ -1176,7 +1176,7 @@ class SchemaDrivenFunnelService {
           id: 'result-transformation-image',
           type: 'image-display-inline',
           properties: {
-            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
+            src: CloudinaryImageFixer.fixKnownProblematicUrls('https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp'),
             alt: 'Guia de transformação do seu estilo',
             width: 600,
             height: 400,
@@ -1312,7 +1312,7 @@ class SchemaDrivenFunnelService {
           id: 'offer-product-image',
           type: 'image-display-inline',
           properties: {
-            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_COMPLETO_PRODUTO.webp',
+            src: CloudinaryImageFixer.fixKnownProblematicUrls('https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_COMPLETO_PRODUTO.webp'),
             alt: 'Guia Completo do Seu Estilo',
             width: 500,
             height: 400,
