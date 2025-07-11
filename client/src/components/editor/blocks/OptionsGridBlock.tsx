@@ -2,6 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { InlineEditableText } from './InlineEditableText';
 import { Rows3, Check } from 'lucide-react';
 import type { BlockComponentProps } from '@/types/blocks';
+import { 
+  OptionsGridUtils, 
+  IMAGE_SIZE_CLASSES, 
+  GRID_LAYOUT_CONFIG,
+  VISUAL_STATES_CONFIG,
+  ANIMATION_CONFIG,
+  SPACING_CONFIG,
+  ACCESSIBILITY_CONFIG,
+  VALIDATION_CONFIG,
+  type OptionItem,
+  type OptionsGridConfig 
+} from '@/config/optionsGridConfig';
 const OptionsGridBlock: React.FC<BlockComponentProps> = ({
   block,
   isSelected = false,
@@ -59,7 +71,8 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
         if (internalSelectedOptions.length < maxSelections) {
           newSelectedOptions = [...internalSelectedOptions, optionId];
         } else {
-          setValidationError(`Máximo de ${maxSelections} seleções permitidas`);
+          const errorMessage = VALIDATION_CONFIG.messages.selectMaximum(maxSelections);
+          setValidationError(errorMessage);
           return;
         }
       }
@@ -71,9 +84,10 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
     setInternalSelectedOptions(newSelectedOptions);
     handlePropertyChange('selectedOptions', newSelectedOptions);
     
-    // Validar seleção
+    // Validar seleção usando configuração de validação
     if (newSelectedOptions.length < minSelections) {
-      setValidationError(validationMessage || `Selecione pelo menos ${minSelections} opção(ões)`);
+      const errorMessage = validationMessage || VALIDATION_CONFIG.messages.selectMinimum(minSelections);
+      setValidationError(errorMessage);
     } else {
       setValidationError('');
     }
@@ -84,22 +98,13 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
   };
 
   const getGridCols = (hasImages: boolean, textOnlyColumns: number = 1) => {
-    if (hasImages) {
-      // Opções com imagens sempre usam 2 colunas (mobile e desktop)
-      return 'grid-cols-1 sm:grid-cols-2';
-    } else {
-      // Opções só com texto usam sempre 1 coluna para melhor legibilidade
-      return 'grid-cols-1';
-    }
+    // Usar utilitário do optionsGridConfig
+    return OptionsGridUtils.getGridClasses(options, columns);
   };
 
   const getImageHeight = (size: string) => {
-    const sizeClasses = {
-      small: 'h-32 sm:h-40 md:h-44 lg:h-48',
-      medium: 'h-40 sm:h-48 md:h-52 lg:h-56',
-      large: 'h-48 sm:h-56 md:h-60 lg:h-64'
-    };
-    return sizeClasses[size as keyof typeof sizeClasses] || 'h-48 sm:h-56 md:h-60 lg:h-64';
+    // Usar classes de altura da configuração
+    return OptionsGridUtils.getImageHeightClasses(size as 'small' | 'medium' | 'large');
   };
 
   if (!options || options.length === 0) {
@@ -150,12 +155,13 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
       
       {/* Detectar se tem imagens para escolher layout automaticamente */}
       {(() => {
-        const hasImages = options.some((option: any) => option.imageUrl && option.imageUrl.trim() !== '');
+        const hasImages = OptionsGridUtils.hasImages(options);
         const gridCols = getGridCols(hasImages, columns);
+        const cardAspectConfig = OptionsGridUtils.getCardAspectConfig(hasImages);
         
         return (
           <div 
-            className={`grid ${gridCols} w-full mx-auto px-1 sm:px-0 gap-3 sm:gap-4 md:gap-5`}
+            className={`grid ${gridCols} w-full mx-auto px-1 sm:px-0 ${SPACING_CONFIG.grid.mobile} ${SPACING_CONFIG.grid.tablet} ${SPACING_CONFIG.grid.desktop}`}
           >
             {options.map((option: any, index: number) => {
           const isSelected = isOptionSelected(option.id);
@@ -166,18 +172,18 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
               key={option.id || index} 
               className={`
                 group relative rounded-lg text-sm sm:text-base md:text-lg font-medium ring-offset-background 
-                transition-all duration-300 ease-in-out transform hover:scale-[1.02] 
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89B7A] focus-visible:ring-offset-2 
+                ${ANIMATION_CONFIG.transition} transform hover:scale-[1.02] 
+                ${ACCESSIBILITY_CONFIG.button.focusVisible}
                 disabled:pointer-events-none disabled:opacity-50 active:scale-95 
                 border-2 bg-white hover:shadow-lg overflow-hidden w-full gap-1 flex 
                 flex-col items-center justify-start option-button
-                ${hasImages && hasOptionImage ? 'aspect-[3/4]' : 'aspect-auto min-h-[60px] py-3 px-4'} 
+                ${hasImages && hasOptionImage ? cardAspectConfig.aspectRatio : `${cardAspectConfig.aspectRatio} ${cardAspectConfig.minHeight} ${cardAspectConfig.padding}`} 
                 ${isSelected 
-                  ? 'border-[#B89B7A] bg-[#FAF9F7] shadow-lg scale-[1.02]' 
-                  : 'border-zinc-200 hover:border-[#B89B7A] hover:bg-[#FAF9F7] shadow-sm'
+                  ? `${VISUAL_STATES_CONFIG.selected.border} ${VISUAL_STATES_CONFIG.selected.background} ${VISUAL_STATES_CONFIG.selected.shadow} ${VISUAL_STATES_CONFIG.selected.transform}` 
+                  : `${VISUAL_STATES_CONFIG.default.border} ${VISUAL_STATES_CONFIG.hover.border} ${VISUAL_STATES_CONFIG.hover.background} ${VISUAL_STATES_CONFIG.default.shadow}`
                 }
                 ${isEditing ? 'cursor-default' : 'cursor-pointer'}
-                touch-manipulation
+                ${ACCESSIBILITY_CONFIG.touchTarget.class}
               `}
               type="button"
               onClick={() => handleOptionSelect(option.id, option.value)}
@@ -189,8 +195,8 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
             >
               {/* Indicador de seleção */}
               {isSelected && (
-                <div className="absolute top-2 right-2 w-5 h-5 sm:w-6 sm:h-6 bg-[#B89B7A] rounded-full flex items-center justify-center shadow-lg z-10 animate-pulse">
-                  <Check className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
+                <div className={`absolute ${ANIMATION_CONFIG.selectionIndicator.position} ${ANIMATION_CONFIG.selectionIndicator.size} ${ANIMATION_CONFIG.selectionIndicator.background} rounded-full flex items-center justify-center shadow-lg z-10 ${ANIMATION_CONFIG.selectionIndicator.animation}`}>
+                  <Check className={`${ANIMATION_CONFIG.selectionIndicator.iconSize} text-white`} />
                 </div>
               )}
               
@@ -199,25 +205,28 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
                   <img
                     src={option.imageUrl}
                     alt={option.text}
-                    width="256"
-                    height="256"
-                    className={`w-full rounded-t-lg bg-white ${getImageHeight(imageSize)} object-cover transition-all duration-300`}
-                    onError={(e) => (e.currentTarget.src = 'https://placehold.co/256x256/cccccc/333333?text=Erro')}
+                    width={ACCESSIBILITY_CONFIG.image.width}
+                    height={ACCESSIBILITY_CONFIG.image.height}
+                    loading={ACCESSIBILITY_CONFIG.image.loading}
+                    className={`w-full rounded-t-lg bg-white ${getImageHeight(imageSize)} object-cover ${ANIMATION_CONFIG.transition}`}
+                    onError={(e) => {
+                      e.currentTarget.src = OptionsGridUtils.getFallbackImageUrl(option.text);
+                    }}
                   />
                   {/* Overlay de seleção */}
                   {isSelected && (
-                    <div className="absolute inset-0 bg-[#B89B7A] bg-opacity-20 rounded-t-lg transition-opacity duration-300"></div>
+                    <div className={`absolute inset-0 ${ANIMATION_CONFIG.overlay.background} ${ANIMATION_CONFIG.overlay.borderRadius} ${ANIMATION_CONFIG.overlay.transition}`}></div>
                   )}
                 </div>
               )}
               
               <div className={`w-full flex flex-row items-center justify-center flex-shrink-0 ${
-                hasOptionImage ? 'py-1 px-1 sm:px-2 text-xs sm:text-sm' : 'py-2 px-3 text-sm sm:text-base'
+                hasOptionImage ? SPACING_CONFIG.cards.withImages.padding : SPACING_CONFIG.cards.textOnly.padding
               }`}>
                 <div className="break-words w-full custom-quill quill ql-editor quill-option text-center">
                   <div 
-                    className={`font-medium transition-colors duration-300 ${
-                      hasOptionImage ? 'leading-tight' : 'leading-relaxed'
+                    className={`font-medium ${ANIMATION_CONFIG.transition} ${
+                      hasOptionImage ? SPACING_CONFIG.cards.withImages.leading : SPACING_CONFIG.cards.textOnly.leading
                     } ${
                       isSelected ? 'text-[#432818]' : 'text-[#432818] group-hover:text-[#B89B7A]'
                     }`}
@@ -234,15 +243,15 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
       
       {/* Mensagem de validação */}
       {validationError && (
-        <div className="mt-2 sm:mt-3 p-2 sm:p-3 bg-red-50 border border-red-200 rounded-md">
-          <p className="text-sm sm:text-base text-red-600">{validationError}</p>
+        <div className={VALIDATION_CONFIG.styles.error.container}>
+          <p className={VALIDATION_CONFIG.styles.error.text}>{validationError}</p>
         </div>
       )}
       
       {/* Informações de seleção para modo de edição */}
       {isEditing && (
-        <div className="mt-2 sm:mt-3 p-2 sm:p-3 bg-[#FAF9F7] border border-[#B89B7A]/20 rounded-md">
-          <p className="text-sm sm:text-base text-[#8F7A6A]">
+        <div className={VALIDATION_CONFIG.styles.info.container}>
+          <p className={VALIDATION_CONFIG.styles.info.text}>
             Modo de edição: {internalSelectedOptions.length} opção(ões) selecionada(s)
             {multipleSelection && ` (máx: ${maxSelections}, mín: ${minSelections})`}
           </p>

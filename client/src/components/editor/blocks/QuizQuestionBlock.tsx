@@ -2,6 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { CheckCircle, Heart, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { 
+  OptionsGridUtils, 
+  VISUAL_STATES_CONFIG,
+  ANIMATION_CONFIG,
+  ACCESSIBILITY_CONFIG,
+  VALIDATION_CONFIG,
+  type OptionItem 
+} from '@/config/optionsGridConfig';
 
 interface QuizQuestionBlockProps {
   question?: string;
@@ -19,7 +27,7 @@ interface QuizQuestionBlockProps {
   onPropertyChange?: (key: string, value: any) => void;
 }
 
-const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
+const QuizQuestionBlock = ({
   question = 'Etapa 1: Qual dessas opções representa melhor seu estilo predominante?',
   options = [
     { id: '1', text: 'Clássico e elegante', imageUrl: 'https://res.cloudinary.com/dtx0k4ue6/image/upload/v1710847234/estilo-classico_urkpfx.jpg' },
@@ -38,7 +46,7 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
   block,
   isSelected = false,
   onPropertyChange
-}) => {
+}: QuizQuestionBlockProps) => {
   const [selectedOptions, setSelectedOptions] = useState<Set<string>>(new Set());
   const [isAutoAdvancing, setIsAutoAdvancing] = useState(false);
 
@@ -79,6 +87,14 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
   const canProceed = allowMultiple 
     ? selectedOptions.size === maxSelections 
     : selectedOptions.size > 0;
+
+  // Destructuring das configurações de estilo
+  const { transition } = ANIMATION_CONFIG;
+  const { 
+    default: defaultStyles, 
+    selected: selectedStyles, 
+    hover: hoverStyles 
+  } = VISUAL_STATES_CONFIG;
 
   return (
     <div className={cn(
@@ -122,20 +138,34 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
       </div>
 
       {/* Options Grid - RESPONSIVO MÁXIMO 2 COLUNAS - LAYOUT HORIZONTAL */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 flex-1 w-full">
+      <div className={cn(
+        "grid gap-3 md:gap-4 flex-1 w-full",
+        // Converter opções para o formato correto usando spread operator
+        OptionsGridUtils.getGridClasses(
+          options.map(opt => ({ 
+            ...opt, 
+            value: opt.id,
+            category: '' 
+          })), 
+          2
+        )
+      )}>
         {options.map((option) => {
           const isOptionSelected = selectedOptions.has(option.id);
+          const hasImage = Boolean(option.imageUrl && option.imageUrl.trim() !== '');
+          const { aspectRatio } = OptionsGridUtils.getCardAspectConfig(hasImage);
           
           return (
             <div
               key={option.id}
               onClick={() => handleOptionClick(option.id)}
               className={cn(
-                "relative cursor-pointer rounded-lg border-2 transition-all duration-200",
-                "bg-white hover:shadow-md flex flex-col",
+                "relative cursor-pointer rounded-lg border-2 bg-white hover:shadow-md flex flex-col",
+                transition,
+                aspectRatio,
                 isOptionSelected 
-                  ? "border-[#B89B7A] bg-[#fff7f3] shadow-md" 
-                  : "border-gray-200 hover:border-[#B89B7A]/50"
+                  ? `${selectedStyles.border} ${selectedStyles.background} ${selectedStyles.shadow}` 
+                  : `${defaultStyles.border} ${hoverStyles.border}/50`
               )}
             >
               {/* Selection Indicator */}
@@ -154,6 +184,9 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
                     src={option.imageUrl} 
                     alt={option.text}
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = OptionsGridUtils.getFallbackImageUrl(option.text);
+                    }}
                   />
                 </div>
               )}
@@ -183,7 +216,7 @@ const QuizQuestionBlock: React.FC<QuizQuestionBlockProps> = ({
             <div className="flex items-center gap-2">
               <Heart className="w-4 h-4 text-[#B89B7A]" />
               <span className="text-xs text-[#8F7A6A]">
-                {selectedOptions.size} de {maxSelections} selecionadas
+                {`${selectedOptions.size} de ${maxSelections} selecionadas`}
               </span>
             </div>
           ) : (
