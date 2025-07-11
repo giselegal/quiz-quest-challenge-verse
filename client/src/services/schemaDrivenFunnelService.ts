@@ -1,5 +1,5 @@
 import type { BlockData } from '@/components/editor/blocks';
-import { REAL_QUIZ_QUESTIONS, STRATEGIC_QUESTIONS } from '@/data/quizQuestions';
+import { quizQuestions } from '@/data/quizQuestions';
 import { QuizDataAdapter } from './quizDataAdapter';
 import { LocalStorageFixer } from '@/utils/fixLocalStorageIssues';
 import { CloudinaryImageFixer } from '@/utils/cloudinaryImageFixer';
@@ -7,8 +7,7 @@ import { styleConfig } from '@/config/styleConfig';
 
 // DEBUG: Verificar se os dados estão sendo importados corretamente
 console.log('🔍 DEBUG - Dados importados:');
-console.log('  REAL_QUIZ_QUESTIONS:', REAL_QUIZ_QUESTIONS?.length || 'UNDEFINED');
-console.log('  STRATEGIC_QUESTIONS:', STRATEGIC_QUESTIONS?.length || 'UNDEFINED');
+console.log('  quizQuestions:', quizQuestions?.length || 'UNDEFINED');
 
 // Interface para dados dinâmicos
 interface DynamicDataContext {
@@ -708,8 +707,7 @@ class SchemaDrivenFunnelService {
    */
   private createModularPages(): SchemaDrivenPageData[] {
     console.log('🏗️ [ES7+] Iniciando criação das 21 etapas modulares...');
-    console.log('🔍 DEBUG: REAL_QUIZ_QUESTIONS length:', REAL_QUIZ_QUESTIONS?.length);
-    console.log('🔍 DEBUG: STRATEGIC_QUESTIONS length:', STRATEGIC_QUESTIONS?.length);
+    console.log('🔍 DEBUG: quizQuestions length:', quizQuestions?.length);
     
     const pages: SchemaDrivenPageData[] = [];
 
@@ -821,7 +819,7 @@ class SchemaDrivenFunnelService {
     // ETAPAS 2-11: QUESTÕES PRINCIPAIS (10 QUESTÕES)
     // Componentes: quiz-intro-header + heading-inline + text-inline + options-grid + button-inline
     // ==========================================
-    REAL_QUIZ_QUESTIONS.forEach((questionData, index) => {
+    quizQuestions.forEach((questionData, index) => {
       console.log(`🎯 [ES7+] Criando questão ${index + 1}:`, questionData.question);
       const currentProgress = 5 + (index + 1) * 5; // 5%, 10%, 15%... até 55%
       
@@ -887,10 +885,10 @@ class SchemaDrivenFunnelService {
               columns: questionData.type === 'both' ? 2 : 1,
               showImages: questionData.type === 'both' || questionData.type === undefined,
               imageSize: 'large',
-              multipleSelection: questionData.multipleSelection || false,
-              maxSelections: questionData.maxSelections || 1,
+              multipleSelection: false,
+              maxSelections: 1,
               minSelections: 1,
-              validationMessage: `Selecione ${questionData.maxSelections || 1} opç${(questionData.maxSelections || 1) > 1 ? 'ões' : 'ão'}`,
+              validationMessage: `Selecione 1 opção`,
               gridGap: 16,
               responsiveColumns: true // Força máximo 2 colunas
             }
@@ -1015,7 +1013,7 @@ class SchemaDrivenFunnelService {
     // ETAPAS 13-18: QUESTÕES ESTRATÉGICAS (6 QUESTÕES)
     // Componentes: quiz-intro-header + heading-inline + text-inline + options-grid + button-inline
     // ==========================================
-    STRATEGIC_QUESTIONS.forEach((questionData, index) => {
+    quizQuestions.slice(0, 6).forEach((questionData, index) => {
       console.log(`🎯 [ES7+] Criando questão estratégica ${index + 1}:`, questionData.question);
       const currentProgress = 65 + (index * 5); // 65%, 70%, 75%... até 90%
       
