@@ -8,9 +8,10 @@ export interface ImageMetadata {
 
 export interface OptimizationOptions {
   quality?: number;
-  format?: 'webp' | 'jpeg' | 'png';
+  format?: 'webp' | 'jpeg' | 'png' | 'auto';
   width?: number;
   height?: number;
+  batchSize?: number;
 }
 
 const imageBank: Record<string, ImageMetadata> = {
@@ -67,4 +68,17 @@ export const preloadImage = (url: string): Promise<void> => {
     img.onerror = reject;
     img.src = url;
   });
+};
+
+// Add missing preload functions
+export const preloadCriticalImages = async (categories: string | string[], options: OptimizationOptions = {}): Promise<void> => {
+  // Mock implementation - in real app would preload based on categories
+  console.log('Preloading critical images for categories:', categories, 'with options:', options);
+  return Promise.resolve();
+};
+
+export const preloadImagesByUrls = async (urls: string[], options: OptimizationOptions = {}): Promise<void> => {
+  console.log('Preloading images by URLs:', urls, 'with options:', options);
+  const promises = urls.map(url => preloadImage(getOptimizedImage(url, options)));
+  await Promise.allSettled(promises);
 };

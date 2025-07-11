@@ -1,91 +1,104 @@
-
-import React, { useState } from 'react';
+import React from 'react';
 import { Block } from '@/types/editor';
-import { SortableBlock } from './SortableBlock';
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
-import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { restrictToVerticalAxis, restrictToParentElement } from '@dnd-kit/modifiers';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { ChevronUp, ChevronDown, Trash2, Copy } from 'lucide-react';
 
 interface DraggableBlockListProps {
   blocks: Block[];
   selectedBlockId: string | null;
-  isPreviewing: boolean;
   onSelectBlock: (id: string) => void;
-  onReorderBlocks: (sourceIndex: number, destinationIndex: number) => void;
-  onDuplicateBlock?: (id: string) => void;
   onDeleteBlock?: (id: string) => void;
+  onDuplicateBlock?: (id: string) => void;
+  onMoveUp?: (index: number) => void;
+  onMoveDown?: (index: number) => void;
+  isPreviewMode?: boolean;
 }
 
 export const DraggableBlockList: React.FC<DraggableBlockListProps> = ({
   blocks,
   selectedBlockId,
-  isPreviewing,
   onSelectBlock,
-  onReorderBlocks,
+  onDeleteBlock,
   onDuplicateBlock,
-  onDeleteBlock
+  onMoveUp,
+  onMoveDown,
+  isPreviewMode = false
 }) => {
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 8,
-      },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
-
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    
-    if (over && active.id !== over.id) {
-      const oldIndex = blocks.findIndex((block) => block.id === active.id);
-      const newIndex = blocks.findIndex((block) => block.id === over.id);
-      
-      if (oldIndex !== -1 && newIndex !== -1) {
-        onReorderBlocks(oldIndex, newIndex);
-      }
-    }
-  };
-
-  const handleDuplicate = (id: string) => {
-    if (onDuplicateBlock) {
-      onDuplicateBlock(id);
-    }
-  };
-
-  const handleDelete = (id: string) => {
-    if (onDeleteBlock) {
-      onDeleteBlock(id);
-    }
-  };
-
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-      modifiers={[restrictToVerticalAxis, restrictToParentElement]}
-    >
-      <SortableContext
-        items={blocks.map(block => block.id)}
-        strategy={verticalListSortingStrategy}
-      >
-        <div className="space-y-4 p-4">
-          {blocks.map((block) => (
-            <SortableBlock
-              key={block.id}
-              block={block}
-              isSelected={selectedBlockId === block.id}
-              isPreviewing={isPreviewing}
-              onSelect={() => onSelectBlock(block.id)}
-              onDuplicate={onDuplicateBlock ? () => handleDuplicate(block.id) : undefined}
-              onDelete={onDeleteBlock ? () => handleDelete(block.id) : undefined}
-            />
-          ))}
+    <div className="space-y-2">
+      {blocks.map((block, index) => (
+        <div
+          key={block.id}
+          className={cn(
+            "p-3 border rounded-lg cursor-pointer transition-colors",
+            selectedBlockId === block.id
+              ? "border-[#B89B7A] bg-[#B89B7A]/10"
+              : "border-gray-200 hover:border-[#B89B7A]/50"
+          )}
+          onClick={() => onSelectBlock(block.id)}
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium capitalize">
+                {block.type.replace('-', ' ')}
+              </span>
+              {block.content.title && (
+                <span className="text-xs text-gray-500 truncate max-w-32">
+                  - {block.content.title}
+                </span>
+              )}
+            </div>
+            
+            {!isPreviewMode && (
+              <div className="flex items-center gap-1">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onMoveUp?.(index);
+                  }}
+                  disabled={index === 0}
+                >
+                  <ChevronUp className="w-3 h-3" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onMoveDown?.(index);
+                  }}
+                  disabled={index === blocks.length - 1}
+                >
+                  <ChevronDown className="w-3 h-3" />
+                </Button>
+                <Button
+                  variant="ghost" 
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDuplicateBlock?.(block.id);
+                  }}
+                >
+                  <Copy className="w-3 h-3" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDeleteBlock?.(block.id);
+                  }}
+                >
+                  <Trash2 className="w-3 h-3" />
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
-      </SortableContext>
-    </DndContext>
+      ))}
+    </div>
   );
 };

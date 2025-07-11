@@ -9,7 +9,7 @@ export interface OptimizedImageProps {
   width?: number;
   height?: number;
   quality?: number;
-  format?: 'webp' | 'jpeg' | 'png';
+  format?: 'webp' | 'jpeg' | 'png' | 'auto';
   onLoad?: () => void;
   onError?: () => void;
   placeholderColor?: string;
