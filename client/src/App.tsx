@@ -35,8 +35,6 @@ const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
 // Editor Principal - Consolidado
 const SchemaDrivenEditorPage = lazy(() => import("./pages/SchemaDrivenEditorPage"));
 const BlockDefinitionsTest = lazy(() => import("./components/editor/tests/BlockDefinitionsTest"));
-// Editor Reorganizado - Nova estrutura limpa
-const OrganizedEditorTestPage = lazy(() => import("./components/editor/OrganizedEditorTestPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App = () => {
@@ -96,12 +94,6 @@ const App = () => {
                 <Route
                   path="/editor/:id"
                   component={SchemaDrivenEditorPage}
-                />
-                
-                {/* Editor Reorganizado - Nova estrutura limpa */}
-                <Route
-                  path="/editor-novo"
-                  component={OrganizedEditorTestPage}
                 />
                 
                 {/* Teste de definições de blocos */}
