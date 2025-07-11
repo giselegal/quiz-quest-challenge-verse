@@ -1,6 +1,7 @@
 import type { BlockData } from '@/components/editor/blocks';
 import { REAL_QUIZ_QUESTIONS, STRATEGIC_QUESTIONS, TRANSITIONS } from '@/components/visual-editor/realQuizData';
 import { QuizDataAdapter } from './quizDataAdapter';
+import { LocalStorageFixer } from '@/utils/fixLocalStorageIssues';
 
 // DEBUG: Verificar se os dados estão sendo importados corretamente
 console.log('🔍 DEBUG - Dados importados:');
