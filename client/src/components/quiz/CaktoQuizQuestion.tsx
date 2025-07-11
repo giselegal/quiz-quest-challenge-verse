@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import { QuizQuestion as QuizQuestionType, UserResponse } from '@/types/quiz';
@@ -41,6 +42,8 @@ const CaktoQuizQuestion: React.FC<CaktoQuizQuestionProps> = ({
 
     onAnswer({
       questionId: question.id,
+      selectedOptionId: answers[0],
+      selectedOptionIds: answers,
       answers,
       styleCategories: selectedStyleCategories as any[]
     });
@@ -48,7 +51,7 @@ const CaktoQuizQuestion: React.FC<CaktoQuizQuestionProps> = ({
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-xl font-semibold mb-4">{question.question}</h2>
+      <h2 className="text-xl font-semibold mb-4">{question.question || question.text}</h2>
       <div className="space-y-4">
         {question.options.map(option => (
           <Button

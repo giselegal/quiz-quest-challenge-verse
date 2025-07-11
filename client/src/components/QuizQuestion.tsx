@@ -49,7 +49,8 @@ export const QuizQuestion: React.FC<QuizQuestionProps> = ({
       setTimeout(() => {
         onAnswer({
           questionId: question.id,
-          selectedOptions: newSelection,
+          selectedOptionId: newSelection[0],
+          selectedOptionIds: newSelection,
           timestamp: Date.now()
         });
       }, 300);
@@ -59,7 +60,8 @@ export const QuizQuestion: React.FC<QuizQuestionProps> = ({
   const handleSubmit = () => {
     onAnswer({
       questionId: question.id,
-      selectedOptions: selectedOptions,
+      selectedOptionId: selectedOptions[0],
+      selectedOptionIds: selectedOptions,
       timestamp: Date.now()
     });
   };
@@ -71,7 +73,7 @@ export const QuizQuestion: React.FC<QuizQuestionProps> = ({
       <Card className="p-8 space-y-6 bg-white shadow-md">
         <div className="space-y-4">
           <h2 className="text-2xl font-playfair text-[#432818] text-center">
-            {question.question}
+            {question.question || question.text}
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

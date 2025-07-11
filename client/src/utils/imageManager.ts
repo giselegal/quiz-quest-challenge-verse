@@ -4,6 +4,7 @@ export interface OptimizedImageOptions {
   height?: number;
   quality?: number;
   format?: 'webp' | 'jpeg' | 'png';
+  batchSize?: number;
 }
 
 export interface ImageMetadata {
@@ -18,12 +19,13 @@ export interface ImageMetadata {
 const preloadedImages = new Set<string>();
 const imageMetadataCache = new Map<string, ImageMetadata>();
 
-export const preloadCriticalImages = (urls: string[]): Promise<void[]> => {
-  return Promise.all(urls.map(url => preloadImage(url)));
+export const preloadCriticalImages = (urls: string[] | string, options?: OptimizedImageOptions): Promise<void[]> => {
+  const urlArray = Array.isArray(urls) ? urls : [urls];
+  return Promise.all(urlArray.map(url => preloadImage(url)));
 };
 
-export const preloadImagesByUrls = (urls: string[]): Promise<void[]> => {
-  return preloadCriticalImages(urls);
+export const preloadImagesByUrls = (urls: string[], options?: OptimizedImageOptions): Promise<void[]> => {
+  return preloadCriticalImages(urls, options);
 };
 
 export const preloadImage = (url: string): Promise<void> => {
@@ -56,6 +58,14 @@ export const optimizeImage = (url: string, options: OptimizedImageOptions = {}):
 };
 
 export const getOptimizedImage = optimizeImage;
+
+// Add missing functions
+export const getOptimizedImageUrl = optimizeImage;
+
+export const getLowQualityPlaceholder = (url: string): string => {
+  // Return a low quality placeholder version of the image
+  return url + '?q=10&w=50';
+};
 
 export const getImageMetadata = (url: string): ImageMetadata | null => {
   return imageMetadataCache.get(url) || null;
