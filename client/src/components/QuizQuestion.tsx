@@ -30,6 +30,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   isStrategicQuestion = false
 }) => {
   const isMobile = useIsMobile();
+  // Fixed: Only check for valid image types
   const hasImageOptions = question.type === 'image' || question.type === 'both';
   const [imageError, setImageError] = useState(false);
   const { scrollToQuestion } = useQuestionScroll();

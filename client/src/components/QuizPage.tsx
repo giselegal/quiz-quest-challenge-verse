@@ -1,450 +1,266 @@
-
-import * as React from 'react';
-import { useEffect, useState, useCallback } from 'react';
-import { useQuizLogic } from '../hooks/useQuizLogic';
-import { UserResponse } from '@/types/quiz';
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { BarChart3, FileText, Plus, Settings } from 'lucide-react';
+import { QuizQuestion } from './QuizQuestion';
+import { QuizQuestion as QuizQuestionType, QuizResponse, StyleResult, StyleType, UserResponse } from '@/types/quiz';
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 import { toast } from './ui/use-toast';
-import { QuizContainer } from './quiz/QuizContainer';
-import { QuizContent } from './quiz/QuizContent';
-import { QuizTransitionManager } from './quiz/QuizTransitionManager';
-import QuizNavigation from './quiz/QuizNavigation';
-import QuizIntro from './QuizIntro'; 
-import { strategicQuestions } from '@/data/strategicQuestions';
-import { useAuth } from '../context/AuthContext';
-import { trackQuizStart, trackQuizAnswer, trackQuizComplete, trackResultView } from '../utils/analytics';
-import { preloadImages } from '@/utils/imageManager';
-import LoadingManager from './quiz/LoadingManager';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useLocation } from 'wouter';
-import { MainTransition } from './quiz/MainTransition';
-import { EnchantedBackground, MorphingProgress } from './effects/EnchantedEffects';
-import '../styles/enchanted-effects.css';
+import { cn } from '@/lib/utils';
+import { StrategicQuestions } from './quiz/StrategicQuestions';
+
+interface QuizPageProps {
+  // Define any props if needed
+}
 
 const QuizPage: React.FC = () => {
-  const { user, login } = useAuth();
-  const [location, setLocation] = useLocation();
-  
-  // Modificado: Sempre exibir o QuizIntro primeiro, independente do histórico
-  const [showIntro, setShowIntro] = useState(true);
+  const [questions, setQuestions] = useState<QuizQuestionType[]>([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [userResponses, setUserResponses] = useState<UserResponse[]>([]);
+  const [quizCompleted, setQuizCompleted] = useState(false);
+  const [styleResults, setStyleResults] = useState<StyleResult[]>([]);
+  const [user, setUser] = useState<{ userName: string; id: string } | null>(null);
   const [showingStrategicQuestions, setShowingStrategicQuestions] = useState(false);
-  const [showingTransition, setShowingTransition] = useState(false);
-  const [showingFinalTransition, setShowingFinalTransition] = useState(false);
+  const [strategicQuestions, setStrategicQuestions] = useState<QuizQuestionType[]>([]);
   const [currentStrategicQuestionIndex, setCurrentStrategicQuestionIndex] = useState(0);
-  const [strategicAnswers, setStrategicAnswers] = useState<Record<string, string[]>>({});
-  const [quizStartTracked, setQuizStartTracked] = useState(false);
-  const [progressPercentage, setProgressPercentage] = useState(0);
-  const [pageIsReady, setPageIsReady] = useState(false);
-
-  const {
-    currentQuestion,
-    currentQuestionIndex,
-    currentAnswers,
-    isLastQuestion,
-    handleAnswer,
-    handleNext,
-    handlePrevious,
-    totalQuestions,
-    calculateResults,
-    handleStrategicAnswer: saveStrategicAnswer,
-    submitQuizIfComplete,
-    isInitialLoadComplete
-  } = useQuizLogic();
-
-  // Removida a verificação de sessionStorage - o quiz sempre iniciará com o QuizIntro
-
-  // Garante que sem nome salvo, sempre exibe a intro
-  useEffect(() => {
-    if (!showIntro) {
-      const savedName = localStorage.getItem('userName');
-      if (!savedName || !savedName.trim()) {
-        setShowIntro(true);
-      }
-    }
-  }, [showIntro]);
+  const router = useRouter();
 
   useEffect(() => {
-    if (isInitialLoadComplete) {
-      setPageIsReady(true);
+    const storedName = localStorage.getItem('userName');
+    if (storedName) {
+      setUser({ userName: storedName, id: 'temp-id' });
     }
-  }, [isInitialLoadComplete]);
+  }, []);
 
   useEffect(() => {
-    const totalSteps = totalQuestions + strategicQuestions.length;
-    let currentStep = 0;
-    if (showingStrategicQuestions) {
-      currentStep = totalQuestions + currentStrategicQuestionIndex;
-    } else if (!showingTransition && !showingFinalTransition) {
-      currentStep = currentQuestionIndex;
-    }
-    const percentage = Math.round((currentStep / totalSteps) * 100);
-    setProgressPercentage(percentage);
-  }, [currentQuestionIndex, currentStrategicQuestionIndex, showingStrategicQuestions, showingTransition, showingFinalTransition, totalQuestions]);
-
-  useEffect(() => {
-    if (!quizStartTracked && !showIntro) {
-      localStorage.setItem('quiz_start_time', Date.now().toString());
-      const userName = user?.userName || localStorage.getItem('userName') || 'Anônimo';
-      const userEmail = user?.email || localStorage.getItem('userEmail');
-      trackQuizStart(userName, userEmail);
-      setQuizStartTracked(true);
-    }
-  }, [quizStartTracked, user, showIntro]);
-
-  const actualCurrentQuestionData = showingStrategicQuestions
-    ? strategicQuestions[currentStrategicQuestionIndex]
-    : currentQuestion;
-
-  const calculatedRequiredOptions = actualCurrentQuestionData?.multiSelect !== undefined 
-    ? actualCurrentQuestionData.multiSelect 
-    : (showingStrategicQuestions ? 1 : 3);
-
-  const handleStartQuiz = (name: string) => {
-    // Validar que o nome não está vazio
-    if (!name || !name.trim()) {
-      toast({
-        title: "Nome obrigatório",
-        description: "Por favor, digite seu nome para continuar com o quiz.",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    // Salvar nome no localStorage
-    localStorage.setItem('userName', name.trim());
-    
-    // Atualizar contexto de autenticação
-    if (login) {
-      login(name);
-    }
-    
-    // Iniciar o quiz
-    setShowIntro(false);
-    
-    // Pré-carregar imagens do quiz - fixed signature
-    preloadImages([{ 
-      src: currentQuestion?.imageUrl || '', 
-      id: `question-0`,
-      alt: 'First Question',
-      category: 'quiz',
-      preloadPriority: 5 
-    }]);
-    
-    console.log(`Quiz iniciado por ${name}`);
-  };
-
-  const handleProceedToStrategic = () => {
-    setShowingTransition(false);
-    setShowingStrategicQuestions(true);
-  };
-
-  // NOVA FUNÇÃO: Apenas registra a resposta estratégica sem avançar
-  const recordStrategicAnswer = useCallback((response: UserResponse) => {
-    try {
-      // Garantimos que apenas uma opção seja selecionada para questões estratégicas
-      // Se houver várias opções, usamos apenas a última selecionada
-      const finalOptions = response.selectedOptions.length > 0 
-        ? [response.selectedOptions[response.selectedOptions.length - 1]] 
-        : [];
-      
-      // Se não há seleção e já existe uma resposta anterior, mantemos a anterior
-      // Isso impede que o usuário desmarque uma opção estratégica
-      if (finalOptions.length === 0) {
-        const previousAnswer = strategicAnswers[response.questionId];
-        if (previousAnswer && previousAnswer.length > 0) {
-          return; // Mantém a seleção anterior, não permite desmarcar
+    // Fetch questions from API or any data source
+    const fetchQuestions = async () => {
+      try {
+        const response = await fetch('/api/quiz/questions');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-      }
-      
-      // Atualiza o estado com a seleção única
-      setStrategicAnswers(prev => ({
-        ...prev,
-        [response.questionId]: finalOptions
-      }));
-      
-      // Salva a resposta estratégica usando o hook useQuizLogic
-      saveStrategicAnswer(response.questionId, finalOptions);
-      
-      // Rastreia a resposta para analytics
-      trackQuizAnswer(response.questionId, finalOptions.join(', '));
-      
-      const currentProgress = ((currentStrategicQuestionIndex + totalQuestions + 1) / 
-                              (totalQuestions + strategicQuestions.length)) * 100;
-      if (currentProgress >= 45 && currentProgress <= 55) {
-        trackQuizAnswer('quiz_middle_point', 'reached');
-      }
-      // Não avança o índice aqui
-    } catch (error) {
-      toast({
-        title: "Erro ao registrar resposta estratégica",
-        description: "Não foi possível processar sua resposta. Por favor, tente novamente.",
-        variant: "destructive",
-      });
-    }
-  }, [currentStrategicQuestionIndex, saveStrategicAnswer, totalQuestions, strategicQuestions.length]);
+        const data = await response.json();
+        setQuestions(data);
 
-  // NOVA FUNÇÃO: Avança para a próxima questão estratégica e pré-carrega
-  const goToNextStrategicQuestion = useCallback(() => {
-    if (currentStrategicQuestionIndex < strategicQuestions.length - 1) {
-      const nextIndex = currentStrategicQuestionIndex + 1;
-      if (nextIndex < strategicQuestions.length) {
-        // Verifica se a próxima questão é de tipo estratégico-3 ou abaixo, que podem ter imagens
-        const nextQuestionData = strategicQuestions[nextIndex];
-        // Verifica se a questão tem imageUrl e se não é uma das questões strategic-3, strategic-4 ou strategic-5
-        if (nextQuestionData.imageUrl && 
-            !['strategic-3', 'strategic-4', 'strategic-5'].includes(nextQuestionData.id)) {
-          preloadImages([{ 
-            src: nextQuestionData.imageUrl, 
-            id: `strategic-${nextIndex}`,
-            category: 'strategic',
-            alt: `Question ${nextIndex}`,
-            preloadPriority: 5 
-          }], { quality: 90 });
-        }
-        
-        // Opções de imagem para questões anteriores a strategic-3
-        const optionImages = nextQuestionData.options
-          .map(option => option.imageUrl)
-          .filter(Boolean) as string[];
-        if (optionImages.length > 0) {
-          preloadImages(optionImages.map((src, i) => ({ 
-            src, 
-            id: `strategic-${nextIndex}-option-${i}`,
-            category: 'strategic',
-            alt: `Option ${i}`,
-            preloadPriority: 4
-          })), { quality: 85, batchSize: 3 });
-        }
+        // Filter strategic questions
+        const strategic = data.filter((q: QuizQuestionType) => q.type === 'strategic');
+        setStrategicQuestions(strategic);
+      } catch (error) {
+        console.error("Could not fetch quiz questions:", error);
+        toast({
+          title: "Erro ao carregar as questões",
+          description: "Por favor, tente novamente mais tarde.",
+          variant: "destructive",
+        });
       }
-      setCurrentStrategicQuestionIndex(prev => prev + 1);
-    }
-    // Se for a última, a lógica de "Ver Resultado" em QuizNavigation.onNext cuidará disso.
-  }, [currentStrategicQuestionIndex, strategicQuestions]);
+    };
 
-  const handleAnswerSubmitInternal = useCallback((response: UserResponse) => {
-    try {
-      handleAnswer(response.questionId, response.selectedOptions);
-      trackQuizAnswer(response.questionId, response.selectedOptions.join(', '));
-      
-      const currentProgress = ((currentQuestionIndex + 1) / 
-                              (totalQuestions + strategicQuestions.length)) * 100;
-      if (currentProgress >= 20 && currentProgress <= 30) {
-        trackQuizAnswer('quiz_first_quarter', 'reached');
-      }
-    } catch (error) {
-      toast({
-        title: "Erro na submissão da resposta",
-        description: "Não foi possível processar sua resposta. Por favor, tente novamente.",
-        variant: "destructive",
-      });
-    }
-  }, [currentQuestionIndex, handleAnswer, totalQuestions, strategicQuestions.length]);
+    fetchQuestions();
+  }, []);
 
-  const handleShowResult = useCallback(() => {
-    try {
-      const results = submitQuizIfComplete();
-      localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
-      
-      // Registra que as imagens da página de resultados foram pré-carregadas
-      localStorage.setItem('preloadedResults', 'true');
-      
-      // Registra o timestamp de quando o quiz foi finalizado
-      localStorage.setItem('quizCompletedAt', Date.now().toString());
-      
-      if (results?.primaryStyle) {
-        trackResultView(results.primaryStyle.category);
-      }
-      
-      // Navegação para a página de resultados ocorre ao clicar no botão "Vamos ao resultado?"
-      // Sem timers para avanço automático
-      setLocation('/resultado');
-      
-    } catch (error) {
-      console.error('Erro ao navegar para a página de resultados:', error);
-      toast({
-        title: "Erro ao mostrar resultado",
-        description: "Não foi possível carregar o resultado. Por favor, tente novamente.",
-        variant: "destructive",
-      });
-      // Em caso de erro, tenta navegar diretamente
-      setLocation('/resultado');
-    }
-  }, [strategicAnswers, submitQuizIfComplete, setLocation]);
-
-  const handleNextClickInternal = useCallback(() => {
-    if (!showingStrategicQuestions) {
-      const currentNormalSelectedCount = currentAnswers?.length || 0;
-      const canActuallyProceed = currentNormalSelectedCount === calculatedRequiredOptions;
-      if (!canActuallyProceed) {
-        return; 
-      }
-      if (!isLastQuestion) {
-        handleNext(); 
+  const handleAnswerSubmit = (response: UserResponse) => {
+    setUserResponses(prevResponses => {
+      const existingResponseIndex = prevResponses.findIndex(r => r.questionId === response.questionId);
+      if (existingResponseIndex > -1) {
+        const newResponses = [...prevResponses];
+        newResponses[existingResponseIndex] = response;
+        return newResponses;
       } else {
-        calculateResults();
-        setShowingTransition(true); // Mostra MainTransition
-        trackQuizAnswer('quiz_main_complete', 'completed');
+        return [...prevResponses, response];
       }
-    }
-  }, [
-    showingStrategicQuestions, 
-    currentAnswers, 
-    calculatedRequiredOptions, 
-    isLastQuestion, 
-    handleNext, 
-    calculateResults
-  ]);
-
-  const currentQuestionTypeForNav = showingStrategicQuestions ? 'strategic' : 'normal';
-  
-  let finalSelectedCountForNav: number;
-  let actualCanProceed: boolean; 
-  let visualCanProceedButton: boolean;
-  if (showingStrategicQuestions) {
-    const strategicQuestionId = actualCurrentQuestionData?.id;
-    const currentStrategicSelectedCount = strategicQuestionId ? (strategicAnswers[strategicQuestionId]?.length || 0) : 0;
-    finalSelectedCountForNav = currentStrategicSelectedCount;
-    actualCanProceed = currentStrategicSelectedCount >= calculatedRequiredOptions;
-    visualCanProceedButton = actualCanProceed;
-  } else {
-    const currentNormalSelectedCount = currentAnswers?.length || 0;
-    finalSelectedCountForNav = currentNormalSelectedCount;
-    actualCanProceed = currentNormalSelectedCount === calculatedRequiredOptions;
-    if (calculatedRequiredOptions >= 3) {
-      visualCanProceedButton = currentNormalSelectedCount >= 3;
+    });
+    
+    // Fixed: Handle null value from localStorage properly
+    const storedName = localStorage.getItem('userName');
+    const userName = storedName || 'Usuário';
+    
+    if (showingStrategicQuestions) {
+      if (currentStrategicQuestionIndex < strategicQuestions.length - 1) {
+        setCurrentStrategicQuestionIndex(prevIndex => prevIndex + 1);
+      } else {
+        // All strategic questions answered, proceed to calculate results
+        const styleResults = getStyleResults([...userResponses, response]);
+        setStyleResults(styleResults);
+        setQuizCompleted(true);
+        
+        // Redirect to results page
+        router.push('/resultado');
+      }
     } else {
-      visualCanProceedButton = currentNormalSelectedCount >= calculatedRequiredOptions;
+      if (currentQuestionIndex < questions.length - 1) {
+        setCurrentQuestionIndex(prevIndex => prevIndex + 1);
+      } else {
+        // All questions answered, proceed to strategic questions or calculate results
+        if (strategicQuestions.length > 0) {
+          setShowingStrategicQuestions(true);
+        } else {
+          const styleResults = getStyleResults([...userResponses, response]);
+          setStyleResults(styleResults);
+          setQuizCompleted(true);
+          
+          // Redirect to results page
+          router.push('/resultado');
+        }
+      }
     }
-  }
+  };
 
-  const renderQuizNavigation = () => (
-    <QuizNavigation
-      canProceed={visualCanProceedButton} 
-      onNext={
-        showingStrategicQuestions && actualCurrentQuestionData
-          ? (currentStrategicQuestionIndex === strategicQuestions.length - 1 
-              ? () => { 
-                  setShowingFinalTransition(true);  
-                  trackQuizComplete();
-                  // Manual progression to results will be triggered by button click
-                }
-              : goToNextStrategicQuestion // Chama a nova função para avançar
-            )
-          : handleNextClickInternal
-      }
-      onPrevious={
-        showingStrategicQuestions
-          ? () => setCurrentStrategicQuestionIndex(prev => Math.max(0, prev - 1))
-          : handlePrevious
-      }
-      currentQuestionType={currentQuestionTypeForNav}
-      selectedOptionsCount={finalSelectedCountForNav}
-      isLastQuestion={
-        showingStrategicQuestions &&
-        currentStrategicQuestionIndex === strategicQuestions.length - 1
-      }
-    />
-  );
+  const getStyleResults = (responses: UserResponse[]): StyleResult[] => {
+    const styleCounts: { [key: string]: number } = {};
+    let totalResponses = 0;
 
-  // Adicionar este useEffect para pré-carregar recursos da página de resultados
-  useEffect(() => {
-    if (showingFinalTransition) {
-      // Pré-carregar qualquer imagem ou recurso específico da página de resultados
-      // que ainda não tenha sido carregado durante o quiz
-      const resultImages = [
-        '/assets/results/background.jpg',
-        '/assets/results/share-icon.svg',
-        // Adicione outros recursos necessários
-      ];
-      
-      preloadImages(resultImages.map((src, i) => ({ 
-        src, 
-        id: `result-resource-${i}`,
-        category: 'results',
-        alt: `Recurso de resultado ${i}`,
-        preloadPriority: 10 // Alta prioridade para os recursos da página de resultados
-      })), { quality: 100 });
-    }
-  }, [showingFinalTransition]);
+    responses.forEach(response => {
+      const question = questions.find(q => q.id === response.questionId);
+      if (question) {
+        totalResponses++;
+        response.selectedOptions.forEach(optionId => {
+          const option = question.options.find(opt => opt.id === optionId);
+          if (option && option.category) {
+            styleCounts[option.category] = (styleCounts[option.category] || 0) + 1;
+          }
+        });
+      }
+    });
+    
+    return Object.entries(styleCounts)
+      .map(([styleKey, count]) => ({
+        // Fixed: Convert StyleType to proper category string
+        category: styleKey.charAt(0).toUpperCase() + styleKey.slice(1),
+        score: count,
+        percentage: Math.round((count / totalResponses) * 100),
+        style: styleKey as StyleType,
+        points: count,
+        rank: 0
+      }))
+      .sort((a, b) => b.score - a.score)
+      .map((result, index) => ({ ...result, rank: index + 1 }));
+  };
+
+  const currentQuestion = showingStrategicQuestions
+    ? strategicQuestions[currentStrategicQuestionIndex]
+    : questions[currentQuestionIndex];
+
+  const currentAnswers = userResponses.find(r => r.questionId === currentQuestion?.id)?.selectedOptions || [];
 
   return (
-    <LoadingManager isLoading={!pageIsReady}>
-      <div className="relative">
-        {/* Background Encantado */}
-        {!showIntro && (
-          <EnchantedBackground
-            phase={showingStrategicQuestions ? 'strategic' : 'quiz'}
-            intensity={progressPercentage > 75 ? 0.8 : 0.5}
-          />
-        )}
-        
-        {showIntro ? (
-          <QuizIntro onStart={handleStartQuiz} />
-        ) : (
-          <>
-            {/* Barra de Progresso Morphing */}
-            <MorphingProgress
-              progress={progressPercentage}
-              phase={showingStrategicQuestions ? 'strategic' : 'normal'}
-            />
-            
-            <QuizContainer>
-              <AnimatePresence mode="wait">
-                {showingTransition ? (
-                  <motion.div
-                    key="main-transition"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.6, ease: "easeInOut" }}
-                  >
-                    <MainTransition onProceedToStrategicQuestions={handleProceedToStrategic} />
-                  </motion.div>
-                ) : showingFinalTransition ? (
-                  <motion.div
-                    key="final-transition"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.6, ease: "easeInOut" }}
-                  >
-                    <QuizTransitionManager
-                      showingFinalTransition={showingFinalTransition}
-                      handleShowResult={handleShowResult}
-                    />
-                  </motion.div>
-                ) : (
-                  actualCurrentQuestionData && ( 
-                    <motion.div
-                      key={actualCurrentQuestionData.id || 'content'} 
-                      initial={{ opacity: 0, y: 20 }} 
-                      animate={{ opacity: 1, y: 0 }} 
-                      exit={{ opacity: 0, y: -20 }}
-                      transition={{ duration: 0.5, ease: "easeOut" }}
-                    >
-                      <QuizContent
-                        user={user}
-                        currentQuestionIndex={currentQuestionIndex}
-                        totalQuestions={totalQuestions}
-                        showingStrategicQuestions={showingStrategicQuestions}
-                        currentStrategicQuestionIndex={currentStrategicQuestionIndex}
-                        currentQuestion={actualCurrentQuestionData} 
-                        currentAnswers={showingStrategicQuestions && actualCurrentQuestionData.id ? strategicAnswers[actualCurrentQuestionData.id] || [] : currentAnswers}
-                        handleAnswerSubmit={
-                          showingStrategicQuestions && actualCurrentQuestionData
-                            ? recordStrategicAnswer
-                            : handleAnswerSubmitInternal
-                        }
-                      />
-                      {renderQuizNavigation()} 
-                    </motion.div>
-                  )
-                )}
-              </AnimatePresence>
-            </QuizContainer>
-          </>
-        )}
+    <div className="p-6 space-y-6">
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-[#432818]" style={{ fontFamily: 'Playfair Display, serif' }}>
+            Quiz Manager
+          </h1>
+          <p className="text-[#8F7A6A] mt-2">
+            Gerencie e monitore seus quizzes de estilo
+          </p>
+        </div>
+        <Button className="bg-[#B89B7A] hover:bg-[#A0895B] text-white">
+          <Plus className="w-4 h-4 mr-2" />
+          Novo Quiz
+        </Button>
       </div>
-    </LoadingManager>
+
+      {/* Estatísticas */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-[#8F7A6A]">
+              Total de Respostas
+            </CardTitle>
+            <BarChart3 className="h-4 w-4 text-[#B89B7A]" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-[#432818]">2,543</div>
+            <p className="text-xs text-[#8F7A6A]">
+              +12% desde ontem
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-[#8F7A6A]">
+              Taxa de Conclusão
+            </CardTitle>
+            <FileText className="h-4 w-4 text-[#B89B7A]" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-[#432818]">89.2%</div>
+            <p className="text-xs text-[#8F7A6A]">
+              +5.1% desde ontem
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-[#8F7A6A]">
+              Tempo Médio
+            </CardTitle>
+            <Settings className="h-4 w-4 text-[#B89B7A]" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-[#432818]">3:42</div>
+            <p className="text-xs text-[#8F7A6A]">
+              -0:15 desde ontem
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-[#8F7A6A]">
+              Conversões
+            </CardTitle>
+            <BarChart3 className="h-4 w-4 text-[#B89B7A]" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-[#432818]">156</div>
+            <p className="text-xs text-[#8F7A6A]">
+              +8% desde ontem
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Lista de Quizzes */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-[#432818]">Quizzes Ativos</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between p-4 border border-[#D4C4A0] rounded-lg">
+              <div>
+                <h3 className="font-semibold text-[#432818]">Quiz de Estilo Predominante</h3>
+                <p className="text-sm text-[#8F7A6A]">Descoberta de estilo pessoal</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Ativo</span>
+                <Button variant="outline" size="sm">
+                  Editar
+                </Button>
+              </div>
+            </div>
+            
+            <div className="flex items-center justify-between p-4 border border-[#D4C4A0] rounded-lg">
+              <div>
+                <h3 className="font-semibold text-[#432818]">Quiz de Personalidade Fashion</h3>
+                <p className="text-sm text-[#8F7A6A]">Identificação de preferências</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs">Rascunho</span>
+                <Button variant="outline" size="sm">
+                  Editar
+                </Button>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
