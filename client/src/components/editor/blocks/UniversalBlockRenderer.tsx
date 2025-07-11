@@ -63,7 +63,18 @@ import BeforeAfterInlineBlock from './inline/BeforeAfterInlineBlock';
 import BonusListInlineBlock from './inline/BonusListInlineBlock';
 import StepHeaderInlineBlock from './inline/StepHeaderInlineBlock';
 
-// Componentes modernos (funcionais)
+// === IMPORTAR COMPONENTES REAIS PARA O EDITOR ===
+import MotivationSection from '@/components/result/MotivationSection';
+import BonusSection from '@/components/result/BonusSection';
+import GuaranteeSection from '@/components/result/GuaranteeSection';
+import { BeforeAfterTransformation } from '@/components/result/BeforeAfterTransformation';
+import Testimonials from '@/components/quiz-result/sales/Testimonials';
+import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
+
+// === SERVIÇO DE COMPONENTES EDITÁVEIS ===
+import { renderEditableComponent, getComponentConfig } from '../services/editableComponentsService';
+
+// Componentes modernos (funcionais) - usando fallbacks
 import TestimonialsGridBlock from './TestimonialsGridBlock';
 import FAQSectionBlock from './FAQSectionBlock';
 import GuaranteeBlock from './GuaranteeBlock';
@@ -78,10 +89,10 @@ export interface BlockRendererProps {
 }
 
 /**
- * Universal Block Renderer for Schema-Driven Editor (ALL INLINE HORIZONTAL)
- * Renders any block type based on its type property
- * All components are now inline-editable with horizontal flexbox layout
- * Implements responsive, mobile-first design with max 2 columns
+ * Universal Block Renderer - Editor Visual Moderno (ES7+)
+ * Sistema completo de renderização com drag & drop
+ * Design responsivo com identidade visual consistente
+ * Edição via painel de propriedades (sem inline editing)
  */
 export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
   block,
@@ -91,71 +102,65 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
   disabled = false,
   className
 }) => {
-  // ES7+ Props comuns padronizados para flexbox inline responsivo
+  // ES7+ Props base com sistema de edição moderno
   const commonProps = {
     block,
     isSelected,
     onClick,
-    onPropertyChange: (key: string, value: any) => {
-      if (onSaveInline) {
-        const updatedBlock = {
-          ...block,
-          properties: { ...block.properties, [key]: value }
-        };
-        onSaveInline(block.id, updatedBlock);
-      }
-    },
     disabled,
     className: cn(
-      // ES7+ Flexbox container responsivo padronizado
-      'flex flex-wrap items-start gap-2 sm:gap-4',
-      'w-full min-h-[60px] transition-all duration-300 ease-out',
-      // Background e padding responsivos
-      'bg-white p-2 sm:p-3 md:p-4 rounded-lg',
-      // Estados visuais modernos
-      isSelected && 'ring-2 ring-blue-500/50 bg-blue-50/30 shadow-md',
-      !disabled && 'hover:bg-gray-50/80 hover:shadow-sm cursor-pointer',
-      // Responsividade avançada
-      'max-w-full overflow-hidden',
+      // Design System baseado no HTML fornecido
+      'relative w-full transition-all duration-200 ease-out',
+      'border border-[#B89B7A]/20 rounded-lg bg-white shadow-sm',
+      'hover:border-[#B89B7A]/40 hover:shadow-md cursor-pointer',
+      // Estados de seleção com cores da marca
+      isSelected && 'ring-2 ring-[#B89B7A] border-[#B89B7A] bg-[#FAF9F7]',
+      // Estados de interação
+      !disabled && 'group/canvas-item max-w-full canvas-item min-h-[1.25rem] relative self-auto mr-auto',
       className
     )
   };
 
-  // TODOS os componentes são agora inline - removido conceito de não-inline
-  const isInlineBlock = (blockType: string): boolean => {
-    return true; // Todos são inline agora
-  };
-
-  // ES7+ Sistema responsivo simplificado - SEM wrapper duplo
+  // ES7+ Sistema de renderização moderno - baseado no HTML exemplo
   const renderComponent = () => {
-    const commonProps = {
+    // Props padrão para todos os componentes no editor
+    const editorComponentProps = {
       block,
       isSelected,
       onClick,
-      onPropertyChange: (key: string, value: any) => {
-        if (onSaveInline) {
-          const updatedBlock = {
-            ...block,
-            properties: { ...block.properties, [key]: value }
-          };
-          onSaveInline(block.id, updatedBlock);
-        }
-      },
       className: cn(
-        // Responsividade nativa mobile-first
-        'w-full transition-all duration-200',
-        'border border-gray-200 rounded-lg shadow-sm bg-white',
-        'hover:shadow-md hover:border-blue-300',
-        isSelected && 'ring-2 ring-blue-500 border-blue-400 bg-blue-50'
+        // Layout moderno conforme HTML de referência
+        'w-full relative rounded-md overflow-hidden',
+        'group-hover/canvas-item:border-2 border-dashed hover:border-2 border-blue-500',
+        'min-h-[1.25rem] min-w-full box-border customizable-gap',
+        // Estados visuais conforme o design do HTML
+        isSelected && 'border-2 border-blue-600 bg-blue-50/10',
+        'transition-all duration-200 ease-out'
       )
     };
 
     const componentMap: Record<string, () => React.ReactNode> = {
-      // === COMPONENTES BÁSICOS ===
-      header: () => <HeadingInlineBlock {...commonProps} />,
-      text: () => <TextInlineBlock {...commonProps} />,
-      image: () => <ImageInlineBlock {...commonProps} />,
-      button: () => <ButtonInlineBlock {...commonProps} />,
+      // === COMPONENTES BÁSICOS DO EDITOR ===
+      header: () => (
+        <div className={editorComponentProps.className} onClick={onClick}>
+          <HeadingInlineBlock {...commonProps} />
+        </div>
+      ),
+      text: () => (
+        <div className={editorComponentProps.className} onClick={onClick}>
+          <TextInlineBlock {...commonProps} />
+        </div>
+      ),
+      image: () => (
+        <div className={editorComponentProps.className} onClick={onClick}>
+          <ImageInlineBlock {...commonProps} />
+        </div>
+      ),
+      button: () => (
+        <div className={editorComponentProps.className} onClick={onClick}>
+          <ButtonInlineBlock {...commonProps} />
+        </div>
+      ),
       spacer: () => <SpacerBlock {...commonProps} />,
       'form-input': () => <FormInputBlock {...commonProps} />,
       list: () => <ListBlock {...commonProps} />,
@@ -248,102 +253,147 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       'quiz-transition-final': () => <QuizTransitionBlock {...commonProps} />,
       
       // === COMPONENTE REFERENCE SYSTEM ===
-      // Para renderizar componentes reais do projeto no editor
+      // RENDERIZA COMPONENTES REAIS NO EDITOR (não placeholders!)
       'component-reference': () => {
-        const { componentPath, componentName, props: componentProps = {}, editable = true, editableFields = [] } = block.properties;
+        const { componentPath, componentName, props: componentProps = {} } = block.properties;
         
-        // ES7+ Handler para editar propriedades inline
-        const handlePropertyEdit = (field: string, value: any) => {
-          if (onSaveInline && editable) {
-            const updatedBlock = {
-              ...block,
-              properties: {
-                ...block.properties,
-                props: {
-                  ...componentProps,
-                  [field]: value
-                }
-              }
-            };
-            onSaveInline(block.id, updatedBlock);
+        // Mapear componentes reais para renderização no editor
+        const getRealComponent = () => {
+          switch (componentPath) {
+            case '@/components/result/MotivationSection':
+              return (
+                <div className={cn(
+                  // Container do editor com identidade da marca
+                  'relative border-2 border-[#B89B7A]/30 rounded-xl overflow-hidden',
+                  'bg-white shadow-sm transition-all duration-300',
+                  isSelected && 'border-[#B89B7A] shadow-lg ring-2 ring-[#B89B7A]/20',
+                  'hover:border-[#B89B7A]/50 cursor-pointer'
+                )}
+                onClick={onClick}
+                >
+                  {/* Badge do editor */}
+                  <div className="absolute top-2 right-2 z-10 bg-[#B89B7A] text-white text-xs px-2 py-1 rounded-full font-medium">
+                    Editável
+                  </div>
+                  
+                  {/* Componente real renderizado */}
+                  <MotivationSection {...componentProps} />
+                </div>
+              );
+
+            case '@/components/result/BonusSection':
+              return (
+                <div className={cn(
+                  'relative border-2 border-[#B89B7A]/30 rounded-xl overflow-hidden',
+                  'bg-white shadow-sm transition-all duration-300',
+                  isSelected && 'border-[#B89B7A] shadow-lg ring-2 ring-[#B89B7A]/20',
+                  'hover:border-[#B89B7A]/50 cursor-pointer'
+                )}
+                onClick={onClick}
+                >
+                  <div className="absolute top-2 right-2 z-10 bg-[#B89B7A] text-white text-xs px-2 py-1 rounded-full font-medium">
+                    Editável
+                  </div>
+                  <BonusSection {...componentProps} />
+                </div>
+              );
+
+            case '@/components/result/GuaranteeSection':
+              return (
+                <div className={cn(
+                  'relative border-2 border-[#B89B7A]/30 rounded-xl overflow-hidden',
+                  'bg-white shadow-sm transition-all duration-300',
+                  isSelected && 'border-[#B89B7A] shadow-lg ring-2 ring-[#B89B7A]/20',
+                  'hover:border-[#B89B7A]/50 cursor-pointer'
+                )}
+                onClick={onClick}
+                >
+                  <div className="absolute top-2 right-2 z-10 bg-[#B89B7A] text-white text-xs px-2 py-1 rounded-full font-medium">
+                    Editável
+                  </div>
+                  <GuaranteeSection {...componentProps} />
+                </div>
+              );
+
+            case '@/components/result/BeforeAfterTransformation':
+              return (
+                <div className={cn(
+                  'relative border-2 border-[#B89B7A]/30 rounded-xl overflow-hidden',
+                  'bg-white shadow-sm transition-all duration-300',
+                  isSelected && 'border-[#B89B7A] shadow-lg ring-2 ring-[#B89B7A]/20',
+                  'hover:border-[#B89B7A]/50 cursor-pointer'
+                )}
+                onClick={onClick}
+                >
+                  <div className="absolute top-2 right-2 z-10 bg-[#B89B7A] text-white text-xs px-2 py-1 rounded-full font-medium">
+                    Editável
+                  </div>
+                  <BeforeAfterTransformation {...componentProps} />
+                </div>
+              );
+
+            case '@/components/quiz-result/sales/Testimonials':
+              return (
+                <div className={cn(
+                  'relative border-2 border-[#B89B7A]/30 rounded-xl overflow-hidden',
+                  'bg-white shadow-sm transition-all duration-300',
+                  isSelected && 'border-[#B89B7A] shadow-lg ring-2 ring-[#B89B7A]/20',
+                  'hover:border-[#B89B7A]/50 cursor-pointer'
+                )}
+                onClick={onClick}
+                >
+                  <div className="absolute top-2 right-2 z-10 bg-[#B89B7A] text-white text-xs px-2 py-1 rounded-full font-medium">
+                    Editável
+                  </div>
+                  <Testimonials {...componentProps} />
+                </div>
+              );
+
+            case '@/components/result/SecurePurchaseElement':
+              return (
+                <div className={cn(
+                  'relative border-2 border-[#B89B7A]/30 rounded-xl overflow-hidden',
+                  'bg-white shadow-sm transition-all duration-300 p-4',
+                  isSelected && 'border-[#B89B7A] shadow-lg ring-2 ring-[#B89B7A]/20',
+                  'hover:border-[#B89B7A]/50 cursor-pointer'
+                )}
+                onClick={onClick}
+                >
+                  <div className="absolute top-2 right-2 z-10 bg-[#B89B7A] text-white text-xs px-2 py-1 rounded-full font-medium">
+                    Editável
+                  </div>
+                  <SecurePurchaseElement {...componentProps} />
+                </div>
+              );
+
+            default:
+              // Fallback com design da marca
+              return (
+                <div className={cn(
+                  'w-full p-6 border-2 border-dashed border-[#B89B7A]/40 rounded-xl',
+                  'bg-gradient-to-br from-[#FAF9F7] to-[#F5F4F1]',
+                  'flex flex-col items-center justify-center gap-3',
+                  'min-h-[120px] text-center transition-all duration-300',
+                  isSelected && 'border-[#B89B7A] bg-gradient-to-br from-[#B89B7A]/10 to-[#B89B7A]/5',
+                  'cursor-pointer hover:border-[#B89B7A]/60'
+                )}
+                onClick={onClick}
+                >
+                  <div className="flex items-center gap-3 text-[#432818]">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#B89B7A] to-[#aa6b5d] flex items-center justify-center">
+                      <span className="text-white font-bold text-sm">G</span>
+                    </div>
+                    <span className="font-playfair font-semibold text-lg">{componentName || 'Componente'}</span>
+                  </div>
+                  <p className="text-sm text-[#8F7A6A]">
+                    Componente não mapeado: <code className="bg-[#B89B7A]/10 px-2 py-1 rounded text-xs">{componentPath}</code>
+                  </p>
+                </div>
+              );
           }
         };
 
-        // Para o editor, renderizamos um placeholder informativo E EDITÁVEL
-        return (
-          <div 
-            className={cn(
-              'w-full p-6 border-2 border-dashed border-blue-300 rounded-lg bg-blue-50',
-              'flex flex-col items-center justify-center gap-4',
-              'min-h-[140px] text-center transition-all duration-300',
-              isSelected && 'border-blue-500 bg-blue-100 shadow-lg',
-              editable && 'hover:border-blue-400 hover:bg-blue-75 cursor-pointer'
-            )}
-            onClick={onClick}
-          >
-            {/* Header do componente */}
-            <div className="flex items-center gap-2 text-blue-700">
-              <span className="text-2xl">🧩</span>
-              <span className="font-semibold text-lg">{componentName || 'Component'}</span>
-              {editable && <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">✏️ Editável</span>}
-            </div>
-            
-            {/* Path do componente */}
-            <p className="text-sm text-blue-600 max-w-md">
-              <code className="bg-blue-200 px-2 py-1 rounded text-xs">{componentPath}</code>
-            </p>
-            
-            {/* Status de renderização */}
-            <div className="text-xs text-blue-500 bg-blue-100 px-3 py-1 rounded-full">
-              ✅ Renderizado na visualização final
-            </div>
-
-            {/* Props editáveis quando selecionado */}
-            {isSelected && editable && editableFields.length > 0 && (
-              <div className="w-full mt-4 p-3 bg-blue-200 rounded border">
-                <h4 className="text-xs font-semibold text-blue-800 mb-2">Propriedades Editáveis:</h4>
-                <div className="space-y-2">
-                  {editableFields.map((field: string) => (
-                    <div key={field} className="flex items-center gap-2 text-xs">
-                      <label className="font-medium text-blue-700 min-w-[60px]">{field}:</label>
-                      <input
-                        type="text"
-                        value={componentProps[field] || ''}
-                        onChange={(e) => handlePropertyEdit(field, e.target.value)}
-                        className="flex-1 px-2 py-1 text-xs border rounded bg-white"
-                        placeholder={`Editar ${field}`}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Preview das props quando selecionado */}
-            {isSelected && Object.keys(componentProps).length > 0 && (
-              <details className="w-full mt-2">
-                <summary className="text-xs text-blue-700 cursor-pointer hover:text-blue-800">
-                  Ver Props Atuais
-                </summary>
-                <pre className="text-xs text-blue-700 mt-2 p-2 bg-blue-200 rounded text-left overflow-auto max-h-32">
-                  {JSON.stringify(componentProps, null, 2)}
-                </pre>
-              </details>
-            )}
-
-            {/* Indicadores de reutilização */}
-            <div className="flex gap-2 text-xs">
-              <span className="bg-green-100 text-green-700 px-2 py-1 rounded-full">
-                🔄 Reutilizável
-              </span>
-              {editable && (
-                <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
-                  ⚙️ Configurável
-                </span>
-              )}
-            </div>
-          </div>
-        );
+        return getRealComponent();
       }
     };
 
@@ -353,13 +403,53 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
   };
 
   return (
-    <div className={cn(
-      // ES7+ Container principal flexbox responsivo
-      'universal-block-renderer',
-      'flex flex-col w-full',
-      'transition-all duration-300 ease-out'
-    )}>
-      {renderComponent()}
+    <div 
+      className={cn(
+        // ES7+ Container principal - Design conforme HTML exemplo
+        'universal-block-renderer w-full',
+        'transition-all duration-300 ease-out',
+        // Hover states conforme o design de referência
+        'group/canvas-item max-w-full canvas-item relative self-auto mr-auto',
+        // Transform support para drag & drop
+        'transform-gpu will-change-transform',
+        // Estilos de posicionamento dinâmicos
+        isSelected && 'z-[5]'
+      )}
+      // Atributos de acessibilidade conforme HTML exemplo
+      role="button"
+      tabIndex={0}
+      aria-disabled={disabled}
+      aria-roledescription="sortable"
+      // Style inline dinâmico para flexbox
+      style={{ 
+        transform: 'translate3d(0px, 0px, 0px) scaleX(1) scaleY(1)',
+        flexBasis: '100%',
+        opacity: 1,
+        willChange: 'transform'
+      }}
+    >
+      {/* Container do componente editável */}
+      <div 
+        id={block.id}
+        className={cn(
+          // Layout base conforme especificações do HTML
+          'min-h-[1.25rem] min-w-full relative self-auto box-border customizable-gap',
+          'group-hover/canvas-item:border-2 border-dashed hover:border-2 border-blue-500 rounded-md',
+          // Estados visuais
+          isSelected && 'border-2 border-blue-600'
+        )}
+        data-state={isSelected ? 'selected' : 'closed'}
+        style={{ 
+          opacity: 1, 
+          willChange: 'transform' 
+        }}
+        onClick={(e) => {
+          e.stopPropagation();
+          onClick?.();
+        }}
+      >
+        {renderComponent()}
+      </div>
     </div>
   );
 };

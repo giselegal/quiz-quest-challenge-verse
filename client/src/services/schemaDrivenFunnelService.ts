@@ -1392,17 +1392,19 @@ class SchemaDrivenFunnelService {
             marginBottom: 24
           }
         },
-        // 8-10. Cards dos estilos secundários (flexbox independentes)
+        // 8-10. Cards dos estilos secundários (TOTALMENTE REUTILIZÁVEIS)
         {
           id: 'result-secondary-1',
           type: 'style-card-inline',
           properties: {
+            // Dados do estilo
             styleName: 'Moderno',
             percentage: 20,
             description: 'Traços modernos na sua personalidade',
             imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_moderno.webp',
+            
+            // Layout configurável
             compact: true,
-            // Layout flexbox
             display: 'flex',
             flexDirection: 'column',
             flex: '1 1 300px', // Flex-grow, flex-shrink, flex-basis
@@ -1413,9 +1415,17 @@ class SchemaDrivenFunnelService {
             borderRadius: 8,
             backgroundColor: '#ffffff',
             boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-            // Editabilidade
+            
+            // MÁXIMA EDITABILIDADE E REUTILIZAÇÃO
             editable: true,
-            editableFields: ['styleName', 'percentage', 'description', 'imageUrl', 'padding', 'borderRadius']
+            reusable: true,
+            cloneable: true,
+            category: 'secondary-styles',
+            editableFields: [
+              'styleName', 'percentage', 'description', 'imageUrl',
+              'compact', 'padding', 'borderRadius', 'backgroundColor',
+              'minWidth', 'maxWidth', 'gap'
+            ]
           }
         },
         {
@@ -1427,7 +1437,6 @@ class SchemaDrivenFunnelService {
             description: 'Praticidade em situações do dia a dia',
             imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_casual.webp',
             compact: true,
-            // Layout flexbox
             display: 'flex',
             flexDirection: 'column',
             flex: '1 1 300px',
@@ -1438,9 +1447,16 @@ class SchemaDrivenFunnelService {
             borderRadius: 8,
             backgroundColor: '#ffffff',
             boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-            // Editabilidade
+            // REUTILIZABILIDADE COMPLETA
             editable: true,
-            editableFields: ['styleName', 'percentage', 'description', 'imageUrl', 'padding', 'borderRadius']
+            reusable: true,
+            cloneable: true,
+            category: 'secondary-styles',
+            editableFields: [
+              'styleName', 'percentage', 'description', 'imageUrl',
+              'compact', 'padding', 'borderRadius', 'backgroundColor',
+              'minWidth', 'maxWidth', 'gap'
+            ]
           }
         },
         {
@@ -1452,7 +1468,6 @@ class SchemaDrivenFunnelService {
             description: 'Toques delicados e femininos',
             imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_romantico.webp',
             compact: true,
-            // Layout flexbox
             display: 'flex',
             flexDirection: 'column',
             flex: '1 1 300px',
@@ -1463,9 +1478,17 @@ class SchemaDrivenFunnelService {
             borderRadius: 8,
             backgroundColor: '#ffffff',
             boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-            // Editabilidade
+            // SISTEMA DE REUTILIZAÇÃO AVANÇADO
             editable: true,
-            editableFields: ['styleName', 'percentage', 'description', 'imageUrl', 'padding', 'borderRadius']
+            reusable: true,
+            cloneable: true,
+            category: 'secondary-styles',
+            template: true, // Pode ser usado como template
+            editableFields: [
+              'styleName', 'percentage', 'description', 'imageUrl',
+              'compact', 'padding', 'borderRadius', 'backgroundColor',
+              'minWidth', 'maxWidth', 'gap'
+            ]
           }
         },
         // 11. Motivação/transição para oferta (flexbox editável)
