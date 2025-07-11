@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { QuizIntroBlockProps } from '@/interfaces/quiz';
 
@@ -144,3 +145,4 @@ const QuizIntroBlock: React.FC<QuizIntroBlockProps> = ({
 };
 
 export default QuizIntroBlock;
+export type { QuizIntroBlockProps };

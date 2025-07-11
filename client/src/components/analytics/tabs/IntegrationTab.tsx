@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { FacebookPixelCard } from '@/components/analytics/integrations/FacebookPixelCard';
+import FacebookPixelCard from '@/components/analytics/integrations/FacebookPixelCard';
 import { GoogleAnalyticsCard } from '@/components/analytics/integrations/GoogleAnalyticsCard';
 import { ApiTokensCard } from '@/components/analytics/integrations/ApiTokensCard';
 import { WebhookCard } from '@/components/analytics/integrations/WebhookCard';

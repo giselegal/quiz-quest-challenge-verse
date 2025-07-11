@@ -1,6 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { Card } from '@/components/ui/card';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { 
+  AlertTriangle, 
+  CheckCircle, 
+  Download, 
+  Eye, 
+  FileImage, 
+  Zap,
+  RefreshCw
+} from 'lucide-react';
 
 // Fixed: Proper interfaces for state
 interface ImageAnalysis {
