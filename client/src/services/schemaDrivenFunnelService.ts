@@ -2,6 +2,7 @@ import type { BlockData } from '@/components/editor/blocks';
 import { REAL_QUIZ_QUESTIONS, STRATEGIC_QUESTIONS, TRANSITIONS } from '@/components/visual-editor/realQuizData';
 import { QuizDataAdapter } from './quizDataAdapter';
 import { LocalStorageFixer } from '@/utils/fixLocalStorageIssues';
+import { CloudinaryImageFixer } from '@/utils/cloudinaryImageFixer';
 
 // DEBUG: Verificar se os dados estão sendo importados corretamente
 console.log('🔍 DEBUG - Dados importados:');
@@ -609,7 +610,7 @@ class SchemaDrivenFunnelService {
           id: 'intro-header',
           type: 'quiz-intro-header',
           properties: {
-            logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+            logoUrl: CloudinaryImageFixer.fixKnownProblematicUrls('https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'),
             logoAlt: 'Logo Gisele Galvão',
             logoWidth: 96,
             logoHeight: 96,

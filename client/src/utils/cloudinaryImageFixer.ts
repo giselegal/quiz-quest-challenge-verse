@@ -10,7 +10,7 @@ export interface ImageFallbackConfig {
 }
 
 export class CloudinaryImageFixer {
-  private static FALLBACK_IMAGES = {
+  public static readonly FALLBACK_IMAGES = {
     logo: '/images/logo-placeholder.png',
     avatar: 'https://via.placeholder.com/96x96/B89B7A/ffffff?text=Avatar',
     product: 'https://via.placeholder.com/600x400/B89B7A/ffffff?text=Produto',
