@@ -1797,7 +1797,7 @@ class SchemaDrivenFunnelService {
     const page = funnel.pages.find(p => p.id === pageId);
     if (!page) return null;
     
-    // Aplicar dados dinâmicos especialmente para a etapa 20
+    // Aplicar dados dinâmicos apenas se for a etapa 20
     if (pageId === 'etapa-20-resultado') {
       return this.applyDynamicDataToPage(page);
     }
