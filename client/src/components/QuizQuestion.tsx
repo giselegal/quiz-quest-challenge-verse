@@ -49,7 +49,8 @@ export const QuizQuestion: React.FC<QuizQuestionProps> = ({
       setTimeout(() => {
         onAnswer({
           questionId: question.id,
-          selectedOptions: newSelection
+          selectedOptions: newSelection,
+          timestamp: Date.now()
         });
       }, 300);
     }
@@ -58,7 +59,8 @@ export const QuizQuestion: React.FC<QuizQuestionProps> = ({
   const handleSubmit = () => {
     onAnswer({
       questionId: question.id,
-      selectedOptions: selectedOptions
+      selectedOptions: selectedOptions,
+      timestamp: Date.now()
     });
   };
 

@@ -1,302 +1,206 @@
-import React, { useState, useCallback } from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Card } from '@/components/ui/card';
-import { DragHandle } from './DragHandle';
-import { QuizQuestion } from '@/types/quiz';
-import { toast } from '@/components/ui/use-toast';
+
+import React, { useState, useEffect } from 'react';
+import { Card } from '../ui/card';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Textarea } from '../ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { Trash2, Plus } from 'lucide-react';
+import { QuizQuestion, QuizOption } from '@/types/quiz';
 
 interface QuizBuilderProps {
-  initialQuestions?: QuizQuestion[];
   onSave: (questions: QuizQuestion[]) => void;
-  className?: string;
 }
 
-const QuizBuilder: React.FC<QuizBuilderProps> = ({
-  initialQuestions = [],
-  onSave,
-  className = ""
-}) => {
-  const [questions, setQuestions] = useState<QuizQuestion[]>(initialQuestions);
-  const [selectedQuestionIndex, setSelectedQuestionIndex] = useState<number | null>(null);
-  const [previewMode, setPreviewMode] = useState(false);
+const QuizBuilder: React.FC<QuizBuilderProps> = ({ onSave }) => {
+  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
 
-  const addQuestion = useCallback(() => {
+  useEffect(() => {
+    if (questions.length === 0) {
+      addQuestion();
+    }
+  }, []);
+
+  const addQuestion = () => {
     const newQuestion: QuizQuestion = {
       id: `question-${Date.now()}`,
-      title: 'Nova Pergunta',
-      type: 'text',
-      multiSelect: 1,
-      options: [
-        {
-          id: `option-${Date.now()}-1`,
-          text: 'Opção 1',
-          styleCategory: 'Natural',
-          points: 1
-        }
-      ]
+      text: '',
+      type: 'multiple',
+      options: []
     };
     setQuestions([...questions, newQuestion]);
-    setSelectedQuestionIndex(questions.length);
-  }, [questions]);
-
-  const updateQuestion = useCallback((index: number, updatedQuestion: QuizQuestion) => {
-    const newQuestions = [...questions];
-    newQuestions[index] = updatedQuestion;
-    setQuestions(newQuestions);
-  }, [questions]);
-
-  const deleteQuestion = useCallback((index: number) => {
-    const newQuestions = [...questions];
-    newQuestions.splice(index, 1);
-    setQuestions(newQuestions);
-    setSelectedQuestionIndex(null);
-  }, [questions]);
-
-  const addOption = useCallback((questionIndex: number) => {
-    const newOption = {
-      id: `option-${Date.now()}`,
-      text: 'Nova Opção',
-      styleCategory: 'Natural',
-      points: 1
-    };
-    const newQuestions = [...questions];
-    if (newQuestions[questionIndex]) {
-      newQuestions[questionIndex].options = [...newQuestions[questionIndex].options, newOption];
-      setQuestions(newQuestions);
-    }
-  }, [questions]);
-
-  const updateOption = useCallback((questionIndex: number, optionIndex: number, updatedOption: any) => {
-    const newQuestions = [...questions];
-    if (newQuestions[questionIndex] && newQuestions[questionIndex].options[optionIndex]) {
-      newQuestions[questionIndex].options[optionIndex] = {
-        ...newQuestions[questionIndex].options[optionIndex],
-        ...updatedOption
-      };
-      setQuestions(newQuestions);
-    }
-  }, [questions]);
-
-  const deleteOption = useCallback((questionIndex: number, optionIndex: number) => {
-    const newQuestions = [...questions];
-    if (newQuestions[questionIndex]) {
-      newQuestions[questionIndex].options.splice(optionIndex, 1);
-      setQuestions(newQuestions);
-    }
-  }, [questions]);
-
-  const moveQuestion = useCallback((dragIndex: number, hoverIndex: number) => {
-    const draggedQuestion = questions[dragIndex];
-    const newQuestions = [...questions];
-    newQuestions.splice(dragIndex, 1);
-    newQuestions.splice(hoverIndex, 0, draggedQuestion);
-    setQuestions(newQuestions);
-    setSelectedQuestionIndex(hoverIndex);
-  }, [questions]);
-
-  const handleSave = useCallback(() => {
-    try {
-      onSave(questions);
-      toast({
-        title: "Quiz salvo com sucesso",
-        description: "As alterações foram salvas com sucesso."
-      });
-    } catch (error) {
-      console.error("Erro ao salvar o quiz:", error);
-      toast({
-        title: "Erro ao salvar",
-        description: "Ocorreu um erro ao salvar as alterações.",
-        variant: "destructive"
-      });
-    }
-  }, [questions, onSave, toast]);
-
-  const calculateStyleScores = (questions: QuizQuestion[]) => {
-    const scores: { [key: string]: number } = {};
-    
-    questions.forEach(question => {
-      question.options.forEach(option => {
-        if (option.styleCategory) {
-          scores[option.styleCategory] = (scores[option.styleCategory] || 0) + (option.points || 1);
-        }
-      });
-    });
-    
-    return scores;
   };
 
-  const togglePreviewMode = () => {
-    setPreviewMode(!previewMode);
+  const addOption = (questionIndex: number) => {
+    const newOption: QuizOption = {
+      id: `option-${Date.now()}`,
+      text: '',
+      points: { Natural: 0, Classico: 0, Criativo: 0, Sexy: 0 }
+    };
+    
+    const updatedQuestions = [...questions];
+    updatedQuestions[questionIndex].options.push(newOption);
+    setQuestions(updatedQuestions);
+  };
+
+  const updateQuestion = (index: number, field: keyof QuizQuestion, value: any) => {
+    const updatedQuestions = [...questions];
+    (updatedQuestions[index] as any)[field] = value;
+    setQuestions(updatedQuestions);
+  };
+
+  const updateOption = (questionIndex: number, optionIndex: number, field: keyof QuizOption, value: any) => {
+    const updatedQuestions = [...questions];
+    (updatedQuestions[questionIndex].options[optionIndex] as any)[field] = value;
+    setQuestions(updatedQuestions);
+  };
+
+  const deleteQuestion = (index: number) => {
+    setQuestions(questions.filter((_, i) => i !== index));
+  };
+
+  const deleteOption = (questionIndex: number, optionIndex: number) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[questionIndex].options = updatedQuestions[questionIndex].options.filter((_, i) => i !== optionIndex);
+    setQuestions(updatedQuestions);
+  };
+
+  const calculateTotalScore = () => {
+    return questions.reduce((total, question) => {
+      return total + question.options.reduce((questionTotal, option) => {
+        if (typeof option.points === 'object') {
+          return questionTotal + Object.values(option.points).reduce((sum: number, points: number) => sum + points, 0);
+        }
+        return questionTotal;
+      }, 0);
+    }, 0);
   };
 
   return (
-    <div className={className}>
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">Editor de Quiz</h2>
-        <div>
-          <Button onClick={handleSave} className="mr-2">Salvar Quiz</Button>
-          <Button onClick={togglePreviewMode}>
-            {previewMode ? 'Voltar ao Editor' : 'Visualizar Quiz'}
+    <div className="p-6 space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold">Quiz Builder</h2>
+        <div className="space-x-2">
+          <Button onClick={addQuestion}>
+            <Plus className="w-4 h-4 mr-2" />
+            Add Question
+          </Button>
+          <Button onClick={() => onSave(questions)} className="bg-green-600">
+            Save Quiz
           </Button>
         </div>
       </div>
 
-      {!previewMode ? (
-        <DndProvider backend={HTML5Backend}>
-          <div className="flex">
-            <div className="w-1/2 pr-4">
-              <h3 className="text-xl mb-2">Perguntas</h3>
-              {questions.map((question, index) => (
-                <Card
-                  key={question.id}
-                  className={`mb-2 p-4 cursor-move ${selectedQuestionIndex === index ? 'bg-gray-100' : ''}`}
-                >
-                  <div className="flex items-center">
-                    <DragHandle onMove={() => moveQuestion(index, index)} />
-                    <button
-                      className="flex-1 text-left"
-                      onClick={() => setSelectedQuestionIndex(index)}
-                    >
-                      {question.title}
-                    </button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => deleteQuestion(index)}
-                      className="text-red-500"
-                    >
-                      Excluir
-                    </Button>
-                  </div>
-                </Card>
-              ))}
-              <Button onClick={addQuestion}>Adicionar Pergunta</Button>
+      {questions.map((question, questionIndex) => (
+        <Card key={question.id} className="p-6">
+          <div className="space-y-4">
+            <div className="flex justify-between items-start">
+              <h3 className="text-lg font-semibold">Question {questionIndex + 1}</h3>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => deleteQuestion(questionIndex)}
+              >
+                <Trash2 className="w-4 h-4" />
+              </Button>
             </div>
 
-            <div className="w-1/2">
-              {selectedQuestionIndex !== null && (
-                <>
-                  <h3 className="text-xl mb-2">Editar Pergunta</h3>
-                  <Card className="p-4">
-                    <div className="mb-2">
-                      <label className="block text-gray-700 text-sm font-bold mb-2">
-                        Título da Pergunta
-                      </label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Question Text</label>
+                <Textarea
+                  value={question.text}
+                  onChange={(e) => updateQuestion(questionIndex, 'text', e.target.value)}
+                  placeholder="Enter your question"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Question Type</label>
+                <Select
+                  value={question.type}
+                  onValueChange={(value: 'single' | 'multiple' | 'strategic' | 'text' | 'image' | 'both') => 
+                    updateQuestion(questionIndex, 'type', value)
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="single">Single Choice</SelectItem>
+                    <SelectItem value="multiple">Multiple Choice</SelectItem>
+                    <SelectItem value="strategic">Strategic</SelectItem>
+                    <SelectItem value="text">Text</SelectItem>
+                    <SelectItem value="image">Image</SelectItem>
+                    <SelectItem value="both">Both</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <h4 className="font-medium">Options</h4>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => addOption(questionIndex)}
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Option
+                </Button>
+              </div>
+
+              {question.options.map((option, optionIndex) => (
+                <div key={option.id} className="border p-4 rounded space-y-3">
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1 space-y-3">
                       <Input
-                        type="text"
-                        value={questions[selectedQuestionIndex].title}
-                        onChange={(e) => {
-                          const newQuestions = [...questions];
-                          newQuestions[selectedQuestionIndex].title = e.target.value;
-                          setQuestions(newQuestions);
-                        }}
+                        value={option.text}
+                        onChange={(e) => updateOption(questionIndex, optionIndex, 'text', e.target.value)}
+                        placeholder="Option text"
                       />
+                      
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                        {['Natural', 'Classico', 'Criativo', 'Sexy'].map((style) => (
+                          <div key={style}>
+                            <label className="block text-xs font-medium mb-1">{style}</label>
+                            <Input
+                              type="number"
+                              value={typeof option.points === 'object' ? option.points[style] || 0 : 0}
+                              onChange={(e) => {
+                                const currentPoints = typeof option.points === 'object' ? option.points : {};
+                                updateOption(questionIndex, optionIndex, 'points', {
+                                  ...currentPoints,
+                                  [style]: parseInt(e.target.value) || 0
+                                });
+                              }}
+                              placeholder="0"
+                              className="text-center"
+                            />
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                    <div className="mb-2">
-                      <label className="block text-gray-700 text-sm font-bold mb-2">
-                        Tipo de Pergunta
-                      </label>
-                      <Input
-                        type="text"
-                        value={questions[selectedQuestionIndex].type}
-                        onChange={(e) => {
-                          const newQuestions = [...questions];
-                          newQuestions[selectedQuestionIndex].type = e.target.value;
-                          setQuestions(newQuestions);
-                        }}
-                      />
-                    </div>
-                    <div className="mb-2">
-                      <label className="block text-gray-700 text-sm font-bold mb-2">
-                        Multi Select
-                      </label>
-                      <Input
-                        type="number"
-                        value={questions[selectedQuestionIndex].multiSelect}
-                        onChange={(e) => {
-                          const newQuestions = [...questions];
-                          newQuestions[selectedQuestionIndex].multiSelect = parseInt(e.target.value);
-                          setQuestions(newQuestions);
-                        }}
-                      />
-                    </div>
-                    <h4 className="text-lg mt-4 mb-2">Opções</h4>
-                    {questions[selectedQuestionIndex].options.map((option, optionIndex) => (
-                      <Card key={option.id} className="mb-2 p-4">
-                        <div className="mb-2">
-                          <label className="block text-gray-700 text-sm font-bold mb-2">
-                            Texto da Opção
-                          </label>
-                          <Textarea
-                            value={option.text}
-                            onChange={(e) => {
-                              updateOption(selectedQuestionIndex, optionIndex, { text: e.target.value });
-                            }}
-                          />
-                        </div>
-                        <div className="mb-2">
-                          <label className="block text-gray-700 text-sm font-bold mb-2">
-                            Style Category
-                          </label>
-                          <Input
-                            type="text"
-                            value={option.styleCategory}
-                            onChange={(e) => {
-                              updateOption(selectedQuestionIndex, optionIndex, { styleCategory: e.target.value });
-                            }}
-                          />
-                        </div>
-                        <div className="mb-2">
-                          <label className="block text-gray-700 text-sm font-bold mb-2">
-                            Points
-                          </label>
-                          <Input
-                            type="number"
-                            value={option.points}
-                            onChange={(e) => {
-                              updateOption(selectedQuestionIndex, optionIndex, { points: parseInt(e.target.value) });
-                            }}
-                          />
-                        </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => deleteOption(selectedQuestionIndex, optionIndex)}
-                          className="text-red-500"
-                        >
-                          Excluir Opção
-                        </Button>
-                      </Card>
-                    ))}
-                    <Button onClick={() => addOption(selectedQuestionIndex)}>
-                      Adicionar Opção
+                    
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => deleteOption(questionIndex, optionIndex)}
+                      className="ml-2"
+                    >
+                      <Trash2 className="w-4 h-4" />
                     </Button>
-                  </Card>
-                </>
-              )}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        </DndProvider>
-      ) : (
-        <div className="p-4">
-          <h3 className="text-xl mb-2">Visualização do Quiz</h3>
-          {questions.map((question) => (
-            <Card key={question.id} className="mb-4 p-4">
-              <h4 className="text-lg font-bold">{question.title}</h4>
-              <ul>
-                {question.options.map((option) => (
-                  <li key={option.id}>{option.text}</li>
-                ))}
-              </ul>
-            </Card>
-          ))}
-          <pre>{JSON.stringify(calculateStyleScores(questions), null, 2)}</pre>
-        </div>
-      )}
+        </Card>
+      ))}
+
+      <div className="text-sm text-gray-600">
+        Total Questions: {questions.length} | Total Score: {calculateTotalScore()}
+      </div>
     </div>
   );
 };
