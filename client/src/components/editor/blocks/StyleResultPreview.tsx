@@ -29,7 +29,7 @@ export const StyleResultPreview: React.FC<StyleResultPreviewProps> = ({
       'Criativo': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp'
     };
     
-    return customImage || styleImages[styleType] || defaultImage;
+    return customImage || styleImages[styleType as keyof typeof styleImages] || defaultImage;
   };
 
   const getStyleDescription = (styleType: string): string => {
@@ -45,7 +45,7 @@ export const StyleResultPreview: React.FC<StyleResultPreviewProps> = ({
       'Criativo': 'O estilo Criativo é único e original. Você gosta de experimentar, misturar e criar seu próprio estilo sem seguir regras.'
     };
     
-    return description || styleDescriptions[styleType] || 'Descrição não disponível para este estilo.';
+    return description || styleDescriptions[styleType as keyof typeof styleDescriptions] || 'Descrição não disponível para este estilo.';
   };
 
   return (

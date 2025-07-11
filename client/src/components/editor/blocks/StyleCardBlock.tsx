@@ -27,8 +27,8 @@ const StyleCardBlock: React.FC<StyleCardBlockProps> = ({
     );
   }
 
-  const { category } = primaryStyle;
-  const { image, description } = styleConfig[category];
+  const category = (primaryStyle as any).category || 'Natural';
+  const { image, description } = styleConfig[category as keyof typeof styleConfig];
 
   return (
     <div className={cn("p-6 bg-white shadow-md border border-[#B89B7A]/20 rounded-lg card-elegant", className)}>
@@ -38,11 +38,11 @@ const StyleCardBlock: React.FC<StyleCardBlockProps> = ({
             <span className="text-sm text-[#8F7A6A]">
               Seu estilo predominante
             </span>
-            <span className="text-[#aa6b5d] font-medium">{primaryStyle.percentage}%</span>
+            <span className="text-[#aa6b5d] font-medium">{(primaryStyle as any).percentage || 0}%</span>
           </div>
           {showProgress && (
             <Progress 
-              value={primaryStyle.percentage} 
+              value={(primaryStyle as any).percentage || 0} 
               className="h-2 bg-[#F3E8E6]" 
               indicatorClassName="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]" 
             />

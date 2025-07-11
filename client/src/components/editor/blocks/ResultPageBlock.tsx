@@ -256,7 +256,7 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = React.memo(({
           <InlineEditText
             as="h1"
             value={`${title} ${userName}, ${description}`}
-            onChange={(value) => {
+            onSave={(value: string) => {
               const parts = value.split(',');
               if (parts.length >= 2) {
                 const titleUserPart = parts[0].trim();
@@ -280,7 +280,7 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = React.memo(({
           <InlineEditText
             as="h2"
             value={primaryStyle.category}
-            onChange={(value) => handlePropertyChange('primaryStyle', { ...primaryStyle, category: value })}
+            onSave={(value: string) => handlePropertyChange('primaryStyle', { ...primaryStyle, category: value })}
             placeholder="Nome do estilo..."
             disabled={disabled}
             className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent"
@@ -314,7 +314,7 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = React.memo(({
                 <InlineEditText
                   as="p"
                   value={resultDescription}
-                  onChange={(value) => handlePropertyChange('resultDescription', value)}
+                  onSave={(value: string) => handlePropertyChange('resultDescription', value)}
                   placeholder="Descrição detalhada do resultado..."
                   disabled={disabled}
                   multiline={true}
@@ -423,7 +423,7 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = React.memo(({
                 <InlineEditText
                   as="span"
                   value={ctaText}
-                  onChange={(value) => handlePropertyChange('ctaText', value)}
+                  onSave={(value: string) => handlePropertyChange('ctaText', value)}
                   placeholder="Texto do CTA principal..."
                   disabled={disabled}
                   className="text-white font-bold"
@@ -477,7 +477,7 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = React.memo(({
                   <InlineEditText
                     as="span"
                     value={guidePrice}
-                    onChange={(value) => handlePropertyChange('guidePrice', value)}
+                    onSave={(value: string) => handlePropertyChange('guidePrice', value)}
                     disabled={disabled}
                     className="font-medium"
                   />
@@ -487,7 +487,7 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = React.memo(({
                   <InlineEditText
                     as="span"
                     value={bonusPrice1}
-                    onChange={(value) => handlePropertyChange('bonusPrice1', value)}
+                    onSave={(value: string) => handlePropertyChange('bonusPrice1', value)}
                     disabled={disabled}
                     className="font-medium"
                   />
@@ -497,7 +497,7 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = React.memo(({
                   <InlineEditText
                     as="span"
                     value={bonusPrice2}
-                    onChange={(value) => handlePropertyChange('bonusPrice2', value)}
+                    onSave={(value: string) => handlePropertyChange('bonusPrice2', value)}
                     disabled={disabled}
                     className="font-medium"
                   />
@@ -508,7 +508,7 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = React.memo(({
                     <InlineEditText
                       as="span"
                       value={originalPrice}
-                      onChange={(value) => handlePropertyChange('originalPrice', value)}
+                      onSave={(value: string) => handlePropertyChange('originalPrice', value)}
                       disabled={disabled}
                     />
                     <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#ff5a5a] transform -translate-y-1/2 -rotate-3"></div>
@@ -521,7 +521,7 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = React.memo(({
                 <InlineEditText
                   as="p"
                   value={finalPrice}
-                  onChange={(value) => handlePropertyChange('finalPrice', value)}
+                  onSave={(value: string) => handlePropertyChange('finalPrice', value)}
                   disabled={disabled}
                   className="text-4xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent mb-1"
                 />
@@ -546,7 +546,7 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = React.memo(({
                 <InlineEditText
                   as="span"
                   value={ctaSecondaryText}
-                  onChange={(value) => handlePropertyChange('ctaSecondaryText', value)}
+                  onSave={(value: string) => handlePropertyChange('ctaSecondaryText', value)}
                   placeholder="Texto do CTA secundário..."
                   disabled={disabled}
                   className="text-white font-bold"

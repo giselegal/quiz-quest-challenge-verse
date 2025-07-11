@@ -314,7 +314,7 @@ const TestimonialsCarouselInline: React.FC<BlockComponentProps> = ({
         {/* Dots Navigation */}
         {testimonials.length > 1 && (
           <div className="px-6 pb-4 flex items-center justify-center gap-2">
-            {testimonials.map((_, index) => (
+            {testimonials.map((_: any, index: number) => (
               <button
                 key={index}
                 onClick={() => handleDotClick(index)}

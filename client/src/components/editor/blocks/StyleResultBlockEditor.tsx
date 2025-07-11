@@ -15,7 +15,10 @@ export const StyleResultBlockEditor: React.FC<BlockEditorProps> = ({
   const selectedStyle: StyleResult = {
     category: "Natural",
     score: 100,
-    percentage: 100
+    percentage: 100,
+    style: "Natural" as any,
+    points: 100,
+    rank: 1
   };
 
   return (
