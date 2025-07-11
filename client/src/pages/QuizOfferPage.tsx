@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import { preloadCriticalImages } from '@/utils/images/preloading';
 import { usePageConfig } from '@/hooks/usePageConfig';

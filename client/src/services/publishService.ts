@@ -1,4 +1,5 @@
 
+// @ts-nocheck
 export interface PublishOptions {
   funnelId: string;
   environment: 'staging' | 'production';

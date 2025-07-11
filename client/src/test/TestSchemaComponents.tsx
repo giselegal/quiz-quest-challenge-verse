@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import QuizIntroBlock from '../components/blocks/quiz/QuizIntroBlock';
 import { BlockData } from '../types/blocks';

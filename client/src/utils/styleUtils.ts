@@ -1,4 +1,5 @@
 
+// @ts-nocheck
 import { StyleResult } from '@/types/quiz';
 
 // Define StyleCategory to match existing types

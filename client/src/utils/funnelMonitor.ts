@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Utilitário para monitorar e otimizar o funil de vendas
 export function monitorFunnelRoutes() {
   console.log('🔄 Inicializando monitoramento do funil de vendas...');

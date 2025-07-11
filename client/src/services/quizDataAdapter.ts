@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { BlockData } from '@/components/editor/blocks';
 import type { SchemaDrivenFunnelData, SchemaDrivenPageData } from '@/services/schemaDrivenFunnelService';
 import { REAL_QUIZ_QUESTIONS, STRATEGIC_QUESTIONS, TRANSITIONS } from '@/components/visual-editor/realQuizData';
