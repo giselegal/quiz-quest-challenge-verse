@@ -34,7 +34,7 @@ const CaktoQuizFlow: React.FC<CaktoQuizFlowProps> = ({ questions, onComplete }) 
         },
         secondaryStyles: [],
         responses: answers,
-        completedAt: new Date()
+        completedAt: Date.now()
       };
       setResult(calculatedResult);
       setIsCompleted(true);

@@ -47,7 +47,8 @@ const QuizResultPage: React.FC = () => {
         category: 'Clássico',
         points: 85,
         percentage: 85,
-        rank: 1
+        rank: 1,
+        score: 85
       },
       secondaryStyles: [
         {
@@ -55,14 +56,16 @@ const QuizResultPage: React.FC = () => {
           category: 'Elegante',
           points: 65,
           percentage: 65,
-          rank: 2
+          rank: 2,
+          score: 65
         },
         {
           style: 'moderno',
           category: 'Moderno',
           points: 45,
           percentage: 45,
-          rank: 3
+          rank: 3,
+          score: 45
         }
       ]
     };

@@ -109,7 +109,7 @@ const VisualEditorLayout: React.FC<VisualEditorLayoutProps> = ({
                           </div>
                         )}
                         <p className="text-sm text-[#432818]">{option.text}</p>
-                        <div className="mt-1 text-xs text-[#8F7A6A]">{option.styleCategory} ({option.points} pts)</div>
+                        <div className="mt-1 text-xs text-[#8F7A6A]">{option.styleCategory} ({typeof option.points === 'object' ? Object.values(option.points || {}).reduce((a, b) => a + b, 0) : option.points || 0} pts)</div>
                       </div>
                     ))}
                   </div>

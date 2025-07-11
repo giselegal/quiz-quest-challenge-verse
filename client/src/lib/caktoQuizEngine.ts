@@ -83,6 +83,6 @@ export const calculateResults = (responses: UserResponse[], questions: QuizQuest
     primaryStyle,
     secondaryStyles,
     responses,
-    completedAt: new Date()
+    completedAt: Date.now()
   };
 };
