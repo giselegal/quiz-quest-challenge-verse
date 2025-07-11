@@ -123,7 +123,7 @@ const DynamicPricingBlock: React.FC<DynamicPricingBlockProps> = ({
         {/* Features */}
         <div className="mb-6">
           <ul className="space-y-3">
-            {plan.features.map((feature, featureIndex) => (
+            {plan.features.map((feature: string, featureIndex: number) => (
               <li key={featureIndex} className="flex items-start gap-3">
                 <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
                 <span className="text-sm" style={{ color: textColor }}>

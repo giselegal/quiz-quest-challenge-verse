@@ -71,7 +71,7 @@ const QuizIntroHeaderBlock: React.FC<QuizIntroHeaderBlockProps> = ({
             <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-50 rounded flex flex-col items-center justify-center text-white text-xs">
               <InlineEditText
                 value={logoUrl}
-                onChange={(value) => handlePropertyChange('logoUrl', value)}
+                onSave={(value: string) => handlePropertyChange('logoUrl', value)}
                 placeholder="URL da logo"
                 className="text-center text-white bg-transparent w-full px-2"
                 disabled={disabled}
@@ -79,7 +79,7 @@ const QuizIntroHeaderBlock: React.FC<QuizIntroHeaderBlockProps> = ({
               />
               <InlineEditText
                 value={logoAlt}
-                onChange={(value) => handlePropertyChange('logoAlt', value)}
+                onSave={(value: string) => handlePropertyChange('logoAlt', value)}
                 placeholder="Alt da logo"
                 className="text-center text-white bg-transparent w-full px-2 mt-1"
                 disabled={disabled}
@@ -105,7 +105,7 @@ const QuizIntroHeaderBlock: React.FC<QuizIntroHeaderBlockProps> = ({
       <div className="text-center mt-2">
         <InlineEditText
           value={`${Math.round(progressValue)}% completo`}
-          onChange={(value) => {
+          onSave={(value: string) => {
             const match = value.match(/(\d+)%/);
             if (match) {
               const numValue = parseInt(match[1]);
