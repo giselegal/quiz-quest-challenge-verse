@@ -2,7 +2,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { FunnelStepProps } from '@/types/funnel';
 import { Button } from '@/components/ui/button';
-import Image from 'next/image';
+// Image component will be replaced with img tag
 
 /**
  * QuizIntroStep - Etapa 3: Introdução às perguntas do quiz
@@ -58,7 +58,7 @@ export const QuizIntroStep: React.FC<FunnelStepProps> = ({
           
           {/* Lista de bullets */}
           <ul className="space-y-3">
-            {bullets.map((item, index) => (
+            {bullets.map((item: string, index: number) => (
               <li key={index} className="flex items-center gap-2">
                 <div className="bg-green-500 rounded-full p-1">
                   <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">

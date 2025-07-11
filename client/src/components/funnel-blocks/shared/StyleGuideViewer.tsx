@@ -153,13 +153,13 @@ export const StyleGuideViewer: React.FC<StyleGuideViewerProps> = ({
         ))}
       </Tabs>
       
-      <style jsx>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         .style-guide-viewer {
           --primary-color: ${primaryColor};
           --secondary-color: ${secondaryColor};
           --accent-color: ${accentColor};
         }
-      `}</style>
+      ` }} />
     </div>
   );
 };

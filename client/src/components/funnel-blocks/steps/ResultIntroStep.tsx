@@ -114,7 +114,7 @@ export const ResultIntroStep: React.FC<FunnelStepProps> = ({
         </div>
       )}
       
-      <style jsx>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @keyframes fadeInUp {
           from {
             opacity: 0;
@@ -128,7 +128,7 @@ export const ResultIntroStep: React.FC<FunnelStepProps> = ({
         .animate-fade-in-up {
           animation: fadeInUp 0.8s ease-out;
         }
-      `}</style>
+      ` }} />
     </div>
   );
 };
