@@ -5,9 +5,14 @@ import { LocalStorageFixer } from '@/utils/fixLocalStorageIssues';
 import { CloudinaryImageFixer } from '@/utils/cloudinaryImageFixer';
 import { styleConfig } from '@/config/styleConfig';
 
+// Importar ferramentas de debug
+import { StorageDebug } from '@/utils/storageDebug';
+import { EmergencyReset } from '@/utils/emergencyReset';
+
 // DEBUG: Verificar se os dados estão sendo importados corretamente
-console.log('🔍 DEBUG - Dados importados:');
+console.log('🔍 DEBUG - schemaDrivenFunnelService - Dados importados:');
 console.log('  quizQuestions:', quizQuestions?.length || 'UNDEFINED');
+console.log('  styleConfig:', Object.keys(styleConfig || {}).length || 'UNDEFINED');
 
 // Interface para dados dinâmicos
 interface DynamicDataContext {

@@ -45,6 +45,7 @@ export interface QuizOption {
   value?: string;
   category?: string;
   points?: number; // Adicionado para compatibilidade
+  description?: string; // Adicionado para questões estratégicas
 }
 
 export interface QuizResponse {

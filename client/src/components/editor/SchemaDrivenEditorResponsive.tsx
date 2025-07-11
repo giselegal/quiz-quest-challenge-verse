@@ -18,6 +18,7 @@ import { SchemaDrivenComponentsSidebar } from './sidebar/SchemaDrivenComponentsS
 import { DynamicPropertiesPanel } from './panels/DynamicPropertiesPanel';
 import { DroppableCanvas } from './dnd/DroppableCanvas';
 import { blockDefinitions } from '@/config/blockDefinitions';
+import { DebugPanel } from '@/components/DebugPanel';
 
 interface SchemaDrivenEditorResponsiveProps {
   funnelId?: string;
@@ -30,12 +31,21 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
   funnelId,
   className = ''
 }) => {
-  console.log('SchemaDrivenEditorResponsive: Component mounted with funnelId:', funnelId);
+  console.log('🚀 SchemaDrivenEditorResponsive: Component mounted with funnelId:', funnelId);
   
   const [deviceView, setDeviceView] = useState<DeviceView>('desktop'); // Voltar ao padrão
   const [showLeftSidebar, setShowLeftSidebar] = useState(true); 
   const [showRightSidebar, setShowRightSidebar] = useState(true);
   const [activeTab, setActiveTab] = useState<'components' | 'pages'>('components');
+  
+  // DEBUG: Verificar se componente está carregando corretamente
+  useEffect(() => {
+    console.log('🔍 DEBUG Editor state:');
+    console.log('  - funnelId:', funnelId);
+    console.log('  - deviceView:', deviceView);
+    console.log('  - showLeftSidebar:', showLeftSidebar);
+    console.log('  - showRightSidebar:', showRightSidebar);
+  }, [funnelId, deviceView, showLeftSidebar, showRightSidebar]);
 
   // Hook principal do editor
   const {
@@ -589,6 +599,9 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
           )}
 
         </div>
+        
+        {/* Debug Panel - sempre disponível */}
+        <DebugPanel />
       </div>
     );
 };

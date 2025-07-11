@@ -12,29 +12,15 @@ neonConfig.webSocketConstructor = ws;
 let pool: Pool | null = null;
 let db: any = null;
 
-// Verificar se estamos em desenvolvimento e usar SQLite
-if (process.env.NODE_ENV === 'development' && !process.env.DATABASE_URL?.startsWith('postgres')) {
-  console.log("🔧 Modo desenvolvimento: usando SQLite");
-  
-  // Criar banco SQLite se não existir
-  const dbPath = './dev.db';
-  const sqlite = new Database(dbPath);
-  
-  // Habilitar WAL mode para melhor performance
-  sqlite.pragma('journal_mode = WAL');
-  
-  db = drizzleSqlite(sqlite, { schema: schemaSqlite });
-  
-  console.log(`✅ SQLite conectado: ${dbPath}`);
-  
-} else if (process.env.DATABASE_URL) {
-  console.log("🔧 Modo produção: usando PostgreSQL/Neon");
+// Use Supabase as primary database for consistency
+if (process.env.DATABASE_URL?.startsWith('postgres')) {
+  console.log("🔧 Usando PostgreSQL/Neon (Supabase)");
   pool = new Pool({ connectionString: process.env.DATABASE_URL });
   db = drizzlePg({ client: pool, schema });
   console.log("✅ PostgreSQL/Neon conectado");
-  
 } else {
-  console.warn("⚠️ DATABASE_URL não definida - usando storage em memória");
+  console.warn("⚠️ DATABASE_URL não definida - funcionalidade limitada");
+  console.log("💡 Para funcionalidade completa, configure DATABASE_URL com Supabase");
 }
 
 export { pool, db };

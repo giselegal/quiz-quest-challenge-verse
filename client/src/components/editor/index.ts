@@ -7,7 +7,6 @@
 export { default as ComponentList } from './ComponentList';
 export { default as PageEditorCanvas } from './PageEditorCanvas';
 export { default as ModernQuizEditor } from './ModernQuizEditor';
-export { default as ModularQuizEditor } from './ModularQuizEditor';
 export { default as EditorLayout } from './EditorLayout';
 export { default as SalesPageEditor } from './SalesPageEditor';
 export { default as QuizEditorInterface } from './QuizEditorInterface';
@@ -28,5 +27,4 @@ export { ModernPropertyPanel } from './ModernPropertyPanel';
 export { default as SchemaDrivenEditorResponsive } from './SchemaDrivenEditorResponsive';
 
 // Testes e exemplos (export default)
-export { default as EditorTestPage } from './EditorTestPage';
 export { default as SimpleEditorTest } from './SimpleEditorTest';

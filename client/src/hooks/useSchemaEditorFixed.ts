@@ -51,7 +51,7 @@ interface UseSchemaEditorReturn {
 }
 
 export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorReturn => {
-  console.log('useSchemaEditorFixed: Hook initialized with initialFunnelId:', initialFunnelId);
+  console.log('🚀 useSchemaEditorFixed: Hook initialized with initialFunnelId:', initialFunnelId);
   
   const [funnel, setFunnel] = useState<SchemaDrivenFunnelData | null>(null);
   const [currentPageId, setCurrentPageId] = useState<string | null>(null);
@@ -59,9 +59,23 @@ export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorR
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [autoSaveState, setAutoSaveState] = useState<AutoSaveState>(schemaDrivenFunnelService.getAutoSaveState());
-  
+
   const { toast } = useToast();
   const initializedRef = useRef(false);
+
+  // DEBUG: Verificar estado do localStorage
+  useEffect(() => {
+    console.log('🔍 DEBUG LocalStorage state:');
+    console.log('  - schemaDrivenFunnel:', localStorage.getItem('schemaDrivenFunnel') ? 'EXISTS' : 'MISSING');
+    console.log('  - schemaDrivenFunnelVersionHistory:', localStorage.getItem('schemaDrivenFunnelVersionHistory') ? 'EXISTS' : 'MISSING');
+    
+    // Verificar conexão com Supabase
+    try {
+      console.log('🔍 DEBUG Supabase client:', !!(window as any).supabase);
+    } catch (error) {
+      console.warn('⚠️ Supabase client not available:', error);
+    }
+  }, []);
 
   // Computed values com dados dinâmicos
   const currentPage = useMemo(() => {

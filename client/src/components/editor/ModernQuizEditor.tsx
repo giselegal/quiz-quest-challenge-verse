@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -113,13 +114,14 @@ const ModernQuizEditor: React.FC<ModernQuizEditorProps> = ({
     setIsDragging(true);
   }, []);
 
-  const handleDragEnd = useCallback((result: any) => {
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
     setIsDragging(false);
     
-    if (!result.destination || !currentFunnel) return;
+    const { active, over } = event;
+    if (!over || active.id === over.id || !currentFunnel) return;
 
     // Handle component reordering logic here
-    console.log('Drag ended:', result);
+    console.log('Drag ended:', { active: active.id, over: over.id });
   }, [currentFunnel]);
 
   const handleConfigUpdate = useCallback((updates: Partial<QuizConfig>) => {
@@ -178,7 +180,7 @@ const ModernQuizEditor: React.FC<ModernQuizEditorProps> = ({
   }
 
   return (
-    <DragDropContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+    <DndContext collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <div className={styles.editorContainer}>
         {/* Header */}
         <header className={styles.editorHeader}>
@@ -391,7 +393,7 @@ const ModernQuizEditor: React.FC<ModernQuizEditorProps> = ({
           </div>
         </div>
       </div>
-    </DragDropContext>
+    </DndContext>
   );
 };
 
