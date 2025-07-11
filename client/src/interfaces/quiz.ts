@@ -42,6 +42,7 @@ export interface QuizConfig {
   theme?: any;
   settings?: any;
   branding?: any;
+  domain?: string;
 }
 
 export interface SimplePage {
