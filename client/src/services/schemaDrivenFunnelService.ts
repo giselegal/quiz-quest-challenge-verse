@@ -1246,24 +1246,28 @@ class SchemaDrivenFunnelService {
             showProgress: false
           }
         },
-        // 2. Card principal do resultado (flexbox responsivo com dados reais)
+        // 2. Card principal do resultado (flexbox responsivo TOTALMENTE EDITÁVEL)
         {
           id: 'result-main-card',
           type: 'result-card-inline',
           properties: {
+            // Dados principais
             title: 'Seu Estilo Predominante',
             styleName: 'dinamicStyleName', // Será preenchido dinamicamente
             percentage: 85, // Será substituído dinamicamente
             description: 'dinamicStyleDescription', // Será preenchido dinamicamente
+            
+            // Configurações visuais EDITÁVEIS
             showMatch: true,
             animateReveal: true,
             showProgress: true,
             showIcon: true,
-            cardVariant: 'elevated',
-            size: 'large',
+            cardVariant: 'elevated', // elevated, flat, outlined
+            size: 'large', // small, medium, large
             backgroundColor: '#ffffff',
             accentColor: '#B89B7A',
-            // Propriedades de layout flexbox
+            
+            // Layout flexbox CONFIGURÁVEL
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -1272,15 +1276,26 @@ class SchemaDrivenFunnelService {
             padding: 24,
             borderRadius: 12,
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-            // Responsividade
+            
+            // Responsividade EDITÁVEL
             responsive: {
               mobile: { padding: 16, gap: 12, size: 'medium' },
               tablet: { padding: 20, gap: 14, size: 'large' },
               desktop: { padding: 24, gap: 16, size: 'large' }
             },
-            // Editabilidade
+            
+            // TOTAL EDITABILIDADE - Todas as propriedades podem ser editadas
             editable: true,
-            editableFields: ['styleName', 'percentage', 'description', 'cardVariant', 'size', 'accentColor']
+            editableFields: [
+              'title', 'styleName', 'percentage', 'description',
+              'cardVariant', 'size', 'backgroundColor', 'accentColor',
+              'showMatch', 'animateReveal', 'showProgress', 'showIcon',
+              'padding', 'borderRadius', 'gap'
+            ],
+            
+            // REUTILIZAÇÃO - Pode ser clonado e reutilizado
+            reusable: true,
+            category: 'result-cards'
           }
         },
         // 3. Características do estilo (lista corrigida)
@@ -1480,51 +1495,70 @@ class SchemaDrivenFunnelService {
             }
           }
         },
-        // 12. Seção Before/After Transformation (componente real do projeto)
+        // 12. Seção Before/After Transformation (componente real EDITÁVEL)
         {
           id: 'result-before-after-section',
           type: 'component-reference',
           properties: {
             componentPath: '@/components/result/BeforeAfterTransformation',
-            componentName: 'BeforeAfterTransformation',
+            componentName: 'Transformações Before/After',
+            editable: true,
+            editableFields: ['primaryStyle', 'autoSlide', 'showArrows'],
             props: {
               primaryStyle: 'dinamicPrimaryStyle',
-              handleCTAClick: 'handleCTAClick'
-            },
-            editable: true,
-            editableFields: ['componentProps']
+              handleCTAClick: 'handleCTAClick',
+              autoSlide: true,
+              showArrows: true,
+              slideInterval: 6000
+            }
           }
         },
-        // 13. Seção de Motivação (componente real do projeto)
+        // 13. Seção de Motivação (componente real REUTILIZÁVEL)
         {
           id: 'result-motivation-section',
           type: 'component-reference',
           properties: {
             componentPath: '@/components/result/MotivationSection',
-            componentName: 'MotivationSection',
-            props: {},
-            editable: true
+            componentName: 'Seção Motivacional',
+            editable: true,
+            editableFields: ['title', 'backgroundColor', 'accentColor'],
+            props: {
+              title: 'Transforme seu Guarda-roupa',
+              backgroundColor: '#ffffff',
+              accentColor: '#B89B7A'
+            }
           }
         },
-        // 14. Seção de Bônus (componente real do projeto)
+        // 14. Seção de Bônus (componente real CONFIGURÁVEL)
         {
           id: 'result-bonus-section',
           type: 'component-reference',
           properties: {
             componentPath: '@/components/result/BonusSection',
-            componentName: 'BonusSection',
-            props: {},
-            editable: true
+            componentName: 'Bônus Exclusivos',
+            editable: true,
+            editableFields: ['title', 'showAnimations', 'cardStyle'],
+            props: {
+              title: 'Bônus Exclusivos para Você',
+              showAnimations: true,
+              cardStyle: 'elevated'
+            }
           }
         },
-        // 15. Seção de Depoimentos (componente real do projeto)
+        // 15. Seção de Depoimentos (componente real PERSONALIZÁVEL)
         {
           id: 'result-testimonials-section',
           type: 'component-reference',
           properties: {
             componentPath: '@/components/quiz-result/sales/Testimonials',
-            componentName: 'Testimonials',
+            componentName: 'Depoimentos de Clientes',
+            editable: true,
+            editableFields: ['title', 'showRatings', 'layout', 'maxItems'],
             props: {
+              title: 'Transformações Reais',
+              showRatings: true,
+              layout: 'grid',
+              maxItems: 3,
               items: [
                 {
                   name: "Mariangela",
@@ -1542,20 +1576,24 @@ class SchemaDrivenFunnelService {
                   text: "Com a Gisele, entendi o poder da linguagem visual. Hoje eu escolho minhas roupas com consciência, propósito e leveza."
                 }
               ]
-            },
-            editable: true,
-            editableFields: ['items']
+            }
           }
         },
-        // 16. Seção de Garantia (componente real do projeto)
+        // 16. Seção de Garantia (componente real EDITÁVEL)
         {
           id: 'result-guarantee-section',
           type: 'component-reference',
           properties: {
             componentPath: '@/components/result/GuaranteeSection',
-            componentName: 'GuaranteeSection',
-            props: {},
-            editable: true
+            componentName: 'Garantia de Satisfação',
+            editable: true,
+            editableFields: ['guaranteeDays', 'title', 'description', 'accentColor'],
+            props: {
+              guaranteeDays: 7,
+              title: 'Sua Satisfação 100% Garantida',
+              description: 'Se por qualquer motivo você não ficar 100% satisfeita, reembolsamos o valor integral sem perguntas.',
+              accentColor: '#B89B7A'
+            }
           }
         },
         // 17. CTA principal melhorado (botão flexível e editável)

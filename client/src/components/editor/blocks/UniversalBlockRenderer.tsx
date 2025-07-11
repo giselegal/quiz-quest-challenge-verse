@@ -250,34 +250,98 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       // === COMPONENTE REFERENCE SYSTEM ===
       // Para renderizar componentes reais do projeto no editor
       'component-reference': () => {
-        const { componentPath, componentName, props: componentProps } = block.properties;
+        const { componentPath, componentName, props: componentProps = {}, editable = true, editableFields = [] } = block.properties;
         
-        // Para o editor, renderizamos um placeholder informativo
+        // ES7+ Handler para editar propriedades inline
+        const handlePropertyEdit = (field: string, value: any) => {
+          if (onSaveInline && editable) {
+            const updatedBlock = {
+              ...block,
+              properties: {
+                ...block.properties,
+                props: {
+                  ...componentProps,
+                  [field]: value
+                }
+              }
+            };
+            onSaveInline(block.id, updatedBlock);
+          }
+        };
+
+        // Para o editor, renderizamos um placeholder informativo E EDITÁVEL
         return (
           <div 
             className={cn(
               'w-full p-6 border-2 border-dashed border-blue-300 rounded-lg bg-blue-50',
-              'flex flex-col items-center justify-center gap-3',
-              'min-h-[120px] text-center',
-              isSelected && 'border-blue-500 bg-blue-100'
+              'flex flex-col items-center justify-center gap-4',
+              'min-h-[140px] text-center transition-all duration-300',
+              isSelected && 'border-blue-500 bg-blue-100 shadow-lg',
+              editable && 'hover:border-blue-400 hover:bg-blue-75 cursor-pointer'
             )}
             onClick={onClick}
           >
+            {/* Header do componente */}
             <div className="flex items-center gap-2 text-blue-700">
               <span className="text-2xl">🧩</span>
-              <span className="font-semibold text-lg">{componentName}</span>
+              <span className="font-semibold text-lg">{componentName || 'Component'}</span>
+              {editable && <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">✏️ Editável</span>}
             </div>
+            
+            {/* Path do componente */}
             <p className="text-sm text-blue-600 max-w-md">
-              Componente real: <code className="bg-blue-200 px-2 py-1 rounded text-xs">{componentPath}</code>
+              <code className="bg-blue-200 px-2 py-1 rounded text-xs">{componentPath}</code>
             </p>
+            
+            {/* Status de renderização */}
             <div className="text-xs text-blue-500 bg-blue-100 px-3 py-1 rounded-full">
               ✅ Renderizado na visualização final
             </div>
-            {isSelected && (
-              <div className="text-xs text-blue-700 mt-2 p-2 bg-blue-200 rounded">
-                Props: {JSON.stringify(componentProps, null, 2)}
+
+            {/* Props editáveis quando selecionado */}
+            {isSelected && editable && editableFields.length > 0 && (
+              <div className="w-full mt-4 p-3 bg-blue-200 rounded border">
+                <h4 className="text-xs font-semibold text-blue-800 mb-2">Propriedades Editáveis:</h4>
+                <div className="space-y-2">
+                  {editableFields.map((field: string) => (
+                    <div key={field} className="flex items-center gap-2 text-xs">
+                      <label className="font-medium text-blue-700 min-w-[60px]">{field}:</label>
+                      <input
+                        type="text"
+                        value={componentProps[field] || ''}
+                        onChange={(e) => handlePropertyEdit(field, e.target.value)}
+                        className="flex-1 px-2 py-1 text-xs border rounded bg-white"
+                        placeholder={`Editar ${field}`}
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
+
+            {/* Preview das props quando selecionado */}
+            {isSelected && Object.keys(componentProps).length > 0 && (
+              <details className="w-full mt-2">
+                <summary className="text-xs text-blue-700 cursor-pointer hover:text-blue-800">
+                  Ver Props Atuais
+                </summary>
+                <pre className="text-xs text-blue-700 mt-2 p-2 bg-blue-200 rounded text-left overflow-auto max-h-32">
+                  {JSON.stringify(componentProps, null, 2)}
+                </pre>
+              </details>
+            )}
+
+            {/* Indicadores de reutilização */}
+            <div className="flex gap-2 text-xs">
+              <span className="bg-green-100 text-green-700 px-2 py-1 rounded-full">
+                🔄 Reutilizável
+              </span>
+              {editable && (
+                <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                  ⚙️ Configurável
+                </span>
+              )}
+            </div>
           </div>
         );
       }
