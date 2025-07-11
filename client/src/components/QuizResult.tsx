@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { StyleResult } from "../types/quiz";
 import { useAuth } from "../context/AuthContext";
@@ -33,8 +34,10 @@ const QuizResult: React.FC<QuizResultProps> = ({
   const [userName, setUserName] = useState<string>("Visitante");
 
   useEffect(() => {
-    if (user && user.userName) {
-      setUserName(user.userName);
+    if (user) {
+      // Use userName if available, otherwise fallback to name or email
+      const displayName = user.userName || user.name || user.email?.split('@')[0] || "Visitante";
+      setUserName(displayName);
     } else {
       const storedName = localStorage.getItem("userName");
       if (storedName) {

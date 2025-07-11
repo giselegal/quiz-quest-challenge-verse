@@ -1,150 +1,118 @@
 
 import React, { useState, useEffect } from 'react';
-import { cn } from '@/lib/utils';
-import { QuizQuestion as QuizQuestionType, UserResponse } from '../types/quiz';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { QuizOption } from './quiz/QuizOption';
-import { highlightStrategicWords } from '@/utils/textHighlight';
+import { Card } from './ui/card';
 import { Button } from './ui/button';
-import { ArrowRight } from 'lucide-react';
-import { useQuestionScroll } from '@/hooks/useQuestionScroll';
-import { StaggeredOptionAnimations } from './effects/StaggeredOptionAnimations';
+import { UserResponse, QuizQuestion as QuizQuestionType } from '@/types/quiz';
+import { AnimatedWrapper } from './ui/animated-wrapper';
 
-interface QuizQuestionProps {
+export interface QuizQuestionProps {
   question: QuizQuestionType;
   onAnswer: (response: UserResponse) => void;
   currentAnswers: string[];
-  autoAdvance?: boolean;
-  hideTitle?: boolean;
   showQuestionImage?: boolean;
+  autoAdvance?: boolean;
   isStrategicQuestion?: boolean;
 }
 
-const QuizQuestion: React.FC<QuizQuestionProps> = ({
+export const QuizQuestion: React.FC<QuizQuestionProps> = ({
   question,
   onAnswer,
   currentAnswers,
-  autoAdvance = false,
-  hideTitle = false,
   showQuestionImage = false,
+  autoAdvance = false,
   isStrategicQuestion = false
 }) => {
-  const isMobile = useIsMobile();
-  // Fixed: Only check for valid image types, excluding 'normal' and 'strategic'
-  const hasImageOptions = question.type === 'image' || question.type === 'both';
-  const [imageError, setImageError] = useState(false);
-  const { scrollToQuestion } = useQuestionScroll();
+  const [selectedOptions, setSelectedOptions] = useState<string[]>(currentAnswers);
 
   useEffect(() => {
-    scrollToQuestion(question.id);
-  }, [question.id, scrollToQuestion]);
+    setSelectedOptions(currentAnswers);
+  }, [currentAnswers, question.id]);
 
   const handleOptionSelect = (optionId: string) => {
-    let newSelectedOptions: string[];
+    let newSelection: string[];
     
-    if (currentAnswers.includes(optionId)) {
-      // Para questões estratégicas, não permitimos desmarcar a única opção selecionada
-      if (isStrategicQuestion) {
-        return; // Não permite desmarcar a opção em questões estratégicas
-      }
-      newSelectedOptions = currentAnswers.filter(id => id !== optionId);
-    } else {
-      if (isStrategicQuestion) {
-        // Para questões estratégicas, substituímos qualquer seleção anterior
-        newSelectedOptions = [optionId];
-      } else if (question.multiSelect && currentAnswers.length >= question.multiSelect) {
-        newSelectedOptions = [...currentAnswers.slice(1), optionId];
+    if (question.multiSelect && question.multiSelect > 1) {
+      if (selectedOptions.includes(optionId)) {
+        newSelection = selectedOptions.filter(id => id !== optionId);
+      } else if (selectedOptions.length < question.multiSelect) {
+        newSelection = [...selectedOptions, optionId];
       } else {
-        newSelectedOptions = [...currentAnswers, optionId];
+        return;
       }
+    } else {
+      newSelection = [optionId];
     }
     
-    onAnswer({ 
+    setSelectedOptions(newSelection);
+    
+    if (autoAdvance && newSelection.length === (question.multiSelect || 1)) {
+      setTimeout(() => {
+        onAnswer({
+          questionId: question.id,
+          selectedOptions: newSelection,
+          timestamp: Date.now()
+        });
+      }, 300);
+    }
+  };
+
+  const handleSubmit = () => {
+    onAnswer({
       questionId: question.id,
-      selectedOptions: newSelectedOptions,
-      timestamp: new Date()
+      selectedOptions: selectedOptions,
+      timestamp: Date.now()
     });
   };
-  
-  const getGridColumns = () => {
-    if (question.type === 'text') {
-      if (isStrategicQuestion) {
-        return "grid-cols-1 gap-3 px-2";
-      }
-      return isMobile ? "grid-cols-1 gap-3 px-2" : "grid-cols-1 gap-4 px-4";
-    }
-    return isMobile ? "grid-cols-2 gap-1 px-0.5" : "grid-cols-2 gap-3 px-2";
-  };
-  
-  // Fixed: Filter out invalid question types
-  const validTypes: Array<'text' | 'both' | 'image'> = ['text', 'both', 'image'];
-  const questionType = validTypes.includes(question.type as any) ? question.type as 'text' | 'both' | 'image' : 'text';
-  
+
+  const canSubmit = selectedOptions.length === (question.multiSelect || 1);
+
   return (
-    <div className={cn("w-full max-w-6xl mx-auto pb-5 relative", 
-      isMobile && "px-2", 
-      isStrategicQuestion && "max-w-3xl strategic-question",
-      question.type === 'text' && !isStrategicQuestion && "text-only-question"
-    )} id={`question-${question.id}`}>
-      {!hideTitle && (
-        <>
-          <h2 className={cn(
-            "font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal",
-            isMobile ? "text-base" : "text-base sm:text-xl",
-            isStrategicQuestion && "strategic-question-title text-[#432818] mb-6 font-bold whitespace-pre-line",
-            isStrategicQuestion && isMobile && "text-[1.25rem] sm:text-2xl",
-            question.type === 'text' && !isStrategicQuestion && "text-[1.15rem] sm:text-xl"
-          )}>
-            {highlightStrategicWords(question.title || question.question)}
+    <AnimatedWrapper show={true}>
+      <Card className="p-8 space-y-6 bg-white shadow-md">
+        <div className="space-y-4">
+          <h2 className="text-2xl font-playfair text-[#432818] text-center">
+            {question.question}
           </h2>
           
-          {isStrategicQuestion && question.imageUrl && !imageError && showQuestionImage && (
-            <div className="w-full mb-6">
-              <img 
-                src={question.imageUrl} 
-                alt="Question visual" 
-                className="w-full max-w-md mx-auto rounded-lg shadow-sm" 
-                onError={() => {
-                  console.error(`Failed to load image: ${question.imageUrl}`);
-                  setImageError(true);
-                }}
-              />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {question.options.map((option) => (
+              <Button
+                key={option.id}
+                variant={selectedOptions.includes(option.id) ? "default" : "outline"}
+                className={`p-4 h-auto text-left ${
+                  selectedOptions.includes(option.id) 
+                    ? 'bg-[#B89B7A] hover:bg-[#A38A69]' 
+                    : 'border-[#B89B7A] hover:bg-[#B89B7A]/10'
+                }`}
+                onClick={() => handleOptionSelect(option.id)}
+              >
+                <div className="space-y-2">
+                  {showQuestionImage && option.imageUrl && (
+                    <img 
+                      src={option.imageUrl} 
+                      alt={option.text}
+                      className="w-full h-32 object-cover rounded"
+                    />
+                  )}
+                  <span className="block">{option.text}</span>
+                </div>
+              </Button>
+            ))}
+          </div>
+          
+          {!autoAdvance && (
+            <div className="text-center">
+              <Button
+                onClick={handleSubmit}
+                disabled={!canSubmit}
+                className="bg-[#B89B7A] hover:bg-[#A38A69] text-white px-8 py-2"
+              >
+                Continuar
+              </Button>
             </div>
           )}
-        </>
-      )}
-      
-      <div className="w-full">
-        <StaggeredOptionAnimations 
-          questionId={question.id}
-          isVisible={true}
-          className={cn(
-            "grid h-full",
-            getGridColumns(),
-            hasImageOptions && "mb-4 relative",
-            isStrategicQuestion && "gap-4"
-          )}
-        >
-          {question.options.map((option, index) => (
-            <QuizOption 
-              key={option.id} 
-              option={option} 
-              isSelected={currentAnswers.includes(option.id)} 
-              onSelect={handleOptionSelect}
-              type={questionType}
-              questionId={question.id}
-              isDisabled={
-                (isStrategicQuestion && currentAnswers.length > 0 && !currentAnswers.includes(option.id)) || 
-                (!isStrategicQuestion && !currentAnswers.includes(option.id) && 
-                  currentAnswers.length >= (question.multiSelect || 1))
-              }
-              isStrategicOption={isStrategicQuestion}
-            />
-          ))}
-        </StaggeredOptionAnimations>
-      </div>
-    </div>
+        </div>
+      </Card>
+    </AnimatedWrapper>
   );
 };
-
-export { QuizQuestion };

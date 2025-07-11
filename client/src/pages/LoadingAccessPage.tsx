@@ -1,62 +1,23 @@
-import React from 'react';
-import FileLoadingSimulator from '@/components/loading/FileLoadingSimulator';
-import { useParams } from 'react-router-dom';
 
-const LoadingAccessPage = () => {
-  const { route } = useParams();
-  
-  // Definir as rotas disponíveis e seus redirecionamentos
-  const routeMap: Record<string, string> = {
-    'editor': '/admin/editor',
-    'admin': '/admin',
-    'dashboard': '/admin/dashboard',
-    'unified-editor': '/admin/unified-editor',
-    'result-editor': '/admin/result/editor',
-    'sales-editor': '/admin/sales/editor',
-    'lovable': 'https://a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com',
-    'lovable-admin': 'https://a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com/admin',
-    'lovable-editor': 'https://a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com/resultado/editor',
-  };
-  
-  // Determinar para onde redirecionar
-  let redirectPath = route && routeMap[route] ? routeMap[route] : '/admin';
-  
-  // Configurações dinâmicas baseadas na rota
-  const getSpeedForRoute = (route?: string): 'slow' | 'medium' | 'fast' => {
-    if (!route) return 'medium';
-    
-    if (['lovable', 'lovable-admin', 'lovable-editor'].includes(route)) {
-      return 'slow'; // Rotas externas mais lentas
-    }
-    
-    if (['editor', 'unified-editor'].includes(route)) {
-      return 'medium'; // Editores são médios
-    }
-    
-    return 'fast'; // Outras rotas são rápidas
-  };
-  
-  const getTotalFiles = (route?: string): number => {
-    if (!route) return 3700;
-    
-    if (['lovable', 'lovable-admin', 'lovable-editor'].includes(route)) {
-      return 4200; // Mais arquivos para Lovable
-    }
-    
-    if (['editor', 'unified-editor', 'result-editor', 'sales-editor'].includes(route)) {
-      return 3700; // Quantidade padrão para editores
-    }
-    
-    return 2500; // Menos arquivos para outras rotas
-  };
-  
+import React from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Loader2 } from 'lucide-react';
+
+const LoadingAccessPage: React.FC = () => {
   return (
-    <FileLoadingSimulator 
-      initialLoaded={2000}
-      totalFiles={getTotalFiles(route)}
-      redirectAfterComplete={redirectPath}
-      speed={getSpeedForRoute(route)}
-    />
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <Card className="w-full max-w-md">
+        <CardContent className="pt-6">
+          <div className="text-center space-y-4">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto text-blue-600" />
+            <h2 className="text-xl font-semibold">Carregando...</h2>
+            <p className="text-gray-600">
+              Preparando sua experiência personalizada.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

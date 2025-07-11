@@ -1,197 +1,133 @@
 
-import React, { useEffect, useState, useCallback } from 'react';
-import { useLocation } from 'react-router-dom';
-import { QuizWelcome } from './QuizWelcome';
-import { QuizContent } from './quiz/QuizContent';
-import QuizTransition from './QuizTransition';
-import { UserResponse } from '../types/quiz';
-import { useAuth } from '../context/AuthContext';
-import { preloadCriticalImages } from '../utils/imageManager';
-
-enum QuizState {
-  Welcome,
-  Quiz,
-  Transition,
-  Result,
-}
-
-interface StyleResult {
-  style: string;
-  points: number;
-  percentage: number;
-  rank: number;
-}
+import React, { useEffect } from 'react';
+import { useQuiz } from '@/context/QuizContext';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 const QuizPage: React.FC = () => {
-  const location = useLocation();
-  const [quizState, setQuizState] = useState(QuizState.Welcome);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [currentStrategicQuestionIndex, setCurrentStrategicQuestionIndex] = useState(0);
-  const [userResponses, setUserResponses] = useState<UserResponse[]>([]);
-  const [quizResult, setQuizResult] = useState<StyleResult[] | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [showingStrategicQuestions, setShowingStrategicQuestions] = useState(false);
-  const [questions, setQuestions] = useState<any[]>([]);
-  const [strategicQuestions, setStrategicQuestions] = useState<any[]>([]);
-  const { user } = useAuth();
+  const { questions, currentQuestionIndex, nextQuestion, previousQuestion, addResponse, setQuestions, isCompleted } = useQuiz();
 
-  // Load real quiz questions from data source
   useEffect(() => {
-    const loadQuestions = async () => {
-      const { quizQuestions } = await import('@/data/quizQuestions');
-      const normalQuestions = quizQuestions.filter(q => q.type !== 'strategic');
-      const strategicQs = quizQuestions.filter(q => q.type === 'strategic');
-      setQuestions(normalQuestions);
-      setStrategicQuestions(strategicQs);
-    };
-    loadQuestions();
-  }, []);
+    // Initialize with some sample questions if none exist
+    if (questions.length === 0) {
+      setQuestions([
+        {
+          id: '1',
+          title: 'Qual é seu estilo preferido?',
+          type: 'single',
+          options: [
+            { id: '1a', text: 'Clássico', points: { classic: 5 } },
+            { id: '1b', text: 'Moderno', points: { modern: 5 } },
+            { id: '1c', text: 'Minimalista', points: { minimal: 5 } }
+          ]
+        },
+        {
+          id: '2',
+          title: 'Quais cores você mais gosta?',
+          type: 'multiple',
+          options: [
+            { id: '2a', text: 'Azul', points: { cool: 3 } },
+            { id: '2b', text: 'Vermelho', points: { warm: 3 } },
+            { id: '2c', text: 'Verde', points: { natural: 3 } },
+            { id: '2d', text: 'Neutro', points: { minimal: 3 } }
+          ]
+        }
+      ]);
+    }
+  }, [questions.length, setQuestions]);
 
-  const totalQuestions = questions.length;
-  const totalStrategicQuestions = strategicQuestions.length;
+  if (isCompleted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>Quiz Concluído!</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 mb-4">
+              Obrigado por completar o quiz. Seus resultados estão sendo processados.
+            </p>
+            <Button className="w-full">Ver Resultados</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
-  const handleAnswerSubmit = useCallback((response: UserResponse) => {
-    setUserResponses((prevResponses) => {
-      const existingResponseIndex = prevResponses.findIndex(
-        (r) => r.questionId === response.questionId
-      );
+  if (questions.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <p className="text-gray-600">Carregando quiz...</p>
+        </div>
+      </div>
+    );
+  }
 
-      if (existingResponseIndex !== -1) {
-        const newResponses = [...prevResponses];
-        newResponses[existingResponseIndex] = response;
-        return newResponses;
-      } else {
-        return [...prevResponses, response];
-      }
+  const currentQuestion = questions[currentQuestionIndex];
+
+  const handleOptionSelect = (optionId: string) => {
+    addResponse({
+      questionId: currentQuestion.id,
+      selectedOptions: [optionId],
+      timestamp: Date.now()
     });
-
-    if (!showingStrategicQuestions) {
-      localStorage.setItem(
-        `question-${currentQuestionIndex + 1}`,
-        JSON.stringify(response)
-      );
-    } else {
-      localStorage.setItem(
-        `strategic-question-${currentStrategicQuestionIndex + 1}`,
-        JSON.stringify(response)
-      );
-    }
-  }, [currentQuestionIndex, showingStrategicQuestions, currentStrategicQuestionIndex]);
-
-  const handleNextClick = useCallback(() => {
-    if (!showingStrategicQuestions) {
-      if (currentQuestionIndex < totalQuestions - 1) {
-        setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
-      } else {
-        setShowingStrategicQuestions(true);
-        setCurrentStrategicQuestionIndex(0);
-        setQuizState(QuizState.Transition);
-      }
-    } else {
-      if (currentStrategicQuestionIndex < totalStrategicQuestions - 1) {
-        setCurrentStrategicQuestionIndex((prevIndex) => prevIndex + 1);
-      } else {
-        setIsLoading(true);
-        setTimeout(() => {
-          // Mock result calculation
-          const mockResult = [
-            { style: 'classico', points: 100, percentage: 85, rank: 1 }
-          ];
-          setQuizResult(mockResult);
-          setQuizState(QuizState.Result);
-          setIsLoading(false);
-          // Navigate to result page
-          window.location.href = '/resultado';
-        }, 2000);
-      }
-    }
-  }, [currentQuestionIndex, showingStrategicQuestions, currentStrategicQuestionIndex, userResponses]);
-
-  const handlePrevious = useCallback(() => {
-    if (showingStrategicQuestions) {
-      if (currentStrategicQuestionIndex > 0) {
-        setCurrentStrategicQuestionIndex((prevIndex) => prevIndex - 1);
-      } else {
-        setShowingStrategicQuestions(false);
-        setCurrentQuestionIndex(questions.length - 1);
-        setQuizState(QuizState.Quiz);
-      }
-    } else {
-      if (currentQuestionIndex > 0) {
-        setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
-      } else {
-        setQuizState(QuizState.Welcome);
-      }
-    }
-  }, [currentQuestionIndex, showingStrategicQuestions, currentStrategicQuestionIndex]);
-
-  const resetQuiz = () => {
-    localStorage.removeItem('userName');
-    localStorage.removeItem('persist:auth');
-    setQuizState(QuizState.Welcome);
-    setCurrentQuestionIndex(0);
-    setCurrentStrategicQuestionIndex(0);
-    setUserResponses([]);
-    setQuizResult(null);
-    setShowingStrategicQuestions(false);
-    window.location.href = '/';
+    
+    setTimeout(() => {
+      nextQuestion();
+    }, 500);
   };
 
-  const getUserName = (): string => {
-    return user?.userName || localStorage.getItem('userName') || '';
-  };
-
-  useEffect(() => {
-    preloadCriticalImages(["quiz", "strategic"]);
-  }, []);
-
-  useEffect(() => {
-    if (quizState === QuizState.Quiz) {
-      window.scrollTo(0, 0);
-    }
-  }, [quizState, currentQuestionIndex]);
-
-  const renderContent = () => {
-    switch (quizState) {
-      case QuizState.Welcome:
-        return <QuizWelcome onStart={() => setQuizState(QuizState.Quiz)} />;
-      case QuizState.Quiz:
-        return (
-          <QuizContent
-            user={user}
-            currentQuestionIndex={currentQuestionIndex}
-            totalQuestions={totalQuestions}
-            showingStrategicQuestions={showingStrategicQuestions}
-            currentStrategicQuestionIndex={currentStrategicQuestionIndex}
-            currentQuestion={questions[currentQuestionIndex]}
-            currentAnswers={
-              userResponses.find((r) => r.questionId === questions[currentQuestionIndex].id)
-                ?.selectedOptions || []
-            }
-            handleAnswerSubmit={handleAnswerSubmit}
-            handleNextClick={handleNextClick}
-            handlePrevious={handlePrevious}
-          />
-        );
-      case QuizState.Transition:
-        return (
-          <QuizTransition
-            onContinue={handleNextClick}
-            onAnswer={handleAnswerSubmit}
-            currentAnswers={
-              userResponses.find((r) => r.questionId === strategicQuestions[0].id)
-                ?.selectedOptions || []
-            }
-          />
-        );
-      case QuizState.Result:
-        return <div>Result Page Placeholder</div>;
-      default:
-        return <QuizWelcome onStart={() => setQuizState(QuizState.Quiz)} />;
-    }
-  };
-
-  return <>{renderContent()}</>;
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <Card className="w-full max-w-2xl">
+        <CardHeader>
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-sm text-gray-500">
+              Pergunta {currentQuestionIndex + 1} de {questions.length}
+            </span>
+            <div className="w-full max-w-xs bg-gray-200 rounded-full h-2 ml-4">
+              <div 
+                className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
+              />
+            </div>
+          </div>
+          <CardTitle className="text-xl">{currentQuestion.title}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {currentQuestion.options?.map((option) => (
+              <Button
+                key={option.id}
+                variant="outline"
+                className="w-full text-left justify-start p-4 h-auto"
+                onClick={() => handleOptionSelect(option.id)}
+              >
+                {option.text}
+              </Button>
+            ))}
+          </div>
+          
+          <div className="flex justify-between mt-6">
+            <Button 
+              variant="outline" 
+              onClick={previousQuestion}
+              disabled={currentQuestionIndex === 0}
+            >
+              Anterior
+            </Button>
+            <Button 
+              onClick={nextQuestion}
+              disabled={currentQuestionIndex === questions.length - 1}
+            >
+              Próxima
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
 };
 
 export default QuizPage;

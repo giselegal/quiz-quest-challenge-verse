@@ -11,25 +11,29 @@ const SAMPLE_OPTIONS: QuizOptionType[] = [
     id: 'sample-1',
     text: 'Elegante e Sofisticado',
     styleCategory: 'Elegante',
-    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1687095491/style-quiz/elegante-6_u1ghdr.jpg'
+    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1687095491/style-quiz/elegante-6_u1ghdr.jpg',
+    points: { elegante: 3, classico: 2 }
   },
   {
     id: 'sample-2',
     text: 'Contemporâneo e Moderno',
     styleCategory: 'Contemporâneo',
-    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1687095491/style-quiz/contemporaneo-6_riqfun.jpg'
+    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1687095491/style-quiz/contemporaneo-6_riqfun.jpg',
+    points: { contemporaneo: 3, moderno: 2 }
   },
   {
     id: 'sample-3',
     text: 'Romântico e Delicado',
     styleCategory: 'Romântico',
-    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1687095492/style-quiz/romantico-6_nkahb3.jpg'
+    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1687095492/style-quiz/romantico-6_nkahb3.jpg',
+    points: { romantico: 3, delicado: 2 }
   },
   {
     id: 'sample-4',
     text: 'Sexy e Empoderado',
     styleCategory: 'Sexy',
-    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1687095492/style-quiz/sexy-6_xvvf64.jpg'
+    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1687095492/style-quiz/sexy-6_xvvf64.jpg',
+    points: { sexy: 3, empoderado: 2 }
   }
 ];
 
