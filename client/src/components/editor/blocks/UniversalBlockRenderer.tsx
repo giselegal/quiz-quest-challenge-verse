@@ -138,77 +138,58 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
     };
 
     const componentMap: Record<string, () => React.ReactNode> = {
-      // ES7+ Componentes básicos sem wrapper
+      // === COMPONENTES BÁSICOS ===
       header: () => <HeadingInlineBlock {...commonProps} />,
       text: () => <TextInlineBlock {...commonProps} />,
       image: () => <ImageInlineBlock {...commonProps} />,
       button: () => <ButtonInlineBlock {...commonProps} />,
       spacer: () => <SpacerBlock {...commonProps} />,
-
-      // Componentes de resultado
+      'form-input': () => <FormInputBlock {...commonProps} />,
+      list: () => <ListBlock {...commonProps} />,
+      
+      // === COMPONENTES DE RESULTADO ===
       'result-header': () => <HeadingInlineBlock {...commonProps} />,
       'result-description': () => <TextInlineBlock {...commonProps} />,
-
-      // Componentes de oferta 
+      
+      // === COMPONENTES DE OFERTA ===
       'product-offer': () => <PricingCardInlineBlock {...commonProps} />,
       'urgency-timer': () => <CountdownInlineBlock {...commonProps} />,
-
-      // Componentes especiais
+      
+      // === COMPONENTES ESPECIAIS ===
       'faq-section': () => <FAQSectionBlock {...commonProps} />,
       testimonials: () => <TestimonialsGridBlock {...commonProps} />,
       guarantee: () => <GuaranteeBlock {...commonProps} />,
-
-      // === COMPONENTES DE MÍDIA ES7+ ===
       'video-player': () => <VideoPlayerBlock {...commonProps} />,
-      audio: () => <TestimonialCardInlineBlock {...commonProps} />,
-
-      // === COMPONENTES UI AVANÇADOS ES7+ ===
-      alert: () => <BadgeInlineBlock {...commonProps} />,
-      arguments: () => <HeadingInlineBlock {...commonProps} />,
-      carousel: () => <ImageDisplayInlineBlock {...commonProps} />,
-      loader: () => <LoadingAnimationBlock {...commonProps} />,
-      compare: () => <PricingCardInlineBlock {...commonProps} />,
-      confetti: () => <BadgeInlineBlock {...commonProps} />,
-      quote: () => <TestimonialCardInlineBlock {...commonProps} />,
-      'form-input': () => <FormInputBlock {...commonProps} />,
-      'chart-area': () => <ImageInlineBlock {...commonProps} />,
-      'chart-level': () => <TextInlineBlock {...commonProps} />,
-      list: () => <ListBlock {...commonProps} />,
-      marquee: () => <TextInlineBlock {...commonProps} />,
-      'options-grid': () => <OptionsGridBlock {...commonProps} />,
-      script: () => <TextInlineBlock {...commonProps} />,
-      terms: () => <TextInlineBlock {...commonProps} />,
-
-      // === COMPONENTES MODULARES ETAPA 20 ES7+ ===
-      'style-card': () => <StyleCardInlineBlock {...commonProps} />,
-      'before-after': () => <ImageDisplayInlineBlock {...commonProps} />,
-      'bonus-section': () => <BonusListInlineBlock {...commonProps} />,
-      'testimonials-real': () => <TestimonialsGridBlock {...commonProps} />,
-      'guarantee-section': () => <GuaranteeBlock {...commonProps} />,
-      'mentor-section': () => <HeadingInlineBlock {...commonProps} />,
-      'secure-purchase': () => <ButtonInlineBlock {...commonProps} />,
-      'value-stack': () => <PricingCardInlineBlock {...commonProps} />,
-      'final-cta': () => <CTAInlineBlock {...commonProps} />,
-
-      // === COMPONENTES INLINE FUNCIONAIS ES7+ ===
+      
+      // === COMPONENTES INLINE ESSENCIAIS ===
       'text-inline': () => <TextInlineBlock {...commonProps} />,
       'heading-inline': () => <HeadingInlineBlock {...commonProps} />,
       'button-inline': () => <ButtonInlineBlock {...commonProps} />,
-      'result-card-inline': () => <ResultCardInlineBlock {...commonProps} />,
-      'countdown-inline': () => <CountdownInlineBlock {...commonProps} />,
-      'quiz-offer-pricing-inline': () => <QuizOfferPricingInlineBlock {...commonProps} />,
-      'pricing-inline': () => <PricingCardInlineBlock {...commonProps} />,
-
-      // === COMPONENTES ESPECIALIZADOS QUIZ ES7+ ===
-      'quiz-intro-header': () => <QuizIntroHeaderBlock {...commonProps} />,
+      'badge-inline': () => <BadgeInlineBlock {...commonProps} />,
       'progress-inline': () => <ProgressInlineBlock {...commonProps} />,
-      'loading-animation': () => <LoadingAnimationBlock {...commonProps} />,
       'image-display-inline': () => <ImageDisplayInlineBlock {...commonProps} />,
       'style-card-inline': () => <StyleCardInlineBlock {...commonProps} />,
+      'result-card-inline': () => <ResultCardInlineBlock {...commonProps} />,
       'testimonial-card-inline': () => <TestimonialCardInlineBlock {...commonProps} />,
-      'badge-inline': () => <BadgeInlineBlock {...commonProps} />,
-
-      // === COMPONENTES MODULARES ETAPA 21 ES7+ ===
+      'countdown-inline': () => <CountdownInlineBlock {...commonProps} />,
+      'stat-inline': () => <StatInlineBlock {...commonProps} />,
+      'pricing-card-inline': () => <PricingCardInlineBlock {...commonProps} />,
+      
+      // === COMPONENTES QUIZ ===
+      'quiz-intro-header': () => <QuizIntroHeaderBlock {...commonProps} />,
+      'loading-animation': () => <LoadingAnimationBlock {...commonProps} />,
+      'options-grid': () => <OptionsGridBlock {...commonProps} />,
+      'quiz-question': () => <QuizQuestionBlock {...commonProps} />,
+      'quiz-progress': () => <QuizProgressBlock {...commonProps} />,
+      
+      // === COMPONENTES ETAPA 20/21 ===
+      'result-header-inline': () => <ResultHeaderInlineBlock {...commonProps} />,
+      'quiz-offer-pricing-inline': () => <QuizOfferPricingInlineBlock {...commonProps} />,
+      'bonus-list-inline': () => <BonusListInlineBlock {...commonProps} />,
+      'before-after-inline': () => <ImageDisplayInlineBlock {...commonProps} />,
+      'divider-inline': () => <SpacerBlock {...commonProps} />,
+      
+      // === COMPONENTES ETAPA 21 ESPECÍFICOS ===
       'hero-badge-inline': () => <BadgeInlineBlock {...commonProps} />,
       'hero-title-inline': () => <HeadingInlineBlock {...commonProps} />,
       'problem-list-inline': () => <ListBlock {...commonProps} />,
@@ -222,54 +203,27 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       'faq-item-inline': () => <FAQSectionBlock {...commonProps} />,
       'section-header-inline': () => <HeadingInlineBlock {...commonProps} />,
       'sticky-header-inline': () => <QuizIntroHeaderBlock {...commonProps} />,
-
-      // === COMPONENTES QUIZ REAIS ES7+ ===
-      'quiz-question': () => <QuizQuestionBlock {...commonProps} />,
-      'quiz-progress': () => <QuizProgressBlock {...commonProps} />,
-      'testimonials-grid': () => <TestimonialsGridBlock {...commonProps} />,
-      'social-proof': () => <TestimonialsGridBlock {...commonProps} />,
-      'value-anchoring': () => <PricingCardInlineBlock {...commonProps} />,
-
-      // === COMPONENTES ADICIONAIS ES7+ ===
-      'main-heading-inline': () => <HeadingInlineBlock {...commonProps} />,
-      'image-inline': () => <ImageDisplayInlineBlock {...commonProps} />,
-      'stat-inline': () => <StatInlineBlock {...commonProps} />,
-      'pricing-card-inline': () => <PricingCardInlineBlock {...commonProps} />,
-      'testimonial-inline': () => <TestimonialCardInlineBlock {...commonProps} />,
-
-      // === BLOCOS QUIZ ESPECÍFICOS ES7+ ===
+      
+      // === COMPONENTES ESTRATÉGICOS ===
+      'strategic-question-image': () => <StrategicQuestionBlock {...commonProps} />,
+      'strategic-question-main': () => <StrategicQuestionBlock {...commonProps} />,
+      'strategic-question-inline': () => <StrategicQuestionBlock {...commonProps} />,
+      
+      // === BLOCOS QUIZ ESPECÍFICOS ===
       QuizQuestionBlock: () => <QuizQuestionBlock {...commonProps} />,
       QuestionMultipleBlock: () => <QuestionMultipleBlock {...commonProps} />,
       StrategicQuestionBlock: () => <StrategicQuestionBlock {...commonProps} />,
       QuizTransitionBlock: () => <QuizTransitionBlock {...commonProps} />,
       ResultPageBlock: () => <ResultPageBlock {...commonProps} />,
-
-      // === SCHEMA SERVICE MAPPINGS ES7+ ===
+      
+      // === MAPEAMENTOS ADICIONAIS ===
       'quiz-title': () => <HeadingInlineBlock {...commonProps} />,
       'quiz-name-input': () => <FormInputBlock {...commonProps} />,
-      'quiz-question-main': () => <QuestionMultipleBlock {...commonProps} />,
-      'quiz-transition-main': () => <QuizTransitionBlock {...commonProps} />,
-      'quiz-question-strategic': () => <StrategicQuestionBlock {...commonProps} />,
-      'quiz-transition-final': () => <QuizTransitionBlock {...commonProps} />,
       'quiz-result-header': () => <HeadingInlineBlock {...commonProps} />,
       'quiz-result-card': () => <PricingCardInlineBlock {...commonProps} />,
       'quiz-offer-title': () => <HeadingInlineBlock {...commonProps} />,
       'quiz-offer-countdown': () => <CountdownInlineBlock {...commonProps} />,
-      'quiz-offer-faq': () => <FAQSectionBlock {...commonProps} />,
-
-      // === NOVOS COMPONENTES MODULARES ETAPAS 20/21 ES7+ ===
-      'result-header-inline': () => <ResultHeaderInlineBlock {...commonProps} />,
-      'testimonials-result': () => <TestimonialsInlineBlock {...commonProps} />,
-      'quiz-offer-pricing': () => <QuizOfferPricingInlineBlock {...commonProps} />,
-      'countdown-timer': () => <CountdownInlineBlock {...commonProps} />,
-      'bonus-list': () => <BonusListInlineBlock {...commonProps} />,
-
-      // === ETAPA 20 - COMPONENTES RESULTADO MODULARES ES7+ (novos) ===
-      'before-after-inline': () => <ImageDisplayInlineBlock {...commonProps} />,
-      'divider-inline': () => <SpacerBlock {...commonProps} />,
-
-      // === ETAPA 21 - COMPONENTES FALTANTES ES7+ (únicos) ===
-      // Removidas duplicatas, mantidos apenas os únicos
+      'quiz-offer-faq': () => <FAQSectionBlock {...commonProps} />
     };
 
     // ES7+ Return com fallback usando optional chaining
