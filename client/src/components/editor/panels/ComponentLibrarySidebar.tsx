@@ -61,6 +61,9 @@ const ComponentLibrarySidebar: React.FC<ComponentLibrarySidebarProps> = ({
       case 'sales': return 'bg-green-100 text-green-700 border-green-200';
       case 'interaction': return 'bg-purple-100 text-purple-700 border-purple-200';
       case 'content': return 'bg-orange-100 text-orange-700 border-orange-200';
+      case 'layout': return 'bg-gray-100 text-gray-700 border-gray-200';
+      case 'media': return 'bg-pink-100 text-pink-700 border-pink-200';
+      case 'interactive': return 'bg-indigo-100 text-indigo-700 border-indigo-200';
       default: return 'bg-gray-100 text-gray-700 border-gray-200';
     }
   };
@@ -73,10 +76,6 @@ const ComponentLibrarySidebar: React.FC<ComponentLibrarySidebarProps> = ({
 
   // Obter componentes flexíveis
   const flexComponents = getAllFlexComponents();
-  const layoutFlexComponents = flexComponents.filter(c => c.category === 'layout');
-  const contentFlexComponents = flexComponents.filter(c => c.category === 'content');
-  const mediaFlexComponents = flexComponents.filter(c => c.category === 'media');
-  const interactiveFlexComponents = flexComponents.filter(c => c.category === 'interactive');
 
   const handleAddComponent = (component: EditableComponentConfig & { path: string }) => {
     onAddComponent?.(component);
@@ -84,139 +83,6 @@ const ComponentLibrarySidebar: React.FC<ComponentLibrarySidebarProps> = ({
 
   const handleAddFlexComponent = (component: FlexComponentConfig) => {
     onAddFlexComponent?.(component);
-  };
-
-  const renderFlexComponentItem = (component: FlexComponentConfig) => (
-    <Card 
-      key={component.type}
-      className="cursor-pointer hover:shadow-md transition-all duration-200 border-[#B89B7A]/20 hover:border-[#B89B7A]/40"
-    >
-      <CardContent className="p-4">
-        <div className="flex items-start gap-3">
-          <div className="w-8 h-8 rounded-lg bg-[#B89B7A]/10 flex items-center justify-center text-[#B89B7A]">
-            {getFlexComponentIcon(component.type)}
-          </div>
-          
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
-              <h4 className="font-medium text-sm text-[#432818] truncate">
-                {component.name}
-              </h4>
-              <div className="text-lg">
-                {component.icon}
-              </div>
-              <Badge 
-                variant="outline" 
-                className={cn("text-xs", getCategoryColor(component.category))}
-              >
-                {component.category}
-              </Badge>
-            </div>
-            
-            {component.description && (
-              <p className="text-xs text-[#8F7A6A] line-clamp-2 mb-2">
-                {component.description}
-              </p>
-            )}
-            
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1 text-xs text-[#6B5B4E]">
-                <span className="w-2 h-2 rounded-full bg-green-400"></span>
-                {component.editableFields.length} campos
-              </div>
-              
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => handleAddFlexComponent(component)}
-                className="h-7 px-2 text-xs border-[#B89B7A]/30 text-[#B89B7A] hover:bg-[#B89B7A]/5"
-              >
-                <Plus className="w-3 h-3 mr-1" />
-                Adicionar
-              </Button>
-            </div>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-    <Card 
-      key={component.path}
-      className="cursor-pointer hover:shadow-md transition-all duration-200 border-[#B89B7A]/20 hover:border-[#B89B7A]/40"
-    >
-      <CardContent className="p-4">
-        <div className="flex items-start gap-3">
-          <div className="w-8 h-8 rounded-lg bg-[#B89B7A]/10 flex items-center justify-center text-[#B89B7A]">
-            {getComponentIcon(component.path)}
-          </div>
-          
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
-              <h4 className="font-medium text-sm text-[#432818] truncate">
-                {component.componentName}
-              </h4>
-              <Badge 
-                variant="outline" 
-                className={cn("text-xs", getCategoryColor(component.category))}
-              >
-                {component.category}
-              </Badge>
-            </div>
-            
-            {component.description && (
-              <p className="text-xs text-[#8F7A6A] line-clamp-2 mb-2">
-                {component.description}
-              </p>
-            )}
-            
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1 text-xs text-[#6B5B4E]">
-                <span className="w-2 h-2 rounded-full bg-green-400"></span>
-                {component.editableFields.length} campos
-              </div>
-              
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => handleAddComponent(component)}
-                className="h-7 px-2 text-xs border-[#B89B7A]/30 text-[#B89B7A] hover:bg-[#B89B7A]/5"
-              >
-                <Plus className="w-3 h-3 mr-1" />
-                Adicionar
-              </Button>
-            </div>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-
-  const renderComponentSection = (
-    title: string, 
-    components: (EditableComponentConfig & { path: string })[], 
-    icon: React.ReactNode
-  ) => {
-    if (components.length === 0) return null;
-    
-    return (
-      <div className="space-y-3">
-        <div className="flex items-center gap-2">
-          <div className="w-5 h-5 text-[#B89B7A]">
-            {icon}
-          </div>
-          <h3 className="font-semibold text-sm text-[#432818]">
-            {title}
-          </h3>
-          <Badge variant="secondary" className="text-xs">
-            {components.length}
-          </Badge>
-        </div>
-        
-        <div className="space-y-2">
-          {components.map(renderComponentItem)}
-        </div>
-      </div>
-    );
   };
 
   return (
@@ -229,47 +95,147 @@ const ComponentLibrarySidebar: React.FC<ComponentLibrarySidebarProps> = ({
           Biblioteca de Componentes
         </CardTitle>
         <p className="text-sm text-[#8F7A6A]">
-          Arraste ou clique para adicionar componentes ao seu funil
+          🚀 Agora com componentes flexíveis para layouts horizontais!
         </p>
       </CardHeader>
       
-      <CardContent className="space-y-6">
-        {/* Componentes de Resultado */}
-        {renderComponentSection(
-          "Resultado & Motivação",
-          resultComponents,
-          <Lightbulb className="w-5 h-5" />
-        )}
+      <CardContent className="space-y-6 max-h-[calc(100vh-120px)] overflow-y-auto">
+        {/* Seção de Componentes Flexíveis */}
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 border border-blue-200">
+          <h2 className="font-bold text-[#432818] mb-4 flex items-center gap-2">
+            <Package className="w-5 h-5" />
+            🔥 Componentes Flexíveis (BoxFlex)
+          </h2>
+          
+          <div className="space-y-3">
+            {flexComponents.map(component => (
+              <Card 
+                key={component.type}
+                className="cursor-pointer hover:shadow-md transition-all duration-200 border-[#B89B7A]/20 hover:border-[#B89B7A]/40"
+              >
+                <CardContent className="p-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-[#B89B7A]/10 flex items-center justify-center text-[#B89B7A]">
+                      {getFlexComponentIcon(component.type)}
+                    </div>
+                    
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h4 className="font-medium text-sm text-[#432818] truncate">
+                          {component.name}
+                        </h4>
+                        <div className="text-lg">
+                          {component.icon}
+                        </div>
+                        <Badge 
+                          variant="outline" 
+                          className={cn("text-xs", getCategoryColor(component.category))}
+                        >
+                          {component.category}
+                        </Badge>
+                      </div>
+                      
+                      <p className="text-xs text-[#8F7A6A] line-clamp-2 mb-2">
+                        {component.description}
+                      </p>
+                      
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1 text-xs text-[#6B5B4E]">
+                          <span className="w-2 h-2 rounded-full bg-blue-400"></span>
+                          {component.editableFields.length} campos • Horizontal
+                        </div>
+                        
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleAddFlexComponent(component)}
+                          className="h-7 px-2 text-xs border-[#B89B7A]/30 text-[#B89B7A] hover:bg-[#B89B7A]/5"
+                        >
+                          <Plus className="w-3 h-3 mr-1" />
+                          Adicionar
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          
+          <div className="mt-4 p-3 bg-white/50 rounded border border-blue-300">
+            <h4 className="font-semibold text-xs text-blue-800 mb-1">✨ Características dos Componentes Flexíveis:</h4>
+            <ul className="text-xs text-blue-700 space-y-1">
+              <li>• 📐 <strong>Layout Horizontal:</strong> Podem ser colocados lado a lado</li>
+              <li>• 🔧 <strong>Totalmente Modulares:</strong> Configuração independente</li>
+              <li>• 🎨 <strong>Reutilizáveis:</strong> Use quantas vezes quiser</li>
+              <li>• ⚡ <strong>Performance:</strong> Renderização otimizada</li>
+            </ul>
+          </div>
+        </div>
         
         <Separator />
         
-        {/* Componentes de Vendas */}
-        {renderComponentSection(
-          "Vendas & Conversão",
-          salesComponents,
-          <Gift className="w-5 h-5" />
-        )}
-        
-        <Separator />
-        
-        {/* Componentes de Interação */}
-        {renderComponentSection(
-          "Interação & Engajamento",
-          interactionComponents,
-          <MessageSquareQuote className="w-5 h-5" />
-        )}
-        
-        {/* Componentes de Conteúdo */}
-        {contentComponents.length > 0 && (
-          <>
-            <Separator />
-            {renderComponentSection(
-              "Conteúdo & Mídia",
-              contentComponents,
-              <Plus className="w-5 h-5" />
-            )}
-          </>
-        )}
+        {/* Componentes Originais */}
+        <div>
+          <h2 className="font-bold text-[#432818] mb-4 flex items-center gap-2">
+            <Shield className="w-5 h-5" />
+            Componentes do Sistema (Verticais)
+          </h2>
+          
+          <div className="space-y-3">
+            {[...resultComponents, ...salesComponents, ...interactionComponents, ...contentComponents].map(component => (
+              <Card 
+                key={component.path}
+                className="cursor-pointer hover:shadow-md transition-all duration-200 border-[#B89B7A]/20 hover:border-[#B89B7A]/40"
+              >
+                <CardContent className="p-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-[#B89B7A]/10 flex items-center justify-center text-[#B89B7A]">
+                      {getComponentIcon(component.path)}
+                    </div>
+                    
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h4 className="font-medium text-sm text-[#432818] truncate">
+                          {component.componentName}
+                        </h4>
+                        <Badge 
+                          variant="outline" 
+                          className={cn("text-xs", getCategoryColor(component.category))}
+                        >
+                          {component.category}
+                        </Badge>
+                      </div>
+                      
+                      {component.description && (
+                        <p className="text-xs text-[#8F7A6A] line-clamp-2 mb-2">
+                          {component.description}
+                        </p>
+                      )}
+                      
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1 text-xs text-[#6B5B4E]">
+                          <span className="w-2 h-2 rounded-full bg-green-400"></span>
+                          {component.editableFields.length} campos • Vertical
+                        </div>
+                        
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleAddComponent(component)}
+                          className="h-7 px-2 text-xs border-[#B89B7A]/30 text-[#B89B7A] hover:bg-[#B89B7A]/5"
+                        >
+                          <Plus className="w-3 h-3 mr-1" />
+                          Adicionar
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
         
         <Separator />
         
@@ -280,16 +246,27 @@ const ComponentLibrarySidebar: React.FC<ComponentLibrarySidebarProps> = ({
           </h4>
           <div className="grid grid-cols-2 gap-4 text-xs">
             <div>
-              <div className="text-[#8F7A6A]">Total de Componentes</div>
+              <div className="text-[#8F7A6A]">Componentes Sistema</div>
               <div className="font-semibold text-[#432818]">
                 {resultComponents.length + salesComponents.length + interactionComponents.length + contentComponents.length}
               </div>
             </div>
             <div>
-              <div className="text-[#8F7A6A]">Editáveis</div>
+              <div className="text-[#8F7A6A]">Componentes Flexíveis</div>
               <div className="font-semibold text-[#432818]">
-                {[...resultComponents, ...salesComponents, ...interactionComponents, ...contentComponents]
-                  .filter(c => c.editable).length}
+                {flexComponents.length}
+              </div>
+            </div>
+            <div>
+              <div className="text-[#8F7A6A]">Layouts Horizontais</div>
+              <div className="font-semibold text-[#432818]">
+                {flexComponents.filter(c => c.category === 'layout').length}
+              </div>
+            </div>
+            <div>
+              <div className="text-[#8F7A6A]">Total Editáveis</div>
+              <div className="font-semibold text-[#432818]">
+                {resultComponents.length + salesComponents.length + interactionComponents.length + contentComponents.length + flexComponents.length}
               </div>
             </div>
           </div>
@@ -302,7 +279,7 @@ const ComponentLibrarySidebar: React.FC<ComponentLibrarySidebarProps> = ({
               💡
             </div>
             <div className="text-xs text-blue-700">
-              <strong>Dica:</strong> Componentes com badge "Editável" podem ter suas propriedades customizadas no painel da direita após serem adicionados.
+              <strong>Como usar:</strong> Os <strong>Componentes Flexíveis</strong> são modulares e independentes. Use o <strong>Container Flexível</strong> para organizar outros componentes horizontalmente. Cada componente é totalmente reutilizável!
             </div>
           </div>
         </div>
