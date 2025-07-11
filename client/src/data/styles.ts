@@ -85,3 +85,7 @@ export const getStyleByCode = (code: string): StyleResult | undefined => {
 export const getStyleByName = (name: string): StyleResult | undefined => {
   return styles.find(style => style.name === name || style.category === name);
 };
+
+export const getStyleById = (id: string): StyleResult | undefined => {
+  return styles.find(style => style.id === id || style.style === id);
+};

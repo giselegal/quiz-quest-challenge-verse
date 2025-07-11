@@ -8,7 +8,7 @@ const SchemaDrivenEditorPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <SchemaDrivenEditorResponsive funnelId={funnelId} />
+      <SchemaDrivenEditorResponsive />
     </div>
   );
 };
