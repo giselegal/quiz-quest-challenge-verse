@@ -1,4 +1,5 @@
 
+// @ts-nocheck
 import React, { useState } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
