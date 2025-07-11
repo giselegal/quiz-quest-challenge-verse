@@ -1,55 +1,56 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { Badge } from '@/components/ui/badge';
 
-export const SupabaseConnectionTest: React.FC = () => {
-  const [status, setStatus] = useState<'checking' | 'connected' | 'error'>('checking');
-  const [details, setDetails] = useState<string>('');
+export function SupabaseConnectionTest() {
+  const [status, setStatus] = useState<'connecting' | 'connected' | 'error'>('connecting');
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const checkConnection = async () => {
+    const testConnection = async () => {
       try {
-        const { data, error } = await supabase.from('quizzes').select('count').limit(1);
+        const { data, error: supabaseError } = await supabase
+          .from('quizzes')
+          .select('count')
+          .limit(1);
         
-        if (error) {
-          setStatus('error');
-          setDetails(error.message);
-        } else {
-          setStatus('connected');
-          setDetails('Database connected successfully');
+        if (supabaseError) {
+          throw supabaseError;
         }
-      } catch (error) {
+        
+        setStatus('connected');
+      } catch (err) {
+        console.error('Supabase connection error:', err);
+        setError(err instanceof Error ? err.message : 'Connection failed');
         setStatus('error');
-        setDetails(error instanceof Error ? error.message : 'Unknown error');
       }
     };
 
-    checkConnection();
+    testConnection();
   }, []);
 
-  const getStatusColor = () => {
-    switch (status) {
-      case 'connected': return 'bg-green-500';
-      case 'error': return 'bg-red-500';
-      default: return 'bg-yellow-500';
-    }
-  };
-
   return (
-    <div className="p-2 bg-white rounded-md shadow-sm border">
-      <div className="flex items-center gap-2">
-        <div className={`w-2 h-2 rounded-full ${getStatusColor()}`} />
-        <Badge variant="outline" className="text-xs">
-          {status === 'checking' ? 'Checking...' : 
-           status === 'connected' ? 'Connected' : 'Error'}
-        </Badge>
-      </div>
-      {details && (
-        <p className="text-xs text-gray-600 mt-1 truncate" title={details}>
-          {details}
-        </p>
+    <div className="p-8 max-w-md mx-auto">
+      <h2 className="text-2xl font-bold mb-4">Supabase Connection Test</h2>
+      
+      {status === 'connecting' && (
+        <div className="text-blue-600">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-2"></div>
+          Connecting to Supabase...
+        </div>
+      )}
+      
+      {status === 'connected' && (
+        <div className="text-green-600">
+          ✅ Connected to Supabase successfully!
+        </div>
+      )}
+      
+      {status === 'error' && (
+        <div className="text-red-600">
+          ❌ Connection failed: {error}
+        </div>
       )}
     </div>
   );
-};
+}

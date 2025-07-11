@@ -5,6 +5,7 @@ interface User {
   id: string;
   email: string;
   name?: string;
+  userName?: string;
 }
 
 interface AuthContextType {
@@ -37,7 +38,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const savedUser = localStorage.getItem('user');
     if (savedUser) {
       try {
-        setUser(JSON.parse(savedUser));
+        const parsedUser = JSON.parse(savedUser);
+        // Ensure userName is available
+        if (parsedUser && !parsedUser.userName && parsedUser.name) {
+          parsedUser.userName = parsedUser.name;
+        }
+        setUser(parsedUser);
       } catch (error) {
         console.error('Error parsing saved user:', error);
         localStorage.removeItem('user');
@@ -54,7 +60,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const mockUser: User = {
           id: '1',
           email,
-          name: email.split('@')[0]
+          name: email.split('@')[0],
+          userName: email.split('@')[0]
         };
         setUser(mockUser);
         localStorage.setItem('user', JSON.stringify(mockUser));
