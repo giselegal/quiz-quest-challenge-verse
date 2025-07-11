@@ -7,6 +7,8 @@ interface OptimizedImageProps {
   className?: string;
   onLoad?: () => void;
   priority?: boolean;
+  width?: number;
+  height?: number;
 }
 
 const OptimizedImage: React.FC<OptimizedImageProps> = ({
@@ -14,7 +16,9 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   alt,
   className,
   onLoad,
-  priority
+  priority,
+  width,
+  height
 }) => {
   return (
     <img 
@@ -23,6 +27,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       className={className}
       onLoad={onLoad}
       loading={priority ? 'eager' : 'lazy'}
+      width={width}
+      height={height}
     />
   );
 };

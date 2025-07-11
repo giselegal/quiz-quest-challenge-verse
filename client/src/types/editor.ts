@@ -1,53 +1,48 @@
 
-export interface EditorBlock {
-  id: string;
-  type: string;
-  content: EditableContent;
-  order?: number;
-  properties?: any;
-}
-
-export interface Block {
-  id: string;
-  type: string;
-  content: any;
-  order: number;
-}
-
 export interface EditableContent {
   title?: string;
   subtitle?: string;
+  description?: string;
   text?: string;
-  items?: string[];
-  buttonText?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  logoUrl?: string;
+  logoHeight?: number;
+  question?: string;
+  progressPercent?: number;
+  showBackButton?: boolean;
+  multipleSelection?: boolean;
+  maxSelections?: number;
+  optionLayout?: 'grid' | 'list';
+  showImages?: boolean;
+  regularPrice?: string;
   salePrice?: string;
+  ctaText?: string;
+  ctaUrl?: string;
+  url?: string;
+  customImage?: string;
+  backgroundColor?: string;
   textColor?: string;
-  alignment?: string;
-  logo?: string;
-  logoAlt?: string;
-  heroImage?: string;
-  heroImageAlt?: string;
-  quote?: string;
-  quoteAuthor?: string;
-  bonusImages?: Array<{
-    url: string;
-    alt: string;
-    title?: string;
+  buttonColor?: string;
+  buttonTextColor?: string;
+  options?: Array<{
+    id: string;
+    text: string;
+    imageUrl?: string;
   }>;
 }
 
 export type BlockType = 
-  | 'headline' 
-  | 'text' 
+  | 'header' 
+  | 'quiz-question' 
+  | 'progress' 
+  | 'navigation' 
+  | 'quiz-options' 
   | 'image' 
-  | 'benefits' 
-  | 'testimonials' 
+  | 'text' 
+  | 'cta' 
   | 'pricing' 
-  | 'guarantee' 
-  | 'cta'
-  | 'header'
-  | 'hero'
-  | 'bonus-carousel'
+  | 'style-result'
   | 'video'
   | 'two-column'
   | 'icon'
@@ -56,6 +51,23 @@ export type BlockType =
   | 'custom-code'
   | 'animation-block';
 
+export interface Block {
+  id: string;
+  type: BlockType;
+  content: EditableContent;
+  order: number;
+  isSelected?: boolean;
+}
+
+export interface EditorBlock extends Block {
+  // EditorBlock is now compatible with Block
+}
+
 export interface EditorConfig {
-  blocks: EditorBlock[];
+  blocks: Block[];
+}
+
+export interface ModernPropertyPanelProps {
+  block: Block | null;
+  onUpdate: (updates: Partial<Block>) => void;
 }
