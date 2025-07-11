@@ -1,59 +1,28 @@
 
 export interface OptimizedImageOptions {
+  quality?: number;
   width?: number;
   height?: number;
-  quality?: number;
-  batchSize?: number;
 }
 
 export interface ImageMetadata {
-  width: number;
-  height: number;
-  format: string;
-  size: number;
+  width?: number;
+  height?: number;
+  title?: string;
 }
 
-// Mock functions for image optimization
-export const getOptimizedImage = async (
-  src: string, 
-  options: OptimizedImageOptions = {}
-): Promise<{ src: string; width?: number; height?: number; alt?: string }> => {
-  // For now, return the original src
-  return { 
-    src, 
-    width: options.width, 
-    height: options.height 
+export const isImagePreloaded = (url: string): boolean => {
+  return false;
+};
+
+export const getOptimizedImage = (url: string, options: OptimizedImageOptions = {}): string => {
+  return url;
+};
+
+export const getImageMetadata = (url: string): ImageMetadata | null => {
+  return {
+    width: 400,
+    height: 300,
+    title: 'Image'
   };
-};
-
-export const getOptimizedImageUrl = (src: string, options: OptimizedImageOptions = {}): string => {
-  // For now, return the original src
-  return src;
-};
-
-export const getLowQualityPlaceholder = (src: string): string => {
-  // Return a placeholder or the original image
-  return src;
-};
-
-export const preloadCriticalImages = (
-  categories: string[], 
-  options: OptimizedImageOptions = {}
-): void => {
-  console.log('Preloading critical images for categories:', categories);
-};
-
-export const preloadImagesByUrls = (
-  urls: string[], 
-  options: OptimizedImageOptions = {}
-): void => {
-  console.log('Preloading images by URLs:', urls);
-};
-
-export const isImagePreloaded = (src: string): boolean => {
-  return false; // Mock implementation
-};
-
-export const getImageMetadata = (src: string): ImageMetadata | null => {
-  return null; // Mock implementation
 };

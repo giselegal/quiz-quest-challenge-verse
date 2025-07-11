@@ -1,48 +1,61 @@
 
+export interface EditorBlock {
+  id: string;
+  type: string;
+  content: EditableContent;
+  order?: number;
+  properties?: any;
+}
+
+export interface Block {
+  id: string;
+  type: string;
+  content: any;
+  order: number;
+}
+
+export interface EditableContent {
+  title?: string;
+  subtitle?: string;
+  text?: string;
+  items?: string[];
+  buttonText?: string;
+  salePrice?: string;
+  textColor?: string;
+  alignment?: string;
+  logo?: string;
+  logoAlt?: string;
+  heroImage?: string;
+  heroImageAlt?: string;
+  quote?: string;
+  quoteAuthor?: string;
+  bonusImages?: Array<{
+    url: string;
+    alt: string;
+    title?: string;
+  }>;
+}
+
 export type BlockType = 
   | 'headline' 
   | 'text' 
   | 'image' 
-  | 'button' 
-  | 'spacer' 
-  | 'divider'
-  | 'testimonial'
-  | 'testimonials'
-  | 'benefits'
-  | 'offer'
-  | 'guarantee'
-  | 'pricing'
+  | 'benefits' 
+  | 'testimonials' 
+  | 'pricing' 
+  | 'guarantee' 
   | 'cta'
   | 'header'
-  | 'hero-section'
+  | 'hero'
   | 'bonus-carousel'
-  | 'style-result'
-  | 'secondary-styles'
-  | 'products'
-  | 'quiz-question'
-  | 'component-reference';
+  | 'video'
+  | 'two-column'
+  | 'icon'
+  | 'faq'
+  | 'carousel'
+  | 'custom-code'
+  | 'animation-block';
 
-export interface EditableContent {
-  [key: string]: any;
-}
-
-export interface PropertySchema {
-  [key: string]: {
-    type: string;
-    label: string;
-    default?: any;
-    options?: any[];
-  };
-}
-
-export interface EditorBlock {
-  id: string;
-  type: BlockType;
-  content: EditableContent;
-  order: number;
-  properties?: EditableContent;
-}
-
-export interface Block extends EditorBlock {
-  properties?: EditableContent;
+export interface EditorConfig {
+  blocks: EditorBlock[];
 }

@@ -1,3 +1,4 @@
+
 /**
  * Editor Components Index
  * Exportações centralizadas dos componentes do editor
@@ -19,8 +20,8 @@ export { EditorBlockItem } from './EditorBlockItem';
 export { EditBlockContent } from './EditBlockContent';
 export { EmptyEditor } from './EmptyEditor';
 
-// Painéis de propriedades (export named)
-export { PropertyPanel } from './PropertyPanel';
+// Painéis de propriedades (export default - fixing the import issue)
+export { default as PropertyPanel } from './PropertyPanel';
 export { ModernPropertyPanel } from './ModernPropertyPanel';
 
 // Layouts responsivos (export default)
