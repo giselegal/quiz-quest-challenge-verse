@@ -1,5 +1,5 @@
 import type { BlockData } from '@/components/editor/blocks';
-import { REAL_QUIZ_QUESTIONS, STRATEGIC_QUESTIONS } from '@/data/realQuizQuestions';
+import { REAL_QUIZ_QUESTIONS, STRATEGIC_QUESTIONS } from '@/data/quizQuestions';
 import { QuizDataAdapter } from './quizDataAdapter';
 import { LocalStorageFixer } from '@/utils/fixLocalStorageIssues';
 import { CloudinaryImageFixer } from '@/utils/cloudinaryImageFixer';
@@ -1608,6 +1608,42 @@ class SchemaDrivenFunnelService {
 
     console.log(`✅ [ES7+] Criadas ${pages.length} etapas modulares (1-21)`);
     return pages;
+  }
+
+  // Utility methods
+  createDefaultFunnel(): SchemaDrivenFunnelData {
+    const now = new Date();
+    
+    return {
+      id: `funnel-${Date.now()}`,
+      name: 'Quiz CaktoQuiz - Descubra Seu Estilo',
+      description: 'Funil completo para descoberta do estilo pessoal - 21 etapas modulares',
+      theme: 'caktoquiz',
+      isPublished: false,
+      pages: this.createModularPages(),
+      config: {
+        name: 'Quiz CaktoQuiz - Descubra Seu Estilo',
+        description: 'Funil completo para descoberta do estilo pessoal - 21 etapas modulares',
+        isPublished: false,
+        theme: 'caktoquiz',
+        primaryColor: '#B89B7A',
+        secondaryColor: '#432818',
+        fontFamily: 'Inter, sans-serif',
+        analytics: {
+          trackingId: 'FB_PIXEL_ID',
+          events: ['page_view', 'quiz_start', 'quiz_complete', 'conversion'],
+          conversionGoals: ['quiz_completion', 'purchase']
+        },
+        seo: {
+          title: 'Descubra Seu Estilo Pessoal - Quiz CaktoQuiz',
+          description: 'Descubra seu estilo pessoal em poucos minutos com nosso quiz especializado.',
+          keywords: ['estilo pessoal', 'moda', 'quiz', 'consultoria']
+        }
+      },
+      version: 1,
+      lastModified: now,
+      createdAt: now
+    };
   }
 
   /**
