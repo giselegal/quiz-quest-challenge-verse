@@ -5,14 +5,19 @@ export interface StyleResult {
   points: number;
   percentage: number;
   rank: number;
+  score: number;
 }
 
 export interface QuizQuestion {
   id: string;
   text: string;
-  type: 'single' | 'multiple' | 'strategic';
+  title?: string;
+  question?: string;
+  type: 'single' | 'multiple' | 'strategic' | 'text' | 'image' | 'both';
   options: QuizOption[];
   maxSelections?: number;
+  multiSelect?: number;
+  imageUrl?: string;
 }
 
 export interface QuizOption {
@@ -20,6 +25,8 @@ export interface QuizOption {
   text: string;
   points: { [styleType: string]: number };
   image?: string;
+  imageUrl?: string;
+  styleCategory?: string;
 }
 
 export interface UserResponse {
@@ -38,6 +45,12 @@ export interface ResultPageConfig {
       content?: any;
     };
   };
+}
+
+// Adicionar QuizResult que estava faltando
+export interface QuizResult {
+  primaryStyle: StyleResult;
+  secondaryStyles: StyleResult[];
 }
 
 // Tipos específicos do Supabase

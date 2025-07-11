@@ -1,68 +1,20 @@
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 interface User {
-  id: string;
   userName: string;
+  id?: string;
   email?: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  setUser: (user: User | null) => void;
-  login: (userData: User) => void;
+  login: (userName: string) => void;
   logout: () => void;
-  isLoading: boolean;
+  isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // Recuperar dados do usuário do localStorage
-    const savedUser = localStorage.getItem('user');
-    const userName = localStorage.getItem('userName');
-    
-    if (savedUser) {
-      try {
-        setUser(JSON.parse(savedUser));
-      } catch (error) {
-        console.error('Error parsing saved user:', error);
-      }
-    } else if (userName) {
-      setUser({ id: 'temp', userName });
-    }
-    
-    setIsLoading(false);
-  }, []);
-
-  const login = (userData: User) => {
-    setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
-    localStorage.setItem('userName', userData.userName);
-  };
-
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('user');
-    localStorage.removeItem('userName');
-  };
-
-  return (
-    <AuthContext.Provider value={{
-      user,
-      setUser,
-      login,
-      logout,
-      isLoading
-    }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -70,4 +22,39 @@ export const useAuth = () => {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
+};
+
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    // Verificar se há um usuário salvo no localStorage
+    const savedUserName = localStorage.getItem('userName');
+    if (savedUserName) {
+      setUser({ userName: savedUserName });
+    }
+  }, []);
+
+  const login = (userName: string) => {
+    const newUser: User = { userName };
+    setUser(newUser);
+    localStorage.setItem('userName', userName);
+  };
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem('userName');
+  };
+
+  const isAuthenticated = !!user;
+
+  return (
+    <AuthContext.Provider value={{ user, login, logout, isAuthenticated }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };

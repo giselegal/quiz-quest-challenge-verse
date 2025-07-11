@@ -62,12 +62,12 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     onAnswer({ 
       questionId: question.id,
       selectedOptions: newSelectedOptions,
-      timestamp: new Date()
+      timestamp: Date.now()
     });
   };
   
   const getGridColumns = () => {
-    if (question.type === 'text') {
+    if (question.type === 'single' || question.type === 'multiple') {
       if (isStrategicQuestion) {
         return "grid-cols-1 gap-3 px-2";
       }
@@ -76,15 +76,11 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     return isMobile ? "grid-cols-2 gap-1 px-0.5" : "grid-cols-2 gap-3 px-2";
   };
   
-  // Fixed: Filter out invalid question types
-  const validTypes: Array<'text' | 'both' | 'image'> = ['text', 'both', 'image'];
-  const questionType = validTypes.includes(question.type as any) ? question.type as 'text' | 'both' | 'image' : 'text';
-  
   return (
     <div className={cn("w-full max-w-6xl mx-auto pb-5 relative", 
       isMobile && "px-2", 
       isStrategicQuestion && "max-w-3xl strategic-question",
-      question.type === 'text' && !isStrategicQuestion && "text-only-question"
+      (question.type === 'single' || question.type === 'multiple') && !isStrategicQuestion && "text-only-question"
     )} id={`question-${question.id}`}>
       {!hideTitle && (
         <>
@@ -93,9 +89,9 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             isMobile ? "text-base" : "text-base sm:text-xl",
             isStrategicQuestion && "strategic-question-title text-[#432818] mb-6 font-bold whitespace-pre-line",
             isStrategicQuestion && isMobile && "text-[1.25rem] sm:text-2xl",
-            question.type === 'text' && !isStrategicQuestion && "text-[1.15rem] sm:text-xl"
+            (question.type === 'single' || question.type === 'multiple') && !isStrategicQuestion && "text-[1.15rem] sm:text-xl"
           )}>
-            {highlightStrategicWords(question.title || question.question)}
+            {highlightStrategicWords(question.title || question.text)}
           </h2>
           
           {isStrategicQuestion && question.imageUrl && !imageError && showQuestionImage && (
@@ -131,7 +127,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
               option={option} 
               isSelected={currentAnswers.includes(option.id)} 
               onSelect={handleOptionSelect}
-              type={questionType}
+              type={question.type as 'text' | 'image' | 'both'}
               questionId={question.id}
               isDisabled={
                 (isStrategicQuestion && currentAnswers.length > 0 && !currentAnswers.includes(option.id)) || 

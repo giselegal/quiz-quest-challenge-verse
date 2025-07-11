@@ -2,19 +2,21 @@
 import React from 'react';
 
 interface LogoProps {
-  src: string;
-  alt: string;
+  src?: string;
+  alt?: string;
   className?: string;
-  style?: React.CSSProperties;
 }
 
-const Logo: React.FC<LogoProps> = ({ src, alt, className = '', style }) => {
+const Logo: React.FC<LogoProps> = ({ 
+  src = '/lovable-uploads/9f029fbb-cabe-48ef-9877-aad214e94c60.png', 
+  alt = 'Logo',
+  className = '' 
+}) => {
   return (
     <img 
       src={src} 
       alt={alt} 
-      className={`object-contain ${className}`}
-      style={style}
+      className={className}
     />
   );
 };
