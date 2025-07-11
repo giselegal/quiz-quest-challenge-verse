@@ -4,6 +4,30 @@ import { BorderRadiusType } from '@/types/styleTypes';
 
 export const getDefaultContentForType = (type: BlockType): EditableContent => {
   switch (type) {
+    case 'quiz-question':
+      return {
+        question: 'Etapa 1: Qual dessas opções representa melhor seu estilo predominante?',
+        options: [
+          { id: '1', text: 'Clássico e elegante', imageUrl: 'https://res.cloudinary.com/dtx0k4ue6/image/upload/v1710847234/estilo-classico_urkpfx.jpg' },
+          { id: '2', text: 'Moderno e descolado', imageUrl: 'https://res.cloudinary.com/dtx0k4ue6/image/upload/v1710847235/estilo-moderno_hqxmzv.jpg' },
+          { id: '3', text: 'Natural e autêntico', imageUrl: 'https://res.cloudinary.com/dtx0k4ue6/image/upload/v1710847236/estilo-natural_wnxkdi.jpg' },
+          { id: '4', text: 'Casual e descontraído' }
+        ],
+        allowMultiple: true,
+        showImages: true,
+        maxSelections: 3,
+        autoAdvance: true,
+        autoAdvanceDelay: 1500,
+        progressPercent: 15,
+        logoUrl: 'https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png',
+        style: {
+          backgroundColor: '#ffffff',
+          color: '#432818',
+          paddingY: '24px',
+          paddingX: '16px',
+          borderRadius: 'md' as BorderRadiusType
+        }
+      };
     case 'headline':
       return {
         title: 'Título Principal',

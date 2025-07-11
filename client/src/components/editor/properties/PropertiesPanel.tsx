@@ -51,6 +51,68 @@ const PropertiesPanel = ({
         {/* Content Properties */}
         <div className="space-y-4">
           <h3 className="text-sm font-medium text-[#432818]">Conteúdo</h3>
+          
+          {selectedBlock.type === 'quiz-question' && (
+            <>
+              <div>
+                <label className="text-sm text-[#8F7A6A]">Pergunta</label>
+                <textarea
+                  className="w-full mt-1 p-2 border rounded"
+                  value={selectedBlock.content.question || ''}
+                  onChange={(e) => onUpdate?.({ question: e.target.value })}
+                  placeholder="Digite sua pergunta aqui..."
+                  rows={3}
+                />
+              </div>
+              <div>
+                <label className="text-sm text-[#8F7A6A]">Múltipla Seleção</label>
+                <div className="flex items-center mt-1">
+                  <input
+                    type="checkbox"
+                    checked={selectedBlock.content.allowMultiple || false}
+                    onChange={(e) => onUpdate?.({ allowMultiple: e.target.checked })}
+                    className="mr-2"
+                  />
+                  <span className="text-sm">Permitir múltiplas seleções</span>
+                </div>
+              </div>
+              <div>
+                <label className="text-sm text-[#8F7A6A]">Máximo de Seleções</label>
+                <input
+                  type="number"
+                  min="1"
+                  max="10"
+                  className="w-full mt-1 p-2 border rounded"
+                  value={selectedBlock.content.maxSelections || 3}
+                  onChange={(e) => onUpdate?.({ maxSelections: parseInt(e.target.value) })}
+                />
+              </div>
+              <div>
+                <label className="text-sm text-[#8F7A6A]">Progresso (%)</label>
+                <input
+                  type="number"
+                  min="0"
+                  max="100"
+                  className="w-full mt-1 p-2 border rounded"
+                  value={selectedBlock.content.progressPercent || 0}
+                  onChange={(e) => onUpdate?.({ progressPercent: parseInt(e.target.value) })}
+                />
+              </div>
+              <div>
+                <label className="text-sm text-[#8F7A6A]">Auto-avanço</label>
+                <div className="flex items-center mt-1">
+                  <input
+                    type="checkbox"
+                    checked={selectedBlock.content.autoAdvance || false}
+                    onChange={(e) => onUpdate?.({ autoAdvance: e.target.checked })}
+                    className="mr-2"
+                  />
+                  <span className="text-sm">Avanço automático ativado</span>
+                </div>
+              </div>
+            </>
+          )}
+
           {selectedBlock.type === 'image' && (
             <>
               <div>

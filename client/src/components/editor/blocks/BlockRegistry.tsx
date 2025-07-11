@@ -12,6 +12,7 @@ import ComparisonTableBlock from './ComparisonTableBlock';
 import SocialProofBlock from './SocialProofBlock';
 import AdvancedCTABlock from './AdvancedCTABlock';
 import StatsMetricsBlock from './StatsMetricsBlock';
+import QuizQuestionBlock from './QuizQuestionBlock';
 
 // Legacy blocks - can be imported if they exist
 // import OptionsGridBlock from './OptionsGridBlock';
@@ -33,6 +34,9 @@ export const BLOCK_COMPONENTS: Record<string, BlockComponent> = {
   'social-proof': SocialProofBlock as BlockComponent,
   'advanced-cta': AdvancedCTABlock as BlockComponent,
   'stats-metrics': StatsMetricsBlock as BlockComponent,
+  
+  // Quiz blocks
+  'quiz-question': QuizQuestionBlock as BlockComponent,
   
   // Legacy blocks (if they exist)
   // 'options-grid': OptionsGridBlock,

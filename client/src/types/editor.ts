@@ -21,6 +21,7 @@ export type BlockType =
   | 'carousel'
   | 'bonus'
   | 'guarantee'
+  | 'quiz-question'
   | string;
 
 // Add missing EditorBlock type which was imported across many files
@@ -44,6 +45,19 @@ export interface EditableContent {
   buttonUrl?: string;
   description?: string;
   items?: any[];
+  
+  // Quiz Question properties
+  question?: string;
+  options?: Array<{ id: string; text: string; imageUrl?: string }>;
+  allowMultiple?: boolean;
+  showImages?: boolean;
+  maxSelections?: number;
+  autoAdvance?: boolean;
+  autoAdvanceDelay?: number;
+  progressPercent?: number;
+  logoUrl?: string;
+  alignment?: 'left' | 'center' | 'right';
+  
   style?: {
     color?: string;
     backgroundColor?: string;

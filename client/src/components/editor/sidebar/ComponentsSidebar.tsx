@@ -14,7 +14,8 @@ import {
   Gift,
   LayoutTemplate,
   Quote,
-  ImagePlus
+  ImagePlus,
+  HelpCircle
 } from 'lucide-react';
 import { EditorBlock } from '@/types/editor';
 
@@ -37,6 +38,7 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
     { type: 'pricing', label: 'Preço', icon: DollarSign },
     { type: 'guarantee', label: 'Garantia', icon: Shield },
     { type: 'cta', label: 'Botão CTA', icon: MousePointer },
+    { type: 'quiz-question', label: 'Questão do Quiz', icon: HelpCircle },
     { type: 'style-result', label: 'Resultado do Estilo', icon: Award },
     { type: 'secondary-styles', label: 'Estilos Secundários', icon: Layout },
     { type: 'bonus', label: 'Bônus', icon: Gift }
