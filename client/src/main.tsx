@@ -9,6 +9,7 @@ import {
 } from "./utils/preloadResources";
 import { fixMainRoutes } from "./utils/fixMainRoutes";
 import { checkMainRoutes } from "./utils/routeChecker";
+import "./utils/consoleErrorFilter"; // Filtro para reduzir logs externos desnecessários
 // import "./utils/hotmartWebhookSimulator"; // Carregar simulador de webhook - temporariamente desabilitado
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
