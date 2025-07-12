@@ -27,6 +27,7 @@ import SyncManagementPage from "./pages/admin/SyncManagementPage";
 // Editor Pages
 import SimpleDragDropEditor from "./pages/SimpleDragDropEditor";
 import EditorVisualPage from "./pages/EditorVisualPage";
+import SchemaDrivenEditorPage from "./pages/SchemaDrivenEditorPage";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,9 @@ function App() {
                   {/* Editor Routes */}
                   <Route path="/simple-editor" element={<SimpleDragDropEditor />} />
                   <Route path="/editor-visual" element={<EditorVisualPage />} />
+                  <Route path="/editor" element={<SchemaDrivenEditorPage />} />
+                  <Route path="/quiz" element={<QuizPage />} />
+                  <Route path="/resultado" element={<ResultPage />} />
                   
                   {/* Admin Routes */}
                   <Route path="/admin" element={<AdminDashboard />} />
