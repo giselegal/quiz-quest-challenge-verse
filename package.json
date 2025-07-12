@@ -1,5 +1,5 @@
 {
-  "name": "rest-express",
+  "name": "quiz-quest-challenge-verse",
   "version": "1.0.0",
   "type": "module",
   "license": "MIT",
@@ -14,7 +14,9 @@
     "db:push": "drizzle-kit push",
     "lovable:prepare": "echo 'Preparando ambiente para desenvolvimento' && npm install",
     "lovable:setup": "./setup-lovable.sh",
-    "lovable:dev": "npm run dev:lovable"
+    "lovable:dev": "npm run dev:lovable",
+    "lovable:build": "npm run build:lovable",
+    "lovable:deploy": "npm run build && echo 'Deploy configurado para Lovable.dev'"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
