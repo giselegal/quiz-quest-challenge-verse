@@ -89,7 +89,7 @@ export interface QuizResult {
 
 // Alias para compatibilidade
 export interface StyleResult extends StyleScore {
-  category: string;
+  category?: string;
   score: number;
   description?: string;
   imageUrl?: string;

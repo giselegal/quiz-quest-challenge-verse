@@ -18,7 +18,7 @@ const RESULT_CRITICAL_IMAGES = [
 
 interface StrategicQuestionsProps {
   currentQuestionIndex: number;
-  answers: Record<string, string[]>;
+  answers: string[] | Record<string, string[]>;
   onAnswer: (response: UserResponse) => void;
 }
 
@@ -98,7 +98,7 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
       <QuizQuestion
         question={strategicQuestions[currentQuestionIndex]}
         onAnswer={onAnswer}
-        currentAnswers={answers[strategicQuestions[currentQuestionIndex].id] || []}
+        currentAnswers={Array.isArray(answers) ? answers : (answers[strategicQuestions[currentQuestionIndex].id] || [])}
         autoAdvance={false}
         showQuestionImage={true}
         isStrategicQuestion={true}

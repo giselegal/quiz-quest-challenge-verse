@@ -10,7 +10,7 @@ import { loadFacebookPixelDynamic } from "./utils/facebookPixelDynamic";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import CriticalCSSLoader from "./components/CriticalCSSLoader";
 import { initialCriticalCSS, heroCriticalCSS } from "./utils/critical-css";
-import { AdminRoute } from "./components/admin/AdminRoute";
+// import { AdminRoute } from "./components/admin/AdminRoute";
 
 // Componente de loading para Suspense
 const LoadingFallback = () => (
@@ -34,7 +34,7 @@ const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
 
 // Editor Principal - Consolidado
 const SchemaDrivenEditorPage = lazy(() => import("./pages/SchemaDrivenEditorPage"));
-const BlockDefinitionsTest = lazy(() => import("./components/editor/tests/BlockDefinitionsTest"));
+// const BlockDefinitionsTest = lazy(() => import("./components/editor/tests/BlockDefinitionsTest"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App = () => {
@@ -96,21 +96,8 @@ const App = () => {
                   component={SchemaDrivenEditorPage}
                 />
                 
-                {/* Teste de definições de blocos */}
-                <Route
-                  path="/test-blocks"
-                  component={BlockDefinitionsTest}
-                />
-                {/* Admin - protegido com AdminAuthProvider */}
-                <Route path="/admin/:rest*">
-                  {() => (
-                    <AdminAuthProvider>
-                      <AdminRoute>
-                        <DashboardPage />
-                      </AdminRoute>
-                    </AdminAuthProvider>
-                  )}
-                </Route>
+                {/* Admin simplificado - sem proteção específica */}
+                <Route path="/admin/:rest*" component={DashboardPage} />
                 {/* 404 - Fallback para rotas não encontradas */}
                 <Route path="*" component={NotFoundPage} />
               </Switch>
