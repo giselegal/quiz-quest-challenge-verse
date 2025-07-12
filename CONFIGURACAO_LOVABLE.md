@@ -4,6 +4,7 @@
 
 **URL do Projeto:** `https://inabgbgrgzfxgkbdaush.supabase.co`
 **API Key:** `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImluYWJnYmdyZ3pmeGdrYmRhdXNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIyNjM1MTcsImV4cCI6MjA2NzgzOTUxN30.RftMKxnqV09nWIVAbJIWMTS-JxiVDOhPZneAXuocGfU`
+**Database URL:** `postgresql://postgres:[YOUR-PASSWORD]@db.inabgbgrgzfxgkbdaush.supabase.co:5432/postgres`
 
 ## ⚙️ Variáveis de Ambiente para o Lovable
 
@@ -13,7 +14,7 @@ Configure as seguintes variáveis no painel de Environment Variables do Lovable:
 
 ```env
 NODE_ENV=production
-DATABASE_URL=postgresql://postgres:[SUA_SENHA_SUPABASE]@db.inabgbgrgzfxgkbdaush.supabase.co:5432/postgres
+DATABASE_URL=postgresql://postgres:[YOUR-PASSWORD]@db.inabgbgrgzfxgkbdaush.supabase.co:5432/postgres
 SUPABASE_URL=https://inabgbgrgzfxgkbdaush.supabase.co
 SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImluYWJnYmdyZ3pmeGdrYmRhdXNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIyNjM1MTcsImV4cCI6MjA2NzgzOTUxN30.RftMKxnqV09nWIVAbJIWMTS-JxiVDOhPZneAXuocGfU
 SESSION_SECRET=quiz_quest_secret_prod_2025
@@ -24,7 +25,7 @@ SESSION_SECRET=quiz_quest_secret_prod_2025
 1. Acesse: https://supabase.com/dashboard/project/inabgbgrgzfxgkbdaush
 2. Vá em **Settings** → **Database** 
 3. Copie a **Database Password** 
-4. Substitua `[SUA_SENHA_SUPABASE]` na DATABASE_URL
+4. Substitua `[YOUR-PASSWORD]` na DATABASE_URL
 
 ### 🎯 Variáveis Opcionais
 

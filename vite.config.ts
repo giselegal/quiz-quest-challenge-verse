@@ -1,10 +1,12 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
+import { componentTagger } from "./client/src/plugins/lovable-component-tagger";
 
 export default defineConfig({
   plugins: [
     react(),
+    componentTagger(),
   ],
   server: {
     port: 8080

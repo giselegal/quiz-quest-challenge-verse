@@ -1,0 +1,43 @@
+{
+  "name": "Quiz Quest Challenge Verse",
+  "description": "Sistema de quiz interativo com editor Lovable integrado",
+  "version": "1.0.0",
+  "lovable": {
+    "projectId": "quiz-sell-genius",
+    "components": [
+      {
+        "name": "QuizCover",
+        "file": "src/components/lovable/QuizCover.lovable.tsx",
+        "category": "Quiz"
+      },
+      {
+        "name": "QuizQuestion", 
+        "file": "src/components/lovable/QuizQuestion.lovable.tsx",
+        "category": "Quiz"
+      },
+      {
+        "name": "QuizLogic",
+        "file": "src/components/lovable/QuizLogic.lovable.tsx", 
+        "category": "Quiz"
+      },
+      {
+        "name": "ResultPageEditor",
+        "file": "src/components/lovable/ResultPageEditor.lovable.tsx",
+        "category": "Quiz"
+      }
+    ],
+    "editor": {
+      "enabled": true,
+      "routes": [
+        "/",
+        "/admin",
+        "/dashboard",
+        "/resultado/*"
+      ]
+    },
+    "build": {
+      "outputDir": "dist",
+      "assetsDir": "assets"
+    }
+  }
+}
