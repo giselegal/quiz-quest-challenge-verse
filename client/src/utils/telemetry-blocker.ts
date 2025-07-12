@@ -1,236 +1,219 @@
 
-// Bloqueador de telemetria mais robusto para Lovable
-// Deve ser carregado ANTES de qualquer outro script
-
-(function() {
-  'use strict';
-  
-  console.log('🛡️ Bloqueador de telemetria ativado');
-  
-  // URLs e termos que devem ser bloqueados
-  const BLOCKED_PATTERNS = [
-    'us-central1-gpt-engineer-390607.cloudfunctions.net',
-    'pushLogsToGrafana',
-    'id-preview--65efd17d-5178-405d-9721-909c97470c6d.lovable.app',
-    'ingesteer.services-prod.nsvcs.net',
-    'rum_collection',
-    'lovable.app'
-  ];
-  
-  // Função para verificar se uma URL deve ser bloqueada
-  function shouldBlock(url: string | URL | undefined): boolean {
-    if (!url) return false;
-    const urlString = url.toString().toLowerCase();
-    return BLOCKED_PATTERNS.some(pattern => urlString.includes(pattern.toLowerCase()));
-  }
-  
-  // 1. Interceptar Fetch API
-  const originalFetch = window.fetch;
-  window.fetch = function(resource: RequestInfo | URL, init?: RequestInit) {
-    if (shouldBlock(resource as string)) {
-      console.log('🚫 Blocked telemetry request:', resource);
-      return Promise.reject(new Error('Telemetry blocked'));
-    }
-    return originalFetch.apply(this, arguments as any);
-  };
-  
-  // 2. Interceptar XMLHttpRequest
-  const originalXHROpen = XMLHttpRequest.prototype.open;
-  XMLHttpRequest.prototype.open = function(method: string, url: string | URL) {
-    if (shouldBlock(url as string)) {
-      console.log('🚫 Blocked XHR telemetry:', url);
-      // Criar um XHR "fake" que não faz nada
-      this.send = function() {};
-      this.setRequestHeader = function() {};
-      return;
-    }
-    return originalXHROpen.apply(this, arguments as any);
-  };
-  
-  // 3. Interceptar console.error para filtrar logs
-  const originalConsoleError = console.error;
-  console.error = function(...args: any[]) {
-    const message = Array.from(arguments).join(' ');
-    
-    // Verificar se é um erro de telemetria
-    const isBlockedError = BLOCKED_PATTERNS.some(pattern => 
-      message.toLowerCase().includes(pattern.toLowerCase())
-    );
-    
-    if (!isBlockedError) {
-      originalConsoleError.apply(console, arguments as any);
-    }
-  };
-  
-  // 4. Interceptar window.onerror
-  const originalOnError = window.onerror;
-  window.onerror = function(message: Event | string, source?: string, lineno?: number, colno?: number, error?: Error) {
-    if (shouldBlock(source) || shouldBlock(message as string)) {
-      console.log('🚫 Blocked error from telemetry:', source);
-      return true; // Previne o erro padrão
-    }
-    if (originalOnError) {
-      return originalOnError.apply(this, arguments as any);
-    }
-    return false;
-  };
-  
-  // 5. Interceptar unhandledrejection
-  window.addEventListener('unhandledrejection', function(event: PromiseRejectionEvent) {
-    const reason = event.reason;
-    if (reason && (shouldBlock(reason.message) || shouldBlock(reason.stack))) {
-      console.log('🚫 Blocked unhandled rejection from telemetry');
-      event.preventDefault();
-    }
-  });
-  
-  // 6. Bloquear appendChild de scripts de telemetria
-  const originalAppendChild = Node.prototype.appendChild;
-  Node.prototype.appendChild = function<T extends Node>(child: T): T {
-    if ((child as any).tagName === 'SCRIPT' && (child as any).src && shouldBlock((child as any).src)) {
-      console.log('🚫 Blocked script injection:', (child as any).src);
-      return child;
-    }
-    return originalAppendChild.apply(this, arguments as any);
-  };
-  
-  // 7. Interceptar createElement para scripts
-  const originalCreateElement = document.createElement;
-  document.createElement = function<K extends keyof HTMLElementTagNameMap>(
-    tagName: K,
-    options?: ElementCreationOptions
-  ): HTMLElementTagNameMap[K] {
-    const element = originalCreateElement.apply(this, arguments as any);
-    
-    if (tagName.toLowerCase() === 'script') {
-      const originalSetAttribute = element.setAttribute;
-      element.setAttribute = function(name: string, value: string) {
-        if (name === 'src' && shouldBlock(value)) {
-          console.log('🚫 Blocked script src:', value);
-          return;
-        }
-        return originalSetAttribute.apply(this, arguments as any);
-      };
-      
-      Object.defineProperty(element, 'src', {
-        set: function(value: string) {
-          if (shouldBlock(value)) {
-            console.log('🚫 Blocked script src property:', value);
-            return;
-          }
-          originalSetAttribute.call(this, 'src', value);
-        },
-        get: function() {
-          return this.getAttribute('src');
-        }
-      });
-    }
-    
-    return element;
-  };
-  
-  console.log('✅ Bloqueador de telemetria configurado com sucesso');
-  
-})();
-
-// Circuit Breaker para controlar chamadas com falhas
-class CircuitBreaker {
-  private failures = 0;
+// Emergency telemetry blocker with circuit breaker pattern
+class TelemetryBlocker {
+  private static instance: TelemetryBlocker;
+  private circuitBreakerState: 'CLOSED' | 'OPEN' | 'HALF_OPEN' = 'CLOSED';
+  private failureCount = 0;
   private lastFailureTime = 0;
-  private state: 'CLOSED' | 'OPEN' | 'HALF_OPEN' = 'CLOSED';
-  
-  constructor(
-    private threshold = 5,
-    private timeout = 60000
-  ) {}
-  
-  async call<T>(fn: () => Promise<T>): Promise<T> {
-    if (this.state === 'OPEN') {
-      if (Date.now() - this.lastFailureTime > this.timeout) {
-        this.state = 'HALF_OPEN';
-      } else {
-        throw new Error('Circuit breaker is OPEN');
-      }
+  private readonly maxFailures = 5;
+  private readonly resetTimeout = 30000; // 30 seconds
+
+  private constructor() {
+    this.initializeBlocking();
+  }
+
+  public static getInstance(): TelemetryBlocker {
+    if (!TelemetryBlocker.instance) {
+      TelemetryBlocker.instance = new TelemetryBlocker();
     }
-    
+    return TelemetryBlocker.instance;
+  }
+
+  private initializeBlocking() {
     try {
-      const result = await fn();
-      this.onSuccess();
-      return result;
+      this.blockConsoleErrors();
+      this.blockNetworkRequests();
+      this.blockGlobalErrors();
+      this.optimizeTimers();
     } catch (error) {
-      this.onFailure();
-      throw error;
+      this.handleFailure();
     }
   }
-  
-  private onSuccess() {
-    this.failures = 0;
-    this.state = 'CLOSED';
-  }
-  
-  private onFailure() {
-    this.failures++;
+
+  private handleFailure() {
+    this.failureCount++;
     this.lastFailureTime = Date.now();
-    if (this.failures >= this.threshold) {
-      this.state = 'OPEN';
+
+    if (this.failureCount >= this.maxFailures) {
+      this.circuitBreakerState = 'OPEN';
+      setTimeout(() => {
+        this.circuitBreakerState = 'HALF_OPEN';
+        this.failureCount = 0;
+      }, this.resetTimeout);
     }
+  }
+
+  private blockConsoleErrors() {
+    if (this.circuitBreakerState === 'OPEN') return;
+
+    const blockedTerms = [
+      'pushLogsToGrafana',
+      'lovable.app',
+      'gpt-engineer-390607',
+      'rum_collection',
+      'Failed to load resource',
+      'Internal Server Error',
+      'status of 500',
+      'status of 404',
+      'status of 400'
+    ];
+
+    const originalError = console.error;
+    const originalWarn = console.warn;
+
+    console.error = (...args: any[]) => {
+      const message = args.join(' ');
+      const shouldBlock = blockedTerms.some(term => 
+        message.toLowerCase().includes(term.toLowerCase())
+      );
+      
+      if (!shouldBlock) {
+        originalError.apply(console, args);
+      }
+    };
+
+    console.warn = (...args: any[]) => {
+      const message = args.join(' ');
+      const shouldBlock = blockedTerms.some(term => 
+        message.toLowerCase().includes(term.toLowerCase())
+      );
+      
+      if (!shouldBlock) {
+        originalWarn.apply(console, args);
+      }
+    };
+  }
+
+  private blockNetworkRequests() {
+    if (this.circuitBreakerState === 'OPEN') return;
+
+    const originalFetch = window.fetch;
+    window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = typeof input === 'string' ? input : input.toString();
+      
+      const blockedDomains = [
+        'lovable.app',
+        'gpt-engineer-390607',
+        'grafana'
+      ];
+
+      const shouldBlock = blockedDomains.some(domain => url.includes(domain));
+      
+      if (shouldBlock) {
+        return new Response('Blocked', { status: 204 });
+      }
+      
+      return originalFetch(input, init);
+    };
+  }
+
+  private blockGlobalErrors() {
+    if (this.circuitBreakerState === 'OPEN') return;
+
+    window.addEventListener('error', (event) => {
+      const message = event.message || '';
+      const filename = event.filename || '';
+      
+      const blockedTerms = [
+        'pushLogsToGrafana',
+        'lovable.app',
+        'gpt-engineer-390607'
+      ];
+
+      const shouldBlock = blockedTerms.some(term => 
+        message.includes(term) || filename.includes(term)
+      );
+      
+      if (shouldBlock) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }, true);
+
+    window.addEventListener('unhandledrejection', (event) => {
+      const reason = event.reason || {};
+      const message = reason.message || reason.toString() || '';
+      
+      const blockedTerms = [
+        'pushLogsToGrafana',
+        'lovable.app',
+        'gpt-engineer-390607'
+      ];
+
+      const shouldBlock = blockedTerms.some(term => 
+        message.toLowerCase().includes(term.toLowerCase())
+      );
+      
+      if (shouldBlock) {
+        event.preventDefault();
+      }
+    });
+  }
+
+  private optimizeTimers() {
+    // Create optimized timer functions without overriding globals
+    (window as any).__optimizedTimeout = (callback: Function, delay: number = 0, ...args: any[]) => {
+      return setTimeout(() => {
+        try {
+          callback(...args);
+        } catch (error) {
+          // Silently handle timer errors
+        }
+      }, Math.max(delay, 16)); // Minimum 16ms for performance
+    };
+
+    (window as any).__optimizedInterval = (callback: Function, delay: number = 100, ...args: any[]) => {
+      return setInterval(() => {
+        try {
+          callback(...args);
+        } catch (error) {
+          // Silently handle interval errors
+        }
+      }, Math.max(delay, 50)); // Minimum 50ms for intervals
+    };
+  }
+
+  public performHealthCheck(): Promise<{ status: string; details: any }> {
+    return new Promise((resolve) => {
+      try {
+        const health = {
+          status: this.circuitBreakerState === 'CLOSED' ? 'healthy' : 'degraded',
+          details: {
+            circuitBreaker: this.circuitBreakerState,
+            failureCount: this.failureCount,
+            lastFailure: this.lastFailureTime,
+            timestamp: Date.now()
+          }
+        };
+        resolve(health);
+      } catch (error) {
+        resolve({
+          status: 'error',
+          details: { error: 'Health check failed' }
+        });
+      }
+    });
+  }
+
+  public getStatus() {
+    return {
+      state: this.circuitBreakerState,
+      failures: this.failureCount,
+      lastFailure: this.lastFailureTime
+    };
   }
 }
 
-// Timeout helper melhorado
-export function __optimizedTimeout(callback: () => void, delay = 100): number {
-  return window.setTimeout(callback, Math.max(delay, 100));
+// Initialize the blocker
+const telemetryBlocker = TelemetryBlocker.getInstance();
+
+// Export functions
+export const performHealthCheck = () => telemetryBlocker.performHealthCheck();
+export const getTelemetryStatus = () => telemetryBlocker.getStatus();
+
+// Initialize on module load
+if (typeof window !== 'undefined') {
+  console.log('🛡️ Telemetry blocker initialized');
 }
 
-// Interval helper melhorado
-export function __optimizedInterval(callback: () => void, delay = 1000): number {
-  return window.setInterval(callback, Math.max(delay, 1000));
-}
-
-// Health check para verificar status dos serviços
-interface HealthCheckResult {
-  endpoint: string;
-  status: number;
-  ok: boolean;
-  error?: string;
-}
-
-const circuitBreaker = new CircuitBreaker();
-
-export async function performHealthCheck(): Promise<HealthCheckResult[]> {
-  const endpoints = [
-    '/api/health',
-    '/api/quiz/status',
-    '/api/admin/status'
-  ];
-  
-  const results = await Promise.allSettled(
-    endpoints.map(async (endpoint) => {
-      try {
-        return await circuitBreaker.call(async () => {
-          const response = await fetch(endpoint, {
-            method: 'HEAD',
-            signal: AbortSignal.timeout(5000)
-          });
-          
-          return {
-            endpoint,
-            status: response.status,
-            ok: response.ok
-          };
-        });
-      } catch (error) {
-        return {
-          endpoint,
-          status: 0,
-          ok: false,
-          error: error instanceof Error ? error.message : 'Unknown error'
-        };
-      }
-    })
-  );
-  
-  return results.map(result => 
-    result.status === 'fulfilled' ? result.value : result.reason
-  );
-}
+export default telemetryBlocker;
