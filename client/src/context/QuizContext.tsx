@@ -81,7 +81,7 @@ export const QuizProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 export const useQuizContext = () => {
   const context = useContext(QuizContext);
   if (context === undefined) {
-    throw new error('useQuizContext must be used within a QuizProvider');
+    throw new Error('useQuizContext must be used within a QuizProvider');
   }
   return context;
 };
