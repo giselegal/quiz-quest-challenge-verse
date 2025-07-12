@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+
+import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useRouter } from 'wouter';
 import { QuizProvider, useQuiz } from '@/context/QuizContext';
 import { UserResponse } from '@/types/quiz';
@@ -35,13 +36,14 @@ const QuizErrorFallback: React.FC<QuizErrorFallbackProps> = ({ error, resetError
 const QuizPageContent: React.FC = () => {
   const [, navigate] = useRouter();
   const [location] = useLocation();
-  const { user } = useQuiz();
+  
+  // Get user data from quiz context
+  const quizContext = useQuiz();
+  const user = { userName: localStorage.getItem('userName') || '' };
   
   const {
     currentQuestionIndex,
     totalQuestions,
-    showingStrategicQuestions,
-    currentStrategicQuestionIndex,
     currentQuestion,
     currentAnswers,
     isInitialLoadComplete,
@@ -51,6 +53,8 @@ const QuizPageContent: React.FC = () => {
   const { trackQuizFinish } = useQuizTracking(currentQuestionIndex);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [showingStrategicQuestions] = useState(false);
+  const [currentStrategicQuestionIndex] = useState(0);
 
   useEffect(() => {
     // Simulate loading delay
@@ -97,8 +101,8 @@ const QuizPageContent: React.FC = () => {
   useEffect(() => {
     if (currentQuestion?.options) {
       const imageUrls = currentQuestion.options
-        .map(option => option.imageUrl)
-        .filter(Boolean);
+        .map((option: any) => option.imageUrl)
+        .filter((url: string | undefined): url is string => Boolean(url));
       
       if (imageUrls.length > 0) {
         preloadImages(imageUrls);
@@ -135,7 +139,7 @@ const QuizPage: React.FC = () => {
   return (
     <ErrorBoundary
       FallbackComponent={QuizErrorFallback}
-      onError={(error, errorInfo) => {
+      onError={(error: Error, errorInfo: any) => {
         console.error('Quiz Error:', error, errorInfo);
       }}
     >
