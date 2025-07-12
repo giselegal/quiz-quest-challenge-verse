@@ -44,7 +44,8 @@ function App() {
                       {/* Public Routes */}
                       <Route path="/" element={<Index />} />
                       <Route path="/quiz" element={<QuizPage />} />
-                      <Route path="/result" element={<ResultPage />} />
+                      <Route path="/resultado/:resultId" element={<ResultPage />} />
+                      <Route path="/resultado" element={<ResultPage />} />
                       
                       {/* Admin Routes */}
                       <Route path="/admin" element={<AdminDashboard />} />
