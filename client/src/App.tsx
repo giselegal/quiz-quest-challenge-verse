@@ -27,9 +27,9 @@ const LandingPage = lazy(() => import("./pages/LandingPage"));
 const QuizPage = lazy(() => import("./components/QuizPage"));
 // const ResultPage = lazy(() => import("./pages/ResultPage")); // Removido temporariamente
 const TestResultPage = lazy(() => import("./pages/TestResultPage"));
-const QuizDescubraSeuEstilo = lazy(
-  () => import("./pages/quiz-descubra-seu-estilo")
-);
+// const QuizDescubraSeuEstilo = lazy(
+//   () => import("./pages/quiz-descubra-seu-estilo")
+// );
 // const DashboardPage = lazy(() => import("./pages/admin/DashboardPage")); // Removido temporariamente
 
 // Editor Principal - Consolidado
@@ -77,15 +77,15 @@ const App = () => {
                 {/* <Route path="/resultado" component={ResultPage} /> */}
                 {/* Teste do componente de resultado */}
                 <Route path="/test-resultado" component={TestResultPage} />
-                <Route
+                {/* <Route
                   path="/quiz-descubra-seu-estilo"
                   component={QuizDescubraSeuEstilo}
                 />
-                {/* Manter rota antiga para compatibilidade */}
+                Manter rota antiga para compatibilidade
                 <Route
                   path="/descubra-seu-estilo"
                   component={QuizDescubraSeuEstilo}
-                />
+                /> */}
                 {/* Editor Principal - ÚNICO EDITOR para Quiz e Funis Completos - removido temporariamente */}
                 {/* <Route
                   path="/editor"

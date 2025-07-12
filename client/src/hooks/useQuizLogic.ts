@@ -226,7 +226,7 @@ export const useQuizLogic = () => {
 
         optionIds.forEach((optionId) => {
           const option = question.options.find((o) => o.id === optionId);
-          if (option) {
+          if (option && option.styleCategory) {
             styleCounter[option.styleCategory]++;
             totalSelections++;
           }
@@ -238,12 +238,15 @@ export const useQuizLogic = () => {
 
       const styleResults: StyleResult[] = Object.entries(styleCounter)
         .map(([category, score]) => ({
-          category: category as StyleResult["category"],
+          category,
           score,
           percentage:
             totalSelections > 0
               ? Math.round((score / totalSelections) * 100)
               : 0,
+          style: category as any,
+          points: score,
+          rank: 0,
         }))
         .sort((a, b) => {
           if (a.score === b.score && clickOrderInternal.length > 0) {
@@ -261,11 +264,11 @@ export const useQuizLogic = () => {
       const primaryStyle = styleResults[0] || null;
       const secondaryStyles = styleResults.slice(1);
 
-      const result: QuizResult = {
+      const result: any = {
         primaryStyle,
         secondaryStyles,
         totalSelections,
-        userName: "User", // Add default userName to fix type error
+        userName: "User",
       };
 
       setQuizResult(result);

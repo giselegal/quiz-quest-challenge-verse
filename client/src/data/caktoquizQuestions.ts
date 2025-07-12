@@ -830,7 +830,7 @@ export const strategicQuestions: QuizQuestion[] = [
 
 // Helper para obter todas as questões em ordem
 export const getAllQuestions = (): QuizQuestion[] => {
-  return [...caktoquizQuestions, ...strategicQuestions].sort((a, b) => a.order - b.order);
+  return [...caktoquizQuestions, ...strategicQuestions].sort((a, b) => (a.order || 0) - (b.order || 0));
 };
 
 // Helper para obter apenas questões normais

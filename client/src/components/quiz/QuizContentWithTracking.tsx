@@ -136,20 +136,16 @@ export const QuizContentWithTracking: React.FC<QuizContentWithTrackingProps> = (
       <div className="container mx-auto px-4 py-8 w-full max-w-5xl">
         {showingStrategicQuestions ? (
           <StrategicQuestions
-            currentQuestion={currentQuestion}
-            currentAnswers={currentAnswers}
-            onAnswerSubmit={handleTrackedAnswerSubmit}
-            onOptionClick={handleOptionClick}
-            canProceed={canProceed}
+            currentQuestionIndex={currentStrategicQuestionIndex}
+            answers={{}}
+            onAnswer={handleTrackedAnswerSubmit}
           />
         ) : (
           <QuizQuestion
             question={currentQuestion}
-            selectedAnswers={currentAnswers}
-            onAnswerSubmit={handleTrackedAnswerSubmit}
-            onOptionClick={handleOptionClick}
-            canProceed={canProceed}
-            requiredSelections={requiredSelections}
+            onAnswer={handleTrackedAnswerSubmit}
+            currentAnswers={currentAnswers}
+            showQuestionImage={true}
           />
         )}
 

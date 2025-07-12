@@ -90,7 +90,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             isStrategicQuestion && isMobile && "text-[1.25rem] sm:text-2xl", // Texto maior para questões estratégicas em mobile
             question.type === 'text' && !isStrategicQuestion && ".text-only-question & " && "text-[1.15rem] sm:text-xl" // Texto maior para títulos em questões só texto
           )}>
-            {highlightStrategicWords(question.title || question.question)}
+            {highlightStrategicWords(question.title || question.question || '')}
           </h2>
           
           {isStrategicQuestion && question.imageUrl && !imageError && showQuestionImage && (
