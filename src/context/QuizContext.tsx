@@ -1,8 +1,9 @@
 
 import React, { createContext, useContext, ReactNode } from 'react';
 import { useQuizLogic } from '../hooks/useQuizLogic';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from '@/components/ui/use-toast';
 import { QuizResult, StyleResult } from '@/types/quiz';
+import { safeLocalStorage } from '@/utils/safeLocalStorage';
 
 // Define the context type
 type QuizContextType = ReturnType<typeof useQuizLogic> & {
@@ -17,7 +18,6 @@ const QuizContext = createContext<QuizContextType | undefined>(undefined);
 // Provider component
 export const QuizProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const quizLogic = useQuizLogic();
-  const { toast } = useToast();
   
   // Define all context functions before returning the provider
   const startQuiz = async (name: string, email: string, quizId: string) => {
@@ -88,11 +88,9 @@ export const useQuizContext = () => {
 
 // Export a simplification of the context
 export const useQuiz = () => {
-  const { toast } = useToast();
-  
   const getQuizResult = (): { primaryStyle: StyleResult; secondaryStyles: StyleResult[] } | null => {
     try {
-      const savedResult = localStorage.getItem('quizResult');
+      const savedResult = safeLocalStorage.getItem('quizResult');
       if (savedResult) {
         const parsedResult = JSON.parse(savedResult);
         return {
@@ -103,6 +101,8 @@ export const useQuiz = () => {
       return null;
     } catch (error) {
       console.error('Error loading quiz result:', error);
+      // Limpar dados corrompidos
+      safeLocalStorage.removeItem('quizResult');
       return null;
     }
   };
