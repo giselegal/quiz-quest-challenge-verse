@@ -1,225 +1,213 @@
+import { BankImage } from '@/data/imageBank';
+import { getOptimizedImage as getOptimizedImageEnhanced } from './images/optimization-enhanced';
+import { ImageOptimizationOptions } from './images/types';
 
-import { ImageOptimizationOptions, PreloadOptions } from './images/types';
+interface ImageMetadata {
+  id: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  category?: string;
+  tags?: string[];
+}
 
-export const getOptimizedImageUrl = (src: string, options?: { width?: number; height?: number; quality?: number; format?: string }) => {
-  if (!src) return '';
-  
-  // For now, return the original URL
-  // In a real implementation, this would generate optimized URLs
-  return src;
-};
+interface PreloadOptions {
+  quality?: number;
+  format?: 'webp' | 'avif' | 'jpg' | 'png' | 'auto';
+  batchSize?: number;
+  onComplete?: () => void;
+  onError?: (error: any) => void;
+}
 
-export const getLowQualityPlaceholder = (src: string) => {
-  if (!src) return '';
-  
-  // For now, return the original URL
-  // In a real implementation, this would generate a low-quality placeholder
-  return src;
-};
+interface OptimizationOptions {
+  quality?: number;
+  format?: 'webp' | 'avif' | 'jpg' | 'png' | 'auto';
+  width?: number;
+  height?: number;
+}
 
-export const preloadImagesByUrls = (
-  urls: string[],
-  options: PreloadOptions = {}
-): Promise<void> => {
-  return new Promise((resolve) => {
-    const { quality = 80, batchSize = 5 } = options;
-    const total = urls.length;
-    let loaded = 0;
+const imageCache = new Map<string, boolean>();
 
-    const loadBatch = (batch: string[]) => {
-      Promise.all(
-        batch.map(
-          (url) =>
-            new Promise<void>((resolveImage) => {
-              const img = new Image();
-              img.src = getOptimizedImageUrl(url, { quality, format: options.format });
-              img.onload = () => {
-                loaded++;
-                options.onProgress?.(loaded, total);
-                resolveImage();
-              };
-              img.onerror = () => {
-                loaded++;
-                options.onProgress?.(loaded, total);
-                resolveImage();
-              };
-            })
-        )
-      ).then(() => {
-        if (loaded >= total) {
-          options.onComplete?.();
-          resolve();
-        } else {
-          const nextBatch = urls.slice(loaded, loaded + batchSize);
-          loadBatch(nextBatch);
-        }
-      });
+/**
+ * Preloads a single image and resolves when it's loaded or rejects on error.
+ * @param src The image source URL
+ * @returns A promise that resolves when the image is loaded or rejects on error
+ */
+const preloadImage = (src: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    if (imageCache.has(src)) {
+      console.log(`[ImageManager] Image already in cache: ${src}`);
+      return resolve();
+    }
+
+    const img = new Image();
+    img.src = src;
+
+    img.onload = () => {
+      imageCache.set(src, true);
+      console.log(`[ImageManager] Preloaded image: ${src}`);
+      resolve();
     };
 
-    const initialBatch = urls.slice(0, batchSize);
-    loadBatch(initialBatch);
+    img.onerror = (error) => {
+      console.error(`[ImageManager] Failed to preload image: ${src}`, error);
+      reject(error);
+    };
   });
 };
 
-export const preloadCriticalImages = async (
-  context: 'strategic' | 'results' | 'transformation' | 'bonus' | 'testimonials' | string[],
-  options: Omit<PreloadOptions, 'onProgress' | 'onComplete'> = {}
+/**
+ * Preloads multiple images in batches with a specified batch size and options.
+ * @param imageUrls An array of image URLs to preload
+ * @param options Preload options including batch size, quality, and format
+ */
+export const preloadImagesByUrls = async (
+  imageUrls: string[],
+  options: PreloadOptions = {}
 ): Promise<void> => {
-  const { quality = 75, batchSize = 3, format } = options;
-  let imageUrls: string[] = [];
+  const { batchSize = 5, quality, format, onComplete, onError } = options;
+  const totalImages = imageUrls.length;
+  let loadedCount = 0;
 
-  if (typeof context === 'string') {
-    switch (context) {
-      case 'strategic':
-        imageUrls = [
-          '/images/quiz/strategic/confused-woman-1.webp',
-          '/images/quiz/strategic/confused-woman-2.webp',
-          '/images/quiz/strategic/elegant-woman-1.webp',
-          '/images/quiz/strategic/elegant-woman-2.webp',
-          '/images/quiz/strategic/modern-woman-1.webp',
-          '/images/quiz/strategic/modern-woman-2.webp',
-        ];
-        break;
-      case 'results':
-        imageUrls = [
-          '/images/results/style-result-dressing-room-2.webp',
-          '/images/results/style-result-woman-thinking.webp',
-          '/images/results/style-result-woman-walking.webp',
-          '/images/results/style-results-header.webp',
-        ];
-        break;
-      case 'transformation':
-        imageUrls = [
-          '/images/transformation/transformation-header.webp',
-          '/images/transformation/transformation-1-v2.webp',
-          '/images/transformation/transformation-2-v2.webp',
-          '/images/transformation/transformation-3-v2.webp',
-        ];
-        break;
-      case 'bonus':
-        imageUrls = [
-          '/images/bonus/bonus-header.webp',
-          '/images/bonus/bonus-1.webp',
-          '/images/bonus/bonus-2.webp',
-          '/images/bonus/bonus-3.webp',
-        ];
-        break;
-      case 'testimonials':
-        imageUrls = [
-          '/images/testimonials/testimonials-header.webp',
-          '/images/testimonials/testimonial-1.webp',
-          '/images/testimonials/testimonial-2.webp',
-          '/images/testimonials/testimonial-3.webp',
-        ];
-        break;
-      default:
-        console.warn(`Unknown critical images context: ${context}`);
-        return;
-    }
-  } else if (Array.isArray(context)) {
-    // Collect images from an array of contexts
-    context.forEach(ctx => {
-      switch (ctx) {
-        case 'strategic':
-          imageUrls.push(
-            '/images/quiz/strategic/confused-woman-1.webp',
-            '/images/quiz/strategic/confused-woman-2.webp',
-            '/images/quiz/strategic/elegant-woman-1.webp',
-            '/images/quiz/strategic/elegant-woman-2.webp',
-            '/images/quiz/strategic/modern-woman-1.webp',
-            '/images/quiz/strategic/modern-woman-2.webp',
-          );
-          break;
-        case 'results':
-          imageUrls.push(
-            '/images/results/style-result-dressing-room-2.webp',
-            '/images/results/style-result-woman-thinking.webp',
-            '/images/results/style-result-woman-walking.webp',
-            '/images/results/style-results-header.webp',
-          );
-          break;
-        case 'transformation':
-          imageUrls.push(
-            '/images/transformation/transformation-header.webp',
-            '/images/transformation/transformation-1-v2.webp',
-            '/images/transformation/transformation-2-v2.webp',
-            '/images/transformation/transformation-3-v2.webp',
-          );
-          break;
-        case 'bonus':
-          imageUrls.push(
-            '/images/bonus/bonus-header.webp',
-            '/images/bonus/bonus-1.webp',
-            '/images/bonus/bonus-2.webp',
-            '/images/bonus/bonus-3.webp',
-          );
-          break;
-        case 'testimonials':
-          imageUrls.push(
-            '/images/testimonials/testimonials-header.webp',
-            '/images/testimonials/testimonial-1.webp',
-            '/images/testimonials/testimonial-2.webp',
-            '/images/testimonials/testimonial-3.webp',
-          );
-          break;
-        default:
-          console.warn(`Unknown critical images context: ${ctx}`);
-      }
+  const preloadBatch = async (start: number, end: number) => {
+    const batch = imageUrls.slice(start, end);
+    const preloadPromises = batch.map(url => {
+      // Use getOptimizedImage to ensure the URL is correctly optimized
+      const optimizedUrl = getOptimizedImage(url, { quality, format });
+      return preloadImage(optimizedUrl);
     });
-  }
 
-  // Remove duplicates
-  imageUrls = [...new Set(imageUrls)];
+    try {
+      await Promise.all(preloadPromises);
+      loadedCount += batch.length;
+      console.log(`[ImageManager] Preloaded batch of images: ${start + 1} - ${end} of ${totalImages}`);
 
-  return preloadImagesByUrls(imageUrls, { quality, batchSize, format });
-};
-
-export const getImageMetadata = (src: string) => {
-  if (!src) return null;
-  
-  // Return metadata with width and height properties
-  return {
-    url: src,
-    alt: `Image ${src.split('/').pop()}`,
-    format: src.includes('.webp') ? 'webp' : 'jpeg',
-    width: 800, // Default dimensions
-    height: 600
+      if (loadedCount < totalImages) {
+        // Schedule the next batch with a slight delay
+        setTimeout(() => {
+          preloadBatch(end, Math.min(end + batchSize, totalImages));
+        }, 50); // Small delay to prevent blocking the main thread
+      } else {
+        console.log(`[ImageManager] All critical images preloaded.`);
+        onComplete?.();
+      }
+    } catch (error) {
+      console.error(`[ImageManager] Error preloading image batch:`, error);
+      onError?.(error);
+    }
   };
+
+  console.log(`[ImageManager] Starting preload of ${totalImages} images in batches of ${batchSize}.`);
+  preloadBatch(0, Math.min(batchSize, totalImages));
 };
 
+/**
+ * Preloads critical images based on a category using data from the image bank.
+ * @param category The category of images to preload
+ * @param options Preload options including batch size, quality, and format
+ */
+export const preloadCriticalImages = async (
+  category: string | string[],
+  options: PreloadOptions = {}
+): Promise<void> => {
+  const { batchSize = 5, quality, format, onComplete, onError } = options;
+  let categories = Array.isArray(category) ? category : [category];
+
+  // Dynamically import getImagesByCategory to avoid circular dependency
+  const { getImagesByCategory } = await import('@/data/imageBank');
+
+  // Collect all images from specified categories
+  let imagesToPreload: BankImage[] = [];
+  categories.forEach(cat => {
+    imagesToPreload = [...imagesToPreload, ...getImagesByCategory(cat)];
+  });
+
+  const totalImages = imagesToPreload.length;
+  let loadedCount = 0;
+
+  const preloadBatch = async (start: number, end: number) => {
+    const batch = imagesToPreload.slice(start, end);
+    const preloadPromises = batch.map(image => {
+      // Use getOptimizedImage to ensure the URL is correctly optimized
+      const optimizedUrl = getOptimizedImage(image.url, { quality, format });
+      return preloadImage(optimizedUrl);
+    });
+
+    try {
+      await Promise.all(preloadPromises);
+      loadedCount += batch.length;
+      console.log(`[ImageManager] Preloaded batch of ${category} images: ${start + 1} - ${end} of ${totalImages}`);
+
+      if (loadedCount < totalImages) {
+        // Schedule the next batch with a slight delay
+        setTimeout(() => {
+          preloadBatch(end, Math.min(end + batchSize, totalImages));
+        }, 50); // Small delay to prevent blocking the main thread
+      } else {
+        console.log(`[ImageManager] All critical ${category} images preloaded.`);
+        onComplete?.();
+      }
+    } catch (error) {
+      console.error(`[ImageManager] Error preloading ${category} image batch:`, error);
+      onError?.(error);
+    }
+  };
+
+  console.log(`[ImageManager] Starting preload of ${totalImages} ${category} images in batches of ${batchSize}.`);
+  preloadBatch(0, Math.min(batchSize, totalImages));
+};
+
+/**
+ * Checks if an image is already preloaded by checking the imageCache.
+ * @param src The source URL of the image
+ * @returns True if the image is preloaded, false otherwise
+ */
 export const isImagePreloaded = (src: string): boolean => {
-  if (!src) return false;
-  
-  // Simple check - in a real implementation this would check if image is in cache
-  const img = new Image();
-  img.src = src;
-  return img.complete;
+  return imageCache.has(src);
 };
 
-export const getOptimizedImage = (src: string, options?: { width?: number; height?: number; quality?: number; format?: string }) => {
-  // For now, delegate to existing function
-  return getOptimizedImageUrl(src, options);
-};
+/**
+ * Gets an image's metadata from the image bank.
+ * @param src The source URL of the image
+ * @returns The image metadata if found, undefined otherwise
+ */
+export const getImageMetadata = (src: string): ImageMetadata | undefined => {
+  try {
+    // Dynamically import getImageById to avoid circular dependency
+    const { getAllImages } = await import('@/data/imageBank');
+    const images = getAllImages();
 
-export const preloadImages = (images: Array<{ src: string; id: string; alt?: string; category?: string; preloadPriority?: number }>, options?: { quality?: number; batchSize?: number; format?: string }) => {
-  const urls = images.map(img => img.src);
-  return preloadImagesByUrls(urls, options);
-};
-
-// Add missing functions with simplified implementations
-export const preloadImagesByIds = (ids: string[], options?: PreloadOptions) => {
-  // Convert IDs to URLs - this is a simplified implementation
-  const urls = ids.map(id => `/images/${id}`);
-  return preloadImagesByUrls(urls, options);
-};
-
-export const preloadImagesByCategory = (category: string, options?: Omit<PreloadOptions, 'onProgress' | 'onComplete'>) => {
-  // Map category to proper context string
-  const validCategories = ['strategic', 'results', 'transformation', 'bonus', 'testimonials'];
-  if (validCategories.includes(category)) {
-    return preloadCriticalImages(category as 'strategic' | 'results' | 'transformation' | 'bonus' | 'testimonials', options);
+    const image = images.find(img => img.url === src);
+    if (image) {
+      return {
+        id: image.id,
+        alt: image.alt,
+        width: image.width,
+        height: image.height,
+        category: image.category,
+        tags: image.tags,
+      };
+    }
+  } catch (error) {
+    console.error("Error fetching image metadata:", error);
+    return undefined;
   }
-  
-  console.warn(`Unknown category: ${category}`);
-  return Promise.resolve();
 };
+
+/**
+ * Gets an optimized image URL with simplified approach
+ * Temporarily simplified to fix loading issues
+ */
+export const getOptimizedImage = (
+  url: string,
+  options: OptimizationOptions = {}
+): string => {
+  if (!url) return '';
+  
+  console.log(`[ImageManager] Processing image URL: ${url}`);
+  
+  // For now, return the original URL to ensure images load
+  // This bypasses complex optimization that might be breaking URLs
+  return url;
+};
+export type { ImageMetadata, PreloadOptions, OptimizationOptions };

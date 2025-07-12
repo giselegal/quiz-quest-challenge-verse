@@ -1,3 +1,4 @@
+
 import React, { Suspense, lazy, useEffect } from "react";
 import { Router, Route, Switch } from "wouter";
 import { AuthProvider } from "./context/AuthContext";
@@ -11,7 +12,6 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import CriticalCSSLoader from "./components/CriticalCSSLoader";
 import { initialCriticalCSS, heroCriticalCSS } from "./utils/critical-css";
 import ErrorBoundary from "./components/ErrorBoundary";
-// import { AdminRoute } from "./components/admin/AdminRoute";
 
 // Componente de loading para Suspense
 const LoadingFallback = () => (
@@ -35,7 +35,6 @@ const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
 
 // Editor Principal - Consolidado
 const SchemaDrivenEditorPage = lazy(() => import("./pages/SchemaDrivenEditorPage"));
-// const BlockDefinitionsTest = lazy(() => import("./components/editor/tests/BlockDefinitionsTest"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App = () => {
@@ -75,7 +74,7 @@ const App = () => {
                 {/* Rota do quiz específica */}
                 <Route path="/quiz" component={QuizPage} />
                 {/* Rotas do teste A/B */}
-                <Route path="/resultado" component={ResultPage} />
+                <Route path="/resultado" component={TestResultPage} />
                 {/* Teste do componente de resultado */}
                 <Route path="/test-resultado" component={TestResultPage} />
                 <Route
