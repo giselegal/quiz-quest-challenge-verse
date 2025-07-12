@@ -1,15 +1,14 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
-import { Download, Upload, Save } from 'lucide-react';
-import { exportProjectAsJson } from '@/utils/exportUtils';
-import { useToast } from '@/components/ui/use-toast';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { FileCode, X, Save } from 'lucide-react';
+import { toast } from '@/components/ui/use-toast';
 
 interface JsonConfigEditorProps {
   config: any;
-  onUpdate: (newConfig: any) => void;
+  onUpdate: (config: any) => void;
 }
 
 export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
@@ -18,10 +17,11 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [jsonText, setJsonText] = useState('');
-  const { toast } = useToast();
+  const [error, setError] = useState<string | null>(null);
 
   const handleOpen = () => {
     setJsonText(JSON.stringify(config, null, 2));
+    setError(null);
     setIsOpen(true);
   };
 
@@ -32,105 +32,59 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
       setIsOpen(false);
       toast({
         title: "Configuração atualizada",
-        description: "As alterações foram salvas com sucesso",
+        description: "A configuração JSON foi aplicada com sucesso"
       });
-    } catch (error) {
-      console.error('Error parsing JSON:', error);
-      toast({
-        title: "Erro ao salvar",
-        description: "JSON inválido. Verifique o formato e tente novamente.",
-        variant: "destructive"
-      });
+    } catch (err) {
+      setError('JSON inválido. Verifique a sintaxe.');
     }
   };
 
-  const handleExport = () => {
-    exportProjectAsJson(config);
+  const handleClose = () => {
+    setIsOpen(false);
+    setError(null);
   };
 
-  const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const content = e.target?.result as string;
-          const parsedConfig = JSON.parse(content);
-          onUpdate(parsedConfig);
-          toast({
-            title: "Configuração importada",
-            description: "O arquivo foi importado com sucesso",
-          });
-        } catch (error) {
-          console.error('Error parsing imported JSON:', error);
-          toast({
-            title: "Erro ao importar",
-            description: "Arquivo JSON inválido",
-            variant: "destructive"
-          });
-        }
-      };
-      reader.readAsText(file);
-    }
-  };
+  if (!isOpen) {
+    return (
+      <Button variant="outline" size="sm" onClick={handleOpen}>
+        <FileCode className="w-4 h-4 mr-2" />
+        Editar JSON
+      </Button>
+    );
+  }
 
   return (
-    <>
-      <div className="flex gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleOpen}
-        >
-          Editar JSON
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleExport}
-        >
-          <Download className="w-4 h-4 mr-2" />
-          Exportar
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => document.getElementById('import-json')?.click()}
-        >
-          <Upload className="w-4 h-4 mr-2" />
-          Importar
-        </Button>
-        <input
-          id="import-json"
-          type="file"
-          accept=".json"
-          className="hidden"
-          onChange={handleImport}
-        />
-      </div>
-
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="max-w-3xl">
-          <DialogHeader>
-            <DialogTitle>Configuração JSON</DialogTitle>
-          </DialogHeader>
-          
-          <div className="space-y-4">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <Card className="w-full max-w-4xl mx-4 h-[80vh]">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle>Editor de Configuração JSON</CardTitle>
+          <Button variant="ghost" size="sm" onClick={handleClose}>
+            <X className="w-4 h-4" />
+          </Button>
+        </CardHeader>
+        <CardContent className="flex flex-col h-full">
+          <div className="flex-1 mb-4">
             <Textarea
               value={jsonText}
               onChange={(e) => setJsonText(e.target.value)}
-              className="min-h-[400px] font-mono text-sm"
+              className="h-full font-mono text-sm"
+              placeholder="Cole sua configuração JSON aqui..."
             />
-            
-            <div className="flex justify-end">
-              <Button onClick={handleSave}>
-                <Save className="w-4 h-4 mr-2" />
-                Salvar Alterações
-              </Button>
-            </div>
+            {error && (
+              <p className="text-red-500 text-sm mt-2">{error}</p>
+            )}
           </div>
-        </DialogContent>
-      </Dialog>
-    </>
+          <div className="flex gap-2">
+            <Button onClick={handleSave} disabled={!!error}>
+              <Save className="w-4 h-4 mr-2" />
+              Aplicar Configuração
+            </Button>
+            <Button variant="outline" onClick={handleClose}>
+              Cancelar
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
