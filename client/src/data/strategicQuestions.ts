@@ -12,19 +12,19 @@ export const strategicQuestions = [
         id: 'str-1-1',
         text: 'Muito satisfeita',
         styleCategory: 'Satisfied',
-        points: 3
+        points: { strategic: 3 }
       },
       {
         id: 'str-1-2', 
         text: 'Parcialmente satisfeita',
         styleCategory: 'Partial',
-        points: 2
+        points: { strategic: 2 }
       },
       {
         id: 'str-1-3',
         text: 'Insatisfeita',
         styleCategory: 'Unsatisfied', 
-        points: 1
+        points: { strategic: 1 }
       }
     ]
   },
@@ -40,19 +40,19 @@ export const strategicQuestions = [
         id: 'str-2-1',
         text: 'Ter mais peças versáteis',
         styleCategory: 'Versatile',
-        points: 3
+        points: { strategic: 3 }
       },
       {
         id: 'str-2-2',
         text: 'Melhorar as combinações',
         styleCategory: 'Combinations',
-        points: 2
+        points: { strategic: 2 }
       },
       {
         id: 'str-2-3',
         text: 'Descobrir meu estilo',
         styleCategory: 'Discovery',
-        points: 1
+        points: { strategic: 1 }
       }
     ]
   }
