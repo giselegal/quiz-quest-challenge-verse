@@ -1,3 +1,4 @@
+
 /**
  * imageManager.ts
  * Utilitários para gerenciamento e otimização de imagens
@@ -31,6 +32,22 @@ export const preloadImage = (url: string): Promise<void> => {
       reject(error);
     };
   });
+};
+
+/**
+ * Preload multiple images for better user experience
+ */
+export const preloadImages = (urls: string[]): Promise<void[]> => {
+  return Promise.all(
+    urls.map(url => preloadImage(url))
+  );
+};
+
+/**
+ * Preload multiple images by URLs with options - added to match client version
+ */
+export const preloadImagesByUrls = (urls: string[], options?: { quality?: number; batchSize?: number }): Promise<void[]> => {
+  return preloadImages(urls);
 };
 
 /**
@@ -106,40 +123,45 @@ export const preloadImagesInBatch = async (
  * Otimiza e pré-carrega imagens de forma estratégica
  */
 export const preloadCriticalImages = async (
-  category: 'home' | 'quiz' | 'result' | 'strategic',
+  category: 'home' | 'quiz' | 'result' | 'strategic' | string[],
   options: { quality?: number; format?: 'webp' | 'avif'; batchSize?: number } = {}
 ): Promise<void[]> => {
   const { quality = 70, format = 'webp', batchSize = 5 } = options;
   let imageUrls: string[] = [];
 
-  switch (category) {
-    case 'home':
-      imageUrls = [
-        'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/quiz-intro-background.jpg',
-        'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/home-image-2.jpg',
-      ];
-      break;
-    case 'quiz':
-      imageUrls = [
-        'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/question-1-option-1.jpg',
-        'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/question-1-option-2.jpg',
-      ];
-      break;
-    case 'result':
-      imageUrls = [
-        'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/transformation-before.jpg',
-        'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/transformation-after.jpg',
-      ];
-      break;
-    case 'strategic':
-      imageUrls = [
-        'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/strategic-image-1.jpg',
-        'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/strategic-image-2.jpg',
-      ];
-      break;
-    default:
-      console.warn(`Categoria de imagem desconhecida: ${category}`);
-      return [];
+  if (Array.isArray(category)) {
+    // If category is an array, treat it as URLs
+    imageUrls = category;
+  } else {
+    switch (category) {
+      case 'home':
+        imageUrls = [
+          'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/quiz-intro-background.jpg',
+          'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/home-image-2.jpg',
+        ];
+        break;
+      case 'quiz':
+        imageUrls = [
+          'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/question-1-option-1.jpg',
+          'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/question-1-option-2.jpg',
+        ];
+        break;
+      case 'result':
+        imageUrls = [
+          'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/transformation-before.jpg',
+          'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/transformation-after.jpg',
+        ];
+        break;
+      case 'strategic':
+        imageUrls = [
+          'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/strategic-image-1.jpg',
+          'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/strategic-image-2.jpg',
+        ];
+        break;
+      default:
+        console.warn(`Categoria de imagem desconhecida: ${category}`);
+        return [];
+    }
   }
 
   // Otimizar URLs das imagens
@@ -152,23 +174,15 @@ export const preloadCriticalImages = async (
   return preloadImagesInBatch(optimizedImageUrls, batchSize);
 };
 
-/**
- * Preload multiple images for better user experience
- */
-export const preloadImages = (urls: string[]): Promise<void[]> => {
-  return Promise.all(
-    urls.map(url => preloadImage(url))
-  );
-};
-
 export default {
   loadImage,
   preloadImage,
+  preloadImages,
+  preloadImagesByUrls,
   optimizeImageQuality,
   convertImageFormat,
   resizeImage,
   applyCloudinaryTransformations,
   preloadImagesInBatch,
-  preloadCriticalImages,
-  preloadImages
+  preloadCriticalImages
 };
