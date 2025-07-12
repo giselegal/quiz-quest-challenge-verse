@@ -53,11 +53,13 @@ const BenefitsListBlock: React.FC<BenefitsListBlockProps> = ({
     }
   };
 
-  const titleAlignmentClasses = {
+  const titleAlignmentClasses: Record<string, string> = {
     left: 'text-left',
     center: 'text-center',
     right: 'text-right'
   };
+
+  const alignmentClass = titleAlignmentClasses[blockTitleAlignment as keyof typeof titleAlignmentClasses] || 'text-center';
 
   return (
     <div
@@ -73,7 +75,7 @@ const BenefitsListBlock: React.FC<BenefitsListBlockProps> = ({
       data-block-id={block.id}
       data-block-type={block.type}
     >
-      <h3 className={`text-xl font-bold text-[#432818] ${titleAlignmentClasses[blockTitleAlignment]}`}>
+      <h3 className={`text-xl font-bold text-[#432818] ${alignmentClass}`}>
         <InlineEditableText
           value={blockTitle}
           onChange={(value: string) => handlePropertyChange('title', value)}

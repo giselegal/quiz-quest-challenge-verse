@@ -43,7 +43,7 @@ export interface Block {
   content: EditableContent;
   order: number;
   visible: boolean;
-  properties: Record<string, any>; // Changed from optional to required
+  properties: Record<string, any>;
 }
 
 // Add EditorBlock as an alias for Block for backward compatibility
@@ -71,7 +71,24 @@ export type BlockType =
   | 'cta'
   | 'quiz-question'
   | 'bonus-carousel'
-  | 'style-result';
+  | 'style-result'
+  | 'price-comparison'
+  | 'pros-cons'
+  | 'stats-metrics'
+  | 'two-columns'
+  | 'FunnelHeroBlock'
+  | 'FunnelPainBlock'
+  | 'result-header-inline'
+  | 'result-card-inline'
+  | 'text-inline'
+  | 'image-display-inline'
+  | 'heading-inline'
+  | 'style-card-inline'
+  | 'button-inline'
+  | 'countdown-inline'
+  | 'quiz-offer-pricing-inline'
+  | 'testimonial-card-inline'
+  | 'badge-inline';
 
 export interface EditorConfig {
   blocks: Block[];

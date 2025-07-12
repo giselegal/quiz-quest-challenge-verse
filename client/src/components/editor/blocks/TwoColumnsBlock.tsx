@@ -1,11 +1,8 @@
-
 import React from 'react';
 import type { BlockComponentProps } from '@/types/blocks';
 
-interface TwoColumnsBlockProps extends BlockComponentProps {
-  block: {
-    id: string;
-    type: 'two-columns';
+interface TwoColumnsBlockProps extends Omit<BlockComponentProps, 'block'> {
+  block: BlockComponentProps['block'] & {
     properties: {
       title?: string;
       subtitle?: string;
