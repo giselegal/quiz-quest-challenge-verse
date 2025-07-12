@@ -17,14 +17,25 @@ export const suppressExternalErrors = () => {
       'Internal Server Error',
       'lovable.app',
       'lovableproject.com',
+      'lovable-api.com',
       'WebSocket connection',
       'rum_collection',
       'ingesteer.services',
       'status of 404',
       'status of 500',
       'status of 502',
+      'status of 400',
       'Bad Request',
-      'Network Error'
+      'Network Error',
+      'ERR_HTTP2_PROTOCOL_ERROR',
+      'Entenda o erro',
+      'editor:1',
+      'id-preview--',
+      '65efd17d-5178-405d-9721-909c97470c6d',
+      'wss://',
+      'createOrJoinSocket',
+      'anônimo',
+      '__lovable_token='
     ];
     
     const shouldSuppress = suppressedPatterns.some(pattern => 
