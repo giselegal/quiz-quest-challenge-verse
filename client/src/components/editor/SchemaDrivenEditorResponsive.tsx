@@ -84,9 +84,10 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
         
       } catch (error) {
         console.error('❌ Erro ao inicializar editor:', error);
+        setIsInitialized(true); // Set initialized even on error to show error UI
         toast({
-          title: "Erro de Inicialização",
-          description: "Falha ao carregar o editor. Tente novamente.",
+          title: "Erro de Inicialização", 
+          description: error instanceof Error ? error.message : "Falha ao carregar o editor. Tente novamente.",
           variant: "destructive",
         });
       }
@@ -104,9 +105,10 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
         description: "Todas as alterações foram salvas com sucesso!",
       });
     } catch (error) {
+      console.error('Erro ao salvar funil:', error);
       toast({
         title: "Erro ao Salvar",
-        description: "Falha ao salvar. Verifique a conexão.",
+        description: error instanceof Error ? error.message : "Falha ao salvar. Verifique a conexão.",
         variant: "destructive",
       });
     }

@@ -8,6 +8,8 @@ import SupabaseConnectionTest from "@/components/SupabaseConnectionTest";
 import { AuthProvider } from "@/context/AuthContext";
 import { QuizProvider } from "@/context/QuizContext";
 import LovableClientProvider from "@/components/LovableClientProvider";
+import ErrorBoundary from "@/components/error-boundary/ErrorBoundary";
+import "@/utils/telemetry-blocker";
 
 // Pages
 import Index from "./pages/Index";
@@ -33,15 +35,16 @@ const queryClient = new QueryClient();
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <LovableClientProvider>
-        <AuthProvider>
-          <QuizProvider>
-            <TooltipProvider>
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
-                <Routes>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <LovableClientProvider>
+          <AuthProvider>
+            <QuizProvider>
+              <TooltipProvider>
+                <Toaster />
+                <Sonner />
+                <BrowserRouter>
+                  <Routes>
                   {/* Public Routes */}
                   <Route path="/" element={<Index />} />
                   <Route path="/quiz-descubra-seu-estilo" element={<QuizPage />} />
@@ -69,13 +72,14 @@ function App() {
                   
                   {/* Development/Testing Routes */}
                   <Route path="/test-supabase" element={<SupabaseConnectionTest />} />
-                </Routes>
-              </BrowserRouter>
-            </TooltipProvider>
-          </QuizProvider>
-        </AuthProvider>
-      </LovableClientProvider>
-    </QueryClientProvider>
+                  </Routes>
+                </BrowserRouter>
+              </TooltipProvider>
+            </QuizProvider>
+          </AuthProvider>
+        </LovableClientProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 
