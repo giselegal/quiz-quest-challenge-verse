@@ -10,8 +10,7 @@ import { QuizTransitionManager } from './quiz/QuizTransitionManager';
 import QuizNavigation from './quiz/QuizNavigation';
 import QuizIntro from './QuizIntro'; 
 import { strategicQuestions } from '@/data/strategicQuestions';
-import { useAuth } from '../context/AuthContext';
-import { trackQuizStart, trackQuizAnswer, trackQuizComplete, trackResultView } from '../utils/analytics';
+// Simplified imports for latest Lovable version
 import { preloadImages } from '@/utils/imageManager';
 import LoadingManager from './quiz/LoadingManager';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -21,7 +20,7 @@ import { EnchantedBackground, MorphingProgress } from './effects/EnchantedEffect
 import '../styles/enchanted-effects.css';
 
 const QuizPage: React.FC = () => {
-  const { user, login } = useAuth();
+  // Simplified for latest Lovable version
   const [location, setLocation] = useLocation();
   
   // Modificado: Sempre exibir o QuizIntro primeiro, independente do histórico
@@ -83,12 +82,11 @@ const QuizPage: React.FC = () => {
   useEffect(() => {
     if (!quizStartTracked && !showIntro) {
       localStorage.setItem('quiz_start_time', Date.now().toString());
-      const userName = user?.userName || localStorage.getItem('userName') || 'Anônimo';
-      const userEmail = user?.email || localStorage.getItem('userEmail');
-      trackQuizStart(userName, userEmail || undefined);
+      const userName = localStorage.getItem('userName') || 'Anônimo';
+      console.log('Quiz started by:', userName);
       setQuizStartTracked(true);
     }
-  }, [quizStartTracked, user, showIntro]);
+  }, [quizStartTracked, showIntro]);
 
   const actualCurrentQuestionData = showingStrategicQuestions
     ? strategicQuestions[currentStrategicQuestionIndex]
@@ -112,10 +110,8 @@ const QuizPage: React.FC = () => {
     // Salvar nome no localStorage
     localStorage.setItem('userName', name.trim());
     
-    // Atualizar contexto de autenticação
-    if (login) {
-      login(name);
-    }
+    // Simplified for latest Lovable version
+    localStorage.setItem('userName', name.trim());
     
     // Iniciar o quiz
     setShowIntro(false);
@@ -164,14 +160,7 @@ const QuizPage: React.FC = () => {
       // Salva a resposta estratégica usando o hook useQuizLogic
       saveStrategicAnswer(response.questionId, finalOptions);
       
-      // Rastreia a resposta para analytics
-      trackQuizAnswer(response.questionId, finalOptions.join(', '));
-      
-      const currentProgress = ((currentStrategicQuestionIndex + totalQuestions + 1) / 
-                              (totalQuestions + strategicQuestions.length)) * 100;
-      if (currentProgress >= 45 && currentProgress <= 55) {
-        trackQuizAnswer('quiz_middle_point', 'reached');
-      }
+      console.log('Strategic answer recorded:', response.questionId, finalOptions);
       // Não avança o índice aqui
     } catch (error) {
       toast({
@@ -223,13 +212,7 @@ const QuizPage: React.FC = () => {
   const handleAnswerSubmitInternal = useCallback((response: UserResponse) => {
     try {
       handleAnswer(response.questionId, response.selectedOptions);
-      trackQuizAnswer(response.questionId, response.selectedOptions.join(', '));
-      
-      const currentProgress = ((currentQuestionIndex + 1) / 
-                              (totalQuestions + strategicQuestions.length)) * 100;
-      if (currentProgress >= 20 && currentProgress <= 30) {
-        trackQuizAnswer('quiz_first_quarter', 'reached');
-      }
+      console.log('Answer submitted:', response.questionId, response.selectedOptions);
     } catch (error) {
       toast({
         title: "Erro na submissão da resposta",
@@ -250,14 +233,7 @@ const QuizPage: React.FC = () => {
       // Registra o timestamp de quando o quiz foi finalizado
       localStorage.setItem('quizCompletedAt', Date.now().toString());
       
-      if (results?.primaryStyle) {
-        trackResultView(results.primaryStyle);
-      }
-      
-      // Navegação para a página de resultados ocorre ao clicar no botão "Vamos ao resultado?"
-      // Sem timers para avanço automático
-      setLocation('/resultado');
-      
+      console.log('Quiz results calculated:', results);
     } catch (error) {
       console.error('Erro ao navegar para a página de resultados:', error);
       toast({
@@ -281,9 +257,11 @@ const QuizPage: React.FC = () => {
         handleNext(); 
       } else {
         calculateResults();
-        setShowingTransition(true); // Mostra MainTransition
-        trackQuizAnswer('quiz_main_complete', 'completed');
+        setShowingTransition(true);
+        console.log('Quiz completed, transitioning to strategic');
       }
+    } else {
+      // Strategic questions logic here if needed
     }
   }, [
     showingStrategicQuestions, 
@@ -321,11 +299,11 @@ const QuizPage: React.FC = () => {
       canProceed={visualCanProceedButton} 
       onNext={
         showingStrategicQuestions && actualCurrentQuestionData
-          ? (currentStrategicQuestionIndex === strategicQuestions.length - 1 
-              ? () => { 
-                  setShowingFinalTransition(true);  
-                  trackQuizComplete();
-                  // Manual progression to results will be triggered by button click
+               ? (currentStrategicQuestionIndex === strategicQuestions.length - 1 
+                   ? () => { 
+                       setShowingFinalTransition(true);  
+                       console.log('Quiz completed');
+                       // Manual progression to results will be triggered by button click
                 }
               : goToNextStrategicQuestion // Chama a nova função para avançar
             )
@@ -422,12 +400,12 @@ const QuizPage: React.FC = () => {
                       transition={{ duration: 0.5, ease: "easeOut" }}
                     >
                       <QuizContent
-                        user={user}
+                        user={{ userName: localStorage.getItem('userName') || '' }}
                         currentQuestionIndex={currentQuestionIndex}
                         totalQuestions={totalQuestions}
                         showingStrategicQuestions={showingStrategicQuestions}
                         currentStrategicQuestionIndex={currentStrategicQuestionIndex}
-                        currentQuestion={actualCurrentQuestionData} 
+                        currentQuestion={actualCurrentQuestionData}
                         currentAnswers={showingStrategicQuestions && actualCurrentQuestionData.id ? strategicAnswers[actualCurrentQuestionData.id] || [] : currentAnswers}
                         handleAnswerSubmit={
                           showingStrategicQuestions && actualCurrentQuestionData

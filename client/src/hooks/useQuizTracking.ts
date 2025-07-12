@@ -1,10 +1,10 @@
 import { useEffect, useCallback, useRef } from 'react';
-import { useAuth } from '@/context/AuthContext';
+// Simplified for latest Lovable version
 import { quizDataService, useQuizData } from '@/services/quizDataService';
 
 // Hook para auto-tracking de cliques em elementos do quiz com integração completa
 export const useQuizTracking = (questionIndex?: number) => {
-  const { user } = useAuth();
+  // Simplified for latest Lovable version
   const questionStartTime = useRef<number>(Date.now());
   const hasTrackedPageView = useRef<boolean>(false);
   const {
@@ -15,13 +15,14 @@ export const useQuizTracking = (questionIndex?: number) => {
     getCurrentSession
   } = useQuizData();
 
-  // Inicializar sessão automaticamente e tracking de página
+  // Simplified tracking for latest Lovable version
   useEffect(() => {
     const currentSession = getCurrentSession();
-    if (!currentSession && user?.userName) {
-      startSession(user.userName, user.email);
+    const userName = localStorage.getItem('userName');
+    if (!currentSession && userName) {
+      startSession(userName);
       // Track início do quiz
-      quizDataService.trackQuizStart(user.userName, user.email);
+      quizDataService.trackQuizStart(userName);
     }
 
     // Track page view apenas uma vez
@@ -29,7 +30,7 @@ export const useQuizTracking = (questionIndex?: number) => {
       quizDataService.trackPageView();
       hasTrackedPageView.current = true;
     }
-  }, [user, startSession, getCurrentSession]);
+  }, [startSession, getCurrentSession]);
 
   // Reset timer quando questão muda
   useEffect(() => {
