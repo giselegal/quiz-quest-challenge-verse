@@ -19,9 +19,13 @@ const QuizPage = lazy(() => import("./components/QuizPage"));
 const ResultPage = lazy(() => import("./pages/ResultPage"));
 const LoadingAccessPage = lazy(() => import("./pages/LoadingAccessPage"));
 
+// Editor Pages - lazy loaded
+const EditorPage = lazy(() => import("./pages/EditorPage"));
+
 // Admin Pages - lazy loaded
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
 const QuizManagement = lazy(() => import("./pages/admin/QuizManagement"));
+const AdminEditorPage = lazy(() => import("./pages/admin/EditorPage"));
 
 // Create optimized query client
 const queryClient = new QueryClient({
@@ -114,6 +118,18 @@ function App() {
                       </RouteErrorBoundary>
                     } />
                     
+                    {/* Editor Routes */}
+                    <Route path="/editor" element={
+                      <RouteErrorBoundary routeName="Editor">
+                        <EditorPage />
+                      </RouteErrorBoundary>
+                    } />
+                    <Route path="/editor/:style" element={
+                      <RouteErrorBoundary routeName="Editor">
+                        <EditorPage />
+                      </RouteErrorBoundary>
+                    } />
+                    
                     {/* Admin Routes */}
                     <Route path="/admin" element={
                       <RouteErrorBoundary routeName="Admin">
@@ -123,6 +139,11 @@ function App() {
                     <Route path="/admin/quiz" element={
                       <RouteErrorBoundary routeName="Quiz Management">
                         <QuizManagement />
+                      </RouteErrorBoundary>
+                    } />
+                    <Route path="/admin/editor" element={
+                      <RouteErrorBoundary routeName="Admin Editor">
+                        <AdminEditorPage />
                       </RouteErrorBoundary>
                     } />
                   </Routes>
