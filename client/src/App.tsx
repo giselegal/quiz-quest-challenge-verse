@@ -54,6 +54,7 @@ function App() {
                   <Route path="/simple-editor" element={<SimpleDragDropEditor />} />
                   <Route path="/editor-visual" element={<EditorVisualPage />} />
                   <Route path="/editor" element={<SchemaDrivenEditorPage />} />
+                  <Route path="/editor/:id" element={<SchemaDrivenEditorPage />} />
                   <Route path="/quiz" element={<QuizPage />} />
                   <Route path="/resultado" element={<ResultPage />} />
                   

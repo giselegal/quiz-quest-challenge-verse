@@ -1,14 +1,14 @@
 import React from 'react';
-import { useRoute } from 'wouter';
+import { useParams } from 'react-router-dom';
 import SchemaDrivenEditorResponsive from '@/components/editor/SchemaDrivenEditorResponsive';
 
 const SchemaDrivenEditorPage: React.FC = () => {
-  const [match, params] = useRoute('/editor/:id');
-  const funnelId = params?.id;
+  const { id } = useParams();
+  const funnelId = id;
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <SchemaDrivenEditorResponsive />
+      <SchemaDrivenEditorResponsive funnelId={funnelId} />
     </div>
   );
 };
