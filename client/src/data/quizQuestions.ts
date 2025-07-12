@@ -3,58 +3,80 @@ import { QuizQuestion } from '@/types/quiz';
 
 export const quizQuestions: QuizQuestion[] = [
   {
-    id: 'q1',
-    text: 'Como você prefere se vestir no dia a dia?',
-    title: 'Estilo Pessoal',
-    type: 'single',
+    id: '1',
+    title: 'Qual é o seu estilo preferido?',
+    text: 'Escolha até 3 opções que mais combinam com você:',
+    type: 'multiple',
+    multiSelect: 3,
     options: [
       {
-        id: 'opt1',
-        text: 'Roupas clássicas e elegantes',
-        points: { elegante: 3, classico: 2 }
+        id: '1a',
+        text: 'Casual e confortável',
+        styleCategory: 'Natural',
+        points: { natural: 3 }
       },
       {
-        id: 'opt2',
-        text: 'Looks modernos e ousados',
-        points: { moderno: 3, criativo: 2 }
+        id: '1b',
+        text: 'Elegante e sofisticado',
+        styleCategory: 'Elegante',
+        points: { elegante: 3 }
       },
       {
-        id: 'opt3',
-        text: 'Confortável e casual',
-        points: { natural: 3, casual: 2 }
+        id: '1c',
+        text: 'Moderno e urbano',
+        styleCategory: 'Contemporâneo',
+        points: { contemporaneo: 3 }
       },
       {
-        id: 'opt4',
-        text: 'Romântico e feminino',
-        points: { romantico: 3, feminino: 2 }
+        id: '1d',
+        text: 'Clássico e atemporal',
+        styleCategory: 'Clássico',
+        points: { classico: 3 }
+      },
+      {
+        id: '1e',
+        text: 'Romântico e delicado',
+        styleCategory: 'Romântico',
+        points: { romantico: 3 }
+      },
+      {
+        id: '1f',
+        text: 'Ousado e sensual',
+        styleCategory: 'Sensual',
+        points: { sensual: 3 }
       }
     ]
   },
   {
-    id: 'q2',
-    text: 'Qual cor você mais se identifica?',
-    title: 'Cores Preferidas',
-    type: 'single',
+    id: '2',
+    title: 'Como você se veste para o trabalho?',
+    text: 'Escolha até 3 opções:',
+    type: 'multiple',
+    multiSelect: 3,
     options: [
       {
-        id: 'opt5',
-        text: 'Preto, branco e cinza',
-        points: { elegante: 3, classico: 2 }
+        id: '2a',
+        text: 'Roupas práticas e confortáveis',
+        styleCategory: 'Natural',
+        points: { natural: 2 }
       },
       {
-        id: 'opt6',
-        text: 'Cores vibrantes e chamativas',
-        points: { moderno: 3, criativo: 2 }
+        id: '2b',
+        text: 'Blazer e peças estruturadas',
+        styleCategory: 'Elegante',
+        points: { elegante: 2 }
       },
       {
-        id: 'opt7',
-        text: 'Tons terrosos e naturais',
-        points: { natural: 3, casual: 2 }
+        id: '2c',
+        text: 'Looks modernos e atuais',
+        styleCategory: 'Contemporâneo',
+        points: { contemporaneo: 2 }
       },
       {
-        id: 'opt8',
-        text: 'Rosa, lavanda e tons pastéis',
-        points: { romantico: 3, feminino: 2 }
+        id: '2d',
+        text: 'Peças clássicas bem cortadas',
+        styleCategory: 'Clássico',
+        points: { classico: 2 }
       }
     ]
   }

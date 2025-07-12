@@ -1,75 +1,31 @@
 
 import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface AnimatedWrapperProps {
-  animation?: 'fade' | 'scale' | 'none';
-  show: boolean;
-  duration?: number;
-  delay?: number;
-  className?: string;
   children: React.ReactNode;
+  show: boolean;
+  className?: string;
 }
 
 export const AnimatedWrapper: React.FC<AnimatedWrapperProps> = ({
-  animation = 'fade',
+  children,
   show,
-  duration = 300,
-  delay = 0,
-  className = '',
-  children
-}) => {
-  const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => {
-    if (show) {
-      const timer = setTimeout(() => setMounted(true), delay);
-      return () => clearTimeout(timer);
-    }
-  }, [show, delay]);
-
-  if (!show || !mounted) return null;
-
-  const animationClass = animation === 'fade' ? 'animate-fade-in' : 
-                        animation === 'scale' ? 'animate-scale-in' : '';
-
-  return (
-    <div 
-      className={`${animationClass} ${className}`}
-      style={{ animationDuration: `${duration}ms` }}
-    >
-      {children}
-    </div>
-  );
-};
-
-interface OptimizedImageProps {
-  src: string;
-  alt: string;
-  width?: number;
-  height?: number;
-  className?: string;
-  priority?: boolean;
-  style?: React.CSSProperties;
-}
-
-export const OptimizedImage: React.FC<OptimizedImageProps> = ({
-  src,
-  alt,
-  width,
-  height,
-  className = '',
-  priority = false,
-  style
+  className = ''
 }) => {
   return (
-    <img
-      src={src}
-      alt={alt}
-      width={width}
-      height={height}
-      className={className}
-      style={style}
-      loading={priority ? 'eager' : 'lazy'}
-    />
+    <AnimatePresence>
+      {show && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3 }}
+          className={className}
+        >
+          {children}
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };

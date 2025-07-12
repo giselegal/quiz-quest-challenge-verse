@@ -1,13 +1,10 @@
 
 import React from 'react';
-import { Progress } from '../ui/progress';
-import { AnimatedWrapper } from '../ui/animated-wrapper';
-import { strategicQuestions } from '@/data/strategicQuestions'; // Importar strategicQuestions
 
 interface QuizHeaderProps {
-  userName: string | null;
+  userName: string;
   currentQuestionIndex: number;
-  totalQuestions: number; // Total de questões normais
+  totalQuestions: number;
   showingStrategicQuestions: boolean;
   currentStrategicQuestionIndex: number;
 }
@@ -17,35 +14,32 @@ export const QuizHeader: React.FC<QuizHeaderProps> = ({
   currentQuestionIndex,
   totalQuestions,
   showingStrategicQuestions,
-  currentStrategicQuestionIndex,
+  currentStrategicQuestionIndex
 }) => {
-  const totalNumberOfStrategicQuestions = strategicQuestions.length;
-
-  const progressValue = showingStrategicQuestions
-    ? Math.round(((totalQuestions + currentStrategicQuestionIndex + 1) / (totalQuestions + totalNumberOfStrategicQuestions)) * 100)
-    : Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100);
-
-  const currentStep = showingStrategicQuestions
-    ? totalQuestions + currentStrategicQuestionIndex + 1
-    : currentQuestionIndex + 1;
-  
-  const totalSteps = showingStrategicQuestions
-    ? totalQuestions + totalNumberOfStrategicQuestions
-    : totalQuestions;
+  const progress = Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100);
 
   return (
-    <>
-      <Progress 
-        value={progressValue} 
-        className="w-full h-2 bg-[#B89B7A]/20 fixed top-0 left-0 z-50"
-        indicatorClassName="bg-[#B89B7A]" 
-      />
-      
-      <AnimatedWrapper show={true} className="flex justify-center items-center pt-4 pb-2 px-4 w-full">
-        <div className="text-sm text-[#1A1818]/60">
-          {currentStep} de {totalSteps}
+    <div className="bg-white shadow-sm">
+      <div className="container mx-auto px-4 py-6">
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-xl font-semibold text-[#432818]">
+            Olá, {userName}!
+          </h1>
+          <span className="text-sm text-[#8F7A6A]">
+            {showingStrategicQuestions 
+              ? `Pergunta ${currentStrategicQuestionIndex + 1} de ${totalQuestions - 10}`
+              : `Pergunta ${currentQuestionIndex + 1} de ${totalQuestions}`
+            }
+          </span>
         </div>
-      </AnimatedWrapper>
-    </>
+        
+        <div className="w-full bg-[#F3E8E6] rounded-full h-2">
+          <div 
+            className="bg-[#B89B7A] h-2 rounded-full transition-all duration-300"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      </div>
+    </div>
   );
 };

@@ -30,16 +30,10 @@ export const QuizContent: React.FC<QuizContentProps> = ({
   handleNextClick,
   handlePrevious,
 }) => {
-  // Get user name from localStorage if not provided in props
   const userName = user?.userName || localStorage.getItem('userName') || '';
-  
-  // Determine the required selections based on question type
   const requiredSelections = showingStrategicQuestions ? 1 : (currentQuestion?.multiSelect || 3);
-  
-  // Check if we have enough selections to proceed
   const canProceed = currentAnswers?.length === requiredSelections;
 
-  // Create a proper answers object for strategic questions
   const strategicAnswers = showingStrategicQuestions && currentQuestion?.id ? {
     [currentQuestion.id]: currentAnswers
   } : {};
