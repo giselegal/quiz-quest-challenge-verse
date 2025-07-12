@@ -7,6 +7,8 @@
     "dev": "NODE_ENV=development tsx server/index.ts",
     "dev:client": "vite --port 8080 --host :: --config client/vite.config.ts",
     "dev:full": "concurrently \"npm run dev\" \"npm run dev:client\"",
+    "dev:clean": "DISABLE_TELEMETRY=true NODE_ENV=development ./start-clean.sh",
+    "start:clean": "./start-clean.sh",
     "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
     "build:dev": "vite build --mode development",
     "start": "NODE_ENV=production node dist/index.js",
@@ -15,7 +17,6 @@
     "lovable:prepare": "echo 'Preparando ambiente para desenvolvimento' && npm install",
     "lovable:dev": "vite --port 8080 --host :: --config vite.config.ts",
     "dev:local": "vite --config vite.config.simple.ts --port 8080 --host ::",
-    "dev:clean": "vite --config vite.config.simple.ts --port 8080 --host :: --force",
     "dev:sqlite": "NODE_ENV=development npm run dev",
     "dev:supabase": "DATABASE_URL='postgresql://postgres:[YOUR_PASSWORD]@db.txqljpitotmcxntprxiu.supabase.co:5432/postgres' npm run dev"
   },
