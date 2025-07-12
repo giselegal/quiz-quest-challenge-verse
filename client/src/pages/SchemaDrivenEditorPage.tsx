@@ -1,15 +1,19 @@
+
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import SchemaDrivenEditorResponsive from '@/components/editor/SchemaDrivenEditorResponsive';
+import SchemaDrivenEditorLayoutV2 from '@/components/editor/SchemaDrivenEditorLayoutV2';
+import { EditorErrorBoundary } from '@/components/editor/EditorErrorBoundary';
 
 const SchemaDrivenEditorPage: React.FC = () => {
   const { id } = useParams();
   const funnelId = id;
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <SchemaDrivenEditorResponsive funnelId={funnelId} />
-    </div>
+    <EditorErrorBoundary>
+      <div className="min-h-screen bg-gray-100">
+        <SchemaDrivenEditorLayoutV2 funnelId={funnelId} />
+      </div>
+    </EditorErrorBoundary>
   );
 };
 
