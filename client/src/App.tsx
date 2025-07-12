@@ -12,12 +12,12 @@ import CriticalCSSLoader from "./components/CriticalCSSLoader";
 import { initialCriticalCSS, heroCriticalCSS } from "./utils/critical-css";
 import { AdminRoute } from "./components/admin/AdminRoute";
 
-// Componente de loading para Suspense
+// Componente de loading para Suspense - otimizado
 const LoadingFallback = () => (
-  <div className="flex items-center justify-center min-h-screen bg-gray-50">
+  <div className="flex items-center justify-center min-h-screen bg-white">
     <div className="text-center">
-      <LoadingSpinner size="lg" color="#B89B7A" className="mx-auto" />
-      <p className="mt-4 text-gray-600">Carregando...</p>
+      <div className="w-8 h-8 border-4 border-[#B89B7A] border-t-transparent rounded-full animate-spin mx-auto"></div>
+      <p className="mt-4 text-gray-600 text-sm">Carregando...</p>
     </div>
   </div>
 );

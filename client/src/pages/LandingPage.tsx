@@ -18,7 +18,7 @@ const LandingPage: React.FC = () => {
     // Pequeno delay para mostrar o loading
     setTimeout(() => {
       setLocation(redirectUrl);
-    }, 500);
+    }, 100);
   }, [setLocation]);
 
   return (
