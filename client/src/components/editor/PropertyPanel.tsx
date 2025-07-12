@@ -15,7 +15,7 @@ import { Slider } from '../ui/slider';
 import { Badge } from '../ui/badge';
 import { Trash2, Plus, ChevronDown, ChevronRight } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/collapsible';
-import { getIconByName } from '@/components/ui/empty-stub';
+import { getIconByName } from '../../utils/iconMap';
 
 interface PropertyPanelProps {
   block: Block | null;

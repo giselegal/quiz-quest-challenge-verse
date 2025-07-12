@@ -29,7 +29,7 @@ export interface QuizQuestion {
   order: number;
   question: string;
   title?: string; // Adicionado para compatibilidade
-  type: 'text' | 'both' | 'image'; // Corrigido tipos válidos
+  type: 'normal' | 'strategic' | 'text' | 'both' | 'image'; // Expandido para compatibilidade
   options: QuizOption[];
   imageUrl?: string;
   multiSelect?: number;
