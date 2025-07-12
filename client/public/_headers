@@ -1,0 +1,4 @@
+# Disable external logging and tracking
+/*
+  X-Frame-Options: DENY
+  Content-Security-Policy: default-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src 'self' http://localhost:5000 ws://localhost:*; img-src 'self' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval'
