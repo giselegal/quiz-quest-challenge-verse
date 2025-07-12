@@ -28,7 +28,6 @@ export const useSchemaEditorFixed = (funnelId?: string) => {
   const [error, setError] = useState<string | null>(null);
   const [isPreviewing, setIsPreviewing] = useState(false);
 
-  // Load funnel data
   const loadFunnel = useCallback(async () => {
     try {
       setLoading(true);
@@ -37,22 +36,18 @@ export const useSchemaEditorFixed = (funnelId?: string) => {
       let funnelData: Funnel;
 
       if (funnelId) {
-        // Try to load existing funnel
         funnelData = await schemaDrivenFunnelService.getFunnel(funnelId);
       } else {
-        // Create or get default funnel
         funnelData = await schemaDrivenFunnelService.createDefaultFunnel();
       }
 
       setFunnel(funnelData);
       
-      // Set first page as current
       if (funnelData.pages && funnelData.pages.length > 0) {
         const firstPage = funnelData.pages[0];
         setCurrentPage(firstPage);
         setBlocks(firstPage.blocks || []);
       } else {
-        // Create a default page if none exists
         const defaultPage: Page = {
           id: 'page-1',
           name: 'Página 1',
@@ -70,12 +65,10 @@ export const useSchemaEditorFixed = (funnelId?: string) => {
     }
   }, [funnelId]);
 
-  // Initialize on mount
   useEffect(() => {
     loadFunnel();
   }, [loadFunnel]);
 
-  // Actions
   const actions = {
     isPreviewing,
     
@@ -110,14 +103,14 @@ export const useSchemaEditorFixed = (funnelId?: string) => {
         type,
         content: {},
         order: blocks.length,
-        visible: true
+        visible: true,
+        properties: {} // Ensure properties is always defined
       };
 
       const updatedBlocks = [...blocks, newBlock];
       setBlocks(updatedBlocks);
       setSelectedBlock(newBlock);
 
-      // Update current page
       if (currentPage) {
         const updatedPage = { ...currentPage, blocks: updatedBlocks };
         setCurrentPage(updatedPage);
@@ -126,12 +119,15 @@ export const useSchemaEditorFixed = (funnelId?: string) => {
 
     updateBlock: (blockId: string, updates: any) => {
       const updatedBlocks = blocks.map(block =>
-        block.id === blockId ? { ...block, ...updates } : block
+        block.id === blockId ? { 
+          ...block, 
+          ...updates,
+          properties: { ...block.properties, ...(updates.properties || {}) }
+        } : block
       );
       
       setBlocks(updatedBlocks);
       
-      // Update current page
       if (currentPage) {
         const updatedPage = { ...currentPage, blocks: updatedBlocks };
         setCurrentPage(updatedPage);
@@ -146,7 +142,6 @@ export const useSchemaEditorFixed = (funnelId?: string) => {
         setSelectedBlock(null);
       }
       
-      // Update current page
       if (currentPage) {
         const updatedPage = { ...currentPage, blocks: updatedBlocks };
         setCurrentPage(updatedPage);
@@ -160,13 +155,13 @@ export const useSchemaEditorFixed = (funnelId?: string) => {
       const duplicatedBlock: Block = {
         ...blockToDuplicate,
         id: `block-${Date.now()}`,
-        order: blocks.length
+        order: blocks.length,
+        properties: { ...blockToDuplicate.properties } // Ensure properties is copied
       };
 
       const updatedBlocks = [...blocks, duplicatedBlock];
       setBlocks(updatedBlocks);
       
-      // Update current page
       if (currentPage) {
         const updatedPage = { ...currentPage, blocks: updatedBlocks };
         setCurrentPage(updatedPage);
@@ -180,7 +175,6 @@ export const useSchemaEditorFixed = (funnelId?: string) => {
       
       setBlocks(updatedBlocks);
       
-      // Update current page
       if (currentPage) {
         const updatedPage = { ...currentPage, blocks: updatedBlocks };
         setCurrentPage(updatedPage);
@@ -193,7 +187,6 @@ export const useSchemaEditorFixed = (funnelId?: string) => {
       }
 
       try {
-        // Update funnel with current page data
         const updatedFunnel = {
           ...funnel,
           pages: funnel.pages.map(page =>

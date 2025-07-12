@@ -29,7 +29,6 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
   } = useSchemaEditorFixed(funnelId);
 
   useEffect(() => {
-    // Simple loading state management
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1000);
@@ -131,13 +130,11 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
     );
   }
 
-  // Safe access to pages with fallback
   const pages = funnel?.pages || [];
   const currentPageData = currentPage || pages[0];
 
   return (
     <div className="h-screen flex flex-col">
-      {/* Toolbar */}
       <div className="border-b bg-white p-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <h1 className="text-lg font-semibold">Editor de Funil</h1>
@@ -172,7 +169,6 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
         </div>
       </div>
 
-      {/* Pages Navigation */}
       {pages.length > 0 && (
         <div className="border-b bg-gray-50 p-2 flex gap-2 overflow-x-auto">
           {pages.slice(0, 10).map((page, index) => (
@@ -189,9 +185,7 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
         </div>
       )}
 
-      {/* Main Content */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Canvas */}
         <div className="flex-1 overflow-auto">
           <DroppableCanvas
             blocks={blocks}
@@ -209,7 +203,7 @@ const SchemaDrivenEditorLayoutV2: React.FC<SchemaDrivenEditorLayoutV2Props> = ({
                 isSelected={selectedBlock?.id === block.id}
                 isEditing={!actions.isPreviewing}
                 onSelect={() => handleBlockSelect(block.id)}
-                onUpdate={(updates) => actions.updateBlock?.(block.id, updates)}
+                onUpdate={(updates: any) => actions.updateBlock?.(block.id, updates)}
                 onDelete={() => handleBlockDelete(block.id)}
               />
             )}

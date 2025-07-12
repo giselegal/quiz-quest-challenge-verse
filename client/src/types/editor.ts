@@ -21,8 +21,8 @@ export interface EditableContent {
   borderRadius?: number;
   height?: number;
   testimonialsImage?: string;
-  properties?: Record<string, any>; // Add properties field
-  items?: string[]; // For benefits list
+  properties?: Record<string, any>;
+  items?: string[];
   [key: string]: any;
 }
 
@@ -43,7 +43,7 @@ export interface Block {
   content: EditableContent;
   order: number;
   visible: boolean;
-  properties?: Record<string, any>;
+  properties: Record<string, any>; // Changed from optional to required
 }
 
 // Add EditorBlock as an alias for Block for backward compatibility
