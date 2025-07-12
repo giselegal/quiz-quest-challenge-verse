@@ -1,97 +1,61 @@
 
-/**
- * imageManager.ts
- * Utilitários para gerenciamento e otimização de imagens
- */
+interface ImageMetadata {
+  width?: number;
+  height?: number;
+  alt?: string;
+  loaded?: boolean;
+}
 
-/**
- * Preload de uma única imagem
- */
-export const preloadImage = (url: string): Promise<void> => {
+const imageCache = new Map<string, ImageMetadata>();
+
+export const preloadImage = (src: string): Promise<void> => {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    img.src = url;
     img.onload = () => {
-      console.log(`Image preloaded: ${url}`);
+      imageCache.set(src, {
+        width: img.naturalWidth,
+        height: img.naturalHeight,
+        loaded: true,
+        alt: `Image ${src}`
+      });
       resolve();
     };
-    img.onerror = (error) => {
-      console.error(`Failed to preload image: ${url}`, error);
-      reject(error);
-    };
+    img.onerror = reject;
+    img.src = src;
   });
 };
 
-/**
- * Preload multiple images for better user experience
- */
 export const preloadImages = (urls: string[]): Promise<void[]> => {
-  return Promise.all(
-    urls.map(url => preloadImage(url))
-  );
+  return Promise.all(urls.map(preloadImage));
 };
 
-/**
- * Get optimized image URL - simplified version
- */
-export const getOptimizedImageUrl = (originalUrl: string, options?: { width?: number; height?: number; quality?: number }): string => {
-  // Return original URL for now to ensure images load
-  return originalUrl;
+export const getOptimizedImageUrl = (src: string, options?: { width?: number; height?: number; quality?: number; format?: string }): string => {
+  // Simple implementation - in a real app, this would handle Cloudinary transformations
+  return src;
 };
 
-/**
- * Get low quality placeholder - simplified version
- */
-export const getLowQualityPlaceholder = (originalUrl: string): string => {
-  // Return original URL for now to ensure images load
-  return originalUrl;
+export const getLowQualityPlaceholder = (src: string): string => {
+  // Simple implementation - in a real app, this would generate a low-quality placeholder
+  return src;
 };
 
-/**
- * Preload critical images by category - simplified version
- */
-export const preloadCriticalImages = async (category: string | string[], options?: { quality?: number; batchSize?: number; format?: string }): Promise<void[]> => {
-  console.log(`Preloading critical images for category: ${category}`);
-  // Return empty promise for now
-  return Promise.resolve([]);
-};
-
-/**
- * Preload images by URLs - alias for preloadImages
- */
-export const preloadImagesByUrls = (urls: string[], options?: { quality?: number; batchSize?: number }): Promise<void[]> => {
+export const preloadCriticalImages = (urls: string[]): Promise<void[]> => {
   return preloadImages(urls);
 };
 
-/**
- * Get image metadata - placeholder function
- */
-export const getImageMetadata = (url: string) => {
-  return { width: 0, height: 0, loaded: false };
+export const preloadImagesByUrls = (urls: string[]): Promise<void[]> => {
+  return preloadImages(urls);
 };
 
-/**
- * Check if image is preloaded - placeholder function
- */
-export const isImagePreloaded = (url: string): boolean => {
-  return false;
+export const getImageMetadata = (src: string): ImageMetadata => {
+  return imageCache.get(src) || { width: undefined, height: undefined, alt: undefined, loaded: false };
 };
 
-/**
- * Get optimized image - alias for getOptimizedImageUrl
- */
-export const getOptimizedImage = (url: string, options?: any): string => {
-  return getOptimizedImageUrl(url, options);
+export const isImagePreloaded = (src: string): boolean => {
+  const metadata = imageCache.get(src);
+  return metadata?.loaded || false;
 };
 
-export default {
-  preloadImage,
-  preloadImages,
-  getOptimizedImageUrl,
-  getLowQualityPlaceholder,
-  preloadCriticalImages,
-  preloadImagesByUrls,
-  getImageMetadata,
-  isImagePreloaded,
-  getOptimizedImage
+export const getOptimizedImage = (src: string, options?: { width?: number; height?: number; quality?: number; format?: string }): string => {
+  return getOptimizedImageUrl(src, options);
 };

@@ -12,8 +12,14 @@ export const useQuizTracking = (currentQuestionIndex?: number) => {
     console.log('Question viewed:', questionId);
   };
 
-  const trackAnswerSubmission = (questionId: string, answer: string) => {
-    console.log('Answer submitted:', questionId, answer);
+  const trackAnswerSubmission = (
+    questionId: string,
+    questionText: string,
+    selectedOptions: string[],
+    optionTexts: string[],
+    stylePoints: Record<string, number>
+  ) => {
+    console.log('Answer submitted:', questionId, questionText, selectedOptions, optionTexts, stylePoints);
   };
 
   const trackQuizOptionClick = (
@@ -44,7 +50,7 @@ export const useQuizTracking = (currentQuestionIndex?: number) => {
   const trackUIInteraction = (
     elementType: string,
     elementId: string,
-    action: string,
+    action?: string,
     metadata?: Record<string, any>
   ) => {
     console.log('UI interaction:', elementType, elementId, action, metadata);

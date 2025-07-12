@@ -59,7 +59,8 @@ export const QuizContentWithTracking: React.FC<QuizContentWithTrackingProps> = (
       
       trackUIInteraction(
         'question_view',
-        currentQuestion.id
+        currentQuestion.id,
+        'question_displayed'
       );
     }
   }, [currentQuestion, currentQuestionIndex, showingStrategicQuestions, trackUIInteraction, resetTrackedPercentages]);
@@ -180,11 +181,11 @@ export const useQuizElementTracking = () => {
   };
 
   const trackFormInteraction = (formType: string, fieldName: string, action: string) => {
-    trackUIInteraction('form_field', fieldName);
+    trackUIInteraction('form_field', fieldName, action);
   };
 
   const trackProgressUpdate = (currentStep: number, totalSteps: number, percentage: number) => {
-    trackUIInteraction('progress_update', 'quiz_progress');
+    trackUIInteraction('progress_update', 'quiz_progress', 'progress_changed');
   };
 
   return {
