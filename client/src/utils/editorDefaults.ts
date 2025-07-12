@@ -17,7 +17,7 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
         showImages: true,
         maxSelections: 3,
         minSelections: 1,
-        progressPercent: 75, // Valor visível para teste
+        progressPercent: 5, // Primeira etapa de 21 = ~5%
         logoUrl: '/api/placeholder/96/96',
         showBackButton: true,
         optionLayout: 'grid',
