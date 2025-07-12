@@ -12,7 +12,20 @@
     'us-central1-gpt-engineer-390607.cloudfunctions.net/pushLogsToGrafana',
     'ingesteer.services-prod.nsvcs.net',
     'rum_collection',
-    'grafana'
+    'grafana',
+    'facebook.com/tr'
+  ];
+  
+  // Avisos específicos do Lovable que devem ser silenciados
+  const BLOCKED_WARNINGS = [
+    'Unrecognized feature:',
+    'vr',
+    'ambient-light-sensor', 
+    'battery',
+    'iframe which has both allow-scripts and allow-same-origin',
+    'sandbox attribute can escape',
+    'preloaded using link preload but not used',
+    'facebook.com/tr'
   ];
   
   // Função para verificar se uma URL deve ser bloqueada

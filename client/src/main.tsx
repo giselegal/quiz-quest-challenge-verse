@@ -1,14 +1,14 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import SimpleApp from './SimpleApp.tsx';
+import App from './App.tsx';
 import './index.css';
 
 console.log('🚀 Main.tsx carregando...');
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <SimpleApp />
+    <App />
   </React.StrictMode>,
 );
 
