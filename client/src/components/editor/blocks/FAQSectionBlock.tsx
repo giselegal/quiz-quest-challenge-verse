@@ -211,7 +211,7 @@ const FAQSectionBlock: React.FC<BlockComponentProps> = ({
                       placeholder="Pergunta da FAQ..."
                       className={cn(
                         TYPOGRAPHY.heading.h6,
-                        `text-[${BRAND_COLORS.secondary.main}]`,
+                        'text-amber-900',
                         'w-full'
                       )}
                       fontWeight="semibold"
@@ -224,13 +224,13 @@ const FAQSectionBlock: React.FC<BlockComponentProps> = ({
                     {isOpen ? (
                       <ChevronUp className={cn(
                         'w-4 h-4 md:w-5 md:h-5',
-                        `text-[${BRAND_COLORS.primary.main}]`,
+                        'text-amber-700',
                         ANIMATIONS.transition
                       )} />
                     ) : (
                       <ChevronDown className={cn(
                         'w-4 h-4 md:w-5 md:h-5',
-                        `text-[${BRAND_COLORS.primary.main}]`,
+                        'text-amber-700',
                         ANIMATIONS.transition
                       )} />
                     )}
@@ -250,7 +250,7 @@ const FAQSectionBlock: React.FC<BlockComponentProps> = ({
                       placeholder="Resposta da FAQ..."
                       className={cn(
                         'text-sm md:text-base lg:text-lg',
-                        `text-[${BRAND_COLORS.neutral.gray600}]`,
+                        'text-gray-600',
                         'leading-relaxed'
                       )}
                       textAlign="left"
