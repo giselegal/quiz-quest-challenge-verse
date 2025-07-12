@@ -24,7 +24,7 @@ echo "🔧 Iniciando servidores..."
 
 # Iniciar o backend
 echo "🖥️  Iniciando backend (porta 5000)..."
-npm run dev:server &
+npm run dev &
 BACKEND_PID=$!
 
 # Aguardar um momento para o backend inicializar

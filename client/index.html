@@ -7,74 +7,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quiz Quest - Descubra Seu Estilo</title>
     
-    <!-- CSP mais permissivo para diagnóstico -->
-    <meta http-equiv="Content-Security-Policy" content="
-      default-src 'self' 
-        *.lovable.app 
-        *.lovableproject.com 
-        *.supabase.co 
-        *.supabase.io 
-        data: blob: 
-        'unsafe-inline' 
-        'unsafe-eval';
-      connect-src 'self' 
-        *.lovable.app 
-        *.lovableproject.com 
-        *.supabase.co 
-        *.supabase.io 
-        wss://*.lovableproject.com 
-        wss://*.lovable.app 
-        https://api.openai.com 
-        data: blob:;
-      img-src 'self' 
-        *.lovable.app 
-        *.lovableproject.com 
-        *.supabase.co 
-        data: blob: 
-        https:;
-      script-src 'self' 
-        *.lovable.app 
-        *.lovableproject.com 
-        'unsafe-inline' 
-        'unsafe-eval';
-      style-src 'self' 
-        *.lovable.app 
-        *.lovableproject.com 
-        'unsafe-inline';
-      font-src 'self' 
-        *.lovable.app 
-        *.lovableproject.com 
-        data:;
-    ">
-    
-    <!-- Meta tags para PWA offline -->
+    <!-- Meta tags básicas -->
     <meta name="theme-color" content="#432818" />
     <meta name="description" content="Descubra seu estilo pessoal único com nosso quiz interativo" />
-    
-    <!-- Manifest para funcionamento offline -->
-    <link rel="manifest" href="/manifest.json" />
-    
-    <!-- Bloqueador de telemetria específico -->
-    <script src="/telemetry-blocker.js"></script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     
-    <!-- Notificação de modo offline -->
+    <!-- Diagnóstico básico -->
     <script>
-      // Detectar estado offline/online
-      window.addEventListener('load', () => {
-        if (!navigator.onLine) {
-          console.log('📱 Starting in offline mode');
-          window.dispatchEvent(new CustomEvent('fallback-mode-activated'));
-        }
-      });
-      
-      // Logging de diagnóstico
       console.log('🚀 Quiz Quest iniciando...');
       console.log('🌐 Navigator online:', navigator.onLine);
       console.log('📍 URL atual:', window.location.href);
+      
+      // Verificar elemento root
+      const root = document.getElementById('root');
+      console.log('📦 Root element:', root ? 'Encontrado' : 'NÃO encontrado');
+      
+      // Monitorar carregamento
+      window.addEventListener('load', () => {
+        console.log('✅ Página carregada completamente');
+        setTimeout(() => {
+          const rootContent = document.getElementById('root')?.innerHTML;
+          console.log('📄 Conteúdo do root:', rootContent ? 'Presente' : 'Vazio');
+          if (!rootContent) {
+            console.error('❌ PROBLEMA: Root está vazio após 2 segundos!');
+          }
+        }, 2000);
+      });
+      
+      // Capturar erros
+      window.addEventListener('error', (e) => {
+        console.error('❌ Erro JavaScript:', e.error);
+        console.error('� Arquivo:', e.filename, 'Linha:', e.lineno);
+      });
+      
+      window.addEventListener('unhandledrejection', (e) => {
+        console.error('❌ Promise rejeitada:', e.reason);
+      });
     </script>
   </body>
 </html>
