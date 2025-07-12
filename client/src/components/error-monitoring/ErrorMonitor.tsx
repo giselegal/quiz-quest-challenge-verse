@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -28,10 +27,7 @@ export const ErrorMonitor: React.FC<ErrorMonitorProps> = ({
     setIsChecking(true);
     try {
       const results = await performHealthCheck();
-      const statuses = results.map((result: HealthStatus | { reason: any }) => 
-        'endpoint' in result ? result : result.reason
-      );
-      setHealthStatus(statuses);
+      setHealthStatus(results);
       setLastCheck(new Date());
     } catch (error) {
       console.error('Health check failed:', error);

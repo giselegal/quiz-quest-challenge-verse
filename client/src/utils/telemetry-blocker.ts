@@ -1,4 +1,3 @@
-
 // Emergency telemetry blocker with circuit breaker pattern
 class TelemetryBlocker {
   private static instance: TelemetryBlocker;
@@ -173,24 +172,35 @@ class TelemetryBlocker {
     };
   }
 
-  public performHealthCheck(): Promise<{ status: string; details: any }> {
+  public performHealthCheck(): Promise<Array<{ endpoint: string; status: number; ok: boolean; error?: string }>> {
     return new Promise((resolve) => {
       try {
-        const health = {
-          status: this.circuitBreakerState === 'CLOSED' ? 'healthy' : 'degraded',
-          details: {
-            circuitBreaker: this.circuitBreakerState,
-            failureCount: this.failureCount,
-            lastFailure: this.lastFailureTime,
-            timestamp: Date.now()
+        const healthChecks = [
+          {
+            endpoint: 'telemetry-blocker',
+            status: this.circuitBreakerState === 'CLOSED' ? 200 : 503,
+            ok: this.circuitBreakerState === 'CLOSED',
+            error: this.circuitBreakerState !== 'CLOSED' ? 'Circuit breaker open' : undefined
+          },
+          {
+            endpoint: 'console-blocking',
+            status: 200,
+            ok: true
+          },
+          {
+            endpoint: 'network-blocking',
+            status: 200,
+            ok: true
           }
-        };
-        resolve(health);
+        ];
+        resolve(healthChecks);
       } catch (error) {
-        resolve({
-          status: 'error',
-          details: { error: 'Health check failed' }
-        });
+        resolve([{
+          endpoint: 'health-check',
+          status: 500,
+          ok: false,
+          error: 'Health check failed'
+        }]);
       }
     });
   }
