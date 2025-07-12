@@ -21,6 +21,9 @@ const Index: React.FC = () => {
                 <Link to="/quiz-descubra-seu-estilo">Começar Quiz</Link>
               </Button>
               <Button variant="outline" asChild>
+                <Link to="/editor">Editor</Link>
+              </Button>
+              <Button variant="outline" asChild>
                 <Link to="/admin">Painel Admin</Link>
               </Button>
             </div>
