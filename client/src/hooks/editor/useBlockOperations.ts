@@ -11,8 +11,9 @@ export const useBlockOperations = (
       id: `block-${Date.now()}`,
       type,
       order: blocks.length,
-      visible: true, // Added missing visible property
-      content: {} as EditableContent
+      visible: true,
+      content: {} as EditableContent,
+      properties: {} // Added missing properties
     };
     
     setBlocks([...blocks, newBlock]);

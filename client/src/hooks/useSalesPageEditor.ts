@@ -12,7 +12,8 @@ export const useSalesPageEditor = () => {
       type,
       content: {},
       order: blocks.length,
-      visible: true // Added missing visible property
+      visible: true,
+      properties: {} // Added missing properties
     };
     
     setBlocks(prev => [...prev, newBlock]);
@@ -32,29 +33,12 @@ export const useSalesPageEditor = () => {
     }
   }, [selectedBlockId]);
 
-  const selectedBlock = blocks.find(block => block.id === selectedBlockId) || null;
-
-  const handleSave = async () => {
-    // Mock save functionality
-    console.log('Saving sales page...');
-    return true;
-  };
-
-  const loadTemplate = (templateBlocks: any[]) => {
-    // Mock template loading
-    console.log('Loading template:', templateBlocks);
-    return true;
-  };
-
   return {
     blocks,
-    selectedBlock,
     selectedBlockId,
     setSelectedBlockId,
     addBlock,
     updateBlock,
-    deleteBlock,
-    handleSave,
-    loadTemplate
+    deleteBlock
   };
 };

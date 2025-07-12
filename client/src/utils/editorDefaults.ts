@@ -3,43 +3,35 @@ import { EditableContent, BlockType } from '@/types/editor';
 
 export const getDefaultContentForType = (type: BlockType): EditableContent => {
   switch (type) {
-    case 'headline':
+    case 'header':
       return {
-        title: 'New Headline',
-        subtitle: 'Subtitle text'
+        title: 'Novo Cabeçalho',
+        subtitle: 'Subtítulo opcional'
       };
+    
     case 'text':
       return {
-        text: 'Enter your text content here...'
+        text: 'Digite aqui seu texto...'
       };
+    
+    case 'button':
+      return {
+        buttonText: 'Clique aqui',
+        backgroundColor: '#2563eb',
+        textColor: '#ffffff'
+      };
+    
     case 'image':
       return {
         imageUrl: '',
-        caption: 'Image caption'
+        caption: 'Adicionar imagem'
       };
-    case 'button':
+    
+    case 'spacer':
       return {
-        buttonText: 'Click Here',
-        backgroundColor: '#B89B7A'
+        height: 40
       };
-    case 'benefits':
-      return {
-        title: 'Key Benefits',
-        items: ['Benefit 1', 'Benefit 2', 'Benefit 3']
-      };
-    case 'testimonials':
-      return {
-        title: 'What Our Clients Say'
-      };
-    case 'pricing':
-      return {
-        title: 'Pricing Plans'
-      };
-    case 'cta':
-      return {
-        title: 'Ready to Get Started?',
-        buttonText: 'Get Started Now'
-      };
+    
     default:
       return {};
   }

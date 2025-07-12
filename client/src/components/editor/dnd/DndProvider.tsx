@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {
   DndContext,
@@ -21,17 +22,16 @@ import {
 import { restrictToVerticalAxis, restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { createPortal } from 'react-dom';
 import { UniversalBlockRenderer } from '../blocks/UniversalBlockRenderer';
-// Type for the blocks data
-type BlockData = any;
+import { Block } from '@/types/editor';
 
 interface DndProviderProps {
   children: React.ReactNode;
-  blocks: BlockData[];
-  onBlocksReorder: (newBlocks: BlockData[]) => void;
+  blocks: Block[];
+  onBlocksReorder: (newBlocks: Block[]) => void;
   onBlockAdd: (blockType: string, position?: number) => void;
   onBlockSelect: (blockId: string) => void;
   selectedBlockId?: string;
-  onBlockUpdate: (blockId: string, updates: Partial<BlockData>) => void;
+  onBlockUpdate: (blockId: string, updates: Partial<Block>) => void;
 }
 
 export const DndProvider: React.FC<DndProviderProps> = ({
@@ -43,7 +43,7 @@ export const DndProvider: React.FC<DndProviderProps> = ({
   selectedBlockId,
   onBlockUpdate
 }) => {
-  const [activeBlock, setActiveBlock] = React.useState<BlockData | null>(null);
+  const [activeBlock, setActiveBlock] = React.useState<Block | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -129,7 +129,6 @@ export const DndProvider: React.FC<DndProviderProps> = ({
               <UniversalBlockRenderer
                 block={activeBlock}
                 isSelected={false}
-                disabled={true}
                 className="pointer-events-none"
               />
             </div>

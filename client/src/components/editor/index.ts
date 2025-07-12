@@ -25,7 +25,7 @@ export { default as PropertyPanel } from './PropertyPanel';
 export { default as ModernPropertyPanel } from './ModernPropertyPanel';
 
 // Layouts responsivos (export default)
-export { default as SchemaDrivenEditorResponsive } from './SchemaDrivenEditorResponsive';
+export { default as SchemaDrivenEditorLayoutV2 } from './SchemaDrivenEditorLayoutV2';
 
 // Testes e exemplos (export default)
 export { default as SimpleEditorTest } from './SimpleEditorTest';

@@ -11,7 +11,8 @@ export const useEditorBlocks = (initialBlocks: Block[] = []) => {
       type,
       content: {} as EditableContent,
       order: blocks.length,
-      visible: true // Added missing visible property
+      visible: true,
+      properties: {} // Added missing properties
     };
     
     setBlocks(prev => [...prev, newBlock]);
