@@ -2,12 +2,14 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
 import { QuizProvider } from "@/context/QuizContext";
 import ErrorBoundary from "@/components/error-boundary/ErrorBoundary";
-import "@/utils/telemetry-blocker";
+import RouteErrorBoundary from "@/components/RouteErrorBoundary";
+// import "@/utils/telemetry-blocker"; // Temporarily disabled for debugging
 
 // Lazy load pages for better performance
 import { lazy, Suspense } from "react";
@@ -40,10 +42,26 @@ const queryClient = new QueryClient({
   },
 });
 
-// Loading component
-const PageLoader = () => (
-  <div className="flex items-center justify-center min-h-screen">
-    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#B89B7A]"></div>
+// Enhanced loading component with retry
+const PageLoader = ({ error, retry }: { error?: Error; retry?: () => void }) => (
+  <div className="flex flex-col items-center justify-center min-h-screen space-y-4">
+    {error ? (
+      <>
+        <div className="text-red-500 text-center">
+          <p>Erro ao carregar página: {error.message}</p>
+        </div>
+        {retry && (
+          <Button onClick={retry} variant="outline">
+            Tentar Novamente
+          </Button>
+        )}
+      </>
+    ) : (
+      <>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#B89B7A]"></div>
+        <p className="text-muted-foreground">Carregando...</p>
+      </>
+    )}
   </div>
 );
 
@@ -60,17 +78,53 @@ function App() {
                 <Suspense fallback={<PageLoader />}>
                   <Routes>
                     {/* Public Routes */}
-                    <Route path="/" element={<Index />} />
-                    <Route path="/quiz-descubra-seu-estilo" element={<QuizPage />} />
-                    <Route path="/descubra-seu-estilo" element={<QuizPage />} />
-                    <Route path="/quiz" element={<QuizPage />} />
-                    <Route path="/resultado" element={<ResultPage />} />
-                    <Route path="/resultado/:id" element={<ResultPage />} />
-                    <Route path="/loading-access" element={<LoadingAccessPage />} />
+                    <Route path="/" element={
+                      <RouteErrorBoundary routeName="Home">
+                        <Index />
+                      </RouteErrorBoundary>
+                    } />
+                    <Route path="/quiz-descubra-seu-estilo" element={
+                      <RouteErrorBoundary routeName="Quiz">
+                        <QuizPage />
+                      </RouteErrorBoundary>
+                    } />
+                    <Route path="/descubra-seu-estilo" element={
+                      <RouteErrorBoundary routeName="Quiz">
+                        <QuizPage />
+                      </RouteErrorBoundary>
+                    } />
+                    <Route path="/quiz" element={
+                      <RouteErrorBoundary routeName="Quiz">
+                        <QuizPage />
+                      </RouteErrorBoundary>
+                    } />
+                    <Route path="/resultado" element={
+                      <RouteErrorBoundary routeName="Result">
+                        <ResultPage />
+                      </RouteErrorBoundary>
+                    } />
+                    <Route path="/resultado/:id" element={
+                      <RouteErrorBoundary routeName="Result">
+                        <ResultPage />
+                      </RouteErrorBoundary>
+                    } />
+                    <Route path="/loading-access" element={
+                      <RouteErrorBoundary routeName="Loading">
+                        <LoadingAccessPage />
+                      </RouteErrorBoundary>
+                    } />
                     
                     {/* Admin Routes */}
-                    <Route path="/admin" element={<AdminDashboard />} />
-                    <Route path="/admin/quiz" element={<QuizManagement />} />
+                    <Route path="/admin" element={
+                      <RouteErrorBoundary routeName="Admin">
+                        <AdminDashboard />
+                      </RouteErrorBoundary>
+                    } />
+                    <Route path="/admin/quiz" element={
+                      <RouteErrorBoundary routeName="Quiz Management">
+                        <QuizManagement />
+                      </RouteErrorBoundary>
+                    } />
                   </Routes>
                 </Suspense>
               </BrowserRouter>

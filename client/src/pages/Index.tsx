@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
@@ -17,10 +18,10 @@ const Index: React.FC = () => {
             </p>
             <div className="flex gap-4">
               <Button asChild>
-                <a href="/quiz-descubra-seu-estilo">Começar Quiz</a>
+                <Link to="/quiz-descubra-seu-estilo">Começar Quiz</Link>
               </Button>
               <Button variant="outline" asChild>
-                <a href="/admin">Painel Admin</a>
+                <Link to="/admin">Painel Admin</Link>
               </Button>
             </div>
           </CardContent>
