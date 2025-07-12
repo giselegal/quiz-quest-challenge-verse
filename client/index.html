@@ -8,13 +8,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
     
-    <!-- Content Security Policy para bloquear telemetria -->
+    <!-- Content Security Policy corrigido para permitir Lovable -->
     <meta http-equiv="Content-Security-Policy" content="
-      default-src 'self' 'unsafe-inline' 'unsafe-eval';
-      connect-src 'self' http://localhost:* ws://localhost:* wss://localhost:*;
-      img-src 'self' data: blob:;
-      script-src 'self' 'unsafe-inline' 'unsafe-eval';
-      style-src 'self' 'unsafe-inline';
+      default-src 'self' 'unsafe-inline' 'unsafe-eval' *.lovable.app *.lovableproject.com;
+      connect-src 'self' http://localhost:* ws://localhost:* wss://localhost:* *.lovable.app *.lovableproject.com wss://*.lovable.app wss://*.lovableproject.com;
+      img-src 'self' data: blob: *.lovable.app *.lovableproject.com;
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' *.lovable.app *.lovableproject.com;
+      style-src 'self' 'unsafe-inline' *.lovable.app *.lovableproject.com;
+      font-src 'self' *.lovable.app *.lovableproject.com;
+      frame-src 'self' *.lovable.app *.lovableproject.com;
     ">
     
     <title>Quiz Quest Challenge Verse - Descubra Seu Estilo</title>

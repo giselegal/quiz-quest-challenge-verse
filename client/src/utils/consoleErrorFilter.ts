@@ -1,26 +1,18 @@
+
 /**
- * Filtro de Console - Suprime logs de erros externos desnecessários
- * 
- * Este utilitário filtra erros de console de serviços externos que não são 
- * relevantes para o desenvolvimento local (Grafana, RUM collection, etc.)
+ * Filtro de Console Específico - Suprime apenas logs de telemetria específicos
  */
 
 class ConsoleErrorFilter {
   private static FILTERED_DOMAINS = [
     'us-central1-gpt-engineer-390607.cloudfunctions.net',
-    'id-preview--65efd17d-5178-405d-9721-909c97470c6d.lovable.app',
-    'ingesteer.services-prod.nsvcs.net',
-    'grafana',
-    'rum_collection',
-    'pushLogsToGrafana'
+    'ingesteer.services-prod.nsvcs.net'
   ];
 
   private static FILTERED_MESSAGES = [
-    'Failed to load resource: the server responded with a status of 500',
-    'Failed to load resource: the server responded with a status of 404',
-    'Failed to load resource: the server responded with a status of 400',
     'POST https://us-central1-gpt-engineer-390607.cloudfunctions.net/pushLogsToGrafana',
-    'GET https://id-preview--65efd17d-5178-405d-9721-909c97470c6d.lovable.app'
+    'rum_collection',
+    'grafana'
   ];
 
   static init() {
@@ -40,18 +32,18 @@ class ConsoleErrorFilter {
       }
     };
 
-    console.log('🔇 Console Error Filter ativado - logs externos filtrados');
+    console.log('🔇 Console Error Filter específico ativado');
   }
 
   private static shouldFilter(args: any[]): boolean {
     const message = args.join(' ').toLowerCase();
     
-    // Filtrar por domínios externos
+    // Filtrar apenas por domínios específicos de telemetria
     const hasFilteredDomain = this.FILTERED_DOMAINS.some(domain => 
       message.includes(domain.toLowerCase())
     );
 
-    // Filtrar por mensagens específicas
+    // Filtrar por mensagens específicas de telemetria
     const hasFilteredMessage = this.FILTERED_MESSAGES.some(msg => 
       message.includes(msg.toLowerCase())
     );
@@ -60,7 +52,6 @@ class ConsoleErrorFilter {
   }
 
   static disable() {
-    // Restaurar console original se necessário
     console.log('🔊 Console Error Filter desativado');
   }
 }

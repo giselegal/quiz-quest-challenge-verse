@@ -1,4 +1,5 @@
-// Emergency telemetry blocker with circuit breaker pattern
+
+// Bloqueador de telemetria específico com circuit breaker
 class TelemetryBlocker {
   private static instance: TelemetryBlocker;
   private circuitBreakerState: 'CLOSED' | 'OPEN' | 'HALF_OPEN' = 'CLOSED';
@@ -20,10 +21,7 @@ class TelemetryBlocker {
 
   private initializeBlocking() {
     try {
-      this.blockConsoleErrors();
-      this.blockNetworkRequests();
-      this.blockGlobalErrors();
-      this.optimizeTimers();
+      this.blockSpecificTelemetry();
     } catch (error) {
       this.handleFailure();
     }
@@ -42,19 +40,15 @@ class TelemetryBlocker {
     }
   }
 
-  private blockConsoleErrors() {
+  private blockSpecificTelemetry() {
     if (this.circuitBreakerState === 'OPEN') return;
 
+    // Apenas termos muito específicos de telemetria
     const blockedTerms = [
       'pushLogsToGrafana',
-      'lovable.app',
       'gpt-engineer-390607',
       'rum_collection',
-      'Failed to load resource',
-      'Internal Server Error',
-      'status of 500',
-      'status of 404',
-      'status of 400'
+      'grafana'
     ];
 
     const originalError = console.error;
@@ -81,94 +75,25 @@ class TelemetryBlocker {
         originalWarn.apply(console, args);
       }
     };
-  }
 
-  private blockNetworkRequests() {
-    if (this.circuitBreakerState === 'OPEN') return;
-
+    // Bloquear apenas requests de telemetria específicos
     const originalFetch = window.fetch;
     window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
       const url = typeof input === 'string' ? input : input.toString();
       
-      const blockedDomains = [
-        'lovable.app',
+      const blockedUrls = [
+        'pushLogsToGrafana',
         'gpt-engineer-390607',
         'grafana'
       ];
 
-      const shouldBlock = blockedDomains.some(domain => url.includes(domain));
+      const shouldBlock = blockedUrls.some(blocked => url.includes(blocked));
       
       if (shouldBlock) {
         return new Response('Blocked', { status: 204 });
       }
       
       return originalFetch(input, init);
-    };
-  }
-
-  private blockGlobalErrors() {
-    if (this.circuitBreakerState === 'OPEN') return;
-
-    window.addEventListener('error', (event) => {
-      const message = event.message || '';
-      const filename = event.filename || '';
-      
-      const blockedTerms = [
-        'pushLogsToGrafana',
-        'lovable.app',
-        'gpt-engineer-390607'
-      ];
-
-      const shouldBlock = blockedTerms.some(term => 
-        message.includes(term) || filename.includes(term)
-      );
-      
-      if (shouldBlock) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-    }, true);
-
-    window.addEventListener('unhandledrejection', (event) => {
-      const reason = event.reason || {};
-      const message = reason.message || reason.toString() || '';
-      
-      const blockedTerms = [
-        'pushLogsToGrafana',
-        'lovable.app',
-        'gpt-engineer-390607'
-      ];
-
-      const shouldBlock = blockedTerms.some(term => 
-        message.toLowerCase().includes(term.toLowerCase())
-      );
-      
-      if (shouldBlock) {
-        event.preventDefault();
-      }
-    });
-  }
-
-  private optimizeTimers() {
-    // Create optimized timer functions without overriding globals
-    (window as any).__optimizedTimeout = (callback: Function, delay: number = 0, ...args: any[]) => {
-      return setTimeout(() => {
-        try {
-          callback(...args);
-        } catch (error) {
-          // Silently handle timer errors
-        }
-      }, Math.max(delay, 16)); // Minimum 16ms for performance
-    };
-
-    (window as any).__optimizedInterval = (callback: Function, delay: number = 100, ...args: any[]) => {
-      return setInterval(() => {
-        try {
-          callback(...args);
-        } catch (error) {
-          // Silently handle interval errors
-        }
-      }, Math.max(delay, 50)); // Minimum 50ms for intervals
     };
   }
 
@@ -181,16 +106,6 @@ class TelemetryBlocker {
             status: this.circuitBreakerState === 'CLOSED' ? 200 : 503,
             ok: this.circuitBreakerState === 'CLOSED',
             error: this.circuitBreakerState !== 'CLOSED' ? 'Circuit breaker open' : undefined
-          },
-          {
-            endpoint: 'console-blocking',
-            status: 200,
-            ok: true
-          },
-          {
-            endpoint: 'network-blocking',
-            status: 200,
-            ok: true
           }
         ];
         resolve(healthChecks);
@@ -223,7 +138,7 @@ export const getTelemetryStatus = () => telemetryBlocker.getStatus();
 
 // Initialize on module load
 if (typeof window !== 'undefined') {
-  console.log('🛡️ Telemetry blocker initialized');
+  console.log('🛡️ Telemetry blocker específico initialized');
 }
 
 export default telemetryBlocker;
