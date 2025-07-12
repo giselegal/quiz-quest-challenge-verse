@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
+import { fileURLToPath, URL } from 'node:url';
 import { componentTagger } from "lovable-tagger";
 
 export default defineConfig(({ mode }) => ({
@@ -14,15 +15,15 @@ export default defineConfig(({ mode }) => ({
   },
   resolve: {
     alias: {
-      "@": path.resolve(import.meta.dirname, "src"),
-      "@shared": path.resolve(import.meta.dirname, "..", "shared"),
-      "@assets": path.resolve(import.meta.dirname, "..", "attached_assets"),
+      "@": fileURLToPath(new URL('./src', import.meta.url)),
+      "@shared": fileURLToPath(new URL('../shared', import.meta.url)),
+      "@assets": fileURLToPath(new URL('../attached_assets', import.meta.url)),
     },
   },
-  publicDir: path.resolve(import.meta.dirname, "public"),
-  root: import.meta.dirname,
+  publicDir: fileURLToPath(new URL('./public', import.meta.url)),
+  root: fileURLToPath(new URL('.', import.meta.url)),
   build: {
-    outDir: path.resolve(import.meta.dirname, "..", "dist", "public"),
+    outDir: fileURLToPath(new URL('../dist/public', import.meta.url)),
     emptyOutDir: true,
   },
 }));
