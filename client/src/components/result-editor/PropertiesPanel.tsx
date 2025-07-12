@@ -1,5 +1,4 @@
 
-// @ts-nocheck
 import React from 'react';
 import { Block, BlockType } from '@/types/editor';
 
@@ -22,7 +21,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
 
   const validBlockTypes: BlockType[] = [
     'headline', 'text', 'image', 'benefits', 'testimonials', 
-    'pricing', 'guarantee', 'cta', 'header', 'hero', 'bonus-carousel'
+    'pricing', 'guarantee', 'cta', 'header', 'bonus-carousel'
   ];
 
   if (!validBlockTypes.includes(selectedBlock.type as BlockType)) {

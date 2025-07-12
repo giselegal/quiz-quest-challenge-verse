@@ -1,5 +1,4 @@
 
-// @ts-nocheck
 import { useState, useCallback, useEffect } from 'react';
 import { Block } from '@/types/editor';
 import { EditorState, BlockManipulationActions } from '@/types/editorTypes';
@@ -30,7 +29,7 @@ export const useResultPageEditor = (styleType: string) => {
     if (resultPageConfig?.blocks) {
       setState(prev => ({
         ...prev,
-        blocks: resultPageConfig.blocks
+        blocks: resultPageConfig.blocks || []
       }));
     } else {
       // Initialize with empty blocks array if not present
@@ -51,7 +50,9 @@ export const useResultPageEditor = (styleType: string) => {
       id: generateId(),
       type,
       content: getDefaultContentForType(type),
-      order: state.blocks.length
+      order: state.blocks.length,
+      visible: true,
+      properties: {}
     };
     
     const newBlocks = [...state.blocks, newBlock];
