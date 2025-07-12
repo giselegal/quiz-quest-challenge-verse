@@ -1,3 +1,4 @@
+
 import { OfferSection } from '@/types/resultPageConfig';
 
 export const createOfferSectionConfig = (): OfferSection => {
@@ -14,7 +15,6 @@ export const createOfferSectionConfig = (): OfferSection => {
       style: {
         padding: '24px',
         backgroundColor: '#FAF9F7',
-        accentColor: '#B89B7A',
         textColor: '#432818'
       }
     },

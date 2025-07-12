@@ -44,7 +44,6 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
         style: {
           padding: '24px',
           backgroundColor: '#FAF9F7',
-          accentColor: '#B89B7A',
           textColor: '#432818'
         }
       },
