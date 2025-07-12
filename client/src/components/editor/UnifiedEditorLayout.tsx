@@ -19,7 +19,6 @@ export const UnifiedEditorLayout: React.FC<UnifiedEditorLayoutProps> = ({
   const [viewportSize, setViewportSize] = useState<'sm' | 'md' | 'lg' | 'xl'>('md');
 
   const {
-    resultPageEditor,
     saveAll
   } = useUnifiedEditor(primaryStyle);
 
@@ -34,7 +33,9 @@ export const UnifiedEditorLayout: React.FC<UnifiedEditorLayoutProps> = ({
         viewportSize={viewportSize}
         onViewportSizeChange={setViewportSize}
         onTogglePreview={handleTogglePreview}
-        onSave={saveAll}
+        onSave={async () => {
+          await saveAll();
+        }}
       />
       
       <div className="flex-1 overflow-hidden">

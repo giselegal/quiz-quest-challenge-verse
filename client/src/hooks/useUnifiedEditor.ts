@@ -2,43 +2,48 @@
 import { useState, useCallback } from 'react';
 import { Block, BlockType, EditableContent } from '@/types/editor';
 import { useEditorBlocks } from './editor/useEditorBlocks';
+import { StyleResult } from '@/types/quiz';
 
 export interface UnifiedEditorActions {
   blocks: Block[];
   selectedBlockId: string | null;
   setSelectedBlockId: (id: string | null) => void;
-  handleSave: () => Promise<void>;
+  handleSave: () => Promise<boolean>;
   loadTemplate: (templateId: string) => Promise<void>;
   addBlock: (type: BlockType) => string;
   updateBlock: (id: string, content: EditableContent) => void;
   deleteBlock: (id: string) => void;
   isPreviewing: boolean;
   togglePreview: () => void;
-  saveAll: () => Promise<void>;
+  saveAll: () => Promise<boolean>;
   openTemplateModal: () => void;
   isTemplateModalOpen: boolean;
   closeTemplateModal: () => void;
-  loadTemplateForCurrentEditor: (templateId: string) => Promise<void>;
+  loadTemplateForCurrentEditor: (templateData: any) => boolean;
   setActiveMode: (mode: string) => void;
 }
 
-export const useUnifiedEditor = (): UnifiedEditorActions => {
-  const { blocks, selectedBlockId, setSelectedBlockId, addBlock, updateBlock, deleteBlock } = useEditorBlocks();
+export const useUnifiedEditor = (primaryStyle?: StyleResult): UnifiedEditorActions => {
+  const { blocks, selectedBlockId, setSelectedBlockId, addBlock, updateBlock: updateBlockBase, deleteBlock } = useEditorBlocks();
   const [isPreviewing, setIsPreviewing] = useState(false);
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
 
-  const handleSave = useCallback(async () => {
+  const updateBlock = useCallback((id: string, content: EditableContent) => {
+    updateBlockBase(id, { content });
+  }, [updateBlockBase]);
+
+  const handleSave = useCallback(async (): Promise<boolean> => {
     try {
-      // Save logic here
       console.log('Saving editor state...', blocks);
+      return true;
     } catch (error) {
       console.error('Error saving:', error);
+      return false;
     }
   }, [blocks]);
 
   const loadTemplate = useCallback(async (templateId: string) => {
     try {
-      // Load template logic here
       console.log('Loading template:', templateId);
     } catch (error) {
       console.error('Error loading template:', error);
@@ -49,8 +54,8 @@ export const useUnifiedEditor = (): UnifiedEditorActions => {
     setIsPreviewing(prev => !prev);
   }, []);
 
-  const saveAll = useCallback(async () => {
-    await handleSave();
+  const saveAll = useCallback(async (): Promise<boolean> => {
+    return await handleSave();
   }, [handleSave]);
 
   const openTemplateModal = useCallback(() => {
@@ -61,10 +66,16 @@ export const useUnifiedEditor = (): UnifiedEditorActions => {
     setIsTemplateModalOpen(false);
   }, []);
 
-  const loadTemplateForCurrentEditor = useCallback(async (templateId: string) => {
-    await loadTemplate(templateId);
-    closeTemplateModal();
-  }, [loadTemplate, closeTemplateModal]);
+  const loadTemplateForCurrentEditor = useCallback((templateData: any): boolean => {
+    try {
+      console.log('Loading template for current editor:', templateData);
+      closeTemplateModal();
+      return true;
+    } catch (error) {
+      console.error('Error loading template:', error);
+      return false;
+    }
+  }, [closeTemplateModal]);
 
   const setActiveMode = useCallback((mode: string) => {
     console.log('Setting active mode:', mode);

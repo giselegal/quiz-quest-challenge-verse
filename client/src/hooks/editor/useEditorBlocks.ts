@@ -4,6 +4,7 @@ import { Block, BlockType, EditableContent } from '@/types/editor';
 
 export const useEditorBlocks = (initialBlocks: Block[] = []) => {
   const [blocks, setBlocks] = useState<Block[]>(initialBlocks);
+  const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
 
   const addBlock = useCallback((type: BlockType): string => {
     const newBlock: Block = {
@@ -12,7 +13,7 @@ export const useEditorBlocks = (initialBlocks: Block[] = []) => {
       content: {} as EditableContent,
       order: blocks.length,
       visible: true,
-      properties: {} // Added missing properties
+      properties: {}
     };
     
     setBlocks(prev => [...prev, newBlock]);
@@ -41,6 +42,8 @@ export const useEditorBlocks = (initialBlocks: Block[] = []) => {
   return {
     blocks,
     setBlocks,
+    selectedBlockId,
+    setSelectedBlockId,
     addBlock,
     updateBlock,
     deleteBlock,

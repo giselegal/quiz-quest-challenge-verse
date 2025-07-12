@@ -1,3 +1,4 @@
+
 import React from 'react';
 import type { BlockComponentProps } from '@/types/blocks';
 import { Button } from '@/components/ui/button';
@@ -22,6 +23,11 @@ interface PricingPlan {
 
 interface PriceComparisonBlockProps extends BlockComponentProps {
   block: BlockComponentProps['block'] & {
+    id: string;
+    type: 'price-comparison';
+    content: any;
+    order: number;
+    visible: boolean;
     properties: {
       title?: string;
       subtitle?: string;
@@ -92,16 +98,16 @@ const PriceComparisonBlock: React.FC<PriceComparisonBlockProps> = ({
             <div
               key={plan.id}
               className={`
-                relative p-6 rounded-lg border
+                relative p-6 rounded-lg border-2
                 ${plan.popular && highlightPopular 
-                  ? 'border-2 ring-2 ring-opacity-50' 
+                  ? 'ring-2 ring-opacity-50' 
                   : 'border-gray-200'
                 }
               `}
               style={{
                 borderColor: plan.popular && highlightPopular ? accentColor : undefined,
-                ringColor: plan.popular && highlightPopular ? accentColor : undefined
-              }}
+                '--tw-ring-color': plan.popular && highlightPopular ? accentColor : undefined
+              } as React.CSSProperties}
             >
               {plan.popular && highlightPopular && (
                 <div
