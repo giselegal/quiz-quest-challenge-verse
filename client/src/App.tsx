@@ -10,7 +10,7 @@ import { loadFacebookPixelDynamic } from "./utils/facebookPixelDynamic";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import CriticalCSSLoader from "./components/CriticalCSSLoader";
 import { initialCriticalCSS, heroCriticalCSS } from "./utils/critical-css";
-import { AdminRoute } from "./components/admin/AdminRoute";
+// import { AdminRoute } from "./components/admin/AdminRoute"; // Removido temporariamente
 
 // Componente de loading para Suspense - otimizado
 const LoadingFallback = () => (
@@ -25,17 +25,17 @@ const LoadingFallback = () => (
 // Lazy loading das páginas essenciais
 const LandingPage = lazy(() => import("./pages/LandingPage"));
 const QuizPage = lazy(() => import("./components/QuizPage"));
-const ResultPage = lazy(() => import("./pages/ResultPage"));
+// const ResultPage = lazy(() => import("./pages/ResultPage")); // Removido temporariamente
 const TestResultPage = lazy(() => import("./pages/TestResultPage"));
 const QuizDescubraSeuEstilo = lazy(
   () => import("./pages/quiz-descubra-seu-estilo")
 );
-const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
+// const DashboardPage = lazy(() => import("./pages/admin/DashboardPage")); // Removido temporariamente
 
 // Editor Principal - Consolidado
-const SchemaDrivenEditorPage = lazy(() => import("./pages/SchemaDrivenEditorPage"));
-const BlockDefinitionsTest = lazy(() => import("./components/editor/tests/BlockDefinitionsTest"));
-const LovableDemoPage = lazy(() => import("./pages/LovableDemoPage"));
+// const SchemaDrivenEditorPage = lazy(() => import("./pages/SchemaDrivenEditorPage")); // Removido temporariamente
+// const BlockDefinitionsTest = lazy(() => import("./components/editor/tests/BlockDefinitionsTest")); // Removido temporariamente
+// const LovableDemoPage = lazy(() => import("./pages/LovableDemoPage")); // Removido temporariamente
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App = () => {
@@ -74,7 +74,7 @@ const App = () => {
                 {/* Rota do quiz específica */}
                 <Route path="/quiz" component={QuizPage} />
                 {/* Rotas do teste A/B */}
-                <Route path="/resultado" component={ResultPage} />
+                {/* <Route path="/resultado" component={ResultPage} /> */}
                 {/* Teste do componente de resultado */}
                 <Route path="/test-resultado" component={TestResultPage} />
                 <Route
@@ -86,28 +86,27 @@ const App = () => {
                   path="/descubra-seu-estilo"
                   component={QuizDescubraSeuEstilo}
                 />
-                {/* Editor Principal - ÚNICO EDITOR para Quiz e Funis Completos */}
-                <Route
+                {/* Editor Principal - ÚNICO EDITOR para Quiz e Funis Completos - removido temporariamente */}
+                {/* <Route
                   path="/editor"
                   component={SchemaDrivenEditorPage}
                 />
-                {/* Editor com ID específico */}
                 <Route
                   path="/editor/:id"
                   component={SchemaDrivenEditorPage}
-                />
-                {/* Teste de definições de blocos */}
-                <Route
+                /> */}
+                {/* Teste de definições de blocos - removido temporariamente */}
+                {/* <Route
                   path="/test-blocks"
                   component={BlockDefinitionsTest}
-                />
+                /> */}
                 {/* Demo do Lovable */}
-                <Route
+                {/* <Route
                   path="/demo"
                   component={LovableDemoPage}
-                />
-                {/* Admin - protegido com AdminAuthProvider */}
-                <Route path="/admin/:rest*">
+                /> */}
+                {/* Admin - protegido com AdminAuthProvider - removido temporariamente */}
+                {/* <Route path="/admin/:rest*">
                   {() => (
                     <AdminAuthProvider>
                       <AdminRoute>
@@ -115,7 +114,7 @@ const App = () => {
                       </AdminRoute>
                     </AdminAuthProvider>
                   )}
-                </Route>
+                </Route> */}
                 {/* 404 - Fallback para rotas não encontradas */}
                 <Route path="*" component={NotFoundPage} />
               </Switch>
