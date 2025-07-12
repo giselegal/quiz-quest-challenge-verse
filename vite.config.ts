@@ -14,15 +14,15 @@ export default defineConfig(({ mode }) => ({
   },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "client", "src"),
+      "@": path.resolve(path.resolve(__dirname, "client"), "src"),
       "@shared": path.resolve(__dirname, "shared"),
       "@assets": path.resolve(__dirname, "attached_assets"),
     },
   },
-  publicDir: path.resolve(__dirname, "client", "public"),
+  publicDir: "public",
   root: path.resolve(__dirname, "client"),
   build: {
-    outDir: path.resolve(__dirname, "dist", "public"),
+    outDir: "../dist/public",
     emptyOutDir: true,
   },
 }));
