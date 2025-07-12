@@ -85,7 +85,7 @@ const QuizPage: React.FC = () => {
       localStorage.setItem('quiz_start_time', Date.now().toString());
       const userName = user?.userName || localStorage.getItem('userName') || 'Anônimo';
       const userEmail = user?.email || localStorage.getItem('userEmail');
-      trackQuizStart(userName, userEmail || undefined);
+      trackQuizStart(userName, userEmail);
       setQuizStartTracked(true);
     }
   }, [quizStartTracked, user, showIntro]);
@@ -251,7 +251,7 @@ const QuizPage: React.FC = () => {
       localStorage.setItem('quizCompletedAt', Date.now().toString());
       
       if (results?.primaryStyle) {
-        trackResultView(results.primaryStyle);
+        trackResultView(results.primaryStyle.category);
       }
       
       // Navegação para a página de resultados ocorre ao clicar no botão "Vamos ao resultado?"

@@ -49,7 +49,7 @@ export const QuizContent: React.FC<QuizContentProps> = ({
         {showingStrategicQuestions ? (
           <StrategicQuestions
             currentQuestionIndex={currentStrategicQuestionIndex}
-            answers={currentAnswers || []}
+            answers={{}}
             onAnswer={handleAnswerSubmit}
           />
         ) : (

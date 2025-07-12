@@ -126,7 +126,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
               option={option} 
               isSelected={currentAnswers.includes(option.id)} 
               onSelect={handleOptionSelect}
-              type={question.type === 'normal' || question.type === 'strategic' ? 'both' : question.type}
+              type={question.type}
               questionId={question.id}
               isDisabled={
                 (isStrategicQuestion && currentAnswers.length > 0 && !currentAnswers.includes(option.id)) || 
