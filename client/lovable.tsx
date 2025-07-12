@@ -36,8 +36,20 @@ export function defineLovable(component: LovableComponent) {
         projectId: '65efd17d-5178-405d-9721-909c97470c6d',
         projectUrl: 'https://lovable.dev/projects/65efd17d-5178-405d-9721-909c97470c6d',
         apiBaseUrl: 'https://api.lovable.dev',
-        editorMode: true
+        editorMode: true,
+        dataApiUrl: '/api/lovable/data'
       };
+      
+      // Carregar dados para o Lovable
+      fetch('/api/lovable/data')
+        .then(response => response.json())
+        .then(data => {
+          (window as any).LOVABLE_DATA = data;
+          console.log('🎨 Lovable: Dados carregados', data);
+        })
+        .catch(error => {
+          console.warn('🎨 Lovable: Erro ao carregar dados', error);
+        });
       
       console.log(`🎨 Lovable: Componente ${component.name} registrado`);
     }

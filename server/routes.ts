@@ -5,6 +5,7 @@ import path from "path";
 import { storage } from "./storage";
 import { getFacebookCAPI } from "./services/facebookCAPI";
 import { generateQuizHtml } from "./quizTemplate";
+import lovableDataRoutes from "./routes/lovable-data";
 import { 
   insertUtmAnalyticsSchema, 
   insertQuizParticipantSchema,
@@ -410,6 +411,9 @@ function generateQuizHtml(funnel: any, quizConfig: any) {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Rotas de dados para Lovable.dev
+  app.use("/api/lovable", lovableDataRoutes);
+  
   // Dashboard Analytics Route
   app.get("/dashboard", (req, res) => {
     res.sendFile(path.join(process.cwd(), 'dashboard_analytics.html'));
@@ -1501,6 +1505,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ success: false, error: "Failed to delete funnel" });
     }
   });
+
+  // Registrar rotas do Lovable
+  app.use("/api/lovable-data", lovableDataRoutes);
 
   const httpServer = createServer(app);
 
