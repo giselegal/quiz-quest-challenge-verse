@@ -8,6 +8,13 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     mode === 'development' && componentTagger(),
+    // Plugin para filtrar logs de telemetria no desenvolvimento
+    mode === 'development' && {
+      name: 'telemetry-filter',
+      configureServer(_server: any) {
+        console.log('🧹 Filtro de telemetria ativo no Vite');
+      }
+    }
   ].filter(Boolean),
   server: {
     host: "::",
