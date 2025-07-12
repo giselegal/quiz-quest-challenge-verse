@@ -34,7 +34,7 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
   useEffect(() => {
     if (!imagesPreloaded) {
       // Preload da questão estratégica atual
-      preloadCriticalImages(["strategic"]);
+      preloadCriticalImages("strategic");
       setImagesPreloaded(true);
     }
     
@@ -49,10 +49,7 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
         console.log(`[Otimização] Iniciando pré-carregamento progressivo de imagens de resultado`);
         
         // Inicia o preload da categoria principal de resultado
-        preloadCriticalImages(['results'], {
-          quality: 80,
-          batchSize: 2
-        });
+        preloadCriticalImages('results');
       }, 500); // Pequeno delay para não competir com recursos iniciais
     }
   }, [imagesPreloaded]);
@@ -66,28 +63,16 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
     // Carrega diferentes conjuntos de imagens com base no progresso
     if (currentQuestionIndex === 1) {
       // Na segunda questão estratégica, carrega transformações
-      preloadCriticalImages(['transformation'], {
-        quality: 75,
-        batchSize: 2
-      });
+      preloadCriticalImages('transformation');
     } else if (currentQuestionIndex === 2) {
       // Na terceira questão, carrega bônus
-      preloadCriticalImages(['bonus'], {
-        quality: 75,
-        batchSize: 2
-      });
+      preloadCriticalImages('bonus');
     } else if (currentQuestionIndex >= 3) {
       // Em questões posteriores, carrega depoimentos
-      preloadCriticalImages(['testimonials'], {
-        quality: 70,
-        batchSize: 2
-      });
+      preloadCriticalImages('testimonials');
       
       // Carrega imagens explícitas de alta prioridade
-      preloadImagesByUrls(RESULT_CRITICAL_IMAGES, {
-        quality: 85, 
-        batchSize: 1
-      });
+      preloadImagesByUrls(RESULT_CRITICAL_IMAGES);
     }
   }, [currentQuestionIndex]);
 
