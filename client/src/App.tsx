@@ -17,6 +17,7 @@ import Index from "./pages/Index";
 import QuizPage from "./components/QuizPage";
 import ResultPage from "./pages/ResultPage";
 import LoadingAccessPage from "./pages/LoadingAccessPage";
+import SimpleTestPage from "./components/SimpleTestPage";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -28,9 +29,6 @@ import SettingsPage from "./pages/admin/SettingsPage";
 import SyncManagementPage from "./pages/admin/SyncManagementPage";
 
 // Editor Pages
-import SimpleDragDropEditor from "./pages/SimpleDragDropEditor";
-import EditorVisualPage from "./pages/EditorVisualPage";
-import SchemaDrivenEditorPage from "./pages/SchemaDrivenEditorPage";
 import SimpleCanvasEditorPage from "./pages/SimpleCanvasEditorPage";
 
 const queryClient = new QueryClient();
@@ -48,34 +46,32 @@ function App() {
                 <ErrorMonitor showInDevelopment={true} />
                 <BrowserRouter>
                   <Routes>
-                  {/* Public Routes */}
-                  <Route path="/" element={<Index />} />
-                  <Route path="/quiz-descubra-seu-estilo" element={<QuizPage />} />
-                  <Route path="/descubra-seu-estilo" element={<QuizPage />} />
-                  <Route path="/resultado" element={<ResultPage />} />
-                  <Route path="/resultado/:id" element={<ResultPage />} />
-                  <Route path="/loading-access" element={<LoadingAccessPage />} />
-                  
-                  {/* Editor Routes */}
-                  <Route path="/simple-editor" element={<SimpleCanvasEditorPage />} />
-                  <Route path="/editor-simple" element={<SimpleDragDropEditor />} />
-                  <Route path="/editor-visual" element={<EditorVisualPage />} />
-                  <Route path="/editor" element={<SchemaDrivenEditorPage />} />
-                  <Route path="/editor/:id" element={<SchemaDrivenEditorPage />} />
-                  <Route path="/quiz" element={<QuizPage />} />
-                  <Route path="/resultado" element={<ResultPage />} />
-                  
-                  {/* Admin Routes */}
-                  <Route path="/admin" element={<AdminDashboard />} />
-                  <Route path="/admin/quiz" element={<QuizManagement />} />
-                  <Route path="/admin/ab-tests" element={<ABTestsPage />} />
-                  <Route path="/admin/criativos" element={<CriativosPage />} />
-                  <Route path="/admin/analytics" element={<AnalyticsPage />} />
-                  <Route path="/admin/sync" element={<SyncManagementPage />} />
-                  <Route path="/admin/settings" element={<SettingsPage />} />
-                  
-                  {/* Development/Testing Routes */}
-                  <Route path="/test-supabase" element={<SupabaseConnectionTest />} />
+                    {/* Test Route - REMOVE THIS AFTER TESTING */}
+                    <Route path="/test" element={<SimpleTestPage />} />
+                    
+                    {/* Public Routes */}
+                    <Route path="/" element={<Index />} />
+                    <Route path="/quiz-descubra-seu-estilo" element={<QuizPage />} />
+                    <Route path="/descubra-seu-estilo" element={<QuizPage />} />
+                    <Route path="/quiz" element={<QuizPage />} />
+                    <Route path="/resultado" element={<ResultPage />} />
+                    <Route path="/resultado/:id" element={<ResultPage />} />
+                    <Route path="/loading-access" element={<LoadingAccessPage />} />
+                    
+                    {/* Editor Routes */}
+                    <Route path="/simple-editor" element={<SimpleCanvasEditorPage />} />
+                    
+                    {/* Admin Routes */}
+                    <Route path="/admin" element={<AdminDashboard />} />
+                    <Route path="/admin/quiz" element={<QuizManagement />} />
+                    <Route path="/admin/ab-tests" element={<ABTestsPage />} />
+                    <Route path="/admin/criativos" element={<CriativosPage />} />
+                    <Route path="/admin/analytics" element={<AnalyticsPage />} />
+                    <Route path="/admin/sync" element={<SyncManagementPage />} />
+                    <Route path="/admin/settings" element={<SettingsPage />} />
+                    
+                    {/* Development/Testing Routes */}
+                    <Route path="/test-supabase" element={<SupabaseConnectionTest />} />
                   </Routes>
                 </BrowserRouter>
               </TooltipProvider>
