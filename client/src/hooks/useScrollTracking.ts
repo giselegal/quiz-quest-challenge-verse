@@ -1,10 +1,7 @@
+
 import { useEffect, useRef } from 'react';
 import { useQuizTracking } from './useQuizTracking';
 
-/**
- * Hook para tracking automático de scroll em páginas do quiz
- * Dispara eventos de tracking em marcos importantes (25%, 50%, 75%, 90%)
- */
 export const useScrollTracking = (enabled: boolean = true) => {
   const { trackScrollProgress } = useQuizTracking();
   const trackedPercentages = useRef<Set<number>>(new Set());
@@ -13,12 +10,10 @@ export const useScrollTracking = (enabled: boolean = true) => {
     if (!enabled) return;
 
     const handleScroll = () => {
-      // Calcular porcentagem de scroll
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
       const documentHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
       const scrollPercentage = Math.round((scrollTop / documentHeight) * 100);
 
-      // Marcos importantes para tracking
       const milestones = [25, 50, 75, 90];
       
       for (const milestone of milestones) {
@@ -31,7 +26,6 @@ export const useScrollTracking = (enabled: boolean = true) => {
       }
     };
 
-    // Throttle para evitar muitos eventos
     let throttled = false;
     const throttledScroll = () => {
       if (throttled) return;
@@ -49,7 +43,6 @@ export const useScrollTracking = (enabled: boolean = true) => {
     };
   }, [enabled, trackScrollProgress]);
 
-  // Reset dos marcos quando a página muda
   const resetTrackedPercentages = () => {
     trackedPercentages.current.clear();
   };

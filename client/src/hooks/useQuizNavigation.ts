@@ -3,7 +3,8 @@ import { useCallback } from 'react';
 import { useRouter } from 'wouter';
 
 export const useQuizNavigation = () => {
-  const [, navigate] = useRouter();
+  const router = useRouter();
+  const navigate = router.navigate;
 
   const navigateToResult = useCallback(() => {
     navigate('/resultado');

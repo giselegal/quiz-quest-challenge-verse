@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { useLocation, useRouter } from 'wouter';
+import { useLocation } from 'wouter';
 import { QuizProvider, useQuiz } from '@/context/QuizContext';
 import { UserResponse } from '@/types/quiz';
 import { useQuizLogic } from '@/hooks/useQuizLogic';
@@ -34,7 +34,6 @@ const QuizErrorFallback: React.FC<QuizErrorFallbackProps> = ({ error, resetError
 };
 
 const QuizPageContent: React.FC = () => {
-  const [, navigate] = useRouter();
   const [location] = useLocation();
   
   // Get user data from quiz context
@@ -51,13 +50,13 @@ const QuizPageContent: React.FC = () => {
   } = useQuizLogic();
 
   const { trackQuizFinish } = useQuizTracking(currentQuestionIndex);
+  const { navigate } = useQuizNavigation();
 
   const [isLoading, setIsLoading] = useState(true);
   const [showingStrategicQuestions] = useState(false);
   const [currentStrategicQuestionIndex] = useState(0);
 
   useEffect(() => {
-    // Simulate loading delay
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 500);
