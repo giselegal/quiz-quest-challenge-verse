@@ -33,7 +33,8 @@ export function defineLovable(component: LovableComponent) {
       
       // Configuração global do Lovable
       (window as any).LOVABLE_CONFIG = {
-        projectId: 'quiz-sell-genius',
+        projectId: '65efd17d-5178-405d-9721-909c97470c6d',
+        projectUrl: 'https://lovable.dev/projects/65efd17d-5178-405d-9721-909c97470c6d',
         apiBaseUrl: 'https://api.lovable.dev',
         editorMode: true
       };

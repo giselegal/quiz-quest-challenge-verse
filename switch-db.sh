@@ -3,6 +3,8 @@
 # Script para alternar entre SQLite (local) e Supabase (cloud)
 
 echo "🔧 Configurador de Banco de Dados"
+echo "🎨 Projeto Lovable: https://lovable.dev/projects/65efd17d-5178-405d-9721-909c97470c6d"
+echo "🔗 Replit: https://replit.com/@giselegal/quiz-quest-challenge-verse"
 echo ""
 echo "Escolha o banco de dados:"
 echo "1) SQLite (local) - Recomendado para desenvolvimento"
