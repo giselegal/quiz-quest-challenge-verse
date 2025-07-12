@@ -154,7 +154,7 @@ const FAQSectionBlock: React.FC<BlockComponentProps> = ({
               placeholder="Título da seção FAQ..."
               className={cn(
                 TYPOGRAPHY.heading.h2,
-                `text-[${BRAND_COLORS.secondary.main}]`
+                'text-amber-900'
               )}
               fontWeight="bold"
               textAlign={alignment as any}

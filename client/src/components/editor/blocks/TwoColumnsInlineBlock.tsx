@@ -113,7 +113,7 @@ const TwoColumnsInlineBlock: React.FC<BlockComponentProps> = ({
         className={cn(
           'w-4 h-4 transition-colors',
           i < rating 
-            ? `text-[${BRAND_COLORS.warning}] fill-current` 
+            ? 'text-yellow-500 fill-current' 
             : 'text-gray-300'
         )}
       />
@@ -121,10 +121,10 @@ const TwoColumnsInlineBlock: React.FC<BlockComponentProps> = ({
   };
 
   const cardStyles = {
-    bordered: `border-2 border-[${BRAND_COLORS.primary.light}] bg-white`,
-    filled: `bg-[${BRAND_COLORS.primary.light}] border-transparent`,
+    bordered: 'border-2 border-amber-300 bg-white',
+    filled: 'bg-amber-100 border-transparent',
     minimal: 'bg-white border border-gray-200',
-    elevated: `bg-white border border-[${BRAND_COLORS.primary.main}] ${EFFECTS.shadows.brand}`
+    elevated: 'bg-white border border-amber-700 shadow-lg'
   };
 
   const spacingClasses = {
@@ -162,7 +162,7 @@ const TwoColumnsInlineBlock: React.FC<BlockComponentProps> = ({
               placeholder="Título da seção..."
               className={cn(
                 TYPOGRAPHY.heading.h2,
-                `text-[${BRAND_COLORS.secondary.main}]`,
+                'text-amber-900',
                 'mb-2'
               )}
               fontWeight="bold"
@@ -226,7 +226,7 @@ const TwoColumnsInlineBlock: React.FC<BlockComponentProps> = ({
                     placeholder="Depoimento do cliente..."
                     className={cn(
                       TYPOGRAPHY.body.base,
-                      `text-[${BRAND_COLORS.text.secondary}]`,
+                      'text-gray-600',
                       'italic leading-relaxed'
                     )}
                     textAlign={alignment as any}
@@ -246,7 +246,7 @@ const TwoColumnsInlineBlock: React.FC<BlockComponentProps> = ({
                     placeholder="Nome do cliente"
                     className={cn(
                       TYPOGRAPHY.heading.h6,
-                      `text-[${BRAND_COLORS.secondary.main}]`
+                      'text-amber-900'
                     )}
                     fontWeight="bold"
                     textAlign={alignment as any}
@@ -259,7 +259,7 @@ const TwoColumnsInlineBlock: React.FC<BlockComponentProps> = ({
                       placeholder="@handle"
                       className={cn(
                         TYPOGRAPHY.body.small,
-                        `text-[${BRAND_COLORS.text.muted}]`
+                        'text-gray-500'
                       )}
                       textAlign={alignment as any}
                     />

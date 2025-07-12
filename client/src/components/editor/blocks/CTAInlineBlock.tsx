@@ -128,12 +128,12 @@ const CTAInlineBlock: React.FC<BlockComponentProps> = ({
   );
 
   const styleClasses = {
-    primary: `bg-gradient-to-r from-[${BRAND_COLORS.info}] to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white ${EFFECTS.shadows.lg}`,
-    brand: `bg-gradient-to-r from-[${BRAND_COLORS.primary.main}] to-[${BRAND_COLORS.primary.hover}] hover:from-[${BRAND_COLORS.primary.hover}] hover:to-[${BRAND_COLORS.primary.dark}] text-white ${EFFECTS.shadows.brand}`,
-    secondary: `bg-gradient-to-r from-[${BRAND_COLORS.secondary.main}] to-[${BRAND_COLORS.secondary.hover}] hover:from-[${BRAND_COLORS.secondary.hover}] hover:to-[${BRAND_COLORS.secondary.dark}] text-white`,
-    success: `bg-gradient-to-r from-[${BRAND_COLORS.success}] to-green-700 hover:from-green-700 hover:to-green-800 text-white`,
-    warning: `bg-gradient-to-r from-[${BRAND_COLORS.warning}] to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white`,
-    danger: `bg-gradient-to-r from-[${BRAND_COLORS.error}] to-red-700 hover:from-red-700 hover:to-red-800 text-white`
+    primary: `bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white ${EFFECTS.shadows.lg}`,
+    brand: `bg-gradient-to-r from-amber-700 to-amber-800 hover:from-amber-800 hover:to-amber-900 text-white ${EFFECTS.shadows.brand}`,
+    secondary: `bg-gradient-to-r from-amber-900 to-amber-950 hover:from-amber-950 hover:to-black text-white`,
+    success: `bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white`,
+    warning: `bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white`,
+    danger: `bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white`
   };
 
   return (
