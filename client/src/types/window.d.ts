@@ -1,7 +1,8 @@
-
-// Type definitions for Facebook Pixel and Google Analytics
-interface Window {
-  fbq?: any;
-  gtag?: any;
-  _fbq?: any;
+// Window extensions for custom error monitoring
+declare global {
+  interface Window {
+    customErrorLogger?: (type: string, data: any) => void;
+  }
 }
+
+export {};

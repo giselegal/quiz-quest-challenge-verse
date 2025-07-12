@@ -9,6 +9,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { QuizProvider } from "@/context/QuizContext";
 import LovableClientProvider from "@/components/LovableClientProvider";
 import ErrorBoundary from "@/components/error-boundary/ErrorBoundary";
+import ErrorMonitor from "@/components/error-monitoring/ErrorMonitor";
 import "@/utils/telemetry-blocker";
 
 // Pages
@@ -43,6 +44,7 @@ function App() {
               <TooltipProvider>
                 <Toaster />
                 <Sonner />
+                <ErrorMonitor showInDevelopment={true} />
                 <BrowserRouter>
                   <Routes>
                   {/* Public Routes */}
