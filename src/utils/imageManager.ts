@@ -1,3 +1,4 @@
+
 import { BankImage } from '@/data/imageBank';
 import { getOptimizedImage as getOptimizedImageEnhanced } from './images/optimization-enhanced';
 import { ImageOptimizationOptions } from './images/types';
@@ -30,8 +31,6 @@ const imageCache = new Map<string, boolean>();
 
 /**
  * Preloads a single image and resolves when it's loaded or rejects on error.
- * @param src The image source URL
- * @returns A promise that resolves when the image is loaded or rejects on error
  */
 const preloadImage = (src: string): Promise<void> => {
   return new Promise((resolve, reject) => {
@@ -57,9 +56,14 @@ const preloadImage = (src: string): Promise<void> => {
 };
 
 /**
+ * Preloads multiple images - alias for compatibility
+ */
+export const preloadImages = async (urls: string[]): Promise<void> => {
+  await Promise.all(urls.map(url => preloadImage(url)));
+};
+
+/**
  * Preloads multiple images in batches with a specified batch size and options.
- * @param imageUrls An array of image URLs to preload
- * @param options Preload options including batch size, quality, and format
  */
 export const preloadImagesByUrls = async (
   imageUrls: string[],
@@ -103,8 +107,6 @@ export const preloadImagesByUrls = async (
 
 /**
  * Preloads critical images based on a category using data from the image bank.
- * @param category The category of images to preload
- * @param options Preload options including batch size, quality, and format
  */
 export const preloadCriticalImages = async (
   category: string | string[],
@@ -159,8 +161,6 @@ export const preloadCriticalImages = async (
 
 /**
  * Checks if an image is already preloaded by checking the imageCache.
- * @param src The source URL of the image
- * @returns True if the image is preloaded, false otherwise
  */
 export const isImagePreloaded = (src: string): boolean => {
   return imageCache.has(src);
@@ -168,8 +168,6 @@ export const isImagePreloaded = (src: string): boolean => {
 
 /**
  * Gets an image's metadata from the image bank.
- * @param src The source URL of the image
- * @returns The image metadata if found, undefined otherwise
  */
 export const getImageMetadata = (src: string): ImageMetadata | undefined => {
   try {
@@ -195,8 +193,7 @@ export const getImageMetadata = (src: string): ImageMetadata | undefined => {
 };
 
 /**
- * Gets an optimized image URL with simplified approach
- * Temporarily simplified to fix loading issues
+ * Gets an optimized image URL - simplified to return original URLs
  */
 export const getOptimizedImage = (
   url: string,
@@ -206,8 +203,23 @@ export const getOptimizedImage = (
   
   console.log(`[ImageManager] Processing image URL: ${url}`);
   
-  // For now, return the original URL to ensure images load
-  // This bypasses complex optimization that might be breaking URLs
+  // Return the original URL directly to ensure images load
   return url;
 };
+
+/**
+ * Alias for getOptimizedImage to maintain compatibility
+ */
+export const getOptimizedImageUrl = getOptimizedImage;
+
+/**
+ * Gets a low quality placeholder URL - simplified to return original URL
+ */
+export const getLowQualityPlaceholder = (url: string): string => {
+  if (!url) return '';
+  
+  // For now, return the original URL to ensure images load
+  return url;
+};
+
 export type { ImageMetadata, PreloadOptions, OptimizationOptions };

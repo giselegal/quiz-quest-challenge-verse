@@ -1,3 +1,4 @@
+
 import { BankImage } from '@/data/imageBank';
 import { getOptimizedImage as getOptimizedImageEnhanced } from './images/optimization-enhanced';
 import { ImageOptimizationOptions } from './images/types';
@@ -28,8 +29,7 @@ interface OptimizationOptions {
 }
 
 /**
- * Gets an optimized image URL with simplified approach
- * Temporarily simplified to fix loading issues
+ * Gets an optimized image URL - simplified to return original URLs
  */
 export const getOptimizedImage = (
   url: string,
@@ -39,15 +39,27 @@ export const getOptimizedImage = (
   
   console.log(`[ImageManager] Processing image URL: ${url}`);
   
+  // Return the original URL directly to ensure images load
+  return url;
+};
+
+/**
+ * Alias for getOptimizedImage to maintain compatibility
+ */
+export const getOptimizedImageUrl = getOptimizedImage;
+
+/**
+ * Gets a low quality placeholder URL - simplified to return original URL
+ */
+export const getLowQualityPlaceholder = (url: string): string => {
+  if (!url) return '';
+  
   // For now, return the original URL to ensure images load
-  // This bypasses complex optimization that might be breaking URLs
   return url;
 };
 
 /**
  * Preloads a single image and resolves when it's loaded
- * @param url The URL of the image to preload
- * @returns A promise that resolves when the image is loaded
  */
 export const preloadImage = (url: string): Promise<void> => {
   return new Promise((resolve, reject) => {
@@ -78,9 +90,14 @@ export const preloadImage = (url: string): Promise<void> => {
 };
 
 /**
+ * Preloads multiple images - alias for compatibility
+ */
+export const preloadImages = async (urls: string[]): Promise<void> => {
+  await Promise.all(urls.map(url => preloadImage(url)));
+};
+
+/**
  * Preloads multiple images sequentially
- * @param urls An array of image URLs to preload
- * @param options Optional parameters like batchSize and onComplete
  */
 export const preloadImagesByUrls = async (
   urls: string[],
@@ -103,8 +120,6 @@ export const preloadImagesByUrls = async (
 
 /**
  * Preloads images by category from the image bank
- * @param category The category of images to preload
- * @param options Optional parameters like quality, batchSize, and onComplete
  */
 export const preloadCriticalImages = async (
   category: string | string[],
@@ -128,8 +143,8 @@ export const preloadCriticalImages = async (
     // });
   }
   
-  // Remove duplicate URLs using Set
-  const uniqueImageUrls = [...new Set(imageUrls)];
+  // Remove duplicate URLs using Array.from instead of spread operator on Set
+  const uniqueImageUrls = Array.from(new Set(imageUrls));
   
   // Preload the unique image URLs
   await preloadImagesByUrls(uniqueImageUrls, options);
@@ -137,8 +152,6 @@ export const preloadCriticalImages = async (
 
 /**
  * Gets image metadata from the image bank
- * @param imageUrl The URL of the image
- * @returns The image metadata if found, otherwise undefined
  */
 export const getImageMetadata = (imageUrl: string): BankImage | undefined => {
   // if (!imageUrl) return undefined;
@@ -163,8 +176,6 @@ export const getImageMetadata = (imageUrl: string): BankImage | undefined => {
 
 /**
  * Extracts the image ID from the URL
- * @param imageUrl The URL of the image
- * @returns The image ID if found, otherwise undefined
  */
 const extractImageIdFromUrl = (imageUrl: string): string | undefined => {
   // Define a regular expression to match the image ID in the URL
