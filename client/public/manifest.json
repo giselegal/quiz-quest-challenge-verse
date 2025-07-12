@@ -1,0 +1,22 @@
+
+{
+  "name": "Quiz Quest - Descubra Seu Estilo",
+  "short_name": "Quiz Quest",
+  "description": "Descubra seu estilo pessoal único",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFAF0",
+  "theme_color": "#432818",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["lifestyle", "entertainment"],
+  "lang": "pt-BR",
+  "scope": "/",
+  "prefer_related_applications": false
+}

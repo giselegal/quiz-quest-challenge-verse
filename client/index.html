@@ -1,30 +1,80 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
   <head>
-    <!-- Bloqueador de telemetria - DEVE SER O PRIMEIRO SCRIPT -->
-    <script src="/telemetry-blocker.js"></script>
-    
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz Quest - Descubra Seu Estilo</title>
     
-    <!-- Content Security Policy corrigido para permitir Lovable -->
+    <!-- CSP mais permissivo para diagnóstico -->
     <meta http-equiv="Content-Security-Policy" content="
-      default-src 'self' 'unsafe-inline' 'unsafe-eval' *.lovable.app *.lovableproject.com;
-      connect-src 'self' http://localhost:* ws://localhost:* wss://localhost:* *.lovable.app *.lovableproject.com wss://*.lovable.app wss://*.lovableproject.com;
-      img-src 'self' data: blob: *.lovable.app *.lovableproject.com;
-      script-src 'self' 'unsafe-inline' 'unsafe-eval' *.lovable.app *.lovableproject.com;
-      style-src 'self' 'unsafe-inline' *.lovable.app *.lovableproject.com;
-      font-src 'self' *.lovable.app *.lovableproject.com;
-      frame-src 'self' *.lovable.app *.lovableproject.com;
+      default-src 'self' 
+        *.lovable.app 
+        *.lovableproject.com 
+        *.supabase.co 
+        *.supabase.io 
+        data: blob: 
+        'unsafe-inline' 
+        'unsafe-eval';
+      connect-src 'self' 
+        *.lovable.app 
+        *.lovableproject.com 
+        *.supabase.co 
+        *.supabase.io 
+        wss://*.lovableproject.com 
+        wss://*.lovable.app 
+        https://api.openai.com 
+        data: blob:;
+      img-src 'self' 
+        *.lovable.app 
+        *.lovableproject.com 
+        *.supabase.co 
+        data: blob: 
+        https:;
+      script-src 'self' 
+        *.lovable.app 
+        *.lovableproject.com 
+        'unsafe-inline' 
+        'unsafe-eval';
+      style-src 'self' 
+        *.lovable.app 
+        *.lovableproject.com 
+        'unsafe-inline';
+      font-src 'self' 
+        *.lovable.app 
+        *.lovableproject.com 
+        data:;
     ">
     
-    <title>Quiz Quest Challenge Verse - Descubra Seu Estilo</title>
-    <meta name="description" content="Descubra seu estilo pessoal com nosso quiz interativo" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <!-- Meta tags para PWA offline -->
+    <meta name="theme-color" content="#432818" />
+    <meta name="description" content="Descubra seu estilo pessoal único com nosso quiz interativo" />
+    
+    <!-- Manifest para funcionamento offline -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Bloqueador de telemetria específico -->
+    <script src="/telemetry-blocker.js"></script>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="./src/main.tsx"></script>
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Notificação de modo offline -->
+    <script>
+      // Detectar estado offline/online
+      window.addEventListener('load', () => {
+        if (!navigator.onLine) {
+          console.log('📱 Starting in offline mode');
+          window.dispatchEvent(new CustomEvent('fallback-mode-activated'));
+        }
+      });
+      
+      // Logging de diagnóstico
+      console.log('🚀 Quiz Quest iniciando...');
+      console.log('🌐 Navigator online:', navigator.onLine);
+      console.log('📍 URL atual:', window.location.href);
+    </script>
   </body>
 </html>
