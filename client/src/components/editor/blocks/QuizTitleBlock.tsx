@@ -60,7 +60,7 @@ const QuizTitleBlock: React.FC<QuizTitleBlockProps> = ({
     >
       <InlineEditText
         value={title}
-        onSave={(value: string) => handlePropertyChange('title', value)}
+        onChange={(value) => handlePropertyChange('title', value)}
         placeholder="Título do quiz"
         className={cn(
           textAlignClass,

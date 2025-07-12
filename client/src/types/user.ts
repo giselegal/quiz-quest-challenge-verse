@@ -8,7 +8,6 @@ export interface User {
   role: string; // Required field
   createdAt: Date;
   updatedAt: Date;
-  userName?: string; // Add userName property
 }
 
 // Define another type alias pointing to the same interface to ensure correct type recognition

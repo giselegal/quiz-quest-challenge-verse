@@ -11,42 +11,30 @@ neonConfig.webSocketConstructor = ws;
 
 let pool: Pool | null = null;
 let db: any = null;
-let dbType: 'postgres' | 'sqlite' = 'sqlite';
 
-// Try PostgreSQL/Supabase first
-if (process.env.DATABASE_URL?.startsWith('postgres')) {
-  try {
-    console.log("🔧 Tentando conectar com PostgreSQL/Supabase...");
-    pool = new Pool({ connectionString: process.env.DATABASE_URL });
-    db = drizzlePg({ client: pool, schema });
-    dbType = 'postgres';
-    console.log("✅ PostgreSQL/Supabase conectado com sucesso!");
-  } catch (error) {
-    console.warn("⚠️ Falha na conexão PostgreSQL:", error);
-    console.log("🔄 Usando SQLite como fallback...");
-    pool = null;
-    db = null;
-  }
+// Verificar se estamos em desenvolvimento e usar SQLite
+if (process.env.NODE_ENV === 'development' && !process.env.DATABASE_URL?.startsWith('postgres')) {
+  console.log("🔧 Modo desenvolvimento: usando SQLite");
+  
+  // Criar banco SQLite se não existir
+  const dbPath = './dev.db';
+  const sqlite = new Database(dbPath);
+  
+  // Habilitar WAL mode para melhor performance
+  sqlite.pragma('journal_mode = WAL');
+  
+  db = drizzleSqlite(sqlite, { schema: schemaSqlite });
+  
+  console.log(`✅ SQLite conectado: ${dbPath}`);
+  
+} else if (process.env.DATABASE_URL) {
+  console.log("🔧 Modo produção: usando PostgreSQL/Neon");
+  pool = new Pool({ connectionString: process.env.DATABASE_URL });
+  db = drizzlePg({ client: pool, schema });
+  console.log("✅ PostgreSQL/Neon conectado");
+  
+} else {
+  console.warn("⚠️ DATABASE_URL não definida - usando storage em memória");
 }
 
-// Fallback to SQLite if PostgreSQL failed or not configured
-if (!db) {
-  try {
-    const dbPath = "./dev.db";
-    console.log("🗃️  Usando SQLite local:", dbPath);
-    const sqlite = new Database(dbPath);
-    db = drizzleSqlite({ client: sqlite, schema: schemaSqlite });
-    dbType = 'sqlite';
-    console.log("✅ SQLite conectado com sucesso!");
-  } catch (error) {
-    console.error("❌ Falha ao conectar com SQLite:", error);
-    throw new Error("Não foi possível conectar com nenhum banco de dados");
-  }
-}
-
-if (dbType === 'sqlite') {
-  console.log("💡 Para funcionalidade completa, configure DATABASE_URL com Supabase");
-  console.log("🔗 Exemplo: DATABASE_URL='postgresql://user:pass@host:5432/db'");
-}
-
-export { pool, db, dbType };
+export { pool, db };

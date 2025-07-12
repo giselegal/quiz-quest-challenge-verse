@@ -1,27 +1,24 @@
 
 import { useCallback } from 'react';
-import { Block, EditableContent } from '@/types/editor';
-import { useToast } from '@/hooks/use-toast';
+import { EditorBlock, EditableContent } from '@/types/editor';
+import { useToast } from '@/components/ui/use-toast';
 import { getDefaultContentForType } from '@/utils/editorDefaults';
 
 export const useEditorActions = (
-  blocks: Block[],
-  onBlocksChange: (blocks: Block[]) => void,
-  addToHistory: (blocks: Block[]) => void
+  blocks: EditorBlock[],
+  onBlocksChange: (blocks: EditorBlock[]) => void,
+  addToHistory: (blocks: EditorBlock[]) => void
 ) => {
   const { toast } = useToast();
 
-  const handleAddBlock = useCallback((type: Block['type']) => {
-    const newBlock: Block = {
+  const handleAddBlock = useCallback((type: EditorBlock['type']) => {
+    const newBlocks = [...blocks, {
       id: `block-${Date.now()}`,
       type,
       content: getDefaultContentForType(type),
-      order: blocks.length,
-      visible: true,
-      properties: {} // Added missing properties
-    };
+      order: blocks.length
+    }];
     
-    const newBlocks = [...blocks, newBlock];
     onBlocksChange(newBlocks);
     addToHistory(newBlocks);
   }, [blocks, onBlocksChange, addToHistory]);

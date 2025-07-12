@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect } from 'react';
 import { useQuizData } from '@/services/quizDataService';
 import { useAuth } from '@/context/AuthContext';

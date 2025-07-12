@@ -21,7 +21,7 @@ const EnhancedEditorMetricsGrid = () => (
 );
 
 // Componente placeholder para o cabeçalho do dashboard
-const EnhancedEditorDashboardHeader = ({ title, description }: { title: string; description: string }) => (
+const EnhancedEditorDashboardHeader = ({ title, description }) => (
   <div className="mb-4">
     <h1 className="text-2xl font-bold">{title}</h1>
     <p className="text-gray-500">{description}</p>

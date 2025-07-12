@@ -105,29 +105,9 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({
     };
 
     updateTimer();
-    // Optimized timer with requestAnimationFrame for better performance
-    let animationFrame: number;
-    let lastUpdateTime = Date.now();
-    
-    const optimizedUpdate = () => {
-      const now = Date.now();
-      if (now - lastUpdateTime >= 1000) {
-        updateTimer();
-        lastUpdateTime = now;
-      }
-      
-      if (!isExpired && timeLeft.total > 0) {
-        animationFrame = requestAnimationFrame(optimizedUpdate);
-      }
-    };
-    
-    animationFrame = requestAnimationFrame(optimizedUpdate);
+    const interval = setInterval(updateTimer, 1000);
 
-    return () => {
-      if (animationFrame) {
-        cancelAnimationFrame(animationFrame);
-      }
-    };
+    return () => clearInterval(interval);
   }, [targetDate, durationMinutes, onExpire]);
 
   const getThemeColors = () => {

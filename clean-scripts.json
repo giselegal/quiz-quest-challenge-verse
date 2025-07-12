@@ -1,6 +1,0 @@
-{
-  "scripts": {
-    "clean-dev": "NODE_ENV=development DISABLE_TELEMETRY=true npm run dev",
-    "clean-client": "NODE_ENV=development DISABLE_TELEMETRY=true npm run dev:client"
-  }
-}

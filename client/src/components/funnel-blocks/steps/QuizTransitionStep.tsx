@@ -118,7 +118,7 @@ export const QuizTransitionStep: React.FC<FunnelStepProps> = ({
         </div>
       )}
       
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style jsx>{`
         @keyframes fadeIn {
           from { opacity: 0; }
           to { opacity: 1; }
@@ -126,7 +126,7 @@ export const QuizTransitionStep: React.FC<FunnelStepProps> = ({
         .animate-fade-in {
           animation: fadeIn 0.5s ease-in-out;
         }
-      ` }} />
+      `}</style>
     </div>
   );
 };

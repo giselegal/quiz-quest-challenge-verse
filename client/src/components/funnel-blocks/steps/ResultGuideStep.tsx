@@ -110,14 +110,14 @@ export const ResultGuideStep: React.FC<FunnelStepProps> = ({
         {/* Tabs de conteúdo */}
         <Tabs defaultValue={defaultTabId} className="mb-8">
           <TabsList className="grid grid-cols-3 mb-6">
-            {result.guideSections?.map((section: any) => (
+            {result.guideSections?.map((section) => (
               <TabsTrigger key={section.id} value={section.id}>
                 {section.title}
               </TabsTrigger>
             ))}
           </TabsList>
           
-          {result.guideSections?.map((section: any) => (
+          {result.guideSections?.map((section) => (
             <TabsContent key={section.id} value={section.id}>
               <Card className="p-6">
                 <h3 className="text-xl font-semibold mb-4">{section.title}</h3>
@@ -125,7 +125,7 @@ export const ResultGuideStep: React.FC<FunnelStepProps> = ({
                 
                 {section.items?.length > 0 && (
                   <div className="space-y-4">
-                    {section.items.map((item: string, index: number) => (
+                    {section.items.map((item, index) => (
                       <div key={index} className="p-3 bg-gray-50 rounded-lg">
                         {item}
                       </div>

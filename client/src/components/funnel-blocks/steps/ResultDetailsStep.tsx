@@ -91,7 +91,7 @@ export const ResultDetailsStep: React.FC<FunnelStepProps> = ({
             <Card className="p-5 bg-gray-50">
               <h3 className="text-lg font-semibold mb-4">Suas características:</h3>
               <ul className="space-y-2">
-                {result.characteristics?.map((item: string, index: number) => (
+                {result.characteristics?.map((item, index) => (
                   <li key={index} className="flex items-start">
                     <div className="flex-shrink-0 mr-2 mt-1">
                       <div className="h-4 w-4 rounded-full bg-green-500"></div>
@@ -106,7 +106,7 @@ export const ResultDetailsStep: React.FC<FunnelStepProps> = ({
             <Card className="p-5 bg-indigo-50">
               <h3 className="text-lg font-semibold mb-4">Recomendações para você:</h3>
               <ul className="space-y-2">
-                {result.recommendations?.map((item: string, index: number) => (
+                {result.recommendations?.map((item, index) => (
                   <li key={index} className="flex items-start">
                     <div className="flex-shrink-0 mr-2 mt-1">
                       <div className="h-4 w-4 rounded-full bg-indigo-500"></div>

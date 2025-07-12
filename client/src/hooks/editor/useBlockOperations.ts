@@ -1,6 +1,8 @@
 
-import { useCallback, useState } from 'react';
-import { Block, BlockType, EditableContent } from '@/types/editor';
+import { useState, useCallback } from 'react';
+import { Block } from '@/types/editor';
+import { generateId } from '@/utils/idGenerator';
+import { getDefaultContentForType } from '@/utils/editorDefaults';
 
 export const useBlockOperations = () => {
   const [blocks, setBlocks] = useState<Block[]>([]);
@@ -10,47 +12,51 @@ export const useBlockOperations = () => {
     setBlocks(newBlocks);
   }, []);
 
-  const addBlock = useCallback((type: BlockType) => {
+  const handleAddBlock = useCallback((type: Block['type']) => {
     const newBlock: Block = {
-      id: `block-${Date.now()}`,
+      id: generateId(),
       type,
       order: blocks.length,
-      visible: true,
-      content: {} as EditableContent,
-      properties: {}
+      content: getDefaultContentForType(type)
     };
-    
-    const newBlocks = [...blocks, newBlock];
-    setBlocks(newBlocks);
+
+    setBlocks(prev => [...prev, newBlock]);
     setSelectedBlockId(newBlock.id);
+
     return newBlock.id;
   }, [blocks]);
 
-  const updateBlock = useCallback((id: string, content: EditableContent) => {
-    setBlocks(blocks.map(block =>
-      block.id === id ? { ...block, content: { ...block.content, ...content } } : block
-    ));
-  }, [blocks]);
+  const handleUpdateBlock = useCallback((id: string, content: any) => {
+    setBlocks(prev => 
+      prev.map(block => 
+        block.id === id ? { ...block, content: { ...block.content, ...content } } : block
+      )
+    );
+  }, []);
 
-  const deleteBlock = useCallback((id: string) => {
-    setBlocks(blocks.filter(block => block.id !== id));
-    if (selectedBlockId === id) {
-      setSelectedBlockId(null);
-    }
-  }, [blocks, selectedBlockId]);
+  const handleDeleteBlock = useCallback((id: string) => {
+    setBlocks(prev => {
+      const filteredBlocks = prev
+        .filter(block => block.id !== id)
+        .map((block, index) => ({ ...block, order: index }));
+      return filteredBlocks;
+    });
+
+    setSelectedBlockId(null);
+  }, []);
 
   const handleReorderBlocks = useCallback((sourceIndex: number, destinationIndex: number) => {
-    const result = Array.from(blocks);
-    const [removed] = result.splice(sourceIndex, 1);
-    result.splice(destinationIndex, 0, removed);
-    
-    const reorderedBlocks = result.map((block, index) => ({
-      ...block,
-      order: index
-    }));
-    
-    setBlocks(reorderedBlocks);
-  }, [blocks]);
+    setBlocks(prev => {
+      const result = Array.from(prev);
+      const [removed] = result.splice(sourceIndex, 1);
+      result.splice(destinationIndex, 0, removed);
+      
+      return result.map((block, index) => ({
+        ...block,
+        order: index
+      }));
+    });
+  }, []);
 
   return {
     blocks,
@@ -58,9 +64,9 @@ export const useBlockOperations = () => {
     setSelectedBlockId,
     updateBlocks,
     actions: {
-      handleAddBlock: addBlock,
-      handleUpdateBlock: updateBlock,
-      handleDeleteBlock: deleteBlock,
+      handleAddBlock,
+      handleUpdateBlock,
+      handleDeleteBlock,
       handleReorderBlocks
     }
   };

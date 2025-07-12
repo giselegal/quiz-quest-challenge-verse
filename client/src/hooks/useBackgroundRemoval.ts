@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { pipeline, env } from '@huggingface/transformers';
 
 // Configure transformers.js to always download models

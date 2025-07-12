@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Script para verificar e corrigir problemas específicos nas URLs principais da Gisele Galvão
  * - https://giselegalvao.com.br/

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { quizCalculationEngine, processResponse, calculateQuizResult } from '../lib/quizCalculation';
 import type { QuizResponse } from '../types/quiz';
 

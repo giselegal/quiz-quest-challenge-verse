@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { preloadCriticalImages, getLowQualityPlaceholder } from '@/utils/imageManager';
 
 /**

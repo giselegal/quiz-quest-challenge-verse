@@ -44,35 +44,6 @@ const DynamicBlockRenderer: React.FC<DynamicBlockRendererProps> = ({
 
   // Renderizar componente baseado no tipo
   const renderComponent = () => {
-    // === SUPORTE ESPECIAL PARA COMPONENT-REFERENCE ===
-    if (componentType === 'component-reference') {
-      const { componentPath, componentName, props: componentProps } = props;
-      
-      // Mapear componentes reais do projeto
-      const componentMap: Record<string, React.ComponentType<any>> = {
-        'BeforeAfterTransformation': BeforeAfterTransformation,
-        'MotivationSection': MotivationSection,
-        'BonusSection': BonusSection,
-        'Testimonials': Testimonials,
-        'GuaranteeSection': GuaranteeSection,
-        'MentorSection': MentorSection,
-        'SecurePurchaseElement': SecurePurchaseElement,
-        'SecondaryStylesSection': SecondaryStylesSection
-      };
-      
-      const Component = componentMap[componentName];
-      if (Component) {
-        return <Component {...(componentProps || {})} />;
-      }
-      
-      // Fallback se componente não encontrado
-      return (
-        <div className="p-4 border border-red-300 bg-red-50 rounded-lg text-red-700">
-          ⚠️ Componente não encontrado: {componentName}
-        </div>
-      );
-    }
-
     switch (componentType) {
       // COMPONENTES REAIS - RESULTPAGE
       case 'header-component-real':

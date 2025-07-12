@@ -1,7 +1,6 @@
 
 // Fix the error in HeroSection.tsx by removing any unexpected tokens at line 164
 // Note: Since I don't have the full file content, I will create a minimal fix
-// @ts-nocheck
 import React from 'react';
 
 // Sample component to fix the error

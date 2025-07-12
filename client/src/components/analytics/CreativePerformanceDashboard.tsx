@@ -62,8 +62,7 @@ export const CreativePerformanceDashboard: React.FC = () => {
     loadCreativeData();
     
     // Atualizar dados a cada 30 segundos
-    // Reduced polling frequency for better performance
-    const interval = setInterval(loadCreativeData, 60000); // 1 minute instead of 30 seconds
+    const interval = setInterval(loadCreativeData, 30000);
     
     return () => clearInterval(interval);
   }, [selectedPeriod]);

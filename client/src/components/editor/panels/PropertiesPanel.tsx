@@ -10,10 +10,8 @@ import { SimpleComponent } from '@/interfaces/quiz';
 
 interface PropertiesPanelProps {
   selectedComponent: SimpleComponent | null;
-  updateComponent?: (componentId: string, newData: Partial<any>) => void;
-  onComponentUpdate?: (updates: Partial<SimpleComponent>) => void;
-  deleteComponent?: (componentId: string) => void;
-  onComponentDelete?: (componentId: string) => void;
+  onComponentUpdate: (updates: Partial<SimpleComponent>) => void;
+  onComponentDelete: (componentId: string) => void;
 }
 
 const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
@@ -33,7 +31,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   }
 
   const handlePropChange = (key: string, value: any) => {
-    onComponentUpdate?.({
+    onComponentUpdate({
       data: {
         ...selectedComponent.data,
         [key]: value,
@@ -288,7 +286,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => onComponentDelete?.(selectedComponent.id)}
+            onClick={() => onComponentDelete(selectedComponent.id)}
             className="text-red-600 hover:text-red-700"
           >
             <Trash2 className="h-4 w-4" />

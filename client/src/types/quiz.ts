@@ -1,89 +1,188 @@
+// Tipos para o sistema de quiz e cálculo de estilos CaktoQuiz
 
-export interface QuizOption {
-  id: string;
-  text: string;
-  image?: string;
-  imageUrl?: string;
-  description?: string;
-  points?: Record<string, number>;
-  styleCode?: string;
-  styleCategory?: string;
-  weight?: number;
-  style?: string; // Add style property for mapping
-  value?: string; // Add value property
+export type StyleType = 
+  | 'classico'
+  | 'romantico' 
+  | 'dramatico'
+  | 'natural'
+  | 'criativo'
+  | 'elegante'
+  | 'sensual'
+  | 'contemporaneo';
+
+export interface Style {
+  id: StyleType;
+  name: string;
+  description: string;
+  imageUrl: string;
+  guideImageUrl: string;
+  colors: {
+    primary: string;
+    secondary: string;
+    accent: string;
+  };
+  keywords: string[];
 }
 
 export interface QuizQuestion {
   id: string;
-  title: string;
-  text: string;
-  question?: string; // Added for backward compatibility
-  type: 'multiple' | 'single' | 'both' | 'image' | 'text' | 'strategic';
-  imageUrl?: string;
+  order: number;
+  question: string;
+  title?: string; // Adicionado para compatibilidade
+  type: 'normal' | 'strategic' | 'text' | 'both' | 'image'; // Expandido para compatibilidade
   options: QuizOption[];
-  required?: boolean;
-  multiSelect?: number; // Added for multi-select support
+  imageUrl?: string;
+  multiSelect?: number;
+}
+
+export interface QuizOption {
+  id: string;
+  text: string;
+  style?: StyleType;
+  styleCategory?: string; // Adicionado para compatibilidade
+  imageUrl?: string;
+  weight?: number;
+  value?: string;
+  category?: string;
+  points?: number; // Adicionado para compatibilidade
+}
+
+export interface QuizResponse {
+  questionId: string;
+  selectedOptionIds: string[]; // Array para múltiplas seleções
+  selectedOptionId?: string; // Para compatibilidade com código antigo
+  selectedStyles?: StyleType[]; // Estilos das opções selecionadas
+  selectedStyle?: StyleType; // Para compatibilidade com código antigo
+  timestamp: Date;
 }
 
 export interface UserResponse {
   questionId: string;
-  selectedOptionId: string;
-  selectedOptionIds?: string[];
-  selectedOptions?: string[]; // Added for backward compatibility
-  timestamp?: number;
-  answers?: string[];
-  styleCategories?: string[];
-  selectedStyles?: string[]; // Added for engine compatibility
-  selectedStyle?: string; // Add selectedStyle property
+  selectedOptions: string[];
+  timestamp: Date;
 }
 
-export interface StyleResult {
-  style: string;
-  category: string;
-  points: number;
-  percentage: number;
-  rank: number;
-  score: number;
-  id?: string; // Added for compatibility
-  name?: string; // Added for compatibility
-}
-
-export interface QuizResult {
-  id: string;
-  primaryStyle: StyleResult;
-  secondaryStyles: StyleResult[];
-  responses: UserResponse[];
-  completedAt: number;
-  participantName?: string;
-  styleScores?: StyleScore[]; // Add styleScores property
-  predominantStyle?: StyleResult; // Add predominantStyle property
-}
-
-export interface Quiz {
-  id: string;
-  title: string;
-  description?: string;
-  questions: QuizQuestion[];
-  active: boolean;
-}
-
-// Export additional types that are referenced in other files
-export type StyleType = 'natural' | 'classico' | 'contemporaneo' | 'elegante' | 'romantico' | 'sensual' | 'dramatico' | 'criativo';
-export type Style = StyleResult;
-export type QuizResponse = UserResponse;
 export interface StyleScore {
   style: StyleType;
   points: number;
   percentage: number;
   rank: number;
 }
-export type StyleCalculationEngine = any; // Placeholder type
 
-// Add QuizComponentData export for unifiedEditor
+export interface QuizResult {
+  id: string;
+  participantName: string;
+  responses: QuizResponse[];
+  styleScores: StyleScore[];
+  predominantStyle: StyleType;
+  primaryStyle?: StyleType; // Para compatibilidade
+  complementaryStyles: StyleType[];
+  secondaryStyles?: StyleType[]; // Para compatibilidade
+  totalNormalQuestions: number;
+  calculatedAt: Date;
+  utmParams?: {
+    source?: string;
+    medium?: string;
+    campaign?: string;
+  };
+}
+
+// Alias para compatibilidade
+export interface StyleResult extends StyleScore {
+  category: string;
+  score: number;
+  description?: string;
+  imageUrl?: string;
+  guideImageUrl?: string;
+}
+
+export interface QuizSession {
+  id: string;
+  participantName?: string;
+  currentQuestionIndex: number;
+  responses: QuizResponse[];
+  startedAt: Date;
+  completedAt?: Date;
+  result?: QuizResult;
+}
+
+// Engine de cálculo
+export interface StyleCalculationEngine {
+  calculateStyleScores(responses: QuizResponse[]): StyleScore[];
+  determineResult(responses: QuizResponse[], participantName: string): QuizResult;
+  getStyleRanking(styleScores: StyleScore[]): StyleScore[];
+}
+
 export interface QuizComponentData {
   id: string;
   type: string;
   content: any;
-  data: any; // Add data property
-  order: number;
+  position: number;
+  data?: any;
+}
+
+export type BlockType =
+  | "hero"
+  | "image"
+  | "text"
+  | "video"
+  | "button"
+  | "divider"
+  | "spacer"
+  | "code"
+  | "list"
+  | "table"
+  | "form"
+  | "social"
+  | "map"
+  | "raw-html"
+  | "raw-js"
+  | "transformation"
+  | "pricing"
+  | "testimonials"
+  | "guarantee"
+  | "faq"
+  | "bonus"
+  | "scarcity-timer"
+  | "dynamic-content"
+  | "integrations"
+  | "legal"
+  | "custom-code"
+  | "heading"
+  | "paragraph";
+
+// Tipo para BlockData que estava sendo importado incorretamente
+export interface BlockData {
+  id: string;
+  type: string;
+  properties: Record<string, any>;
+  order?: number;
+  visible?: boolean;
+}
+
+// Versioning
+export interface QuizVersion {
+  id: string;
+  version: number;
+  createdAt: string;
+  changes: string[];
+  data: any;
+}
+
+// Interfaces para funil
+export interface QuizFunnel {
+  id: string;
+  name: string;
+  description?: string;
+  theme?: any;
+  config?: any;
+  questions?: QuizQuestion[];
+  results?: any[];
+  intro?: any;
+  offer?: any;
+  pages: any[];
+  isPublished: boolean;
+  version: number;
+  createdAt?: string;
+  updatedAt?: string;
 }

@@ -47,7 +47,7 @@ export const BasicFunnelExample: React.FC = () => {
   
   // Hook de navegação
   const { 
-    currentStep: currentStepIndex, 
+    currentStepIndex, 
     goToNextStep, 
     goToPreviousStep 
   } = useFunnelNavigation({
@@ -56,7 +56,7 @@ export const BasicFunnelExample: React.FC = () => {
   });
   
   // Obter a etapa atual
-  const currentStepData = funnelConfig.steps[currentStepIndex] || funnelConfig.steps[0];
+  const currentStep = funnelConfig.steps[currentStepIndex] || funnelConfig.steps[0];
   
   // Handler para dados do usuário
   const handleUpdateUserData = (data: any) => {
@@ -69,15 +69,15 @@ export const BasicFunnelExample: React.FC = () => {
   // Renderizar o componente correto para a etapa atual
   const renderCurrentStep = () => {
     const commonProps = {
-      id: currentStepData.id,
+      id: currentStep.id,
       stepNumber: currentStepIndex + 1,
       totalSteps: funnelConfig.steps.length,
       onNext: goToNextStep,
       onPrevious: goToPreviousStep,
-      data: currentStepData.settings
+      data: currentStep.settings
     };
     
-    switch (currentStepData.stepType) {
+    switch (currentStep.stepType) {
       case 'intro':
         return <FunnelIntroStep {...commonProps} stepType="intro" />;
       
@@ -105,7 +105,7 @@ export const BasicFunnelExample: React.FC = () => {
       default:
         return (
           <div className="p-4 border border-gray-300 rounded-lg">
-            Etapa não implementada: {currentStepData.stepType}
+            Etapa não implementada: {currentStep.stepType}
           </div>
         );
     }
@@ -113,7 +113,11 @@ export const BasicFunnelExample: React.FC = () => {
 
   return (
     <FunnelConfigProvider 
-      initialConfig={funnelConfig}
+      config={funnelConfig}
+      currentStepIndex={currentStepIndex}
+      setCurrentStepIndex={(index) => goToNextStep(index)}
+      userData={userData}
+      updateUserData={handleUpdateUserData}
     >
       <div className="max-w-4xl mx-auto py-8 px-4">
         {renderCurrentStep()}

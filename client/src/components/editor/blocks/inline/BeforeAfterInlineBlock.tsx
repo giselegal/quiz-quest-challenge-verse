@@ -69,7 +69,7 @@ const BeforeAfterInlineBlock: React.FC<BlockComponentProps> = ({
           </div>
           
           <ul className="space-y-2">
-            {beforeItems.map((item: any, index: number) => (
+            {beforeItems.map((item, index) => (
               <li key={index} className="flex items-start">
                 <div className="w-2 h-2 rounded-full bg-red-400 mt-2 mr-3 flex-shrink-0" />
                 <span className="text-sm text-gray-600">{item}</span>
@@ -103,7 +103,7 @@ const BeforeAfterInlineBlock: React.FC<BlockComponentProps> = ({
           </div>
           
           <ul className="space-y-2">
-            {afterItems.map((item: any, index: number) => (
+            {afterItems.map((item, index) => (
               <li key={index} className="flex items-start">
                 <div 
                   className="w-2 h-2 rounded-full mt-2 mr-3 flex-shrink-0"

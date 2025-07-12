@@ -1,124 +1,265 @@
+export interface Block {
+  id: string;
+  type: string;
+  content: Record<string, any>;
+  order: number; // Changed from optional to required to match EditorBlock
+  settings?: Record<string, any>;
+  [key: string]: any;
+}
 
+export type BlockType = 
+  | 'heading'
+  | 'paragraph'
+  | 'image'
+  | 'button'
+  | 'title'
+  | 'subtitle'
+  | 'text'
+  | 'styleResult'
+  | 'cta'
+  | 'testimonial'
+  | 'carousel'
+  | 'bonus'
+  | 'guarantee'
+  | 'quiz-question'
+  | string;
+
+// Add missing EditorBlock type which was imported across many files
+export interface EditorBlock extends Block {
+  id: string;
+  type: BlockType;
+  content: EditableContent;
+  order: number;
+  settings?: Record<string, any>;
+}
+
+// Add missing EditableContent type
 export interface EditableContent {
   title?: string;
   subtitle?: string;
   text?: string;
   imageUrl?: string;
-  buttonText?: string;
-  backgroundColor?: string;
-  textColor?: string;
+  imageAlt?: string;
   caption?: string;
-  responsive?: ResponsiveConfig;
-  animationType?: string;
-  animationDuration?: number;
-  animationDelay?: number;
-  animationTrigger?: string;
-  image?: string;
-  size?: number;
-  color?: string;
-  position?: string;
-  width?: number;
-  borderRadius?: number;
-  height?: number;
-  testimonialsImage?: string;
-  properties?: Record<string, any>;
-  items?: string[];
+  buttonText?: string;
+  buttonUrl?: string;
+  description?: string;
+  items?: any[];
+  
+  // Quiz Question properties
+  question?: string;
+  options?: Array<{ id: string; text: string; imageUrl?: string }>;
+  multipleSelection?: boolean;
+  showImages?: boolean;
+  maxSelections?: number;
+  minSelections?: number;
+  progressPercent?: number;
+  logoUrl?: string;
+  showBackButton?: boolean;
+  optionLayout?: 'vertical' | 'horizontal' | 'grid';
+  alignment?: 'left' | 'center' | 'right';
+  
+  style?: {
+    color?: string;
+    backgroundColor?: string;
+    padding?: string;
+    margin?: string;
+    textAlign?: string;
+    fontSize?: string;
+    fontWeight?: string;
+    fontFamily?: string;
+    lineHeight?: string;
+    width?: string;
+    height?: string;
+    borderRadius?: string;
+    display?: string;
+    flexDirection?: string;
+    justifyContent?: string;
+    alignItems?: string;
+    gap?: string;
+    boxShadow?: string;
+    letterSpacing?: string;
+    borderWidth?: string;
+    borderStyle?: string;
+    borderColor?: string;
+    objectFit?: string;
+    [key: string]: any;
+  };
   [key: string]: any;
 }
 
-export interface ResponsiveConfig {
-  mobile?: EditableContent;
-  tablet?: EditableContent;
-  desktop?: EditableContent;
-  hideOnMobile?: boolean;
-  hideOnTablet?: boolean;
-  hideOnDesktop?: boolean;
-  mobileWidth?: string;
-  tabletWidth?: string;
-}
-
-export interface Block {
-  id: string;
-  type: BlockType;
-  content: EditableContent;
-  order: number;
-  visible: boolean;
-  properties: Record<string, any>;
-}
-
-// Add EditorBlock as an alias for Block for backward compatibility
-export type EditorBlock = Block;
-
-export type BlockType = 
-  | 'header' 
-  | 'text' 
-  | 'image' 
-  | 'button' 
-  | 'spacer' 
-  | 'divider' 
-  | 'testimonial'
-  | 'offer' 
-  | 'hero-section' 
-  | 'secondary-styles' 
-  | 'products' 
-  | 'component-reference'
-  | 'icon'
-  | 'guarantee'
-  | 'headline'
-  | 'benefits'
-  | 'testimonials'
-  | 'pricing'
-  | 'cta'
-  | 'quiz-question'
-  | 'bonus-carousel'
-  | 'style-result'
-  | 'price-comparison'
-  | 'pros-cons'
-  | 'stats-metrics'
-  | 'two-columns'
-  | 'FunnelHeroBlock'
-  | 'FunnelPainBlock'
-  | 'result-header-inline'
-  | 'result-card-inline'
-  | 'text-inline'
-  | 'image-display-inline'
-  | 'heading-inline'
-  | 'style-card-inline'
-  | 'button-inline'
-  | 'countdown-inline'
-  | 'quiz-offer-pricing-inline'
-  | 'testimonial-card-inline'
-  | 'badge-inline';
-
+// Add missing EditorConfig type
 export interface EditorConfig {
+  blocks: EditorBlock[];
+  globalStyles?: {
+    backgroundColor?: string;
+    fontFamily?: string;
+    textColor?: string;
+    accentColor?: string;
+    secondaryColor?: string;
+    buttonStyle?: string;
+    headingStyle?: string;
+    spacing?: string;
+    borderRadius?: string;
+    [key: string]: any;
+  };
+  settings?: {
+    showLogo?: boolean;
+    showNavigation?: boolean;
+    showFooter?: boolean;
+    [key: string]: any;
+  };
+}
+
+// Tipos para as propriedades de cada campo no painel de propriedades
+export type PropertyType = 
+  | 'text' 
+  | 'number' 
+  | 'color' 
+  | 'select' 
+  | 'boolean' 
+  | 'url' 
+  | 'array-of-objects' 
+  | 'image' 
+  | 'icon-select' 
+  | 'textarea' 
+  | 'text-area'
+  | 'range'
+  | 'image-upload'
+  | 'font-size-slider'
+  | 'font-weight-buttons'
+  | 'text-style-buttons'
+  | 'text-align-buttons'
+  | 'content-type-buttons'
+  | 'color-palette'
+  | 'image-url'
+  | 'video-url'
+  | 'json-editor';
+
+export interface PropertySchema {
+  key: string; // Chave da propriedade (ex: 'text', 'fontSize')
+  label: string; // Rótulo visível no painel
+  type: PropertyType; // Tipo de controle (text, color, select, array-of-objects, etc.)
+  defaultValue?: any; // Valor padrão
+  options?: { label: string; value: string }[]; // Para tipo 'select'
+  nestedPath?: string; // Para propriedades aninhadas (ex: 'styles.backgroundColor')
+  itemSchema?: PropertySchema[]; // Para 'array-of-objects', define o schema de cada item
+  min?: number; // Para 'number' e 'range'
+  max?: number; // Para 'number' e 'range'
+  step?: number; // Para 'number' e 'range'
+  placeholder?: string; // Para campos de texto
+  helpText?: string; // Texto de ajuda
+  description?: string; // Descrição adicional
+  rows?: number; // Para textarea
+}
+
+// Interface para as opções de uma pergunta
+export interface QuestionOption {
+  id: string;
+  text: string;
+  imageUrl?: string; // Opcional, para opções com imagem
+  value?: string; // Valor da opção para processamento
+}
+
+// Interface para pergunta do quiz
+export interface QuizQuestion {
+  id: string;
+  type: 'single-choice' | 'multiple-choice' | 'text-input' | 'slider' | 'yes-no';
+  title: string;
+  description?: string;
+  options?: QuestionOption[];
+  required?: boolean;
+  minSelections?: number;
+  maxSelections?: number;
+  validation?: {
+    minLength?: number;
+    maxLength?: number;
+    pattern?: string;
+  };
+}
+
+// Interface para resultado do quiz
+export interface QuizResult {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl?: string;
+  recommendations?: string[];
+  nextSteps?: {
+    title: string;
+    description: string;
+    buttonText: string;
+    buttonUrl: string;
+  }[];
+}
+
+// Interface para o funil
+export interface Funnel {
+  id: string;
+  name: string;
+  pages: Page[];
+  config: Record<string, any>; // Configurações globais do funil
+  version: number;
+  isPublished: boolean;
+  theme?: FunnelTheme;
+  metadata?: {
+    description?: string;
+    tags?: string[];
+    createdAt?: string;
+    updatedAt?: string;
+  };
+}
+
+// Interface para uma página do funil
+export interface Page {
+  id: string;
+  title: string;
   blocks: Block[];
-  theme: EditorTheme;
-  globalStyles?: GlobalStyles;
-  saveConfig?: () => void;
+  settings?: {
+    backgroundColor?: string;
+    padding?: string;
+    maxWidth?: string;
+  };
 }
 
-export interface GlobalStyles {
-  backgroundColor?: string;
-  textColor?: string;
-  fontFamily?: string;
-  fontSize?: string;
-}
-
-export interface EditorTheme {
+// Interface para tema do funil
+export interface FunnelTheme {
+  id: string;
+  name: string;
   colors: {
     primary: string;
     secondary: string;
     background: string;
     text: string;
+    accent: string;
   };
   fonts: {
     heading: string;
     body: string;
   };
+  spacing: {
+    small: string;
+    medium: string;
+    large: string;
+  };
+  borderRadius: string;
 }
 
-export interface EditorState {
-  config: EditorConfig;
-  selectedBlockId: string | null;
-  isPreviewMode: boolean;
+// Definição de um bloco completo com schema
+export interface BlockDefinition {
+  type: string;
+  label: string;
+  icon: React.ElementType;
+  category: 'content' | 'quiz' | 'funnel' | 'layout';
+  propertiesSchema: PropertySchema[];
+  defaultProperties: Record<string, any>;
+  preview?: string; // URL ou caminho para preview do bloco
 }
+
+// Interface estendida para blocos com schema
+export interface SchemaBlock extends Block {
+  properties: Record<string, any>; // Propriedades configuráveis via painel
+  schema?: PropertySchema[]; // Schema para validação e UI do painel
+}
+
+// =====================================================================

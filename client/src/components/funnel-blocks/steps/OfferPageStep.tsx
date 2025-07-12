@@ -134,7 +134,7 @@ export const OfferPageStep: React.FC<FunnelStepProps> = ({
               <h4 className="text-lg font-semibold">O que você vai receber:</h4>
               
               <ul className="space-y-3">
-                {offer.features.map((feature: any, index: number) => (
+                {offer.features.map((feature, index) => (
                   <li key={index} className="flex items-start">
                     <div className="flex-shrink-0 mr-3">
                       <div className="bg-green-500 rounded-full p-1">
@@ -153,7 +153,7 @@ export const OfferPageStep: React.FC<FunnelStepProps> = ({
                 <h4 className="text-lg font-semibold mb-4">Bônus Exclusivos:</h4>
                 
                 <div className="space-y-4">
-                  {offer.bonuses.map((bonus: any, index: number) => (
+                  {offer.bonuses.map((bonus, index) => (
                     <div key={index} className="flex items-start">
                       <div className="flex-shrink-0 mr-3">
                         <div className="bg-yellow-500 rounded-full p-1">
@@ -189,7 +189,7 @@ export const OfferPageStep: React.FC<FunnelStepProps> = ({
                 <h4 className="text-lg font-semibold">O que estão dizendo:</h4>
                 
                 <div className="grid gap-4 md:grid-cols-2">
-                  {data.testimonials?.map((testimonial: any, index: number) => (
+                  {testimonials.map((testimonial, index) => (
                     <div key={index} className="bg-gray-50 p-4 rounded-lg">
                       <div className="flex items-center gap-3 mb-2">
                         {testimonial.imageUrl && (

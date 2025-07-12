@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from 'react';
 import CreativeAnalyticsDashboardNew from '@/components/analytics/CreativeAnalyticsDashboardNew';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';

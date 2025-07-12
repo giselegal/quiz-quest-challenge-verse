@@ -1,5 +1,4 @@
 
-// @ts-nocheck
 import { QuizBuilderState, QuizComponentData, QuizComponentType, QuizStage } from '@/types/quizBuilder';
 import { generateId } from '@/utils/idGenerator';
 import { ResultPageConfig } from '@/types/resultPageConfig';

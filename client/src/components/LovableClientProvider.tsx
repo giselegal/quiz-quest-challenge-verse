@@ -1,42 +1,41 @@
 
-import React, { ReactNode, useEffect } from 'react';
+"use client";
 
-interface LovableClientProviderProps {
-  children: ReactNode;
+import React, { useEffect, useState } from 'react';
+
+interface LovableProviderProps {
+  children: React.ReactNode;
 }
 
-const LovableClientProvider: React.FC<LovableClientProviderProps> = ({ children }) => {
+export function LovableClientProvider({ children }: LovableProviderProps) {
+  const [isEditorMode, setIsEditorMode] = useState(false);
+  
   useEffect(() => {
-    // Configuração básica para filtrar apenas telemetria específica
-    if (process.env.NODE_ENV === 'development') {
-      console.log('🧹 LovableClientProvider: Filtro básico ativado');
+    if (typeof window !== 'undefined') {
+      const isEditor = window.location.pathname.includes('/admin') || 
+                      window.location.pathname === '/' ||
+                      window.location.pathname.startsWith('/dashboard') ||
+                      window.location.pathname.startsWith('/resultado/') ||
+                      window.location.search.includes('lovable=true');
       
-      // Interceptar apenas erros de telemetria específicos
-      const originalConsoleError = console.error;
+      setIsEditorMode(isEditor);
       
-      const blockedTerms = [
-        'pushLogsToGrafana',
-        'gpt-engineer-390607',
-        'rum_collection',
-        'grafana'
-      ];
-      
-      console.error = (...args: any[]) => {
-        const message = args.join(' ');
-        const shouldBlock = blockedTerms.some(term => 
-          message.toLowerCase().includes(term.toLowerCase())
-        );
+      if (isEditor) {
+        (window as any).LOVABLE_CONFIG = {
+          projectId: 'quiz-sell-genius',
+          apiBaseUrl: 'https://api.lovable.dev',
+        };
         
-        if (!shouldBlock) {
-          originalConsoleError.apply(console, args);
-        }
-      };
-      
-      console.log('✅ Filtro básico configurado');
+        return () => {
+          delete (window as any).LOVABLE_CONFIG;
+        };
+      }
     }
   }, []);
-
-  return <>{children}</>;
-};
-
-export default LovableClientProvider;
+  
+  return (
+    <div className={isEditorMode ? 'lovable-editable-page' : ''} data-lovable-root={isEditorMode ? 'true' : undefined}>
+      {children}
+    </div>
+  );
+}

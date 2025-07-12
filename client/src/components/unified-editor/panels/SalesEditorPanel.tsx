@@ -1,5 +1,4 @@
 
-// @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { StyleResult } from '@/types/quiz';

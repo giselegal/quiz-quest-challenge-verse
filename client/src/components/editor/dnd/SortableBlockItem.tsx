@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -6,16 +5,16 @@ import { cn } from '@/lib/utils';
 import { UniversalBlockRenderer } from '../blocks/UniversalBlockRenderer';
 import { GripVertical, Trash2, Copy, Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Block } from '@/types/editor';
+import type { BlockData } from '@/types/blocks';
 
 interface SortableBlockItemProps {
-  block: Block;
+  block: BlockData;
   isSelected: boolean;
   onSelect: () => void;
   onDelete: () => void;
   onDuplicate: () => void;
   onToggleVisibility: () => void;
-  onSaveInline: (blockId: string, updates: Partial<Block>) => void;
+  onSaveInline: (blockId: string, updates: Partial<BlockData>) => void;
   disabled?: boolean;
   className?: string;
 }
@@ -53,7 +52,7 @@ export const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
     transition,
   };
 
-  const isHidden = !block.visible;
+  const isHidden = block.properties?.hidden || false;
 
   return (
     <div
@@ -61,7 +60,7 @@ export const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
       style={style}
       className={cn(
         'group relative w-full rounded-lg transition-all duration-200',
-        'flex flex-col',
+        'flex flex-col', // Layout flexível vertical
         isDragging && 'opacity-50 scale-105 z-50',
         isOver && 'ring-1 ring-blue-300/50',
         isSelected && 'ring-1 ring-blue-400/60 shadow-sm',
@@ -74,6 +73,7 @@ export const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
       <div className={cn(
         'absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-90 transition-opacity z-10 bg-white/80 backdrop-blur-sm rounded-md p-1 shadow-sm',
         isSelected && 'opacity-70',
+        // Mobile optimizations
         'md:gap-1 gap-0.5',
         'md:p-1 p-0.5'
       )}>
@@ -134,14 +134,15 @@ export const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
 
       {/* Block Content */}
       <div className={cn(
-        'relative w-full flex-1',
+        'relative w-full flex-1', // Flex item que cresce
         isHidden && 'pointer-events-none'
       )}>
         <UniversalBlockRenderer
           block={block}
           isSelected={isSelected}
-          onSelect={onSelect}
-          onUpdate={(updates) => onSaveInline(block.id, updates)}
+          onClick={onSelect}
+          onSaveInline={onSaveInline}
+          disabled={disabled}
           className={cn(
             'w-full h-full transition-all duration-200',
             isDragging && 'pointer-events-none'

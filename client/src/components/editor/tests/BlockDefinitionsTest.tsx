@@ -40,11 +40,11 @@ const BlockDefinitionsTest: React.FC = () => {
               <p><strong>Categoria:</strong> {modernResultPageBlock.category}</p>
               <p><strong>Ícone:</strong> {modernResultPageBlock.icon}</p>
               <p><strong>Descrição:</strong> {modernResultPageBlock.description}</p>
-              <p><strong>Propriedades:</strong> {modernResultPageBlock.propertiesSchema?.length || 0} configurações</p>
+              <p><strong>Propriedades:</strong> {modernResultPageBlock.propertiesSchema.length} configurações</p>
               <div className="mt-4">
                 <h3 className="font-semibold mb-2">Propriedades Disponíveis:</h3>
                 <ul className="list-disc list-inside text-sm">
-                  {modernResultPageBlock.propertiesSchema?.map((prop: any, index: number) => (
+                  {modernResultPageBlock.propertiesSchema.map((prop: any, index: number) => (
                     <li key={index}>{prop.label} ({prop.type})</li>
                   ))}
                 </ul>
@@ -65,11 +65,11 @@ const BlockDefinitionsTest: React.FC = () => {
               <p><strong>Categoria:</strong> {quizOfferPageBlock.category}</p>
               <p><strong>Ícone:</strong> {quizOfferPageBlock.icon}</p>
               <p><strong>Descrição:</strong> {quizOfferPageBlock.description}</p>
-              <p><strong>Propriedades:</strong> {quizOfferPageBlock.propertiesSchema?.length || 0} configurações</p>
+              <p><strong>Propriedades:</strong> {quizOfferPageBlock.propertiesSchema.length} configurações</p>
               <div className="mt-4">
                 <h3 className="font-semibold mb-2">Propriedades Disponíveis:</h3>
                 <ul className="list-disc list-inside text-sm">
-                  {quizOfferPageBlock.propertiesSchema?.map((prop: any, index: number) => (
+                  {quizOfferPageBlock.propertiesSchema.map((prop: any, index: number) => (
                     <li key={index}>{prop.label} ({prop.type})</li>
                   ))}
                 </ul>

@@ -90,7 +90,7 @@ export const ProcessingStep: React.FC<FunnelStepProps> = ({
         </div>
       )}
       
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style jsx>{`
         @keyframes pingSlowly {
           0% { transform: scale(0.95); opacity: 1; }
           50% { transform: scale(1); opacity: 0.6; }
@@ -115,7 +115,7 @@ export const ProcessingStep: React.FC<FunnelStepProps> = ({
         .animate-ping-fast {
           animation: pingQuickly 2s infinite ease-in-out;
         }
-      ` }} />
+      `}</style>
     </div>
   );
 };

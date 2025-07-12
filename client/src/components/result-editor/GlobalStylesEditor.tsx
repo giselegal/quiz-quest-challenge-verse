@@ -1,10 +1,9 @@
-
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { X, Save } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 
 interface GlobalStylesEditorProps {
   globalStyles: {
@@ -25,6 +24,14 @@ export const GlobalStylesEditor: React.FC<GlobalStylesEditorProps> = ({
 }) => {
   const [styles, setStyles] = useState(globalStyles);
 
+  // Handle color change safely
+  const handleColorChange = (colorType: string, hexColor: string) => {
+    setStyles(prev => ({
+      ...prev,
+      [colorType]: hexColor || '#FFFFFF' // Default to white if color is undefined
+    }));
+  };
+
   const handleChange = (key: string, value: string) => {
     setStyles(prev => ({
       ...prev,
@@ -32,81 +39,113 @@ export const GlobalStylesEditor: React.FC<GlobalStylesEditorProps> = ({
     }));
   };
 
-  const handleSave = () => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     onSave(styles);
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <Card className="w-full max-w-md mx-4">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Estilos Globais</CardTitle>
-          <Button variant="ghost" size="sm" onClick={onCancel}>
-            <X className="w-4 h-4" />
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+      <div className="bg-white rounded-lg max-w-md w-full p-6 shadow-xl max-h-[90vh] overflow-auto">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-medium text-[#432818]">Estilos Globais</h2>
+          <Button variant="ghost" size="sm" onClick={onCancel} className="text-[#8F7A6A]">
+            Fechar
           </Button>
-        </CardHeader>
-        <CardContent className="space-y-4">
+        </div>
+
+        <Separator className="mb-4" />
+
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="primaryColor">Cor Primária</Label>
-            <Input
-              id="primaryColor"
-              type="color"
-              value={styles.primaryColor || '#B89B7A'}
-              onChange={(e) => handleChange('primaryColor', e.target.value)}
-            />
+            <div className="flex items-center gap-2">
+              <div
+                className="w-8 h-8 border rounded"
+                style={{ backgroundColor: styles.primaryColor }}
+              ></div>
+              <Input
+                id="primaryColor"
+                type="text"
+                value={styles.primaryColor || ''}
+                onChange={(e) => handleChange('primaryColor', e.target.value)}
+                placeholder="#B89B7A"
+              />
+            </div>
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="secondaryColor">Cor Secundária</Label>
-            <Input
-              id="secondaryColor"
-              type="color"
-              value={styles.secondaryColor || '#432818'}
-              onChange={(e) => handleChange('secondaryColor', e.target.value)}
-            />
+            <div className="flex items-center gap-2">
+              <div
+                className="w-8 h-8 border rounded"
+                style={{ backgroundColor: styles.secondaryColor }}
+              ></div>
+              <Input
+                id="secondaryColor"
+                type="text"
+                value={styles.secondaryColor || ''}
+                onChange={(e) => handleChange('secondaryColor', e.target.value)}
+                placeholder="#432818"
+              />
+            </div>
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="textColor">Cor do Texto</Label>
-            <Input
-              id="textColor"
-              type="color"
-              value={styles.textColor || '#432818'}
-              onChange={(e) => handleChange('textColor', e.target.value)}
-            />
+            <div className="flex items-center gap-2">
+              <div
+                className="w-8 h-8 border rounded"
+                style={{ backgroundColor: styles.textColor }}
+              ></div>
+              <Input
+                id="textColor"
+                type="text"
+                value={styles.textColor || ''}
+                onChange={(e) => handleChange('textColor', e.target.value)}
+                placeholder="#3A3A3A"
+              />
+            </div>
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="backgroundColor">Cor de Fundo</Label>
-            <Input
-              id="backgroundColor"
-              type="color"
-              value={styles.backgroundColor || '#FAF9F7'}
-              onChange={(e) => handleChange('backgroundColor', e.target.value)}
-            />
+            <div className="flex items-center gap-2">
+              <div
+                className="w-8 h-8 border rounded"
+                style={{ backgroundColor: styles.backgroundColor }}
+              ></div>
+              <Input
+                id="backgroundColor"
+                type="text"
+                value={styles.backgroundColor || ''}
+                onChange={(e) => handleChange('backgroundColor', e.target.value)}
+                placeholder="#FAF9F7"
+              />
+            </div>
           </div>
-          
+
           <div className="space-y-2">
-            <Label htmlFor="fontFamily">Família da Fonte</Label>
+            <Label htmlFor="fontFamily">Fonte Principal</Label>
             <Input
               id="fontFamily"
-              value={styles.fontFamily || 'Playfair Display, serif'}
+              type="text"
+              value={styles.fontFamily || ''}
               onChange={(e) => handleChange('fontFamily', e.target.value)}
-              placeholder="Arial, sans-serif"
+              placeholder="Playfair Display, serif"
             />
           </div>
-          
-          <div className="flex gap-2 pt-4">
-            <Button onClick={handleSave} className="flex-1">
-              <Save className="w-4 h-4 mr-2" />
-              Salvar
-            </Button>
-            <Button variant="outline" onClick={onCancel} className="flex-1">
+
+          <div className="flex gap-2 justify-end pt-4">
+            <Button type="button" variant="outline" onClick={onCancel}>
               Cancelar
             </Button>
+            <Button type="submit" className="bg-[#B89B7A] hover:bg-[#A38A69] text-white">
+              Salvar Estilos
+            </Button>
           </div>
-        </CardContent>
-      </Card>
+        </form>
+      </div>
     </div>
   );
 };

@@ -1,19 +1,15 @@
-
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import SchemaDrivenEditorLayoutV2 from '@/components/editor/SchemaDrivenEditorLayoutV2';
-import { EditorErrorBoundary } from '@/components/editor/EditorErrorBoundary';
+import { useRoute } from 'wouter';
+import SchemaDrivenEditorResponsive from '@/components/editor/SchemaDrivenEditorResponsive';
 
 const SchemaDrivenEditorPage: React.FC = () => {
-  const { id } = useParams();
-  const funnelId = id;
+  const [match, params] = useRoute('/editor/:id');
+  const funnelId = params?.id;
 
   return (
-    <EditorErrorBoundary>
-      <div className="min-h-screen bg-gray-100">
-        <SchemaDrivenEditorLayoutV2 funnelId={funnelId} />
-      </div>
-    </EditorErrorBoundary>
+    <div className="min-h-screen bg-gray-100">
+      <SchemaDrivenEditorResponsive funnelId={funnelId} />
+    </div>
   );
 };
 

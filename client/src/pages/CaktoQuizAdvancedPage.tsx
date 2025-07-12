@@ -1,11 +1,10 @@
-
 import React from 'react';
-import SchemaDrivenEditorLayoutV2 from '@/components/editor/SchemaDrivenEditorLayoutV2';
+import SchemaDrivenEditorResponsive from '@/components/editor/SchemaDrivenEditorResponsive';
 
 const CaktoQuizAdvancedPage: React.FC = () => {
   return (
-    <div className="h-screen">
-      <SchemaDrivenEditorLayoutV2 />
+    <div className="min-h-screen bg-gray-100">
+      <SchemaDrivenEditorResponsive />
     </div>
   );
 };

@@ -26,7 +26,7 @@ const getCategories = (): string[] => {
   const categorySet = new Set(blockDefinitions.map(block => block.category || 'Sem Categoria'));
   const categories = Array.from(categorySet);
   // Ordem específica das categorias para melhor UX
-  const priorityOrder = ['BoxFlex', 'Quiz', 'Resultado', 'Oferta', 'Inline', 'Layout', 'Formulário', 'Básico', 'Vendas', 'Avançados', 'Sem Categoria'];
+  const priorityOrder = ['Quiz', 'Básicos', 'Layout', 'Vendas', 'Avançados', 'Inline', 'Sem Categoria'];
   return categories.sort((a, b) => {
     const aIndex = priorityOrder.indexOf(a);
     const bIndex = priorityOrder.indexOf(b);

@@ -1,14 +1,15 @@
-import React from 'react';
-import { Toast, ToastProvider, ToastViewport } from './toast';
-
-// Simple hook for now - can be expanded later
-const useToast = () => {
-  const [toasts, setToasts] = React.useState<any[]>([]);
-  return { toasts };
-};
+import { useToast } from "@/hooks/use-toast"
+import {
+  Toast,
+  ToastClose,
+  ToastDescription,
+  ToastProvider,
+  ToastTitle,
+  ToastViewport,
+} from "@/components/ui/toast"
 
 export function Toaster() {
-  const { toasts } = useToast();
+  const { toasts } = useToast()
 
   return (
     <ToastProvider>
@@ -16,16 +17,17 @@ export function Toaster() {
         return (
           <Toast key={id} {...props}>
             <div className="grid gap-1">
-              {title && <div className="text-sm font-semibold">{title}</div>}
+              {title && <ToastTitle>{title}</ToastTitle>}
               {description && (
-                <div className="text-sm opacity-90">{description}</div>
+                <ToastDescription>{description}</ToastDescription>
               )}
             </div>
             {action}
+            <ToastClose />
           </Toast>
-        );
+        )
       })}
       <ToastViewport />
     </ToastProvider>
-  );
+  )
 }

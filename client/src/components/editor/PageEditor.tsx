@@ -1,40 +1,70 @@
 
-import React, { useState } from 'react';
-import { Block, BlockType } from '@/types/editor';
-import { Button } from '@/components/ui/button';
+import React from 'react';
+import { DragEndEvent } from '@dnd-kit/core';
+import { arrayMove } from '@dnd-kit/sortable';
+import { EditorBlock } from '@/types/editor';
+import { EditorToolbar } from './toolbar/EditorToolbar';
+import { EditorContent } from './content/EditorContent';
+import { useEditorHistory } from '@/hooks/editor/useEditorHistory';
+import { useEditorActions } from '@/hooks/editor/useEditorActions';
 
-const PageEditor: React.FC = () => {
-  const [blocks, setBlocks] = useState<Block[]>([]);
+interface PageEditorProps {
+  blocks: EditorBlock[];
+  onBlocksChange: (blocks: EditorBlock[]) => void;
+  onPreviewToggle: () => void;
+  isPreviewing: boolean;
+}
 
-  const addBlock = (type: BlockType) => {
-    const newBlock: Block = {
-      id: `block-${Date.now()}`,
-      type,
-      content: {},
-      order: blocks.length,
-      visible: true,
-      properties: {} // Added missing properties
-    };
+export const PageEditor: React.FC<PageEditorProps> = ({
+  blocks,
+  onBlocksChange,
+  onPreviewToggle,
+  isPreviewing
+}) => {
+  const { addToHistory, undo, redo, canUndo, canRedo } = useEditorHistory(blocks);
+  const { handleAddBlock, handleUpdateBlock, handleDeleteBlock, handleSave } = useEditorActions(
+    blocks,
+    onBlocksChange,
+    addToHistory
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
     
-    setBlocks([...blocks, newBlock]);
+    if (over && active.id !== over.id) {
+      const activeIndex = blocks.findIndex(block => block.id === active.id);
+      const overIndex = blocks.findIndex(block => block.id === over.id);
+      
+      const newBlocks = arrayMove(blocks, activeIndex, overIndex)
+        .map((block, index) => ({ ...block, order: index }));
+      
+      onBlocksChange(newBlocks);
+      addToHistory(newBlocks);
+    }
   };
 
   return (
-    <div className="p-4">
-      <div className="mb-4">
-        <Button onClick={() => addBlock('header')}>Add Header</Button>
-        <Button onClick={() => addBlock('text')} className="ml-2">Add Text</Button>
-      </div>
-      
-      <div className="space-y-2">
-        {blocks.map((block) => (
-          <div key={block.id} className="p-2 border rounded">
-            Block: {block.type}
-          </div>
-        ))}
+    <div className="h-full flex flex-col">
+      <EditorToolbar 
+        onUndo={undo}
+        onRedo={redo}
+        onTogglePreview={onPreviewToggle}
+        onSave={handleSave}
+        isPreviewing={isPreviewing}
+        canUndo={canUndo}
+        canRedo={canRedo}
+      />
+
+      <div className="flex-1 overflow-auto p-4 bg-[#FAF9F7]">
+        <EditorContent 
+          blocks={blocks}
+          onDragEnd={handleDragEnd}
+          onAddBlock={handleAddBlock}
+          onUpdateBlock={handleUpdateBlock}
+          onDeleteBlock={handleDeleteBlock}
+          isPreviewing={isPreviewing}
+        />
       </div>
     </div>
   );
 };
-
-export default PageEditor;

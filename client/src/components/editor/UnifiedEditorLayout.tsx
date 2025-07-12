@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ComponentsSidebar } from './sidebar/ComponentsSidebar';
 import { StyleResult } from '@/types/quiz';
-import { PropertiesPanel } from './properties/PropertiesPanel';
+import PropertiesPanel from './properties/PropertiesPanel';
 import { EditorToolbar } from './toolbar/EditorToolbar';
 import { useUnifiedEditor } from '@/hooks/useUnifiedEditor';
 import ResultEditorPanel from '@/components/unified-editor/panels/ResultEditorPanel';
@@ -19,6 +19,7 @@ export const UnifiedEditorLayout: React.FC<UnifiedEditorLayoutProps> = ({
   const [viewportSize, setViewportSize] = useState<'sm' | 'md' | 'lg' | 'xl'>('md');
 
   const {
+    resultPageEditor,
     saveAll
   } = useUnifiedEditor(primaryStyle);
 
@@ -33,9 +34,7 @@ export const UnifiedEditorLayout: React.FC<UnifiedEditorLayoutProps> = ({
         viewportSize={viewportSize}
         onViewportSizeChange={setViewportSize}
         onTogglePreview={handleTogglePreview}
-        onSave={async () => {
-          await saveAll();
-        }}
+        onSave={saveAll}
       />
       
       <div className="flex-1 overflow-hidden">

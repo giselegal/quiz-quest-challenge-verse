@@ -63,7 +63,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
     }
   }, [resultPageConfig, updateBlocks, updateSection]);
 
-  const handleUpdateConfig = (newConfig: any) => {
+  const handleUpdateConfig = (newConfig) => {
     if (newConfig) {
       try {
         importConfig(newConfig);
@@ -100,12 +100,9 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
 
   // Cast do tipo para garantir compatibilidade com o componente EditorPreview
   const primaryStyle: StyleResult = {
-    style: selectedStyle.category,
     category: selectedStyle.category as any,
     score: selectedStyle.score,
-    percentage: selectedStyle.percentage,
-    points: selectedStyle.score,
-    rank: 1
+    percentage: selectedStyle.percentage
   };
 
   return (
@@ -149,12 +146,11 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
 
             <ResizablePanel defaultSize={25}>
               <PropertiesPanel
-                selectedBlock={selectedBlockId ? blocks.find(b => b.id === selectedBlockId) || null : null}
-                onUpdate={(content) => {
-                  if (selectedBlockId) {
-                    blockActions.handleUpdateBlock(selectedBlockId, content);
-                  }
-                }}
+                selectedBlockId={selectedBlockId}
+                blocks={blocks}
+                onClose={() => setSelectedBlockId(null)}
+                onUpdate={blockActions.handleUpdateBlock}
+                onDelete={blockActions.handleDeleteBlock}
               />
             </ResizablePanel>
           </ResizablePanelGroup>

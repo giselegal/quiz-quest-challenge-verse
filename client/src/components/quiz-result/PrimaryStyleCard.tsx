@@ -1,5 +1,4 @@
 
-// @ts-nocheck
 import React from 'react';
 import { Card } from '../ui/card';
 import { StyleResult } from '@/types/quiz';

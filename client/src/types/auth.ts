@@ -3,12 +3,6 @@ export interface User {
   id: string;
   email: string;
   name?: string;
-  userName?: string; // Add userName property
-  role?: string;
-  image?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  emailVerified?: Date;
 }
 
 export interface AuthContextType {

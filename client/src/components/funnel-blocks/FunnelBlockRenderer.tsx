@@ -1,12 +1,15 @@
 import React from 'react';
 import {
-  FunnelIntroStep,
-  QuestionMultipleStep,
-  ProcessingStep,
-  ResultIntroStep,
-  OfferPageStep,
-  FunnelProgressBar,
-  CountdownTimer
+  IntroPage,
+  QuizQuestion,
+  LoadingTransition,
+  StyleResultDisplay,
+  SalesOffer,
+  TestimonialsGrid,
+  GuaranteeSection,
+  FAQSection,
+  SocialProof,
+  funnelHelpers
 } from '@/components/funnel-blocks';
 
 /**
@@ -38,7 +41,7 @@ export const renderFunnelBlock = ({
 }: BlockRendererProps) => {
   
   // Calcular progresso baseado na página atual
-  const progressValue = Math.round(((currentPageIndex + 1) / totalPages) * 100);
+  const progressValue = funnelHelpers.calculateProgress(currentPageIndex + 1, totalPages);
   
   const progressConfig = {
     showProgress: block.settings.showProgress || false,
@@ -51,115 +54,195 @@ export const renderFunnelBlock = ({
     case 'intro':
     case 'header':
       return (
-        <FunnelIntroStep
-          id={block.id}
-          stepType="intro"
-          stepNumber={currentPageIndex + 1}
-          totalSteps={totalPages}
-          onNext={() => onBlockInteraction(block.id, { type: 'intro_submit' })}
-          data={{
-            title: block.settings.title || 'Bem-vinda!',
-            subtitle: block.settings.subtitle,
-            buttonText: block.settings.buttonText || 'Continuar'
-          }}
+        <IntroPage
+          title={block.settings.title || 'Bem-vinda!'}
+          subtitle={block.settings.subtitle}
+          description={block.settings.description}
+          logoUrl={block.settings.logoUrl}
+          imageUrl={block.settings.imageUrl}
+          showNameInput={block.settings.showNameInput !== false}
+          nameInputLabel={block.settings.nameInputLabel}
+          nameInputPlaceholder={block.settings.nameInputPlaceholder}
+          buttonText={block.settings.buttonText || 'Continuar'}
+          buttonStyle={block.settings.buttonStyle || 'primary'}
+          alignment={block.settings.alignment || 'center'}
+          progressConfig={progressConfig}
+          deviceView={deviceView}
+          onSubmit={(data) => onBlockInteraction(block.id, { type: 'intro_submit', ...data })}
         />
       );
 
     case 'question-multiple':
     case 'question-strategic':
       return (
-        <QuestionMultipleStep
-          id={block.id}
-          stepType="question-multiple"
-          stepNumber={currentPageIndex + 1}
-          totalSteps={totalPages}
-          onNext={() => onBlockInteraction(block.id, { type: 'question_answer' })}
-          data={{
-            question: block.settings.question || 'Selecione uma opção:',
-            options: block.settings.options || []
-          }}
+        <QuizQuestion
+          question={block.settings.question || 'Selecione uma opção:'}
+          description={block.settings.description}
+          questionNumber={currentPageIndex}
+          totalQuestions={totalPages}
+          options={block.settings.options || []}
+          multipleSelection={block.settings.multipleSelection || false}
+          required={block.settings.required !== false}
+          autoAdvance={block.settings.autoAdvance !== false}
+          autoAdvanceDelay={block.settings.autoAdvanceDelay || 1000}
+          optionStyle={block.settings.optionStyle || 'card'}
+          optionLayout={block.settings.optionLayout || 'vertical'}
+          showLetters={block.settings.showLetters !== false}
+          progressConfig={progressConfig}
+          deviceView={deviceView}
+          onAnswer={(answers) => onBlockInteraction(block.id, { 
+            type: 'question_answer', 
+            answers,
+            questionId: block.id 
+          })}
         />
       );
 
     case 'loading-animation':
     case 'loader':
       return (
-        <ProcessingStep
-          id={block.id}
-          stepType="processing"
-          stepNumber={currentPageIndex + 1}
-          totalSteps={totalPages}
-          onNext={() => onBlockInteraction(block.id, { type: 'loading_complete' })}
-          data={{
-            title: block.settings.message || 'Processando suas respostas...',
-            duration: block.settings.duration || 4000
-          }}
+        <LoadingTransition
+          message={block.settings.message || 'Processando suas respostas...'}
+          submessage={block.settings.submessage}
+          loadingTexts={block.settings.loadingTexts || [
+            'Analisando suas preferências...',
+            'Identificando seu estilo único...',
+            'Preparando recomendações personalizadas...'
+          ]}
+          animationType={block.settings.animationType || 'elegant'}
+          duration={block.settings.duration || 4000}
+          showProgress={block.settings.showProgress !== false}
+          deviceView={deviceView}
+          onComplete={() => onBlockInteraction(block.id, { type: 'loading_complete' })}
+          onProgress={(progress) => onBlockInteraction(block.id, { 
+            type: 'loading_progress', 
+            progress 
+          })}
         />
       );
 
     case 'style-result-display':
       return (
-        <ResultIntroStep
-          id={block.id}
-          stepType="result-intro"
-          stepNumber={currentPageIndex + 1}
-          totalSteps={totalPages}
-          onNext={() => onBlockInteraction(block.id, { type: 'result_continue' })}
-          data={{
-            title: block.settings.styleName || 'Seu Estilo Único',
-            description: block.settings.styleDescription || ''
-          }}
+        <StyleResultDisplay
+          styleName={block.settings.styleName || 'Seu Estilo Único'}
+          styleImage={block.settings.styleImage || ''}
+          styleDescription={block.settings.styleDescription || ''}
+          percentMatch={block.settings.percentMatch || 92}
+          characteristics={block.settings.characteristics || []}
+          styleKeywords={block.settings.styleKeywords || []}
+          showPercentage={block.settings.showPercentage !== false}
+          showCharacteristics={block.settings.showCharacteristics !== false}
+          congratulationsText={block.settings.congratulationsText}
+          subtitleText={block.settings.subtitleText}
+          continueButtonText={block.settings.continueButtonText || 'Ver Minha Transformação'}
+          deviceView={deviceView}
+          onContinue={() => onBlockInteraction(block.id, { type: 'result_continue' })}
         />
       );
 
     case 'sales-offer':
     case 'price':
       return (
-        <OfferPageStep
-          id={block.id}
-          stepType="offer-page"
-          stepNumber={currentPageIndex + 1}
-          totalSteps={totalPages}
-          onNext={() => onBlockInteraction(block.id, { type: 'purchase_intent' })}
-          data={{
-            title: block.settings.title || 'Oferta Especial',
-            price: block.settings.currentPrice || 'R$ 97,00',
-            features: block.settings.features || []
+        <SalesOffer
+          title={block.settings.title || 'Oferta Especial'}
+          subtitle={block.settings.subtitle}
+          description={block.settings.description}
+          priceConfig={{
+            originalPrice: block.settings.originalPrice,
+            currentPrice: block.settings.currentPrice || 'R$ 97,00',
+            discount: block.settings.discount,
+            currency: block.settings.currency || 'BRL',
+            installments: block.settings.installments
           }}
+          features={block.settings.features || []}
+          urgencyText={block.settings.urgency || block.settings.urgencyText}
+          buttonText={block.settings.buttonText || 'Quero Aproveitar'}
+          buttonSubtext={block.settings.buttonSubtext}
+          cardStyle={block.settings.cardStyle || 'elegant'}
+          deviceView={deviceView}
+          onPurchase={() => onBlockInteraction(block.id, { type: 'purchase_intent' })}
         />
       );
 
     case 'testimonials-grid':
       return (
-        <div className="p-8 text-center">
-          <h3 className="text-lg font-semibold mb-4">{block.settings.title || 'Depoimentos'}</h3>
-          <p className="text-gray-600">Componente de depoimentos não implementado</p>
-        </div>
+        <TestimonialsGrid
+          title={block.settings.title || 'Depoimentos'}
+          subtitle={block.settings.subtitle}
+          testimonials={block.settings.testimonials || []}
+          layout={block.settings.layout || 'grid'}
+          columns={block.settings.columns || 3}
+          showRatings={block.settings.showRatings !== false}
+          showAvatars={block.settings.showAvatars !== false}
+          showRoles={block.settings.showRoles !== false}
+          cardStyle={block.settings.cardStyle || 'elegant'}
+          deviceView={deviceView}
+        />
       );
 
     case 'guarantee-section':
     case 'guarantee':
       return (
-        <div className="p-8 text-center">
-          <h3 className="text-lg font-semibold mb-4">{block.settings.title || 'Garantia de Satisfação'}</h3>
-          <p className="text-gray-600">Componente de garantia não implementado</p>
-        </div>
+        <GuaranteeSection
+          title={block.settings.title || 'Garantia de Satisfação'}
+          period={block.settings.period || '30 dias'}
+          description={block.settings.description || ''}
+          features={block.settings.features || []}
+          sealStyle={block.settings.sealStyle || 'badge'}
+          layout={block.settings.layout || 'centered'}
+          showIcon={block.settings.showIcon !== false}
+          iconStyle={block.settings.iconStyle || 'shield'}
+          cardStyle={block.settings.cardStyle || 'elevated'}
+          deviceView={deviceView}
+        />
       );
 
     case 'faq':
       return (
-        <div className="p-8 text-center">
-          <h3 className="text-lg font-semibold mb-4">{block.settings.title || 'Perguntas Frequentes'}</h3>
-          <p className="text-gray-600">Componente de FAQ não implementado</p>
-        </div>
+        <FAQSection
+          title={block.settings.title || 'Perguntas Frequentes'}
+          subtitle={block.settings.subtitle}
+          faqs={block.settings.questions || block.settings.faqs || []}
+          allowMultipleOpen={block.settings.allowMultipleOpen || false}
+          openFirst={block.settings.openFirst || false}
+          cardStyle={block.settings.cardStyle || 'bordered'}
+          iconStyle={block.settings.iconStyle || 'chevron'}
+          deviceView={deviceView}
+          onFAQToggle={(faqId, isOpen) => onBlockInteraction(block.id, {
+            type: 'faq_toggle',
+            faqId,
+            isOpen
+          })}
+        />
       );
 
     case 'social-proof':
       return (
-        <div className="p-8 text-center">
-          <h3 className="text-lg font-semibold mb-4">{block.settings.title || 'Prova Social'}</h3>
-          <p className="text-gray-600">Componente de prova social não implementado</p>
-        </div>
+        <SocialProof
+          title={block.settings.title}
+          subtitle={block.settings.subtitle}
+          stats={[
+            { 
+              number: block.settings.number1 || '10.000+', 
+              label: block.settings.label1 || 'Clientes' 
+            },
+            { 
+              number: block.settings.number2 || '4.9★', 
+              label: block.settings.label2 || 'Avaliação' 
+            },
+            { 
+              number: block.settings.number3 || '99%', 
+              label: block.settings.label3 || 'Satisfação' 
+            }
+          ]}
+          layout={block.settings.layout || 'horizontal'}
+          showReviews={block.settings.showReviews !== false}
+          averageRating={block.settings.averageRating || 4.9}
+          totalReviews={block.settings.totalReviews || 1250}
+          backgroundColor={block.settings.backgroundColor}
+          accentColor={block.settings.accentColor}
+          deviceView={deviceView}
+        />
       );
 
     // Fallback para blocos não mapeados ainda

@@ -29,7 +29,7 @@ export class StyleCalculationEngine {
     // 1. Filtrar apenas respostas de questões normais
     const normalResponses = responses.filter(response => {
       const question = normalQuestions.find(q => q.id === response.questionId);
-      return question?.type === 'strategic';
+      return question?.type === 'normal';
     });
 
     // 2. Contar pontos por estilo
@@ -49,10 +49,10 @@ export class StyleCalculationEngine {
 
     normalResponses.forEach(response => {
       if (response.selectedStyle) {
-        (stylePoints as any)[response.selectedStyle] += 1; // Cada resposta vale 1 ponto
+        stylePoints[response.selectedStyle] += 1; // Cada resposta vale 1 ponto
         responseOrder.push({
-          style: response.selectedStyle as StyleType,
-          timestamp: new Date(response.timestamp || Date.now())
+          style: response.selectedStyle,
+          timestamp: response.timestamp
         });
       }
     });
@@ -99,7 +99,7 @@ export class StyleCalculationEngine {
     });
 
     // 6. Determinar estilo predominante e complementares
-    const predominantStyleData = getStyleById(styleScores[0].style);
+    const predominantStyle = styleScores[0].style;
     const complementaryStyles = styleScores
       .slice(1, 3) // 2º e 3º lugar
       .map(score => score.style);
@@ -107,26 +107,13 @@ export class StyleCalculationEngine {
     // 7. Criar resultado final
     const result: QuizResult = {
       id: crypto.randomUUID(),
-      primaryStyle: predominantStyleData || {
-        style: styleScores[0].style,
-        category: styleScores[0].style,
-        points: styleScores[0].points,
-        percentage: styleScores[0].percentage,
-        rank: styleScores[0].rank,
-        score: styleScores[0].points
-      },
-      secondaryStyles: styleScores.slice(1, 3).map(score => ({
-        style: score.style,
-        category: score.style,
-        points: score.points,
-        percentage: score.percentage,
-        rank: score.rank,
-        score: score.points
-      })),
-      responses,
-      completedAt: Date.now(),
       participantName,
-      styleScores
+      responses,
+      styleScores,
+      predominantStyle,
+      complementaryStyles,
+      totalNormalQuestions,
+      calculatedAt: new Date()
     };
 
     return result;
@@ -141,7 +128,7 @@ export class StyleCalculationEngine {
   ): { isValid: boolean; missingQuestions: string[] } {
     const answeredQuestionIds = new Set(responses.map(r => r.questionId));
     const normalQuestionIds = normalQuestions
-      .filter(q => q.type === 'strategic')
+      .filter(q => q.type === 'normal')
       .map(q => q.id);
 
     const missingQuestions = normalQuestionIds.filter(
@@ -166,10 +153,10 @@ export class StyleCalculationEngine {
     progress: number;
     currentLeadingStyle?: StyleType;
   } {
-    const totalQuestions = normalQuestions.filter(q => q.type === 'strategic').length;
+    const totalQuestions = normalQuestions.filter(q => q.type === 'normal').length;
     const answeredQuestions = responses.filter(response => {
       const question = normalQuestions.find(q => q.id === response.questionId);
-      return question?.type === 'strategic';
+      return question?.type === 'normal';
     }).length;
 
     const progress = totalQuestions > 0 ? (answeredQuestions / totalQuestions) * 100 : 0;
@@ -184,7 +171,7 @@ export class StyleCalculationEngine {
 
       responses.forEach(response => {
         if (response.selectedStyle) {
-          (tempPoints as any)[response.selectedStyle] += 1;
+          tempPoints[response.selectedStyle] += 1;
         }
       });
 

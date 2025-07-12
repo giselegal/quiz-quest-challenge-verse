@@ -14,7 +14,7 @@ export const BonusCarouselBlock: React.FC<BonusCarouselBlockProps> = ({ content,
         <h2 className="text-xl font-semibold text-[#aa6b5d] mb-4">{content.title}</h2>
       )}
       <div className="grid md:grid-cols-3 gap-6">
-        {(content.bonusImages || []).map((image: any, index: number) => (
+        {(content.bonusImages || []).map((image, index) => (
           <div key={index} className="space-y-2">
             <img 
               src={image.url} 

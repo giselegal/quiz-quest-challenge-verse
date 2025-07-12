@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { SimpleComponent, QuizOption, BonusItem, FaqItem } from "@/interfaces/quiz";
 
 export const getDefaultData = (type: SimpleComponent["type"]): SimpleComponent["data"] => {

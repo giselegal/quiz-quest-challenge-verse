@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import crypto from "crypto";

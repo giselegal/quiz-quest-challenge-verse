@@ -24,23 +24,23 @@ const ComponentRenderer: React.FC<ComponentRendererProps> = ({
       case 'headline':
         return (
           <div className="space-y-2">
-            {component.data?.title && (
+            {component.data.title && (
               <h2 className="text-2xl font-bold">{component.data.title}</h2>
             )}
-            {component.data?.subtitle && (
+            {component.data.subtitle && (
               <p className="text-lg">{component.data.subtitle}</p>
             )}
           </div>
         );
       
       case 'text':
-        return <div className="prose max-w-none">{component.data?.text || 'Texto de exemplo'}</div>;
+        return <div className="prose max-w-none">{component.data.text || 'Texto de exemplo'}</div>;
       
       case 'image':
-        return component.data?.imageUrl ? (
+        return component.data.imageUrl ? (
           <img 
             src={component.data.imageUrl}
-            alt={component.data?.alt || 'Imagem'}
+            alt={component.data.alt || 'Imagem'}
             className="max-w-full h-auto rounded"
           />
         ) : (
@@ -52,8 +52,8 @@ const ComponentRenderer: React.FC<ComponentRendererProps> = ({
       case 'stageQuestion':
         return (
           <div className="space-y-4">
-            <h3 className="text-xl font-medium">{component.data?.question || 'Pergunta não definida'}</h3>
-            {(component.data?.options && component.data.options.length > 0) ? (
+            <h3 className="text-xl font-medium">{component.data.question || 'Pergunta não definida'}</h3>
+            {(component.data.options && component.data.options.length > 0) ? (
               <div className="space-y-2">
                 {component.data.options.map((option, index) => (
                   <div key={index} className="p-3 border rounded hover:bg-gray-50 cursor-pointer">
@@ -72,7 +72,7 @@ const ComponentRenderer: React.FC<ComponentRendererProps> = ({
       case 'multipleChoice':
         return (
           <div className="space-y-2">
-            {(component.data?.options && component.data.options.length > 0) ? (
+            {(component.data.options && component.data.options.length > 0) ? (
               component.data.options.map((option, index) => (
                 <div key={index} className="flex items-center space-x-2">
                   <input type="checkbox" id={`opt-${component.id}-${index}`} disabled={isPreviewing} />
@@ -88,7 +88,7 @@ const ComponentRenderer: React.FC<ComponentRendererProps> = ({
       case 'singleChoice':
         return (
           <div className="space-y-2">
-            {(component.data?.options && component.data.options.length > 0) ? (
+            {(component.data.options && component.data.options.length > 0) ? (
               component.data.options.map((option, index) => (
                 <div key={index} className="flex items-center space-x-2">
                   <input type="radio" name={`opt-${component.id}`} id={`opt-${component.id}-${index}`} disabled={isPreviewing} />

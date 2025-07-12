@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Editor Test Page - ES7 Pattern
  * Página para testar o novo editor reorganizado

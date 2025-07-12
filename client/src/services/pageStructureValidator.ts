@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Validador e corretor de estrutura de páginas para garantir que todas
  * as páginas na aba "Páginas" sejam schema-driven e editáveis

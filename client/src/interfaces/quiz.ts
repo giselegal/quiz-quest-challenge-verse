@@ -1,106 +1,216 @@
-
-export interface QuizIntroBlockProps {
-  blockId?: string;
-  data?: {
-    title?: string;
-    subtitle?: string;
-    description?: string;
-    buttonText?: string;
-    titleColor?: string;
-    subtitleColor?: string;
-    descriptionColor?: string;
-    buttonColor?: string;
-    buttonTextColor?: string;
-    imageUrl?: string;
-    imageAlt?: string;
+export interface QuizConfig {
+  domain: string;
+  seo: {
+    title: string;
+    description: string;
+    keywords: string;
   };
-  onUpdate?: (data: any) => void;
-  className?: string;
-  isEditing?: boolean;
+  pixel: {
+    facebookPixelId: string;
+    googleAnalyticsId: string;
+  };
+  utm: {
+    source: string;
+    medium: string;
+    campaign: string;
+    content: string;
+    term: string;
+  };
+  scoring: {
+    normalQuestionPoints: number;
+    strategicQuestionPoints: number;
+    autoAdvanceNormal: boolean;
+    autoAdvanceStrategic: boolean;
+    normalSelectionLimit: number;
+    strategicSelectionLimit: number;
+  };
+  results: {
+    showUserName: boolean;
+    showPrimaryStyle: boolean;
+    showSecondaryStyles: boolean;
+    showPercentages: boolean;
+    showStyleImages: boolean;
+    showStyleGuides: boolean;
+  };
+}
+
+export interface QuizOption {
+  id: string;
+  text: string;
+  imageUrl?: string;
+  value: string;
+  category?: string;
+  points?: {
+    [styleName: string]: number;
+  };
+}
+
+export interface BonusItem {
+  id: string;
+  title: string;
+  value: string;
+  description?: string;
+}
+
+export interface FaqItem {
+  id: string;
+  question: string;
+  answer: string;
 }
 
 export interface SimpleComponent {
   id: string;
-  type: string;
-  data?: any;
-  style?: any;
-  position?: number;
-}
-
-export interface QuizFunnel {
-  id: string;
-  name: string;
-  description?: string;
-  pages: SimplePage[];
-  config?: QuizConfig;
-  createdAt: Date | string;
-  updatedAt: Date | string;
-  isPublished?: boolean;
-  version?: number;
-}
-
-export interface QuizConfig {
-  id?: string;
-  name?: string;
-  theme?: any;
-  settings?: any;
-  branding?: any;
-  domain?: string;
-  seo?: {
+  type:
+    | "title"
+    | "subtitle"
+    | "text"
+    | "paragraph"
+    | "image"
+    | "button"
+    | "spacer"
+    | "input"
+    | "email"
+    | "phone"
+    | "options"
+    | "progress"
+    | "logo"
+    | "video"
+    | "testimonial"
+    | "price"
+    | "countdown"
+    | "guarantee"
+    | "bonus"
+    | "faq"
+    | "social-proof"
+    | "text-inline"
+    | "badge-inline"
+    | "stat-inline"
+    | "progress-inline"
+    | "image-display"
+    | "style-card"
+    | "pricing-card"
+    | "testimonial-card"
+    | "result-card"
+    | "countdown-inline"
+    | "pricing-inline";
+  data: {
+    text?: string;
+    src?: string;
+    alt?: string;
+    width?: number;
+    height?: number;
+    label?: string;
+    placeholder?: string;
+    required?: boolean;
+    type?: string;
+    options?: QuizOption[];
+    multiSelect?: boolean;
+    hasImages?: boolean;
+    progressValue?: number;
+    showPercentage?: boolean;
+    color?: string;
+    backgroundColor?: string;
+    videoUrl?: string;
+    price?: string;
+    originalPrice?: string;
+    installments?: string;
+    currency?: string;
+    endDate?: string;
     title?: string;
-    description?: string;
-    keywords?: string[] | string;
+    name?: string;
+    role?: string;
+    avatar?: string;
+    testimonialAuthor?: string;
+    testimonialRole?: string;
+    testimonialImage?: string;
+    guaranteeDays?: number;
+    bonuses?: BonusItem[];
+    bonusItems?: BonusItem[];
+    faqs?: FaqItem[];
+    faqItems?: FaqItem[];
+    customerCount?: string;
+    rating?: string;
+    reviewCount?: string;
+    socialProofCount?: number;
+    socialProofText?: string;
+    fontSize?: string;
+    fontWeight?: string;
+    variant?: string;
+    maxSelections?: number;
+    alignment?: "left" | "center" | "right";
+    size?: "small" | "medium" | "large";
+    [key: string]: any; // Allow additional properties
   };
-  pixel?: {
-    facebookPixelId?: string;
-    googleAnalyticsId?: string;
-  };
-  utm?: {
-    source?: string;
-    medium?: string;
-    campaign?: string;
-    content?: string;
-    term?: string;
-  };
-  scoring?: {
-    normalQuestionPoints?: number;
-    strategicQuestionPoints?: number;
-    autoAdvanceNormal?: boolean;
-    autoAdvanceStrategic?: boolean;
-    normalSelectionLimit?: number;
-    strategicSelectionLimit?: number;
-  };
-  results?: {
-    showUserName?: boolean;
-    showPrimaryStyle?: boolean;
-    showSecondaryStyles?: boolean;
-    showPercentages?: boolean;
-    showStyleImages?: boolean;
-    showStyleGuides?: boolean;
-  };
-  analytics?: {
-    googleAnalyticsId?: string;
-    facebookPixelId?: string;
-    zapierWebhook?: string;
-  };
-  integrations?: {
-    email?: any;
-    crm?: any;
-    webhooks?: any[];
+  style: {
+    fontSize?: string;
+    fontWeight?: string;
+    textAlign?: "left" | "center" | "right";
+    color?: string;
+    backgroundColor?: string;
+    padding?: string;
+    margin?: string;
+    marginBottom?: string;
+    borderRadius?: string;
+    border?: string;
+    width?: string;
+    minWidth?: string;
+    maxWidth?: string;
+    height?: string;
+    minHeight?: string;
+    display?: string;
+    gap?: string;
   };
 }
 
 export interface SimplePage {
   id: string;
   title: string;
-  type: string;
+  type:
+    | "intro"
+    | "question"
+    | "loading"
+    | "result"
+    | "offer"
+    | "transition"
+    | "sales"
+    | "checkout"
+    | "upsell"
+    | "thankyou"
+    | "webinar"
+    | "launch";
+  progress: number;
+  showHeader: boolean;
+  showProgress: boolean;
   components: SimpleComponent[];
-  progress?: number;
-  showHeader?: boolean;
-  showProgress?: boolean;
+  questionType?: string;
+  multiSelect?: number;
 }
 
-export interface Version {
+export interface ComponentProps {
+  isSelected?: boolean;
+  onClick?: () => void;
+}
+
+export interface QuizVariant {
+  id: string;
+  name: string;
+  description: string;
+  pages: SimplePage[];
+  trafficPercent: number;
+  isActive: boolean;
+  createdAt?: string;
+}
+
+export interface QuizFunnel {
+  id: string;
+  name: string;
+  pages: SimplePage[];
+  variants?: QuizVariant[];
+  updatedAt?: string;
+  createdAt?: string;
+}
+// Versioning para QuizFunnel
+export interface QuizVersion {
   id: string;
   version: number;
   createdAt: string;

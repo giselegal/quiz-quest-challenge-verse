@@ -28,15 +28,15 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
 }) => {
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
   
-  const displayType = data?.displayType || 'text';
+  const displayType = data.displayType || 'text';
   const showImages = displayType === 'image' || displayType === 'both';
   const showText = displayType === 'text' || displayType === 'both';
-  const multiSelect = data?.multiSelect || 1;
-  const imageSize = data?.imageSize || 'medium';
-  const selectionIndicator = data?.selectionIndicator || 'border';
+  const multiSelect = data.multiSelect || 1;
+  const imageSize = data.imageSize || 'medium';
+  const selectionIndicator = data.selectionIndicator || 'border';
   
   const getGridColumns = () => {
-    const columns = data?.layout?.columns || 2;
+    const columns = data.layout?.columns || 2;
     switch (columns) {
       case 1: return "grid-cols-1 gap-3";
       case 3: return "grid-cols-1 sm:grid-cols-3 gap-3";
@@ -63,7 +63,7 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
     
     if (typeof option === 'string') {
       text = option;
-      if (data?.optionImages && Array.isArray(data.optionImages) && data.optionImages[index]) {
+      if (data.optionImages && Array.isArray(data.optionImages) && data.optionImages[index]) {
         imageUrl = data.optionImages[index];
       }
     } else if (option && typeof option === 'object') {
@@ -110,18 +110,18 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
         isSelected && "ring-2 ring-inset ring-[#B89B7A]/20"
       )}
       style={{
-        backgroundColor: style?.backgroundColor || data?.backgroundColorQuestion || '#FFFAF0',
-        color: style?.textColor || data?.textColorQuestion || '#432818',
+        backgroundColor: style?.backgroundColor || data.backgroundColorQuestion || '#FFFAF0',
+        color: style?.textColor || data.textColorQuestion || '#432818',
         borderRadius: style?.borderRadius ? `${style?.borderRadius}px` : '8px',
         padding: `${style?.paddingY || 16}px ${style?.paddingX || 16}px`,
       }}
     >
       <h2 className="text-xl sm:text-2xl font-playfair text-center mb-5 px-3 pt-3 font-semibold tracking-normal">
-        {data?.title || data?.question || 'Pergunta do Quiz'}
+        {data.title || data.question || 'Pergunta do Quiz'}
       </h2>
       
       <p className="text-sm text-[#1A1818]/70 px-2 py-2 mb-4 text-center font-medium">
-        {data?.subtitle || (multiSelect > 1 ? `Selecione ${multiSelect} opções` : 'Selecione uma opção')}
+        {data.subtitle || (multiSelect > 1 ? `Selecione ${multiSelect} opções` : 'Selecione uma opção')}
       </p>
       
       <div className={cn(
@@ -129,7 +129,7 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
         getGridColumns(),
         showImages && "mb-4 relative"
       )}>
-        {(data?.options || ['Opção 1', 'Opção 2', 'Opção 3', 'Opção 4']).map((option, index) => {
+        {(data.options || ['Opção 1', 'Opção 2', 'Opção 3', 'Opção 4']).map((option, index) => {
           const { text, imageUrl, styleCategory } = extractOptionData(option, index);
           const isSelected = isOptionSelected(index);
           
@@ -226,14 +226,14 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
       </div>
       
       <div className="mt-4 text-sm text-[#432818]/60 text-center">
-        {data?.stageTitle || 'Pergunta'} • {data?.stageNumber || 1} de {data?.totalStages || 7}
+        {data.stageTitle || 'Pergunta'} • {data.stageNumber || 1} de {data.totalStages || 7}
       </div>
       
       <div className="w-full h-1 bg-[#B89B7A]/20 mt-3 rounded-full overflow-hidden">
         <div 
           className="h-full bg-[#B89B7A]" 
           style={{ 
-            width: `${((data?.stageNumber || 1) / (data?.totalStages || 7)) * 100}%` 
+            width: `${((data.stageNumber || 1) / (data.totalStages || 7)) * 100}%` 
           }}
         ></div>
       </div>

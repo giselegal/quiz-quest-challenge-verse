@@ -37,32 +37,32 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
     case 'header': 
       return (
         <div style={getComponentStyles()} className={cn("py-6", isSelected && !isPreview && "bg-opacity-90")}>
-          <h1 className="text-3xl font-bold text-center">{data?.stageTitle || 'Título Principal'}</h1>
-          {data?.subtitle && <p className="text-xl text-center mt-2">{data.subtitle}</p>}
+          <h1 className="text-3xl font-bold text-center">{data.stageTitle || 'Título Principal'}</h1>
+          {data.subtitle && <p className="text-xl text-center mt-2">{data.subtitle}</p>}
         </div>
       );
 
     case 'headline':
       return (
         <div style={getComponentStyles()} className={cn("py-4", isSelected && !isPreview && "bg-opacity-90")}>
-          <h2 className="text-2xl font-bold">{data?.title || 'Título da Seção'}</h2>
+          <h2 className="text-2xl font-bold">{data.title || 'Título da Seção'}</h2>
         </div>
       );
 
     case 'text':
       return (
         <div style={getComponentStyles()} className={cn("py-3", isSelected && !isPreview && "bg-opacity-90")}>
-          <p>{data?.text || 'Texto do parágrafo que será exibido aqui. Edite este texto nas propriedades.'}</p>
+          <p>{data.text || 'Texto do parágrafo que será exibido aqui. Edite este texto nas propriedades.'}</p>
         </div>
       );
 
     case 'image':
       return (
         <div style={getComponentStyles()} className={cn("py-4 text-center", isSelected && !isPreview && "bg-opacity-90")}>
-          {data?.imageUrl ? (
+          {data.imageUrl ? (
             <img 
               src={data.imageUrl} 
-              alt={data?.alt || 'Quiz image'}
+              alt={data.alt || 'Quiz image'} 
               className="max-w-full max-h-96 mx-auto rounded-md"
             />
           ) : (
@@ -70,7 +70,7 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
               <p className="text-gray-500">Imagem não configurada</p>
             </div>
           )}
-          {data?.caption && (
+          {data.caption && (
             <p className="text-sm text-gray-500 mt-2">{data.caption}</p>
           )}
         </div>
@@ -81,12 +81,12 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
       return (
         <StageQuestionComponent
           data={{
-            ...(data || {}),
-            displayType: data?.displayType || 'text',
-            multiSelect: type === 'multipleChoice' ? (data?.multiSelect || 3) : 1,
-            layout: data?.layout || { columns: 2, direction: 'vertical' },
-            imageSize: data?.imageSize || 'medium',
-            selectionIndicator: data?.selectionIndicator || 'border',
+            ...data,
+            displayType: data.displayType || 'text',
+            multiSelect: type === 'multipleChoice' ? (data.multiSelect || 3) : 1,
+            layout: data.layout || { columns: 2, direction: 'vertical' },
+            imageSize: data.imageSize || 'medium',
+            selectionIndicator: data.selectionIndicator || 'border',
           }}
           style={style || {}}
           isSelected={isSelected && !isPreview}
@@ -96,18 +96,18 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
     case 'quizResult':
       return (
         <div style={getComponentStyles()} className={cn("py-6 text-center", isSelected && !isPreview && "bg-opacity-90")}>
-          <h2 className="text-2xl font-bold mb-4">{data?.resultTitle || 'Seu Estilo Predominante'}</h2>
+          <h2 className="text-2xl font-bold mb-4">{data.resultTitle || 'Seu Estilo Predominante'}</h2>
           <div className="inline-block bg-[#ffefec] px-4 py-2 rounded-md text-[#aa6b5d] mb-6">
             Estilo exemplo: Natural
           </div>
-          <p>{data?.resultDescription || 'Descrição do resultado do quiz será exibida aqui.'}</p>
+          <p>{data.resultDescription || 'Descrição do resultado do quiz será exibida aqui.'}</p>
         </div>
       );
 
     case 'stageCover':
       return (
         <StageCoverComponent 
-          data={data || {}}
+          data={data}
           style={style}
           isSelected={isSelected && !isPreview}
         />
@@ -117,12 +117,12 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
       return (
         <StageQuestionComponent
           data={{
-            ...(data || {}),
-            displayType: data?.displayType || 'text',
-            multiSelect: data?.multiSelect || 3,
-            layout: data?.layout || { columns: 2, direction: 'vertical' },
-            imageSize: data?.imageSize || 'medium',
-            selectionIndicator: data?.selectionIndicator || 'border',
+            ...data,
+            displayType: data.displayType || 'text',
+            multiSelect: data.multiSelect || 3,
+            layout: data.layout || { columns: 2, direction: 'vertical' },
+            imageSize: data.imageSize || 'medium',
+            selectionIndicator: data.selectionIndicator || 'border',
           }}
           style={style || {}}
           isSelected={isSelected && !isPreview}
@@ -132,7 +132,7 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
     case 'stageResult':
       return (
         <StageResultComponent 
-          data={data || {}}
+          data={data}
           style={style}
           isSelected={isSelected && !isPreview}
         />

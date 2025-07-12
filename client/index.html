@@ -1,54 +1,14 @@
-
-<!doctype html>
-<html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quiz Quest - Descubra Seu Estilo</title>
-    
-    <!-- Meta tags básicas -->
-    <meta name="theme-color" content="#432818" />
-    <meta name="description" content="Descubra seu estilo pessoal único com nosso quiz interativo" />
-    
-    <!-- Bloqueador de telemetria atualizado -->
-    <script src="/telemetry-blocker-v2.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Quiz Quest Challenge Verse - Descubra Seu Estilo</title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    
-    <!-- Diagnóstico básico -->
-    <script>
-      console.log('🚀 Quiz Quest iniciando...');
-      console.log('🌐 Navigator online:', navigator.onLine);
-      console.log('📍 URL atual:', window.location.href);
-      
-      // Verificar elemento root
-      const root = document.getElementById('root');
-      console.log('📦 Root element:', root ? 'Encontrado' : 'NÃO encontrado');
-      
-      // Monitorar carregamento
-      window.addEventListener('load', () => {
-        console.log('✅ Página carregada completamente');
-        setTimeout(() => {
-          const rootContent = document.getElementById('root')?.innerHTML;
-          console.log('📄 Conteúdo do root:', rootContent ? 'Presente' : 'Vazio');
-          if (!rootContent) {
-            console.error('❌ PROBLEMA: Root está vazio após 2 segundos!');
-          }
-        }, 2000);
-      });
-      
-      // Capturar erros
-      window.addEventListener('error', (e) => {
-        console.error('❌ Erro JavaScript:', e.error);
-        console.error('� Arquivo:', e.filename, 'Linha:', e.lineno);
-      });
-      
-      window.addEventListener('unhandledrejection', (e) => {
-        console.error('❌ Promise rejeitada:', e.reason);
-      });
-    </script>
+    <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
+    <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
   </body>
 </html>

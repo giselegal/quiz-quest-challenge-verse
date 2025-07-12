@@ -29,7 +29,7 @@ export const useResultPageEditor = (styleType: string) => {
     if (resultPageConfig?.blocks) {
       setState(prev => ({
         ...prev,
-        blocks: resultPageConfig.blocks || []
+        blocks: resultPageConfig.blocks
       }));
     } else {
       // Initialize with empty blocks array if not present
@@ -50,9 +50,7 @@ export const useResultPageEditor = (styleType: string) => {
       id: generateId(),
       type,
       content: getDefaultContentForType(type),
-      order: state.blocks.length,
-      visible: true,
-      properties: {}
+      order: state.blocks.length
     };
     
     const newBlocks = [...state.blocks, newBlock];

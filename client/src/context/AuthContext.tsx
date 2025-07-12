@@ -1,20 +1,66 @@
+
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface User {
-  id: string;
-  email: string;
-  name?: string;
-  userName?: string;
+  userName: string;
+  email?: string; // Added email as optional property
+  role?: string;  // Added role property for admin access
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (name: string, email?: string) => void;
   logout: () => void;
-  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(() => {
+    const savedName = localStorage.getItem('userName');
+    const savedEmail = localStorage.getItem('userEmail');
+    const savedRole = localStorage.getItem('userRole');
+    
+    return savedName ? { 
+      userName: savedName,
+      ...(savedEmail && { email: savedEmail }),
+      ...(savedRole && { role: savedRole })
+    } : null;
+  });
+
+  const login = (name: string, email?: string) => {
+    const userData: User = { 
+      userName: name 
+    };
+    
+    if (email) {
+      userData.email = email;
+      localStorage.setItem('userEmail', email);
+    }
+    
+    // Preservar o status de admin caso exista
+    const savedRole = localStorage.getItem('userRole');
+    if (savedRole) {
+      userData.role = savedRole;
+    }
+    
+    setUser(userData);
+    localStorage.setItem('userName', name);
+  };
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userRole');
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -22,35 +68,4 @@ export const useAuth = () => {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-};
-
-interface AuthProviderProps {
-  children: ReactNode;
-}
-
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  const login = async (email: string, password: string) => {
-    setLoading(true);
-    try {
-      // Mock login - replace with actual authentication
-      setUser({ id: '1', email, name: 'Test User', userName: 'testuser' });
-    } catch (error) {
-      console.error('Login failed:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const logout = () => {
-    setUser(null);
-  };
-
-  return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
-      {children}
-    </AuthContext.Provider>
-  );
 };

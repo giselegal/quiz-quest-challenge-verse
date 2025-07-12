@@ -1,5 +1,4 @@
 
-// @ts-nocheck
 import { QuizQuestion } from '../../types/quiz';
 
 export const clothingQuestions: QuizQuestion[] = [

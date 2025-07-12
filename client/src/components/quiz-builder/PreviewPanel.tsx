@@ -119,7 +119,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
 
   const renderComponent = (component: QuizComponentData) => {
     const props = {
-      data: component.data || {},
+      data: component.data,
       style: component.style,
       isSelected: component.id === selectedComponentId,
     };

@@ -1,5 +1,5 @@
 
-// @ts-nocheck
+import React from 'react';
 import { QuizResult, StyleResult } from '@/types/quiz';
 
 interface ResultPreviewProps {

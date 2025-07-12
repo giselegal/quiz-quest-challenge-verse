@@ -58,9 +58,9 @@ export const getDefaultContentForType = (type: string): EditableContent => {
       return {
         title: 'Benefícios',
         items: [
-          'Benefício 1: Descrição do primeiro benefício',
-          'Benefício 2: Descrição do segundo benefício',
-          'Benefício 3: Descrição do terceiro benefício'
+          { title: 'Benefício 1', description: 'Descrição do primeiro benefício' },
+          { title: 'Benefício 2', description: 'Descrição do segundo benefício' },
+          { title: 'Benefício 3', description: 'Descrição do terceiro benefício' }
         ],
         style: {
           padding: '1rem'
@@ -81,7 +81,7 @@ export const getDefaultContentForType = (type: string): EditableContent => {
       };
     case 'spacer':
       return {
-        height: 32
+        height: '2rem'
       };
     default:
       return {

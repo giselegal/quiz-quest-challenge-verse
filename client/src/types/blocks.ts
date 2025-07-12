@@ -1,12 +1,13 @@
+// Tipos base para o sistema de blocos schema-driven
 
-import { Block } from './editor';
+export interface BlockData {
+  id: string;
+  type: string;
+  properties: Record<string, any>;
+}
 
-// Type alias for BlockData - now using Block as the base
-export type BlockData = Block;
-
-// Block component props interface for all block components
 export interface BlockComponentProps {
-  block: Block;
+  block: BlockData;
   isSelected?: boolean;
   isEditing?: boolean;
   onClick?: () => void;
@@ -14,13 +15,20 @@ export interface BlockComponentProps {
   className?: string;
 }
 
-// Additional block-specific properties
-export interface BlockMetadata {
-  lastModified?: Date;
-  author?: string;
-  version?: number;
+// Tipos específicos para quiz
+export interface QuizAnswer {
+  id: string;
+  text: string;
+  value: string;
+  weight?: number;
 }
 
-export interface ExtendedBlockData extends Block {
-  metadata?: BlockMetadata;
+export interface QuizOption {
+  id: string;
+  text: string;
+  value: string;
+  weight?: number;
 }
+
+// Re-export tipos existentes para compatibilidade
+// export type { BlockData as Block } from '@/services/funnelService';

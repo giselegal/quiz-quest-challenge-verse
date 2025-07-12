@@ -50,10 +50,11 @@ app.use((req, res, next) => {
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route
   // doesn't interfere with the other routes
-  if (app.get("env") === "production") {
+  if (app.get("env") === "development") {
+    await setupVite(app, server);
+  } else {
     serveStatic(app);
   }
-  // In development, we let the frontend run independently on port 8080
 
   // ALWAYS serve the app on port 5000
   // this serves both the API and the client.

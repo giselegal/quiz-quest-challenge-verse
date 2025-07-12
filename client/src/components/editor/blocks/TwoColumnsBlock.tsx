@@ -1,11 +1,11 @@
 
 import React from 'react';
 import type { BlockComponentProps } from '@/types/blocks';
-import { TwoColumnsHeader } from './two-columns/TwoColumnsHeader';
-import { ColumnLayout } from './two-columns/ColumnLayout';
 
-interface TwoColumnsBlockProps extends Omit<BlockComponentProps, 'block'> {
-  block: BlockComponentProps['block'] & {
+interface TwoColumnsBlockProps extends BlockComponentProps {
+  block: {
+    id: string;
+    type: 'two-columns';
     properties: {
       title?: string;
       subtitle?: string;
@@ -56,6 +56,130 @@ const TwoColumnsBlock: React.FC<TwoColumnsBlockProps> = ({
     textColor = '#374151'
   } = block.properties;
 
+  const getRatioClasses = () => {
+    const ratios = {
+      '50-50': 'lg:grid-cols-2',
+      '60-40': 'lg:grid-cols-[3fr_2fr]',
+      '40-60': 'lg:grid-cols-[2fr_3fr]',
+      '70-30': 'lg:grid-cols-[7fr_3fr]',
+      '30-70': 'lg:grid-cols-[3fr_7fr]'
+    };
+    return ratios[columnRatio] || 'lg:grid-cols-2';
+  };
+
+  const getAlignmentClasses = () => {
+    const alignments = {
+      'top': 'items-start',
+      'center': 'items-center',
+      'bottom': 'items-end'
+    };
+    return alignments[verticalAlignment] || 'items-start';
+  };
+
+  const renderContent = (content: any) => {
+    const getTextAlign = (alignment?: string) => {
+      const aligns = {
+        'left': 'text-left',
+        'center': 'text-center',
+        'right': 'text-right'
+      };
+      return aligns[alignment || 'left'] || 'text-left';
+    };
+
+    switch (content.type) {
+      case 'text':
+        return (
+          <div className={getTextAlign(content.alignment)}>
+            {content.title && (
+              <h3 className="text-xl font-semibold mb-4" style={{ color: textColor }}>
+                {content.title}
+              </h3>
+            )}
+            {content.content && (
+              <div 
+                className="prose prose-gray max-w-none"
+                style={{ color: textColor }}
+                dangerouslySetInnerHTML={{ __html: content.content }}
+              />
+            )}
+          </div>
+        );
+
+      case 'image':
+        return (
+          <div className={getTextAlign(content.alignment)}>
+            {content.title && (
+              <h3 className="text-xl font-semibold mb-4" style={{ color: textColor }}>
+                {content.title}
+              </h3>
+            )}
+            {content.imageUrl && (
+              <img
+                src={content.imageUrl}
+                alt={content.title || 'Imagem'}
+                className="w-full h-auto rounded-lg shadow-md"
+                loading="lazy"
+              />
+            )}
+          </div>
+        );
+
+      case 'video':
+        return (
+          <div className={getTextAlign(content.alignment)}>
+            {content.title && (
+              <h3 className="text-xl font-semibold mb-4" style={{ color: textColor }}>
+                {content.title}
+              </h3>
+            )}
+            {content.videoUrl && (
+              <div className="aspect-video rounded-lg overflow-hidden shadow-md">
+                <iframe
+                  src={content.videoUrl}
+                  title={content.title || 'Vídeo'}
+                  className="w-full h-full"
+                  frameBorder="0"
+                  allowFullScreen
+                />
+              </div>
+            )}
+          </div>
+        );
+
+      case 'list':
+        return (
+          <div className={getTextAlign(content.alignment)}>
+            {content.title && (
+              <h3 className="text-xl font-semibold mb-4" style={{ color: textColor }}>
+                {content.title}
+              </h3>
+            )}
+            {content.items && content.items.length > 0 && (
+              <ul className="space-y-3">
+                {content.items.map((item, index) => (
+                  <li 
+                    key={index} 
+                    className="flex items-start gap-3"
+                    style={{ color: textColor }}
+                  >
+                    <span className="w-2 h-2 bg-[#B89B7A] rounded-full mt-2 flex-shrink-0"></span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        );
+
+      default:
+        return (
+          <div className="text-gray-400 text-center p-8 border-2 border-dashed border-gray-300 rounded-lg">
+            Conteúdo não configurado
+          </div>
+        );
+    }
+  };
+
   return (
     <div 
       className={`
@@ -71,21 +195,40 @@ const TwoColumnsBlock: React.FC<TwoColumnsBlockProps> = ({
       data-block-id={block.id}
       data-block-type={block.type}
     >
-      <TwoColumnsHeader 
-        title={title}
-        subtitle={subtitle}
-        textColor={textColor}
-      />
+      {/* Header */}
+      {(title || subtitle) && (
+        <div className="text-center mb-8">
+          {title && (
+            <h2 className="text-2xl md:text-3xl font-bold mb-2" style={{ color: textColor }}>
+              {title}
+            </h2>
+          )}
+          {subtitle && (
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              {subtitle}
+            </p>
+          )}
+        </div>
+      )}
 
-      <ColumnLayout
-        leftContent={leftContent}
-        rightContent={rightContent}
-        columnRatio={columnRatio}
-        verticalAlignment={verticalAlignment}
-        gap={gap}
-        mobileStack={mobileStack}
-        textColor={textColor}
-      />
+      {/* Two Columns Grid */}
+      <div 
+        className={`
+          grid grid-cols-1 ${mobileStack ? getRatioClasses() : getRatioClasses().replace('lg:', '')}
+          ${getAlignmentClasses()}
+        `}
+        style={{ gap: `${gap}px` }}
+      >
+        {/* Left Column */}
+        <div className="w-full">
+          {renderContent(leftContent)}
+        </div>
+
+        {/* Right Column */}
+        <div className="w-full">
+          {renderContent(rightContent)}
+        </div>
+      </div>
     </div>
   );
 };

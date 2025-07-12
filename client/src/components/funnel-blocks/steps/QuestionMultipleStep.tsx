@@ -116,13 +116,10 @@ export const QuestionMultipleStep: React.FC<FunnelStepProps> = ({
         
         {/* Opções de resposta */}
         <div className="grid gap-3 mb-8">
-          {options.map((option: any) => (
+          {options.map((option) => (
             <QuizOption
               key={option.id}
-              id={option.id}
-              text={option.text}
-              value={option.value}
-              imageUrl={option.imageUrl}
+              option={option}
               isSelected={selectedOptions.includes(option.id)}
               onSelect={() => handleSelect(option.id)}
               multiSelect={multiSelect}

@@ -1,84 +1,225 @@
 
-export interface ImageMetadata {
-  alt?: string;
-  width?: number;
-  height?: number;
-  title?: string;
-}
+import { ImageOptimizationOptions, PreloadOptions } from './images/types';
 
-export interface OptimizationOptions {
-  quality?: number;
-  format?: 'webp' | 'jpeg' | 'png' | 'auto';
-  width?: number;
-  height?: number;
-  batchSize?: number;
-}
-
-const imageBank: Record<string, ImageMetadata> = {
-  'sapatos-1.jpg': { alt: 'Sapatos elegantes', width: 400, height: 400 },
-  'sapatos-2.jpg': { alt: 'Sapatos casuais', width: 400, height: 400 },
-  // Add more as needed
-};
-
-export const getImageMetadata = (url: string): ImageMetadata | undefined => {
-  const filename = url.split('/').pop();
-  return filename ? imageBank[filename] : undefined;
-};
-
-export const getOptimizedImage = (url: string, options: OptimizationOptions = {}): string => {
-  if (!url) return '';
+export const getOptimizedImageUrl = (src: string, options?: { width?: number; height?: number; quality?: number; format?: string }) => {
+  if (!src) return '';
   
-  const { quality = 80, format, width, height } = options;
+  // For now, return the original URL
+  // In a real implementation, this would generate optimized URLs
+  return src;
+};
+
+export const getLowQualityPlaceholder = (src: string) => {
+  if (!src) return '';
   
-  // For Cloudinary URLs, add optimization parameters
-  if (url.includes('cloudinary.com')) {
-    const baseUrl = url.split('/upload/')[0] + '/upload/';
-    const imagePath = url.split('/upload/')[1];
-    
-    let transformations = [];
-    
-    if (quality !== 80) transformations.push(`q_${quality}`);
-    if (format && format !== 'auto') transformations.push(`f_${format}`);
-    if (width) transformations.push(`w_${width}`);
-    if (height) transformations.push(`h_${height}`);
-    
-    const transformString = transformations.length > 0 ? transformations.join(',') + '/' : '';
-    
-    return `${baseUrl}${transformString}${imagePath}`;
-  }
-  
-  return url;
+  // For now, return the original URL
+  // In a real implementation, this would generate a low-quality placeholder
+  return src;
 };
 
-export const getOptimizedImageUrl = getOptimizedImage; // Alias for backward compatibility
+export const preloadImagesByUrls = (
+  urls: string[],
+  options: PreloadOptions = {}
+): Promise<void> => {
+  return new Promise((resolve) => {
+    const { quality = 80, batchSize = 5 } = options;
+    const total = urls.length;
+    let loaded = 0;
 
-export const getLowQualityPlaceholder = (url: string): string => {
-  return getOptimizedImage(url, { quality: 10, width: 50 });
-};
+    const loadBatch = (batch: string[]) => {
+      Promise.all(
+        batch.map(
+          (url) =>
+            new Promise<void>((resolveImage) => {
+              const img = new Image();
+              img.src = getOptimizedImageUrl(url, { quality, format: options.format });
+              img.onload = () => {
+                loaded++;
+                options.onProgress?.(loaded, total);
+                resolveImage();
+              };
+              img.onerror = () => {
+                loaded++;
+                options.onProgress?.(loaded, total);
+                resolveImage();
+              };
+            })
+        )
+      ).then(() => {
+        if (loaded >= total) {
+          options.onComplete?.();
+          resolve();
+        } else {
+          const nextBatch = urls.slice(loaded, loaded + batchSize);
+          loadBatch(nextBatch);
+        }
+      });
+    };
 
-export const isImagePreloaded = (url: string): boolean => {
-  // Simple check - in a real app this would check browser cache
-  return false;
-};
-
-export const preloadImage = (url: string): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => resolve();
-    img.onerror = reject;
-    img.src = url;
+    const initialBatch = urls.slice(0, batchSize);
+    loadBatch(initialBatch);
   });
 };
 
-// Add missing preload functions
-export const preloadCriticalImages = async (categories: string | string[], options: OptimizationOptions = {}): Promise<void> => {
-  // Mock implementation - in real app would preload based on categories
-  console.log('Preloading critical images for categories:', categories, 'with options:', options);
-  return Promise.resolve();
+export const preloadCriticalImages = async (
+  context: 'strategic' | 'results' | 'transformation' | 'bonus' | 'testimonials' | string[],
+  options: Omit<PreloadOptions, 'onProgress' | 'onComplete'> = {}
+): Promise<void> => {
+  const { quality = 75, batchSize = 3, format } = options;
+  let imageUrls: string[] = [];
+
+  if (typeof context === 'string') {
+    switch (context) {
+      case 'strategic':
+        imageUrls = [
+          '/images/quiz/strategic/confused-woman-1.webp',
+          '/images/quiz/strategic/confused-woman-2.webp',
+          '/images/quiz/strategic/elegant-woman-1.webp',
+          '/images/quiz/strategic/elegant-woman-2.webp',
+          '/images/quiz/strategic/modern-woman-1.webp',
+          '/images/quiz/strategic/modern-woman-2.webp',
+        ];
+        break;
+      case 'results':
+        imageUrls = [
+          '/images/results/style-result-dressing-room-2.webp',
+          '/images/results/style-result-woman-thinking.webp',
+          '/images/results/style-result-woman-walking.webp',
+          '/images/results/style-results-header.webp',
+        ];
+        break;
+      case 'transformation':
+        imageUrls = [
+          '/images/transformation/transformation-header.webp',
+          '/images/transformation/transformation-1-v2.webp',
+          '/images/transformation/transformation-2-v2.webp',
+          '/images/transformation/transformation-3-v2.webp',
+        ];
+        break;
+      case 'bonus':
+        imageUrls = [
+          '/images/bonus/bonus-header.webp',
+          '/images/bonus/bonus-1.webp',
+          '/images/bonus/bonus-2.webp',
+          '/images/bonus/bonus-3.webp',
+        ];
+        break;
+      case 'testimonials':
+        imageUrls = [
+          '/images/testimonials/testimonials-header.webp',
+          '/images/testimonials/testimonial-1.webp',
+          '/images/testimonials/testimonial-2.webp',
+          '/images/testimonials/testimonial-3.webp',
+        ];
+        break;
+      default:
+        console.warn(`Unknown critical images context: ${context}`);
+        return;
+    }
+  } else if (Array.isArray(context)) {
+    // Collect images from an array of contexts
+    context.forEach(ctx => {
+      switch (ctx) {
+        case 'strategic':
+          imageUrls.push(
+            '/images/quiz/strategic/confused-woman-1.webp',
+            '/images/quiz/strategic/confused-woman-2.webp',
+            '/images/quiz/strategic/elegant-woman-1.webp',
+            '/images/quiz/strategic/elegant-woman-2.webp',
+            '/images/quiz/strategic/modern-woman-1.webp',
+            '/images/quiz/strategic/modern-woman-2.webp',
+          );
+          break;
+        case 'results':
+          imageUrls.push(
+            '/images/results/style-result-dressing-room-2.webp',
+            '/images/results/style-result-woman-thinking.webp',
+            '/images/results/style-result-woman-walking.webp',
+            '/images/results/style-results-header.webp',
+          );
+          break;
+        case 'transformation':
+          imageUrls.push(
+            '/images/transformation/transformation-header.webp',
+            '/images/transformation/transformation-1-v2.webp',
+            '/images/transformation/transformation-2-v2.webp',
+            '/images/transformation/transformation-3-v2.webp',
+          );
+          break;
+        case 'bonus':
+          imageUrls.push(
+            '/images/bonus/bonus-header.webp',
+            '/images/bonus/bonus-1.webp',
+            '/images/bonus/bonus-2.webp',
+            '/images/bonus/bonus-3.webp',
+          );
+          break;
+        case 'testimonials':
+          imageUrls.push(
+            '/images/testimonials/testimonials-header.webp',
+            '/images/testimonials/testimonial-1.webp',
+            '/images/testimonials/testimonial-2.webp',
+            '/images/testimonials/testimonial-3.webp',
+          );
+          break;
+        default:
+          console.warn(`Unknown critical images context: ${ctx}`);
+      }
+    });
+  }
+
+  // Remove duplicates
+  imageUrls = [...new Set(imageUrls)];
+
+  return preloadImagesByUrls(imageUrls, { quality, batchSize, format });
 };
 
-export const preloadImagesByUrls = async (urls: string[], options: OptimizationOptions = {}): Promise<void> => {
-  console.log('Preloading images by URLs:', urls, 'with options:', options);
-  const promises = urls.map(url => preloadImage(getOptimizedImage(url, options)));
-  await Promise.allSettled(promises);
+export const getImageMetadata = (src: string) => {
+  if (!src) return null;
+  
+  // Return metadata with width and height properties
+  return {
+    url: src,
+    alt: `Image ${src.split('/').pop()}`,
+    format: src.includes('.webp') ? 'webp' : 'jpeg',
+    width: 800, // Default dimensions
+    height: 600
+  };
+};
+
+export const isImagePreloaded = (src: string): boolean => {
+  if (!src) return false;
+  
+  // Simple check - in a real implementation this would check if image is in cache
+  const img = new Image();
+  img.src = src;
+  return img.complete;
+};
+
+export const getOptimizedImage = (src: string, options?: { width?: number; height?: number; quality?: number; format?: string }) => {
+  // For now, delegate to existing function
+  return getOptimizedImageUrl(src, options);
+};
+
+export const preloadImages = (images: Array<{ src: string; id: string; alt?: string; category?: string; preloadPriority?: number }>, options?: { quality?: number; batchSize?: number; format?: string }) => {
+  const urls = images.map(img => img.src);
+  return preloadImagesByUrls(urls, options);
+};
+
+// Add missing functions with simplified implementations
+export const preloadImagesByIds = (ids: string[], options?: PreloadOptions) => {
+  // Convert IDs to URLs - this is a simplified implementation
+  const urls = ids.map(id => `/images/${id}`);
+  return preloadImagesByUrls(urls, options);
+};
+
+export const preloadImagesByCategory = (category: string, options?: Omit<PreloadOptions, 'onProgress' | 'onComplete'>) => {
+  // Map category to proper context string
+  const validCategories = ['strategic', 'results', 'transformation', 'bonus', 'testimonials'];
+  if (validCategories.includes(category)) {
+    return preloadCriticalImages(category as 'strategic' | 'results' | 'transformation' | 'bonus' | 'testimonials', options);
+  }
+  
+  console.warn(`Unknown category: ${category}`);
+  return Promise.resolve();
 };

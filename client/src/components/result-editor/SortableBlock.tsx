@@ -1,33 +1,37 @@
 
 import React from 'react';
+import { Block } from '@/types/editor';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Block, BlockType } from '@/types/editor';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { GripVertical, Edit, Copy, Trash2 } from 'lucide-react';
+import { GripVertical, Copy, Trash2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { BlockType } from '@/types/quiz';
 
-interface SortableBlockProps {
+export interface SortableBlockProps {
   block: Block;
-  onEdit: () => void;
-  onDuplicate: () => void;
-  onDelete: () => void;
   isSelected: boolean;
+  isPreviewing: boolean;
+  onSelect: () => void;
+  onDuplicate?: () => void;
+  onDelete?: () => void;
 }
 
 export const SortableBlock: React.FC<SortableBlockProps> = ({
   block,
-  onEdit,
+  isSelected,
+  isPreviewing,
+  onSelect,
   onDuplicate,
-  onDelete,
-  isSelected
+  onDelete
 }) => {
   const {
     attributes,
     listeners,
     setNodeRef,
     transform,
-    transition,
-    isDragging
+    transition
   } = useSortable({ id: block.id });
 
   const style = {
@@ -35,52 +39,93 @@ export const SortableBlock: React.FC<SortableBlockProps> = ({
     transition,
   };
 
-  const renderBlockContent = () => {
-    const blockType = block.type as BlockType; // Fix: Cast to BlockType
-    
-    switch (blockType) {
-      case 'headline':
-        return <h2 className="text-xl font-bold">{block.content.title || 'Título'}</h2>;
-      case 'text':
-        return <p>{block.content.text || 'Texto'}</p>;
+  const getBlockPreview = () => {
+    switch (block.type as BlockType) {
+      case 'heading':
+        return <h2 className="text-xl font-medium">{block.content.text || 'Título'}</h2>;
+      case 'paragraph':
+        return <p className="text-sm line-clamp-2">{block.content.text || 'Parágrafo de texto'}</p>;
       case 'image':
-        return <div className="bg-gray-200 h-32 flex items-center justify-center">Imagem</div>;
+        return block.content.imageUrl ? (
+          <div className="h-20 bg-gray-100 flex items-center justify-center overflow-hidden">
+            <img 
+              src={block.content.imageUrl} 
+              alt={block.content.alt || 'Imagem'} 
+              className="max-h-full object-cover"
+            />
+          </div>
+        ) : (
+          <div className="h-20 bg-gray-100 flex items-center justify-center text-gray-400">
+            Imagem
+          </div>
+        );
       case 'button':
-        return <Button>{block.content.text || 'Botão'}</Button>;
+        return (
+          <div className="inline-block px-4 py-2 bg-primary text-primary-foreground rounded-md">
+            {block.content.text || 'Botão'}
+          </div>
+        );
       default:
-        return <div>Bloco {blockType}</div>;
+        return <div className="text-sm text-gray-500">{block.type}</div>;
     }
   };
 
-  return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className={`
-        border rounded-lg p-4 mb-4 bg-white
-        ${isSelected ? 'border-blue-500 ring-2 ring-blue-200' : 'border-gray-200'}
-        ${isDragging ? 'opacity-50' : ''}
-      `}
-    >
-      <div className="flex items-center justify-between mb-2">
-        <div {...attributes} {...listeners} className="cursor-grab">
-          <GripVertical className="w-4 h-4 text-gray-400" />
-        </div>
-        
-        <div className="flex gap-2">
-          <Button size="sm" variant="outline" onClick={onEdit}>
-            <Edit className="w-3 h-3" />
-          </Button>
-          <Button size="sm" variant="outline" onClick={onDuplicate}>
-            <Copy className="w-3 h-3" />
-          </Button>
-          <Button size="sm" variant="outline" onClick={onDelete}>
-            <Trash2 className="w-3 h-3" />
-          </Button>
-        </div>
+  if (isPreviewing) {
+    return (
+      <div ref={setNodeRef} style={style}>
+        {getBlockPreview()}
       </div>
-      
-      {renderBlockContent()}
-    </div>
+    );
+  }
+
+  return (
+    <Card 
+      ref={setNodeRef} 
+      style={style}
+      className={cn(
+        'relative', 
+        isSelected ? 'border-primary' : 'border-muted'
+      )}
+      onClick={onSelect}
+    >
+      <div className="absolute left-0 top-0 bottom-0 px-1 flex items-center cursor-grab" {...attributes} {...listeners}>
+        <GripVertical className="h-4 w-4 text-muted-foreground" />
+      </div>
+
+      <CardContent className="p-4 pl-8">
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="text-sm font-medium capitalize">{block.type}</h4>
+          
+          <div className="flex space-x-1">
+            {onDuplicate && (
+              <Button 
+                type="button" 
+                variant="ghost" 
+                size="sm" 
+                className="h-7 w-7 p-0"
+                onClick={(e) => { e.stopPropagation(); onDuplicate(); }}
+              >
+                <Copy className="h-3.5 w-3.5" />
+              </Button>
+            )}
+            {onDelete && (
+              <Button 
+                type="button" 
+                variant="ghost" 
+                size="sm" 
+                className="h-7 w-7 p-0"
+                onClick={(e) => { e.stopPropagation(); onDelete(); }}
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+              </Button>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-2">
+          {getBlockPreview()}
+        </div>
+      </CardContent>
+    </Card>
   );
 };

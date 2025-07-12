@@ -72,6 +72,3 @@ export const StyleResultSection: React.FC<StyleResultSectionProps> = ({
     </Card>
   );
 };
-
-// Export the StyleResult interface for use in other components
-export type { StyleResult } from '@/types/quiz';

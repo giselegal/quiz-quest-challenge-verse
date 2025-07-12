@@ -1,31 +1,27 @@
-
 /**
  * Editor Components Index
  * Exportações centralizadas dos componentes do editor
  */
 
-// Componentes principais do editor (export default)
+// Principais componentes do editor
 export { default as ComponentList } from './ComponentList';
 export { default as PageEditorCanvas } from './PageEditorCanvas';
 export { default as ModernQuizEditor } from './ModernQuizEditor';
+export { default as ModularQuizEditor } from './ModularQuizEditor';
 export { default as EditorLayout } from './EditorLayout';
-export { default as SalesPageEditor } from './SalesPageEditor';
-export { default as QuizEditorInterface } from './QuizEditorInterface';
 export { default as QuizEditorSteps } from './QuizEditorSteps';
 
-// Componentes de UI e blocos (export named)
-export { AddBlockButton } from './AddBlockButton';
+// Componentes com named exports
+export { PropertyPanel } from './PropertyPanel';
+export { ModernPropertyPanel } from './ModernPropertyPanel';
 export { BlockRenderer } from './BlockRenderer';
 export { EditorBlockItem } from './EditorBlockItem';
-export { EditBlockContent } from './EditBlockContent';
+export { AddBlockButton } from './AddBlockButton';
 export { EmptyEditor } from './EmptyEditor';
+export { EditBlockContent } from './EditBlockContent';
+export { PageEditor } from './PageEditor';
+export { UnifiedEditorLayout } from './UnifiedEditorLayout';
 
-// Painéis de propriedades (export both default and named)
-export { default as PropertyPanel } from './PropertyPanel';
-export { default as ModernPropertyPanel } from './ModernPropertyPanel';
-
-// Layouts responsivos (export default)
-export { default as SchemaDrivenEditorLayoutV2 } from './SchemaDrivenEditorLayoutV2';
-
-// Testes e exemplos (export default)
+// Testes e outros
+export { default as EditorTestPage } from './EditorTestPage';
 export { default as SimpleEditorTest } from './SimpleEditorTest';

@@ -43,7 +43,7 @@ export const StagesPanel: React.FC<StagesPanelProps> = ({
     })
   );
 
-  const handleDragEnd = (event: any) => {
+  const handleDragEnd = (event) => {
     const { active, over } = event;
     
     if (active.id !== over.id) {

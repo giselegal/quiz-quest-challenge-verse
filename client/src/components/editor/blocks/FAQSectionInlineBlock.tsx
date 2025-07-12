@@ -142,14 +142,14 @@ const FAQSectionInlineBlock: React.FC<BlockComponentProps> = ({
   };
 
   const updateItem = (id: string, field: keyof FAQItem, value: any) => {
-    const updatedItems = items.map((item: any) => 
+    const updatedItems = items.map(item => 
       item.id === id ? { ...item, [field]: value } : item
     );
     handlePropertyChange('items', updatedItems);
   };
 
   const removeItem = (id: string) => {
-    const updatedItems = items.filter((item: any) => item.id !== id);
+    const updatedItems = items.filter(item => item.id !== id);
     handlePropertyChange('items', updatedItems);
   };
 
@@ -265,7 +265,7 @@ const FAQSectionInlineBlock: React.FC<BlockComponentProps> = ({
 
         {/* FAQ Items */}
         <div className={spacingClasses[spacing as keyof typeof spacingClasses]}>
-          {items.map((item: any, index: number) => {
+          {items.map((item, index) => {
             const isOpen = openItems.has(item.id);
             
             return (

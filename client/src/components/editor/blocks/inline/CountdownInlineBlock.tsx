@@ -33,43 +33,22 @@ const CountdownInlineBlock: React.FC<BlockComponentProps> = ({
     setIsLoaded(true);
   }, []);
 
-  // Optimized timer countdown with performance improvements
+  // Timer countdown
   useEffect(() => {
-    let animationFrame: number;
-    let lastUpdateTime = Date.now();
-    
-    const updateTimer = () => {
-      const now = Date.now();
-      // Only update every 1000ms to reduce unnecessary renders
-      if (now - lastUpdateTime >= 1000) {
-        setTimer((prev) => {
-          if (prev.seconds > 0) {
-            return { ...prev, seconds: prev.seconds - 1 };
-          } else if (prev.minutes > 0) {
-            return { minutes: prev.minutes - 1, seconds: 59 };
-          } else {
-            return { minutes: 0, seconds: 0 };
-          }
-        });
-        lastUpdateTime = now;
-      }
-      
-      // Continue animation if timer hasn't reached zero
-      setTimer((currentTimer) => {
-        if (currentTimer.minutes > 0 || currentTimer.seconds > 0) {
-          animationFrame = requestAnimationFrame(updateTimer);
+    const interval = setInterval(() => {
+      setTimer((prev) => {
+        if (prev.seconds > 0) {
+          return { ...prev, seconds: prev.seconds - 1 };
+        } else if (prev.minutes > 0) {
+          return { minutes: prev.minutes - 1, seconds: 59 };
+        } else {
+          clearInterval(interval);
+          return { minutes: 0, seconds: 0 };
         }
-        return currentTimer;
       });
-    };
-    
-    animationFrame = requestAnimationFrame(updateTimer);
-    
-    return () => {
-      if (animationFrame) {
-        cancelAnimationFrame(animationFrame);
-      }
-    };
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   // Classes de espaçamento

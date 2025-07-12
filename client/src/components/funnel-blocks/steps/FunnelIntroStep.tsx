@@ -115,7 +115,7 @@ const FunnelIntroStep: React.FC<FunnelIntroStepProps> = ({
             <FunnelProgressBar 
               currentStep={stepNumber} 
               totalSteps={totalSteps}
-              showLabels
+              showText
             />
           </div>
         )}

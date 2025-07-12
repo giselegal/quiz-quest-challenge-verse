@@ -1,5 +1,4 @@
 
-// @ts-nocheck
 import React from 'react';
 import { StyleResult } from '@/types/quiz';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';

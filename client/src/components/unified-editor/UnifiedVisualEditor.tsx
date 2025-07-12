@@ -52,7 +52,6 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
     const newTab = value as EditorTab;
     setActiveTab(newTab);
     toast({
-      title: "Editor Ativado",
       description: `Editor de ${newTab === 'quiz' ? 'Quiz' : newTab === 'result' ? 'Resultado' : 'Vendas'} ativado`,
       duration: 2000,
     });

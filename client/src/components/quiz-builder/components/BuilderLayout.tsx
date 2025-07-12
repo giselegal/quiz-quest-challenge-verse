@@ -14,7 +14,7 @@ interface BuilderLayoutProps {
   selectedComponentId: string | null;
   activeStage: QuizStage | null;
   isPreviewing: boolean;
-  onComponentSelect: (type: any) => void;
+  onComponentSelect: (type: string) => void;
   onStageAdd: (type: QuizStage['type']) => void;
   onStageSelect: (id: string) => void;
   onComponentMove: (draggedId: string, targetId: string) => void;
@@ -95,9 +95,9 @@ const BuilderLayout: React.FC<BuilderLayoutProps> = ({
       {/* Right Panel - Properties */}
       <ResizablePanel defaultSize={25} className="bg-[#F9F6F2]">
         <PropertiesPanel 
-           component={selectedComponent ?? null}
-           stage={activeStage}
-           onClose={() => onSelectComponent('')}
+          component={selectedComponent}
+          stage={activeStage}
+          onClose={() => onSelectComponent('')}
           onUpdate={onComponentUpdate}
           onUpdateStage={onStageUpdate}
           onDelete={onComponentDelete}

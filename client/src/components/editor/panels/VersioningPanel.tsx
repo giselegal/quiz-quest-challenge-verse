@@ -6,21 +6,9 @@ import { Badge } from '@/components/ui/badge';
 import { 
   History, GitBranch, Download, Upload, 
   Save, RotateCcw, Tag, Calendar, User,
-  MoreVertical, Eye, Copy, Trash2,
-  EyeOff
+  MoreVertical, Eye, Copy, Trash2
 } from 'lucide-react';
-import { QuizFunnel } from '@/interfaces/quiz';
-
-// Define QuizVariant type
-interface QuizVariant {
-  id: string;
-  name: string;
-  description: string;
-  pages: any[];
-  trafficPercent: number;
-  isActive: boolean;
-  createdAt: string;
-}
+import { QuizFunnel, QuizVariant } from '@/interfaces/quiz';
 import { useVersionManager } from '@/hooks/useVersionManager';
 import styles from '@/styles/editor.module.css';
 
@@ -89,7 +77,7 @@ const VersioningPanel: React.FC<VersioningPanelProps> = ({
 
     const updatedFunnel = {
       ...funnel,
-      variants: [...((funnel as any).variants || []), newVariant],
+      variants: [...(funnel.variants || []), newVariant],
     };
 
     onFunnelUpdate(updatedFunnel);
@@ -97,7 +85,7 @@ const VersioningPanel: React.FC<VersioningPanelProps> = ({
   };
 
   const handleDeleteVariant = (variantId: string) => {
-    const updatedVariants = ((funnel as any).variants || []).filter((v: any) => v.id !== variantId);
+    const updatedVariants = (funnel.variants || []).filter(v => v.id !== variantId);
     const updatedFunnel = {
       ...funnel,
       variants: updatedVariants,
@@ -106,7 +94,7 @@ const VersioningPanel: React.FC<VersioningPanelProps> = ({
   };
 
   const handleToggleVariant = (variantId: string) => {
-    const updatedVariants = ((funnel as any).variants || []).map((variant: any) =>
+    const updatedVariants = (funnel.variants || []).map(variant =>
       variant.id === variantId
         ? { ...variant, isActive: !variant.isActive }
         : variant
@@ -346,7 +334,7 @@ const VersioningPanel: React.FC<VersioningPanelProps> = ({
             </Card>
 
             <div className={styles.variantsList}>
-              {((funnel as any).variants || []).map((variant: any) => (
+              {(funnel.variants || []).map((variant) => (
                 <Card key={variant.id} className={styles.variantCard}>
                   <CardHeader className={styles.variantHeader}>
                     <div className={styles.variantInfo}>
@@ -404,7 +392,7 @@ const VersioningPanel: React.FC<VersioningPanelProps> = ({
                 </Card>
               ))}
 
-              {(!(funnel as any).variants || (funnel as any).variants.length === 0) && (
+              {(!funnel.variants || funnel.variants.length === 0) && (
                 <div className={styles.emptyState}>
                   <GitBranch className="h-12 w-12 opacity-50" />
                   <h3>Nenhum teste A/B configurado</h3>

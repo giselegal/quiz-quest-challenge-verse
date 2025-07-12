@@ -1,49 +1,69 @@
 
 import { useState, useCallback } from 'react';
-import { Block, BlockType, EditableContent } from '@/types/editor';
+import { EditorBlock, EditorConfig, EditableContent } from '@/types/editor';
+import { EditorActions } from '@/types/editorActions';
+import { getDefaultContentForType } from '@/utils/editorDefaults';
+import { generateId } from '@/utils/idGenerator';
 
-export const useEditorBlocks = (initialBlocks: Block[] = []) => {
-  const [blocks, setBlocks] = useState<Block[]>(initialBlocks);
-  const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
-
-  const addBlock = useCallback((type: BlockType): string => {
-    const newBlock: Block = {
-      id: `block-${Date.now()}`,
+export const useEditorBlocks = (
+  config: EditorConfig,
+  setConfig: (config: EditorConfig) => void
+): EditorActions => {
+  const addBlock = useCallback((type: EditorBlock['type']) => {
+    const blocksLength = config.blocks.length;
+    const newBlock: EditorBlock = {
+      id: generateId(),
       type,
-      content: {} as EditableContent,
-      order: blocks.length,
-      visible: true,
-      properties: {}
+      content: getDefaultContentForType(type),
+      order: blocksLength
     };
     
-    setBlocks(prev => [...prev, newBlock]);
-    return newBlock.id;
-  }, [blocks.length]);
+    setConfig({
+      ...config,
+      blocks: [...config.blocks, newBlock]
+    });
 
-  const updateBlock = useCallback((id: string, updates: Partial<Block>) => {
-    setBlocks(prev => prev.map(block =>
-      block.id === id ? { ...block, ...updates } : block
-    ));
-  }, []);
+    return newBlock.id;
+  }, [config, setConfig]);
+
+  const updateBlock = useCallback((id: string, content: Partial<EditableContent>) => {
+    setConfig({
+      ...config,
+      blocks: config.blocks.map(block =>
+        block.id === id
+          ? { ...block, content: { ...block.content, ...content } }
+          : block
+      )
+    });
+  }, [config, setConfig]);
 
   const deleteBlock = useCallback((id: string) => {
-    setBlocks(prev => prev.filter(block => block.id !== id));
-  }, []);
+    setConfig({
+      ...config,
+      blocks: config.blocks
+        .filter(block => block.id !== id)
+        .map((block, index) => ({
+          ...block,
+          order: index
+        }))
+    });
+  }, [config, setConfig]);
 
   const reorderBlocks = useCallback((startIndex: number, endIndex: number) => {
-    setBlocks(prev => {
-      const result = Array.from(prev);
-      const [removed] = result.splice(startIndex, 1);
-      result.splice(endIndex, 0, removed);
-      return result.map((block, index) => ({ ...block, order: index }));
+    const newBlocks = Array.from(config.blocks);
+    const [removed] = newBlocks.splice(startIndex, 1);
+    newBlocks.splice(endIndex, 0, removed);
+    
+    setConfig({
+      ...config,
+      blocks: newBlocks.map((block, index) => ({
+        ...block,
+        order: index
+      }))
     });
-  }, []);
+  }, [config, setConfig]);
 
   return {
-    blocks,
-    setBlocks,
-    selectedBlockId,
-    setSelectedBlockId,
     addBlock,
     updateBlock,
     deleteBlock,

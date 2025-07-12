@@ -1,9 +1,12 @@
+
 import React from 'react';
 import { Check, X, Star, Shield, Zap } from 'lucide-react';
 import type { BlockComponentProps } from '@/types/blocks';
 
-interface ProsConsBlockProps extends Omit<BlockComponentProps, 'block'> {
-  block: BlockComponentProps['block'] & {
+interface ProsConsBlockProps extends BlockComponentProps {
+  block: {
+    id: string;
+    type: 'pros-cons';
     properties: {
       title?: string;
       subtitle?: string;

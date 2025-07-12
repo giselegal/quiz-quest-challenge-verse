@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { QuizQuestion } from '../../types/quiz';
 
 export const selfPerceptionQuestions: QuizQuestion[] = [
