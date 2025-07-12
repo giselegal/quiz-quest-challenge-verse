@@ -1,4 +1,4 @@
-// lovable.ts - Configuração principal do Lovable
+// lovable.tsx - Configuração principal do Lovable
 import React from 'react';
 
 // Tipos para o sistema Lovable
@@ -19,11 +19,27 @@ export interface LovableComponent {
 // Função principal para definir componentes Lovable
 export function defineLovable(component: LovableComponent) {
   // Em desenvolvimento, registra o componente para o editor
-  if (typeof window !== 'undefined' && window.location.search.includes('lovable=true')) {
-    if (!(window as any).LOVABLE_COMPONENTS) {
-      (window as any).LOVABLE_COMPONENTS = {};
+  if (typeof window !== 'undefined') {
+    const isLovableMode = 
+      window.location.search.includes('lovable=true') ||
+      window.location.pathname.includes('/admin') ||
+      window.location.pathname === '/';
+    
+    if (isLovableMode) {
+      if (!(window as any).LOVABLE_COMPONENTS) {
+        (window as any).LOVABLE_COMPONENTS = {};
+      }
+      (window as any).LOVABLE_COMPONENTS[component.name] = component;
+      
+      // Configuração global do Lovable
+      (window as any).LOVABLE_CONFIG = {
+        projectId: 'quiz-sell-genius',
+        apiBaseUrl: 'https://api.lovable.dev',
+        editorMode: true
+      };
+      
+      console.log(`🎨 Lovable: Componente ${component.name} registrado`);
     }
-    (window as any).LOVABLE_COMPONENTS[component.name] = component;
   }
 
   // Retorna o componente React padrão
@@ -33,25 +49,21 @@ export function defineLovable(component: LovableComponent) {
   };
 }
 
-// Hook para desenvolvimento/editor
+// Hook simplificado para desenvolvimento/editor
 export function useLovableEditor() {
   const [isEditorMode, setIsEditorMode] = React.useState(false);
 
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
-      const isEditor = window.location.search.includes('lovable=true') ||
-                       window.location.pathname.includes('/admin') ||
-                       window.location.pathname === '/';
+      const isEditor = 
+        window.location.search.includes('lovable=true') ||
+        window.location.pathname.includes('/admin') ||
+        window.location.pathname === '/';
       
       setIsEditorMode(isEditor);
       
       if (isEditor) {
-        // Configurações específicas do editor
-        (window as any).LOVABLE_CONFIG = {
-          projectId: 'quiz-sell-genius',
-          apiBaseUrl: 'https://api.lovable.dev',
-          editorMode: true
-        };
+        console.log('🎨 Lovable: Modo editor ativado');
       }
     }
   }, []);
@@ -59,34 +71,20 @@ export function useLovableEditor() {
   return { isEditorMode };
 }
 
-// Utilitário para exportar componentes
-export function exportLovableComponent(component: LovableComponent) {
-  return {
-    component,
-    metadata: {
-      name: component.name,
-      displayName: component.displayName,
-      description: component.description,
-      category: component.category,
-      propsSchema: component.propsSchema
-    }
-  };
-}
-
-// Provider para contexto global
-export const LovableContext = React.createContext({
-  isEditorMode: false,
-  components: {} as Record<string, LovableComponent>
-});
-
+// Provider simplificado
 export function LovableProvider({ children }: { children: React.ReactNode }) {
   const { isEditorMode } = useLovableEditor();
-  const [components] = React.useState({});
+
+  React.useEffect(() => {
+    if (isEditorMode) {
+      console.log('🎨 Lovable: Provider ativo no modo editor');
+    }
+  }, [isEditorMode]);
 
   return (
-    <LovableContext.Provider value={{ isEditorMode, components }}>
+    <div className={isEditorMode ? 'lovable-editor-active' : ''}>
       {children}
-    </LovableContext.Provider>
+    </div>
   );
 }
 

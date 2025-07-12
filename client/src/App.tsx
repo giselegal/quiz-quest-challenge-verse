@@ -35,6 +35,7 @@ const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
 // Editor Principal - Consolidado
 const SchemaDrivenEditorPage = lazy(() => import("./pages/SchemaDrivenEditorPage"));
 const BlockDefinitionsTest = lazy(() => import("./components/editor/tests/BlockDefinitionsTest"));
+const LovableDemoPage = lazy(() => import("./pages/LovableDemoPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App = () => {
@@ -99,6 +100,11 @@ const App = () => {
                 <Route
                   path="/test-blocks"
                   component={BlockDefinitionsTest}
+                />
+                {/* Demo do Lovable */}
+                <Route
+                  path="/demo"
+                  component={LovableDemoPage}
                 />
                 {/* Admin - protegido com AdminAuthProvider */}
                 <Route path="/admin/:rest*">
