@@ -2,6 +2,8 @@
 export const strategicQuestions = [
   {
     id: 'strategic-1',
+    title: 'Como você se sente em relação ao seu estilo atual?',
+    text: 'Como você se sente em relação ao seu estilo atual?',
     question: 'Como você se sente em relação ao seu estilo atual?',
     type: 'single' as const,
     multiSelect: 1,
@@ -28,6 +30,8 @@ export const strategicQuestions = [
   },
   {
     id: 'strategic-2',
+    title: 'O que você mais gostaria de melhorar no seu guarda-roupa?',
+    text: 'O que você mais gostaria de melhorar no seu guarda-roupa?',
     question: 'O que você mais gostaria de melhorar no seu guarda-roupa?',
     type: 'single' as const,
     multiSelect: 1,
