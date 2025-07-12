@@ -18,7 +18,7 @@ const RESULT_CRITICAL_IMAGES = [
 
 interface StrategicQuestionsProps {
   currentQuestionIndex: number;
-  answers: Record<string, string[]>;
+  answers: string[] | Record<string, string[]>;
   onAnswer: (response: UserResponse) => void;
 }
 
@@ -34,7 +34,7 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
   useEffect(() => {
     if (!imagesPreloaded) {
       // Preload da questão estratégica atual
-      preloadCriticalImages("strategic");
+      preloadCriticalImages(["strategic"]);
       setImagesPreloaded(true);
     }
     
@@ -49,7 +49,7 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
         console.log(`[Otimização] Iniciando pré-carregamento progressivo de imagens de resultado`);
         
         // Inicia o preload da categoria principal de resultado
-        preloadCriticalImages('results');
+        preloadCriticalImages(['results']);
       }, 500); // Pequeno delay para não competir com recursos iniciais
     }
   }, [imagesPreloaded]);
@@ -63,13 +63,13 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
     // Carrega diferentes conjuntos de imagens com base no progresso
     if (currentQuestionIndex === 1) {
       // Na segunda questão estratégica, carrega transformações
-      preloadCriticalImages('transformation');
+      preloadCriticalImages(['transformation']);
     } else if (currentQuestionIndex === 2) {
       // Na terceira questão, carrega bônus
-      preloadCriticalImages('bonus');
+      preloadCriticalImages(['bonus']);
     } else if (currentQuestionIndex >= 3) {
       // Em questões posteriores, carrega depoimentos
-      preloadCriticalImages('testimonials');
+      preloadCriticalImages(['testimonials']);
       
       // Carrega imagens explícitas de alta prioridade
       preloadImagesByUrls(RESULT_CRITICAL_IMAGES);
@@ -83,7 +83,7 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
       <QuizQuestion
         question={strategicQuestions[currentQuestionIndex]}
         onAnswer={onAnswer}
-        currentAnswers={answers[strategicQuestions[currentQuestionIndex].id] || []}
+        currentAnswers={Array.isArray(answers) ? answers : (answers[strategicQuestions[currentQuestionIndex].id] || [])}
         autoAdvance={false}
         showQuestionImage={true}
         isStrategicQuestion={true}
