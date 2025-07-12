@@ -10,11 +10,11 @@ const Index: React.FC = () => {
       <div className="max-w-4xl mx-auto">
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle>Quiz Sell Genius</CardTitle>
+            <CardTitle>Quiz Quest Challenge Verse</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground mb-4">
-              Bem-vindo ao Quiz Sell Genius - Sua plataforma completa para criar quizzes interativos.
+              Bem-vindo ao Quiz Quest Challenge Verse - Sua plataforma completa para criar quizzes interativos e funis de conversão.
             </p>
             <div className="flex gap-4">
               <Button asChild>

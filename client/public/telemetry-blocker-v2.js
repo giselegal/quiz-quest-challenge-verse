@@ -1,33 +1,5 @@
-
-// Bloqueador de telemetria específico - permite recursos legítimo  // 3. Interceptar console.error e console.warn para filtrar logs
-  const originalConsoleError = console.error;
-  const originalConsoleWarn = console.warn;
-  
-  console.error = function() {
-    const message = Array.from(arguments).join(' ');
-    
-    // Verificar se é um erro de telemetria ou aviso específico
-    const isBlockedError = BLOCKED_PATTERNS.some(pattern => 
-      message.toLowerCase().includes(pattern.toLowerCase())
-    );
-    
-    const isBlockedWarning = shouldBlockWarning(message);
-    
-    if (!isBlockedError && !isBlockedWarning) {
-      originalConsoleError.apply(console, arguments);
-    }
-  };
-  
-  console.warn = function() {
-    const message = Array.from(arguments).join(' ');
-    
-    // Verificar se é um aviso que deve ser silenciado
-    const isBlockedWarning = shouldBlockWarning(message);
-    
-    if (!isBlockedWarning) {
-      originalConsoleWarn.apply(console, arguments);
-    }
-  };/ Deve ser carregado ANTES de qualquer outro script
+// Bloqueador de telemetria específico - permite recursos legítimos do Lovable
+// Deve ser carregado ANTES de qualquer outro script
 
 (function() {
   'use strict';
@@ -84,7 +56,6 @@
   XMLHttpRequest.prototype.open = function(method, url) {
     if (shouldBlock(url)) {
       console.log('🚫 Blocked XHR telemetry:', url);
-      // Criar um XHR "fake" que não faz nada
       this.send = function() {};
       this.setRequestHeader = function() {};
       return;
@@ -92,21 +63,45 @@
     return originalXHROpen.apply(this, arguments);
   };
   
-  // 3. Interceptar console.error para filtrar logs específicos
+  // 3. Interceptar console.error e console.warn para filtrar logs
   const originalConsoleError = console.error;
+  const originalConsoleWarn = console.warn;
+  
   console.error = function() {
     const message = Array.from(arguments).join(' ');
     
-    // Verificar se é um erro de telemetria específica
     const isBlockedError = BLOCKED_PATTERNS.some(pattern => 
       message.toLowerCase().includes(pattern.toLowerCase())
     );
     
-    if (!isBlockedError) {
+    const isBlockedWarning = shouldBlockWarning(message);
+    
+    if (!isBlockedError && !isBlockedWarning) {
       originalConsoleError.apply(console, arguments);
     }
   };
   
-  console.log('✅ Bloqueador de telemetria específico configurado');
+  console.warn = function() {
+    const message = Array.from(arguments).join(' ');
+    
+    const isBlockedWarning = shouldBlockWarning(message);
+    
+    if (!isBlockedWarning) {
+      originalConsoleWarn.apply(console, arguments);
+    }
+  };
+  
+  // 4. Interceptar window.onerror
+  const originalOnError = window.onerror;
+  window.onerror = function(message, source, lineno, colno, error) {
+    if (shouldBlock(source) || shouldBlock(message) || shouldBlockWarning(message)) {
+      return true;
+    }
+    if (originalOnError) {
+      return originalOnError.apply(this, arguments);
+    }
+  };
+  
+  console.log('✅ Bloqueador de telemetria configurado com sucesso');
   
 })();
