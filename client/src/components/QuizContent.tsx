@@ -53,7 +53,7 @@ export const QuizContent: React.FC<QuizContentProps> = ({
         {showingStrategicQuestions ? (
           <StrategicQuestions
             currentQuestionIndex={currentStrategicQuestionIndex}
-            answers={showingStrategicQuestions ? currentAnswers.reduce((acc, optionId) => {
+            answers={showingStrategicQuestions ? currentAnswers.reduce((acc: Record<string, string[]>, optionId) => {
               if (currentQuestion?.id) {
                 acc[currentQuestion.id] = [optionId];
               }

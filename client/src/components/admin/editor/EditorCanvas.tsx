@@ -1,6 +1,5 @@
 
 import React, { useState, useCallback } from 'react';
-import { useDrop } from 'react-dnd';
 import { DragEndEvent } from '@dnd-kit/core';
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
@@ -27,22 +26,18 @@ export default function EditorCanvas({
   selectedComponent 
 }: EditorCanvasProps) {
   
-  const [{ isOver }, dropRef] = useDrop<{ type: string }, void, { isOver: boolean }>(() => ({
-    accept: 'component',
-    drop: (item: { type: string }) => {
-      const newComponent: Component = {
-        id: `comp-${Date.now()}`,
-        type: item.type,
-        props: getDefaultProps(item.type)
-      };
-      
-      onChange([...components, newComponent]);
-      onSelectComponent(newComponent);
-    },
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
-    }),
-  }));
+  const [isOver, setIsOver] = useState(false);
+  
+  const handleDrop = (item: { type: string }) => {
+    const newComponent: Component = {
+      id: `comp-${Date.now()}`,
+      type: item.type,
+      props: getDefaultProps(item.type)
+    };
+    
+    onChange([...components, newComponent]);
+    onSelectComponent(newComponent);
+  };
 
   const getDefaultProps = (type: string): Record<string, any> => {
     switch (type) {
@@ -100,7 +95,7 @@ export default function EditorCanvas({
 
   return (
     <div 
-      ref={dropRef}
+      onClick={handleDrop}
       className={`min-h-[600px] rounded-lg border-2 border-dashed p-6 transition-colors ${
         isOver ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-white'
       }`}
