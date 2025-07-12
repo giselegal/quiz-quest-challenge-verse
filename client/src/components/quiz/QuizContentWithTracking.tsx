@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { QuizQuestion } from '../QuizQuestion';
 import { UserResponse } from '@/types/quiz';
@@ -58,13 +59,7 @@ export const QuizContentWithTracking: React.FC<QuizContentWithTrackingProps> = (
       
       trackUIInteraction(
         'question_view',
-        currentQuestion.id,
-        'question_displayed',
-        {
-          questionIndex: currentQuestionIndex,
-          questionType: showingStrategicQuestions ? 'strategic' : 'normal',
-          questionText: currentQuestion.question
-        }
+        currentQuestion.id
       );
     }
   }, [currentQuestion, currentQuestionIndex, showingStrategicQuestions, trackUIInteraction, resetTrackedPercentages]);
@@ -185,18 +180,11 @@ export const useQuizElementTracking = () => {
   };
 
   const trackFormInteraction = (formType: string, fieldName: string, action: string) => {
-    trackUIInteraction('form_field', fieldName, action, {
-      formType,
-      fieldName
-    });
+    trackUIInteraction('form_field', fieldName);
   };
 
   const trackProgressUpdate = (currentStep: number, totalSteps: number, percentage: number) => {
-    trackUIInteraction('progress_update', 'quiz_progress', 'progress_changed', {
-      currentStep,
-      totalSteps,
-      percentage
-    });
+    trackUIInteraction('progress_update', 'quiz_progress');
   };
 
   return {

@@ -12,7 +12,7 @@ export const useQuizLogic = () => {
   const questions: QuizQuestion[] = [
     {
       id: 'q1',
-      type: 'multiple-choice',
+      type: 'image',
       question: 'Qual é o seu estilo preferido?',
       options: [
         { id: 'opt1', text: 'Clássico', imageUrl: '', styleCategory: 'classic' },

@@ -1,10 +1,9 @@
 
 import { useCallback } from 'react';
-import { useRouter } from 'wouter';
+import { useLocation } from 'wouter';
 
 export const useQuizNavigation = () => {
-  const router = useRouter();
-  const navigate = router.navigate;
+  const [, navigate] = useLocation();
 
   const navigateToResult = useCallback(() => {
     navigate('/resultado');
