@@ -19,7 +19,7 @@ interface ComponentsSidebarProps {
   onComponentSelect: (type: BlockType) => void;
 }
 
-const componentTypes: Array<{ type: BlockType; label: string; icon: React.ComponentType }> = [
+const componentTypes: Array<{ type: BlockType; label: string; icon: React.ComponentType<any> }> = [
   { type: 'headline', label: 'Título', icon: Type },
   { type: 'text', label: 'Texto', icon: Type },
   { type: 'image', label: 'Imagem', icon: Image },
