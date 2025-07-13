@@ -19,56 +19,56 @@ export const caktoquizQuestions: QuizQuestion[] = [
         id: 'q1_a',
         text: 'Conforto, leveza e praticidade no vestir.',
         style: 'natural',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp',
+        imageUrl: '/quiz/option-11.webp',
         weight: 1
       },
       {
         id: 'q1_b',
         text: 'Discrição, caimento clássico e sobriedade.',
         style: 'classico',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp',
+        imageUrl: '/quiz/option-12.webp',
         weight: 1
       },
       {
         id: 'q1_c',
         text: 'Praticidade com um toque de estilo atual.',
         style: 'contemporaneo',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp',
+        imageUrl: '/quiz/option-4.webp',
         weight: 1
       },
       {
         id: 'q1_d',
         text: 'Elegância refinada, moderna e sem exageros.',
         style: 'elegante',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp',
+        imageUrl: '/quiz/option-14.webp',
         weight: 1
       },
       {
         id: 'q1_e',
         text: 'Delicadeza em tecidos suaves e fluidos.',
         style: 'romantico',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp',
+        imageUrl: '/quiz/option-15.webp',
         weight: 1
       },
       {
         id: 'q1_f',
         text: 'Sensualidade com destaque para o corpo.',
         style: 'sensual',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp',
+        imageUrl: '/quiz/option-16.webp',
         weight: 1
       },
       {
         id: 'q1_g',
         text: 'Impacto visual com peças estruturadas e assimétricas.',
         style: 'dramatico',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp',
+        imageUrl: '/quiz/option-17.webp',
         weight: 1
       },
       {
         id: 'q1_h',
         text: 'Mix criativo com formas ousadas e originais.',
         style: 'criativo',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp',
+        imageUrl: '/quiz/option-18.webp',
         weight: 1
       }
     ]
@@ -145,7 +145,7 @@ export const caktoquizQuestions: QuizQuestion[] = [
         id: 'q3_a',
         text: 'Visual leve, despojado e natural',
         style: 'natural',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp',
+        imageUrl: '/style-natural.webp',
         weight: 1
       },
       {
@@ -159,7 +159,7 @@ export const caktoquizQuestions: QuizQuestion[] = [
         id: 'q3_c',
         text: 'Visual casual com toque atual',
         style: 'contemporaneo',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp',
+        imageUrl: '/style-contemporary.webp',
         weight: 1
       },
       {

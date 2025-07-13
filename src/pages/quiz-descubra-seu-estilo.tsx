@@ -768,7 +768,7 @@ const DescubraSeuEstilo: React.FC = () => {
             <div className="order-1 md:order-1 space-y-6">
               <div className="text-center md:text-left mb-6">
                 <img
-                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
+                  src="/logo.webp"
                   alt="Gisele Galvão - Logo da Marca"
                   className="h-12 md:h-16 mx-auto md:mx-0 mb-4"
                 />
@@ -803,7 +803,7 @@ const DescubraSeuEstilo: React.FC = () => {
             <div className="order-2 md:order-2 relative">
               <div className="relative rounded-lg overflow-hidden shadow-2xl">
                 <img
-                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.jpg"
+                  src="/hero-image.jpg"
                   alt="Mulher descobrindo seu estilo autêntico"
                   className="w-full h-auto object-cover"
                 />
