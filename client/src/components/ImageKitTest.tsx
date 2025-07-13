@@ -7,17 +7,17 @@ const ImageKitTest: React.FC = () => {
   const images = [
     {
       name: 'Logo',
-      url: 'https://ik.imagekit.io/1wxfl3468/tr:w-120,h-50,q-80,f-webp/Estilos%20Universais%20Quiz/LOGO%20DA%20MARCA%20GISELE.png',
+      url: 'https://res.cloudinary.com/der8kogzu/image/upload/LOGO_DA_MARCA_GISELE_l78gin.png',
       alt: 'Logo da marca'
     },
     {
       name: 'Gisele - Pose Acessibilidade',
-      url: 'https://ik.imagekit.io/1wxfl3468/tr:w-400,h-500,q-85,f-webp/Estilos%20Universais%20Quiz/GISELE-GALV%C3%83O-POSE-ACESSIBILIDADE.jpg',
+      url: 'https://res.cloudinary.com/der8kogzu/image/upload/GISELE-GALVÃO-POSE-ACESSIBILIDADE_iyt9rg.jpg',
       alt: 'Gisele Galvão'
     },
     {
       name: 'Mulher Sem Estilo',
-      url: 'https://ik.imagekit.io/1wxfl3468/tr:w-500,h-350,q-80,f-webp/Estilos%20Universais%20Quiz/MULHER%20SEM%20ESTILO%20E%20PERDIDA_HH_0TRK1A',
+      url: 'https://res.cloudinary.com/der8kogzu/image/upload/MULHER_SEM_ESTILO_E_PERDIDA_HH_0TRK1A_hse63r.png',
       alt: 'Mulher sem estilo e perdida'
     },
     {

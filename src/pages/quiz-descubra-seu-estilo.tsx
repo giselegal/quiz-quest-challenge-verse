@@ -436,21 +436,21 @@ const customStyles = `
 
 // URLs das imagens (atualizadas para ImageKit com imagens reais)
 const HERO_IMAGE_URL =
-  "https://ik.imagekit.io/1wxfl3468/tr:w-400,h-300,q-80,f-webp/Estilos%20Universais%20Quiz/LOGO%20DA%20MARCA%20GISELE.png";
+  "https://res.cloudinary.com/der8kogzu/image/upload/LOGO_DA_MARCA_GISELE_l78gin.png";
 const HERO_COMPLEMENTARY_IMAGE_URL =
-  "https://ik.imagekit.io/1wxfl3468/tr:w-600,h-400,q-85,f-webp/Estilos%20Universais%20Quiz/GISELE-GALV%C3%83O-POSE-ACESSIBILIDADE.jpg";
+  "https://res.cloudinary.com/der8kogzu/image/upload/GISELE-GALVÃO-POSE-ACESSIBILIDADE_iyt9rg.jpg";
 const PROBLEM_IMAGE_URL =
-  "https://ik.imagekit.io/1wxfl3468/tr:w-500,h-350,q-80,f-webp/Estilos%20Universais%20Quiz/MULHER%20SEM%20ESTILO%20E%20PERDIDA_HH_0TRK1A";
+  "https://res.cloudinary.com/der8kogzu/image/upload/MULHER_SEM_ESTILO_E_PERDIDA_HH_0TRK1A_hse63r.png";
 const SOLUTION_QUIZ_IMAGE_URL =
-  "https://ik.imagekit.io/1wxfl3468/tr:w-500,h-350,q-80,f-webp/Estilos%20Universais%20Quiz/IMAGEM%208%20ESTILOS%20UNIVERSAIS_Sd9XfgcdH";
+  "https://res.cloudinary.com/der8kogzu/image/upload/IMAGEM_8_ESTILOS_UNIVERSAIS_Sd9XfgcdH_ievpxw.png";
 const GUIDES_BENEFITS_IMAGE_URL =
-  "https://ik.imagekit.io/1wxfl3468/tr:w-500,h-350,q-80,f-webp/Estilos%20Universais%20Quiz/MOCKUPS%20IMAGENS%20DO%20GUIA%20DE%20ESILOS";
+  "https://res.cloudinary.com/der8kogzu/image/upload/MOCKUPS_IMAGENS_DO_GUIA_DE_ESILOS_xdkpdn.png";
 const BONUS_1_KEY_PIECES_IMAGE_URL =
-  "https://ik.imagekit.io/1wxfl3468/tr:w-400,h-300,q-80,f-webp/Estilos%20Universais%20Quiz/PE%C3%87AS%20-%20CHAVE%20DO%20GUARDA-ROUPA%20DE%20SUCESSO%20-%20REVISTA%20-%20%20B%C3%94NUS%201";
+  "https://res.cloudinary.com/der8kogzu/image/upload/PEÇAS_-_CHAVE_DO_GUARDA-ROUPA_DE_SUCESSO_-_REVISTA_-_BÔNUS_1_lbv7qe.png";
 const BONUS_2_VISAGISM_IMAGE_URL =
-  "https://ik.imagekit.io/1wxfl3468/tr:w-400,h-300,q-80,f-webp/Estilos%20Universais%20Quiz/PE%C3%87AS%20-%20CHAVE%20DO%20GUARDA-ROUPA%20DE%20SUCESSO%20-%20IMAGENS%20CELULAR%20-%20GUIA%20VISAGISMO%20-%20B%C3%94NUS%201";
+  "https://res.cloudinary.com/der8kogzu/image/upload/PEÇAS_-_CHAVE_DO_GUARDA-ROUPA_DE_SUCESSO_-_IMAGENS_CELULAR_-_REVISTA_-_BÔNUS_1_jacoih.png";
 const GUARANTEE_IMAGE_URL =
-  "https://ik.imagekit.io/1wxfl3468/tr:w-300,h-200,q-80,f-webp/Estilos%20Universais%20Quiz/C%C3%B3pia%20de%2001.%20_P%C3%A1gina$$_%20-%20Produto%20de%20Entrada%20%20(1080%20x%201000%20px)%20(1).png";
+  "https://res.cloudinary.com/der8kogzu/image/upload/Cópia_de_01.__Página___-_Produto_de_Entrada_1080_x_1000_px_1_ugzu3n.png";
 
 // Dados para as seções da página
 const painPoints = [
@@ -803,7 +803,7 @@ const DescubraSeuEstilo: React.FC = () => {
             <div className="order-2 md:order-2 relative">
               <div className="relative rounded-lg overflow-hidden shadow-2xl">
                 <img
-                  src="https://ik.imagekit.io/1wxfl3468/tr:w-600,h-400,q-85,f-webp/hero-image.jpg"
+                  src="https://res.cloudinary.com/der8kogzu/image/upload/GISELE-GALVÃO-POSE-ACESSIBILIDADE_iyt9rg.jpg"
                   alt="Mulher descobrindo seu estilo autêntico"
                   className="w-full h-auto object-cover"
                 />
