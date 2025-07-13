@@ -434,23 +434,23 @@ const customStyles = `
   }
 `;
 
-// URLs das imagens (mantidas da versão original)
+// URLs das imagens (atualizadas para ImageKit com imagens reais)
 const HERO_IMAGE_URL =
-  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp";
+  "https://ik.imagekit.io/1wxfl3468/tr:w-400,h-300,q-80,f-webp/Estilos%20Universais%20Quiz/LOGO%20DA%20MARCA%20GISELE.png";
 const HERO_COMPLEMENTARY_IMAGE_URL =
-  "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.jpg";
+  "https://ik.imagekit.io/1wxfl3468/tr:w-600,h-400,q-85,f-webp/Estilos%20Universais%20Quiz/GISELE-GALV%C3%83O-POSE-ACESSIBILIDADE.jpg";
 const PROBLEM_IMAGE_URL =
-  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_9_mgkdnb.webp";
+  "https://ik.imagekit.io/1wxfl3468/tr:w-500,h-350,q-80,f-webp/Estilos%20Universais%20Quiz/MULHER%20SEM%20ESTILO%20E%20PERDIDA_HH_0TRK1A";
 const SOLUTION_QUIZ_IMAGE_URL =
-  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921098/Espanhol_Portugu%C3%AAs_5_cptzyb.webp";
+  "https://ik.imagekit.io/1wxfl3468/tr:w-500,h-350,q-80,f-webp/Estilos%20Universais%20Quiz/IMAGEM%208%20ESTILOS%20UNIVERSAIS_Sd9XfgcdH";
 const GUIDES_BENEFITS_IMAGE_URL =
-  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp";
+  "https://ik.imagekit.io/1wxfl3468/tr:w-500,h-350,q-80,f-webp/Estilos%20Universais%20Quiz/MOCKUPS%20IMAGENS%20DO%20GUIA%20DE%20ESILOS";
 const BONUS_1_KEY_PIECES_IMAGE_URL =
-  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921227/Espanhol_Portugu%C3%AAs_6_y4kqao.webp";
+  "https://ik.imagekit.io/1wxfl3468/tr:w-400,h-300,q-80,f-webp/Estilos%20Universais%20Quiz/PE%C3%87AS%20-%20CHAVE%20DO%20GUARDA-ROUPA%20DE%20SUCESSO%20-%20REVISTA%20-%20%20B%C3%94NUS%201";
 const BONUS_2_VISAGISM_IMAGE_URL =
-  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921365/Espanhol_Portugu%C3%AAs_7_eqgdqz.webp";
+  "https://ik.imagekit.io/1wxfl3468/tr:w-400,h-300,q-80,f-webp/Estilos%20Universais%20Quiz/PE%C3%87AS%20-%20CHAVE%20DO%20GUARDA-ROUPA%20DE%20SUCESSO%20-%20IMAGENS%20CELULAR%20-%20GUIA%20VISAGISMO%20-%20B%C3%94NUS%201";
 const GUARANTEE_IMAGE_URL =
-  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921750/Garantia_7_dias_j8mxth.webp";
+  "https://ik.imagekit.io/1wxfl3468/tr:w-300,h-200,q-80,f-webp/Estilos%20Universais%20Quiz/C%C3%B3pia%20de%2001.%20_P%C3%A1gina$$_%20-%20Produto%20de%20Entrada%20%20(1080%20x%201000%20px)%20(1).png";
 
 // Dados para as seções da página
 const painPoints = [

@@ -18,24 +18,23 @@ const colors = {
 };
 
 // --- Constantes e funções movidas para o escopo do módulo ---
-const LOGO_BASE_URL = 'https://res.cloudinary.com/dqljyf76t/image/upload/';
-const LOGO_IMAGE_ID = 'v1744911572/LOGO_DA_MARCA_GISELE_r14oz2';
+const LOGO_BASE_URL = 'https://ik.imagekit.io/1wxfl3468';
+const LOGO_IMAGE_PATH = '/Estilos%20Universais%20Quiz/LOGO%20DA%20MARCA%20GISELE.png';
 
-const INTRO_IMAGE_BASE_URL = 'https://res.cloudinary.com/dqljyf76t/image/upload/';
-const INTRO_IMAGE_ID =
-  'v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up';
+const INTRO_IMAGE_BASE_URL = 'https://ik.imagekit.io/1wxfl3468';
+const INTRO_IMAGE_PATH = '/Estilos%20Universais%20Quiz/GISELE-GALV%C3%83O-POSE-ACESSIBILIDADE.jpg';
 
-// Otimizado para carregamento mais rápido - URLs pré-construídas
+// Otimizado para carregamento mais rápido - URLs pré-construídas com ImageKit
 const STATIC_LOGO_IMAGE_URLS = {
-  webp: `${LOGO_BASE_URL}f_webp,q_70,w_120,h_50,c_fit/${LOGO_IMAGE_ID}.webp`,
-  png: `${LOGO_BASE_URL}f_png,q_70,w_120,h_50,c_fit/${LOGO_IMAGE_ID}.png`,
+  webp: `${LOGO_BASE_URL}/tr:f-webp,q-70,w-120,h-50,c-maintain_ratio${LOGO_IMAGE_PATH}`,
+  png: `${LOGO_BASE_URL}/tr:f-png,q-70,w-120,h-50,c-maintain_ratio${LOGO_IMAGE_PATH}`,
 };
 
-// Imagem LCP: Otimizada para carregamento mais rápido - URLs pré-construídas
+// Imagem LCP: Otimizada para carregamento mais rápido - URLs pré-construídas com ImageKit
 const STATIC_INTRO_IMAGE_URLS = {
-  avif: `${INTRO_IMAGE_BASE_URL}f_avif,q_85,w_300,c_limit/${INTRO_IMAGE_ID}.avif`,
-  webp: `${INTRO_IMAGE_BASE_URL}f_webp,q_85,w_300,c_limit/${INTRO_IMAGE_ID}.webp`,
-  png: `${INTRO_IMAGE_BASE_URL}f_png,q_85,w_300,c_limit/${INTRO_IMAGE_ID}.png`,
+  avif: `${INTRO_IMAGE_BASE_URL}/tr:f-avif,q-85,w-300,c-at_max${INTRO_IMAGE_PATH}`,
+  webp: `${INTRO_IMAGE_BASE_URL}/tr:f-webp,q-85,w-300,c-at_max${INTRO_IMAGE_PATH}`,
+  png: `${INTRO_IMAGE_BASE_URL}/tr:f-png,q-85,w-300,c-at_max${INTRO_IMAGE_PATH}`,
 };
 
 interface QuizIntroProps {

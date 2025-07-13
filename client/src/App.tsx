@@ -1,4 +1,3 @@
-
 import React, { Suspense, lazy, useEffect, useState } from "react";
 import { Router, Route, Switch } from "wouter";
 import { QuizProvider } from "./context/QuizContext";
@@ -90,6 +89,7 @@ const LandingPage = lazy(() => import("./pages/LandingPage"));
 const QuizPage = lazy(() => import("./components/QuizPage"));
 const TestResultPage = lazy(() => import("./pages/TestResultPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
+const ImageKitTest = lazy(() => import("./components/ImageKitTest"));
 
 const App = () => {
   const [isInitialized, setIsInitialized] = useState(false);
@@ -141,6 +141,9 @@ const App = () => {
               <Route path="/" component={LandingPage} />
               <Route path="/quiz" component={QuizPage} />
               <Route path="/test-resultado" component={TestResultPage} />
+              
+              {/* ImageKit Test Route */}
+              <Route path="/imagekit-test" component={ImageKitTest} />
               
               {/* 404 - Fallback for not found routes */}
               <Route path="*" component={NotFoundPage} />

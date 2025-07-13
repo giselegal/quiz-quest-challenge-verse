@@ -6,6 +6,7 @@ export const imageKitConfig = {
   publicKey: "public_aefgGxZYG6EbJCM3mnwW7cw/r0g=",
   urlEndpoint: "https://ik.imagekit.io/1wxfl3468",
   transformationPosition: "path" as const,
+  authenticationEndpoint: "http://www.yourserver.com/auth",
 };
 
 /**
@@ -25,6 +26,7 @@ export const mapCloudinaryToImageKit = (cloudinaryUrl: string): string => {
   const mappings: Record<string, string> = {
     'LOGO_DA_MARCA_GISELE_r14oz2.webp': '/logo.webp',
     '4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.jpg': '/hero-image.jpg',
+    '20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.jpg': '/hero-image.jpg',
     '2_ziffwx.webp': '/style-natural.webp',
     '12_edlmwf.webp': '/style-classic.webp',
     '13_uvbciq.webp': '/style-contemporary.webp',
@@ -41,6 +43,12 @@ export const mapCloudinaryToImageKit = (cloudinaryUrl: string): string => {
     'GUIA_SEXY_t5x2ov.webp': '/guide-sexy.webp',
     'GUIA_DRAMÁTICO_mpn60d.webp': '/guide-dramatic.webp',
     'GUIA_CRIATIVO_ntbzph.webp': '/guide-creative.webp',
+    'Espanhol_Portugu%C3%AAs_9_mgkdnb.webp': '/problem-image.webp',
+    'Espanhol_Portugu%C3%AAs_5_cptzyb.webp': '/solution-quiz-image.webp',
+    'Espanhol_Portugu%C3%AAs_8_cgrhuw.webp': '/guides-benefits-image.webp',
+    'Espanhol_Portugu%C3%AAs_6_y4kqao.webp': '/bonus-key-pieces.webp',
+    'Espanhol_Portugu%C3%AAs_7_eqgdqz.webp': '/bonus-visagism.webp',
+    'Garantia_7_dias_j8mxth.webp': '/guarantee-7-days.webp',
   };
   
   return mappings[filename] || `/images/${filename}`;
