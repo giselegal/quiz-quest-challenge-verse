@@ -1,6 +1,33 @@
 {
-  "totalImages": 151,
+  "totalImages": 154,
   "images": {
+    "mockuptabletvisagismokq6yew": {
+      "originalName": "MOCKUP_TABLET_VISAGISMO_kq6yew",
+      "url": "https://res.cloudinary.com/der8kogzu/image/upload/v1752444310/MOCKUP_TABLET_VISAGISMO_kq6yew.png",
+      "width": 2938,
+      "height": 2128,
+      "format": "png",
+      "size": 3392111,
+      "cleanName": "mockuptabletvisagismokq6yew"
+    },
+    "mockupsrevistacelularguiadeestilowd8uec": {
+      "originalName": "MOCKUPS_REVISTA_CELULAR_GUIA_DE_ESTILO_wd8uec",
+      "url": "https://res.cloudinary.com/der8kogzu/image/upload/v1752444259/MOCKUPS_REVISTA_CELULAR_GUIA_DE_ESTILO_wd8uec.png",
+      "width": 2812,
+      "height": 2631,
+      "format": "png",
+      "size": 3798222,
+      "cleanName": "mockupsrevistacelularguiadeestilowd8uec"
+    },
+    "geminigeneratedimagei5cst6i5cst6i5csfpoukb": {
+      "originalName": "Gemini_Generated_Image_i5cst6i5cst6i5cs_fpoukb",
+      "url": "https://res.cloudinary.com/der8kogzu/image/upload/v1752443943/Gemini_Generated_Image_i5cst6i5cst6i5cs_fpoukb.png",
+      "width": 2048,
+      "height": 2048,
+      "format": "png",
+      "size": 5725592,
+      "cleanName": "geminigeneratedimagei5cst6i5cst6i5csfpoukb"
+    },
     "estilosuniversaisquiz1rklt2f": {
       "originalName": "Estilos_Universais_Quiz_1_rklt2f",
       "url": "https://res.cloudinary.com/der8kogzu/image/upload/v1752431503/Estilos_Universais_Quiz_1_rklt2f.png",
@@ -1361,5 +1388,5 @@
       "cleanName": "sample"
     }
   },
-  "generatedAt": "2025-07-13T19:23:08.824Z"
+  "generatedAt": "2025-07-13T22:06:51.245Z"
 }

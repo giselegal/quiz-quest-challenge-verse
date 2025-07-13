@@ -18,11 +18,11 @@ const colors = {
 };
 
 // --- Constantes e funções movidas para o escopo do módulo ---
-const LOGO_BASE_URL = 'https://res.cloudinary.com/der8kogzu/image/upload';
+const LOGO_BASE_URL = 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430327';
 const LOGO_IMAGE_PATH = '/LOGO_DA_MARCA_GISELE_l78gin.png';
 
-const INTRO_IMAGE_BASE_URL = 'https://res.cloudinary.com/der8kogzu/image/upload';
-const INTRO_IMAGE_PATH = '/GISELE-GALVÃO-POSE-ACESSIBILIDADE_iyt9rg.jpg';
+const INTRO_IMAGE_BASE_URL = 'https://res.cloudinary.com/der8kogzu/image/upload/v1752443943';
+const INTRO_IMAGE_PATH = '/Gemini_Generated_Image_i5cst6i5cst6i5cs_fpoukb.png';
 
 // Otimizado para carregamento mais rápido - URLs diretas do Cloudinary
 const STATIC_LOGO_IMAGE_URLS = {
