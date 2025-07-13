@@ -12,7 +12,7 @@ interface LogoProps {
 }
 
 const Logo: React.FC<LogoProps> = ({ 
-  src = "https://ik.imagekit.io/1wxfl3468/tr:w-300,h-150,q-90,f-webp/logo.webp",
+  src = "https://res.cloudinary.com/der8kogzu/image/upload/LOGO_DA_MARCA_GISELE_l78gin.png",
   alt = "Logo Gisele Galvão",
   className = "h-14 mx-auto", 
   style,

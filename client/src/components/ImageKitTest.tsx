@@ -1,7 +1,7 @@
 import React from 'react';
 
 /**
- * Componente para testar se todas as imagens ImageKit estão carregando
+ * Componente para testar se todas as imagens Cloudinary estão carregando
  */
 const ImageKitTest: React.FC = () => {
   const images = [
@@ -22,69 +22,69 @@ const ImageKitTest: React.FC = () => {
     },
     {
       name: '8 Estilos Universais',
-      url: 'https://ik.imagekit.io/1wxfl3468/tr:w-500,h-350,q-80,f-webp/Estilos%20Universais%20Quiz/IMAGEM%208%20ESTILOS%20UNIVERSAIS_Sd9XfgcdH',
+      url: 'https://res.cloudinary.com/der8kogzu/image/upload/IMAGEM_8_ESTILOS_UNIVERSAIS_Sd9XfgcdH_ievpxw.png',
       alt: '8 Estilos Universais'
     },
     {
       name: 'Mockups Guias',
-      url: 'https://ik.imagekit.io/1wxfl3468/tr:w-500,h-350,q-80,f-webp/Estilos%20Universais%20Quiz/MOCKUPS%20IMAGENS%20DO%20GUIA%20DE%20ESILOS',
+      url: 'https://res.cloudinary.com/der8kogzu/image/upload/MOCKUPS_IMAGENS_DO_GUIA_DE_ESILOS_xdkpdn.png',
       alt: 'Mockups dos guias de estilo'
     },
     {
       name: 'Bônus 1 - Peças Chave',
-      url: 'https://ik.imagekit.io/1wxfl3468/tr:w-400,h-300,q-80,f-webp/Estilos%20Universais%20Quiz/PE%C3%87AS%20-%20CHAVE%20DO%20GUARDA-ROUPA%20DE%20SUCESSO%20-%20REVISTA%20-%20%20B%C3%94NUS%201',
+      url: 'https://res.cloudinary.com/der8kogzu/image/upload/PEÇAS_-_CHAVE_DO_GUARDA-ROUPA_DE_SUCESSO_-_REVISTA_-_BÔNUS_1_lbv7qe.png',
       alt: 'Bônus peças-chave'
     },
     {
       name: 'Bônus 2 - Visagismo',
-      url: 'https://ik.imagekit.io/1wxfl3468/tr:w-400,h-300,q-80,f-webp/Estilos%20Universais%20Quiz/PE%C3%87AS%20-%20CHAVE%20DO%20GUARDA-ROUPA%20DE%20SUCESSO%20-%20IMAGENS%20CELULAR%20-%20GUIA%20VISAGISMO%20-%20B%C3%94NUS%201',
+      url: 'https://res.cloudinary.com/der8kogzu/image/upload/PEÇAS_-_CHAVE_DO_GUARDA-ROUPA_DE_SUCESSO_-_IMAGENS_CELULAR_-_REVISTA_-_BÔNUS_1_jacoih.png',
       alt: 'Bônus visagismo'
     },
     {
       name: 'Garantia',
-      url: 'https://ik.imagekit.io/1wxfl3468/tr:w-300,h-200,q-80,f-webp/Estilos%20Universais%20Quiz/C%C3%B3pia%20de%2001.%20_P%C3%A1gina$$_%20-%20Produto%20de%20Entrada%20%20(1080%20x%201000%20px)%20(1).png',
+      url: 'https://res.cloudinary.com/der8kogzu/image/upload/Cópia_de_01.__Página___-_Produto_de_Entrada_1080_x_1000_px_1_ugzu3n.png',
       alt: 'Garantia do produto'
     },
     // Guias de Estilo
     {
       name: 'Guia Natural',
-      url: 'https://ik.imagekit.io/1wxfl3468/tr:w-300,h-400,q-80,f-webp/Estilos%20Universais%20Quiz/GUIA%20NATURAL.png',
+      url: 'https://res.cloudinary.com/der8kogzu/image/upload/GUIA_NATURAL_dlhcwm.png',
       alt: 'Guia Estilo Natural'
     },
     {
       name: 'Guia Clássico',
-      url: 'https://ik.imagekit.io/1wxfl3468/tr:w-300,h-400,q-80,f-webp/Estilos%20Universais%20Quiz/GUIA%20CL%C3%81SSICO.png',
+      url: 'https://res.cloudinary.com/der8kogzu/image/upload/GUIA_CLÁSSICO_rfpptj.png',
       alt: 'Guia Estilo Clássico'
     },
     {
       name: 'Guia Contemporâneo',
-      url: 'https://ik.imagekit.io/1wxfl3468/tr:w-300,h-400,q-80,f-webp/Estilos%20Universais%20Quiz/GUIA%20CONTEMPOR%C3%82NEO.png',
+      url: 'https://res.cloudinary.com/der8kogzu/image/upload/GUIA_CONTEMPORÂNEO_hqqqzp.png',
       alt: 'Guia Estilo Contemporâneo'
     },
     {
       name: 'Guia Elegante',
-      url: 'https://ik.imagekit.io/1wxfl3468/tr:w-300,h-400,q-80,f-webp/Estilos%20Universais%20Quiz/GUIA%20ELEGANTE.png',
+      url: 'https://res.cloudinary.com/der8kogzu/image/upload/GUIA_ELEGANTE_mdozq9.png',
       alt: 'Guia Estilo Elegante'
     },
     // Imagens do Quiz Q1
     {
       name: 'Q1 - Natural',
-      url: 'https://ik.imagekit.io/1wxfl3468/tr:w-200,h-150,q-80,f-webp/Estilos%20Universais%20Quiz/Q1%20-%20A).png',
+      url: 'https://res.cloudinary.com/der8kogzu/image/upload/Q1_-_A_xlh5cg.png',
       alt: 'Quiz - Estilo Natural'
     },
     {
       name: 'Q1 - Clássico',
-      url: 'https://ik.imagekit.io/1wxfl3468/tr:w-200,h-150,q-80,f-webp/Estilos%20Universais%20Quiz/Q1%20-%20B).png',
+      url: 'https://res.cloudinary.com/der8kogzu/image/upload/Q1_-_B_bm79bg.png',
       alt: 'Quiz - Estilo Clássico'
     },
     {
       name: 'Q1 - Contemporâneo',
-      url: 'https://ik.imagekit.io/1wxfl3468/tr:w-200,h-150,q-80,f-webp/Estilos%20Universais%20Quiz/Q1%20-%20C).png',
+      url: 'https://res.cloudinary.com/der8kogzu/image/upload/Q1_-_C_n2at5j.png',
       alt: 'Quiz - Estilo Contemporâneo'
     },
     {
       name: 'Q1 - Elegante',
-      url: 'https://ik.imagekit.io/1wxfl3468/tr:w-200,h-150,q-80,f-webp/Estilos%20Universais%20Quiz/Q1%20-%20D).png',
+      url: 'https://res.cloudinary.com/der8kogzu/image/upload/Q1_-_D_psbhs9.png',
       alt: 'Quiz - Estilo Elegante'
     }
   ];
@@ -99,7 +99,7 @@ const ImageKitTest: React.FC = () => {
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6 text-center">Teste ImageKit - Quiz Quest</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">Teste Cloudinary - Quiz Quest</h1>
       
       <div className="mb-6 p-4 bg-blue-50 rounded-lg">
         <h2 className="text-lg font-semibold mb-2">Status do Teste</h2>

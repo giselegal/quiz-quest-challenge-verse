@@ -18,11 +18,11 @@ const colors = {
 };
 
 // --- Constantes e funções movidas para o escopo do módulo ---
-const LOGO_BASE_URL = 'https://ik.imagekit.io/1wxfl3468';
-const LOGO_IMAGE_PATH = '/Estilos%20Universais%20Quiz/LOGO%20DA%20MARCA%20GISELE.png';
+const LOGO_BASE_URL = 'https://res.cloudinary.com/der8kogzu/image/upload';
+const LOGO_IMAGE_PATH = '/LOGO_DA_MARCA_GISELE_l78gin.png';
 
-const INTRO_IMAGE_BASE_URL = 'https://ik.imagekit.io/1wxfl3468';
-const INTRO_IMAGE_PATH = '/Estilos%20Universais%20Quiz/GISELE-GALV%C3%83O-POSE-ACESSIBILIDADE.jpg';
+const INTRO_IMAGE_BASE_URL = 'https://res.cloudinary.com/der8kogzu/image/upload';
+const INTRO_IMAGE_PATH = '/GISELE-GALVÃO-POSE-ACESSIBILIDADE_iyt9rg.jpg';
 
 // Otimizado para carregamento mais rápido - URLs pré-construídas com ImageKit
 const STATIC_LOGO_IMAGE_URLS = {
