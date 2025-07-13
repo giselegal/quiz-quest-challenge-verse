@@ -8,7 +8,7 @@ export const QUIZ_IMAGES = {
   // ===============================
   intro: {
     logo: "https://res.cloudinary.com/der8kogzu/image/upload/v1752430327/LOGO_DA_MARCA_GISELE_l78gin.png",
-    heroImage: "https://res.cloudinary.com/der8kogzu/image/upload/v1752443943/Gemini_Generated_Image_i5cst6i5cst6i5cs_fpoukb.png"
+    heroImage: "https://res.cloudinary.com/der8kogzu/image/upload/v1752448832/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_oelynz.png"
   },
 
   // ===============================
