@@ -803,7 +803,7 @@ const DescubraSeuEstilo: React.FC = () => {
             <div className="order-2 md:order-2 relative">
               <div className="relative rounded-lg overflow-hidden shadow-2xl">
                 <img
-                  src="/hero-image.jpg"
+                  src="https://ik.imagekit.io/1wxfl3468/tr:w-600,h-400,q-85,f-webp/hero-image.jpg"
                   alt="Mulher descobrindo seu estilo autêntico"
                   className="w-full h-auto object-cover"
                 />

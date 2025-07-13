@@ -57,10 +57,20 @@ export const optimizeImageQuality = (
   imageUrl: string,
   quality: number = 70
 ): string => {
-  const url = new URL(imageUrl);
-  const baseUrl = `https://res.cloudinary.com/${url.hostname}/image/upload/q_${quality},f_auto`;
-  const imagePath = url.pathname;
-  return `${baseUrl}${imagePath}`;
+  // If it's a relative path or ImageKit URL, return as is
+  if (!imageUrl.includes('cloudinary.com') || imageUrl.startsWith('/')) {
+    return imageUrl;
+  }
+  
+  try {
+    const url = new URL(imageUrl);
+    const baseUrl = `https://res.cloudinary.com/${url.hostname}/image/upload/q_${quality},f_auto`;
+    const imagePath = url.pathname;
+    return `${baseUrl}${imagePath}`;
+  } catch (error) {
+    console.warn('Failed to optimize image URL:', imageUrl, error);
+    return imageUrl;
+  }
 };
 
 /**
@@ -70,10 +80,20 @@ export const convertImageFormat = (
   imageUrl: string,
   format: 'webp' | 'avif' = 'webp'
 ): string => {
-  const url = new URL(imageUrl);
-  const baseUrl = `https://res.cloudinary.com/${url.hostname}/image/upload/f_${format},q_auto`;
-  const imagePath = url.pathname;
-  return `${baseUrl}${imagePath}`;
+  // If it's a relative path or ImageKit URL, return as is
+  if (!imageUrl.includes('cloudinary.com') || imageUrl.startsWith('/')) {
+    return imageUrl;
+  }
+  
+  try {
+    const url = new URL(imageUrl);
+    const baseUrl = `https://res.cloudinary.com/${url.hostname}/image/upload/f_${format},q_auto`;
+    const imagePath = url.pathname;
+    return `${baseUrl}${imagePath}`;
+  } catch (error) {
+    console.warn('Failed to convert image format:', imageUrl, error);
+    return imageUrl;
+  }
 };
 
 /**
@@ -83,10 +103,20 @@ export const resizeImage = (
   imageUrl: string,
   width: number
 ): string => {
-  const url = new URL(imageUrl);
-  const baseUrl = `https://res.cloudinary.com/${url.hostname}/image/upload/w_${width},c_scale`;
-  const imagePath = url.pathname;
-  return `${baseUrl}${imagePath}`;
+  // If it's a relative path or ImageKit URL, return as is
+  if (!imageUrl.includes('cloudinary.com') || imageUrl.startsWith('/')) {
+    return imageUrl;
+  }
+  
+  try {
+    const url = new URL(imageUrl);
+    const baseUrl = `https://res.cloudinary.com/${url.hostname}/image/upload/w_${width},c_scale`;
+    const imagePath = url.pathname;
+    return `${baseUrl}${imagePath}`;
+  } catch (error) {
+    console.warn('Failed to resize image:', imageUrl, error);
+    return imageUrl;
+  }
 };
 
 /**
@@ -96,10 +126,20 @@ export const applyCloudinaryTransformations = (
   imageUrl: string,
   transformations: string
 ): string => {
-  const url = new URL(imageUrl);
-  const baseUrl = `https://res.cloudinary.com/${url.hostname}/image/upload/${transformations}`;
-  const imagePath = url.pathname;
-  return `${baseUrl}${imagePath}`;
+  // If it's a relative path or ImageKit URL, return as is
+  if (!imageUrl.includes('cloudinary.com') || imageUrl.startsWith('/')) {
+    return imageUrl;
+  }
+  
+  try {
+    const url = new URL(imageUrl);
+    const baseUrl = `https://res.cloudinary.com/${url.hostname}/image/upload/${transformations}`;
+    const imagePath = url.pathname;
+    return `${baseUrl}${imagePath}`;
+  } catch (error) {
+    console.warn('Failed to apply transformations:', imageUrl, error);
+    return imageUrl;
+  }
 };
 
 /**
