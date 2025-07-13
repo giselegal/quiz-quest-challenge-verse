@@ -11,14 +11,14 @@ export const accessoriesQuestions: QuizQuestion[] = [
       {
         id: '8a',
         text: 'Tênis nude casual e confortável.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735426/47_bi6vgf.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430297/Q8_-_A_zk7yf0.png',
         styleCategory: 'Natural',
         points: 1
       },
       {
         id: '8b',
         text: 'Scarpin nude de salto baixo.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735427/48_ymo1ur.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430300/Q8_-_B_azy3ox.png',
         styleCategory: 'Clássico',
         points: 1
       },
