@@ -21,8 +21,8 @@ const colors = {
 const LOGO_BASE_URL = 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430327';
 const LOGO_IMAGE_PATH = '/LOGO_DA_MARCA_GISELE_l78gin.png';
 
-const INTRO_IMAGE_BASE_URL = 'https://res.cloudinary.com/der8kogzu/image/upload/v1752443943';
-const INTRO_IMAGE_PATH = '/Gemini_Generated_Image_i5cst6i5cst6i5cs_fpoukb.png';
+const INTRO_IMAGE_BASE_URL = 'https://res.cloudinary.com/der8kogzu/image/upload/v1752448832';
+const INTRO_IMAGE_PATH = '/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_oelynz.png';
 
 // Otimizado para carregamento mais rápido - URLs diretas do Cloudinary
 const STATIC_LOGO_IMAGE_URLS = {
