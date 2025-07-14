@@ -212,56 +212,48 @@ export const caktoquizQuestions: QuizQuestion[] = [
         id: 'q4_a',
         text: 'Poucos detalhes, básico e prático',
         style: 'natural',
-        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430276/Q4_-_A_k6gvtc.png',
         weight: 1
       },
       {
         id: 'q4_b',
         text: 'Bem discretos e sutis, clean e clássico',
         style: 'classico',
-        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430277/Q4_-_B_a1emi6.png',
         weight: 1
       },
       {
         id: 'q4_c',
         text: 'Básico, mas com um toque de estilo',
         style: 'contemporaneo',
-        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430277/Q4_-_C_ywcxcx.png',
         weight: 1
       },
       {
         id: 'q4_d',
         text: 'Detalhes refinados, chic e que deem status',
         style: 'elegante',
-        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430277/Q4_-_D_y7u29d.png',
         weight: 1
       },
       {
         id: 'q4_e',
         text: 'Detalhes delicados, laços, babados',
         style: 'romantico',
-        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430277/Q4_-_E_gnuvl3.png',
         weight: 1
       },
       {
         id: 'q4_f',
         text: 'Roupas que valorizem meu corpo: couro, zíper, fendas',
         style: 'sensual',
-        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430291/Q4_-_F_lzrw2j.png',
         weight: 1
       },
       {
         id: 'q4_g',
         text: 'Detalhes marcantes, firmeza e peso',
         style: 'dramatico',
-        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430289/Q4_-_G_vr81is.png',
         weight: 1
       },
       {
         id: 'q4_h',
         text: 'Detalhes diferentes do convencional, produções ousadas',
         style: 'criativo',
-        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430290/Q4_-_H_yjbt0s.png',
         weight: 1
       }
     ]

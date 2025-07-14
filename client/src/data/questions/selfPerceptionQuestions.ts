@@ -6,7 +6,6 @@ export const selfPerceptionQuestions: QuizQuestion[] = [
     title: 'Como você se sente em relação ao seu estilo pessoal hoje?',
     type: 'text',
     multiSelect: 1,
-    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_00_30_44_naqom0.webp',
     options: [
       {
         id: 'strategic-1-1',

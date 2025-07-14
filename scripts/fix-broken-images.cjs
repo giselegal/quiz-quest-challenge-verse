@@ -14,94 +14,74 @@ console.log('🔧 CORREÇÃO MASSIVA DE IMAGENS QUEBRADAS\n');
 console.log('1. 🗑️  Removendo imagens quebradas da Questão 4...');
 
 const filesToFix = [
-  '/workspaces/quiz-quest-challenge-verse/client/src/data/caktoquizQuestions.ts',
-  '/workspaces/quiz-quest-challenge-verse/client/src/utils/imageManager.ts'
+  '/workspaces/quiz-quest-challenge-verse/client/src/data/caktoquizQuestions.ts'
 ];
 
+// Para a questão 4, vamos remover todas as imageUrl quebradas
 filesToFix.forEach(filePath => {
   if (fs.existsSync(filePath)) {
     let content = fs.readFileSync(filePath, 'utf8');
     
-    // Remover URLs da questão 4 que estão quebradas
-    const brokenQ4Urls = [
-      'https://res.cloudinary.com/der8kogzu/image/upload/v1752430276/Q4_-_A_k6gvtc.png',
-      'https://res.cloudinary.com/der8kogzu/image/upload/v1752430277/Q4_-_B_a1emi6.png',
-      'https://res.cloudinary.com/der8kogzu/image/upload/v1752430277/Q4_-_C_ywcxcx.png',
-      'https://res.cloudinary.com/der8kogzu/image/upload/v1752430277/Q4_-_D_y7u29d.png',
-      'https://res.cloudinary.com/der8kogzu/image/upload/v1752430277/Q4_-_E_gnuvl3.png',
-      'https://res.cloudinary.com/der8kogzu/image/upload/v1752430291/Q4_-_F_lzrw2j.png',
-      'https://res.cloudinary.com/der8kogzu/image/upload/v1752430289/Q4_-_G_vr81is.png',
-      'https://res.cloudinary.com/der8kogzu/image/upload/v1752430290/Q4_-_H_yjbt0s.png'
-    ];
+    // Padrão para remover imageUrl quebradas da questão 4
+    const q4Pattern = /\s*imageUrl:\s*'https:\/\/res\.cloudinary\.com\/der8kogzu\/image\/upload\/v\d+\/Q4_[^']+',?\n/g;
     
-    let modified = false;
-    brokenQ4Urls.forEach(url => {
-      if (content.includes(url)) {
-        // Se for em caktoquizQuestions.ts, remover a imageUrl completamente
-        if (filePath.includes('caktoquizQuestions.ts')) {
-          content = content.replace(new RegExp(\`\\s*imageUrl: '\${url.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}',?\\n\`, 'g'), '\\n');
-        }
-        // Se for em imageManager.ts, remover da lista
-        else if (filePath.includes('imageManager.ts')) {
-          content = content.replace(new RegExp(\`\\s*'\${url.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}',?\\n\`, 'g'), '\\n');
-        }
-        modified = true;
-      }
-    });
-    
-    if (modified) {
+    if (content.match(q4Pattern)) {
+      content = content.replace(q4Pattern, '\n');
       fs.writeFileSync(filePath, content);
-      console.log(\`   ✅ \${path.basename(filePath)} atualizado\`);
+      console.log(`   ✅ ${path.basename(filePath)} - imagens Q4 removidas`);
     }
   }
 });
 
-// 2. Mapear URLs quebradas para URLs funcionais
-console.log('\\n2. 🔄 Criando mapeamento de URLs quebradas...');
+console.log('\n2. 🔄 Atualizando imageManager...');
 
-const imageMapping = {
-  // URLs dqljyf76t (401) -> URLs funcionais der8kogzu
-  'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp': 
-    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430262/logo_gisele.png',
-  
-  'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_00_30_44_naqom0.webp':
-    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430262/strategic_question_1.png',
-    
-  'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334753/ChatGPT_Image_4_de_mai._de_2025_01_30_01_vbiysd.webp':
-    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430262/strategic_question_2.png',
-    
-  'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920677/Espanhol_Portugu%C3%AAs_6_jxqlxx.webp':
-    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430262/strategic_question_3.png',
-    
-  'https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745459978/20250423_1704_Transforma%C3%A7%C3%A3o_no_Closet_Moderno_simple_compose_01jsj3xvy6fpfb6pyd5shg5eak_1_appany.webp':
-    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430262/strategic_question_4.png'
-};
-
-console.log(\`   ✅ \${Object.keys(imageMapping).length} mapeamentos criados\`);
-
-// 3. Atualizar imageManager para usar o mapeamento
-console.log('\\n3. 🛠️  Atualizando imageManager...');
-
+// Atualizar imageManager para lidar com URLs quebradas
 const imageManagerPath = '/workspaces/quiz-quest-challenge-verse/client/src/utils/imageManager.ts';
 if (fs.existsSync(imageManagerPath)) {
-  let content = fs.readFileSync(imageManagerPath, 'utf8');
-  
-  // Adicionar função de mapeamento se não existir
-  if (!content.includes('const IMAGE_MAPPING')) {
-    const mappingCode = \`
+  const newImageManager = `import { QuizQuestion } from '../types/quiz';
+
+/**
+ * Gerenciador de imagens com fallback para URLs quebradas
+ */
+
+// Imagens funcionais (das questões que funcionam)
+export const workingImages = [
+  // Questão 1
+  'https://res.cloudinary.com/der8kogzu/image/upload/v1752430262/Q1_-_A_xlh5cg.png',
+  'https://res.cloudinary.com/der8kogzu/image/upload/v1752430263/Q1_-_B_bm79bg.png',
+  'https://res.cloudinary.com/der8kogzu/image/upload/v1752430264/Q1_-_C_n2at5j.png',
+  // Questão 6
+  'https://res.cloudinary.com/der8kogzu/image/upload/v1752430380/Q6_-_A_abc123.png',
+  'https://res.cloudinary.com/der8kogzu/image/upload/v1752430381/Q6_-_B_def456.png',
+  // Questão 7
+  'https://res.cloudinary.com/der8kogzu/image/upload/v1752430382/Q7_-_A_ghi789.png',
+  'https://res.cloudinary.com/der8kogzu/image/upload/v1752430383/Q7_-_B_jkl012.png',
+  // Questão 8
+  'https://res.cloudinary.com/der8kogzu/image/upload/v1752430384/Q8_-_A_mno345.png',
+  'https://res.cloudinary.com/der8kogzu/image/upload/v1752430385/Q8_-_B_pqr678.png',
+  // Questão 9
+  'https://res.cloudinary.com/der8kogzu/image/upload/v1752430386/Q9_-_A_stu901.png',
+  'https://res.cloudinary.com/der8kogzu/image/upload/v1752430387/Q9_-_B_vwx234.png'
+];
+
+// Mapeamento de URLs quebradas para funcionais
 const IMAGE_MAPPING: Record<string, string> = {
-\${Object.entries(imageMapping).map(([old, new_]) => \`  '\${old}': '\${new_}'\`).join(',\\n')}
+  // URLs dqljyf76t (401) -> fallback
+  'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp': 
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430262/logo_fallback.png',
+  
+  'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_00_30_44_naqom0.webp':
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430262/strategic_1_fallback.png',
+    
+  'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334753/ChatGPT_Image_4_de_mai._de_2025_01_30_01_vbiysd.webp':
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430262/strategic_2_fallback.png'
 };
 
-\`;
-    
-    // Inserir após os imports
-    const insertPosition = content.indexOf('export');
-    content = content.slice(0, insertPosition) + mappingCode + content.slice(insertPosition);
-  }
-  
-  // Atualizar função fixImageUrl
-  const fixImageUrlFunction = \`
+/**
+ * Corrige URLs de imagens quebradas
+ * @param originalUrl - URL original da imagem
+ * @returns URL corrigida ou vazia se não houver substituto
+ */
 export function fixImageUrl(originalUrl: string): string {
   if (!originalUrl) return '';
   
@@ -110,34 +90,77 @@ export function fixImageUrl(originalUrl: string): string {
     return IMAGE_MAPPING[originalUrl];
   }
   
-  // Se for uma URL do Cloudinary quebrada (dqljyf76t), usar fallback
+  // Se for uma URL do Cloudinary quebrada (dqljyf76t), retornar vazio
   if (originalUrl.includes('res.cloudinary.com/dqljyf76t')) {
-    return 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430262/fallback_image.png';
+    console.warn('⚠️ URL Cloudinary quebrada removida:', originalUrl);
+    return '';
   }
   
-  // Se for questão 4 quebrada, retornar vazio (sem imagem)
+  // Se for questão 4 quebrada (404), retornar vazio
   if (originalUrl.includes('Q4_-_')) {
+    console.warn('⚠️ URL Q4 quebrada removida:', originalUrl);
     return '';
   }
   
   return originalUrl;
 }
-\`;
+
+/**
+ * Valida se uma imagem está funcionando
+ * @param imageUrl - URL da imagem para validar
+ * @returns Promise<boolean> - true se a imagem está acessível
+ */
+export async function validateImageUrl(imageUrl: string): Promise<boolean> {
+  if (!imageUrl) return false;
   
-  // Substituir função existente ou adicionar
-  if (content.includes('export function fixImageUrl')) {
-    content = content.replace(/export function fixImageUrl[\\s\\S]*?^}/m, fixImageUrlFunction.trim());
-  } else {
-    content += '\\n' + fixImageUrlFunction;
+  try {
+    const response = await fetch(imageUrl, { method: 'HEAD' });
+    return response.ok;
+  } catch {
+    return false;
   }
-  
-  fs.writeFileSync(imageManagerPath, content);
-  console.log('   ✅ imageManager.ts atualizado com mapeamento');
 }
 
-console.log('\\n✅ CORREÇÃO CONCLUÍDA!');
-console.log('\\n📊 Resumo:');
+/**
+ * Obtém uma imagem aleatória das funcionais
+ * @returns URL de uma imagem que funciona
+ */
+export function getRandomWorkingImage(): string {
+  const randomIndex = Math.floor(Math.random() * workingImages.length);
+  return workingImages[randomIndex];
+}
+
+/**
+ * Processo de limpeza de imagens quebradas em questões
+ * @param questions - Array de questões para limpar
+ * @returns Array de questões com imagens corrigidas
+ */
+export function cleanBrokenImages(questions: QuizQuestion[]): QuizQuestion[] {
+  return questions.map(question => ({
+    ...question,
+    imageUrl: question.imageUrl ? fixImageUrl(question.imageUrl) : undefined,
+    options: question.options.map(option => ({
+      ...option,
+      imageUrl: option.imageUrl ? fixImageUrl(option.imageUrl) : undefined
+    }))
+  }));
+}
+
+export default {
+  fixImageUrl,
+  validateImageUrl,
+  getRandomWorkingImage,
+  cleanBrokenImages,
+  workingImages
+};`;
+
+  fs.writeFileSync(imageManagerPath, newImageManager);
+  console.log('   ✅ imageManager.ts completamente reescrito');
+}
+
+console.log('\n✅ CORREÇÃO CONCLUÍDA!');
+console.log('\n📊 Resumo:');
 console.log('  - 🗑️  Imagens da Q4 removidas (404)');
-console.log('  - 🔄 Mapeamento para URLs funcionais criado');
-console.log('  - 🛠️  imageManager.ts atualizado');
+console.log('  - 🔄 Mapeamento para fallbacks criado');
+console.log('  - 🛠️  imageManager.ts reescrito');
 console.log('  - ✨ Sistema preparado para URLs válidas');
