@@ -2,7 +2,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { EditorStage, EditorComponent } from '@/components/live-editor/LiveQuizEditor';
 import { toast } from '@/components/ui/use-toast';
-import { createDefaultFunnelStages } from '@/data/funnelStages';
+import { createDefaultFunnelStages } from '../data/funnelStages';
 
 export const useLiveEditor = () => {
   const [stages, setStages] = useState<EditorStage[]>([]);
