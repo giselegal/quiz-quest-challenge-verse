@@ -140,7 +140,7 @@ function generateProductRecommendations(primaryStyle: any): Product[] {
       price: 197,
       originalPrice: 297,
       discount: 33,
-      image: `https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/product-guide-${primaryStyle?.name?.toLowerCase()}.webp`,
+      image: `https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/product_guide_${primaryStyle?.name?.toLowerCase()}_default_abc123`,
       category: 'Guias Digitais',
       rating: 4.9,
       reviews: Math.floor(Math.random() * 200) + 100,
@@ -158,7 +158,7 @@ function generateProductRecommendations(primaryStyle: any): Product[] {
       price: 497,
       originalPrice: 697,
       discount: 29,
-      image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/product-consultation.webp',
+      image: 'https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/product_consultation_default_def456',
       category: 'Serviços',
       rating: 5.0,
       reviews: Math.floor(Math.random() * 100) + 50,
@@ -201,14 +201,14 @@ function generateContentRecommendations(primaryStyle: any): ContentRecommendatio
       title: `Como usar ${primaryStyle?.name || 'seu estilo'} no dia a dia`,
       type: 'article',
       url: '#',
-      image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/content-daily.webp'
+      image: 'https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/content_daily_default_ghi789'
     },
     {
       id: 'content-2',
       title: 'Cores que combinam com você',
       type: 'guide',
       url: '#',
-      image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/content-colors.webp'
+      image: 'https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/content_colors_default_jkl012'
     }
   ];
 }

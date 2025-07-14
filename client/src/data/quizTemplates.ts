@@ -18,7 +18,7 @@ export const quizTemplates: QuizTemplate[] = [
     id: 'template-estilo-pessoal',
     name: 'Quiz de Estilo Pessoal',
     description: 'Template para descobrir o estilo pessoal dos participantes, com foco em moda e imagem.',
-    thumbnail: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp',
+    thumbnail: 'https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/template_dossie_completo_pqr678',
     stages: [
       {
         id: 'stage-cover-1',
@@ -29,7 +29,7 @@ export const quizTemplates: QuizTemplate[] = [
           title: 'Descubra seu Estilo Pessoal',
           subtitle: 'Responda algumas perguntas e descubra qual estilo combina mais com você',
           buttonText: 'Começar Quiz',
-          backgroundImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg'
+          backgroundImage: 'https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/whatsapp_background_image_stu901'
         }
       },
       {

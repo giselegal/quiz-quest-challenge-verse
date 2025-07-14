@@ -18,7 +18,7 @@ export const defaultResultTemplate = {
     content: {
       description: 'Aqui será exibida uma descrição detalhada do seu estilo predominante, com características, recomendações e dicas personalizadas.',
       mainImage: 'https://placehold.co/600x400?text=Estilo+Predominante',
-      tabletImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp',
+      tabletImage: 'https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/mockup_tablet_guia_imagem_estilo_mno345',
       showSecondaryStyles: true,
       showOffer: true
     },
