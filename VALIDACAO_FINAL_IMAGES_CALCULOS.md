@@ -3,12 +3,16 @@
 ## 📊 **RESUMO DA ATUALIZAÇÃO**
 
 ### **Questões Atualizadas (4-9)**
-- ⚠️ **Questão 4**: Detalhes - **SEM IMAGENS** (aguardando upload)
-- ⚠️ **Questão 5**: Estampas - **SEM IMAGENS** (aguardando upload)  
+- ✅ **Questão 4**: Detalhes - **IMAGENS ADICIONADAS E FUNCIONAIS**
+- ⚠️ **Questão 5**: Estampas - **SEM IMAGENS** (aguardando URLs corretas)  
 - ✅ **Questão 6**: Casacos - **TODAS IMAGENS FUNCIONAIS**
 - ✅ **Questão 7**: Calças - **TODAS IMAGENS FUNCIONAIS**
 - ✅ **Questão 8**: Sapatos - **TODAS IMAGENS FUNCIONAIS**
 - ✅ **Questão 9**: Acessórios - **TODAS IMAGENS FUNCIONAIS**
+
+### **Status das Imagens por Questão**
+- ✅ **Questões 4, 6-9**: Imagens funcionais testadas
+- ⚠️ **Questão 5**: Apenas texto (aguardando imagens)
 
 ### **Arquivos Atualizados**
 1. `/client/src/data/caktoquizQuestions.ts` - **Questões 4 e 5 atualizadas**
@@ -67,8 +71,8 @@
 ## 🎯 **STATUS FINAL**
 
 ### **✅ CONCLUÍDO**
-- [x] Questões 6-9 com todas as imagens funcionais no novo Cloudinary
-- [x] Questões 4-5 configuradas como texto (imagens serão adicionadas posteriormente)
+- [x] Questões 4, 6-9 com todas as imagens funcionais no novo Cloudinary
+- [x] Questão 5 configurada como texto (aguardando URLs corretas)
 - [x] Consistency entre `imageManager.ts` e `caktoquizQuestions.ts`
 - [x] Lógica de cálculo mapeada e documentada
 - [x] Fluxo de resultado validado end-to-end
@@ -76,13 +80,13 @@
 
 ### **🚀 PRONTO PARA PRODUÇÃO**
 O quiz está agora com:
-1. **67% das imagens funcionais** - Questões 6-9 com Cloudinary `der8kogzu`
-2. **Questões 4-5 em modo texto** - Funcionais mas aguardando imagens
+1. **83% das imagens funcionais** - Questões 4, 6-9 com Cloudinary `der8kogzu`
+2. **Questão 5 em modo texto** - Funcional mas aguardando imagens
 3. **Cálculo robusto e transparente** - Documentado e validado
 4. **Fluxo completo validado** - Da pergunta ao resultado final
 
 ### **⚠️ PENDÊNCIAS**
-1. **Upload de imagens** para questões 4 e 5 no Cloudinary `der8kogzu`
+1. **URLs corretas** para as imagens da questão 5 no Cloudinary `der8kogzu`
 2. **Teste manual completo** via interface web
 
 ---
