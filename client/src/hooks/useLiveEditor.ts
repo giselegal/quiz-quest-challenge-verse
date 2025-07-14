@@ -1,23 +1,13 @@
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { EditorStage, EditorComponent } from '@/components/live-editor/LiveQuizEditor';
 import { toast } from '@/components/ui/use-toast';
-import { createDefaultFunnelStages } from '../data/funnelStages';
 
 export const useLiveEditor = () => {
   const [stages, setStages] = useState<EditorStage[]>([]);
   const [activeStageId, setActiveStageId] = useState<string | null>(null);
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
-
-  // Inicializar com as 21 etapas padrão
-  useEffect(() => {
-    const defaultStages = createDefaultFunnelStages();
-    setStages(defaultStages);
-    if (defaultStages.length > 0) {
-      setActiveStageId(defaultStages[0].id);
-    }
-  }, []);
 
   const setActiveStage = useCallback((stageId: string) => {
     setActiveStageId(stageId);

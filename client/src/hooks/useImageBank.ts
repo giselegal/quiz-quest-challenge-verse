@@ -15,7 +15,11 @@ export const useImageBank = () => {
         setImages(imageData);
         
         // Preload critical images without onComplete callback
-        await preloadCriticalImages(['strategic']);
+        await preloadCriticalImages('strategic', {
+          quality: 75,
+          batchSize: 3,
+          format: 'webp'
+        });
         
         setPreloadProgress(100);
       } catch (error) {
@@ -30,7 +34,11 @@ export const useImageBank = () => {
 
   const preloadImagesByCategory = async (category: string) => {
     try {
-      await preloadCriticalImages([category]);
+      await preloadCriticalImages(category as any, {
+        quality: 80,
+        batchSize: 5,
+        format: 'webp'
+      });
     } catch (error) {
       console.error(`Error preloading images for category ${category}:`, error);
     }

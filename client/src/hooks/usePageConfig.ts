@@ -253,19 +253,7 @@ export const useDynamicComponent = (pageId: string, blockId: string) => {
       userName: props.userName || 'Usuário'
     }),
     ...(block?.type === 'button-component-real' && {
-      onClick: () => {
-        try {
-          // Função mais segura que eval - executa apenas funções simples
-          const funcStr = props.onClick || 'console.log("Button clicked")';
-          if (funcStr.includes('console.log')) {
-            console.log("Button clicked");
-          } else {
-            console.warn('Função não suportada:', funcStr);
-          }
-        } catch (e) {
-          console.error('Erro ao executar função:', e);
-        }
-      },
+      onClick: () => eval(props.onClick || 'console.log("Button clicked")'),
       children: props.children || 'Clique aqui'
     })
   };
