@@ -25,42 +25,42 @@ export const accessoriesQuestions: QuizQuestion[] = [
       {
         id: '8c',
         text: 'Sandália dourada com salto bloco.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735427/49_apcrwa.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430335/Q8_-_C_theeds.png',
         styleCategory: 'Contemporâneo',
         points: 1
       },
       {
         id: '8d',
         text: 'Scarpin nude salto alto e fino.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735428/50_qexxxo.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430335/Q8_-_D_ocqyca.png',
         styleCategory: 'Elegante',
         points: 1
       },
       {
         id: '8e',
         text: 'Sandália anabela off white.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735428/51_xbgntp.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430334/Q8_-_E_i7b4hk.png',
         styleCategory: 'Romântico',
         points: 1
       },
       {
         id: '8f',
         text: 'Sandália rosa de tiras finas.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735429/52_edlp0e.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430334/Q8_-_F_wa1spu.png',
         styleCategory: 'Sexy',
         points: 1
       },
       {
         id: '8g',
         text: 'Scarpin preto moderno com vinil transparente.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735429/53_bfdp6f.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430334/Q8_-_G_fo3y4o.png',
         styleCategory: 'Dramático',
         points: 1
       },
       {
         id: '8h',
         text: 'Scarpin colorido estampado.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735430/54_xnilkc.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430335/Q8_-_H_qe9iqk.png',
         styleCategory: 'Criativo',
         points: 1
       }
