@@ -8,7 +8,7 @@ import { QuizContainer } from './quiz/QuizContainer';
 import { QuizContent } from './quiz/QuizContent';
 import { QuizTransitionManager } from './quiz/QuizTransitionManager';
 import QuizNavigation from './quiz/QuizNavigation';
-import QuizIntro from './QuizIntro'; 
+import QuizIntro from '../components/QuizIntro'; 
 import { strategicQuestions } from '@/data/strategicQuestions';
 import { useAuth } from '../context/AuthContext';
 import { trackQuizStart, trackQuizAnswer, trackQuizComplete, trackResultView } from '../utils/analytics';
