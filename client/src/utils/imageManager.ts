@@ -106,10 +106,30 @@ export function cleanBrokenImages(questions: QuizQuestion[]): QuizQuestion[] {
   }));
 }
 
+/**
+ * Obtém URL de imagem com fallback para URLs quebradas
+ * @param imageUrl - URL original da imagem
+ * @returns URL corrigida ou uma imagem fallback
+ */
+export function getImageUrlWithFallback(imageUrl: string): string {
+  if (!imageUrl) return getRandomWorkingImage();
+  
+  const fixedUrl = fixImageUrl(imageUrl);
+  
+  // Se a URL foi corrigida com sucesso, usar ela
+  if (fixedUrl && fixedUrl !== '') {
+    return fixedUrl;
+  }
+  
+  // Caso contrário, usar uma imagem fallback
+  return getRandomWorkingImage();
+}
+
 export default {
   fixImageUrl,
   validateImageUrl,
   getRandomWorkingImage,
   cleanBrokenImages,
+  getImageUrlWithFallback,
   workingImages
 };
