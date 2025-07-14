@@ -45,25 +45,25 @@ export const quizTemplates: QuizTemplate[] = [
             {
               id: 'option-1',
               text: 'Roupas confortáveis e casuais',
-              imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp',
+              imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/template_option_natural_vwx234',
               styleCategory: 'Natural'
             },
             {
               id: 'option-2',
               text: 'Peças clássicas e atemporais',
-              imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp',
+              imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/template_option_classico_yz0567',
               styleCategory: 'Clássico'
             },
             {
               id: 'option-3',
               text: 'Looks modernos e minimalistas',
-              imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp',
+              imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/template_option_contemporaneo_abc890',
               styleCategory: 'Contemporâneo'
             },
             {
               id: 'option-4',
               text: 'Peças sofisticadas e refinadas',
-              imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp',
+              imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/template_option_elegante_def123',
               styleCategory: 'Elegante'
             }
           ]

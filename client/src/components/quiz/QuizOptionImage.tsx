@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { AspectRatio } from '../ui/aspect-ratio';
+import { getImageUrlWithFallback } from '@/utils/imageManager';
 
 interface QuizOptionImageProps {
   imageUrl: string;
@@ -25,15 +26,18 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
   const [imageError, setImageError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  console.log(`[QuizOptionImage] Loading image: ${imageUrl}`);
+  // Usar sistema de fallback para URLs quebradas
+  const safeImageUrl = getImageUrlWithFallback(imageUrl);
+
+  console.log(`[QuizOptionImage] Loading image: ${imageUrl} -> ${safeImageUrl}`);
 
   const handleImageLoad = () => {
-    console.log(`[QuizOptionImage] Successfully loaded: ${imageUrl}`);
+    console.log(`[QuizOptionImage] Successfully loaded: ${safeImageUrl}`);
     setImageLoaded(true);
   };
 
   const handleImageError = () => {
-    console.error(`[QuizOptionImage] Failed to load: ${imageUrl}`);
+    console.error(`[QuizOptionImage] Failed to load: ${safeImageUrl}`);
     setImageError(true);
   };
 
@@ -62,7 +66,7 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
           !isSelected && "hover:scale-110"
         )}>
           <img 
-            src={imageUrl}
+            src={safeImageUrl}
             alt={altText}
             className={cn(
               "object-cover w-full h-full transition-all duration-300",

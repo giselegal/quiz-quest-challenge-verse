@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+mport React, { useState } from 'react';
 import quizStyles from '@/styles/quiz.module.css';
 
 interface QuizOption {

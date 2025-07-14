@@ -15,7 +15,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
       {showLogo && (
         <div className="w-28 h-auto mb-8">
           <img 
-            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
+            src="https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/logo_marca_gisele_default_vxo8wq"
             alt="Logo Gisele Galvão"
             width={112}
             height={56}
