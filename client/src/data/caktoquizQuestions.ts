@@ -338,56 +338,56 @@ export const caktoquizQuestions: QuizQuestion[] = [
         id: 'q6_a',
         text: 'Cardigã bege confortável e casual',
         style: 'natural',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/29_sdogoy.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430285/Q6_-_A_ydwyde.png',
         weight: 1
       },
       {
         id: 'q6_b',
         text: 'Blazer verde estruturado',
         style: 'classico',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/30_nfth8k.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430285/Q6_-_B_xz6flj.png',
         weight: 1
       },
       {
         id: 'q6_c',
         text: 'Trench coat bege tradicional',
         style: 'contemporaneo',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/31_tcmhcl.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430286/Q6_-_C_zk2ab3.png',
         weight: 1
       },
       {
         id: 'q6_d',
         text: 'Blazer branco refinado',
         style: 'elegante',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/32_h78pd8.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430286/Q6_-_D_hh759o.png',
         weight: 1
       },
       {
         id: 'q6_e',
         text: 'Casaco pink vibrante e moderno',
         style: 'romantico',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/33_u8pldd.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430286/Q6_-_E_opj922.png',
         weight: 1
       },
       {
         id: 'q6_f',
         text: 'Jaqueta vinho de couro estilosa',
         style: 'sensual',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/34_peadir.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430287/Q6_-_F_n4mgoz.png',
         weight: 1
       },
       {
         id: 'q6_g',
         text: 'Jaqueta preta estilo rocker',
         style: 'dramatico',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735379/35_pulzso.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430294/Q6_-_G_ue5itf.png',
         weight: 1
       },
       {
         id: 'q6_h',
         text: 'Casaco estampado criativo e colorido',
         style: 'criativo',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/36_cympaq.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430296/Q6_-_H_t6xmoz.png',
         weight: 1
       }
     ]
@@ -405,56 +405,56 @@ export const caktoquizQuestions: QuizQuestion[] = [
         id: 'q7_a',
         text: 'Calça fluida acetinada bege',
         style: 'natural',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735419/38_iilv0l.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430292/Q7_-_A_txdfij.png',
         weight: 1
       },
       {
         id: 'q7_b',
         text: 'Calça de alfaiataria cinza',
         style: 'classico',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735417/39_arsswu.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430294/Q7_-_B_xp3bqm.png',
         weight: 1
       },
       {
         id: 'q7_c',
         text: 'Jeans reto e básico',
         style: 'contemporaneo',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735419/40_beq52x.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430299/Q7_-_C_vzwcvi.png',
         weight: 1
       },
       {
         id: 'q7_d',
         text: 'Calça reta bege de tecido',
         style: 'elegante',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735419/41_hconq4.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430296/Q7_-_D_vzgr64.png',
         weight: 1
       },
       {
         id: 'q7_e',
         text: 'Calça ampla rosa alfaiatada',
         style: 'romantico',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735420/42_q8xws1.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430295/Q7_-_E_akiks2.png',
         weight: 1
       },
       {
         id: 'q7_f',
         text: 'Legging preta de couro',
         style: 'sensual',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735424/43_ljy7sh.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430296/Q7_-_F_u8oswz.png',
         weight: 1
       },
       {
         id: 'q7_g',
         text: 'Calça reta preta de couro',
         style: 'dramatico',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735424/44_nqgvoq.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430329/Q7_-_G_bnnneg.png',
         weight: 1
       },
       {
         id: 'q7_h',
         text: 'Calça estampada floral leve e ampla',
         style: 'criativo',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735425/45_lp64m8.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430328/Q7_-_H_votjzt.png',
         weight: 1
       }
     ]
@@ -472,56 +472,56 @@ export const caktoquizQuestions: QuizQuestion[] = [
         id: 'q8_a',
         text: 'Tênis nude casual e confortável',
         style: 'natural',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735426/47_bi6vgf.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430297/Q8_-_A_zk7yf0.png',
         weight: 1
       },
       {
         id: 'q8_b',
         text: 'Scarpin nude de salto baixo',
         style: 'classico',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735427/48_ymo1ur.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430300/Q8_-_B_azy3ox.png',
         weight: 1
       },
       {
         id: 'q8_c',
         text: 'Sandália dourada com salto bloco',
         style: 'contemporaneo',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735427/49_apcrwa.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430335/Q8_-_C_theeds.png',
         weight: 1
       },
       {
         id: 'q8_d',
         text: 'Scarpin nude salto alto e fino',
         style: 'elegante',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735428/50_qexxxo.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430335/Q8_-_D_ocqyca.png',
         weight: 1
       },
       {
         id: 'q8_e',
         text: 'Sandália anabela off white',
         style: 'romantico',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735428/51_xbgntp.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430334/Q8_-_E_i7b4hk.png',
         weight: 1
       },
       {
         id: 'q8_f',
         text: 'Sandália rosa de tiras finas',
         style: 'sensual',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735429/52_edlp0e.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430334/Q8_-_F_wa1spu.png',
         weight: 1
       },
       {
         id: 'q8_g',
         text: 'Scarpin preto moderno com vinil transparente',
         style: 'dramatico',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735429/53_bfdp6f.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430334/Q8_-_G_fo3y4o.png',
         weight: 1
       },
       {
         id: 'q8_h',
         text: 'Scarpin colorido estampado',
         style: 'criativo',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735430/54_xnilkc.webp',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430335/Q8_-_H_qe9iqk.png',
         weight: 1
       }
     ]
@@ -539,48 +539,56 @@ export const caktoquizQuestions: QuizQuestion[] = [
         id: 'q9_a',
         text: 'Pequenos e discretos, às vezes nem uso',
         style: 'natural',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430351/Q9_-_A_cffjcw.png',
         weight: 1
       },
       {
         id: 'q9_b',
         text: 'Brincos pequenos e discretos. Corrente fininha',
         style: 'classico',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752431503/Q9_B.png',
         weight: 1
       },
       {
         id: 'q9_c',
         text: 'Acessórios que elevem meu look com um toque moderno',
         style: 'contemporaneo',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752431483/Q9_C_fr3bxa.png',
         weight: 1
       },
       {
         id: 'q9_d',
         text: 'Acessórios sofisticados, joias ou semijoias',
         style: 'elegante',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430353/Q9_-_D_e1flwe.png',
         weight: 1
       },
       {
         id: 'q9_e',
         text: 'Peças delicadas e com um toque feminino',
         style: 'romantico',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430363/Q9_-_E_f9thcb.png',
         weight: 1
       },
       {
         id: 'q9_f',
         text: 'Brincos longos, colares que valorizem minha beleza',
         style: 'sensual',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430351/Q9_-_F_gtxs9r.png',
         weight: 1
       },
       {
         id: 'q9_g',
         text: 'Acessórios pesados, que causem um impacto',
         style: 'dramatico',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430352/Q9_-_G_bihqmg.png',
         weight: 1
       },
       {
         id: 'q9_h',
         text: 'Acessórios diferentes, grandes e marcantes',
         style: 'criativo',
+        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430352/Q9_-_H_bddztd.png',
         weight: 1
       }
     ]

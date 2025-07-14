@@ -53,6 +53,54 @@ export const workingImages = {
     'https://res.cloudinary.com/der8kogzu/image/upload/v1752430291/Q4_-_F_lzrw2j.png',
     'https://res.cloudinary.com/der8kogzu/image/upload/v1752430289/Q4_-_G_vr81is.png',
     'https://res.cloudinary.com/der8kogzu/image/upload/v1752430290/Q4_-_H_yjbt0s.png'
+  ],
+
+  // Questão 6
+  q6: [
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430285/Q6_-_A_ydwyde.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430285/Q6_-_B_xz6flj.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430286/Q6_-_C_zk2ab3.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430286/Q6_-_D_hh759o.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430286/Q6_-_E_opj922.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430287/Q6_-_F_n4mgoz.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430294/Q6_-_G_ue5itf.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430296/Q6_-_H_t6xmoz.png'
+  ],
+
+  // Questão 7
+  q7: [
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430292/Q7_-_A_txdfij.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430294/Q7_-_B_xp3bqm.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430299/Q7_-_C_vzwcvi.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430296/Q7_-_D_vzgr64.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430295/Q7_-_E_akiks2.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430296/Q7_-_F_u8oswz.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430329/Q7_-_G_bnnneg.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430328/Q7_-_H_votjzt.png'
+  ],
+
+  // Questão 8
+  q8: [
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430297/Q8_-_A_zk7yf0.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430300/Q8_-_B_azy3ox.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430335/Q8_-_C_theeds.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430335/Q8_-_D_ocqyca.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430334/Q8_-_E_i7b4hk.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430334/Q8_-_F_wa1spu.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430334/Q8_-_G_fo3y4o.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430335/Q8_-_H_qe9iqk.png'
+  ],
+
+  // Questão 9
+  q9: [
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430351/Q9_-_A_cffjcw.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752431503/Q9_B.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752431483/Q9_C_fr3bxa.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430353/Q9_-_D_e1flwe.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430363/Q9_-_E_f9thcb.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430351/Q9_-_F_gtxs9r.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430352/Q9_-_G_bihqmg.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430352/Q9_-_H_bddztd.png'
   ]
 };
 
@@ -311,10 +359,10 @@ export const preloadCriticalImages = async (
         imageUrls = [workingImages.logo, workingImages.introBg];
         break;
       case 'quiz':
-        imageUrls = [...workingImages.q1, ...workingImages.q2];
+        imageUrls = [...workingImages.q1, ...workingImages.q2, ...workingImages.q4, ...workingImages.q6];
         break;
       case 'result':
-        imageUrls = [...workingImages.q2, ...workingImages.q4];
+        imageUrls = [...workingImages.q7, ...workingImages.q8, ...workingImages.q9];
         break;
       case 'strategic':
         imageUrls = getRandomStrategicImages(4);
@@ -336,7 +384,11 @@ function getRandomStrategicImages(count: number): string[] {
   const allStrategicImages = [
     ...workingImages.q1,
     ...workingImages.q2,
-    ...workingImages.q4
+    ...workingImages.q4,
+    ...workingImages.q6,
+    ...workingImages.q7,
+    ...workingImages.q8,
+    ...workingImages.q9
   ];
   
   const shuffled = [...allStrategicImages].sort(() => 0.5 - Math.random());
