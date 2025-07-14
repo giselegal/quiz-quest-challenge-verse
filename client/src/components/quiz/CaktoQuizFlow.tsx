@@ -19,7 +19,7 @@ export const CaktoQuizFlow: React.FC = () => {
   const [quizResult, setQuizResult] = useState<QuizResult | null>(null);
 
   const allQuestions = getAllQuestions();
-  const normalQuestions = caktoquizQuestions.sort((a, b) => (a.order || 0) - (b.order || 0));
+  const normalQuestions = caktoquizQuestions;
   const strategicQuestionsData = strategicQuestions;
 
   // Handlers

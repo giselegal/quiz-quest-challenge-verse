@@ -1,91 +1,61 @@
-/**
- * Gerenciador Simples de Imagens
- * Remove URLs quebradas e fornece fallbacks
- */
 
-// Imagens que funcionam (verificadas)
-const WORKING_IMAGES = [
-  'https://res.cloudinary.com/der8kogzu/image/upload/v1752430262/Q1_-_A_xlh5cg.png',
-  'https://res.cloudinary.com/der8kogzu/image/upload/v1752430263/Q1_-_B_bm79bg.png',
-  'https://res.cloudinary.com/der8kogzu/image/upload/v1752430264/Q1_-_C_n2at5j.png'
-];
-
-/**
- * Obtém URL de imagem com fallback automático
- * @param imageUrl - URL original da imagem
- * @returns URL corrigida ou placeholder
- */
-export function getImageUrlWithFallback(imageUrl: string): string {
-  if (!imageUrl) return '';
-  
-  // URLs quebradas conhecidas - retornar vazio para usar modo texto
-  const brokenUrls = [
-    'res.cloudinary.com/dqljyf76t',  // Conta 401
-    'Q4_-_',                         // Questão 4 quebrada
-  ];
-  
-  // Se for uma URL quebrada, retornar vazio
-  if (brokenUrls.some(broken => imageUrl.includes(broken))) {
-    console.warn('🚫 URL quebrada removida:', imageUrl);
-    return '';
-  }
-  
-  // Se chegou até aqui, usar a URL original
-  return imageUrl;
+interface ImageMetadata {
+  width?: number;
+  height?: number;
+  alt?: string;
+  loaded?: boolean;
 }
 
-/**
- * Corrige URLs de imagens quebradas (remove-as)
- * @param originalUrl - URL original da imagem
- * @returns URL corrigida ou vazia
- */
-export function fixImageUrl(originalUrl: string): string {
-  return getImageUrlWithFallback(originalUrl);
-}
+const imageCache = new Map<string, ImageMetadata>();
 
-// Funções de compatibilidade (simplificadas para evitar erros de build)
+export const preloadImage = (src: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      imageCache.set(src, {
+        width: img.naturalWidth,
+        height: img.naturalHeight,
+        loaded: true,
+        alt: `Image ${src}`
+      });
+      resolve();
+    };
+    img.onerror = reject;
+    img.src = src;
+  });
+};
 
-export function preloadCriticalImages(): void {
-  console.log('📸 Preload crítico (simplificado)');
-}
+export const preloadImages = (urls: string[]): Promise<void[]> => {
+  return Promise.all(urls.map(preloadImage));
+};
 
-export function preloadImagesByUrls(urls: string[]): void {
-  console.log('📸 Preload por URLs (simplificado)', urls.length);
-}
+export const getOptimizedImageUrl = (src: string, options?: { width?: number; height?: number; quality?: number; format?: string }): string => {
+  // Simple implementation - in a real app, this would handle Cloudinary transformations
+  return src;
+};
 
-export function preloadImages(): void {
-  console.log('📸 Preload geral (simplificado)');
-}
+export const getLowQualityPlaceholder = (src: string): string => {
+  // Simple implementation - in a real app, this would generate a low-quality placeholder
+  return src;
+};
 
-export function getOptimizedImageUrl(url: string): string {
-  return getImageUrlWithFallback(url);
-}
+export const preloadCriticalImages = (urls: string[]): Promise<void[]> => {
+  return preloadImages(urls);
+};
 
-export function getLowQualityPlaceholder(url: string): string {
-  return getImageUrlWithFallback(url);
-}
+export const preloadImagesByUrls = (urls: string[]): Promise<void[]> => {
+  return preloadImages(urls);
+};
 
-export function getImageMetadata(url: string): any {
-  return { url: getImageUrlWithFallback(url), optimized: true };
-}
+export const getImageMetadata = (src: string): ImageMetadata => {
+  return imageCache.get(src) || { width: undefined, height: undefined, alt: undefined, loaded: false };
+};
 
-export function isImagePreloaded(url: string): boolean {
-  return true; // Sempre retorna true para simplificar
-}
+export const isImagePreloaded = (src: string): boolean => {
+  const metadata = imageCache.get(src);
+  return metadata?.loaded || false;
+};
 
-export function getOptimizedImage(url: string): string {
-  return getImageUrlWithFallback(url);
-}
-
-export default {
-  getImageUrlWithFallback,
-  fixImageUrl,
-  preloadCriticalImages,
-  preloadImagesByUrls,
-  preloadImages,
-  getOptimizedImageUrl,
-  getLowQualityPlaceholder,
-  getImageMetadata,
-  isImagePreloaded,
-  getOptimizedImage
+export const getOptimizedImage = (src: string, options?: { width?: number; height?: number; quality?: number; format?: string }): string => {
+  return getOptimizedImageUrl(src, options);
 };
