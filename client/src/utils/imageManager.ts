@@ -205,7 +205,7 @@ const brokenToWorkingImageMap: Record<string, string> = {
   '3_asaunw.webp': workingImages.q2[5],
   '6_gnoxfg.webp': workingImages.q2[6],
   '8_yqu3hw.webp': workingImages.q2[7],
-  
+
   // Questões mais avançadas
   '20_oh44vh.webp': workingImages.q4[0],
   '21_o7wkte.webp': workingImages.q4[1],

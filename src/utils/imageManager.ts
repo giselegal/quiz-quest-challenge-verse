@@ -6,114 +6,98 @@
 
 // URLs das novas imagens funcionais do Cloudinary (der8kogzu)
 export const workingImages = {
-  // Etapa 1 - Quiz Introduction
-  etapa1_quiz_introduction: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa1_quiz_introduction_kgmspp",
+  // Logo e introdução
+  logo: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430327/LOGO_DA_MARCA_GISELE_l78gin.png',
+  introBg: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752443943/Gemini_Generated_Image_i5cst6i5cst6i5cs_fpoukb.png',
   
-  // Etapa 2 - Personal Information
-  etapa2_personal_information: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa2_personal_information_mgrxl4",
+  // Antes e depois
+  beforeAfter1: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430348/MARIANGELA_-_ANTES_E_DEPOIS_ipuoap.png',
+  beforeAfter2: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430335/ADRIANA-_ANTES_E_DEPOIS_ttgifc.png',
   
-  // Etapa 3 - Learning Style
-  etapa3_learning_style: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa3_learning_style_dgz2ai",
+  // Depoimentos
+  testimonial1: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430304/DEPOIMENTO_COM_IMAGEM_-_S?NIA_q0g9cq.png',
+  testimonial2: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430304/DEPOIMENTO_COM_IMAGEM_-_PATR?CIA_x0mhud.png',
+  testimonial3: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430304/DEPOIMENTO_COM_IMAGEM_-_MARIANGELA_sj7lki.png',
   
-  // Etapa 4 - Experience Level
-  etapa4_experience_level: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa4_experience_level_bpmmbw",
+  // Questão 1
+  q1: [
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430262/Q1_-_A_xlh5cg.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430263/Q1_-_B_bm79bg.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430262/Q1_-_C_n2at5j.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430264/Q1_-_D_psbhs9.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430272/Q1_-_E_pwhukq.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430272/Q1_-_F_z1nyug.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430268/Q1_-_G_zgy8mq.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430269/Q1_-_H_dqhkzv.png'
+  ],
   
-  // Etapa 5 - Course Preferences
-  etapa5_course_preferences: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa5_course_preferences_hjt8cu",
+  // Questão 2
+  q2: [
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430272/Q3_-_A_plsfwp.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430270/Q3_-_B_w75tyg.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430270/Q3_-_C_ep9x9h.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430271/Q3_-_D_xxra9m.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430278/Q3_-_E_lr9p2d.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430280/Q3_-_F_amdr7l.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430279/Q3_-_G_zod0w5.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430276/Q3_-_H_aghfg8.png'
+  ],
   
-  // Etapa 6 - Study Goals
-  etapa6_study_goals: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa6_study_goals_sqxbgi",
-  
-  // Etapa 7 - Time Availability
-  etapa7_time_availability: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa7_time_availability_azjrte",
-  
-  // Etapa 8 - Budget Range
-  etapa8_budget_range: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa8_budget_range_enwdmk",
-  
-  // Etapa 9 - Motivations
-  etapa9_motivations: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa9_motivations_cjgvdx",
-  
-  // Etapa 10 - Challenge Areas
-  etapa10_challenge_areas: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa10_challenge_areas_mgcazq",
-  
-  // Etapa 11 - Learning Environment
-  etapa11_learning_environment: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa11_learning_environment_s8ql8w",
-  
-  // Etapa 12 - Success Metrics
-  etapa12_success_metrics: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa12_success_metrics_phafdr",
-  
-  // Etapa 13 - Progress Tracking
-  etapa13_progress_tracking: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa13_progress_tracking_b0mbuu",
-  
-  // Etapa 14 - Support Preferences
-  etapa14_support_preferences: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa14_support_preferences_thozfn",
-  
-  // Etapa 15 - Technology Comfort
-  etapa15_technology_comfort: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa15_technology_comfort_uvkvwx",
-  
-  // Etapa 16 - Career Goals
-  etapa16_career_goals: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa16_career_goals_cyjk1t",
-  
-  // Etapa 17 - Previous Education
-  etapa17_previous_education: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa17_previous_education_pxltbx",
-  
-  // Etapa 18 - Feedback Style
-  etapa18_feedback_style: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa18_feedback_style_e2nkmj",
-  
-  // Etapa 19 - Final Preferences
-  etapa19_final_preferences: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa19_final_preferences_pbmgqn",
-  
-  // Etapa 20 - Results
-  etapa20_results: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa20_results_hmhfpl"
+  // Questão 4
+  q4: [
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430276/Q4_-_A_k6gvtc.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430277/Q4_-_B_a1emi6.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430277/Q4_-_C_ywcxcx.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430277/Q4_-_D_y7u29d.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430277/Q4_-_E_gnuvl3.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430291/Q4_-_F_lzrw2j.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430289/Q4_-_G_vr81is.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430290/Q4_-_H_yjbt0s.png'
+  ]
 };
 
 // Imagens de fallback para cada tipo de etapa
 export const fallbackImages = {
-  quiz_intro: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa1_quiz_introduction_kgmspp",
-  personal_info: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa2_personal_information_mgrxl4",
-  learning_style: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa3_learning_style_dgz2ai",
-  experience: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa4_experience_level_bpmmbw",
-  preferences: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa5_course_preferences_hjt8cu",
-  goals: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa6_study_goals_sqxbgi",
-  time: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa7_time_availability_azjrte",
-  budget: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa8_budget_range_enwdmk",
-  motivations: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa9_motivations_cjgvdx",
-  challenges: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa10_challenge_areas_mgcazq",
-  environment: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa11_learning_environment_s8ql8w",
-  metrics: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa12_success_metrics_phafdr",
-  tracking: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa13_progress_tracking_b0mbuu",
-  support: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa14_support_preferences_thozfn",
-  technology: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa15_technology_comfort_uvkvwx",
-  career: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa16_career_goals_cyjk1t",
-  education: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa17_previous_education_pxltbx",
-  feedback: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa18_feedback_style_e2nkmj",
-  final: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa19_final_preferences_pbmgqn",
-  results: "https://res.cloudinary.com/der8kogzu/image/upload/v1/quiz-quest/etapa20_results_hmhfpl"
+  default: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI0Y3RjJFOSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiNCODlCN0EiPkltYWdlbSBOw6NvIERpc3BvbsOtdmVsPC90ZXh0Pjwvc3ZnPg==',
+  logo: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430327/LOGO_DA_MARCA_GISELE_l78gin.png',
+  quiz_intro: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752443943/Gemini_Generated_Image_i5cst6i5cst6i5cs_fpoukb.png'
 };
 
 // Mapeamento de URLs quebradas para URLs funcionais
 export const brokenToWorkingImageMap: Record<string, string> = {
-  // Mapear URLs antigas quebradas para novas funcionais por nome do arquivo
-  'etapa1_quiz_introduction': workingImages.etapa1_quiz_introduction,
-  'etapa2_personal_information': workingImages.etapa2_personal_information,
-  'etapa3_learning_style': workingImages.etapa3_learning_style,
-  'etapa4_experience_level': workingImages.etapa4_experience_level,
-  'etapa5_course_preferences': workingImages.etapa5_course_preferences,
-  'etapa6_study_goals': workingImages.etapa6_study_goals,
-  'etapa7_time_availability': workingImages.etapa7_time_availability,
-  'etapa8_budget_range': workingImages.etapa8_budget_range,
-  'etapa9_motivations': workingImages.etapa9_motivations,
-  'etapa10_challenge_areas': workingImages.etapa10_challenge_areas,
-  'etapa11_learning_environment': workingImages.etapa11_learning_environment,
-  'etapa12_success_metrics': workingImages.etapa12_success_metrics,
-  'etapa13_progress_tracking': workingImages.etapa13_progress_tracking,
-  'etapa14_support_preferences': workingImages.etapa14_support_preferences,
-  'etapa15_technology_comfort': workingImages.etapa15_technology_comfort,
-  'etapa16_career_goals': workingImages.etapa16_career_goals,
-  'etapa17_previous_education': workingImages.etapa17_previous_education,
-  'etapa18_feedback_style': workingImages.etapa18_feedback_style,
-  'etapa19_final_preferences': workingImages.etapa19_final_preferences,
-  'etapa20_results': workingImages.etapa20_results
+  // Questão 1 - mapear imagens numeradas antigas para novas
+  '14_l2nprc.webp': workingImages.q1[0],
+  '4_snhaym.webp': workingImages.q1[1], 
+  '15_xezvcy.webp': workingImages.q1[2],
+  '16_mpqpew.webp': workingImages.q1[3],
+  '11_hqmr8l.webp': workingImages.q1[4],
+  '12_edlmwf.webp': workingImages.q1[5],
+  '18_j8ipfb.webp': workingImages.q1[6],
+  '17_m5ogub.webp': workingImages.q1[7],
+  
+  // Questão 2
+  '2_ziffwx.webp': workingImages.q2[0],
+  '5_dhrgpf.webp': workingImages.q2[1],
+  '9_x6so6a.webp': workingImages.q2[2],
+  '7_ynez1z.webp': workingImages.q2[3],
+  '13_uvbciq.webp': workingImages.q2[4],
+  '3_asaunw.webp': workingImages.q2[5],
+  '6_gnoxfg.webp': workingImages.q2[6],
+  '8_yqu3hw.webp': workingImages.q2[7],
+  
+  // Questões mais avançadas
+  '20_oh44vh.webp': workingImages.q4[0],
+  '21_o7wkte.webp': workingImages.q4[1],
+  '26_dptanw.webp': workingImages.q4[2],
+  '23_bdfxrh.webp': workingImages.q4[3],
+  '22_siebw2.webp': workingImages.q4[4],
+  '24_nptszu.webp': workingImages.q4[5],
+  '25_motk6b.webp': workingImages.q4[6],
+  '27_wxmklx.webp': workingImages.q4[7],
+  
+  // Logo
+  'logo.webp': workingImages.logo,
+  'LOGO_DA_MARCA_GISELE': workingImages.logo
 };
 
 /**
@@ -324,28 +308,16 @@ export const preloadCriticalImages = async (
   } else {
     switch (category) {
       case 'home':
-        imageUrls = [
-          'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/quiz-intro-background.jpg',
-          'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/home-image-2.jpg',
-        ];
+        imageUrls = [workingImages.logo, workingImages.introBg];
         break;
       case 'quiz':
-        imageUrls = [
-          'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/question-1-option-1.jpg',
-          'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/question-1-option-2.jpg',
-        ];
+        imageUrls = [...workingImages.q1, ...workingImages.q2];
         break;
       case 'result':
-        imageUrls = [
-          'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/transformation-before.jpg',
-          'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/transformation-after.jpg',
-        ];
+        imageUrls = [...workingImages.q2, ...workingImages.q4];
         break;
       case 'strategic':
-        imageUrls = [
-          'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/strategic-image-1.jpg',
-          'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_800/v1699010272/strategic-image-2.jpg',
-        ];
+        imageUrls = getRandomStrategicImages(4);
         break;
       default:
         console.warn(`Categoria de imagem desconhecida: ${category}`);
@@ -353,15 +325,38 @@ export const preloadCriticalImages = async (
     }
   }
 
-  // Otimizar URLs das imagens
-  const optimizedImageUrls = imageUrls.map(url => {
-    let optimizedUrl = optimizeImageQuality(url, quality);
-    optimizedUrl = convertImageFormat(optimizedUrl, format);
-    return optimizedUrl;
-  });
+  // Aplicar fallback a URLs que possam estar quebradas
+  const validImageUrls = imageUrls.map(url => getImageUrlWithFallback(url));
 
-  return preloadImagesInBatch(optimizedImageUrls, batchSize);
+  return preloadImagesInBatch(validImageUrls, batchSize);
 };
+
+// Função auxiliar para obter imagens estratégicas aleatórias
+function getRandomStrategicImages(count: number): string[] {
+  const allStrategicImages = [
+    ...workingImages.q1,
+    ...workingImages.q2,
+    ...workingImages.q4
+  ];
+  
+  const shuffled = [...allStrategicImages].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, Math.min(count, shuffled.length));
+}
+
+// Função para obter imagens de uma questão específica
+export function getQuestionImages(questionNumber: number): string[] {
+  const images = workingImages[`q${questionNumber}` as keyof typeof workingImages];
+  if (Array.isArray(images)) {
+    return images;
+  }
+  return [];
+}
+
+// Função para obter uma imagem aleatória estratégica
+export function getRandomStrategicImage(): string {
+  const randomImages = getRandomStrategicImages(1);
+  return randomImages[0] || fallbackImages.default;
+}
 
 export default {
   loadImage,
@@ -373,5 +368,8 @@ export default {
   resizeImage,
   applyCloudinaryTransformations,
   preloadImagesInBatch,
-  preloadCriticalImages
+  preloadCriticalImages,
+  getImageUrlWithFallback,
+  getQuestionImages,
+  getRandomStrategicImage
 };
