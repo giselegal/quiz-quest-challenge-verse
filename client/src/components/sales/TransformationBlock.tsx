@@ -15,7 +15,7 @@ const TransformationBlock: React.FC = () => {
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
               <img 
-                src="https://res.cloudinary.com/der8kogzu/image/upload/v1752430348/MARIANGELA_-_ANTES_E_DEPOIS_ipuoap.png" 
+                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp" 
                 alt="Transformação Antes e Depois" 
                 className="w-full h-auto rounded-lg shadow-md"
               />

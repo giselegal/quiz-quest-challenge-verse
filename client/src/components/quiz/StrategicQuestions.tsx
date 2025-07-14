@@ -10,10 +10,10 @@ import { getAllImages } from '@/data/imageBank'; // Importar para acessar o banc
 
 // Imagens críticas da página de resultados a serem pré-carregadas
 const RESULT_CRITICAL_IMAGES = [
-  // URLs das imagens mais importantes da página de resultados - usando novas URLs funcionais
-  'https://res.cloudinary.com/der8kogzu/image/upload/v1752430326/MOCKUPS_DE_TODOS_OS_PRODUTOS_-_GUIAS_DE_ESILOS_E_B?NUS_legwsb.png',
-  'https://res.cloudinary.com/der8kogzu/image/upload/v1752430348/IMANGES_MULHERES_8_ESTILOS_UNIVERSAIS_blvkgv.png',
-  'https://res.cloudinary.com/der8kogzu/image/upload/v1752430327/MULHER_ELEGANTE_COM_GUIA_DE_ESTILO_euxps7.png'
+  // URLs das imagens mais importantes da página de resultados
+  'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp',
+  'https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp',
+  'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_80,w_800/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp'
 ];
 
 interface StrategicQuestionsProps {

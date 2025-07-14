@@ -1,7 +1,6 @@
 
 import { useState, useEffect } from 'react';
 import { UserResponse, QuizQuestion } from '@/types/quiz';
-import { quizQuestions } from '@/data/quizQuestions';
 
 export const useQuizLogic = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -9,8 +8,19 @@ export const useQuizLogic = () => {
   const [isInitialLoadComplete, setIsInitialLoadComplete] = useState(false);
   const [quizResult, setQuizResult] = useState<any>(null);
 
-  // Use real quiz questions instead of mock data
-  const questions: QuizQuestion[] = quizQuestions;
+  // Mock data with proper type
+  const questions: QuizQuestion[] = [
+    {
+      id: 'q1',
+      type: 'image',
+      question: 'Qual é o seu estilo preferido?',
+      options: [
+        { id: 'opt1', text: 'Clássico', imageUrl: '', styleCategory: 'classic' },
+        { id: 'opt2', text: 'Moderno', imageUrl: '', styleCategory: 'modern' },
+        { id: 'opt3', text: 'Casual', imageUrl: '', styleCategory: 'casual' }
+      ]
+    }
+  ];
 
   const totalQuestions = questions.length;
   const currentQuestion = questions[currentQuestionIndex] || null;

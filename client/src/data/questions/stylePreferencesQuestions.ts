@@ -11,56 +11,56 @@ export const stylePreferencesQuestions: QuizQuestion[] = [
       {
         id: '5a',
         text: 'Estampas clean, com poucas informações.',
-        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430276/Q5_-_A_k6gvtc.png',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/20_oh44vh.webp',
         styleCategory: 'Natural',
         points: 1
       },
       {
         id: '5b',
         text: 'Estampas clássicas e atemporais.',
-        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430277/Q5_-_B_a1emi6.png',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735368/21_o7wkte.webp',
         styleCategory: 'Clássico',
         points: 1
       },
       {
         id: '5c',
         text: 'Atemporais, mas que tenham uma pegada de atual e moderna.',
-        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430277/Q5_-_C_ywcxcx.png',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735369/22_siebw2.webp',
         styleCategory: 'Contemporâneo',
         points: 1
       },
       {
         id: '5d',
         text: 'Estampas clássicas e atemporais, mas sofisticadas.',
-        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430277/Q5_-_D_y7u29d.png',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/23_bdfxrh.webp',
         styleCategory: 'Elegante',
         points: 1
       },
       {
         id: '5e',
         text: 'Estampas florais e/ou delicadas como bolinhas, borboletas e corações.',
-        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430277/Q5_-_E_gnuvl3.png',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/24_nptszu.webp',
         styleCategory: 'Romântico',
         points: 1
       },
       {
         id: '5f',
         text: 'Estampas de animal print, como onça, zebra e cobra.',
-        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430291/Q5_-_F_lzrw2j.png',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/25_motk6b.webp',
         styleCategory: 'Sexy',
         points: 1
       },
       {
         id: '5g',
         text: 'Estampas geométricas, abstratas e exageradas como grandes poás.',
-        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430289/Q5_-_G_vr81is.png',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/26_dptanw.webp',
         styleCategory: 'Dramático',
         points: 1
       },
       {
         id: '5h',
         text: 'Estampas diferentes do usual, como africanas, xadrez grandes.',
-        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430290/Q5_-_H_yjbt0s.png',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/27_wxmklx.webp',
         styleCategory: 'Criativo',
         points: 1
       }

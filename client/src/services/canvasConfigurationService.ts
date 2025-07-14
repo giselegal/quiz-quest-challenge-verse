@@ -39,7 +39,7 @@ export const getStep20ResultCanvas = (): CanvasStepConfiguration => ({
       id: 'result-header-inline',
       type: 'result-header-inline',
       properties: {
-        logoUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430327/LOGO_DA_MARCA_GISELE_l78gin.png',
+        logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
         logoAlt: 'Logo Gisele Galvão',
         logoHeight: 60,
         userName: 'Seu Nome',
@@ -56,7 +56,7 @@ export const getStep20ResultCanvas = (): CanvasStepConfiguration => ({
         styleName: 'Elegante',
         percentage: 85,
         description: 'Você possui um estilo único que combina elegância com modernidade. Suas escolhas refletem sofisticação e bom gosto.',
-        imageUrl: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430272/Q3_-_A_plsfwp.png',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp',
         showPercentage: true,
         showDescription: true,
         className: 'mb-8'
@@ -82,7 +82,7 @@ export const getStep20ResultCanvas = (): CanvasStepConfiguration => ({
       id: 'transformation-image',
       type: 'image-display-inline',
       properties: {
-        src: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430327/MULHER_ELEGANTE_COM_GUIA_DE_ESTILO_euxps7.png',
+        src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
         alt: 'Guia de transformação de estilo',
         width: 600,
         height: 400,
@@ -243,7 +243,7 @@ export const getStep21OfferCanvas = (): CanvasStepConfiguration => ({
       id: 'offer-product-image',
       type: 'image-display-inline',
       properties: {
-        src: 'https://res.cloudinary.com/der8kogzu/image/upload/v1752430326/MOCKUPS_DE_TODOS_OS_PRODUTOS_-_GUIAS_DE_ESILOS_E_B?NUS_legwsb.png',
+        src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp',
         alt: 'Guia Completo de Estilo Personalizado',
         width: 600,
         height: 400,
