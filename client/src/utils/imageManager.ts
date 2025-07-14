@@ -133,6 +133,18 @@ export const workingImages = {
     'https://res.cloudinary.com/der8kogzu/image/upload/v1752430290/Q4_-_H_yjbt0s.png'
   ],
   
+  // Questão 5
+  q5: [
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430280/Q5_-_A_p0yqat.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430280/Q5_-_B_jj8onw.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430282/Q5_-_C_v8qknl.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430281/Q5_-_D_oqgb1n.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430281/Q5_-_E_vfqrkt.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430282/Q5_-_F_pcbp5z.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430283/Q5_-_G_qp9e8y.png',
+    'https://res.cloudinary.com/der8kogzu/image/upload/v1752430283/Q5_-_H_wd8vlf.png'
+  ],
+  
   // Questão 6
   q6: [
     'https://res.cloudinary.com/der8kogzu/image/upload/v1752430285/Q6_-_A_ydwyde.png',

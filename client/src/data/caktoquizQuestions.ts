@@ -271,56 +271,48 @@ export const caktoquizQuestions: QuizQuestion[] = [
         id: 'q5_a',
         text: 'Estampas clean, com poucas informações',
         style: 'natural',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/20_oh44vh.webp',
         weight: 1
       },
       {
         id: 'q5_b',
         text: 'Estampas clássicas e atemporais',
         style: 'classico',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735368/21_o7wkte.webp',
         weight: 1
       },
       {
         id: 'q5_c',
         text: 'Atemporais, mas que tenham uma pegada de atual e moderna',
         style: 'contemporaneo',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735369/22_siebw2.webp',
         weight: 1
       },
       {
         id: 'q5_d',
         text: 'Estampas clássicas e atemporais, mas sofisticadas',
         style: 'elegante',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/23_bdfxrh.webp',
         weight: 1
       },
       {
         id: 'q5_e',
         text: 'Estampas florais e/ou delicadas como bolinhas, borboletas e corações',
         style: 'romantico',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/24_nptszu.webp',
         weight: 1
       },
       {
         id: 'q5_f',
         text: 'Estampas de animal print, como onça, zebra e cobra',
         style: 'sensual',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/25_motk6b.webp',
         weight: 1
       },
       {
         id: 'q5_g',
         text: 'Estampas geométricas, abstratas e exageradas como grandes poás',
         style: 'dramatico',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/26_dptanw.webp',
         weight: 1
       },
       {
         id: 'q5_h',
         text: 'Estampas diferentes do usual, como africanas, xadrez grandes',
         style: 'criativo',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/27_wxmklx.webp',
         weight: 1
       }
     ]
