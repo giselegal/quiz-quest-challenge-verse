@@ -2,17 +2,17 @@
 import * as React from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useQuizLogic } from '../hooks/useQuizLogic';
-import { UserResponse } from '@/types/quiz';
+import { UserResponse } from '../types/quiz';
 import { toast } from './ui/use-toast';
 import { QuizContainer } from './quiz/QuizContainer';
 import { QuizContent } from './quiz/QuizContent';
 import { QuizTransitionManager } from './quiz/QuizTransitionManager';
 import QuizNavigation from './quiz/QuizNavigation';
 import QuizIntro from '../components/QuizIntro'; 
-import { strategicQuestions } from '@/data/strategicQuestions';
+import { strategicQuestions } from '../data/strategicQuestions';
 import { useAuth } from '../context/AuthContext';
 import { trackQuizStart, trackQuizAnswer, trackQuizComplete, trackResultView } from '../utils/analytics';
-import { preloadImages } from '@/utils/imageManager';
+import { preloadImages } from '../utils/imageManager';
 import LoadingManager from './quiz/LoadingManager';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'wouter';
@@ -121,13 +121,7 @@ const QuizPage: React.FC = () => {
     setShowIntro(false);
     
     // Pré-carregar imagens do quiz - fixed signature
-    preloadImages([{ 
-      src: currentQuestion?.imageUrl || '', 
-      id: `question-0`,
-      alt: 'First Question',
-      category: 'quiz',
-      preloadPriority: 5 
-    }]);
+    preloadImages([currentQuestion?.imageUrl || ''].filter(Boolean));
     
     console.log(`Quiz iniciado por ${name}`);
   };
@@ -198,7 +192,7 @@ const QuizPage: React.FC = () => {
             category: 'strategic',
             alt: `Question ${nextIndex}`,
             preloadPriority: 5 
-          }], { quality: 90 });
+          }].map(img => img.src).filter(Boolean));
         }
         
         // Opções de imagem para questões anteriores a strategic-3
@@ -212,7 +206,7 @@ const QuizPage: React.FC = () => {
             category: 'strategic',
             alt: `Option ${i}`,
             preloadPriority: 4
-          })), { quality: 85, batchSize: 3 });
+          })).map(img => img.src).filter(Boolean));
         }
       }
       setCurrentStrategicQuestionIndex(prev => prev + 1);
@@ -362,7 +356,7 @@ const QuizPage: React.FC = () => {
         category: 'results',
         alt: `Recurso de resultado ${i}`,
         preloadPriority: 10 // Alta prioridade para os recursos da página de resultados
-      })), { quality: 100 });
+      })).map(img => img.src).filter(Boolean));
     }
   }, [showingFinalTransition]);
 
