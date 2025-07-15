@@ -1,167 +1,270 @@
-import React, { useMemo } from 'react';
+import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { Image } from 'lucide-react';
+import { Image, Upload, Edit3, ExternalLink } from 'lucide-react';
 import type { BlockComponentProps } from '@/types/blocks';
 
 /**
- * ImageInlineBlock - Componente de imagem responsivo
- * Visualização: Canvas responsivo
- * Edição: Painel de propriedades (lado direito)
+ * ImageInlineBlock - Componente modular inline horizontal
+ * Imagem responsiva e configurável
+ * MODULAR | REUTILIZÁVEL | RESPONSIVO | INDEPENDENTE
  */
-const ImageInlineBlock: React.FC<BlockComponentProps> = ({ 
+const ImageInlineBlock: React.FC<BlockComponentProps> = ({
   block,
   isSelected = false,
   onClick,
+  onPropertyChange,
   className = ''
 }) => {
-  const { 
-    src = 'https://via.placeholder.com/600x400?text=Imagem',
+  const {
+    imageUrl = '',
     alt = 'Imagem',
     width = 'auto',
     height = 'auto',
-    alignment = 'center',
-    borderRadius = 'md',
-    objectFit = 'cover',
-    padding = 'medium',
-    backgroundColor = 'transparent',
+    objectFit = 'cover', // cover, contain, fill, none, scale-down
+    borderRadius = 'medium',
     showCaption = false,
     caption = '',
-    maxWidth = 'full'
+    clickable = false,
+    href = '',
+    target = '_blank',
+    maxWidth = 'full',
+    aspectRatio = 'auto', // auto, square, video, portrait, landscape
+    isEditable = true
   } = block.properties;
 
-  // Classes de alinhamento
-  const alignmentClasses = {
-    'left': 'justify-start text-left',
-    'center': 'justify-center text-center',
-    'right': 'justify-end text-right'
+  const [isEditing, setIsEditing] = useState(false);
+  const [editValues, setEditValues] = useState({
+    imageUrl,
+    alt,
+    caption
+  });
+
+  // Tamanhos de largura
+  const widthClasses = {
+    auto: 'w-auto',
+    full: 'w-full',
+    '32': 'w-32',
+    '48': 'w-48',
+    '64': 'w-64',
+    '80': 'w-80',
+    '96': 'w-96'
   };
 
-  // Classes de largura máxima
-  const maxWidthClasses = {
-    'sm': 'max-w-sm',
-    'md': 'max-w-md',
-    'lg': 'max-w-lg',
-    'xl': 'max-w-xl',
-    '2xl': 'max-w-2xl',
-    'full': 'max-w-full'
+  // Tamanhos de altura
+  const heightClasses = {
+    auto: 'h-auto',
+    '32': 'h-32',
+    '48': 'h-48',
+    '64': 'h-64',
+    '80': 'h-80',
+    '96': 'h-96'
   };
 
-  // Classes de padding
-  const paddingClasses = {
-    'none': 'p-0',
-    'small': 'p-2 sm:p-3',
-    'medium': 'p-3 sm:p-4 lg:p-6',
-    'large': 'p-4 sm:p-6 lg:p-8'
-  };
-
-  // Classes de border radius
-  const borderRadiusClasses = {
-    'none': 'rounded-none',
-    'sm': 'rounded-sm',
-    'md': 'rounded-md',
-    'lg': 'rounded-lg',
-    'xl': 'rounded-xl',
-    'full': 'rounded-full'
-  };
-
-  // Classes de object fit
+  // Object fit
   const objectFitClasses = {
-    'contain': 'object-contain',
-    'cover': 'object-cover',
-    'fill': 'object-fill',
-    'none': 'object-none',
+    cover: 'object-cover',
+    contain: 'object-contain',
+    fill: 'object-fill',
+    none: 'object-none',
     'scale-down': 'object-scale-down'
+  };
+
+  // Border radius
+  const borderRadiusClasses = {
+    none: 'rounded-none',
+    small: 'rounded-sm',
+    medium: 'rounded-md',
+    large: 'rounded-lg',
+    full: 'rounded-full'
+  };
+
+  // Aspect ratios
+  const aspectRatioClasses = {
+    auto: '',
+    square: 'aspect-square',
+    video: 'aspect-video',
+    portrait: 'aspect-[3/4]',
+    landscape: 'aspect-[4/3]'
+  };
+
+  // Max width
+  const maxWidthClasses = {
+    sm: 'max-w-sm',
+    md: 'max-w-md',
+    lg: 'max-w-lg',
+    xl: 'max-w-xl',
+    '2xl': 'max-w-2xl',
+    full: 'max-w-full'
+  };
+
+  const handleSave = () => {
+    if (onPropertyChange) {
+      Object.entries(editValues).forEach(([key, value]) => {
+        onPropertyChange(key, value);
+      });
+    }
+    setIsEditing(false);
+  };
+
+  const handleCancel = () => {
+    setEditValues({ imageUrl, alt, caption });
+    setIsEditing(false);
+  };
+
+  const handleImageClick = () => {
+    if (clickable && href) {
+      window.open(href, target);
+    } else if (isEditable) {
+      setIsEditing(true);
+    }
   };
 
   return (
     <div
       className={cn(
-        // Layout responsivo base
-        'w-full h-full flex flex-col',
-        // Responsividade horizontal com quebra
-        'sm:flex-row sm:flex-wrap',
-        // Largura máxima e centralização
-        'max-w-full mx-auto',
-        // Padding responsivo
-        paddingClasses[padding as keyof typeof paddingClasses] || paddingClasses.medium,
-        // Alinhamento
-        alignmentClasses[alignment as keyof typeof alignmentClasses] || alignmentClasses.center,
-        // Background
-        backgroundColor !== 'transparent' && backgroundColor,
-        // Estados visuais
-        'transition-all duration-200',
-        isSelected && 'ring-2 ring-blue-500 bg-blue-50',
-        'cursor-pointer hover:bg-gray-50',
+        // INLINE HORIZONTAL: Flexível
+        'flex-shrink-0 flex-grow-0 relative group',
+        // Container
+        'p-2 rounded-lg border border-transparent',
+        'hover:border-gray-200 hover:bg-gray-50/30 transition-all duration-200',
+        isSelected && 'border-blue-500 bg-blue-50/30',
+        maxWidthClasses[maxWidth as keyof typeof maxWidthClasses],
         className
       )}
       onClick={onClick}
     >
-      <div 
-        className={cn(
-          'relative group',
-          // Largura máxima responsiva
-          maxWidthClasses[maxWidth as keyof typeof maxWidthClasses] || maxWidthClasses.full,
-          // Centralização dentro do container
-          alignment === 'center' && 'mx-auto'
-        )}
-      >
-        {src ? (
-          <img
-            src={src}
-            alt={alt}
-            className={cn(
-              // Layout responsivo
-              'w-full h-auto',
-              // Border radius
-              borderRadiusClasses[borderRadius as keyof typeof borderRadiusClasses] || borderRadiusClasses.md,
-              // Object fit
-              objectFitClasses[objectFit as keyof typeof objectFitClasses] || objectFitClasses.cover,
-              // Sombra e transições
-              'shadow-sm transition-all duration-200',
-              'hover:shadow-md',
-              // Aspectos responsivos
-              height !== 'auto' && `h-${height}`,
-              width !== 'auto' && width !== 'full' && `w-${width}`
-            )}
-            style={{
-              maxHeight: height !== 'auto' ? height : undefined,
-              width: width === 'full' ? '100%' : width === 'auto' ? 'auto' : width
-            }}
-          />
-        ) : (
-          // Placeholder quando não há imagem
-          <div
-            className={cn(
-              'w-full aspect-video flex items-center justify-center',
-              'bg-gray-100 border-2 border-dashed border-gray-300',
-              borderRadiusClasses[borderRadius as keyof typeof borderRadiusClasses] || borderRadiusClasses.md,
-              'text-gray-500'
-            )}
-          >
-            <div className="text-center">
-              <Image className="w-12 h-12 mx-auto mb-2 opacity-50" />
-              <p className="text-sm font-medium">Clique para adicionar imagem</p>
+      {isEditing ? (
+        <div className="space-y-3 p-4 bg-white border rounded-lg shadow-sm min-w-80">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              URL da Imagem
+            </label>
+            <input
+              type="url"
+              value={editValues.imageUrl}
+              onChange={(e) => setEditValues(prev => ({...prev, imageUrl: e.target.value}))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none focus:border-blue-500"
+              placeholder="https://exemplo.com/imagem.jpg"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Texto Alternativo
+            </label>
+            <input
+              type="text"
+              value={editValues.alt}
+              onChange={(e) => setEditValues(prev => ({...prev, alt: e.target.value}))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none focus:border-blue-500"
+              placeholder="Descrição da imagem"
+            />
+          </div>
+
+          {showCaption && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Legenda
+              </label>
+              <input
+                type="text"
+                value={editValues.caption}
+                onChange={(e) => setEditValues(prev => ({...prev, caption: e.target.value}))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none focus:border-blue-500"
+                placeholder="Legenda da imagem"
+              />
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Overlay para seleção */}
-        {isSelected && (
-          <div className="absolute inset-0 bg-blue-500 bg-opacity-20 flex items-center justify-center rounded-md">
-            <span className="text-blue-800 font-medium text-sm bg-white px-2 py-1 rounded shadow">
-              Imagem selecionada
-            </span>
+          <div className="flex gap-2">
+            <button
+              onClick={handleSave}
+              className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600"
+            >
+              Salvar
+            </button>
+            <button
+              onClick={handleCancel}
+              className="px-3 py-1 bg-gray-500 text-white rounded text-sm hover:bg-gray-600"
+            >
+              Cancelar
+            </button>
           </div>
-        )}
-      </div>
-
-      {/* Caption/Legenda (se habilitada) */}
-      {showCaption && caption && (
-        <div className="mt-2 sm:mt-3">
-          <p className="text-sm text-gray-600 leading-relaxed break-words">
-            {caption}
-          </p>
         </div>
+      ) : (
+        <>
+          {imageUrl ? (
+            <div className="space-y-2">
+              <div 
+                className={cn(
+                  'relative overflow-hidden transition-transform duration-200',
+                  borderRadiusClasses[borderRadius as keyof typeof borderRadiusClasses],
+                  aspectRatioClasses[aspectRatio as keyof typeof aspectRatioClasses],
+                  clickable && 'cursor-pointer hover:scale-105',
+                  isEditable && !clickable && 'cursor-pointer'
+                )}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleImageClick();
+                }}
+              >
+                <img
+                  src={imageUrl}
+                  alt={alt}
+                  className={cn(
+                    'transition-all duration-200',
+                    widthClasses[width as keyof typeof widthClasses],
+                    heightClasses[height as keyof typeof heightClasses],
+                    objectFitClasses[objectFit as keyof typeof objectFitClasses],
+                    aspectRatio === 'auto' ? 'w-full h-auto' : 'w-full h-full'
+                  )}
+                  onError={(e) => {
+                    e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZTVlN2ViIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5YTNhZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlbSBuw6NvIGVuY29udHJhZGE8L3RleHQ+PC9zdmc+';
+                  }}
+                />
+                
+                {/* Overlay para link externo */}
+                {clickable && href && (
+                  <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors duration-200 flex items-center justify-center">
+                    <ExternalLink className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                  </div>
+                )}
+              </div>
+
+              {/* Caption */}
+              {showCaption && caption && (
+                <p className="text-sm text-gray-600 text-center italic">
+                  {caption}
+                </p>
+              )}
+            </div>
+          ) : (
+            <div 
+              className={cn(
+                'bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg',
+                'flex flex-col items-center justify-center p-8',
+                'min-h-[120px] cursor-pointer hover:border-gray-400 transition-colors duration-200',
+                aspectRatioClasses[aspectRatio as keyof typeof aspectRatioClasses]
+              )}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (isEditable) setIsEditing(true);
+              }}
+            >
+              <Upload className="w-8 h-8 text-gray-400 mb-2" />
+              <p className="text-sm text-gray-500 text-center">
+                Clique para adicionar imagem
+              </p>
+            </div>
+          )}
+
+          {/* Indicador de edição */}
+          {isEditable && isSelected && (
+            <div className="absolute -top-2 -right-2 bg-blue-500 text-white rounded-full p-1">
+              <Edit3 className="w-3 h-3" />
+            </div>
+          )}
+        </>
       )}
     </div>
   );

@@ -1,200 +1,206 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { ArrowRight, Download, ExternalLink, ShoppingCart } from 'lucide-react';
+import { MousePointer2, Edit3, ArrowRight, Download, Play, Star } from 'lucide-react';
 import type { BlockComponentProps } from '@/types/blocks';
 
 /**
- * ButtonInlineBlock - Componente de botão modular
- * Botão responsivo e configurável para CTAs
+ * ButtonInlineBlock - Componente modular inline horizontal
+ * Botão responsivo e configurável com múltiplas variantes
  * MODULAR | REUTILIZÁVEL | RESPONSIVO | INDEPENDENTE
- * Utiliza funcionalidades modernas do ES7+
  */
 const ButtonInlineBlock: React.FC<BlockComponentProps> = ({
   block,
   isSelected = false,
   onClick,
+  onPropertyChange,
   className = ''
 }) => {
-  // ES7+ Destructuring com optional chaining e nullish coalescing
   const {
     text = 'Clique Aqui',
-    url = '#',
-    variant = 'primary',
-    size = 'medium',
-    icon = 'arrow-right',
-    showIcon = true,
+    variant = 'primary', // primary, secondary, outline, ghost, destructive
+    size = 'medium', // small, medium, large
+    icon = 'none', // none, arrow-right, download, play, star
+    iconPosition = 'right', // left, right, none
     fullWidth = false,
-    target = '_self',
-    backgroundColor = '#B89B7A',
-    textColor = '#ffffff',
-    hoverColor = '#A1835D',
+    disabled = false,
+    href = '',
+    target = '_blank',
+    backgroundColor = '',
+    textColor = '',
+    borderColor = '',
     borderRadius = 'medium',
-    // Propriedades do grid system
-    gridColumns = 'auto',
-    spacing = 'normal'
-  } = block?.properties ?? {};
+    isEditable = true
+  } = block.properties;
 
-  // ES7+ Icon mapping com const assertion
-  const iconComponents = {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editValue, setEditValue] = useState(text);
+
+  // Ícones disponíveis
+  const iconMap = {
+    'none': null,
     'arrow-right': ArrowRight,
     'download': Download,
-    'external-link': ExternalLink,
-    'shopping-cart': ShoppingCart,
-    'none': null
-  } as const;
+    'play': Play,
+    'star': Star
+  };
 
-  // ES7+ Computed property access
-  const IconComponent = iconComponents[icon as keyof typeof iconComponents] ?? ArrowRight;
+  const IconComponent = iconMap[icon as keyof typeof iconMap];
 
-  // ES7+ Object shorthand para classes
+  // Variantes de cor
   const variantClasses = {
-    primary: 'bg-[#B89B7A] hover:bg-[#A1835D] text-white border-transparent',
-    secondary: 'bg-transparent border-[#B89B7A] text-[#B89B7A] hover:bg-[#B89B7A] hover:text-white',
-    outline: 'bg-transparent border-gray-300 text-gray-700 hover:bg-gray-50',
-    ghost: 'bg-transparent border-transparent text-[#B89B7A] hover:bg-[#B89B7A]/10'
-  } as const;
+    primary: 'bg-blue-600 hover:bg-blue-700 text-white border-blue-600',
+    secondary: 'bg-gray-600 hover:bg-gray-700 text-white border-gray-600',
+    outline: 'bg-transparent hover:bg-gray-50 text-gray-900 border-gray-300',
+    ghost: 'bg-transparent hover:bg-gray-100 text-gray-900 border-transparent',
+    destructive: 'bg-red-600 hover:bg-red-700 text-white border-red-600'
+  };
 
+  // Tamanhos
   const sizeClasses = {
-    small: 'px-4 py-2 text-sm',
-    medium: 'px-6 py-3 text-base',
-    large: 'px-8 py-4 text-lg',
-    xlarge: 'px-12 py-6 text-xl'
-  } as const;
+    small: 'px-3 py-1.5 text-sm',
+    medium: 'px-4 py-2 text-base',
+    large: 'px-6 py-3 text-lg'
+  };
 
-  const radiusClasses = {
+  const iconSizes = {
+    small: 'w-4 h-4',
+    medium: 'w-5 h-5',
+    large: 'w-6 h-6'
+  };
+
+  // Border radius
+  const borderRadiusClasses = {
     none: 'rounded-none',
     small: 'rounded-sm',
     medium: 'rounded-md',
     large: 'rounded-lg',
     full: 'rounded-full'
-  } as const;
+  };
 
-  // ES7+ Grid system classes
-  const gridClasses = {
-    auto: 'w-full md:w-[calc(50%-0.5rem)]',
-    half: 'w-full md:w-[calc(50%-0.5rem)]',
-    full: 'w-full'
-  } as const;
-
-  const spacingClasses = {
-    tight: 'p-2',
-    normal: 'p-4',
-    loose: 'p-6'
-  } as const;
-
-  // ES7+ useCallback para otimização
-  const handleClick = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    
-    if (url && url !== '#') {
-      if (target === '_blank') {
-        window.open(url, '_blank', 'noopener,noreferrer');
-      } else {
-        window.location.href = url;
-      }
+  const handleSave = () => {
+    if (onPropertyChange) {
+      onPropertyChange('text', editValue);
     }
-    
-    // Callback opcional do editor
-    onClick?.();
-  }, [url, target, onClick]);
+    setIsEditing(false);
+  };
 
-  // ES7+ useMemo para data attributes
-  const dataAttributes = useMemo(() => ({
-    'data-block-id': block?.id,
-    'data-block-type': block?.type,
-    'data-button-variant': variant
-  }), [block?.id, block?.type, variant]);
+  const handleCancel = () => {
+    setEditValue(text);
+    setIsEditing(false);
+  };
+
+  const customStyles = {
+    backgroundColor: backgroundColor || undefined,
+    color: textColor || undefined,
+    borderColor: borderColor || undefined
+  };
+
+  const hasCustomStyles = backgroundColor || textColor || borderColor;
 
   return (
     <div
       className={cn(
-        // CANVAS GRID SYSTEM
-        'flex-shrink-0 flex-grow-0',
-        gridClasses[gridColumns as keyof typeof gridClasses] ?? gridClasses.auto,
-        
-        // SPACING
-        spacingClasses[spacing as keyof typeof spacingClasses] ?? spacingClasses.normal,
-        
-        // EDITOR STATES
-        isSelected && 'ring-2 ring-blue-500 ring-offset-2',
-        'transition-all duration-200',
-        
+        // INLINE HORIZONTAL: Flexível
+        'flex-shrink-0 flex-grow-0 relative group',
+        fullWidth ? 'w-full' : 'w-auto',
+        // Container editável
+        'p-1 rounded-lg',
+        isSelected && 'bg-blue-50/30',
         className
       )}
-      onClick={(e) => e.stopPropagation()}
-      {...dataAttributes}
+      onClick={onClick}
     >
-      <Button
-        className={cn(
-          // Variant styling
-          variantClasses[variant as keyof typeof variantClasses] ?? variantClasses.primary,
-          
-          // Size styling
-          sizeClasses[size as keyof typeof sizeClasses] ?? sizeClasses.medium,
-          
-          // Border radius
-          radiusClasses[borderRadius as keyof typeof radiusClasses] ?? radiusClasses.medium,
-          
-          // Full width option
-          fullWidth ? 'w-full' : 'w-auto',
-          
-          // Interactive states
-          'transition-all duration-300 transform hover:scale-105 active:scale-95',
-          'font-semibold shadow-lg hover:shadow-xl',
-          
-          // Focus states
-          'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#B89B7A]'
-        )}
-        style={{
-          backgroundColor: variant === 'primary' ? backgroundColor : undefined,
-          color: variant === 'primary' ? textColor : undefined,
-          '--hover-bg': hoverColor
-        } as React.CSSProperties}
-        onClick={handleClick}
-        type="button"
-      >
-        <span className="flex items-center gap-2">
-          {text}
-          {/* ES7+ Conditional rendering com logical AND */}
-          {showIcon && IconComponent && (
-            <IconComponent className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+      {isEditing ? (
+        <div className="space-y-2 p-2 bg-white border rounded-lg shadow-sm">
+          <input
+            type="text"
+            value={editValue}
+            onChange={(e) => setEditValue(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none focus:border-blue-500"
+            placeholder="Texto do botão"
+            autoFocus
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleSave();
+              if (e.key === 'Escape') handleCancel();
+            }}
+          />
+          <div className="flex gap-2">
+            <button
+              onClick={handleSave}
+              className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600"
+            >
+              Salvar
+            </button>
+            <button
+              onClick={handleCancel}
+              className="px-3 py-1 bg-gray-500 text-white rounded text-sm hover:bg-gray-600"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      ) : (
+        <>
+          <button
+            className={cn(
+              // Base styles
+              'inline-flex items-center justify-center font-medium transition-all duration-200',
+              'border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500',
+              'hover:scale-105 active:scale-95',
+              // Tamanho
+              sizeClasses[size as keyof typeof sizeClasses],
+              // Variante (aplicada apenas se não há estilos customizados)
+              !hasCustomStyles && variantClasses[variant as keyof typeof variantClasses],
+              // Border radius
+              borderRadiusClasses[borderRadius as keyof typeof borderRadiusClasses],
+              // Estados
+              disabled && 'opacity-50 cursor-not-allowed hover:scale-100',
+              fullWidth && 'w-full',
+              // Cursor editável
+              isEditable && 'cursor-pointer'
+            )}
+            style={hasCustomStyles ? customStyles : undefined}
+            disabled={disabled}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (isEditable) setIsEditing(true);
+              if (href && !isEditing) {
+                window.open(href, target);
+              }
+            }}
+          >
+            {/* Ícone à esquerda */}
+            {IconComponent && iconPosition === 'left' && (
+              <IconComponent className={cn(iconSizes[size as keyof typeof iconSizes], 'mr-2')} />
+            )}
+
+            {/* Texto do botão */}
+            <span>{text || 'Clique Aqui'}</span>
+
+            {/* Ícone à direita */}
+            {IconComponent && iconPosition === 'right' && (
+              <IconComponent className={cn(iconSizes[size as keyof typeof iconSizes], 'ml-2')} />
+            )}
+          </button>
+
+          {/* Indicador de edição */}
+          {isEditable && isSelected && (
+            <div className="absolute -top-2 -right-2 bg-blue-500 text-white rounded-full p-1">
+              <Edit3 className="w-3 h-3" />
+            </div>
           )}
-        </span>
-      </Button>
+
+          {/* Empty state */}
+          {!text && (
+            <div className="absolute inset-0 flex items-center justify-center bg-gray-100/80 rounded-lg text-gray-500 text-sm">
+              <MousePointer2 className="w-4 h-4 mr-2" />
+              Clique para editar
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 };
 
-// ES7+ Export com named exports e default
 export default ButtonInlineBlock;
-
-// ES7+ Type exports
-export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
-export type ButtonSize = 'small' | 'medium' | 'large' | 'xlarge';
-export type ButtonIcon = 'arrow-right' | 'download' | 'external-link' | 'shopping-cart' | 'none';
-
-// ES7+ Const assertions para arrays readonly
-export const BUTTON_VARIANTS = ['primary', 'secondary', 'outline', 'ghost'] as const;
-export const BUTTON_SIZES = ['small', 'medium', 'large', 'xlarge'] as const;
-export const BUTTON_ICONS = ['arrow-right', 'download', 'external-link', 'shopping-cart', 'none'] as const;
-
-// ES7+ Factory function
-export const createButtonBlock = (
-  text: string,
-  url: string,
-  options: Partial<{
-    variant: ButtonVariant;
-    size: ButtonSize;
-    icon: ButtonIcon;
-    fullWidth: boolean;
-  }> = {}
-) => ({
-  id: crypto.randomUUID?.() ?? Math.random().toString(36),
-  type: 'button-inline',
-  properties: {
-    text,
-    url,
-    ...options
-  }
-});

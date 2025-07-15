@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import QuizQuestionBlock from './blocks/QuizQuestionBlock';
+import QuizQuestionBlock from '@/components/blocks/quiz/QuizQuestionBlock';
 
 interface QuizStep {
   id: string;
@@ -340,22 +340,17 @@ const QuizEditorSteps = () => {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="w-full max-w-4xl">
         <QuizQuestionBlock
+          blockId={currentStepData.id}
           question={currentStepData.question}
-          options={currentStepData.options}
-          allowMultiple={currentStepData.allowMultiple}
+          options={currentStepData.options.map(opt => ({ ...opt, value: opt.id }))}
+          multipleSelection={currentStepData.allowMultiple}
           showImages={currentStepData.showImages}
           maxSelections={currentStepData.maxSelections}
-          autoAdvance={true}
-          autoAdvanceDelay={1500}
-          onNext={handleNext}
+          onAnswer={(answers: string[]) => handleStepResponse(currentStepData.id, answers)}
           onBack={currentStep > 0 ? handleBack : undefined}
           progressPercent={progressPercent}
-          logoUrl="https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png"
-          onPropertyChange={(key, value) => {
-            if (key === 'selectedOptions') {
-              handleStepResponse(currentStepData.id, value);
-            }
-          }}
+          logoUrl="/api/placeholder/96/96"
+          showBackButton={currentStep > 0}
         />
         
         {/* Debug Info */}

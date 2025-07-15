@@ -13,6 +13,7 @@ const StyleCardInlineBlock: React.FC<BlockComponentProps> = ({
   block,
   isSelected = false,
   onClick,
+  onPropertyChange,
   className = ''
 }) => {
   const {
@@ -23,7 +24,8 @@ const StyleCardInlineBlock: React.FC<BlockComponentProps> = ({
     showProgress = true,
     cardSize = 'medium',
     backgroundColor = 'white',
-    borderColor = '#B89B7A'
+    borderColor = '#B89B7A',
+    isEditable = true
   } = block.properties;
 
   // Tamanhos modulares responsivos

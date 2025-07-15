@@ -33,9 +33,8 @@ const QuizDescubraSeuEstilo = lazy(
 const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
 
 // Editor Principal - Consolidado
-const SimpleDragDropEditor = lazy(
-  () => import("./components/visual-editor/SimpleDragDropEditor")
-);
+const SchemaDrivenEditorPage = lazy(() => import("./pages/SchemaDrivenEditorPage"));
+const BlockDefinitionsTest = lazy(() => import("./components/editor/tests/BlockDefinitionsTest"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App = () => {
@@ -86,15 +85,21 @@ const App = () => {
                   path="/descubra-seu-estilo"
                   component={QuizDescubraSeuEstilo}
                 />
-                {/* Editor Principal - Rota Principal do Editor */}
+                {/* Editor Principal - ÚNICO EDITOR para Quiz e Funis Completos */}
                 <Route
                   path="/editor"
-                  component={SimpleDragDropEditor}
+                  component={SchemaDrivenEditorPage}
                 />
-                {/* Editor Visual */}
+                {/* Editor com ID específico */}
                 <Route
-                  path="/editor-visual"
-                  component={SimpleDragDropEditor}
+                  path="/editor/:id"
+                  component={SchemaDrivenEditorPage}
+                />
+                
+                {/* Teste de definições de blocos */}
+                <Route
+                  path="/test-blocks"
+                  component={BlockDefinitionsTest}
                 />
                 {/* Admin - protegido com AdminAuthProvider */}
                 <Route path="/admin/:rest*">

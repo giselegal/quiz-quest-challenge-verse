@@ -1,211 +1,157 @@
-import React, { useState, useEffect } from 'react';
-import { Gift, Star, CheckCircle } from 'lucide-react';
-import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
+import React from 'react';
+import { cn } from '@/lib/utils';
+import { Gift, Star, CheckCircle2 } from 'lucide-react';
 import type { BlockComponentProps } from '@/types/blocks';
 
 /**
- * BonusListInlineBlock - Bloco de lista de bônus (modular)
- * Renderiza apenas a lista de bônus/produtos
+ * BonusListInlineBlock - Componente modular inline horizontal
+ * Lista de bônus e benefícios
+ * MODULAR | REUTILIZÁVEL | RESPONSIVO | INDEPENDENTE
  */
 const BonusListInlineBlock: React.FC<BlockComponentProps> = ({
   block,
   isSelected = false,
   onClick,
-  onPropertyChange,
   className = ''
 }) => {
   const {
-    title = 'Bônus Exclusivos Inclusos',
-    bonuses = [
+    title = 'Bônus Exclusivos',
+    bonusItems = [
       {
-        title: 'Guia Completo do Seu Estilo',
-        description: 'Material exclusivo com dicas personalizadas para seu estilo único',
-        value: 'R$ 97,00',
-        image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
-        badge: 'GUIA PRINCIPAL'
+        title: 'Guia de Combinações',
+        description: 'Como criar looks incríveis',
+        value: 'R$ 47'
       },
       {
-        title: 'Paleta de Cores Personalizada',
-        description: 'Suas cores ideais baseadas no resultado do quiz',
-        value: 'R$ 47,00',
-        image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp',
-        badge: 'BÔNUS EXCLUSIVO'
+        title: 'Checklist de Compras',
+        description: 'Evite compras desnecessárias',
+        value: 'R$ 27'
+      },
+      {
+        title: 'Consultoria Express',
+        description: '30 min de consultoria online',
+        value: 'R$ 97'
       }
     ],
-    backgroundColor = '#ffffff',
-    textColor = '#432818',
-    accentColor = '#B89B7A',
-    // Propriedades de grid para responsividade
-    gridColumns = 1,
-    spacing = 'md'
+    showValues = true,
+    totalValue = 'R$ 171',
+    highlightColor = '#B89B7A',
+    backgroundColor = 'white',
+    variant = 'card' // card, list, minimal
   } = block.properties;
 
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
-
-  // Classes de espaçamento
-  const spacingClasses = {
-    none: 'p-0',
-    sm: 'p-4',
-    md: 'p-6',
-    lg: 'p-8',
-    xl: 'p-12'
-  };
-
-  // Classes de grid baseadas na propriedade gridColumns
-  const gridClasses = {
-    1: 'w-full',
-    2: 'w-full md:w-1/2'
-  };
-
-  const handlePropertyChange = (key: string, value: any) => {
-    if (onPropertyChange) {
-      onPropertyChange(key, value);
-    }
+  // Variantes de estilo
+  const variantClasses = {
+    card: 'p-6 rounded-xl border border-gray-200 shadow-sm',
+    list: 'p-4 border-l-4 border-opacity-50',
+    minimal: 'p-4'
   };
 
   return (
     <div
-      className={`
-        ${gridClasses[gridColumns as keyof typeof gridClasses] || gridClasses[1]}
-        ${spacingClasses[spacing as keyof typeof spacingClasses] || spacingClasses.md}
-        transition-all duration-200
-        ${isSelected 
-          ? 'ring-1 ring-blue-500 bg-blue-50/30' 
-          : 'hover:shadow-sm'
-        }
-        ${className}
-      `}
-      style={{ backgroundColor }}
+      className={cn(
+        // INLINE HORIZONTAL: Flexível e quebra linha automaticamente
+        'flex-shrink-0 flex-grow-0',
+        // Container responsivo
+        'w-full',
+        // Variante
+        variantClasses[variant as keyof typeof variantClasses],
+        // Estados do editor
+        isSelected && 'ring-2 ring-blue-500 ring-offset-2',
+        'cursor-pointer transition-all duration-200 hover:shadow-lg',
+        className
+      )}
+      style={{ 
+        backgroundColor,
+        borderLeftColor: variant === 'list' ? highlightColor : undefined
+      }}
       onClick={onClick}
-      data-block-id={block.id}
-      data-block-type={block.type}
     >
-      <AnimatedWrapper show={isLoaded}>
-        <div className="max-w-6xl mx-auto">
-          {/* Título */}
-          {title && (
-            <div className="text-center mb-12">
-              <div className="flex items-center justify-center gap-2 mb-4">
-                <Gift className="w-6 h-6" style={{ color: accentColor }} />
-                <h3 className="text-2xl lg:text-3xl font-bold" style={{ color: textColor }}>
-                  {title}
-                </h3>
-              </div>
+      {/* Header */}
+      <div className="flex items-center mb-6">
+        <div 
+          className="w-10 h-10 rounded-full flex items-center justify-center mr-4"
+          style={{ backgroundColor: `${highlightColor}20` }}
+        >
+          <Gift 
+            className="w-5 h-5"
+            style={{ color: highlightColor }}
+          />
+        </div>
+        <div>
+          <h3 className="text-xl font-bold text-gray-900">{title}</h3>
+          <p className="text-sm text-gray-500">Inclusos no seu pacote</p>
+        </div>
+      </div>
+
+      {/* Lista de bônus */}
+      <div className="space-y-4">
+        {bonusItems.map((bonus, index) => (
+          <div key={index} className="flex items-start p-4 bg-gray-50 rounded-lg">
+            <div className="flex-shrink-0 mr-4">
               <div 
-                className="w-24 h-1 mx-auto rounded-full"
-                style={{
-                  background: `linear-gradient(to right, ${accentColor}, #aa6b5d)`
-                }}
-              />
-            </div>
-          )}
-
-          {/* Grid de Bônus */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {bonuses.map((bonus: any, index: number) => (
-              <div
-                key={index}
-                className="group bg-white rounded-2xl p-6 lg:p-8 border border-opacity-15 transition-all duration-500 hover:scale-105 hover:shadow-2xl relative"
-                style={{
-                  borderColor: accentColor,
-                  boxShadow: "0 8px 24px rgba(184, 155, 122, 0.15)"
-                }}
+                className="w-8 h-8 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: highlightColor }}
               >
-                {/* Badge */}
-                <div className="absolute -top-4 -right-4 z-10">
-                  <span
-                    className="text-xs font-bold px-4 py-2 rounded-full text-white shadow-lg transform rotate-12"
-                    style={{
-                      background: index === 0 
-                        ? `linear-gradient(to right, ${accentColor}, #aa6b5d)`
-                        : `linear-gradient(to right, #aa6b5d, ${accentColor})`
-                    }}
-                  >
-                    {bonus.badge || (index === 0 ? 'PRINCIPAL' : 'BÔNUS')}
-                  </span>
-                </div>
-
-                {/* Imagem */}
-                {bonus.image && (
-                  <div 
-                    className="relative mb-6 rounded-xl p-4 overflow-hidden"
-                    style={{
-                      backgroundColor: '#f9f4ef',
-                      boxShadow: "0 2px 4px rgba(184, 155, 122, 0.08)"
-                    }}
-                  >
-                    <img
-                      src={bonus.image}
-                      alt={bonus.title}
-                      className="w-full h-32 object-contain transition-all duration-500 group-hover:scale-110"
-                      loading="lazy"
-                    />
-                    <div 
-                      className="absolute inset-0 bg-gradient-to-t from-opacity-10 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-xl"
-                      style={{ backgroundColor: accentColor }}
-                    />
-                  </div>
-                )}
-
-                {/* Conteúdo */}
-                <div className="text-left space-y-4">
-                  <h4 className="font-bold text-lg lg:text-xl leading-tight" style={{ color: textColor }}>
+                <CheckCircle2 className="w-4 h-4 text-white" />
+              </div>
+            </div>
+            
+            <div className="flex-1">
+              <div className="flex items-start justify-between">
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-1">
                     {bonus.title}
                   </h4>
-                  <p className="text-sm lg:text-base text-gray-600 leading-relaxed">
+                  <p className="text-sm text-gray-600">
                     {bonus.description}
                   </p>
-
-                  {/* Valor */}
-                  <div className="pt-4 border-t border-opacity-10" style={{ borderColor: accentColor }}>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-gray-500">
-                        Valor individual:
-                      </span>
-                      <span 
-                        className="text-lg font-bold line-through"
-                        style={{ color: accentColor }}
-                      >
-                        {bonus.value}
-                      </span>
+                </div>
+                
+                {showValues && bonus.value && (
+                  <div className="ml-4 text-right">
+                    <div 
+                      className="text-sm font-bold"
+                      style={{ color: highlightColor }}
+                    >
+                      {bonus.value}
+                    </div>
+                    <div className="text-xs text-gray-500 line-through">
+                      Valor individual
                     </div>
                   </div>
-                </div>
+                )}
               </div>
-            ))}
+            </div>
           </div>
+        ))}
+      </div>
 
-          {/* Valor Total */}
-          <div className="mt-12 text-center">
-            <div 
-              className="inline-flex items-center gap-3 px-6 py-3 rounded-full border-2"
-              style={{
-                backgroundColor: `${accentColor}10`,
-                borderColor: `${accentColor}30`
-              }}
-            >
-              <Star className="w-5 h-5" style={{ color: accentColor }} />
-              <span className="font-semibold" style={{ color: textColor }}>
-                Valor total dos bônus: 
-              </span>
-              <span 
-                className="text-xl font-bold"
-                style={{ color: accentColor }}
-              >
-                R$ 144,00
+      {/* Total */}
+      {showValues && totalValue && (
+        <div className="mt-6 pt-4 border-t border-gray-200">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Star 
+                className="w-5 h-5 mr-2"
+                style={{ color: highlightColor }}
+              />
+              <span className="font-semibold text-gray-900">
+                Valor total dos bônus:
               </span>
             </div>
-            <p className="text-sm text-gray-600 mt-2">
-              <CheckCircle className="w-4 h-4 inline mr-1 text-green-500" />
-              Inclusos gratuitamente na sua compra
-            </p>
+            <div 
+              className="text-2xl font-bold"
+              style={{ color: highlightColor }}
+            >
+              {totalValue}
+            </div>
           </div>
+          <p className="text-sm text-gray-500 text-center mt-2">
+            Tudo isso <strong>grátis</strong> para você
+          </p>
         </div>
-      </AnimatedWrapper>
+      )}
     </div>
   );
 };
