@@ -1,5 +1,5 @@
 import React from 'react';
-import { OptionsGridBlock } from '@/components/editor/blocks/OptionsGridBlock';
+import OptionsGridBlock from '@/components/editor/blocks/OptionsGridBlock';
 import { UniversalBlockRenderer } from '@/components/editor/blocks/UniversalBlockRenderer';
 
 const TestOptionsGrid = () => {
@@ -59,7 +59,7 @@ const TestOptionsGrid = () => {
             isSelected={false}
             isEditing={false}
             onClick={() => console.log('🖱️ Block clicked')}
-            onPropertyChange={(key, value) => {
+            onPropertyChange={(key: string, value: any) => {
               console.log('🎯 TESTE DIRETO - onPropertyChange:', { key, value });
               alert(`Callback funcionou! ${key}: ${JSON.stringify(value)}`);
             }}
@@ -76,7 +76,7 @@ const TestOptionsGrid = () => {
             block={testBlock}
             isSelected={false}
             onClick={() => console.log('🖱️ UniversalBlock clicked')}
-            onSaveInline={(blockId, updates) => {
+            onSaveInline={(blockId: string, updates: any) => {
               console.log('💾 TESTE VIA RENDERER - onSaveInline:', { blockId, updates });
               alert(`UniversalRenderer funcionou! Block: ${blockId}, Updates: ${JSON.stringify(updates)}`);
             }}
