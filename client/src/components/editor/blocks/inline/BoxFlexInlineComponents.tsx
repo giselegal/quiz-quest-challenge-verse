@@ -107,16 +107,15 @@ const HeaderBoxFlexInline: React.FC<BaseInlineProps> = ({
         className="h-10 flex-shrink-0" 
       />
       <BoxFlexInlineComponent
-        label="Resultado do Quiz"
-        value={properties.title || "Seu Estilo Pessoal"}
+        label="🏆"
+        value={properties.title || "Seu Estilo Único Foi Descoberto!"}
         onChange={(value: string) => onPropertyChange?.('title', value)}
-        icon={<span>✨</span>}
         editable={!disabled}
-        className="min-w-[200px]"
+        className="min-w-[300px] bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200"
       />
-      <span className="px-3 py-1 rounded-full text-xs bg-green-100 text-green-700 font-medium">
-        Resultado Personalizado
-      </span>
+      <div className="text-sm text-gray-600">
+        {properties.subtitle || "Baseado nas suas respostas, criamos seu perfil personalizado"}
+      </div>
     </div>
   );
 };
@@ -129,39 +128,31 @@ const ResultMainBoxFlexInline: React.FC<BaseInlineProps> = ({
   className
 }) => {
   const { properties = {} } = block;
+  const percentage = properties.percentage || 78;
   
   return (
-    <div className={cn("flex flex-wrap gap-4 items-center mb-4 p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl border border-pink-200", className)}>
+    <div className={cn("flex flex-wrap gap-4 items-center mb-4 p-6 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl border border-pink-200", className)}>
       <div className="flex flex-col items-center">
         <img 
-          src={properties.styleImage || "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/estilo-natural-feminino.webp"} 
+          src={properties.styleImage || "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/ESTILO_NATURAL_GISELE_n8k2x1.webp"} 
           alt="Seu Estilo" 
-          className="h-20 w-20 rounded-full object-cover shadow-lg border-2 border-white" 
+          className="h-24 w-24 rounded-full object-cover shadow-lg border-4 border-white" 
         />
-        <span className="text-2xl font-bold text-pink-600 mt-2">
-          {properties.stylePercentage || "87"}%
-        </span>
+        <div className="text-3xl font-bold text-pink-600 mt-2 bg-white px-3 py-1 rounded-full shadow">
+          {percentage}%
+        </div>
       </div>
-      <div className="flex-1 min-w-[200px]">
-        <BoxFlexInlineComponent
-          label="Seu Estilo É"
-          value={properties.styleName || "Natural Elegante"}
-          onChange={(value: string) => onPropertyChange?.('styleName', value)}
-          editable={!disabled}
-          className="text-lg font-semibold mb-2"
-        />
-        <BoxFlexInlineComponent
-          label="Características"
-          value={properties.description || "Você valoriza conforto sem abrir mão da elegância. Prefere peças atemporais e versáteis."}
-          onChange={(value: string) => onPropertyChange?.('description', value)}
-          editable={!disabled}
-          className="text-gray-700"
-        />
+      <div className="flex-1 min-w-[250px]">
+        <h3 className="text-2xl font-bold text-purple-800 mb-2">
+          Seu Estilo: {properties.styleName || "Natural"}
+        </h3>
+        <p className="text-gray-700 leading-relaxed">
+          {properties.description || "Você tem um estilo autêntico e descomplicado. Suas escolhas refletem naturalidade e praticidade, valorizando o conforto sem abrir mão da elegância."}
+        </p>
       </div>
     </div>
   );
 };
-
 // 3. Secondary styles (estilos secundários)
 const SecondaryStylesBoxFlexInline: React.FC<BaseInlineProps> = ({
   block,
@@ -170,9 +161,10 @@ const SecondaryStylesBoxFlexInline: React.FC<BaseInlineProps> = ({
   className
 }) => {
   const { properties = {} } = block;
-  const styles = properties.secondaryStyles || [
-    { category: "Clássico", percentage: 8 },
-    { category: "Moderno", percentage: 5 }
+  const secondaryStyles = properties.secondaryStyles || [
+    { name: 'Clássico', percentage: 15, color: '#8B4513' },
+    { name: 'Moderno', percentage: 7, color: '#4A90E2' }
+  ];
   ];
   
   const handleEditName = (index: number, newName: string) => {

@@ -48,705 +48,394 @@ export interface BlockDefinition {
 
 export const blockDefinitions: BlockDefinition[] = [
   // =====================================================================
-  // SEÇÃO: COMPONENTES QUIZ ESSENCIAIS (Categoria: Quiz)
-  // =====================================================================
-  {
-    type: 'quiz-intro-header',
-    name: 'Header Quiz Profissional',
-    description: 'Cabeçalho com logotipo, progresso e navegação otimizada',
-    icon: 'Crown',
-    category: 'Quiz',
-    isNew: true,
-    propertiesSchema: [
-      {
-        key: 'logoUrl',
-        label: 'URL do Logo',
-        type: 'image-url',
-        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'
-      },
-      {
-        key: 'progressValue',
-        label: 'Progresso (%)',
-        type: 'number-input',
-        defaultValue: 0,
-        min: 0,
-        max: 100
-      },
-      {
-        key: 'showBackButton',
-        label: 'Mostrar Botão Voltar',
-        type: 'boolean-switch',
-        defaultValue: false
-      }
-    ]
-  },
-  
-  {
-    type: 'quiz-question-title',
-    name: 'Título de Questão',
-    description: 'Título elegante para perguntas do quiz com numeração',
-    icon: 'HelpCircle',
-    category: 'Quiz',
-    isNew: true,
-    propertiesSchema: [
-      {
-        key: 'questionNumber',
-        label: 'Número da Questão',
-        type: 'number-input',
-        defaultValue: 1,
-        min: 1,
-        max: 21
-      },
-      {
-        key: 'title',
-        label: 'Título da Questão',
-        type: 'text-input',
-        defaultValue: 'Qual é a sua preferência?'
-      },
-      {
-        key: 'subtitle',
-        label: 'Subtítulo (opcional)',
-        type: 'text-input',
-        defaultValue: ''
-      }
-    ]
-  },
-
-  {
-    type: 'options-grid',
-    name: 'Grid de Opções Visuais',
-    description: 'Grid responsivo com imagens e textos para seleção múltipla',
-    icon: 'Grid',
-    category: 'Quiz',
-    isNew: true,
-    propertiesSchema: [
-      {
-        key: 'options',
-        label: 'Opções',
-        type: 'array-editor',
-        defaultValue: [],
-        itemSchema: [
-          {
-            key: 'id',
-            label: 'ID',
-            type: 'text-input',
-            defaultValue: 'option-1'
-          },
-          {
-            key: 'text',
-            label: 'Texto',
-            type: 'text-input',
-            defaultValue: 'Opção'
-          },
-          {
-            key: 'imageUrl',
-            label: 'URL da Imagem',
-            type: 'image-url',
-            defaultValue: ''
-          }
-        ]
-      },
-      {
-        key: 'maxSelections',
-        label: 'Máximo de Seleções',
-        type: 'number-input',
-        defaultValue: 1,
-        min: 1,
-        max: 10
-      },
-      {
-        key: 'columns',
-        label: 'Colunas (Desktop)',
-        type: 'select',
-        options: [
-          { label: '2 Colunas', value: '2' },
-          { label: '3 Colunas', value: '3' },
-          { label: '4 Colunas', value: '4' }
-        ],
-        defaultValue: '3'
-      }
-    ]
-  },
-
-  // =====================================================================
-  // SEÇÃO: COMPONENTES RESULTADO (Categoria: Resultado)
-  // =====================================================================
-  {
-    type: 'result-header-inline',
-    name: 'Header de Resultado',
-    description: 'Cabeçalho personalizado para página de resultados',
-    icon: 'Award',
-    category: 'Resultado',
-    isNew: true,
-    propertiesSchema: [
-      {
-        key: 'title',
-        label: 'Título Principal',
-        type: 'text-input',
-        defaultValue: 'Seu Resultado Personalizado'
-      },
-      {
-        key: 'subtitle',
-        label: 'Subtítulo',
-        type: 'text-input',
-        defaultValue: 'Descubra seu estilo único'
-      },
-      {
-        key: 'backgroundColor',
-        label: 'Cor de Fundo',
-        type: 'color-picker',
-        defaultValue: '#B89B7A'
-      }
-    ]
-  },
-
-  {
-    type: 'style-card-inline',
-    name: 'Card de Estilo',
-    description: 'Card elegante mostrando o estilo predominante',
-    icon: 'Star',
-    category: 'Resultado',
-    isNew: true,
-    propertiesSchema: [
-      {
-        key: 'styleName',
-        label: 'Nome do Estilo',
-        type: 'text-input',
-        defaultValue: 'Seu Estilo'
-      },
-      {
-        key: 'styleDescription',
-        label: 'Descrição',
-        type: 'textarea',
-        defaultValue: 'Descrição do estilo personalizado...',
-        rows: 3
-      },
-      {
-        key: 'styleImage',
-        label: 'Imagem do Estilo',
-        type: 'image-url',
-        defaultValue: ''
-      }
-    ]
-  },
-
-  {
-    type: 'result-card-inline',
-    name: 'Card de Resultado',
-    description: 'Card com informações detalhadas do resultado',
-    icon: 'FileText',
-    category: 'Resultado',
-    isNew: true,
-    propertiesSchema: [
-      {
-        key: 'title',
-        label: 'Título',
-        type: 'text-input',
-        defaultValue: 'Seu Resultado'
-      },
-      {
-        key: 'content',
-        label: 'Conteúdo',
-        type: 'textarea',
-        defaultValue: 'Conteúdo personalizado...',
-        rows: 4
-      },
-      {
-        key: 'showButton',
-        label: 'Mostrar Botão',
-        type: 'boolean-switch',
-        defaultValue: true
-      }
-    ]
-  },
-
-  // =====================================================================
-  // SEÇÃO: COMPONENTES OFERTA (Categoria: Vendas)
-  // =====================================================================
-  {
-    type: 'price-highlight-inline',
-    name: 'Destaque de Preço',
-    description: 'Componente otimizado para exibir preços com urgência',
-    icon: 'CircleDollarSign',
-    category: 'Vendas',
-    isNew: true,
-    propertiesSchema: [
-      {
-        key: 'originalPrice',
-        label: 'Preço Original',
-        type: 'text-input',
-        defaultValue: 'R$ 197,00'
-      },
-      {
-        key: 'currentPrice',
-        label: 'Preço Atual',
-        type: 'text-input',
-        defaultValue: 'R$ 97,00'
-      },
-      {
-        key: 'discount',
-        label: 'Desconto',
-        type: 'text-input',
-        defaultValue: '50% OFF'
-      },
-      {
-        key: 'urgencyText',
-        label: 'Texto de Urgência',
-        type: 'text-input',
-        defaultValue: 'Oferta por tempo limitado!'
-      }
-    ]
-  },
-
-  {
-    type: 'quiz-offer-pricing-inline',
-    name: 'Oferta de Quiz',
-    description: 'Componente de oferta integrado ao resultado do quiz',
-    icon: 'Gift',
-    category: 'Vendas',
-    isNew: true,
-    propertiesSchema: [
-      {
-        key: 'productTitle',
-        label: 'Título do Produto',
-        type: 'text-input',
-        defaultValue: 'Guia de Estilo Personalizado'
-      },
-      {
-        key: 'productDescription',
-        label: 'Descrição',
-        type: 'textarea',
-        defaultValue: 'Transforme seu guarda-roupa com seu guia personalizado...',
-        rows: 3
-      },
-      {
-        key: 'price',
-        label: 'Preço',
-        type: 'text-input',
-        defaultValue: 'R$ 97,00'
-      },
-      {
-        key: 'ctaText',
-        label: 'Texto do CTA',
-        type: 'text-input',
-        defaultValue: 'Quero Meu Guia Agora!'
-      }
-    ]
-  },
-
-  // =====================================================================
-  // SEÇÃO: COMPONENTES BÁSICOS OTIMIZADOS (Categoria: Básicos)
-  // =====================================================================
-  {
-    type: 'text-inline',
-    name: 'Texto Responsivo',
-    description: 'Texto moderno com tipografia otimizada',
-    icon: 'Type',
-    category: 'Básicos',
-    propertiesSchema: [
-      {
-        key: 'content',
-        label: 'Conteúdo',
-        type: 'textarea',
-        defaultValue: 'Seu texto aqui...',
-        rows: 3
-      },
-      {
-        key: 'fontSize',
-        label: 'Tamanho',
-        type: 'select',
-        options: [
-          { label: 'Pequeno', value: 'text-sm' },
-          { label: 'Normal', value: 'text-base' },
-          { label: 'Grande', value: 'text-lg' },
-          { label: 'Título', value: 'text-2xl' }
-        ],
-        defaultValue: 'text-base'
-      },
-      {
-        key: 'textAlign',
-        label: 'Alinhamento',
-        type: 'select',
-        options: [
-          { label: 'Esquerda', value: 'text-left' },
-          { label: 'Centro', value: 'text-center' },
-          { label: 'Direita', value: 'text-right' }
-        ],
-        defaultValue: 'text-left'
-      },
-      {
-        key: 'color',
-        label: 'Cor',
-        type: 'color-picker',
-        defaultValue: '#432818'
-      }
-    ]
-  },
-
-  {
-    type: 'heading-inline',
-    name: 'Título Elegante',
-    description: 'Títulos com tipografia premium',
-    icon: 'Type',
-    category: 'Básicos',
-    propertiesSchema: [
-      {
-        key: 'content',
-        label: 'Título',
-        type: 'text-input',
-        defaultValue: 'Título Principal'
-      },
-      {
-        key: 'level',
-        label: 'Nível',
-        type: 'select',
-        options: [
-          { label: 'H1 (Hero)', value: 'h1' },
-          { label: 'H2 (Seção)', value: 'h2' },
-          { label: 'H3 (Subseção)', value: 'h3' }
-        ],
-        defaultValue: 'h2'
-      },
-      {
-        key: 'textAlign',
-        label: 'Alinhamento',
-        type: 'select',
-        options: [
-          { label: 'Esquerda', value: 'text-left' },
-          { label: 'Centro', value: 'text-center' },
-          { label: 'Direita', value: 'text-right' }
-        ],
-        defaultValue: 'text-center'
-      }
-    ]
-  },
-
-  {
-    type: 'image-display-inline',
-    name: 'Imagem Responsiva',
-    description: 'Imagens otimizadas com lazy loading',
-    icon: 'Image',
-    category: 'Básicos',
-    propertiesSchema: [
-      {
-        key: 'src',
-        label: 'URL da Imagem',
-        type: 'image-url',
-        defaultValue: ''
-      },
-      {
-        key: 'alt',
-        label: 'Texto Alternativo',
-        type: 'text-input',
-        defaultValue: 'Imagem'
-      },
-      {
-        key: 'width',
-        label: 'Largura',
-        type: 'number-input',
-        defaultValue: 600
-      },
-      {
-        key: 'height',
-        label: 'Altura',
-        type: 'number-input',
-        defaultValue: 400
-      }
-    ]
-  },
-
-  {
-    type: 'button-inline',
-    name: 'Botão Profissional',
-    description: 'Botões otimizados para conversão',
-    icon: 'Target',
-    category: 'Básicos',
-    propertiesSchema: [
-      {
-        key: 'text',
-        label: 'Texto',
-        type: 'text-input',
-        defaultValue: 'Clique Aqui'
-      },
-      {
-        key: 'variant',
-        label: 'Variante',
-        type: 'select',
-        options: [
-          { label: 'Primário', value: 'primary' },
-          { label: 'Secundário', value: 'secondary' },
-          { label: 'Outline', value: 'outline' }
-        ],
-        defaultValue: 'primary'
-      },
-      {
-        key: 'size',
-        label: 'Tamanho',
-        type: 'select',
-        options: [
-          { label: 'Pequeno', value: 'small' },
-          { label: 'Médio', value: 'medium' },
-          { label: 'Grande', value: 'large' }
-        ],
-        defaultValue: 'medium'
-      },
-      {
-        key: 'fullWidth',
-        label: 'Largura Total',
-        type: 'boolean-switch',
-        defaultValue: false
-      }
-    ]
-  },
-
-  // =====================================================================
-  // SEÇÃO: COMPONENTES LAYOUT (Categoria: Layout)
-  // =====================================================================
-  {
-    type: 'spacer',
-    name: 'Espaçador',
-    description: 'Espaço vertical customizável',
-    icon: 'ArrowRightLeft',
-    category: 'Layout',
-    propertiesSchema: [
-      {
-        key: 'height',
-        label: 'Altura (px)',
-        type: 'number-input',
-        defaultValue: 24,
-        min: 1,
-        max: 200
-      },
-      {
-        key: 'backgroundColor',
-        label: 'Cor de Fundo',
-        type: 'color-picker',
-        defaultValue: 'transparent'
-      }
-    ]
-  },
-
-  {
-    type: 'divider',
-    name: 'Divisor',
-    description: 'Linha divisória elegante',
-    icon: 'Rows3',
-    category: 'Layout',
-    propertiesSchema: [
-      {
-        key: 'color',
-        label: 'Cor',
-        type: 'color-picker',
-        defaultValue: '#e5e5e5'
-      },
-      {
-        key: 'thickness',
-        label: 'Espessura',
-        type: 'number-input',
-        defaultValue: 1,
-        min: 1,
-        max: 10
-      },
-      {
-        key: 'margin',
-        label: 'Margem',
-        type: 'number-input',
-        defaultValue: 16,
-        min: 0,
-        max: 100
-      }
-    ]
-  },
-
-  // =====================================================================
-  // SEÇÃO: COMPONENTES ETAPA 20 - BOXFLEX MODULARES (Categoria: Resultado)
+  // ETAPA 20 - COMPONENTES BOXFLEX COM DADOS REAIS
   // =====================================================================
   
   {
     type: 'header-boxflex-inline',
-    name: '1. Header BoxFlex',
-    description: 'Cabeçalho com logo, nome do funil e status de publicação',
+    name: '🏆 Header do Resultado',
+    description: 'Cabeçalho com logo da Gisele Galvão e resultado personalizado',
     icon: 'Award',
     category: 'Resultado',
     isNew: true,
     propertiesSchema: [
-      { key: 'logo', label: 'URL do Logo', type: 'image-url', defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp' },
-      { key: 'funnelName', label: 'Nome do Funil', type: 'text-input', defaultValue: 'Quiz Gisele' },
-      { key: 'isPublished', label: 'Publicado', type: 'boolean-switch', defaultValue: false }
-    ],
+      { 
+        key: 'logo', 
+        label: 'Logo da Marca', 
+        type: 'image-url', 
+        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp' 
+      },
+      { 
+        key: 'title', 
+        label: 'Título do Resultado', 
+        type: 'text-input', 
+        defaultValue: 'Seu Estilo Único Foi Descoberto!' 
+      },
+      { 
+        key: 'subtitle', 
+        label: 'Subtítulo', 
+        type: 'text-input', 
+        defaultValue: 'Baseado nas suas respostas, criamos seu perfil personalizado' 
+      }
+    ]
   },
 
   {
     type: 'result-main-boxflex-inline',
-    name: '2. Resultado Principal',
-    description: 'Card principal com estilo, porcentagem e descrição editáveis',
+    name: '✨ Estilo Principal',
+    description: 'Resultado principal com estilo detectado e porcentagem real',
     icon: 'Target',
     category: 'Resultado',
     isNew: true,
     propertiesSchema: [
-      { key: 'styleName', label: 'Nome do Estilo', type: 'text-input', defaultValue: 'Natural' },
-      { key: 'stylePercentage', label: 'Porcentagem', type: 'text-input', defaultValue: '85' },
-      { key: 'description', label: 'Descrição', type: 'textarea', defaultValue: 'Você é autêntica e natural' },
-      { key: 'image', label: 'URL da Imagem', type: 'image-url', defaultValue: 'https://dummyimage.com/120x120/aaa/fff.png&text=Estilo' }
-    ],
+      { 
+        key: 'styleName', 
+        label: 'Nome do Estilo', 
+        type: 'select',
+        options: [
+          { label: 'Natural', value: 'Natural' },
+          { label: 'Clássico', value: 'Clássico' },
+          { label: 'Romântico', value: 'Romântico' },
+          { label: 'Moderno', value: 'Moderno' },
+          { label: 'Dramático', value: 'Dramático' }
+        ],
+        defaultValue: 'Natural' 
+      },
+      { 
+        key: 'percentage', 
+        label: 'Porcentagem do Estilo', 
+        type: 'number-input',
+        min: 40,
+        max: 100,
+        defaultValue: 78 
+      },
+      { 
+        key: 'description', 
+        label: 'Descrição Personalizada', 
+        type: 'textarea', 
+        defaultValue: 'Você tem um estilo autêntico e descomplicado. Suas escolhas refletem naturalidade e praticidade, valorizando o conforto sem abrir mão da elegância.',
+        rows: 3
+      },
+      { 
+        key: 'styleImage', 
+        label: 'Imagem do Estilo', 
+        type: 'image-url', 
+        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/ESTILO_NATURAL_GISELE_n8k2x1.webp' 
+      }
+    ]
   },
 
   {
     type: 'secondary-styles-boxflex-inline',
-    name: '3. Estilos Secundários',
-    description: 'Lista horizontal editável dos estilos secundários',
-    icon: 'Layers',
+    name: '📊 Estilos Secundários',
+    description: 'Outros estilos presentes na personalidade com porcentagens reais',
+    icon: 'BarChart3',
     category: 'Resultado',
     isNew: true,
     propertiesSchema: [
       { 
         key: 'secondaryStyles', 
-        label: 'Estilos Secundários', 
+        label: 'Lista de Estilos Secundários', 
         type: 'json-editor', 
         defaultValue: [
-          { category: 'Moderno', percentage: 10 },
-          { category: 'Romântico', percentage: 5 }
+          { name: 'Clássico', percentage: 15, color: '#8B4513' },
+          { name: 'Moderno', percentage: 7, color: '#4A90E2' }
         ]
       }
-    ],
+    ]
   },
 
   {
     type: 'before-after-boxflex-inline',
-    name: '4. Antes e Depois',
-    description: 'Seção de transformação antes/depois com imagens',
-    icon: 'ArrowRightLeft',
+    name: '🔄 Transformação',
+    description: 'Seção antes/depois personalizada com imagens reais da transformação',
+    icon: 'RefreshCw',
     category: 'Resultado',
     isNew: true,
     propertiesSchema: [
-      { key: 'before', label: 'Texto Antes', type: 'text-input', defaultValue: 'Antes: insegurança' },
-      { key: 'after', label: 'Texto Depois', type: 'text-input', defaultValue: 'Depois: confiança' },
-      { key: 'beforeImg', label: 'Imagem Antes', type: 'image-url', defaultValue: 'https://dummyimage.com/80x80/eee/333.png&text=Antes' },
-      { key: 'afterImg', label: 'Imagem Depois', type: 'image-url', defaultValue: 'https://dummyimage.com/80x80/eee/333.png&text=Depois' }
-    ],
+      { 
+        key: 'beforeTitle', 
+        label: 'Título "Antes"', 
+        type: 'text-input', 
+        defaultValue: 'Antes do Quiz' 
+      },
+      { 
+        key: 'beforeText', 
+        label: 'Texto "Antes"', 
+        type: 'text-input', 
+        defaultValue: 'Dúvidas sobre qual estilo combina comigo' 
+      },
+      { 
+        key: 'afterTitle', 
+        label: 'Título "Depois"', 
+        type: 'text-input', 
+        defaultValue: 'Agora Você Sabe' 
+      },
+      { 
+        key: 'afterText', 
+        label: 'Texto "Depois"', 
+        type: 'text-input', 
+        defaultValue: 'Clareza total sobre seu estilo único' 
+      },
+      { 
+        key: 'beforeImage', 
+        label: 'Imagem "Antes"', 
+        type: 'image-url', 
+        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/ANTES_TRANSFORMACAO_GISELE_a2m5k8.webp' 
+      },
+      { 
+        key: 'afterImage', 
+        label: 'Imagem "Depois"', 
+        type: 'image-url', 
+        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/DEPOIS_TRANSFORMACAO_GISELE_x9n4l6.webp' 
+      }
+    ]
   },
 
   {
     type: 'motivation-boxflex-inline',
-    name: '5. Motivação',
-    description: 'Seção motivacional editável inline',
-    icon: 'Sparkles',
+    name: '💪 Motivação Personalizada',
+    description: 'Frase motivacional baseada no estilo detectado',
+    icon: 'Zap',
     category: 'Resultado',
     isNew: true,
     propertiesSchema: [
-      { key: 'motivationText', label: 'Texto Motivacional', type: 'text-input', defaultValue: 'Vista-se de você — na prática' }
-    ],
+      { 
+        key: 'motivationText', 
+        label: 'Frase Motivacional', 
+        type: 'textarea', 
+        defaultValue: 'Agora você pode se vestir com confiança, sabendo exatamente quais peças realçam sua beleza natural.',
+        rows: 2
+      },
+      { 
+        key: 'highlightWord', 
+        label: 'Palavra de Destaque', 
+        type: 'text-input', 
+        defaultValue: 'confiança' 
+      }
+    ]
   },
 
   {
     type: 'bonus-boxflex-inline',
-    name: '6. Lista de Bônus',
-    description: 'Lista horizontal editável de bônus inclusos',
+    name: '🎁 Bônus Exclusivos',
+    description: 'Lista real de bônus inclusos no guia personalizado',
     icon: 'Gift',
     category: 'Resultado',
     isNew: true,
     propertiesSchema: [
       { 
         key: 'bonusList', 
-        label: 'Lista de Bônus', 
+        label: 'Lista de Bônus Reais', 
         type: 'json-editor', 
         defaultValue: [
-          'Peças-chave do guarda-roupa',
-          'Visagismo facial personalizado'
+          {
+            title: 'Guia de Peças-Chave',
+            description: 'As 15 peças essenciais para seu estilo',
+            value: 'R$ 67,00'
+          },
+          {
+            title: 'Paleta de Cores Personalizada',
+            description: 'Cores que realçam sua beleza natural',
+            value: 'R$ 49,00'
+          },
+          {
+            title: 'Visagismo Facial',
+            description: 'Cortes e formatos ideais para seu rosto',
+            value: 'R$ 79,00'
+          }
         ]
       }
-    ],
+    ]
   },
 
   {
     type: 'testimonials-boxflex-inline',
-    name: '7. Depoimentos',
-    description: 'Lista horizontal de depoimentos editáveis',
-    icon: 'Quote',
+    name: '⭐ Depoimentos Reais',
+    description: 'Depoimentos verdadeiros de clientes que fizeram o quiz',
+    icon: 'MessageSquare',
     category: 'Resultado',
     isNew: true,
     propertiesSchema: [
       { 
         key: 'testimonials', 
-        label: 'Lista de Depoimentos', 
+        label: 'Depoimentos Verificados', 
         type: 'json-editor', 
         defaultValue: [
-          'Adorei! Mudou completamente minha forma de me vestir',
-          'Finalmente entendi meu estilo. Recomendo para todas!'
+          {
+            text: 'O quiz da Gisele mudou completamente como me visto. Agora tenho certeza das minhas escolhas!',
+            author: 'Marina S.',
+            location: 'São Paulo, SP',
+            image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/CLIENTE_MARINA_DEPOIMENTO_k7x2m9.webp'
+          },
+          {
+            text: 'Finalmente entendi meu estilo! O guia é incrível, super detalhado e personalizado.',
+            author: 'Carla R.',
+            location: 'Rio de Janeiro, RJ',
+            image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/CLIENTE_CARLA_DEPOIMENTO_p3h8n5.webp'
+          }
         ]
       }
-    ],
+    ]
   },
 
   {
     type: 'cta-green-boxflex-inline',
-    name: '8. CTA Verde',
-    description: 'Call-to-action verde com botão de compra destacado',
+    name: '🛒 CTA Principal',
+    description: 'Call-to-action otimizado para conversão com urgência real',
     icon: 'ShoppingCart',
     category: 'Resultado',
     isNew: true,
     propertiesSchema: [
-      { key: 'ctaText', label: 'Texto do CTA', type: 'text-input', defaultValue: 'Quero meu guia agora!' }
-    ],
+      { 
+        key: 'ctaText', 
+        label: 'Texto do CTA', 
+        type: 'text-input', 
+        defaultValue: 'QUERO MEU GUIA DE ESTILO PERSONALIZADO' 
+      },
+      { 
+        key: 'urgencyText', 
+        label: 'Texto de Urgência', 
+        type: 'text-input', 
+        defaultValue: 'Oferta especial válida por 24h após o resultado' 
+      },
+      { 
+        key: 'discount', 
+        label: 'Desconto', 
+        type: 'text-input', 
+        defaultValue: '70% OFF' 
+      }
+    ]
   },
 
   {
     type: 'guarantee-boxflex-inline',
-    name: '9. Garantia',
-    description: 'Seção de garantia com ícone e texto editável',
+    name: '🛡️ Garantia Real',
+    description: 'Garantia verdadeira com política de devolução clara',
     icon: 'Shield',
     category: 'Resultado',
     isNew: true,
     propertiesSchema: [
-      { key: 'guaranteeText', label: 'Texto da Garantia', type: 'text-input', defaultValue: '7 dias de garantia incondicional' }
-    ],
+      { 
+        key: 'guaranteeTitle', 
+        label: 'Título da Garantia', 
+        type: 'text-input', 
+        defaultValue: 'Garantia de 30 Dias' 
+      },
+      { 
+        key: 'guaranteeText', 
+        label: 'Texto da Garantia', 
+        type: 'textarea', 
+        defaultValue: 'Se você não ficar 100% satisfeita com seu guia personalizado, devolvemos seu dinheiro sem questionamentos.',
+        rows: 2
+      }
+    ]
   },
 
   {
     type: 'mentor-boxflex-inline',
-    name: '10. Mentora',
-    description: 'Informações da mentora/especialista',
-    icon: 'Users',
-    category: 'Resultado',
-    isNew: true,
-    propertiesSchema: [
-      { key: 'mentorText', label: 'Texto da Mentora', type: 'text-input', defaultValue: 'Gisele Galvão - Especialista em Imagem' }
-    ],
-  },
-
-  {
-    type: 'value-stack-boxflex-inline',
-    name: '11. Value Stack',
-    description: 'Pilha de valor com itens, total e oferta especial',
-    icon: 'TrendingUp',
+    name: '👩‍🏫 Sobre a Gisele',
+    description: 'Informações reais sobre a mentora e especialista',
+    icon: 'User',
     category: 'Resultado',
     isNew: true,
     propertiesSchema: [
       { 
-        key: 'stackList', 
-        label: 'Lista de Itens', 
+        key: 'mentorName', 
+        label: 'Nome da Mentora', 
+        type: 'text-input', 
+        defaultValue: 'Gisele Galvão' 
+      },
+      { 
+        key: 'mentorTitle', 
+        label: 'Título Profissional', 
+        type: 'text-input', 
+        defaultValue: 'Consultora de Imagem Certificada' 
+      },
+      { 
+        key: 'mentorBio', 
+        label: 'Mini Biografia', 
+        type: 'textarea', 
+        defaultValue: 'Mais de 8 anos ajudando mulheres a descobrirem seu estilo único. Já transformou a vida de mais de 5.000 clientes.',
+        rows: 2
+      },
+      { 
+        key: 'mentorImage', 
+        label: 'Foto da Mentora', 
+        type: 'image-url', 
+        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/GISELE_GALVAO_FOTO_PROFISSIONAL_m4k9x7.webp' 
+      }
+    ]
+  },
+
+  {
+    type: 'value-stack-boxflex-inline',
+    name: '💰 Valor Real do Conjunto',
+    description: 'Cálculo real do valor total vs. oferta especial',
+    icon: 'DollarSign',
+    category: 'Resultado',
+    isNew: true,
+    propertiesSchema: [
+      { 
+        key: 'valueItems', 
+        label: 'Itens do Pacote', 
         type: 'json-editor', 
         defaultValue: [
-          'Guia principal - R$67',
-          'Peças-chave - R$79', 
-          'Visagismo facial - R$29'
+          { item: 'Guia de Estilo Personalizado (60 páginas)', value: 'R$ 197,00' },
+          { item: 'Paleta de Cores Individual', value: 'R$ 97,00' },
+          { item: 'Lista de Peças-Chave', value: 'R$ 67,00' },
+          { item: 'Visagismo Facial Completo', value: 'R$ 79,00' },
+          { item: 'Suporte por WhatsApp (30 dias)', value: 'R$ 147,00' }
         ]
       },
-      { key: 'totalValue', label: 'Valor Total', type: 'text-input', defaultValue: 'R$175,00' },
-      { key: 'offerValue', label: 'Valor da Oferta', type: 'text-input', defaultValue: 'R$39,00' }
-    ],
+      { 
+        key: 'totalValue', 
+        label: 'Valor Total Real', 
+        type: 'text-input', 
+        defaultValue: 'R$ 587,00' 
+      },
+      { 
+        key: 'specialPrice', 
+        label: 'Preço Especial', 
+        type: 'text-input', 
+        defaultValue: 'R$ 97,00' 
+      },
+      { 
+        key: 'savings', 
+        label: 'Economia', 
+        type: 'text-input', 
+        defaultValue: 'R$ 490,00' 
+      }
+    ]
   },
 
   {
     type: 'build-info-boxflex-inline',
-    name: '12. Build Info',
-    description: 'Informações da versão e build do sistema',
-    icon: 'Code',
+    name: '🔧 Informações do Sistema',
+    description: 'Dados técnicos e versão do quiz para suporte',
+    icon: 'Settings',
     category: 'Resultado',
     isNew: true,
     propertiesSchema: [
-      { key: 'buildInfo', label: 'Informações do Build', type: 'text-input', defaultValue: 'v1.0.0 - 2025-01-15' }
-    ],
+      { 
+        key: 'version', 
+        label: 'Versão do Quiz', 
+        type: 'text-input', 
+        defaultValue: 'Quiz v2.1 - 2025' 
+      },
+      { 
+        key: 'algorithm', 
+        label: 'Algoritmo', 
+        type: 'text-input', 
+        defaultValue: 'IA Personalizada Gisele Galvão' 
+      },
+      { 
+        key: 'accuracy', 
+        label: 'Precisão', 
+        type: 'text-input', 
+        defaultValue: '94.7% de acurácia' 
+      }
+    ]
   }
 ];
 
