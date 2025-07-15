@@ -35,6 +35,22 @@ import {
   LoadingAnimationBlock
 } from './inline';
 
+// Novos componentes BoxFlex da Etapa 20
+import {
+  HeaderBoxFlexInline,
+  ResultMainBoxFlexInline,
+  SecondaryStylesBoxFlexInline,
+  BeforeAfterBoxFlexInline,
+  MotivationBoxFlexInline,
+  BonusBoxFlexInline,
+  TestimonialsBoxFlexInline,
+  CTAGreenBoxFlexInline,
+  GuaranteeBoxFlexInline,
+  MentorBoxFlexInline,
+  ValueStackBoxFlexInline,
+  BuildInfoBoxFlexInline
+} from './inline/BoxFlexInlineComponents_Etapa20';
+
 // Componentes básicos (funcionais)
 import { SpacerBlock } from './SpacerBlock';
 import { VideoPlayerBlock } from './VideoPlayerBlock';
