@@ -90,6 +90,11 @@ const App = () => {
                   path="/descubra-seu-estilo"
                   component={QuizDescubraSeuEstilo}
                 />
+                {/* Editor Principal - Rota Principal do Editor */}
+                <Route
+                  path="/editor"
+                  component={SimpleDragDropEditor}
+                />
                 {/* Editor Visual */}
                 <Route
                   path="/editor-visual"
