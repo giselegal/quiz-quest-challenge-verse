@@ -262,6 +262,99 @@ export const BeforeAfterBoxFlexInline: React.FC<BaseInlineProps> = ({
   );
 };
 
+// Motivation/Action section
+export const MotivationBoxFlexInline: React.FC<BaseInlineProps> = ({
+  block,
+  onPropertyChange,
+  disabled,
+  className
+}) => {
+  const { properties = {} } = block;
+  
+  return (
+    <BoxFlexInlineComponent
+      label="Motivação"
+      value={properties.motivationText || "Vista-se de você — na prática"}
+      onChange={(value: string) => onPropertyChange?.('motivationText', value)}
+      icon={<span>✨</span>}
+      editable={!disabled}
+      className={cn("min-w-[280px]", className)}
+    />
+  );
+};
+
+// Bonus section
+export const BonusBoxFlexInline: React.FC<BaseInlineProps> = ({
+  block,
+  onPropertyChange,
+  disabled,
+  className
+}) => {
+  const { properties = {} } = block;
+  const bonusList = properties.bonusList || [
+    "Peças-chave do guarda-roupa",
+    "Visagismo facial personalizado"
+  ];
+  
+  const handleEditBonus = (index: number, value: string) => {
+    const newBonus = [...bonusList];
+    newBonus[index] = value;
+    onPropertyChange?.('bonusList', newBonus);
+  };
+  
+  return (
+    <div className={cn("flex flex-wrap gap-4 mb-4", className)}>
+      {bonusList.map((bonus: string, idx: number) => (
+        <BoxFlexInlineComponent
+          key={idx}
+          label={`Bônus ${idx + 1}`}
+          value={bonus}
+          onChange={(val: string) => handleEditBonus(idx, val)}
+          icon={<span>🎁</span>}
+          editable={!disabled}
+          className="min-w-[180px]"
+        />
+      ))}
+    </div>
+  );
+};
+
+// Testimonials section
+export const TestimonialsBoxFlexInline: React.FC<BaseInlineProps> = ({
+  block,
+  onPropertyChange,
+  disabled,
+  className
+}) => {
+  const { properties = {} } = block;
+  const testimonials = properties.testimonials || [
+    "Adorei! Mudou completamente minha forma de me vestir",
+    "Finalmente entendi meu estilo. Recomendo para todas!"
+  ];
+  
+  const handleEditTestimonial = (index: number, value: string) => {
+    const newTestimonials = [...testimonials];
+    newTestimonials[index] = value;
+    onPropertyChange?.('testimonials', newTestimonials);
+  };
+  
+  return (
+    <div className={cn("flex flex-wrap gap-4 mb-4", className)}>
+      {testimonials.map((testimonial: string, idx: number) => (
+        <BoxFlexInlineComponent
+          key={idx}
+          label={`Depoimento ${idx + 1}`}
+          value={testimonial}
+          onChange={(val: string) => handleEditTestimonial(idx, val)}
+          icon={<span>⭐</span>}
+          editable={!disabled}
+          className="min-w-[220px]"
+        />
+      ))}
+    </div>
+  );
+};
+
 // CTA section with green styling
 export const CTAGreenBoxFlexInline: React.FC<BaseInlineProps> = ({
   block,
@@ -351,7 +444,83 @@ export const ValueStackBoxFlexInline: React.FC<BaseInlineProps> = ({
   );
 };
 
+// Guarantee section
+export const GuaranteeBoxFlexInline: React.FC<BaseInlineProps> = ({
+  block,
+  onPropertyChange,
+  disabled,
+  className
+}) => {
+  const { properties = {} } = block;
+  
+  return (
+    <BoxFlexInlineComponent
+      label="Garantia"
+      value={properties.guaranteeText || "7 dias de garantia incondicional"}
+      onChange={(value: string) => onPropertyChange?.('guaranteeText', value)}
+      icon={<span>🛡️</span>}
+      editable={!disabled}
+      className={cn("min-w-[240px]", className)}
+    />
+  );
+};
+
+// Mentor section
+export const MentorBoxFlexInline: React.FC<BaseInlineProps> = ({
+  block,
+  onPropertyChange,
+  disabled,
+  className
+}) => {
+  const { properties = {} } = block;
+  
+  return (
+    <BoxFlexInlineComponent
+      label="Mentora"
+      value={properties.mentorText || "Gisele Galvão - Especialista em Imagem"}
+      onChange={(value: string) => onPropertyChange?.('mentorText', value)}
+      icon={<span>👩‍🏫</span>}
+      editable={!disabled}
+      className={cn("min-w-[260px]", className)}
+    />
+  );
+};
+
+// Build info section
+export const BuildInfoBoxFlexInline: React.FC<BaseInlineProps> = ({
+  block,
+  onPropertyChange,
+  disabled,
+  className
+}) => {
+  const { properties = {} } = block;
+  
+  return (
+    <div className={cn("text-xs text-gray-500 mt-6 flex justify-end", className)}>
+      <BoxFlexInlineComponent
+        label="Build"
+        value={properties.buildInfo || "v1.0.0 - 2025-01-15"}
+        onChange={(value: string) => onPropertyChange?.('buildInfo', value)}
+        editable={!disabled}
+        className="min-w-[160px] text-xs"
+      />
+    </div>
+  );
+};
+
 // Export all components
 export {
-  BoxFlexInlineComponent as default
+  BoxFlexInlineComponent as default,
+  HeaderBoxFlexInline,
+  ResultMainBoxFlexInline,
+  SecondaryStylesBoxFlexInline,
+  BeforeAfterBoxFlexInline,
+  MotivationBoxFlexInline,
+  BonusBoxFlexInline,
+  TestimonialsBoxFlexInline,
+  CTAGreenBoxFlexInline,
+  GuaranteeBoxFlexInline,
+  MentorBoxFlexInline,
+  ValueStackBoxFlexInline,
+  BuildInfoBoxFlexInline
 };
