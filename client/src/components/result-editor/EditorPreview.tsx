@@ -2,11 +2,13 @@
 import React from 'react';
 import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import EditableBlock from './EditableBlock';
+import { UniversalBlockRenderer } from '@/components/editor/blocks/UniversalBlockRenderer';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { Block } from '@/types/editor';
 import { StyleResult } from '@/types/quiz';
 import { Button } from '@/components/ui/button';
-import { Monitor, Smartphone, Eye, EyeOff } from 'lucide-react';
+import { Monitor, Smartphone, Eye, EyeOff, GripVertical } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface EditorPreviewProps {
