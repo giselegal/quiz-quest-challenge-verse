@@ -127,14 +127,7 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
         totalPages: funnel.pages.length,
         pageNames: funnel.pages.map(p => p.name),
         currentPageId,
-        activeTab,
-        pagesStructure: funnel.pages.map(p => ({
-          id: p.id,
-          name: p.name,
-          title: p.title,
-          order: p.order,
-          blocksCount: p.blocks?.length || 0
-        }))
+        activeTab
       });
     }
   }, [funnel?.pages, currentPageId, activeTab]);
