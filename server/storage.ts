@@ -111,7 +111,9 @@ export class DatabaseStorage implements IStorage {
 
   // Funnel operations
   async createFunnel(funnel: InsertFunnel): Promise<Funnel> {
-    const id = `funnel_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    // Generate proper UUID for database
+    const { randomUUID } = await import('crypto');
+    const id = randomUUID();
     const now = new Date().toISOString();
     const funnelWithId = {
       ...funnel,
