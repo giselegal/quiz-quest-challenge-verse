@@ -187,7 +187,7 @@ export const useQuizEditor = (options: UseQuizEditorOptions = {}) => {
         title: title || state.quizData?.title || 'Quiz sem título',
         description: description || state.quizData?.description,
         questions: state.questions,
-        userId: user?.id,
+        userId: user?.userName, // AuthContext usa userName como identificador
         isPublished: state.quizData?.isPublished || false,
         metadata: {
           ...state.quizData?.metadata,
@@ -270,7 +270,7 @@ export const useQuizEditor = (options: UseQuizEditorOptions = {}) => {
         title: state.quizData?.title || 'Quiz sem título',
         description: state.quizData?.description,
         questions: state.questions,
-        userId: user?.id,
+        userId: user?.userName, // AuthContext usa userName como identificador
         isPublished: false, // Auto-save sempre como rascunho
         metadata: state.quizData?.metadata
       };
