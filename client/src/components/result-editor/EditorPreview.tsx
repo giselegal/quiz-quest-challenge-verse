@@ -20,6 +20,78 @@ interface EditorPreviewProps {
   onReorderBlocks: (sourceIndex: number, destinationIndex: number) => void;
 }
 
+// Componente sortável para o UniversalBlockRenderer
+interface SortableBlockProps {
+  block: Block;
+  isSelected: boolean;
+  onClick: () => void;
+  isPreviewing: boolean;
+  primaryStyle: StyleResult;
+}
+
+const SortableBlock: React.FC<SortableBlockProps> = ({
+  block,
+  isSelected,
+  onClick,
+  isPreviewing,
+  primaryStyle
+}) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({ id: block.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={cn(
+        'relative group transition-all duration-200',
+        isDragging && 'opacity-50 z-50',
+        isSelected && 'ring-2 ring-blue-500 bg-blue-50/30'
+      )}
+    >
+      {!isPreviewing && (
+        <div className="absolute -left-8 top-0 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+          <Button
+            size="icon"
+            variant="ghost"
+            className="h-6 w-6 bg-white shadow-sm border cursor-grab"
+            {...attributes}
+            {...listeners}
+          >
+            <GripVertical className="h-3 w-3" />
+          </Button>
+        </div>
+      )}
+      
+      <UniversalBlockRenderer
+        block={{
+          id: block.id,
+          type: block.type as string,
+          properties: block.content || {}
+        }}
+        isSelected={isSelected}
+        onClick={onClick}
+        disabled={isPreviewing}
+        onSaveInline={(blockId, updates) => {
+          // This would typically update the block in the parent component
+          console.log('Block updated:', blockId, updates);
+        }}
+      />
+    </div>
+  );
+};
+
 export const EditorPreview: React.FC<EditorPreviewProps> = ({
   blocks,
   selectedBlockId,
@@ -117,14 +189,12 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
               >
                 <div className="space-y-4">
                   {blocks.map((block, index) => (
-                    <EditableBlock
+                    <SortableBlock
                       key={block.id}
                       block={block}
-                      index={index}
                       isSelected={selectedBlockId === block.id}
                       onClick={() => onSelectBlock(block.id)}
-                      isPreviewMode={isPreviewing}
-                      onReorderBlocks={onReorderBlocks}
+                      isPreviewing={isPreviewing}
                       primaryStyle={primaryStyle}
                     />
                   ))}
