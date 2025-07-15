@@ -33,7 +33,7 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
   const [deviceView, setDeviceView] = useState<DeviceView>('desktop'); // Voltar ao padrão
   const [showLeftSidebar, setShowLeftSidebar] = useState(true); 
   const [showRightSidebar, setShowRightSidebar] = useState(true);
-  const [activeTab, setActiveTab] = useState<'components' | 'pages'>('pages');
+  const [activeTab, setActiveTab] = useState<'components' | 'pages'>('components');
 
   // Hook principal do editor
   const {
@@ -119,25 +119,6 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
       createNewFunnel();
     }
   }, [funnel, isLoading, funnelId, createNewFunnel]);
-
-  // DEBUG: Log das páginas do funil
-  useEffect(() => {
-    if (funnel?.pages) {
-      console.log('🔍 DEBUG - Páginas do funil:', {
-        totalPages: funnel.pages.length,
-        pageNames: funnel.pages.map(p => p.name),
-        currentPageId,
-        activeTab,
-        pagesStructure: funnel.pages.map(p => ({
-          id: p.id,
-          name: p.name,
-          title: p.title,
-          order: p.order,
-          blocksCount: p.blocks?.length || 0
-        }))
-      });
-    }
-  }, [funnel?.pages, currentPageId, activeTab]);
 
   // DEBUG: Log estado das sidebars
   useEffect(() => {
@@ -380,9 +361,11 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
                 onComponentSelect={(type) => {
                   console.log('🔄 Component selected:', type);
                   handleComponentSelect(type);
+                  // Removida lógica que fechava sidebar automaticamente
+                  // A sidebar agora permanece aberta para melhor experiência do usuário
                 }}
-                activeTab={activeTab === 'components' ? 'blocks' : 'pages'}
-                onTabChange={(tab: string) => setActiveTab(tab === 'blocks' ? 'components' : 'pages')}
+                activeTab={activeTab}
+                onTabChange={(tab: string) => setActiveTab(tab as "pages" | "components")}
                 funnelPages={funnel?.pages || []}
                 currentPageId={currentPageId ?? undefined}
                 setCurrentPage={setCurrentPage}

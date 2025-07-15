@@ -130,7 +130,7 @@ export class CaktoQuizCalculationEngine {
     );
 
     return {
-      id: crypto.randomUUID?.() ?? Math.random().toString(36),
+      id: crypto.randomUUID(),
       participantName,
       responses,
       styleScores,

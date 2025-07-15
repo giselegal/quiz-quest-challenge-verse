@@ -137,8 +137,6 @@ export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorR
       const loadedFunnel = await schemaDrivenFunnelService.loadFunnel(funnelId);
       
       if (loadedFunnel) {
-        // Funnel carregado com sucesso
-        
         setFunnel(loadedFunnel);
         setCurrentPageId(loadedFunnel.pages[0]?.id || null);
         setSelectedBlockId(null);
@@ -385,24 +383,15 @@ export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorR
     schemaDrivenFunnelService.disableAutoSave();
   }, []);
 
-  // Helper function to validate UUID format
-  const isValidUUID = (id: string): boolean => {
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-    return uuidRegex.test(id) || id.startsWith('funnel-');
-  };
-
   // Inicializar funil apenas uma vez
   useEffect(() => {
     if (initializedRef.current) return;
     initializedRef.current = true;
 
-    if (initialFunnelId && typeof initialFunnelId === 'string' && initialFunnelId !== 'new' && isValidUUID(initialFunnelId)) {
-      console.log('🔄 Loading funnel with valid UUID:', initialFunnelId);
+    if (initialFunnelId && typeof initialFunnelId === 'string') {
+      console.log('🔄 Loading funnel with ID:', initialFunnelId);
       loadFunnel(initialFunnelId);
     } else {
-      if (initialFunnelId && !isValidUUID(initialFunnelId)) {
-        console.warn('⚠️ Invalid UUID provided, creating default funnel instead:', initialFunnelId);
-      }
       console.log('🆕 Creating default funnel');
       const defaultFunnel = schemaDrivenFunnelService.createDefaultFunnel();
       console.log('🔍 DEBUG - Funnel criado:', {
