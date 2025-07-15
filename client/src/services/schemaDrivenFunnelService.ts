@@ -1123,7 +1123,7 @@ class SchemaDrivenFunnelService {
 
     // ==========================================
     // ETAPA 20: RESULTADO PERSONALIZADO - MAPS TO /resultado (ResultPage.tsx)
-    // CONFIGURAÇÃO COMPLETA COM COMPONENTES REAIS DO RESULTADO
+    // BASEADA NOS COMPONENTES REAIS DA RESULTPAGE
     // ==========================================
     console.log('🎯 [FIXED] Creating Step 20: Result Page → /resultado (ResultPage.tsx)');
     pages.push({
@@ -1133,109 +1133,150 @@ class SchemaDrivenFunnelService {
       type: 'result',
       order: 20,
       blocks: [
-        // 1. Header com logo e progresso (como em ResultPage.tsx)
+        // 1. Header do resultado (Header component)
         {
-          id: 'result-header-logo',
-          type: 'quiz-intro-header',
+          id: 'result-header',
+          type: 'result-header',
           properties: {
             logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
-            logoAlt: 'Logo Gisele Galvão',
-            logoWidth: 96,
-            logoHeight: 96,
-            progressValue: 100,
-            progressMax: 100,
-            showBackButton: false
+            showProgress: false,
+            progressValue: 100
           }
         },
-        // 2. Título principal do resultado
+        // 2. Título principal de congratulações
         {
-          id: 'result-main-title',
-          type: 'text-inline',
+          id: 'result-congratulations-title',
+          type: 'heading-inline',
           properties: {
-            content: '<span style="color: #B89B7A; font-weight: 700;">Parabéns!</span> Seu estilo predominante foi identificado.',
-            fontSize: 'text-2xl',
-            fontWeight: 'font-bold',
+            content: 'Parabéns! Seu estilo predominante foi identificado.',
+            level: 'h1',
             textAlign: 'text-center',
             color: '#432818',
             marginBottom: 32
           }
         },
-        // 3. Card de estilo predominante (como em ResultPage.tsx)
+        // 3. Card de estilo com progresso (styleConfig based)
         {
-          id: 'result-primary-style-card',
-          type: 'style-card-inline',
+          id: 'result-style-card',
+          type: 'style-result-card',
           properties: {
-            styleName: 'Seu Estilo Predominante',
-            styleDescription: 'Baseado nas suas respostas, identificamos seu perfil único de estilo pessoal.',
-            styleImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp',
-            showPercentage: true,
-            percentage: 85
+            category: 'Natural',
+            percentage: 85,
+            showSecondaryStyles: true,
+            secondaryStyles: [
+              { name: 'Clássico', percentage: 15 },
+              { name: 'Contemporâneo', percentage: 10 },
+              { name: 'Elegante', percentage: 8 }
+            ]
           }
         },
-        // 4. Barra de progresso do estilo
+        // 4. Seção de motivação (MotivationSection)
         {
-          id: 'result-style-progress',
-          type: 'progress-bar-inline',
+          id: 'result-motivation-section',
+          type: 'motivation-section',
           properties: {
-            label: 'Seu estilo predominante',
-            value: 85,
-            maxValue: 100,
-            color: '#B89B7A',
-            backgroundColor: '#f0f0f0',
-            height: 12
+            title: 'Transforme sua imagem e autoestima',
+            content: 'Descubra como se vestir com confiança e destacar sua personalidade única.',
+            showAnimation: true
           }
         },
-        // 5. Estilos secundários
+        // 5. Seção de estilos secundários (SecondaryStylesSection)
         {
-          id: 'result-secondary-styles',
-          type: 'text-inline',
+          id: 'result-secondary-styles-section',
+          type: 'secondary-styles-section',
           properties: {
-            content: '<strong>Estilos Secundários:</strong><br/>Clássico (15%) • Contemporâneo (10%) • Elegante (8%)',
-            fontSize: 'text-base',
-            textAlign: 'text-center',
-            color: '#666666',
-            marginTop: 16,
-            marginBottom: 32
+            secondaryStyles: [
+              { name: 'Clássico', percentage: 15 },
+              { name: 'Contemporâneo', percentage: 10 },
+              { name: 'Elegante', percentage: 8 }
+            ]
           }
         },
-        // 6. Imagem do guia de estilo
+        // 6. Depoimentos (Testimonials)
         {
-          id: 'result-guide-image',
-          type: 'image-display-inline',
+          id: 'result-testimonials',
+          type: 'testimonials',
           properties: {
-            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp',
-            alt: 'Guia de Estilo Personalizado',
-            width: 540,
-            height: 400,
-            className: 'object-cover w-full h-auto rounded-lg mx-auto shadow-lg'
+            testimonials: [
+              {
+                name: 'Ana Silva',
+                text: 'Transformei completamente meu guarda-roupa! Agora me sinto muito mais confiante.',
+                rating: 5,
+                image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/Mockups_p%C3%A1gina_de_venda_Guia_de_Estilo_1_vostj4.webp'
+              },
+              {
+                name: 'Maria Costa',
+                text: 'O guia é incrível! Aprendi a combinar peças que já tinha em casa.',
+                rating: 5,
+                image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/Mockups_p%C3%A1gina_de_venda_Guia_de_Estilo_1_vostj4.webp'
+              }
+            ]
           }
         },
-        // 7. Descrição do resultado
+        // 7. Seção de mentor (MentorSection)
         {
-          id: 'result-description',
-          type: 'text-inline',
+          id: 'result-mentor-section',
+          type: 'mentor-section',
           properties: {
-            content: 'Pessoas com seu perfil de estilo valorizam autenticidade e praticidade. Você prefere peças que reflitam sua personalidade única, sem abrir mão do conforto e da funcionalidade.',
-            fontSize: 'text-lg',
-            textAlign: 'text-center',
-            color: '#432818',
-            marginTop: 24,
-            marginBottom: 32
+            mentorName: 'Gisele Galvão',
+            mentorImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.webp',
+            credentials: 'Consultora de Estilo e Imagem',
+            description: 'Especialista em transformação pessoal através do estilo.'
           }
         },
-        // 8. CTA principal (como em ResultPage.tsx)
+        // 8. Seção de transformação (BeforeAfterTransformation)
+        {
+          id: 'result-transformation-section',
+          type: 'before-after-transformation',
+          properties: {
+            title: 'Veja algumas transformações incríveis:',
+            transformations: [
+              {
+                beforeImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334756/ChatGPT_Image_4_de_mai._de_2025_01_42_42_jlugsc.webp',
+                afterImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_00_30_44_naqom0.webp',
+                description: 'Transformação completa de visual'
+              }
+            ]
+          }
+        },
+        // 9. Seção de garantia (GuaranteeSection)
+        {
+          id: 'result-guarantee-section',
+          type: 'guarantee-section',
+          properties: {
+            guaranteeText: 'Garantia de 7 dias ou seu dinheiro de volta',
+            guaranteeImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916216/C%C3%B3pia_de_01._P%C3%A1gina_-_Produto_de_Entrada_2_hamaox.webp'
+          }
+        },
+        // 10. Seção de bônus (BonusSection)
+        {
+          id: 'result-bonus-section',
+          type: 'bonus-section',
+          properties: {
+            bonuses: [
+              {
+                title: 'Bônus 1: Guia de Peças-Chave',
+                description: 'Descubra as peças essenciais para o seu estilo',
+                image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp'
+              },
+              {
+                title: 'Bônus 2: Visagismo Personalizado',
+                description: 'Aprenda a harmonizar seu visual com seu rosto',
+                image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp'
+              }
+            ]
+          }
+        },
+        // 11. CTA principal com compra segura
         {
           id: 'result-main-cta',
-          type: 'button-inline',
+          type: 'secure-purchase-cta',
           properties: {
-            text: 'Quero Meu Guia Completo de Estilo!',
-            variant: 'primary',
-            size: 'large',
-            fullWidth: true,
-            backgroundColor: '#B89B7A',
-            textColor: '#ffffff',
-            marginTop: 40,
-            onClick: 'handleCTAClick'
+            text: 'QUERO MEU GUIA COMPLETO AGORA!',
+            price: 'R$ 97,00',
+            originalPrice: 'R$ 197,00',
+            discount: '50% OFF',
+            securityText: 'Compra 100% segura'
           }
         }
       ],
