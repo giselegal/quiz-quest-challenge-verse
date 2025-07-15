@@ -1,8 +1,27 @@
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import type { BlockData } from "@/types/blocks";
+import { Crown, Target, RefreshCw, Sparkles, Gift, ShoppingCart, Shield, User, DollarSign, Settings } from 'lucide-react';
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 
-// ===== BASE COMPONENT =====
+// ===== CORES DA MARCA GISELE GALVÃO =====
+const BRAND_COLORS = {
+  primary: '#B89B7A',      // Dourado elegante
+  secondary: '#432818',    // Marrom sofisticado  
+  accent: '#aa6b5d',       // Rosé suave
+  background: '#FFFBF7',   // Creme claro
+  surface: '#F9F4EF',      // Bege claro
+  text: {
+    primary: '#432818',
+    secondary: '#6B4F43',
+    light: '#8B7355'
+  }
+};
+
+// ===== BASE COMPONENT ELEGANTE =====
 interface BoxFlexInlineProps {
   label?: string;
   value: string;
@@ -12,10 +31,11 @@ interface BoxFlexInlineProps {
   children?: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
+  variant?: 'default' | 'elegant' | 'highlight' | 'minimal';
   [key: string]: any;
 }
 
-// UI Component base para todos os componentes BoxFlex
+// UI Component elegante usando Radix UI
 export const BoxFlexInlineComponent: React.FC<BoxFlexInlineProps> = ({
   label,
   value,
@@ -24,6 +44,7 @@ export const BoxFlexInlineComponent: React.FC<BoxFlexInlineProps> = ({
   editable = true,
   children,
   className,
+  variant = 'default',
   ...props
 }) => {
   const [editing, setEditing] = useState(false);
@@ -33,49 +54,82 @@ export const BoxFlexInlineComponent: React.FC<BoxFlexInlineProps> = ({
     setEditing(false);
     if (editValue !== value) onChange?.(editValue);
   };
+
+  const variantStyles = {
+    default: 'bg-white border-gray-200 hover:border-brand-primary/30',
+    elegant: `bg-white border-2 border-[${BRAND_COLORS.primary}]/20 hover:border-[${BRAND_COLORS.primary}]/40`,
+    highlight: `bg-gradient-to-r from-[${BRAND_COLORS.surface}] to-white border-[${BRAND_COLORS.accent}]/30`,
+    minimal: 'bg-gray-50 border-gray-100'
+  };
   
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
       className={cn(
-        "flex items-center gap-4 px-4 py-2 bg-white rounded-lg shadow-sm border border-gray-200",
-        "min-h-[56px] transition-all duration-200 hover:shadow-md",
+        "flex items-center gap-3 px-4 py-3 rounded-lg border transition-all duration-200",
+        "hover:shadow-md hover:shadow-black/5",
+        variantStyles[variant],
         className
       )}
+      style={{ 
+        borderColor: `${BRAND_COLORS.primary}20`,
+        backgroundColor: variant === 'elegant' ? BRAND_COLORS.surface : undefined,
+        ...props.style 
+      }}
       {...props}
     >
-      {icon && <div className="mr-2 flex-shrink-0">{icon}</div>}
-      {label && <span className="text-gray-700 font-medium flex-shrink-0">{label}</span>}
-      {editable ? (
-        editing ? (
-          <input
-            type="text"
-            className="flex-1 px-2 py-1 rounded border border-gray-300 focus:border-blue-500 focus:outline-none"
-            value={editValue}
-            autoFocus
-            onChange={e => setEditValue(e.target.value)}
-            onBlur={handleBlur}
-            onKeyDown={e => {
-              if (e.key === "Enter") handleBlur();
-              if (e.key === "Escape") {
-                setEditing(false);
-                setEditValue(value);
-              }
-            }}
-          />
+      {icon && (
+        <div className="flex-shrink-0 p-1.5 rounded-md" style={{ backgroundColor: `${BRAND_COLORS.primary}15` }}>
+          {icon}
+        </div>
+      )}
+      
+      {label && (
+        <span className="text-sm font-medium flex-shrink-0" style={{ color: BRAND_COLORS.text.secondary }}>
+          {label}
+        </span>
+      )}
+      
+      <div className="flex-1 min-w-0">
+        {editable ? (
+          editing ? (
+            <input
+              type="text"
+              className="w-full px-2 py-1 text-sm rounded border border-gray-300 focus:border-brand-primary focus:outline-none"
+              value={editValue}
+              autoFocus
+              onChange={e => setEditValue(e.target.value)}
+              onBlur={handleBlur}
+              onKeyDown={e => {
+                if (e.key === "Enter") handleBlur();
+                if (e.key === "Escape") {
+                  setEditing(false);
+                  setEditValue(value);
+                }
+              }}
+              style={{ borderColor: `${BRAND_COLORS.primary}50` }}
+            />
+          ) : (
+            <span
+              className="block w-full cursor-pointer text-sm hover:underline truncate"
+              onClick={() => setEditing(true)}
+              title={value}
+              style={{ color: BRAND_COLORS.text.primary }}
+            >
+              {value}
+            </span>
+          )
         ) : (
-          <span
-            className="flex-1 cursor-pointer text-blue-700 hover:underline truncate"
-            onClick={() => setEditing(true)}
-            title={value}
-          >
+          <span className="block w-full text-sm truncate" style={{ color: BRAND_COLORS.text.primary }}>
             {value}
           </span>
-        )
-      ) : (
-        <span className="flex-1 truncate">{value}</span>
-      )}
+        )}
+      </div>
+      
       {children}
-    </div>
+    </motion.div>
   );
 };
 
@@ -90,7 +144,7 @@ interface BaseInlineProps {
   className?: string;
 }
 
-// 1. Header section - DADOS REAIS da ResultPage
+// 1. Header section - ELEGANTE COM CORES DA MARCA
 const HeaderBoxFlexInline: React.FC<BaseInlineProps> = ({
   block,
   onPropertyChange,
@@ -100,31 +154,45 @@ const HeaderBoxFlexInline: React.FC<BaseInlineProps> = ({
   const { properties = {} } = block;
   
   return (
-    <div className={cn("flex gap-4 items-center mb-4 flex-wrap", className)}>
-      <img 
-        src={properties.logo || "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"} 
-        alt="Logo Gisele Galvão" 
-        className="h-10 flex-shrink-0" 
-      />
-      <BoxFlexInlineComponent
-        label="🏆 Resultado"
-        value={properties.title || "Seu Estilo Predominante Foi Descoberto!"}
-        onChange={(value: string) => onPropertyChange?.('title', value)}
-        editable={!disabled}
-        className="min-w-[300px] bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200"
-      />
-      <BoxFlexInlineComponent
-        label="Percentual:"
-        value={properties.percentage || "85%"}
-        onChange={(value: string) => onPropertyChange?.('percentage', value)}
-        editable={!disabled}
-        className="min-w-[80px] bg-pink-50 border-pink-200"
-      />
-    </div>
+    <Card className={cn("border-0 shadow-lg", className)} style={{ backgroundColor: BRAND_COLORS.surface }}>
+      <CardHeader className="pb-4">
+        <div className="flex items-center gap-4">
+          <motion.img 
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.5 }}
+            src={properties.logo || "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"} 
+            alt="Logo Gisele Galvão" 
+            className="h-12 w-auto" 
+          />
+          <div className="flex-1">
+            <BoxFlexInlineComponent
+              icon={<Crown className="w-5 h-5" style={{ color: BRAND_COLORS.primary }} />}
+              value={properties.title || "Seu Estilo Predominante Foi Descoberto!"}
+              onChange={(value: string) => onPropertyChange?.('title', value)}
+              editable={!disabled}
+              variant="elegant"
+              className="mb-2"
+            />
+            <Badge 
+              variant="secondary" 
+              className="text-xs"
+              style={{ 
+                backgroundColor: `${BRAND_COLORS.accent}20`,
+                color: BRAND_COLORS.accent,
+                border: `1px solid ${BRAND_COLORS.accent}30`
+              }}
+            >
+              {properties.percentage || "85%"} de compatibilidade
+            </Badge>
+          </div>
+        </div>
+      </CardHeader>
+    </Card>
   );
 };
 
-// 2. Result main section - DADOS REAIS da categoria do estilo
+// 2. Result main section - ELEGANTE COM DESIGN SOFISTICADO
 const ResultMainBoxFlexInline: React.FC<BaseInlineProps> = ({
   block,
   onPropertyChange,
@@ -135,34 +203,71 @@ const ResultMainBoxFlexInline: React.FC<BaseInlineProps> = ({
   const percentage = properties.percentage || 85;
   
   return (
-    <div className={cn("flex flex-wrap gap-4 items-center mb-4 p-6 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl border border-pink-200", className)}>
-      <div className="flex flex-col items-center">
-        <img 
-          src={properties.styleImage || "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp"} 
-          alt="Seu Estilo Natural" 
-          className="h-24 w-24 rounded-full object-cover shadow-lg border-4 border-white" 
-        />
-        <div className="text-3xl font-bold text-pink-600 mt-2 bg-white px-3 py-1 rounded-full shadow">
-          {percentage}%
+    <Card className={cn("overflow-hidden border-0 shadow-xl", className)}>
+      <CardContent className="p-6">
+        <div className="grid md:grid-cols-2 gap-6 items-center">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="space-y-4"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <Target className="w-6 h-6" style={{ color: BRAND_COLORS.primary }} />
+              <h3 className="text-2xl font-serif" style={{ color: BRAND_COLORS.text.primary }}>
+                Seu Estilo
+              </h3>
+            </div>
+            
+            <BoxFlexInlineComponent
+              label="Categoria:"
+              value={properties.styleName || "Natural"}
+              onChange={(value: string) => onPropertyChange?.('styleName', value)}
+              editable={!disabled}
+              variant="highlight"
+              className="text-lg font-semibold"
+            />
+            
+            <BoxFlexInlineComponent
+              label="Descrição:"
+              value={properties.description || "Você valoriza o conforto e a praticidade, com um visual descontraído e autêntico."}
+              onChange={(value: string) => onPropertyChange?.('description', value)}
+              editable={!disabled}
+              variant="minimal"
+            />
+            
+            <div className="flex items-center gap-2 mt-4">
+              <div 
+                className="w-3 h-3 rounded-full"
+                style={{ backgroundColor: BRAND_COLORS.primary }}
+              />
+              <span className="text-sm" style={{ color: BRAND_COLORS.text.secondary }}>
+                {percentage}% de compatibilidade
+              </span>
+            </div>
+          </motion.div>
+          
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="relative"
+          >
+            <img 
+              src={properties.styleImage || "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp"} 
+              alt="Seu Estilo" 
+              className="w-full h-64 object-cover rounded-xl shadow-lg" 
+            />
+            <div 
+              className="absolute -top-2 -right-2 w-12 h-12 rounded-full flex items-center justify-center text-white font-bold shadow-lg"
+              style={{ backgroundColor: BRAND_COLORS.accent }}
+            >
+              {percentage}%
+            </div>
+          </motion.div>
         </div>
-      </div>
-      <div className="flex-1 min-w-[250px]">
-        <BoxFlexInlineComponent
-          label="📱 Estilo:"
-          value={properties.styleName || "Natural"}
-          onChange={(value: string) => onPropertyChange?.('styleName', value)}
-          editable={!disabled}
-          className="mb-3 bg-white/70 rounded-lg text-2xl font-bold text-purple-800"
-        />
-        <BoxFlexInlineComponent
-          label="📝 Descrição:"
-          value={properties.description || "Você valoriza o conforto e a praticidade, com um visual descontraído e autêntico."}
-          onChange={(value: string) => onPropertyChange?.('description', value)}
-          editable={!disabled}
-          className="text-gray-700 leading-relaxed bg-white/50 rounded-lg"
-        />
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 // 3. Secondary styles (estilos secundários)
