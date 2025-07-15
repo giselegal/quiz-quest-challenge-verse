@@ -1,0 +1,75 @@
+Critical CSS "hero-critical" injected, 409 chars
+useQuizLogic: useEffect executado, currentQuestion: 
+Object {id: "1", title: "QUAL O SEU TIPO DE ROUPA FAVORITA?", type: "both", multiSelect: 3, options: Array(8)}
+useQuizLogic: Definindo isInitialLoadComplete como true imediatamente
+Facebook Pixel initialized with ID: 1311550759901086
+Loaded Facebook Pixel for funnel: quiz_isca (1311550759901086)
+Tracking funnel event: PixelInitialized 
+Object {pixel_id: "1311550759901086", funnel_type: "quiz_isca", page_url: "https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/editor", funnel_id: "quiz_isca", funnel_name: "Quiz como Isca", …}
+[Analytics] Parâmetros UTM capturados: 
+Object {}
+App initialized with essential routes only
+useQuizLogic: Hook inicializado
+useQuizLogic: Estados inicializados 
+Object {currentQuestionIndex: 0, isInitialLoadComplete: true, totalQuestions: 9}
+useQuizLogic: Hook inicializado
+useQuizLogic: Estados inicializados 
+Object {currentQuestionIndex: 0, isInitialLoadComplete: true, totalQuestions: 9}
+🔍 DEBUG - Dados importados:
+  REAL_QUIZ_QUESTIONS: 10
+  STRATEGIC_QUESTIONS: 6
+  TRANSITIONS: OK
+🧹 Performing initial localStorage cleanup...
+🆕 Creating default funnel
+require is not defined
+🔍 DEBUG Estado: 
+Object {deviceView: "desktop", showLeftSidebar: true, showRightSidebar: true, windowWidth: 1234}
+The above error occurred in the <SchemaDrivenEditorResponsive> component:
+
+    at SchemaDrivenEditorResponsive (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/client/src/components/editor/SchemaDrivenEditorResponsive.tsx:38:3)
+    at div
+    at SchemaDrivenEditorPage (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/src/pages/SchemaDrivenEditorPage.tsx:22:27)
+    at Route (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/node_modules/.vite/deps/wouter.js?v=456faa87:280:16)
+    at Switch (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/node_modules/.vite/deps/wouter.js?v=456faa87:336:17)
+    at Suspense
+    at Router (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/node_modules/.vite/deps/wouter.js?v=456faa87:235:17)
+    at Provider (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/node_modules/.vite/deps/chunk-LQMYIA2Y.js?v=456faa87:22:15)
+    at TooltipProvider (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=456faa87:2240:5)
+    at QuizProvider (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/src/context/QuizContext.tsx:22:32)
+    at AuthProvider (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/src/context/AuthContext.tsx:20:32)
+    at App (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/src/App.tsx?v=Y5O3-2fOlD0CK_MO0dya_:74:3)
+    at div
+    at LovableClientProvider (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/src/components/LovableClientProvider.tsx:20:41)
+    at Suspense
+    at ClientLayout (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/src/components/ClientLayout.tsx?v=Y5O3-2fOlD0CK_MO0dya_:23:40)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+
+at SchemaDrivenEditorResponsive (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/client/src/components/editor/SchemaDrivenEditorResponsive.tsx:38:3)
+at div
+at SchemaDrivenEditorPage (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/src/pages/SchemaDrivenEditorPage.tsx:22:27)
+at Route (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/node_modules/.vite/deps/wouter.js?v=456faa87:280:16)
+at Switch (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/node_modules/.vite/deps/wouter.js?v=456faa87:336:17)
+at Suspense
+at Router (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/node_modules/.vite/deps/wouter.js?v=456faa87:235:17)
+at Provider (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/node_modules/.vite/deps/chunk-LQMYIA2Y.js?v=456faa87:22:15)
+at TooltipProvider (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=456faa87:2240:5)
+at QuizProvider (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/src/context/QuizContext.tsx:22:32)
+at AuthProvider (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/src/context/AuthContext.tsx:20:32)
+at App (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/src/App.tsx?v=Y5O3-2fOlD0CK_MO0dya_:74:3)
+at div
+at LovableClientProvider (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/src/components/LovableClientProvider.tsx:20:41)
+at Suspense
+at ClientLayout (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/src/components/ClientLayout.tsx?v=Y5O3-2fOlD0CK_MO0dya_:23:40)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+at t.value (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://aef87c72-1a6d-4148-ae73-554ced8a8b46-00-1tcfvyjadnpvs.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+require is not defined
+useQuizLogic: Limpando timeout
+Critical CSS "initial-critical" removed
+Critical CSS "hero-critical" removed

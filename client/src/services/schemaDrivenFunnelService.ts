@@ -1,6 +1,8 @@
 import type { BlockData } from '@/components/editor/blocks';
 import { REAL_QUIZ_QUESTIONS, STRATEGIC_QUESTIONS, TRANSITIONS } from '@/components/visual-editor/realQuizData';
 import { QuizDataAdapter } from './quizDataAdapter';
+import { generateTimestampId } from '../utils/idGenerator';
+import { createCorrectedStepConfiguration } from './stepMappingService';
 
 // DEBUG: Verificar se os dados estão sendo importados corretamente
 console.log('🔍 DEBUG - Dados importados:');
@@ -538,7 +540,6 @@ class SchemaDrivenFunnelService {
 
   // Utility methods
   createDefaultFunnel(): SchemaDrivenFunnelData {
-    const { generateTimestampId } = require('../utils/idGenerator');
     const now = new Date();
     
     return {
@@ -583,8 +584,7 @@ class SchemaDrivenFunnelService {
     console.log('🔍 DEBUG: REAL_QUIZ_QUESTIONS length:', REAL_QUIZ_QUESTIONS?.length);
     console.log('🔍 DEBUG: STRATEGIC_QUESTIONS length:', STRATEGIC_QUESTIONS?.length);
     
-    // Import step mapping service for corrected step configurations
-    const { createCorrectedStepConfiguration } = require('./stepMappingService');
+    // Using imported step mapping service for corrected step configurations
     
     const pages: SchemaDrivenPageData[] = [];
 
