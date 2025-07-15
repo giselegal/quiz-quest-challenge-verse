@@ -33,7 +33,7 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
   const [deviceView, setDeviceView] = useState<DeviceView>('desktop'); // Voltar ao padrão
   const [showLeftSidebar, setShowLeftSidebar] = useState(true); 
   const [showRightSidebar, setShowRightSidebar] = useState(true);
-  const [activeTab, setActiveTab] = useState<'components' | 'pages'>('components');
+  const [activeTab, setActiveTab] = useState<'components' | 'pages'>('pages');
 
   // Hook principal do editor
   const {
