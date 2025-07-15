@@ -70,3 +70,17 @@ export interface VersionMetadata {
   lastSavedAt: string;
   autoSaveInterval: number;
 }
+// Interfaces adicionais que estavam faltando
+export interface FunnelManagerState {
+  isLoading: boolean;
+  error: string | null;
+  funnels: any[];
+  activeFunnelId: string | null;
+}
+
+export interface EditorStateExtended extends EditorState {
+  blocks: any[];
+  selectedBlockId: string | null;
+  isPreviewing: boolean;
+  isGlobalStylesOpen: boolean;
+}

@@ -4,6 +4,32 @@ import { BorderRadiusType } from '@/types/styleTypes';
 
 export const getDefaultContentForType = (type: BlockType): EditableContent => {
   switch (type) {
+    case 'quiz-question':
+      return {
+        question: 'Etapa 1: Qual dessas opções representa melhor seu estilo predominante?',
+        options: [
+          { id: '1', text: 'Clássico e elegante', imageUrl: 'https://res.cloudinary.com/dtx0k4ue6/image/upload/v1710847234/estilo-classico_urkpfx.jpg' },
+          { id: '2', text: 'Moderno e descolado', imageUrl: 'https://res.cloudinary.com/dtx0k4ue6/image/upload/v1710847235/estilo-moderno_hqxmzv.jpg' },
+          { id: '3', text: 'Natural e autêntico', imageUrl: 'https://res.cloudinary.com/dtx0k4ue6/image/upload/v1710847236/estilo-natural_wnxkdi.jpg' },
+          { id: '4', text: 'Casual e descontraído' }
+        ],
+        multipleSelection: true,
+        showImages: true,
+        maxSelections: 3,
+        minSelections: 1,
+        progressPercent: 5, // Primeira etapa de 21 = ~5%
+        logoUrl: '/api/placeholder/96/96',
+        showBackButton: true,
+        optionLayout: 'grid',
+        alignment: 'center',
+        style: {
+          backgroundColor: '#ffffff',
+          color: '#432818',
+          paddingY: '24px',
+          paddingX: '16px',
+          borderRadius: 'md' as BorderRadiusType
+        }
+      };
     case 'headline':
       return {
         title: 'Título Principal',

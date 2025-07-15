@@ -3,6 +3,7 @@ import React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { EditorTab } from '../UnifiedVisualEditor';
+import { blockDefinitions } from '@/config/blockDefinitions';
 import { 
   Layout, 
   Type, 
@@ -20,7 +21,18 @@ import {
   CreditCard,
   Tag,
   List,
-  Users
+  Users,
+  Crown,
+  Gift,
+  Target,
+  Quote,
+  LoaderCircle,
+  ArrowRightLeft,
+  TrendingUp,
+  Heart,
+  Shield,
+  Sparkles,
+  Bell
 } from 'lucide-react';
 
 interface UnifiedComponentsSidebarProps {
@@ -217,8 +229,46 @@ export const UnifiedComponentsSidebar: React.FC<UnifiedComponentsSidebarProps> =
     ];
   };
 
+  // Helper function to get icon component from icon name
+  const getIconComponent = (iconName: string) => {
+    const iconMap: Record<string, React.ReactNode> = {
+      'Crown': <Crown className="w-4 h-4" />,
+      'Gift': <Gift className="w-4 h-4" />,
+      'Target': <Target className="w-4 h-4" />,
+      'Quote': <Quote className="w-4 h-4" />,
+      'LoaderCircle': <LoaderCircle className="w-4 h-4" />,
+      'ArrowRightLeft': <ArrowRightLeft className="w-4 h-4" />,
+      'TrendingUp': <TrendingUp className="w-4 h-4" />,
+      'Users': <Users className="w-4 h-4" />,
+      'Shield': <Shield className="w-4 h-4" />,
+      'Sparkles': <Sparkles className="w-4 h-4" />,
+      'Bell': <Bell className="w-4 h-4" />,
+      'Heart': <Heart className="w-4 h-4" />,
+      'Type': <Type className="w-4 h-4" />,
+      'Image': <Image className="w-4 h-4" />,
+      'Layout': <Layout className="w-4 h-4" />,
+      'ShoppingCart': <ShoppingCart className="w-4 h-4" />,
+      'CreditCard': <CreditCard className="w-4 h-4" />
+    };
+    return iconMap[iconName] || <Layout className="w-4 h-4" />;
+  };
+
   const getSalesComponents = (): ComponentGroup[] => {
+    // Get inline components from blockDefinitions
+    const inlineComponents = blockDefinitions
+      .filter(block => block.category === 'Inline')
+      .map(block => ({
+        type: block.type,
+        name: block.name,
+        icon: getIconComponent(block.icon),
+        description: block.description
+      }));
+
     return [
+      {
+        title: 'Componentes Inline (Horizontais)',
+        items: inlineComponents
+      },
       {
         title: 'Componentes de Página de Vendas',
         items: [

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { getLowQualityPlaceholder } from '@/utils/imageUtils';
-import { motion, AnimatePresence } from 'framer-motion';
 
 interface ProgressiveImageProps {
   src: string;
@@ -11,7 +10,7 @@ interface ProgressiveImageProps {
   height?: number;
   onLoad?: () => void;
   loading?: 'lazy' | 'eager';
-  fetchPriority?: 'high' | 'low' | 'auto';
+  fetchpriority?: 'high' | 'low' | 'auto';
   sizes?: string;
   style?: React.CSSProperties;
   fit?: 'cover' | 'contain' | 'fill';
@@ -26,7 +25,7 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
   height,
   onLoad,
   loading = 'lazy',
-  fetchPriority = 'auto',
+  fetchpriority = 'auto',
   sizes,
   style,
   fit = 'cover'
@@ -91,30 +90,25 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
       )}
 
       {/* Imagem principal com efeito de fade-in */}
-      <AnimatePresence>
-        {!error ? (
-          <motion.img 
-            src={src} 
-            alt={alt} 
-            width={width}
-            height={height}
-            loading={loading}
-            fetchPriority={fetchPriority}
-            sizes={sizes}
-            onLoad={handleLoad}
-            onError={handleError}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: loaded ? 1 : 0 }}
-            transition={{ duration: 0.3 }}
-            className="w-full h-full transition-all"
-            style={{ objectFit: fit }}
-          />
-        ) : (
-          <div className="flex items-center justify-center w-full h-full bg-gray-100 text-gray-400 text-sm py-4">
-            Não foi possível carregar a imagem
-          </div>
-        )}
-      </AnimatePresence>
+      {!error ? (
+        <img 
+          src={src} 
+          alt={alt} 
+          width={width}
+          height={height}
+          loading={loading}
+          {...({ fetchpriority } as any)}
+          sizes={sizes}
+          onLoad={handleLoad}
+          onError={handleError}
+          className={`w-full h-full transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+          style={{ objectFit: fit }}
+        />
+      ) : (
+        <div className="flex items-center justify-center w-full h-full bg-gray-100 text-gray-400 text-sm py-4">
+          Não foi possível carregar a imagem
+        </div>
+      )}
     </div>
   );
 };

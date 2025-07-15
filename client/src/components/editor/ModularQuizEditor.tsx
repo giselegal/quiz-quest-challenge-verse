@@ -81,7 +81,7 @@ const ModularQuizEditor: React.FC = () => {
 
   // Editor state
   const [activeTab, setActiveTab] = useState<'editor' | 'funis' | 'historico' | 'config'>(initialEditorState.activeTab as any);
-  const [deviceView, setDeviceView] = useState<'mobile' | 'tablet' | 'desktop'>(initialEditorState.deviceView);
+  const [deviceView, setDeviceView] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(initialEditorState.selectedComponentId);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(initialEditorState.dragOverIndex);
   const [currentPageIndex, setCurrentPageIndex] = useState(initialEditorState.currentPageIndex);
@@ -92,9 +92,17 @@ const ModularQuizEditor: React.FC = () => {
   // Funnel & Version Management
   const { toast } = useToast();
   const { saveFunnel, loadFunnel, deleteFunnel, createBackup, restoreBackup } = useFunnelManager();
-  const { saveVersion, loadVersion, clearHistory, getVersionHistory, getVersionMetadata } = useVersionManager();
+  const { 
+    versions, 
+    currentVersion, 
+    saveVersion, 
+    loadVersion, 
+    deleteVersion, 
+    clearHistory, 
+    getVersionHistory, 
+    getVersionMetadata 
+  } = useVersionManager();
   const [funnels, setFunnels] = useState<QuizFunnel[]>([]);
-  const [versions, setVersions] = useState<any[]>([]);
   const [versionMetadata, setVersionMetadata] = useState<any>(null);
   const [isLoading, setIsLoading] = useState({
     funnels: false,
@@ -149,7 +157,7 @@ const ModularQuizEditor: React.FC = () => {
         const versionHistory = await getVersionHistory();
         const metadata = await getVersionMetadata();
         if (versionHistory && Array.isArray(versionHistory)) {
-          setVersions(versionHistory);
+          // versions já vem do hook, não precisamos de setVersions
         }
         if (metadata) {
           setVersionMetadata(metadata);
