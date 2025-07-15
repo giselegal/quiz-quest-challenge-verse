@@ -81,18 +81,7 @@ export interface SimpleComponent {
     | "guarantee"
     | "bonus"
     | "faq"
-    | "social-proof"
-    | "text-inline"
-    | "badge-inline"
-    | "stat-inline"
-    | "progress-inline"
-    | "image-display"
-    | "style-card"
-    | "pricing-card"
-    | "testimonial-card"
-    | "result-card"
-    | "countdown-inline"
-    | "pricing-inline";
+    | "social-proof";
   data: {
     text?: string;
     src?: string;
@@ -208,12 +197,4 @@ export interface QuizFunnel {
   variants?: QuizVariant[];
   updatedAt?: string;
   createdAt?: string;
-}
-// Versioning para QuizFunnel
-export interface QuizVersion {
-  id: string;
-  version: number;
-  createdAt: string;
-  changes: string[];
-  data: any;
 }

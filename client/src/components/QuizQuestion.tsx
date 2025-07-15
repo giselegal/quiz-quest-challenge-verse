@@ -60,8 +60,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     
     onAnswer({ 
       questionId: question.id,
-      selectedOptions: newSelectedOptions,
-      timestamp: new Date()
+      selectedOptions: newSelectedOptions
     });
   };
   
@@ -90,7 +89,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             isStrategicQuestion && isMobile && "text-[1.25rem] sm:text-2xl", // Texto maior para questões estratégicas em mobile
             question.type === 'text' && !isStrategicQuestion && ".text-only-question & " && "text-[1.15rem] sm:text-xl" // Texto maior para títulos em questões só texto
           )}>
-            {highlightStrategicWords(question.title || question.question)}
+            {highlightStrategicWords(question.title)}
           </h2>
           
           {isStrategicQuestion && question.imageUrl && !imageError && showQuestionImage && (
@@ -131,7 +130,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
               isDisabled={
                 (isStrategicQuestion && currentAnswers.length > 0 && !currentAnswers.includes(option.id)) || 
                 (!isStrategicQuestion && !currentAnswers.includes(option.id) && 
-                  currentAnswers.length >= (question.multiSelect || 1))
+                  currentAnswers.length >= question.multiSelect)
               }
               isStrategicOption={isStrategicQuestion}
             />

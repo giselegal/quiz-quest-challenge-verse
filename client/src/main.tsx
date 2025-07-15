@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
-import ClientLayout from "./components/ClientLayout";
 import {
   initializeResourcePreloading,
   setupRouteChangePreloading,
@@ -13,8 +12,6 @@ import { checkMainRoutes } from "./utils/routeChecker";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ClientLayout>
-      <App />
-    </ClientLayout>
+    <App />
   </React.StrictMode>
 );

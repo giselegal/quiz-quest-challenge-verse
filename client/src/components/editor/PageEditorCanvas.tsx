@@ -10,29 +10,13 @@ import {
 import { SimplePage, SimpleComponent } from '@/interfaces/quiz';
 import styles from '@/styles/editor/editor-modular.module.css';
 
-// Import component renderers - Using modern inline blocks
+// Import component renderers
 import {
   QuizTitle, QuizSubtitle, QuizParagraph, QuizImage, QuizButton,
   QuizSpacer, QuizProgress, QuizInput, QuizOptions, QuizVideo,
-  QuizTestimonial, QuizPrice, QuizGuarantee,
+  QuizTestimonial, QuizPrice, QuizCountdown, QuizGuarantee,
   QuizBonus, QuizFAQ, QuizSocialProof, QuizEmail, QuizPhone
 } from '@/components/quiz/components';
-
-// Import modern inline blocks
-import { UniversalBlockRenderer } from '@/components/editor/blocks/UniversalBlockRenderer';
-import { 
-  TextInlineBlock,
-  BadgeInlineBlock,
-  StatInlineBlock,
-  CountdownInlineBlock,
-  ResultCardInlineBlock,
-  QuizOfferPricingInlineBlock,
-  StyleCardInlineBlock,
-  ProgressInlineBlock,
-  ImageDisplayInlineBlock,
-  PricingCardInlineBlock,
-  TestimonialCardInlineBlock
-} from '@/components/editor/blocks/inline';
 
 interface PageEditorCanvasProps {
   currentPage: SimplePage | null;
@@ -46,9 +30,8 @@ interface PageEditorCanvasProps {
   duplicateComponent: (componentId: string) => void;
 }
 
-// Component renderer mapping - Including modern inline blocks
+// Component renderer mapping
 const ComponentRenderers: Record<string, React.ComponentType<any>> = {
-  // Componentes básicos tradicionais
   title: QuizTitle,
   subtitle: QuizSubtitle,
   text: QuizParagraph,
@@ -64,25 +47,11 @@ const ComponentRenderers: Record<string, React.ComponentType<any>> = {
   video: QuizVideo,
   testimonial: QuizTestimonial,
   price: QuizPrice,
+  countdown: QuizCountdown,
   guarantee: QuizGuarantee,
   bonus: QuizBonus,
   faq: QuizFAQ,
   'social-proof': QuizSocialProof,
-  
-  // Componentes inline modernos
-  'text-inline': TextInlineBlock,
-  'badge-inline': BadgeInlineBlock,
-  'stat-inline': StatInlineBlock,
-  'countdown': CountdownInlineBlock,
-  'countdown-inline': CountdownInlineBlock,
-  'result-card': ResultCardInlineBlock,
-  'result-card-inline': ResultCardInlineBlock,
-  'pricing-inline': QuizOfferPricingInlineBlock,
-  'pricing-card': PricingCardInlineBlock,
-  'style-card': StyleCardInlineBlock,
-  'progress-inline': ProgressInlineBlock,
-  'image-display': ImageDisplayInlineBlock,
-  'testimonial-card': TestimonialCardInlineBlock,
 };
 
 const PageEditorCanvas: React.FC<PageEditorCanvasProps> = ({
@@ -112,7 +81,8 @@ const PageEditorCanvas: React.FC<PageEditorCanvasProps> = ({
 
   const renderComponentPreview = useCallback((component: SimpleComponent, index: number) => {
     const isSelected = component.id === selectedComponent;
-    
+    const ComponentRenderer = ComponentRenderers[component.type] || null;
+
     return (
       <div 
         key={component.id}
@@ -135,32 +105,13 @@ const PageEditorCanvas: React.FC<PageEditorCanvasProps> = ({
         <div className={styles.componentWrapper}>
           {/* Componente Preview */}
           <div className={styles.componentPreview}>
-            {(() => {
-              // Primeiro, tentar usar o UniversalBlockRenderer para componentes inline modernos
-              try {
-                const blockData = {
-                  id: component.id,
-                  type: component.type,
-                  properties: {
-                    ...component.data,
-                    style: component.style || {}
-                  }
-                };
-                return <UniversalBlockRenderer block={blockData} />;
-              } catch (error) {
-                // Fallback para ComponentRenderers tradicionais
-                const ComponentRenderer = ComponentRenderers[component.type];
-                if (ComponentRenderer) {
-                  return <ComponentRenderer {...component.data} style={component.style} />;
-                }
-                // Última opção: placeholder
-                return (
-                  <div className={styles.componentPlaceholder}>
-                    {`Componente ${component.type} não disponível`}
-                  </div>
-                );
-              }
-            })()}
+            {ComponentRenderer ? (
+              <ComponentRenderer {...component.data} style={component.style} />
+            ) : (
+              <div className={styles.componentPlaceholder}>
+                {`Componente ${component.type} não disponível`}
+              </div>
+            )}
           </div>
           
           {/* Componente Actions */}
