@@ -26,22 +26,15 @@ const LoadingFallback = () => (
 const LandingPage = lazy(() => import("./pages/LandingPage"));
 const QuizPage = lazy(() => import("./components/QuizPage"));
 const ResultPage = lazy(() => import("./pages/ResultPage"));
+const TestResultPage = lazy(() => import("./pages/TestResultPage"));
 const QuizDescubraSeuEstilo = lazy(
   () => import("./pages/quiz-descubra-seu-estilo")
 );
 const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
-const SimpleDragDropEditor = lazy(
-  () => import("./components/visual-editor/SimpleDragDropEditor")
-);
-const ImprovedQuizEditor = lazy(
-  () => import("./components/visual-editor/ImprovedQuizEditor")
-);
-const ModernQuizEditor = lazy(
-  () => import("./components/visual-editor/ModernQuizEditor")
-);
-const EditorTestPage = lazy(
-  () => import("./components/editor/EditorTestPage")
-);
+
+// Editor Principal - Consolidado
+const SchemaDrivenEditorPage = lazy(() => import("./pages/SchemaDrivenEditorPage"));
+const BlockDefinitionsTest = lazy(() => import("./components/editor/tests/BlockDefinitionsTest"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App = () => {
@@ -81,6 +74,8 @@ const App = () => {
                 <Route path="/quiz" component={QuizPage} />
                 {/* Rotas do teste A/B */}
                 <Route path="/resultado" component={ResultPage} />
+                {/* Teste do componente de resultado */}
+                <Route path="/test-resultado" component={TestResultPage} />
                 <Route
                   path="/quiz-descubra-seu-estilo"
                   component={QuizDescubraSeuEstilo}
@@ -90,30 +85,20 @@ const App = () => {
                   path="/descubra-seu-estilo"
                   component={QuizDescubraSeuEstilo}
                 />
-                {/* Editor Visual */}
+                {/* Editor Principal - ÚNICO EDITOR para Quiz e Funis Completos */}
                 <Route
-                  path="/editor-visual"
-                  component={SimpleDragDropEditor}
+                  path="/editor"
+                  component={SchemaDrivenEditorPage}
                 />
-                {/* Simple Editor - usando o mesmo editor robusto */}
+                {/* Editor com ID específico */}
                 <Route
-                  path="/simple-editor"
-                  component={SimpleDragDropEditor}
+                  path="/editor/:id"
+                  component={SchemaDrivenEditorPage}
                 />
-                {/* Editor Melhorado - nova versão organizada */}
+                {/* Teste de definições de blocos */}
                 <Route
-                  path="/editor-improved"
-                  component={ImprovedQuizEditor}
-                />
-                {/* Editor Modular - nova arquitetura modular */}
-                <Route
-                  path="/editor-modular"
-                  component={EditorTestPage}
-                />
-                {/* Editor Modular Direto - implementação modular final */}
-                <Route
-                  path="/editor-modular-final"
-                  component={lazy(() => import("./components/editor/ModularQuizEditor"))}
+                  path="/test-blocks"
+                  component={BlockDefinitionsTest}
                 />
                 {/* Admin - protegido com AdminAuthProvider */}
                 <Route path="/admin/:rest*">
@@ -125,8 +110,8 @@ const App = () => {
                     </AdminAuthProvider>
                   )}
                 </Route>
-                {/* 404 */}
-                <Route component={NotFoundPage} />
+                {/* 404 - Fallback para rotas não encontradas */}
+                <Route path="*" component={NotFoundPage} />
               </Switch>
             </Suspense>
           </Router>
