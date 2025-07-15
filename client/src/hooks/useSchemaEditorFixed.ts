@@ -137,8 +137,6 @@ export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorR
       const loadedFunnel = await schemaDrivenFunnelService.loadFunnel(funnelId);
       
       if (loadedFunnel) {
-        // Funnel carregado com sucesso
-        
         setFunnel(loadedFunnel);
         setCurrentPageId(loadedFunnel.pages[0]?.id || null);
         setSelectedBlockId(null);
