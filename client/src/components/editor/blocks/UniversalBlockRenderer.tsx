@@ -49,7 +49,7 @@ import {
   MentorBoxFlexInline,
   ValueStackBoxFlexInline,
   BuildInfoBoxFlexInline
-} from './inline/BoxFlexInlineComponents_Etapa20';
+} from './inline/BoxFlexInlineComponents';
 
 // Componentes básicos (funcionais)
 import { SpacerBlock } from './SpacerBlock';

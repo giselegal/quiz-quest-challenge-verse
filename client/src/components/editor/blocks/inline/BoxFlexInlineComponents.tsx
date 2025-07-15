@@ -79,7 +79,7 @@ export const BoxFlexInlineComponent: React.FC<BoxFlexInlineProps> = ({
   );
 };
 
-// ===== ETAPA 20 COMPONENTS =====
+// ===== ETAPA 20 COMPONENTS - ORDEM CORRETA DO CANVAS =====
 
 interface BaseInlineProps {
   block: BlockData;
@@ -90,7 +90,7 @@ interface BaseInlineProps {
   className?: string;
 }
 
-// Header section
+// 1. Header section (primeiro componente)
 export const HeaderBoxFlexInline: React.FC<BaseInlineProps> = ({
   block,
   onPropertyChange,
@@ -126,7 +126,7 @@ export const HeaderBoxFlexInline: React.FC<BaseInlineProps> = ({
   );
 };
 
-// Result main section
+// 2. Result main section (resultado principal)
 export const ResultMainBoxFlexInline: React.FC<BaseInlineProps> = ({
   block,
   onPropertyChange,
@@ -169,7 +169,7 @@ export const ResultMainBoxFlexInline: React.FC<BaseInlineProps> = ({
   );
 };
 
-// Secondary styles
+// 3. Secondary styles (estilos secundários)
 export const SecondaryStylesBoxFlexInline: React.FC<BaseInlineProps> = ({
   block,
   onPropertyChange,
@@ -218,7 +218,7 @@ export const SecondaryStylesBoxFlexInline: React.FC<BaseInlineProps> = ({
   );
 };
 
-// Before/After section
+// 4. Before/After section (transformação)
 export const BeforeAfterBoxFlexInline: React.FC<BaseInlineProps> = ({
   block,
   onPropertyChange,
@@ -262,7 +262,7 @@ export const BeforeAfterBoxFlexInline: React.FC<BaseInlineProps> = ({
   );
 };
 
-// Motivation/Action section
+// 5. Motivation section (motivação)
 export const MotivationBoxFlexInline: React.FC<BaseInlineProps> = ({
   block,
   onPropertyChange,
@@ -283,7 +283,7 @@ export const MotivationBoxFlexInline: React.FC<BaseInlineProps> = ({
   );
 };
 
-// Bonus section
+// 6. Bonus section (bônus)
 export const BonusBoxFlexInline: React.FC<BaseInlineProps> = ({
   block,
   onPropertyChange,
@@ -319,7 +319,7 @@ export const BonusBoxFlexInline: React.FC<BaseInlineProps> = ({
   );
 };
 
-// Testimonials section
+// 7. Testimonials section (depoimentos)
 export const TestimonialsBoxFlexInline: React.FC<BaseInlineProps> = ({
   block,
   onPropertyChange,
@@ -355,7 +355,7 @@ export const TestimonialsBoxFlexInline: React.FC<BaseInlineProps> = ({
   );
 };
 
-// CTA section with green styling
+// 8. CTA section with green styling (call-to-action)
 export const CTAGreenBoxFlexInline: React.FC<BaseInlineProps> = ({
   block,
   onPropertyChange,
@@ -391,7 +391,49 @@ export const CTAGreenBoxFlexInline: React.FC<BaseInlineProps> = ({
   );
 };
 
-// Value stack section
+// 9. Guarantee section (garantia)
+export const GuaranteeBoxFlexInline: React.FC<BaseInlineProps> = ({
+  block,
+  onPropertyChange,
+  disabled,
+  className
+}) => {
+  const { properties = {} } = block;
+  
+  return (
+    <BoxFlexInlineComponent
+      label="Garantia"
+      value={properties.guaranteeText || "7 dias de garantia incondicional"}
+      onChange={(value: string) => onPropertyChange?.('guaranteeText', value)}
+      icon={<span>🛡️</span>}
+      editable={!disabled}
+      className={cn("min-w-[240px]", className)}
+    />
+  );
+};
+
+// 10. Mentor section (mentora)
+export const MentorBoxFlexInline: React.FC<BaseInlineProps> = ({
+  block,
+  onPropertyChange,
+  disabled,
+  className
+}) => {
+  const { properties = {} } = block;
+  
+  return (
+    <BoxFlexInlineComponent
+      label="Mentora"
+      value={properties.mentorText || "Gisele Galvão - Especialista em Imagem"}
+      onChange={(value: string) => onPropertyChange?.('mentorText', value)}
+      icon={<span>👩‍🏫</span>}
+      editable={!disabled}
+      className={cn("min-w-[260px]", className)}
+    />
+  );
+};
+
+// 11. Value stack section (pilha de valor)
 export const ValueStackBoxFlexInline: React.FC<BaseInlineProps> = ({
   block,
   onPropertyChange,
@@ -444,49 +486,7 @@ export const ValueStackBoxFlexInline: React.FC<BaseInlineProps> = ({
   );
 };
 
-// Guarantee section
-export const GuaranteeBoxFlexInline: React.FC<BaseInlineProps> = ({
-  block,
-  onPropertyChange,
-  disabled,
-  className
-}) => {
-  const { properties = {} } = block;
-  
-  return (
-    <BoxFlexInlineComponent
-      label="Garantia"
-      value={properties.guaranteeText || "7 dias de garantia incondicional"}
-      onChange={(value: string) => onPropertyChange?.('guaranteeText', value)}
-      icon={<span>🛡️</span>}
-      editable={!disabled}
-      className={cn("min-w-[240px]", className)}
-    />
-  );
-};
-
-// Mentor section
-export const MentorBoxFlexInline: React.FC<BaseInlineProps> = ({
-  block,
-  onPropertyChange,
-  disabled,
-  className
-}) => {
-  const { properties = {} } = block;
-  
-  return (
-    <BoxFlexInlineComponent
-      label="Mentora"
-      value={properties.mentorText || "Gisele Galvão - Especialista em Imagem"}
-      onChange={(value: string) => onPropertyChange?.('mentorText', value)}
-      icon={<span>👩‍🏫</span>}
-      editable={!disabled}
-      className={cn("min-w-[260px]", className)}
-    />
-  );
-};
-
-// Build info section
+// 12. Build info section (informações do build)
 export const BuildInfoBoxFlexInline: React.FC<BaseInlineProps> = ({
   block,
   onPropertyChange,
@@ -508,7 +508,7 @@ export const BuildInfoBoxFlexInline: React.FC<BaseInlineProps> = ({
   );
 };
 
-// Export all components
+// Export all components in the correct order
 export {
   BoxFlexInlineComponent as default,
   HeaderBoxFlexInline,
