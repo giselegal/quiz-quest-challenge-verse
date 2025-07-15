@@ -3,7 +3,7 @@ import React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { EditorTab } from '../UnifiedVisualEditor';
-import { blockDefinitions } from '@/config/blockDefinitions';
+import { blockDefinitions } from '@/config/blockDefinitionsOptimized';
 import { 
   Layout, 
   Type, 
@@ -167,8 +167,8 @@ export const UnifiedComponentsSidebar: React.FC<UnifiedComponentsSidebarProps> =
       .map(block => ({
         type: block.type,
         name: block.name,
-        icon: getIconComponent(block.icon),
-        description: block.description
+        icon: getIconComponent(block.icon || 'Layout'),
+        description: block.description || 'Componente BoxFlex'
       }));
 
     // Get basic components
@@ -177,8 +177,8 @@ export const UnifiedComponentsSidebar: React.FC<UnifiedComponentsSidebarProps> =
       .map(block => ({
         type: block.type,
         name: block.name,
-        icon: getIconComponent(block.icon),
-        description: block.description
+        icon: getIconComponent(block.icon || 'Layout'),
+        description: block.description || 'Componente básico'
       }));
 
     return [
@@ -235,7 +235,10 @@ export const UnifiedComponentsSidebar: React.FC<UnifiedComponentsSidebarProps> =
       // Novos ícones para componentes BoxFlex Etapa 20
       'Award': <Crown className="w-4 h-4" />,
       'Layers': <List className="w-4 h-4" />,
-      'Star': <Star className="w-4 h-4" />
+      'Star': <Star className="w-4 h-4" />,
+      'Code': <FileText className="w-4 h-4" />,
+      'Grid': <BarChart2 className="w-4 h-4" />,
+      'HelpCircle': <AlertCircle className="w-4 h-4" />
     };
     return iconMap[iconName] || <Layout className="w-4 h-4" />;
   };
@@ -247,8 +250,8 @@ export const UnifiedComponentsSidebar: React.FC<UnifiedComponentsSidebarProps> =
       .map(block => ({
         type: block.type,
         name: block.name,
-        icon: getIconComponent(block.icon),
-        description: block.description
+        icon: getIconComponent(block.icon || 'Layout'),
+        description: block.description || 'Componente inline'
       }));
 
     return [

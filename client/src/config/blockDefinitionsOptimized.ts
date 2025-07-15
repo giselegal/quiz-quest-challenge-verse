@@ -556,6 +556,197 @@ export const blockDefinitions: BlockDefinition[] = [
         max: 100
       }
     ]
+  },
+
+  // =====================================================================
+  // SEÇÃO: COMPONENTES ETAPA 20 - BOXFLEX MODULARES (Categoria: Resultado)
+  // =====================================================================
+  
+  {
+    type: 'header-boxflex-inline',
+    name: '1. Header BoxFlex',
+    description: 'Cabeçalho com logo, nome do funil e status de publicação',
+    icon: 'Award',
+    category: 'Resultado',
+    isNew: true,
+    propertiesSchema: [
+      { key: 'logo', label: 'URL do Logo', type: 'image-url', defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp' },
+      { key: 'funnelName', label: 'Nome do Funil', type: 'text-input', defaultValue: 'Quiz Gisele' },
+      { key: 'isPublished', label: 'Publicado', type: 'boolean-switch', defaultValue: false }
+    ],
+  },
+
+  {
+    type: 'result-main-boxflex-inline',
+    name: '2. Resultado Principal',
+    description: 'Card principal com estilo, porcentagem e descrição editáveis',
+    icon: 'Target',
+    category: 'Resultado',
+    isNew: true,
+    propertiesSchema: [
+      { key: 'styleName', label: 'Nome do Estilo', type: 'text-input', defaultValue: 'Natural' },
+      { key: 'stylePercentage', label: 'Porcentagem', type: 'text-input', defaultValue: '85' },
+      { key: 'description', label: 'Descrição', type: 'textarea', defaultValue: 'Você é autêntica e natural' },
+      { key: 'image', label: 'URL da Imagem', type: 'image-url', defaultValue: 'https://dummyimage.com/120x120/aaa/fff.png&text=Estilo' }
+    ],
+  },
+
+  {
+    type: 'secondary-styles-boxflex-inline',
+    name: '3. Estilos Secundários',
+    description: 'Lista horizontal editável dos estilos secundários',
+    icon: 'Layers',
+    category: 'Resultado',
+    isNew: true,
+    propertiesSchema: [
+      { 
+        key: 'secondaryStyles', 
+        label: 'Estilos Secundários', 
+        type: 'json-editor', 
+        defaultValue: [
+          { category: 'Moderno', percentage: 10 },
+          { category: 'Romântico', percentage: 5 }
+        ]
+      }
+    ],
+  },
+
+  {
+    type: 'before-after-boxflex-inline',
+    name: '4. Antes e Depois',
+    description: 'Seção de transformação antes/depois com imagens',
+    icon: 'ArrowRightLeft',
+    category: 'Resultado',
+    isNew: true,
+    propertiesSchema: [
+      { key: 'before', label: 'Texto Antes', type: 'text-input', defaultValue: 'Antes: insegurança' },
+      { key: 'after', label: 'Texto Depois', type: 'text-input', defaultValue: 'Depois: confiança' },
+      { key: 'beforeImg', label: 'Imagem Antes', type: 'image-url', defaultValue: 'https://dummyimage.com/80x80/eee/333.png&text=Antes' },
+      { key: 'afterImg', label: 'Imagem Depois', type: 'image-url', defaultValue: 'https://dummyimage.com/80x80/eee/333.png&text=Depois' }
+    ],
+  },
+
+  {
+    type: 'motivation-boxflex-inline',
+    name: '5. Motivação',
+    description: 'Seção motivacional editável inline',
+    icon: 'Sparkles',
+    category: 'Resultado',
+    isNew: true,
+    propertiesSchema: [
+      { key: 'motivationText', label: 'Texto Motivacional', type: 'text-input', defaultValue: 'Vista-se de você — na prática' }
+    ],
+  },
+
+  {
+    type: 'bonus-boxflex-inline',
+    name: '6. Lista de Bônus',
+    description: 'Lista horizontal editável de bônus inclusos',
+    icon: 'Gift',
+    category: 'Resultado',
+    isNew: true,
+    propertiesSchema: [
+      { 
+        key: 'bonusList', 
+        label: 'Lista de Bônus', 
+        type: 'json-editor', 
+        defaultValue: [
+          'Peças-chave do guarda-roupa',
+          'Visagismo facial personalizado'
+        ]
+      }
+    ],
+  },
+
+  {
+    type: 'testimonials-boxflex-inline',
+    name: '7. Depoimentos',
+    description: 'Lista horizontal de depoimentos editáveis',
+    icon: 'Quote',
+    category: 'Resultado',
+    isNew: true,
+    propertiesSchema: [
+      { 
+        key: 'testimonials', 
+        label: 'Lista de Depoimentos', 
+        type: 'json-editor', 
+        defaultValue: [
+          'Adorei! Mudou completamente minha forma de me vestir',
+          'Finalmente entendi meu estilo. Recomendo para todas!'
+        ]
+      }
+    ],
+  },
+
+  {
+    type: 'cta-green-boxflex-inline',
+    name: '8. CTA Verde',
+    description: 'Call-to-action verde com botão de compra destacado',
+    icon: 'ShoppingCart',
+    category: 'Resultado',
+    isNew: true,
+    propertiesSchema: [
+      { key: 'ctaText', label: 'Texto do CTA', type: 'text-input', defaultValue: 'Quero meu guia agora!' }
+    ],
+  },
+
+  {
+    type: 'guarantee-boxflex-inline',
+    name: '9. Garantia',
+    description: 'Seção de garantia com ícone e texto editável',
+    icon: 'Shield',
+    category: 'Resultado',
+    isNew: true,
+    propertiesSchema: [
+      { key: 'guaranteeText', label: 'Texto da Garantia', type: 'text-input', defaultValue: '7 dias de garantia incondicional' }
+    ],
+  },
+
+  {
+    type: 'mentor-boxflex-inline',
+    name: '10. Mentora',
+    description: 'Informações da mentora/especialista',
+    icon: 'Users',
+    category: 'Resultado',
+    isNew: true,
+    propertiesSchema: [
+      { key: 'mentorText', label: 'Texto da Mentora', type: 'text-input', defaultValue: 'Gisele Galvão - Especialista em Imagem' }
+    ],
+  },
+
+  {
+    type: 'value-stack-boxflex-inline',
+    name: '11. Value Stack',
+    description: 'Pilha de valor com itens, total e oferta especial',
+    icon: 'TrendingUp',
+    category: 'Resultado',
+    isNew: true,
+    propertiesSchema: [
+      { 
+        key: 'stackList', 
+        label: 'Lista de Itens', 
+        type: 'json-editor', 
+        defaultValue: [
+          'Guia principal - R$67',
+          'Peças-chave - R$79', 
+          'Visagismo facial - R$29'
+        ]
+      },
+      { key: 'totalValue', label: 'Valor Total', type: 'text-input', defaultValue: 'R$175,00' },
+      { key: 'offerValue', label: 'Valor da Oferta', type: 'text-input', defaultValue: 'R$39,00' }
+    ],
+  },
+
+  {
+    type: 'build-info-boxflex-inline',
+    name: '12. Build Info',
+    description: 'Informações da versão e build do sistema',
+    icon: 'Code',
+    category: 'Resultado',
+    isNew: true,
+    propertiesSchema: [
+      { key: 'buildInfo', label: 'Informações do Build', type: 'text-input', defaultValue: 'v1.0.0 - 2025-01-15' }
+    ],
   }
 ];
 
