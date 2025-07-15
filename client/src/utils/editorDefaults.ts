@@ -156,6 +156,90 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
         }
       };
       
+    // === COMPONENTES BOXFLEX ETAPA 20 ===
+    case 'header-boxflex-inline':
+      return {
+        logo: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+        funnelName: 'Quiz Gisele',
+        isPublished: false
+      };
+      
+    case 'result-main-boxflex-inline':
+      return {
+        styleName: 'Natural',
+        stylePercentage: '85',
+        description: 'Você é autêntica e natural',
+        image: 'https://dummyimage.com/120x120/aaa/fff.png&text=Estilo'
+      };
+      
+    case 'secondary-styles-boxflex-inline':
+      return {
+        secondaryStyles: [
+          { category: 'Moderno', percentage: 10 },
+          { category: 'Romântico', percentage: 5 }
+        ]
+      };
+      
+    case 'before-after-boxflex-inline':
+      return {
+        before: 'Antes: insegurança',
+        after: 'Depois: confiança',
+        beforeImg: 'https://dummyimage.com/80x80/eee/333.png&text=Antes',
+        afterImg: 'https://dummyimage.com/80x80/eee/333.png&text=Depois'
+      };
+      
+    case 'motivation-boxflex-inline':
+      return {
+        motivationText: 'Vista-se de você — na prática'
+      };
+      
+    case 'bonus-boxflex-inline':
+      return {
+        bonusList: [
+          'Peças-chave do guarda-roupa',
+          'Visagismo facial personalizado'
+        ]
+      };
+      
+    case 'testimonials-boxflex-inline':
+      return {
+        testimonials: [
+          'Adorei! Mudou completamente minha forma de me vestir',
+          'Finalmente entendi meu estilo. Recomendo para todas!'
+        ]
+      };
+      
+    case 'cta-green-boxflex-inline':
+      return {
+        ctaText: 'Quero meu guia agora!'
+      };
+      
+    case 'guarantee-boxflex-inline':
+      return {
+        guaranteeText: '7 dias de garantia incondicional'
+      };
+      
+    case 'mentor-boxflex-inline':
+      return {
+        mentorText: 'Gisele Galvão - Especialista em Imagem'
+      };
+      
+    case 'value-stack-boxflex-inline':
+      return {
+        stackList: [
+          'Guia principal - R$67',
+          'Peças-chave - R$79', 
+          'Visagismo facial - R$29'
+        ],
+        totalValue: 'R$175,00',
+        offerValue: 'R$39,00'
+      };
+      
+    case 'build-info-boxflex-inline':
+      return {
+        buildInfo: 'v1.0.0 - 2025-01-15'
+      };
+      
     // Add more default content types as needed
     default:
       return {
