@@ -88,8 +88,10 @@ const useErrorBoundary = () => {
 const LandingPage = lazy(() => import("./pages/LandingPage"));
 const QuizPage = lazy(() => import("./components/QuizPage"));
 const TestResultPage = lazy(() => import("./pages/TestResultPage"));
+const QuizDescubraSeuEstilo = lazy(() => import("./pages/quiz-descubra-seu-estilo"));
 const SchemaDrivenEditorPage = lazy(() => import("./pages/SchemaDrivenEditorPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
+const ImageKitTest = lazy(() => import("./components/ImageKitTest"));
 
 const App = () => {
   const [isInitialized, setIsInitialized] = useState(false);
@@ -142,8 +144,12 @@ const App = () => {
               <Route path="/quiz" component={QuizPage} />
               <Route path="/resultado" component={TestResultPage} />
               <Route path="/test-resultado" component={TestResultPage} />
+              <Route path="/quiz-descubra-seu-estilo" component={QuizDescubraSeuEstilo} />
               <Route path="/editor" component={SchemaDrivenEditorPage} />
               <Route path="/editor/:id" component={SchemaDrivenEditorPage} />
+              
+              {/* ImageKit Test Route */}
+              <Route path="/imagekit-test" component={ImageKitTest} />
               
               {/* 404 - Fallback for not found routes */}
               <Route path="*" component={NotFoundPage} />
