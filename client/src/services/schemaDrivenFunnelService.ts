@@ -1122,52 +1122,100 @@ class SchemaDrivenFunnelService {
     });
 
     // ==========================================
-    // ETAPA 20: RESULTADO PERSONALIZADO - MAPS TO /resultado
-    // CONFIGURAÇÃO COMPLETA COM COMPONENTES NO CANVAS
+    // ETAPA 20: RESULTADO PERSONALIZADO - MAPS TO /resultado (ResultPage.tsx)
+    // CONFIGURAÇÃO COMPLETA COM COMPONENTES REAIS DO RESULTADO
     // ==========================================
-    console.log('🎯 [FIXED] Creating Step 20: Result Page → /resultado');
+    console.log('🎯 [FIXED] Creating Step 20: Result Page → /resultado (ResultPage.tsx)');
     pages.push({
       id: 'etapa-20-resultado',
       name: 'Resultado (/resultado)',
-      title: 'Etapa 20: Resultado Personalizado',
+      title: 'Etapa 20: Resultado Personalizado - ResultPage.tsx',
       type: 'result',
       order: 20,
       blocks: [
-        // 1. Header de resultado
+        // 1. Header com logo e progresso (como em ResultPage.tsx)
         {
-          id: 'result-header',
-          type: 'result-header-inline',
+          id: 'result-header-logo',
+          type: 'quiz-intro-header',
           properties: {
-            title: 'Seu Resultado Personalizado',
-            subtitle: 'Descubra seu estilo único',
-            backgroundColor: '#B89B7A'
+            logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+            logoAlt: 'Logo Gisele Galvão',
+            logoWidth: 96,
+            logoHeight: 96,
+            progressValue: 100,
+            progressMax: 100,
+            showBackButton: false
           }
         },
-        // 2. Espaçador
+        // 2. Título principal do resultado
         {
-          id: 'result-spacer-1',
-          type: 'spacer',
+          id: 'result-main-title',
+          type: 'text-inline',
           properties: {
-            height: 32,
-            backgroundColor: 'transparent'
+            content: '<span style="color: #B89B7A; font-weight: 700;">Parabéns!</span> Seu estilo predominante foi identificado.',
+            fontSize: 'text-2xl',
+            fontWeight: 'font-bold',
+            textAlign: 'text-center',
+            color: '#432818',
+            marginBottom: 32
           }
         },
-        // 3. Card de estilo predominante
+        // 3. Card de estilo predominante (como em ResultPage.tsx)
         {
-          id: 'result-style-card',
+          id: 'result-primary-style-card',
           type: 'style-card-inline',
           properties: {
             styleName: 'Seu Estilo Predominante',
-            styleDescription: 'Baseado nas suas respostas, identificamos seu perfil único de estilo...',
-            styleImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp'
+            styleDescription: 'Baseado nas suas respostas, identificamos seu perfil único de estilo pessoal.',
+            styleImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp',
+            showPercentage: true,
+            percentage: 85
           }
         },
-        // 4. Texto explicativo
+        // 4. Barra de progresso do estilo
         {
-          id: 'result-explanation',
+          id: 'result-style-progress',
+          type: 'progress-bar-inline',
+          properties: {
+            label: 'Seu estilo predominante',
+            value: 85,
+            maxValue: 100,
+            color: '#B89B7A',
+            backgroundColor: '#f0f0f0',
+            height: 12
+          }
+        },
+        // 5. Estilos secundários
+        {
+          id: 'result-secondary-styles',
           type: 'text-inline',
           properties: {
-            content: 'Seu estilo reflete sua personalidade única. Continue lendo para descobrir como aplicar essas características no seu dia a dia.',
+            content: '<strong>Estilos Secundários:</strong><br/>Clássico (15%) • Contemporâneo (10%) • Elegante (8%)',
+            fontSize: 'text-base',
+            textAlign: 'text-center',
+            color: '#666666',
+            marginTop: 16,
+            marginBottom: 32
+          }
+        },
+        // 6. Imagem do guia de estilo
+        {
+          id: 'result-guide-image',
+          type: 'image-display-inline',
+          properties: {
+            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp',
+            alt: 'Guia de Estilo Personalizado',
+            width: 540,
+            height: 400,
+            className: 'object-cover w-full h-auto rounded-lg mx-auto shadow-lg'
+          }
+        },
+        // 7. Descrição do resultado
+        {
+          id: 'result-description',
+          type: 'text-inline',
+          properties: {
+            content: 'Pessoas com seu perfil de estilo valorizam autenticidade e praticidade. Você prefere peças que reflitam sua personalidade única, sem abrir mão do conforto e da funcionalidade.',
             fontSize: 'text-lg',
             textAlign: 'text-center',
             color: '#432818',
@@ -1175,78 +1223,85 @@ class SchemaDrivenFunnelService {
             marginBottom: 32
           }
         },
-        // 5. Card de resultado detalhado
+        // 8. CTA principal (como em ResultPage.tsx)
         {
-          id: 'result-detail-card',
-          type: 'result-card-inline',
-          properties: {
-            title: 'Análise Completa do Seu Estilo',
-            content: 'Com base nas suas 16 respostas, criamos um perfil detalhado que mostra exatamente como você pode se vestir com mais confiança e autenticidade.',
-            showButton: true
-          }
-        },
-        // 6. Imagem inspiracional
-        {
-          id: 'result-inspiration-image',
-          type: 'image-display-inline',
-          properties: {
-            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp',
-            alt: 'Inspiração de estilo',
-            width: 600,
-            height: 400,
-            className: 'object-cover w-full h-auto rounded-lg mx-auto'
-          }
-        },
-        // 7. CTA para oferta
-        {
-          id: 'result-cta',
+          id: 'result-main-cta',
           type: 'button-inline',
           properties: {
-            text: 'Quero Meu Guia Completo Agora!',
+            text: 'Quero Meu Guia Completo de Estilo!',
             variant: 'primary',
             size: 'large',
             fullWidth: true,
             backgroundColor: '#B89B7A',
             textColor: '#ffffff',
-            marginTop: 40
+            marginTop: 40,
+            onClick: 'handleCTAClick'
           }
         }
       ],
       settings: {
         showProgress: false,
-        backgroundColor: '#ffffff',
+        backgroundColor: '#fffaf7',
         textColor: '#432818',
         maxWidth: 'max-w-4xl',
-        padding: 'p-6'
+        padding: 'p-6',
+        usePageConfig: true,
+        pageConfigId: 'result-page'
       }
     });
 
     // ==========================================
-    // ETAPA 21: OFERTA COMERCIAL - MAPS TO /quiz-descubra-seu-estilo
-    // CONFIGURAÇÃO COMPLETA COM COMPONENTES NO CANVAS
+    // ETAPA 21: OFERTA COMERCIAL - MAPS TO /quiz-descubra-seu-estilo (QuizOfferPage.tsx)
+    // CONFIGURAÇÃO COMPLETA COM COMPONENTES REAIS DA PÁGINA DE OFERTA
     // ==========================================
-    console.log('🎯 [FIXED] Creating Step 21: Offer Page → /quiz-descubra-seu-estilo');
+    console.log('🎯 [FIXED] Creating Step 21: Offer Page → /quiz-descubra-seu-estilo (QuizOfferPage.tsx)');
     pages.push({
       id: 'etapa-21-oferta',
       name: 'Oferta (/quiz-descubra-seu-estilo)',
-      title: 'Etapa 21: Oferta Comercial',
+      title: 'Etapa 21: Oferta Comercial - QuizOfferPage.tsx',
       type: 'offer',
       order: 21,
       blocks: [
-        // 1. Header de oferta
+        // 1. Header com logo (como em QuizOfferPage.tsx)
         {
-          id: 'offer-header',
-          type: 'heading-inline',
+          id: 'offer-header-logo',
+          type: 'image-display-inline',
           properties: {
-            content: 'Transforme Seu Estilo Hoje Mesmo!',
-            level: 'h1',
-            textAlign: 'text-center',
-            color: '#432818'
+            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+            alt: 'Logo Gisele Galvão',
+            width: 180,
+            height: 80,
+            className: 'h-auto object-contain mx-auto'
           }
         },
-        // 2. Subtítulo de urgência
+        // 2. Badge de credibilidade
         {
-          id: 'offer-subtitle',
+          id: 'offer-credibility-badge',
+          type: 'badge-inline',
+          properties: {
+            icon: 'Award',
+            text: 'Consultora Especialista em Estilo',
+            backgroundColor: '#10b981',
+            textColor: '#ffffff',
+            borderColor: '#10b981'
+          }
+        },
+        // 3. Título principal da oferta
+        {
+          id: 'offer-main-title',
+          type: 'text-inline',
+          properties: {
+            content: '<span style="color: #B89B7A; font-weight: 700;">Transforme</span> Seu Guarda-Roupa e Sua Confiança',
+            fontSize: 'text-3xl',
+            fontWeight: 'font-bold',
+            textAlign: 'text-center',
+            color: '#432818',
+            marginBottom: 16
+          }
+        },
+        // 4. Subtítulo de urgência
+        {
+          id: 'offer-urgency-subtitle',
           type: 'text-inline',
           properties: {
             content: 'Oferta exclusiva para quem completou o quiz - válida apenas hoje!',
@@ -1256,51 +1311,124 @@ class SchemaDrivenFunnelService {
             marginBottom: 32
           }
         },
-        // 3. Destaque de preço
+        // 5. Countdown timer (como em QuizOfferPage.tsx)
         {
-          id: 'offer-price-highlight',
+          id: 'offer-countdown-timer',
+          type: 'countdown-timer-inline',
+          properties: {
+            title: 'Oferta expira em:',
+            minutes: 15,
+            backgroundColor: '#fee2e2',
+            textColor: '#dc2626',
+            borderColor: '#fca5a5'
+          }
+        },
+        // 6. Destaque de preço principal
+        {
+          id: 'offer-price-main',
           type: 'price-highlight-inline',
           properties: {
             originalPrice: 'R$ 197,00',
             currentPrice: 'R$ 97,00',
             discount: '50% OFF',
-            urgencyText: 'Apenas hoje!'
+            urgencyText: 'Apenas hoje!',
+            installments: '12x R$ 9,70',
+            backgroundColor: '#f8fafc',
+            borderColor: '#B89B7A'
           }
         },
-        // 4. Espaçador
+        // 7. Benefícios em grid
         {
-          id: 'offer-spacer-1',
-          type: 'spacer',
+          id: 'offer-benefits-grid',
+          type: 'benefits-grid-inline',
           properties: {
-            height: 32,
-            backgroundColor: 'transparent'
+            title: 'O que você vai receber:',
+            benefits: [
+              '✓ Guia personalizado baseado no seu perfil',
+              '✓ 50+ looks para o seu estilo',
+              '✓ Dicas de combinações práticas',
+              '✓ Acesso vitalício ao conteúdo',
+              '✓ Suporte por WhatsApp',
+              '✓ Garantia de 7 dias'
+            ],
+            columns: 2,
+            backgroundColor: '#ffffff',
+            borderColor: '#e5e7eb'
           }
         },
-        // 5. Componente de oferta de quiz
+        // 8. CTA principal
         {
-          id: 'offer-quiz-pricing',
-          type: 'quiz-offer-pricing-inline',
+          id: 'offer-main-cta',
+          type: 'button-inline',
           properties: {
-            productTitle: 'Guia de Estilo Personalizado',
-            productDescription: 'Transforme seu guarda-roupa com seu guia personalizado baseado no seu perfil único.',
-            price: 'R$ 97,00',
-            ctaText: 'Quero Meu Guia Agora!'
+            text: 'QUERO TRANSFORMAR MEU ESTILO AGORA!',
+            variant: 'primary',
+            size: 'large',
+            fullWidth: true,
+            backgroundColor: '#B89B7A',
+            textColor: '#ffffff',
+            marginTop: 32,
+            marginBottom: 16,
+            onClick: 'handleCtaClick'
           }
         },
-        // 6. Benefícios
+        // 9. Garantia e segurança
         {
-          id: 'offer-benefits',
+          id: 'offer-guarantee-security',
           type: 'text-inline',
           properties: {
-            content: '✓ Guia personalizado baseado no seu perfil\n✓ 50+ looks para o seu estilo\n✓ Dicas de combinações práticas\n✓ Acesso vitalício\n✓ Garantia de 7 dias',
-            fontSize: 'text-base',
-            textAlign: 'text-left',
-            color: '#432818',
-            marginTop: 24,
+            content: '🔒 Compra 100% segura • Garantia de 7 dias • Suporte 24/7',
+            fontSize: 'text-sm',
+            textAlign: 'text-center',
+            color: '#666666',
+            marginTop: 16,
             marginBottom: 32
           }
         },
-        // 7. CTA final
+        // 10. Depoimentos (como em QuizOfferPage.tsx)
+        {
+          id: 'offer-testimonials',
+          type: 'testimonials-inline',
+          properties: {
+            title: 'O que dizem nossas clientes:',
+            testimonials: [
+              {
+                name: 'Maria Silva',
+                text: 'Transformei completamente meu guarda-roupa! Agora me sinto muito mais confiante.',
+                rating: 5
+              },
+              {
+                name: 'Ana Costa',
+                text: 'O guia é incrível! Aprendi a combinar peças que já tinha em casa.',
+                rating: 5
+              }
+            ],
+            backgroundColor: '#f8fafc'
+          }
+        },
+        // 11. FAQ seção
+        {
+          id: 'offer-faq',
+          type: 'faq-inline',
+          properties: {
+            title: 'Perguntas Frequentes:',
+            faqs: [
+              {
+                question: 'Como funciona o guia personalizado?',
+                answer: 'Baseado no seu resultado do quiz, criamos um guia específico para seu perfil de estilo.'
+              },
+              {
+                question: 'Posso pagar parcelado?',
+                answer: 'Sim! Você pode parcelar em até 12x no cartão de crédito.'
+              },
+              {
+                question: 'Há garantia?',
+                answer: 'Sim! Oferecemos garantia de 7 dias. Se não gostar, devolvemos 100% do valor.'
+              }
+            ]
+          }
+        },
+        // 12. CTA final de fechamento
         {
           id: 'offer-final-cta',
           type: 'button-inline',
@@ -1310,19 +1438,9 @@ class SchemaDrivenFunnelService {
             size: 'large',
             fullWidth: true,
             backgroundColor: '#B89B7A',
-            textColor: '#ffffff'
-          }
-        },
-        // 8. Garantia
-        {
-          id: 'offer-guarantee',
-          type: 'text-inline',
-          properties: {
-            content: '🔒 Compra 100% segura • Garantia de 7 dias',
-            fontSize: 'text-sm',
-            textAlign: 'text-center',
-            color: '#666666',
-            marginTop: 16
+            textColor: '#ffffff',
+            marginTop: 40,
+            onClick: 'handleCtaClick'
           }
         }
       ],
@@ -1330,8 +1448,10 @@ class SchemaDrivenFunnelService {
         showProgress: false,
         backgroundColor: '#ffffff',
         textColor: '#432818',
-        maxWidth: 'max-w-4xl',
-        padding: 'p-6'
+        maxWidth: 'max-w-6xl',
+        padding: 'p-6',
+        usePageConfig: true,
+        pageConfigId: 'quiz-offer-page'
       }
     });
 
