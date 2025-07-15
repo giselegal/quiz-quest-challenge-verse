@@ -84,7 +84,7 @@ const SortableBlock: React.FC<SortableBlockProps> = ({
         onClick={onClick}
         disabled={isPreviewing}
         onSaveInline={(blockId, updates) => {
-          // This would typically update the block in the parent component
+          // This would typically update the block content in the parent component
           console.log('Block updated:', blockId, updates);
         }}
       />
