@@ -48,15 +48,16 @@ export interface BlockDefinition {
 
 export const blockDefinitions: BlockDefinition[] = [
   // =====================================================================
-  // ETAPA 20 - COMPONENTES BOXFLEX COM DADOS REAIS
+  // ETAPA 20 - COMPONENTES ELEGANTES DA MARCA GISELE GALVÃO
+  // Paleta: #B89B7A (Dourado), #432818 (Marrom), #aa6b5d (Rosé)
   // =====================================================================
   
   {
     type: 'header-boxflex-inline',
-    name: '🏆 Header do Resultado',
-    description: 'Cabeçalho com logo da Gisele Galvão e resultado personalizado',
-    icon: 'Award',
-    category: 'Resultado',
+    name: 'Header do Resultado',
+    description: 'Cabeçalho elegante com logo da Gisele Galvão e resultado personalizado',
+    icon: 'Crown',
+    category: 'Resultado Elegante',
     isNew: true,
     propertiesSchema: [
       { 
@@ -82,10 +83,10 @@ export const blockDefinitions: BlockDefinition[] = [
 
   {
     type: 'result-main-boxflex-inline',
-    name: '✨ Estilo Principal',
-    description: 'Resultado principal com estilo detectado e porcentagem real',
-    icon: 'Target',
-    category: 'Resultado',
+    name: 'Estilo Principal',
+    description: 'Resultado principal com estilo detectado e porcentagem real da marca',
+    icon: 'Sparkles',
+    category: 'Resultado Elegante',
     isNew: true,
     propertiesSchema: [
       { 
@@ -120,17 +121,17 @@ export const blockDefinitions: BlockDefinition[] = [
         key: 'styleImage', 
         label: 'Imagem do Estilo', 
         type: 'image-url', 
-        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/ESTILO_NATURAL_GISELE_n8k2x1.webp' 
+        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp' 
       }
     ]
   },
 
   {
     type: 'secondary-styles-boxflex-inline',
-    name: '📊 Estilos Secundários',
-    description: 'Outros estilos presentes na personalidade com porcentagens reais',
+    name: 'Estilos Secundários',
+    description: 'Outros estilos presentes na personalidade com cores elegantes da marca',
     icon: 'BarChart3',
-    category: 'Resultado',
+    category: 'Resultado Elegante',
     isNew: true,
     propertiesSchema: [
       { 
@@ -138,8 +139,8 @@ export const blockDefinitions: BlockDefinition[] = [
         label: 'Lista de Estilos Secundários', 
         type: 'json-editor', 
         defaultValue: [
-          { name: 'Clássico', percentage: 15, color: '#8B4513' },
-          { name: 'Moderno', percentage: 7, color: '#4A90E2' }
+          { name: 'Clássico', percentage: 15, color: '#B89B7A' },
+          { name: 'Moderno', percentage: 7, color: '#aa6b5d' }
         ]
       }
     ]
@@ -147,10 +148,10 @@ export const blockDefinitions: BlockDefinition[] = [
 
   {
     type: 'before-after-boxflex-inline',
-    name: '🔄 Transformação',
-    description: 'Seção antes/depois personalizada com imagens reais da transformação',
+    name: 'Transformação Elegante',
+    description: 'Seção antes/depois com design sofisticado da marca Gisele Galvão',
     icon: 'RefreshCw',
-    category: 'Resultado',
+    category: 'Resultado Elegante',
     isNew: true,
     propertiesSchema: [
       { 
@@ -181,69 +182,51 @@ export const blockDefinitions: BlockDefinition[] = [
         key: 'beforeImage', 
         label: 'Imagem "Antes"', 
         type: 'image-url', 
-        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/ANTES_TRANSFORMACAO_GISELE_a2m5k8.webp' 
+        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334756/ChatGPT_Image_4_de_mai._de_2025_01_42_42_jlugsc.webp' 
       },
       { 
         key: 'afterImage', 
         label: 'Imagem "Depois"', 
         type: 'image-url', 
-        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/DEPOIS_TRANSFORMACAO_GISELE_x9n4l6.webp' 
+        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_00_30_44_naqom0.webp' 
       }
     ]
   },
 
   {
     type: 'motivation-boxflex-inline',
-    name: '💪 Motivação Personalizada',
-    description: 'Frase motivacional baseada no estilo detectado',
-    icon: 'Zap',
-    category: 'Resultado',
+    name: 'Motivação Elegante',
+    description: 'Frase motivacional sofisticada baseada no estilo detectado',
+    icon: 'Heart',
+    category: 'Resultado Elegante',
     isNew: true,
     propertiesSchema: [
       { 
         key: 'motivationText', 
         label: 'Frase Motivacional', 
         type: 'textarea', 
-        defaultValue: 'Agora você pode se vestir com confiança, sabendo exatamente quais peças realçam sua beleza natural.',
+        defaultValue: 'Vista-se de você — na prática, com o seu Guia de Estilo Personalizado',
         rows: 2
-      },
-      { 
-        key: 'highlightWord', 
-        label: 'Palavra de Destaque', 
-        type: 'text-input', 
-        defaultValue: 'confiança' 
       }
     ]
   },
 
   {
     type: 'bonus-boxflex-inline',
-    name: '🎁 Bônus Exclusivos',
-    description: 'Lista real de bônus inclusos no guia personalizado',
+    name: 'Bônus Elegantes',
+    description: 'Lista refinada de bônus inclusos no guia personalizado da marca',
     icon: 'Gift',
-    category: 'Resultado',
+    category: 'Resultado Elegante',
     isNew: true,
     propertiesSchema: [
       { 
         key: 'bonusList', 
-        label: 'Lista de Bônus Reais', 
-        type: 'json-editor', 
+        label: 'Lista de Bônus Premium', 
+        type: 'array-editor', 
         defaultValue: [
-          {
-            title: 'Guia de Peças-Chave',
-            description: 'As 15 peças essenciais para seu estilo',
-            value: 'R$ 67,00'
-          },
-          {
-            title: 'Paleta de Cores Personalizada',
-            description: 'Cores que realçam sua beleza natural',
-            value: 'R$ 49,00'
-          },
-          {
-            title: 'Visagismo Facial',
-            description: 'Cortes e formatos ideais para seu rosto',
-            value: 'R$ 79,00'
-          }
+          'Guia de Peças Essenciais para seu Estilo Natural - R$ 79,00',
+          'Visagismo Facial Personalizado - R$ 29,00',
+          'Checklist de Compras por Estilo'
         ]
       }
     ]
@@ -251,29 +234,19 @@ export const blockDefinitions: BlockDefinition[] = [
 
   {
     type: 'testimonials-boxflex-inline',
-    name: '⭐ Depoimentos Reais',
-    description: 'Depoimentos verdadeiros de clientes que fizeram o quiz',
-    icon: 'MessageSquare',
-    category: 'Resultado',
+    name: 'Depoimentos Elegantes',
+    description: 'Depoimentos sofisticados de clientes que fizeram o quiz',
+    icon: 'MessageCircle',
+    category: 'Resultado Elegante',
     isNew: true,
     propertiesSchema: [
       { 
         key: 'testimonials', 
         label: 'Depoimentos Verificados', 
-        type: 'json-editor', 
+        type: 'array-editor', 
         defaultValue: [
-          {
-            text: 'O quiz da Gisele mudou completamente como me visto. Agora tenho certeza das minhas escolhas!',
-            author: 'Marina S.',
-            location: 'São Paulo, SP',
-            image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/CLIENTE_MARINA_DEPOIMENTO_k7x2m9.webp'
-          },
-          {
-            text: 'Finalmente entendi meu estilo! O guia é incrível, super detalhado e personalizado.',
-            author: 'Carla R.',
-            location: 'Rio de Janeiro, RJ',
-            image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/CLIENTE_CARLA_DEPOIMENTO_p3h8n5.webp'
-          }
+          'Finalmente entendi meu estilo! O quiz foi preciso e o guia é incrível. Recomendo!',
+          'Mudou completamente minha forma de me vestir. Agora sei o que funciona para mim!'
         ]
       }
     ]
@@ -281,52 +254,34 @@ export const blockDefinitions: BlockDefinition[] = [
 
   {
     type: 'cta-green-boxflex-inline',
-    name: '🛒 CTA Principal',
-    description: 'Call-to-action otimizado para conversão com urgência real',
-    icon: 'ShoppingCart',
-    category: 'Resultado',
+    name: 'CTA Premium',
+    description: 'Call-to-action elegante otimizado para conversão com design da marca',
+    icon: 'ShoppingBag',
+    category: 'Resultado Elegante',
     isNew: true,
     propertiesSchema: [
       { 
         key: 'ctaText', 
         label: 'Texto do CTA', 
         type: 'text-input', 
-        defaultValue: 'QUERO MEU GUIA DE ESTILO PERSONALIZADO' 
-      },
-      { 
-        key: 'urgencyText', 
-        label: 'Texto de Urgência', 
-        type: 'text-input', 
-        defaultValue: 'Oferta especial válida por 24h após o resultado' 
-      },
-      { 
-        key: 'discount', 
-        label: 'Desconto', 
-        type: 'text-input', 
-        defaultValue: '70% OFF' 
+        defaultValue: 'Garantir Meu Guia + Bônus Especiais' 
       }
     ]
   },
 
   {
     type: 'guarantee-boxflex-inline',
-    name: '🛡️ Garantia Real',
-    description: 'Garantia verdadeira com política de devolução clara',
+    name: 'Garantia Elegante',
+    description: 'Garantia sofisticada com política de devolução clara da marca',
     icon: 'Shield',
-    category: 'Resultado',
+    category: 'Resultado Elegante',
     isNew: true,
     propertiesSchema: [
-      { 
-        key: 'guaranteeTitle', 
-        label: 'Título da Garantia', 
-        type: 'text-input', 
-        defaultValue: 'Garantia de 30 Dias' 
-      },
       { 
         key: 'guaranteeText', 
         label: 'Texto da Garantia', 
         type: 'textarea', 
-        defaultValue: 'Se você não ficar 100% satisfeita com seu guia personalizado, devolvemos seu dinheiro sem questionamentos.',
+        defaultValue: '7 dias de garantia total. Se não ficar satisfeita, devolvemos 100% do seu dinheiro',
         rows: 2
       }
     ]
@@ -334,106 +289,73 @@ export const blockDefinitions: BlockDefinition[] = [
 
   {
     type: 'mentor-boxflex-inline',
-    name: '👩‍🏫 Sobre a Gisele',
-    description: 'Informações reais sobre a mentora e especialista',
+    name: 'Sobre a Gisele',
+    description: 'Informações elegantes sobre a mentora e especialista',
     icon: 'User',
-    category: 'Resultado',
+    category: 'Resultado Elegante',
     isNew: true,
     propertiesSchema: [
-      { 
-        key: 'mentorName', 
-        label: 'Nome da Mentora', 
-        type: 'text-input', 
-        defaultValue: 'Gisele Galvão' 
-      },
-      { 
-        key: 'mentorTitle', 
-        label: 'Título Profissional', 
-        type: 'text-input', 
-        defaultValue: 'Consultora de Imagem Certificada' 
-      },
-      { 
-        key: 'mentorBio', 
-        label: 'Mini Biografia', 
-        type: 'textarea', 
-        defaultValue: 'Mais de 8 anos ajudando mulheres a descobrirem seu estilo único. Já transformou a vida de mais de 5.000 clientes.',
-        rows: 2
-      },
       { 
         key: 'mentorImage', 
         label: 'Foto da Mentora', 
         type: 'image-url', 
-        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/GISELE_GALVAO_FOTO_PROFISSIONAL_m4k9x7.webp' 
+        defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.webp' 
+      },
+      { 
+        key: 'mentorText', 
+        label: 'Texto da Mentora', 
+        type: 'text-input', 
+        defaultValue: 'Gisele Galvão - Especialista em Imagem e Estilo Pessoal' 
       }
     ]
   },
 
   {
     type: 'value-stack-boxflex-inline',
-    name: '💰 Valor Real do Conjunto',
-    description: 'Cálculo real do valor total vs. oferta especial',
-    icon: 'DollarSign',
-    category: 'Resultado',
+    name: 'Valor Premium',
+    description: 'Cálculo elegante do valor total vs. oferta especial da marca',
+    icon: 'TrendingUp',
+    category: 'Resultado Elegante',
     isNew: true,
     propertiesSchema: [
       { 
-        key: 'valueItems', 
+        key: 'stackList', 
         label: 'Itens do Pacote', 
-        type: 'json-editor', 
+        type: 'array-editor', 
         defaultValue: [
-          { item: 'Guia de Estilo Personalizado (60 páginas)', value: 'R$ 197,00' },
-          { item: 'Paleta de Cores Individual', value: 'R$ 97,00' },
-          { item: 'Lista de Peças-Chave', value: 'R$ 67,00' },
-          { item: 'Visagismo Facial Completo', value: 'R$ 79,00' },
-          { item: 'Suporte por WhatsApp (30 dias)', value: 'R$ 147,00' }
+          'Guia principal - R$ 67,00',
+          'Bônus Peças-chave - R$ 79,00', 
+          'Bônus Visagismo - R$ 29,00'
         ]
       },
       { 
         key: 'totalValue', 
         label: 'Valor Total Real', 
         type: 'text-input', 
-        defaultValue: 'R$ 587,00' 
+        defaultValue: 'R$ 175,00' 
       },
       { 
-        key: 'specialPrice', 
+        key: 'offerValue', 
         label: 'Preço Especial', 
         type: 'text-input', 
-        defaultValue: 'R$ 97,00' 
-      },
-      { 
-        key: 'savings', 
-        label: 'Economia', 
-        type: 'text-input', 
-        defaultValue: 'R$ 490,00' 
+        defaultValue: 'R$ 39,00' 
       }
     ]
   },
 
   {
     type: 'build-info-boxflex-inline',
-    name: '🔧 Informações do Sistema',
-    description: 'Dados técnicos e versão do quiz para suporte',
+    name: 'Informações do Sistema',
+    description: 'Dados técnicos elegantes e versão do quiz para suporte',
     icon: 'Settings',
-    category: 'Resultado',
+    category: 'Resultado Elegante',
     isNew: true,
     propertiesSchema: [
       { 
-        key: 'version', 
-        label: 'Versão do Quiz', 
+        key: 'buildInfo', 
+        label: 'Informações do Build', 
         type: 'text-input', 
-        defaultValue: 'Quiz v2.1 - 2025' 
-      },
-      { 
-        key: 'algorithm', 
-        label: 'Algoritmo', 
-        type: 'text-input', 
-        defaultValue: 'IA Personalizada Gisele Galvão' 
-      },
-      { 
-        key: 'accuracy', 
-        label: 'Precisão', 
-        type: 'text-input', 
-        defaultValue: '94.7% de acurácia' 
+        defaultValue: 'v1.0.0 - 2025-01-15' 
       }
     ]
   }
