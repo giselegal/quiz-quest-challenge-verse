@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -13,16 +13,31 @@ import { toast } from '@/components/ui/use-toast';
 interface VisualEditorLayoutProps {
   initialQuestions?: QuizQuestion[];
   onSave?: (questions: QuizQuestion[]) => void;
+  onQuestionsChange?: (questions: QuizQuestion[]) => void;
 }
 
 const VisualEditorLayout: React.FC<VisualEditorLayoutProps> = ({
   initialQuestions = [],
-  onSave
+  onSave,
+  onQuestionsChange
 }) => {
   const [questions, setQuestions] = useState<QuizQuestion[]>(initialQuestions);
   const [activeTab, setActiveTab] = useState('editor');
   const [previewMode, setPreviewMode] = useState(false);
   const [showProperties, setShowProperties] = useState(true);
+  
+  // Sincronizar com initialQuestions quando mudar
+  useEffect(() => {
+    setQuestions(initialQuestions);
+  }, [initialQuestions]);
+
+  // Propagar mudanças para o componente pai
+  const handleQuestionsChange = (newQuestions: QuizQuestion[]) => {
+    setQuestions(newQuestions);
+    if (onQuestionsChange) {
+      onQuestionsChange(newQuestions);
+    }
+  };
   
   const handleSave = () => {
     if (onSave) {
@@ -139,7 +154,7 @@ const VisualEditorLayout: React.FC<VisualEditorLayoutProps> = ({
                 <TabsContent value="editor" className="flex-1 overflow-auto p-0 m-0">
                   <DraggableQuizEditor 
                     questions={questions} 
-                    onQuestionsChange={setQuestions} 
+                    onQuestionsChange={handleQuestionsChange} 
                   />
                 </TabsContent>
                 

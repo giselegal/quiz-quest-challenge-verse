@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import VisualEditorLayout from '@/components/visual-editor/VisualEditorLayout';
-import { QuizQuestion } from '@/types/quiz';
 import { useToast } from '@/components/ui/use-toast';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Save } from 'lucide-react';
+import { ArrowLeft, Save, Cloud, CloudOff, Wifi, WifiOff, AlertCircle } from 'lucide-react';
+import { useQuizEditor } from '@/hooks/useQuizEditor';
+import { motion } from 'framer-motion';
+import { Badge } from '@/components/ui/badge';
 
 const VisualEditorPage: React.FC = () => {
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
