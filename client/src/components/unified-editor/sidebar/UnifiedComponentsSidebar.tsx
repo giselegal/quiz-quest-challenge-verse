@@ -161,51 +161,34 @@ export const UnifiedComponentsSidebar: React.FC<UnifiedComponentsSidebarProps> =
   };
 
   const getResultComponents = (): ComponentGroup[] => {
+    // Get components from blockDefinitions for Resultado category
+    const resultadoComponents = blockDefinitions
+      .filter(block => block.category === 'Resultado')
+      .map(block => ({
+        type: block.type,
+        name: block.name,
+        icon: getIconComponent(block.icon),
+        description: block.description
+      }));
+
+    // Get basic components
+    const basicComponents = blockDefinitions
+      .filter(block => block.category === 'Básicos')
+      .map(block => ({
+        type: block.type,
+        name: block.name,
+        icon: getIconComponent(block.icon),
+        description: block.description
+      }));
+
     return [
       {
-        title: 'Componentes de Resultado',
-        items: [
-          {
-            type: 'header',
-            name: 'Cabeçalho',
-            icon: <PanelLeft className="w-4 h-4" />,
-            description: 'Cabeçalho da página de resultado'
-          },
-          {
-            type: 'resultsSummary',
-            name: 'Resumo',
-            icon: <BarChart2 className="w-4 h-4" />,
-            description: 'Resumo visual dos resultados'
-          },
-          {
-            type: 'styleDescription',
-            name: 'Descrição de Estilo',
-            icon: <FileText className="w-4 h-4" />,
-            description: 'Descrição detalhada do estilo'
-          },
-          {
-            type: 'styleImage',
-            name: 'Imagem de Estilo',
-            icon: <Image className="w-4 h-4" />,
-            description: 'Imagem representativa do estilo'
-          },
-          {
-            type: 'recommendations',
-            name: 'Recomendações',
-            icon: <Star className="w-4 h-4" />,
-            description: 'Dicas e recomendações personalizadas'
-          },
-          {
-            type: 'callToAction',
-            name: 'Chamada para Ação',
-            icon: <ArrowRight className="w-4 h-4" />,
-            description: 'Botão de chamada para ação'
-          }
-        ]
+        title: 'Etapa 20 - BoxFlex Modulares',
+        items: resultadoComponents
       },
       {
         title: 'Componentes Básicos',
-        items: [
+        items: basicComponents.length > 0 ? basicComponents : [
           {
             type: 'headline',
             name: 'Título',
@@ -248,7 +231,11 @@ export const UnifiedComponentsSidebar: React.FC<UnifiedComponentsSidebarProps> =
       'Image': <Image className="w-4 h-4" />,
       'Layout': <Layout className="w-4 h-4" />,
       'ShoppingCart': <ShoppingCart className="w-4 h-4" />,
-      'CreditCard': <CreditCard className="w-4 h-4" />
+      'CreditCard': <CreditCard className="w-4 h-4" />,
+      // Novos ícones para componentes BoxFlex Etapa 20
+      'Award': <Crown className="w-4 h-4" />,
+      'Layers': <List className="w-4 h-4" />,
+      'Star': <Star className="w-4 h-4" />
     };
     return iconMap[iconName] || <Layout className="w-4 h-4" />;
   };
