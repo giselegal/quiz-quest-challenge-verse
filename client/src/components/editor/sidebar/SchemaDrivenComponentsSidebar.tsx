@@ -3,13 +3,13 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { blockDefinitions } from '@/config/blockDefinitionsOptimized';
+import { blockDefinitions } from '@/config/blockDefinitionsClean';
 import { 
   Type, Image, ArrowRight, CheckCircle, Target, Play, Star, FileText, ShoppingCart, Clock, 
   MessageSquare, HelpCircle, Shield, Video, AlertTriangle, Zap, Volume2, RotateCcw, Loader, 
   BarChart3, Quote, FormInput, List, TrendingUp, Grid, FileCode, BookOpen, Palette, Sparkles, 
   Gift, Award, Layers, Users, Brain, Crown, Heart, Mic, GalleryHorizontalEnd, RotateCw, 
-  Blocks, Layout, MousePointer, Package, CircleDollarSign, ArrowRightLeft, Rows3
+  Blocks, Layout, MousePointer, Package
 } from 'lucide-react';
 
 interface SchemaDrivenComponentsSidebarProps {
@@ -26,7 +26,7 @@ const getCategories = (): string[] => {
   const categorySet = new Set(blockDefinitions.map(block => block.category || 'Sem Categoria'));
   const categories = Array.from(categorySet);
   // Ordem específica das categorias para melhor UX
-  const priorityOrder = ['Quiz', 'Resultado', 'Vendas', 'Básicos', 'Layout', 'Avançados', 'Inline', 'Sem Categoria'];
+  const priorityOrder = ['Quiz', 'Básicos', 'Layout', 'Vendas', 'Avançados', 'Inline', 'Sem Categoria'];
   return categories.sort((a, b) => {
     const aIndex = priorityOrder.indexOf(a);
     const bIndex = priorityOrder.indexOf(b);
@@ -84,10 +84,7 @@ const iconMap: { [key: string]: React.ReactNode } = {
   'Blocks': <Blocks className="w-4 h-4" />,
   'Layout': <Layout className="w-4 h-4" />,
   'MousePointer': <MousePointer className="w-4 h-4" />,
-  'Package': <Package className="w-4 h-4" />,
-  'CircleDollarSign': <CircleDollarSign className="w-4 h-4" />,
-  'ArrowRightLeft': <ArrowRightLeft className="w-4 h-4" />,
-  'Rows3': <Rows3 className="w-4 h-4" />
+  'Package': <Package className="w-4 h-4" />
 };
 
 // Função para obter ícone da página baseado no tipo/conteúdo

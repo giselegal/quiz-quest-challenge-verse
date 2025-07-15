@@ -228,39 +228,8 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       'quiz-result-card': () => <PricingCardInlineBlock {...commonProps} />,
       'quiz-offer-title': () => <HeadingInlineBlock {...commonProps} />,
       'quiz-offer-countdown': () => <CountdownInlineBlock {...commonProps} />,
-      'quiz-offer-faq': () => <FAQSectionBlock {...commonProps} />,
-      
-      // === COMPONENTES ESPECÍFICOS DO FUNIL ===
-      'quiz-question-title': () => <HeadingInlineBlock {...commonProps} />,
-      'quiz-question-subtitle': () => <TextInlineBlock {...commonProps} />,
-      'quiz-main-image': () => <ImageInlineBlock {...commonProps} />,
-      'quiz-continue-button': () => <ButtonInlineBlock {...commonProps} />,
-      'quiz-start-button': () => <ButtonInlineBlock {...commonProps} />,
-      'transition-image': () => <ImageInlineBlock {...commonProps} />,
-      'transition-text': () => <TextInlineBlock {...commonProps} />,
-      'strategic-intro-text': () => <TextInlineBlock {...commonProps} />,
-      'strategic-main-image': () => <ImageInlineBlock {...commonProps} />,
-      'strategic-subtitle': () => <TextInlineBlock {...commonProps} />,
-      'strategic-continue-button': () => <ButtonInlineBlock {...commonProps} />,
-      
-      // === COMPONENTES BÁSICOS EXTRAS ===
-      'spinner': () => <LoadingAnimationBlock {...commonProps} />,
-      'intro': () => <QuizIntroHeaderBlock {...commonProps} />,
-      'question': () => <QuizQuestionBlock {...commonProps} />,
-      'result': () => <ResultPageBlock {...commonProps} />,
-      'offer': () => <PricingCardInlineBlock {...commonProps} />,
-      'thank-you': () => <TextInlineBlock {...commonProps} />,
-      'custom': () => <TextInlineBlock {...commonProps} />
+      'quiz-offer-faq': () => <FAQSectionBlock {...commonProps} />
     };
-
-    // DEBUG: Log component mapping
-    if (!componentMap[block.type as keyof typeof componentMap]) {
-      console.warn(`🔴 UniversalBlockRenderer - Componente não encontrado:`, {
-        blockType: block.type,
-        availableTypes: Object.keys(componentMap),
-        fallbackTo: 'TextInlineBlock'
-      });
-    }
 
     // ES7+ Return com fallback usando optional chaining
     return componentMap[block.type as keyof typeof componentMap]?.() ?? 
