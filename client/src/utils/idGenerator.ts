@@ -3,20 +3,19 @@
  * Fixes the UUID issue with the database
  */
 
-import { randomUUID } from 'crypto';
-
-// Generate proper UUID for database storage
+// Generate proper UUID for database storage (browser-compatible)
 export const generateUUID = (): string => {
-  try {
-    return randomUUID();
-  } catch (error) {
-    // Fallback for environments without crypto.randomUUID
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      const r = Math.random() * 16 | 0;
-      const v = c === 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    });
+  // Use crypto.randomUUID if available (modern browsers)
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
   }
+  
+  // Fallback UUID v4 generation for older browsers
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
 };
 
 // Generate timestamped ID for local storage (non-database use)

@@ -106,7 +106,7 @@ export class StyleCalculationEngine {
 
     // 7. Criar resultado final
     const result: QuizResult = {
-      id: crypto.randomUUID(),
+      id: crypto.randomUUID?.() ?? Math.random().toString(36),
       participantName,
       responses,
       styleScores,
