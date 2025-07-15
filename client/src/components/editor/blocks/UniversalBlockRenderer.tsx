@@ -237,14 +237,35 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       QuizTransitionBlock: () => <QuizTransitionBlock {...commonProps} />,
       ResultPageBlock: () => <ResultPageBlock {...commonProps} />,
       
-      // === MAPEAMENTOS ADICIONAIS ===
-      'quiz-title': () => <HeadingInlineBlock {...commonProps} />,
-      'quiz-name-input': () => <FormInputBlock {...commonProps} />,
-      'quiz-result-header': () => <HeadingInlineBlock {...commonProps} />,
-      'quiz-result-card': () => <PricingCardInlineBlock {...commonProps} />,
-      'quiz-offer-title': () => <HeadingInlineBlock {...commonProps} />,
-      'quiz-offer-countdown': () => <CountdownInlineBlock {...commonProps} />,
-      'quiz-offer-faq': () => <FAQSectionBlock {...commonProps} />
+      // === COMPONENTES ETAPA 20 - BOXFLEX HORIZONTAL ===
+      'header-boxflex-inline': () => <HeaderBoxFlexInline {...commonProps} />,
+      'result-main-boxflex-inline': () => <ResultMainBoxFlexInline {...commonProps} />,
+      'secondary-styles-boxflex-inline': () => <SecondaryStylesBoxFlexInline {...commonProps} />,
+      'before-after-boxflex-inline': () => <BeforeAfterBoxFlexInline {...commonProps} />,
+      'motivation-boxflex-inline': () => <MotivationBoxFlexInline {...commonProps} />,
+      'bonus-boxflex-inline': () => <BonusBoxFlexInline {...commonProps} />,
+      'testimonials-boxflex-inline': () => <TestimonialsBoxFlexInline {...commonProps} />,
+      'cta-green-boxflex-inline': () => <CTAGreenBoxFlexInline {...commonProps} />,
+      'guarantee-boxflex-inline': () => <GuaranteeBoxFlexInline {...commonProps} />,
+      'mentor-boxflex-inline': () => <MentorBoxFlexInline {...commonProps} />,
+      'value-stack-boxflex-inline': () => <ValueStackBoxFlexInline {...commonProps} />,
+      'build-info-boxflex-inline': () => <BuildInfoBoxFlexInline {...commonProps} />,
+      
+      // === MAPEAMENTOS ALTERNATIVOS ETAPA 20 ===
+      'etapa20-header': () => <HeaderBoxFlexInline {...commonProps} />,
+      'etapa20-resultado-principal': () => <ResultMainBoxFlexInline {...commonProps} />,
+      'etapa20-estilos-secundarios': () => <SecondaryStylesBoxFlexInline {...commonProps} />,
+      'etapa20-antes-depois': () => <BeforeAfterBoxFlexInline {...commonProps} />,
+      'etapa20-motivacao': () => <MotivationBoxFlexInline {...commonProps} />,
+      'etapa20-bonus': () => <BonusBoxFlexInline {...commonProps} />,
+      'etapa20-depoimentos': () => <TestimonialsBoxFlexInline {...commonProps} />,
+      'etapa20-cta-verde': () => <CTAGreenBoxFlexInline {...commonProps} />,
+      'etapa20-garantia': () => <GuaranteeBoxFlexInline {...commonProps} />,
+      'etapa20-mentora': () => <MentorBoxFlexInline {...commonProps} />,
+      'etapa20-value-stack': () => <ValueStackBoxFlexInline {...commonProps} />,
+      'etapa20-build-info': () => <BuildInfoBoxFlexInline {...commonProps} />,
+
+      // ...existing components...
     };
 
     // ES7+ Return com fallback usando optional chaining
