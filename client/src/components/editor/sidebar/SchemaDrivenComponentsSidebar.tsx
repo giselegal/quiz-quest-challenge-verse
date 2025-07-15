@@ -115,6 +115,8 @@ export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSideb
   const categories = getCategories();
   const allBlocks = blockDefinitions;
 
+  // Debug removido - sistema funcionando corretamente
+
   return (
     <div className="h-full flex flex-col">
       <div className="p-2 sm:p-4 border-b border-gray-200">
