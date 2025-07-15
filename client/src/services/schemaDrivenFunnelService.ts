@@ -587,11 +587,11 @@ class SchemaDrivenFunnelService {
     const pages: SchemaDrivenPageData[] = [];
 
     // ==========================================
-    // ETAPA 1: INTRODUÇÃO (COLETA DO NOME)
+    // ETAPA 1: INTRODUÇÃO (COLETA DO NOME) - ROTA: /quiz
     // ==========================================
     pages.push({
       id: 'etapa-1-intro',
-      name: 'Introdução',
+      name: 'Introdução (/quiz)',
       title: 'Etapa 1: Introdução - Coleta do Nome',
       type: 'intro',
       order: 1,
@@ -1098,14 +1098,20 @@ class SchemaDrivenFunnelService {
     // CRITICAL FIX: Now correctly represents ResultPage.tsx content
     // ==========================================
     console.log('🎯 [FIXED] Creating Step 20: Result Page → /resultado');
-    pages.push(createCorrectedStepConfiguration(20));
+    const step20 = createCorrectedStepConfiguration(20);
+    step20.name = 'Resultado (/resultado)';
+    step20.title = 'Etapa 20: Resultado Personalizado';
+    pages.push(step20);
 
     // ==========================================
     // ETAPA 21: OFERTA COMERCIAL - MAPS TO /quiz-descubra-seu-estilo
     // CRITICAL FIX: Now correctly represents QuizDescubraSeuEstilo.tsx content
     // ==========================================
     console.log('🎯 [FIXED] Creating Step 21: Offer Page → /quiz-descubra-seu-estilo');
-    pages.push(createCorrectedStepConfiguration(21));
+    const step21 = createCorrectedStepConfiguration(21);
+    step21.name = 'Oferta (/quiz-descubra-seu-estilo)';
+    step21.title = 'Etapa 21: Oferta Comercial';
+    pages.push(step21);
 
     console.log(`✅ [ES7+] Criadas ${pages.length} etapas modulares (1-21)`);
     return pages;
