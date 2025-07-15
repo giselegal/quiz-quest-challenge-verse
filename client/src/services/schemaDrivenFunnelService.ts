@@ -745,7 +745,7 @@ class SchemaDrivenFunnelService {
               marginBottom: 24
             }
           },
-          // 4. Grid de opções responsivo (máx 3 colunas)
+          // 4. Grid de opções responsivo (máx 2 colunas)
           {
             id: `question-${index + 1}-options`,
             type: 'options-grid',
@@ -757,26 +757,18 @@ class SchemaDrivenFunnelService {
                 imageUrl: (opt as any).imageUrl || undefined,
                 category: (opt as any).category || opt.value || opt.id
               })),
-              columns: '3',
-              showImages: true,
+              columns: questionData.type === 'both' ? 2 : 1,
+              showImages: questionData.type === 'both' || questionData.type === undefined,
               imageSize: 'large',
               multipleSelection: questionData.multipleSelection || false,
               maxSelections: questionData.maxSelections || 1,
               minSelections: 1,
               validationMessage: `Selecione ${questionData.maxSelections || 1} opç${(questionData.maxSelections || 1) > 1 ? 'ões' : 'ão'}`,
-              gridGap: 16
+              gridGap: 16,
+              responsiveColumns: true // Força máximo 2 colunas
             }
           },
-          // 5. Espaçador
-          {
-            id: `question-${index + 1}-spacer`,
-            type: 'spacer',
-            properties: {
-              height: 24,
-              backgroundColor: 'transparent'
-            }
-          },
-          // 6. Botão continuar modular (componente inline)
+          // 5. Botão continuar modular (componente inline)
           {
             id: `question-${index + 1}-continue`,
             type: 'button-inline',
@@ -947,19 +939,7 @@ class SchemaDrivenFunnelService {
               marginBottom: 24
             }
           },
-          // 4. Imagem estratégica (quando aplicável)
-          {
-            id: `strategic-${index + 1}-image`,
-            type: 'image-display-inline',
-            properties: {
-              src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp',
-              alt: 'Questão estratégica',
-              width: 400,
-              height: 250,
-              className: 'object-cover w-full h-auto rounded-lg mx-auto mb-6'
-            }
-          },
-          // 5. Grid de opções (estilo simplificado)
+          // 4. Grid de opções (estilo simplificado)
           {
             id: `strategic-${index + 1}-options`,
             type: 'options-grid',
@@ -970,25 +950,17 @@ class SchemaDrivenFunnelService {
                 value: opt.value || opt.id,
                 category: (opt as any).category || opt.value || opt.id
               })),
-              columns: '2',
+              columns: 1,
               showImages: false,
               multipleSelection: false,
               maxSelections: 1,
               minSelections: 1,
               validationMessage: 'Selecione uma opção',
-              gridGap: 12
+              gridGap: 12,
+              responsiveColumns: true
             }
           },
-          // 6. Espaçador
-          {
-            id: `strategic-${index + 1}-spacer`,
-            type: 'spacer',
-            properties: {
-              height: 24,
-              backgroundColor: 'transparent'
-            }
-          },
-          // 7. Botão continuar (componente inline)
+          // 5. Botão continuar (componente inline)
           {
             id: `strategic-${index + 1}-continue`,
             type: 'button-inline',
@@ -1123,217 +1095,23 @@ class SchemaDrivenFunnelService {
 
     // ==========================================
     // ETAPA 20: RESULTADO PERSONALIZADO - MAPS TO /resultado
-    // CONFIGURAÇÃO COMPLETA COM COMPONENTES NO CANVAS
+    // CRITICAL FIX: Now correctly represents ResultPage.tsx content
     // ==========================================
     console.log('🎯 [FIXED] Creating Step 20: Result Page → /resultado');
-    pages.push({
-      id: 'etapa-20-resultado',
-      name: 'Resultado (/resultado)',
-      title: 'Etapa 20: Resultado Personalizado',
-      type: 'result',
-      order: 20,
-      blocks: [
-        // 1. Header de resultado
-        {
-          id: 'result-header',
-          type: 'result-header-inline',
-          properties: {
-            title: 'Seu Resultado Personalizado',
-            subtitle: 'Descubra seu estilo único',
-            backgroundColor: '#B89B7A'
-          }
-        },
-        // 2. Espaçador
-        {
-          id: 'result-spacer-1',
-          type: 'spacer',
-          properties: {
-            height: 32,
-            backgroundColor: 'transparent'
-          }
-        },
-        // 3. Card de estilo predominante
-        {
-          id: 'result-style-card',
-          type: 'style-card-inline',
-          properties: {
-            styleName: 'Seu Estilo Predominante',
-            styleDescription: 'Baseado nas suas respostas, identificamos seu perfil único de estilo...',
-            styleImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp'
-          }
-        },
-        // 4. Texto explicativo
-        {
-          id: 'result-explanation',
-          type: 'text-inline',
-          properties: {
-            content: 'Seu estilo reflete sua personalidade única. Continue lendo para descobrir como aplicar essas características no seu dia a dia.',
-            fontSize: 'text-lg',
-            textAlign: 'text-center',
-            color: '#432818',
-            marginTop: 24,
-            marginBottom: 32
-          }
-        },
-        // 5. Card de resultado detalhado
-        {
-          id: 'result-detail-card',
-          type: 'result-card-inline',
-          properties: {
-            title: 'Análise Completa do Seu Estilo',
-            content: 'Com base nas suas 16 respostas, criamos um perfil detalhado que mostra exatamente como você pode se vestir com mais confiança e autenticidade.',
-            showButton: true
-          }
-        },
-        // 6. Imagem inspiracional
-        {
-          id: 'result-inspiration-image',
-          type: 'image-display-inline',
-          properties: {
-            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp',
-            alt: 'Inspiração de estilo',
-            width: 600,
-            height: 400,
-            className: 'object-cover w-full h-auto rounded-lg mx-auto'
-          }
-        },
-        // 7. CTA para oferta
-        {
-          id: 'result-cta',
-          type: 'button-inline',
-          properties: {
-            text: 'Quero Meu Guia Completo Agora!',
-            variant: 'primary',
-            size: 'large',
-            fullWidth: true,
-            backgroundColor: '#B89B7A',
-            textColor: '#ffffff',
-            marginTop: 40
-          }
-        }
-      ],
-      settings: {
-        showProgress: false,
-        backgroundColor: '#ffffff',
-        textColor: '#432818',
-        maxWidth: 'max-w-4xl',
-        padding: 'p-6'
-      }
-    });
+    const step20 = createCorrectedStepConfiguration(20);
+    step20.name = 'Resultado (/resultado)';
+    step20.title = 'Etapa 20: Resultado Personalizado';
+    pages.push(step20);
 
     // ==========================================
     // ETAPA 21: OFERTA COMERCIAL - MAPS TO /quiz-descubra-seu-estilo
-    // CONFIGURAÇÃO COMPLETA COM COMPONENTES NO CANVAS
+    // CRITICAL FIX: Now correctly represents QuizDescubraSeuEstilo.tsx content
     // ==========================================
     console.log('🎯 [FIXED] Creating Step 21: Offer Page → /quiz-descubra-seu-estilo');
-    pages.push({
-      id: 'etapa-21-oferta',
-      name: 'Oferta (/quiz-descubra-seu-estilo)',
-      title: 'Etapa 21: Oferta Comercial',
-      type: 'offer',
-      order: 21,
-      blocks: [
-        // 1. Header de oferta
-        {
-          id: 'offer-header',
-          type: 'heading-inline',
-          properties: {
-            content: 'Transforme Seu Estilo Hoje Mesmo!',
-            level: 'h1',
-            textAlign: 'text-center',
-            color: '#432818'
-          }
-        },
-        // 2. Subtítulo de urgência
-        {
-          id: 'offer-subtitle',
-          type: 'text-inline',
-          properties: {
-            content: 'Oferta exclusiva para quem completou o quiz - válida apenas hoje!',
-            fontSize: 'text-lg',
-            textAlign: 'text-center',
-            color: '#B89B7A',
-            marginBottom: 32
-          }
-        },
-        // 3. Destaque de preço
-        {
-          id: 'offer-price-highlight',
-          type: 'price-highlight-inline',
-          properties: {
-            originalPrice: 'R$ 197,00',
-            currentPrice: 'R$ 97,00',
-            discount: '50% OFF',
-            urgencyText: 'Apenas hoje!'
-          }
-        },
-        // 4. Espaçador
-        {
-          id: 'offer-spacer-1',
-          type: 'spacer',
-          properties: {
-            height: 32,
-            backgroundColor: 'transparent'
-          }
-        },
-        // 5. Componente de oferta de quiz
-        {
-          id: 'offer-quiz-pricing',
-          type: 'quiz-offer-pricing-inline',
-          properties: {
-            productTitle: 'Guia de Estilo Personalizado',
-            productDescription: 'Transforme seu guarda-roupa com seu guia personalizado baseado no seu perfil único.',
-            price: 'R$ 97,00',
-            ctaText: 'Quero Meu Guia Agora!'
-          }
-        },
-        // 6. Benefícios
-        {
-          id: 'offer-benefits',
-          type: 'text-inline',
-          properties: {
-            content: '✓ Guia personalizado baseado no seu perfil\n✓ 50+ looks para o seu estilo\n✓ Dicas de combinações práticas\n✓ Acesso vitalício\n✓ Garantia de 7 dias',
-            fontSize: 'text-base',
-            textAlign: 'text-left',
-            color: '#432818',
-            marginTop: 24,
-            marginBottom: 32
-          }
-        },
-        // 7. CTA final
-        {
-          id: 'offer-final-cta',
-          type: 'button-inline',
-          properties: {
-            text: 'GARANTIR MINHA TRANSFORMAÇÃO AGORA!',
-            variant: 'primary',
-            size: 'large',
-            fullWidth: true,
-            backgroundColor: '#B89B7A',
-            textColor: '#ffffff'
-          }
-        },
-        // 8. Garantia
-        {
-          id: 'offer-guarantee',
-          type: 'text-inline',
-          properties: {
-            content: '🔒 Compra 100% segura • Garantia de 7 dias',
-            fontSize: 'text-sm',
-            textAlign: 'text-center',
-            color: '#666666',
-            marginTop: 16
-          }
-        }
-      ],
-      settings: {
-        showProgress: false,
-        backgroundColor: '#ffffff',
-        textColor: '#432818',
-        maxWidth: 'max-w-4xl',
-        padding: 'p-6'
-      }
-    });
+    const step21 = createCorrectedStepConfiguration(21);
+    step21.name = 'Oferta (/quiz-descubra-seu-estilo)';
+    step21.title = 'Etapa 21: Oferta Comercial';
+    pages.push(step21);
 
     console.log(`✅ [ES7+] Criadas ${pages.length} etapas modulares (1-21)`);
     return pages;
