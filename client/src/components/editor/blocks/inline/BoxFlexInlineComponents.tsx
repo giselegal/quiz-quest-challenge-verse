@@ -103,24 +103,19 @@ const HeaderBoxFlexInline: React.FC<BaseInlineProps> = ({
     <div className={cn("flex gap-4 items-center mb-4 flex-wrap", className)}>
       <img 
         src={properties.logo || "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"} 
-        alt="Logo" 
+        alt="Logo Gisele Galvão" 
         className="h-10 flex-shrink-0" 
       />
       <BoxFlexInlineComponent
-        label="Funil"
-        value={properties.funnelName || "Quiz Gisele"}
-        onChange={(value: string) => onPropertyChange?.('funnelName', value)}
-        icon={<span>📄</span>}
+        label="Resultado do Quiz"
+        value={properties.title || "Seu Estilo Pessoal"}
+        onChange={(value: string) => onPropertyChange?.('title', value)}
+        icon={<span>✨</span>}
         editable={!disabled}
-        className="min-w-[160px]"
+        className="min-w-[200px]"
       />
-      <span className={cn(
-        "px-3 py-1 rounded-full text-xs",
-        properties.isPublished 
-          ? "bg-green-100 text-green-700" 
-          : "bg-gray-100 text-gray-700"
-      )}>
-        {properties.isPublished ? "Publicado" : "Rascunho"}
+      <span className="px-3 py-1 rounded-full text-xs bg-green-100 text-green-700 font-medium">
+        Resultado Personalizado
       </span>
     </div>
   );
@@ -136,33 +131,31 @@ const ResultMainBoxFlexInline: React.FC<BaseInlineProps> = ({
   const { properties = {} } = block;
   
   return (
-    <div className={cn("flex flex-wrap gap-4 items-center mb-4", className)}>
-      <BoxFlexInlineComponent
-        label="Estilo"
-        value={properties.styleName || "Natural"}
-        onChange={(value: string) => onPropertyChange?.('styleName', value)}
-        editable={!disabled}
-        className="min-w-[120px]"
-      />
-      <BoxFlexInlineComponent
-        label="%"
-        value={properties.stylePercentage || "85"}
-        onChange={(value: string) => onPropertyChange?.('stylePercentage', value)}
-        editable={!disabled}
-        className="min-w-[80px]"
-      />
-      <BoxFlexInlineComponent
-        label="Descrição"
-        value={properties.description || "Você é autêntica e natural"}
-        onChange={(value: string) => onPropertyChange?.('description', value)}
-        editable={!disabled}
-        className="min-w-[220px] flex-1"
-      />
-      <div className="flex-shrink-0">
+    <div className={cn("flex flex-wrap gap-4 items-center mb-4 p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl border border-pink-200", className)}>
+      <div className="flex flex-col items-center">
         <img 
-          src={properties.image || "https://dummyimage.com/120x120/aaa/fff.png&text=Estilo"} 
-          alt="Estilo" 
-          className="h-14 rounded-lg shadow" 
+          src={properties.styleImage || "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/estilo-natural-feminino.webp"} 
+          alt="Seu Estilo" 
+          className="h-20 w-20 rounded-full object-cover shadow-lg border-2 border-white" 
+        />
+        <span className="text-2xl font-bold text-pink-600 mt-2">
+          {properties.stylePercentage || "87"}%
+        </span>
+      </div>
+      <div className="flex-1 min-w-[200px]">
+        <BoxFlexInlineComponent
+          label="Seu Estilo É"
+          value={properties.styleName || "Natural Elegante"}
+          onChange={(value: string) => onPropertyChange?.('styleName', value)}
+          editable={!disabled}
+          className="text-lg font-semibold mb-2"
+        />
+        <BoxFlexInlineComponent
+          label="Características"
+          value={properties.description || "Você valoriza conforto sem abrir mão da elegância. Prefere peças atemporais e versáteis."}
+          onChange={(value: string) => onPropertyChange?.('description', value)}
+          editable={!disabled}
+          className="text-gray-700"
         />
       </div>
     </div>
@@ -178,8 +171,8 @@ const SecondaryStylesBoxFlexInline: React.FC<BaseInlineProps> = ({
 }) => {
   const { properties = {} } = block;
   const styles = properties.secondaryStyles || [
-    { category: "Moderno", percentage: 10 },
-    { category: "Romântico", percentage: 5 }
+    { category: "Clássico", percentage: 8 },
+    { category: "Moderno", percentage: 5 }
   ];
   
   const handleEditName = (index: number, newName: string) => {
@@ -195,22 +188,22 @@ const SecondaryStylesBoxFlexInline: React.FC<BaseInlineProps> = ({
   };
   
   return (
-    <div className={cn("flex flex-wrap gap-4 mb-4", className)}>
+    <div className={cn("flex flex-wrap gap-4 mb-4 p-3 bg-gray-50 rounded-lg", className)}>
+      <span className="text-sm font-medium text-gray-600 mb-2 w-full">Estilos Complementares:</span>
       {styles.map((style: any, i: number) => (
-        <div key={i} className="flex gap-2">
+        <div key={i} className="flex gap-2 items-center bg-white p-2 rounded shadow-sm">
           <BoxFlexInlineComponent
-            label="Sec."
             value={style.category}
             onChange={(newName: string) => handleEditName(i, newName)}
             editable={!disabled}
             className="min-w-[100px]"
           />
+          <span className="text-sm text-gray-500">•</span>
           <BoxFlexInlineComponent
-            label="%"
-            value={style.percentage.toString()}
-            onChange={(newPerc: string) => handleEditPercentage(i, newPerc)}
+            value={`${style.percentage}%`}
+            onChange={(newPerc: string) => handleEditPercentage(i, newPerc.replace('%', ''))}
             editable={!disabled}
-            className="min-w-[60px]"
+            className="min-w-[50px]"
           />
         </div>
       ))}
@@ -228,34 +221,39 @@ const BeforeAfterBoxFlexInline: React.FC<BaseInlineProps> = ({
   const { properties = {} } = block;
   
   return (
-    <div className={cn("flex flex-wrap gap-4 items-center mb-4 bg-gray-50 p-4 rounded-lg", className)}>
-      <div className="flex flex-col items-center gap-2">
+    <div className={cn("flex flex-wrap gap-6 items-center mb-6 bg-gradient-to-r from-red-50 via-orange-50 to-green-50 p-6 rounded-xl border", className)}>
+      <div className="flex flex-col items-center gap-3 bg-white p-4 rounded-lg shadow-sm">
         <img 
-          src={properties.beforeImg || "https://dummyimage.com/80x80/eee/333.png&text=Antes"} 
-          alt="Antes" 
-          className="h-16 rounded-lg" 
+          src={properties.beforeImg || "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/antes-transformacao.webp"} 
+          alt="Antes da Transformação" 
+          className="h-20 w-20 rounded-lg object-cover" 
         />
         <BoxFlexInlineComponent
-          label="Antes"
-          value={properties.before || "Antes: insegurança"}
+          label="Problema"
+          value={properties.before || "Roupas que não combinam com sua personalidade"}
           onChange={(value: string) => onPropertyChange?.('before', value)}
           editable={!disabled}
-          className="min-w-[120px]"
+          className="min-w-[200px] text-center"
         />
       </div>
-      <span className="mx-2 text-2xl">⬇️</span>
-      <div className="flex flex-col items-center gap-2">
+      
+      <div className="flex flex-col items-center">
+        <span className="text-3xl mb-2">🔄</span>
+        <span className="text-sm font-medium text-gray-600">Transformação</span>
+      </div>
+      
+      <div className="flex flex-col items-center gap-3 bg-white p-4 rounded-lg shadow-sm">
         <img 
-          src={properties.afterImg || "https://dummyimage.com/80x80/eee/333.png&text=Depois"} 
-          alt="Depois" 
-          className="h-16 rounded-lg" 
+          src={properties.afterImg || "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/depois-transformacao.webp"} 
+          alt="Depois da Transformação" 
+          className="h-20 w-20 rounded-lg object-cover" 
         />
         <BoxFlexInlineComponent
-          label="Depois"
-          value={properties.after || "Depois: confiança"}
+          label="Solução"
+          value={properties.after || "Visual alinhado com quem você realmente é"}
           onChange={(value: string) => onPropertyChange?.('after', value)}
           editable={!disabled}
-          className="min-w-[120px]"
+          className="min-w-[200px] text-center"
         />
       </div>
     </div>
@@ -272,14 +270,16 @@ const MotivationBoxFlexInline: React.FC<BaseInlineProps> = ({
   const { properties = {} } = block;
   
   return (
-    <BoxFlexInlineComponent
-      label="Motivação"
-      value={properties.motivationText || "Vista-se de você — na prática"}
-      onChange={(value: string) => onPropertyChange?.('motivationText', value)}
-      icon={<span>✨</span>}
-      editable={!disabled}
-      className={cn("min-w-[280px]", className)}
-    />
+    <div className={cn("mb-6 p-6 bg-gradient-to-r from-purple-100 to-pink-100 rounded-xl border border-purple-200", className)}>
+      <BoxFlexInlineComponent
+        label="💎 Agora é hora de..."
+        value={properties.motivationText || "Vista-se de você — na prática, com o seu Guia de Estilo Personalizado"}
+        onChange={(value: string) => onPropertyChange?.('motivationText', value)}
+        icon={<span className="text-2xl">✨</span>}
+        editable={!disabled}
+        className="text-lg font-medium text-purple-800 bg-white/70 rounded-lg"
+      />
+    </div>
   );
 };
 
@@ -292,8 +292,9 @@ const BonusBoxFlexInline: React.FC<BaseInlineProps> = ({
 }) => {
   const { properties = {} } = block;
   const bonusList = properties.bonusList || [
-    "Peças-chave do guarda-roupa",
-    "Visagismo facial personalizado"
+    "Guia de Peças Essenciais para seu Estilo Natural",
+    "Checklist de Compras Personalizadas",
+    "Dicas de Combinações Exclusivas"
   ];
   
   const handleEditBonus = (index: number, value: string) => {
@@ -303,18 +304,23 @@ const BonusBoxFlexInline: React.FC<BaseInlineProps> = ({
   };
   
   return (
-    <div className={cn("flex flex-wrap gap-4 mb-4", className)}>
-      {bonusList.map((bonus: string, idx: number) => (
-        <BoxFlexInlineComponent
-          key={idx}
-          label={`Bônus ${idx + 1}`}
-          value={bonus}
-          onChange={(val: string) => handleEditBonus(idx, val)}
-          icon={<span>🎁</span>}
-          editable={!disabled}
-          className="min-w-[180px]"
-        />
-      ))}
+    <div className={cn("mb-6 p-4 bg-yellow-50 rounded-xl border border-yellow-200", className)}>
+      <h3 className="text-lg font-semibold text-yellow-800 mb-4 flex items-center gap-2">
+        🎁 Bônus Exclusivos Inclusos
+      </h3>
+      <div className="grid gap-3">
+        {bonusList.map((bonus: string, idx: number) => (
+          <BoxFlexInlineComponent
+            key={idx}
+            label={`Bônus ${idx + 1}:`}
+            value={bonus}
+            onChange={(val: string) => handleEditBonus(idx, val)}
+            icon={<span className="text-green-600">✅</span>}
+            editable={!disabled}
+            className="bg-white rounded-lg shadow-sm"
+          />
+        ))}
+      </div>
     </div>
   );
 };
