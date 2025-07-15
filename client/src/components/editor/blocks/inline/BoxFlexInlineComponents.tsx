@@ -270,7 +270,7 @@ const ResultMainBoxFlexInline: React.FC<BaseInlineProps> = ({
     </Card>
   );
 };
-// 3. Secondary styles (estilos secundários)
+// 3. Secondary styles (estilos secundários) - ELEGANTE
 const SecondaryStylesBoxFlexInline: React.FC<BaseInlineProps> = ({
   block,
   onPropertyChange,
@@ -279,28 +279,50 @@ const SecondaryStylesBoxFlexInline: React.FC<BaseInlineProps> = ({
 }) => {
   const { properties = {} } = block;
   const secondaryStyles = properties.secondaryStyles || [
-    { name: 'Clássico', percentage: 12, color: '#8B4513' },
-    { name: 'Contemporâneo', percentage: 3, color: '#4A90E2' }
+    { name: 'Clássico', percentage: 12, color: BRAND_COLORS.secondary },
+    { name: 'Contemporâneo', percentage: 3, color: BRAND_COLORS.accent }
   ];
   
   return (
-    <div className={cn("flex flex-wrap gap-4 mb-4 p-4 bg-gray-50 rounded-lg", className)}>
-      <h4 className="text-lg font-semibold text-gray-800 w-full mb-2">📊 Estilos Complementares</h4>
-      <div className="flex gap-4 w-full">
+    <Card className={cn("border-0 shadow-md", className)}>
+      <CardHeader className="pb-4">
+        <div className="flex items-center gap-2">
+          <Target className="w-5 h-5" style={{ color: BRAND_COLORS.primary }} />
+          <h4 className="text-lg font-semibold" style={{ color: BRAND_COLORS.text.primary }}>
+            Estilos Complementares
+          </h4>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-3">
         {secondaryStyles.map((style: any, i: number) => (
-          <div key={i} className="flex flex-col items-center bg-white p-3 rounded-lg shadow-sm border" style={{ borderTopColor: style.color }}>
-            <div className="text-sm font-medium text-gray-800">{style.name}</div>
-            <div className="text-2xl font-bold mt-1" style={{ color: style.color }}>
-              {style.percentage}%
+          <motion.div 
+            key={i}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: i * 0.1 }}
+            className="flex items-center justify-between p-3 rounded-lg"
+            style={{ backgroundColor: `${style.color}10`, border: `1px solid ${style.color}20` }}
+          >
+            <span className="font-medium" style={{ color: BRAND_COLORS.text.primary }}>
+              {style.name}
+            </span>
+            <div className="flex items-center gap-2">
+              <div 
+                className="w-2 h-2 rounded-full"
+                style={{ backgroundColor: style.color }}
+              />
+              <span className="text-lg font-bold" style={{ color: style.color }}>
+                {style.percentage}%
+              </span>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
-// 4. Before/After section (transformação)
+// 4. Before/After section (transformação) - ELEGANTE
 const BeforeAfterBoxFlexInline: React.FC<BaseInlineProps> = ({
   block,
   onPropertyChange,
@@ -310,45 +332,83 @@ const BeforeAfterBoxFlexInline: React.FC<BaseInlineProps> = ({
   const { properties = {} } = block;
   
   return (
-    <div className={cn("flex flex-wrap gap-6 items-center mb-6 bg-gradient-to-r from-red-50 via-orange-50 to-green-50 p-6 rounded-xl border", className)}>
-      <div className="flex flex-col items-center gap-3 bg-white p-4 rounded-lg shadow-sm flex-1 min-w-[200px]">
-        <img 
-          src={properties.beforeImage || "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334756/ChatGPT_Image_4_de_mai._de_2025_01_42_42_jlugsc.webp"} 
-          alt="Antes da Transformação" 
-          className="h-24 w-24 rounded-full object-cover border-4 border-red-200"
-        />
-        <h4 className="font-bold text-red-600">
-          {properties.beforeTitle || "Antes do Quiz"}
-        </h4>
-        <p className="text-sm text-gray-600 text-center">
-          {properties.beforeText || "Dúvidas sobre qual estilo combina comigo"}
-        </p>
-      </div>
-      
-      <div className="flex items-center justify-center">
-        <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg">
-          🔄 TRANSFORMAÇÃO
+    <Card className={cn("overflow-hidden border-0 shadow-lg", className)}>
+      <CardContent className="p-6">
+        <div className="text-center mb-6">
+          <RefreshCw className="w-8 h-8 mx-auto mb-2" style={{ color: BRAND_COLORS.primary }} />
+          <h3 className="text-xl font-serif" style={{ color: BRAND_COLORS.text.primary }}>
+            Sua Transformação
+          </h3>
         </div>
-      </div>
-      
-      <div className="flex flex-col items-center gap-3 bg-white p-4 rounded-lg shadow-sm flex-1 min-w-[200px]">
-        <img 
-          src={properties.afterImage || "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_00_30_44_naqom0.webp"} 
-          alt="Depois da Transformação" 
-          className="h-24 w-24 rounded-full object-cover border-4 border-green-200"
-        />
-        <h4 className="font-bold text-green-600">
-          {properties.afterTitle || "Agora Você Sabe"}
-        </h4>
-        <p className="text-sm text-gray-600 text-center">
-          {properties.afterText || "Clareza total sobre seu estilo único"}
-        </p>
-      </div>
-    </div>
+        
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center space-y-4"
+          >
+            <div className="relative">
+              <img 
+                src={properties.beforeImage || "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334756/ChatGPT_Image_4_de_mai._de_2025_01_42_42_jlugsc.webp"} 
+                alt="Antes" 
+                className="w-32 h-32 mx-auto rounded-full object-cover shadow-lg"
+                style={{ border: `3px solid ${BRAND_COLORS.accent}50` }}
+              />
+              <Badge 
+                variant="destructive" 
+                className="absolute -bottom-2 left-1/2 transform -translate-x-1/2"
+              >
+                Antes
+              </Badge>
+            </div>
+            
+            <BoxFlexInlineComponent
+              value={properties.beforeText || "Dúvidas sobre qual estilo combina comigo"}
+              onChange={(value: string) => onPropertyChange?.('beforeText', value)}
+              editable={!disabled}
+              variant="minimal"
+              className="text-center"
+            />
+          </motion.div>
+          
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-center space-y-4"
+          >
+            <div className="relative">
+              <img 
+                src={properties.afterImage || "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_00_30_44_naqom0.webp"} 
+                alt="Depois" 
+                className="w-32 h-32 mx-auto rounded-full object-cover shadow-lg"
+                style={{ border: `3px solid ${BRAND_COLORS.primary}` }}
+              />
+              <Badge 
+                variant="default" 
+                className="absolute -bottom-2 left-1/2 transform -translate-x-1/2"
+                style={{ backgroundColor: BRAND_COLORS.primary }}
+              >
+                Agora
+              </Badge>
+            </div>
+            
+            <BoxFlexInlineComponent
+              value={properties.afterText || "Clareza total sobre seu estilo único"}
+              onChange={(value: string) => onPropertyChange?.('afterText', value)}
+              editable={!disabled}
+              variant="elegant"
+              className="text-center"
+            />
+          </motion.div>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
-// 5. Motivation section (motivação)
+// 5. Motivation section (motivação) - ELEGANTE
 const MotivationBoxFlexInline: React.FC<BaseInlineProps> = ({
   block,
   onPropertyChange,
@@ -358,20 +418,28 @@ const MotivationBoxFlexInline: React.FC<BaseInlineProps> = ({
   const { properties = {} } = block;
   
   return (
-    <div className={cn("mb-6 p-6 bg-gradient-to-r from-purple-100 to-pink-100 rounded-xl border border-purple-200", className)}>
-      <BoxFlexInlineComponent
-        label="💎 Agora é hora de..."
-        value={properties.motivationText || "Vista-se de você — na prática, com o seu Guia de Estilo Personalizado"}
-        onChange={(value: string) => onPropertyChange?.('motivationText', value)}
-        icon={<span className="text-2xl">✨</span>}
-        editable={!disabled}
-        className="text-lg font-medium text-purple-800 bg-white/70 rounded-lg"
-      />
-    </div>
+    <Card className={cn("border-0 shadow-lg", className)} style={{ backgroundColor: BRAND_COLORS.surface }}>
+      <CardContent className="p-6 text-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6 }}
+        >
+          <Sparkles className="w-8 h-8 mx-auto mb-4" style={{ color: BRAND_COLORS.primary }} />
+          <BoxFlexInlineComponent
+            value={properties.motivationText || "Vista-se de você — na prática, com o seu Guia de Estilo Personalizado"}
+            onChange={(value: string) => onPropertyChange?.('motivationText', value)}
+            editable={!disabled}
+            variant="highlight"
+            className="text-lg font-medium text-center"
+          />
+        </motion.div>
+      </CardContent>
+    </Card>
   );
 };
 
-// 6. Bonus section (bônus)
+// 6. Bonus section (bônus) - ELEGANTE
 const BonusBoxFlexInline: React.FC<BaseInlineProps> = ({
   block,
   onPropertyChange,
@@ -385,35 +453,43 @@ const BonusBoxFlexInline: React.FC<BaseInlineProps> = ({
     "Checklist de Compras por Estilo"
   ];
   
-  const handleEditBonus = (index: number, value: string) => {
-    const newBonus = [...bonusList];
-    newBonus[index] = value;
-    onPropertyChange?.('bonusList', newBonus);
-  };
-  
   return (
-    <div className={cn("mb-6 p-4 bg-yellow-50 rounded-xl border border-yellow-200", className)}>
-      <h3 className="text-lg font-semibold text-yellow-800 mb-4 flex items-center gap-2">
-        🎁 Bônus Exclusivos Inclusos
-      </h3>
-      <div className="grid gap-3">
+    <Card className={cn("border-0 shadow-lg", className)}>
+      <CardHeader>
+        <div className="flex items-center gap-2">
+          <Gift className="w-6 h-6" style={{ color: BRAND_COLORS.accent }} />
+          <h3 className="text-xl font-serif" style={{ color: BRAND_COLORS.text.primary }}>
+            Bônus Exclusivos
+          </h3>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-3">
         {bonusList.map((bonus: string, idx: number) => (
-          <BoxFlexInlineComponent
+          <motion.div
             key={idx}
-            label={`Bônus ${idx + 1}:`}
-            value={bonus}
-            onChange={(val: string) => handleEditBonus(idx, val)}
-            icon={<span className="text-green-600">✅</span>}
-            editable={!disabled}
-            className="bg-white rounded-lg shadow-sm"
-          />
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: idx * 0.1 }}
+          >
+            <BoxFlexInlineComponent
+              icon={<div className="w-2 h-2 rounded-full" style={{ backgroundColor: BRAND_COLORS.accent }} />}
+              value={bonus}
+              onChange={(val: string) => {
+                const newBonus = [...bonusList];
+                newBonus[idx] = val;
+                onPropertyChange?.('bonusList', newBonus);
+              }}
+              editable={!disabled}
+              variant="minimal"
+            />
+          </motion.div>
         ))}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
-// 7. Testimonials section (depoimentos)
+// 7. Testimonials section (depoimentos) - ELEGANTE
 const TestimonialsBoxFlexInline: React.FC<BaseInlineProps> = ({
   block,
   onPropertyChange,
@@ -426,24 +502,37 @@ const TestimonialsBoxFlexInline: React.FC<BaseInlineProps> = ({
     "Mudou completamente minha forma de me vestir. Agora sei o que funciona para mim!"
   ];
   
-  const handleEditTestimonial = (index: number, value: string) => {
-    const newTestimonials = [...testimonials];
-    newTestimonials[index] = value;
-    onPropertyChange?.('testimonials', newTestimonials);
-  };
-  
   return (
-    <div className={cn("flex flex-wrap gap-4 mb-4", className)}>
+    <div className={cn("grid gap-4", className)}>
       {testimonials.map((testimonial: string, idx: number) => (
-        <BoxFlexInlineComponent
+        <motion.div
           key={idx}
-          label={`⭐ Depoimento ${idx + 1}`}
-          value={testimonial}
-          onChange={(val: string) => handleEditTestimonial(idx, val)}
-          icon={<span>💬</span>}
-          editable={!disabled}
-          className="min-w-[220px] bg-blue-50 border-blue-200"
-        />
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: idx * 0.1 }}
+        >
+          <Card className="border-0 shadow-md" style={{ backgroundColor: `${BRAND_COLORS.primary}05` }}>
+            <CardContent className="p-4">
+              <div className="flex items-start gap-3">
+                <div 
+                  className="w-3 h-3 rounded-full mt-2 flex-shrink-0"
+                  style={{ backgroundColor: BRAND_COLORS.accent }}
+                />
+                <BoxFlexInlineComponent
+                  value={testimonial}
+                  onChange={(val: string) => {
+                    const newTestimonials = [...testimonials];
+                    newTestimonials[idx] = val;
+                    onPropertyChange?.('testimonials', newTestimonials);
+                  }}
+                  editable={!disabled}
+                  variant="minimal"
+                  className="italic"
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
       ))}
     </div>
   );
