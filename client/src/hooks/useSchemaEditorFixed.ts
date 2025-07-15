@@ -102,13 +102,24 @@ export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorR
 
   // Ações do funil
   const createNewFunnel = useCallback(async () => {
+    if (!funnel || !funnel.pages || funnel.pages.length === 0) {
+      console.warn('🔍 DEBUG - createNewFunnel: No funnel or pages available');
+      return;
+    }
+    
     setIsLoading(true);
     try {
-      const defaultFunnel = schemaDrivenFunnelService.createDefaultFunnel();
-      const createdFunnel = await schemaDrivenFunnelService.createFunnel(defaultFunnel);
+      const createdFunnel = await schemaDrivenFunnelService.createFunnel(funnel);
       
-      setFunnel(createdFunnel);
-      setCurrentPageId(createdFunnel.pages[0]?.id || null);
+      // Não sobrescrever o funil com páginas se o backend não retornar as páginas
+      if (createdFunnel.pages && createdFunnel.pages.length > 0) {
+        setFunnel(createdFunnel);
+        setCurrentPageId(createdFunnel.pages[0]?.id || null);
+      } else {
+        // Manter o funil local com páginas e apenas atualizar o ID
+        setFunnel(prev => prev ? { ...prev, id: createdFunnel.id } : null);
+      }
+      
       setSelectedBlockId(null);
       
       toast({
@@ -124,7 +135,7 @@ export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorR
     } finally {
       setIsLoading(false);
     }
-  }, [toast]);
+  }, [funnel, toast]);
 
   const loadFunnel = useCallback(async (funnelId: string) => {
     if (!funnelId || typeof funnelId !== 'string') {
@@ -411,8 +422,23 @@ export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorR
         firstPageBlocks: defaultFunnel.pages[0]?.blocks?.length || 0
       });
       
+      // Forçar atualização do estado
       setFunnel(defaultFunnel);
       setCurrentPageId(defaultFunnel.pages[0]?.id || null);
+      
+      // Debug adicional para verificar se o estado está sendo atualizado
+      console.log('🔍 DEBUG - Estado após setFunnel:', {
+        pagesSet: defaultFunnel.pages.length,
+        currentPageIdSet: defaultFunnel.pages[0]?.id
+      });
+      
+      // Verificar se o estado foi realmente atualizado
+      setTimeout(() => {
+        console.log('🔍 DEBUG - Estado após timeout:', {
+          funnelState: !!defaultFunnel,
+          pagesInState: defaultFunnel.pages.length
+        });
+      }, 100);
       
       try {
         schemaDrivenFunnelService.saveLocalFunnel(defaultFunnel);
@@ -421,8 +447,13 @@ export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorR
       }
       
       console.log('🎯 Funil carregado com', defaultFunnel.pages.length, 'etapas:', defaultFunnel.pages.map(p => p.name));
+      
+      // Criar o funil no backend com as páginas (sem aguardar)
+      setTimeout(() => {
+        createNewFunnel();
+      }, 500);
     }
-  }, [initialFunnelId, loadFunnel]);
+  }, [initialFunnelId, loadFunnel, createNewFunnel]);
 
   // Atualizar estado do auto-save menos frequentemente
   useEffect(() => {

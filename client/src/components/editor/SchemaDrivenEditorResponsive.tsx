@@ -55,6 +55,10 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
     isSaving
   } = useSchemaEditor(funnelId || undefined);
 
+  // Debug - verificar se o funnel está chegando corretamente
+  console.log('🔍 DEBUG SchemaDrivenEditorResponsive - funnel:', funnel);
+  console.log('🔍 DEBUG SchemaDrivenEditorResponsive - funnel.pages:', funnel?.pages?.length || 0);
+
   // Handlers
   const handleComponentSelect = (type: string) => {
     const definition = blockDefinitions.find((def: any) => def.type === type);
@@ -365,7 +369,11 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
                   // A sidebar agora permanece aberta para melhor experiência do usuário
                 }}
                 activeTab={activeTab}
-                onTabChange={(tab: string) => setActiveTab(tab as "pages" | "components")}
+                onTabChange={(tab: string) => {
+                  console.log('🔄 Tab changed to:', tab);
+                  console.log('🔍 DEBUG - Funnel pages available:', funnel?.pages?.length || 0);
+                  setActiveTab(tab as "pages" | "components");
+                }}
                 funnelPages={funnel?.pages || []}
                 currentPageId={currentPageId ?? undefined}
                 setCurrentPage={setCurrentPage}

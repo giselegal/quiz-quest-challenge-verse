@@ -114,6 +114,11 @@ export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSideb
 }) => {
   const categories = getCategories();
   const allBlocks = blockDefinitions;
+  
+  // Debug log para ver se as páginas estão chegando
+  console.log('🔍 DEBUG SchemaDrivenComponentsSidebar - funnelPages:', funnelPages.length);
+  console.log('🔍 DEBUG SchemaDrivenComponentsSidebar - activeTab:', activeTab);
+  console.log('🔍 DEBUG SchemaDrivenComponentsSidebar - pages:', funnelPages.map(p => p.name));
 
   return (
     <div className="h-full flex flex-col">

@@ -1450,7 +1450,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ success: false, error: "Funnel not found" });
       }
       
-      res.json({ success: true, data: funnel });
+      // Buscar páginas do funil
+      const pages = await storage.getFunnelPages(id);
+      
+      // Transformar páginas para o formato esperado pelo frontend
+      const transformedPages = pages.map(page => ({
+        id: page.metadata?.id || page.id,
+        name: page.metadata?.name || page.title,
+        title: page.title,
+        type: page.pageType,
+        order: page.pageOrder,
+        blocks: page.blocks || [],
+        settings: page.metadata?.settings || {}
+      }));
+      
+      // Retornar funil com páginas
+      const funnelWithPages = {
+        ...funnel,
+        pages: transformedPages
+      };
+      
+      res.json({ success: true, data: funnelWithPages });
     } catch (error) {
       console.error("Error fetching funnel:", error);
       res.status(500).json({ success: false, error: "Failed to fetch funnel" });
@@ -1460,9 +1480,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // POST create new funnel
   app.post("/api/schema-driven/funnels", async (req, res) => {
     try {
-      const validatedData = insertFunnelSchema.parse(req.body);
-      const funnel = await storage.createFunnel(validatedData);
-      res.status(201).json({ success: true, data: funnel });
+      const requestData = req.body;
+      
+      // Separar dados do funil das páginas
+      const { pages, ...funnelData } = requestData;
+      
+      // Validar dados do funil
+      const validatedFunnelData = insertFunnelSchema.parse(funnelData);
+      
+      // Criar o funil primeiro
+      const funnel = await storage.createFunnel(validatedFunnelData);
+      
+      // Se há páginas, criar cada uma
+      if (pages && Array.isArray(pages)) {
+        for (const page of pages) {
+          const pageData = {
+            funnelId: funnel.id,
+            pageType: page.type || 'page',
+            pageOrder: page.order || 1,
+            title: page.title || page.name || 'Untitled Page',
+            blocks: page.blocks || [],
+            metadata: {
+              id: page.id,
+              name: page.name,
+              type: page.type,
+              order: page.order,
+              settings: page.settings || {}
+            }
+          };
+          
+          await storage.createFunnelPage(pageData);
+        }
+      }
+      
+      // Retornar funil completo com páginas
+      const funnelWithPages = {
+        ...funnel,
+        pages: pages || []
+      };
+      
+      res.status(201).json({ success: true, data: funnelWithPages });
     } catch (error) {
       console.error("Error creating funnel:", error);
       res.status(500).json({ success: false, error: "Failed to create funnel" });
