@@ -3,7 +3,48 @@
 // Configuração das 21 etapas do funil com componentes mais organizados
 // =====================================================================
 
-import type { BlockDefinition } from '@/config/blockDefinitions';
+// Tipos base para o schema de propriedades
+export type PropertyInputType =
+  | 'text-input'
+  | 'textarea'
+  | 'number-input'
+  | 'boolean-switch'
+  | 'color-picker'
+  | 'select'
+  | 'image-url'
+  | 'video-url'
+  | 'array-editor'
+  | 'json-editor';
+
+export interface PropertyOption {
+  label: string;
+  value: string;
+}
+
+export interface PropertySchema {
+  key: string;
+  label: string;
+  type: PropertyInputType;
+  placeholder?: string;
+  options?: PropertyOption[];
+  defaultValue?: any;
+  rows?: number;
+  min?: number;
+  max?: number;
+  description?: string;
+  nestedPath?: string;
+  itemSchema?: PropertySchema[];
+}
+
+export interface BlockDefinition {
+  type: string;
+  name: string;
+  description?: string;
+  icon?: string;
+  category?: string;
+  isNew?: boolean;
+  propertiesSchema?: PropertySchema[];
+}
 
 export const blockDefinitions: BlockDefinition[] = [
   // =====================================================================
