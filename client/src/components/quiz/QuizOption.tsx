@@ -14,7 +14,7 @@ interface QuizOptionProps {
   option: QuizOptionType;
   isSelected: boolean;
   onSelect: (optionId: string) => void;
-  type: 'text' | 'image' | 'both' | 'normal' | 'strategic';
+  type: 'text' | 'image' | 'both';
   questionId?: string;
   isDisabled?: boolean;
   isStrategicOption?: boolean; // Nova prop
@@ -151,9 +151,9 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           <QuizOptionImage
             imageUrl={option.imageUrl}
             altText={option.text}
-            styleCategory={option.styleCategory || ''}
+            styleCategory={option.styleCategory}
             isSelected={isSelected}
-            is3DQuestion={is3DQuestion || false}
+            is3DQuestion={is3DQuestion}
             questionId={questionId || ''}
           />
         )}

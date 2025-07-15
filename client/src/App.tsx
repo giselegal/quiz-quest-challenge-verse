@@ -1,164 +1,125 @@
-import React, { Suspense, lazy, useEffect, useState } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 import { Router, Route, Switch } from "wouter";
+import { AuthProvider } from "./context/AuthContext";
+import { AdminAuthProvider } from "./context/AdminAuthContext";
 import { QuizProvider } from "./context/QuizContext";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
+import { captureUTMParameters } from "./utils/analytics";
+import { loadFacebookPixelDynamic } from "./utils/facebookPixelDynamic";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import { fixLocalStorageIssues, checkLocalStorageIntegrity } from "./utils/fixLocalStorageIssues";
+import CriticalCSSLoader from "./components/CriticalCSSLoader";
+import { initialCriticalCSS, heroCriticalCSS } from "./utils/critical-css";
+import { AdminRoute } from "./components/admin/AdminRoute";
 
-// Loading component for Suspense
+// Componente de loading para Suspense
 const LoadingFallback = () => (
-  <div className="flex items-center justify-center min-h-screen bg-white">
+  <div className="flex items-center justify-center min-h-screen bg-gray-50">
     <div className="text-center">
-      <LoadingSpinner size="lg" />
+      <LoadingSpinner size="lg" color="#B89B7A" className="mx-auto" />
       <p className="mt-4 text-gray-600">Carregando...</p>
     </div>
   </div>
 );
 
-// Error Boundary Component
-const ErrorFallback = ({ error, resetError }: { error: Error; resetError: () => void }) => (
-  <div className="flex items-center justify-center min-h-screen bg-white p-4">
-    <div className="text-center max-w-md">
-      <h2 className="text-2xl font-bold text-red-600 mb-4">Ops! Algo deu errado</h2>
-      <p className="text-gray-600 mb-4">
-        Ocorreu um erro inesperado. Isso pode ser devido a dados corrompidos no navegador.
-      </p>
-      <div className="space-y-2">
-        <button
-          onClick={resetError}
-          className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          Tentar Novamente
-        </button>
-        <button
-          onClick={() => {
-            localStorage.clear();
-            window.location.reload();
-          }}
-          className="w-full bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-        >
-          Limpar Dados e Recarregar
-        </button>
-      </div>
-      <details className="mt-4 text-left">
-        <summary className="cursor-pointer text-sm text-gray-500">Detalhes do erro</summary>
-        <pre className="text-xs text-red-500 mt-2 overflow-auto">{error.message}</pre>
-      </details>
-    </div>
-  </div>
-);
-
-// Error Boundary Hook
-const useErrorBoundary = () => {
-  const [hasError, setHasError] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-
-  const resetError = () => {
-    setHasError(false);
-    setError(null);
-  };
-
-  useEffect(() => {
-    const handleError = (event: ErrorEvent) => {
-      console.error('Erro capturado:', event.error);
-      setError(event.error);
-      setHasError(true);
-    };
-
-    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
-      console.error('Promise rejeitada:', event.reason);
-      setError(new Error(event.reason));
-      setHasError(true);
-    };
-
-    window.addEventListener('error', handleError);
-    window.addEventListener('unhandledrejection', handleUnhandledRejection);
-
-    return () => {
-      window.removeEventListener('error', handleError);
-      window.removeEventListener('unhandledrejection', handleUnhandledRejection);
-    };
-  }, []);
-
-  return { hasError, error, resetError };
-};
-
-// Lazy loaded pages
+// Lazy loading das páginas essenciais
 const LandingPage = lazy(() => import("./pages/LandingPage"));
 const QuizPage = lazy(() => import("./components/QuizPage"));
+const ResultPage = lazy(() => import("./pages/ResultPage"));
 const TestResultPage = lazy(() => import("./pages/TestResultPage"));
-const QuizDescubraSeuEstilo = lazy(() => import("./pages/quiz-descubra-seu-estilo"));
+const QuizDescubraSeuEstilo = lazy(
+  () => import("./pages/quiz-descubra-seu-estilo")
+);
+const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
+
+// Editor Principal - Consolidado
 const SchemaDrivenEditorPage = lazy(() => import("./pages/SchemaDrivenEditorPage"));
+const BlockDefinitionsTest = lazy(() => import("./components/editor/tests/BlockDefinitionsTest"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
-const ImageKitTest = lazy(() => import("./components/ImageKitTest"));
 
 const App = () => {
-  const [isInitialized, setIsInitialized] = useState(false);
-  const { hasError, error, resetError } = useErrorBoundary();
-
-  // Inicializar aplicação
+  // Inicializar analytics na montagem do componente
   useEffect(() => {
-    const initializeApp = async () => {
-      try {
-        console.log('🚀 Inicializando aplicação...');
-        
-        // Verificar integridade do localStorage
-        const isStorageWorking = checkLocalStorageIntegrity();
-        if (!isStorageWorking) {
-          console.warn('⚠️ Problemas detectados no localStorage');
-        }
-        
-        // Corrigir problemas conhecidos
-        fixLocalStorageIssues();
-        
-        console.log('✅ Aplicação inicializada com sucesso');
-      } catch (error) {
-        console.error('❌ Erro na inicialização:', error);
-      } finally {
-        setIsInitialized(true);
-      }
-    };
+    try {
+      loadFacebookPixelDynamic();
+      captureUTMParameters();
 
-    initializeApp();
+      console.log("App initialized with essential routes only");
+    } catch (error) {
+      console.error("Erro ao inicializar aplicativo:", error);
+    }
   }, []);
 
-  // Mostrar erro se houver
-  if (hasError && error) {
-    return <ErrorFallback error={error} resetError={resetError} />;
-  }
-
-  // Mostrar loading durante inicialização
-  if (!isInitialized) {
-    return <LoadingFallback />;
-  }
-
   return (
-    <QuizProvider>
-      <TooltipProvider>
-        <Router>
-          <Suspense fallback={<LoadingFallback />}>
-            <Switch>
-              {/* Main routes */}
-              <Route path="/" component={LandingPage} />
-              <Route path="/quiz" component={QuizPage} />
-              <Route path="/resultado" component={TestResultPage} />
-              <Route path="/test-resultado" component={TestResultPage} />
-              <Route path="/quiz-descubra-seu-estilo" component={QuizDescubraSeuEstilo} />
-              <Route path="/editor" component={SchemaDrivenEditorPage} />
-              <Route path="/editor/:id" component={SchemaDrivenEditorPage} />
-              
-              {/* ImageKit Test Route */}
-              <Route path="/imagekit-test" component={ImageKitTest} />
-              
-              {/* 404 - Fallback for not found routes */}
-              <Route path="*" component={NotFoundPage} />
-            </Switch>
-          </Suspense>
-        </Router>
-        <Toaster />
-      </TooltipProvider>
-    </QuizProvider>
+    <AuthProvider>
+      <QuizProvider>
+        <TooltipProvider>
+          <Router>
+            <CriticalCSSLoader
+              cssContent={initialCriticalCSS}
+              id="initial-critical"
+              removeOnLoad={true}
+            />
+            <CriticalCSSLoader
+              cssContent={heroCriticalCSS}
+              id="hero-critical"
+              removeOnLoad={true}
+            />
+
+            <Suspense fallback={<LoadingFallback />}>
+              <Switch>
+                {/* Página inicial com teste A/B */}
+                <Route path="/" component={LandingPage} />
+                {/* Rota do quiz específica */}
+                <Route path="/quiz" component={QuizPage} />
+                {/* Rotas do teste A/B */}
+                <Route path="/resultado" component={ResultPage} />
+                {/* Teste do componente de resultado */}
+                <Route path="/test-resultado" component={TestResultPage} />
+                <Route
+                  path="/quiz-descubra-seu-estilo"
+                  component={QuizDescubraSeuEstilo}
+                />
+                {/* Manter rota antiga para compatibilidade */}
+                <Route
+                  path="/descubra-seu-estilo"
+                  component={QuizDescubraSeuEstilo}
+                />
+                {/* Editor Principal - ÚNICO EDITOR para Quiz e Funis Completos */}
+                <Route
+                  path="/editor"
+                  component={SchemaDrivenEditorPage}
+                />
+                {/* Editor com ID específico */}
+                <Route
+                  path="/editor/:id"
+                  component={SchemaDrivenEditorPage}
+                />
+                
+                {/* Teste de definições de blocos */}
+                <Route
+                  path="/test-blocks"
+                  component={BlockDefinitionsTest}
+                />
+                {/* Admin - protegido com AdminAuthProvider */}
+                <Route path="/admin/:rest*">
+                  {() => (
+                    <AdminAuthProvider>
+                      <AdminRoute>
+                        <DashboardPage />
+                      </AdminRoute>
+                    </AdminAuthProvider>
+                  )}
+                </Route>
+                {/* 404 - Fallback para rotas não encontradas */}
+                <Route path="*" component={NotFoundPage} />
+              </Switch>
+            </Suspense>
+          </Router>
+          <Toaster />
+        </TooltipProvider>
+      </QuizProvider>
+    </AuthProvider>
   );
 };
 

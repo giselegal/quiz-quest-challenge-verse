@@ -66,7 +66,7 @@ export function initPerformanceObservers() {
     // FID Observer
     const fidObserver = new PerformanceObserver((entryList) => {
       const entries = entryList.getEntries();
-      for (const entry of Array.from(entries)) {
+      for (const entry of entries) {
         const customEntry = entry as EnhancedPerformanceEntry;
         const fid = customEntry.processingStart ? 
           customEntry.processingStart - customEntry.startTime : 
@@ -88,7 +88,7 @@ export function initPerformanceObservers() {
     let cumulativeLayoutShift = 0;
     const clsObserver = new PerformanceObserver((entryList) => {
       const entries = entryList.getEntries();
-      for (const entry of Array.from(entries)) {
+      for (const entry of entries) {
         const customEntry = entry as EnhancedPerformanceEntry;
         
         // Ignorar shifts causados pela interação do usuário

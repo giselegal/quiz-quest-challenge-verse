@@ -1,149 +1,193 @@
 import React from 'react';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { PropertyInput } from './block-properties/PropertyInput';
+import { blockDefinitions, type PropertySchema as OriginalPropertySchema } from '@/config/blockDefinitions';
+import { type BlockData } from '@/components/editor/blocks';
+
+// Função auxiliar local
+const getBlockDefinition = (type: string) => 
+  blockDefinitions.find(block => block.type === type);
 
 interface DynamicPropertiesPanelProps {
-  selectedBlock?: any;
-  onPropertyChange: (key: string, value: any) => void;
+  selectedBlock: BlockData | null;
+  funnelConfig: {
+    name?: string;
+    description?: string;
+    isPublished?: boolean;
+    theme?: string;
+  };
+  onBlockPropertyChange: (key: string, value: any) => void;
   onNestedPropertyChange: (path: string, value: any) => void;
+  onFunnelConfigChange: (config: any) => void;
 }
 
 export const DynamicPropertiesPanel: React.FC<DynamicPropertiesPanelProps> = ({
   selectedBlock,
-  onPropertyChange,
-  onNestedPropertyChange
+  funnelConfig,
+  onBlockPropertyChange,
+  onNestedPropertyChange,
+  onFunnelConfigChange
 }) => {
+  
+  // Função para obter valor de propriedade aninhada (ex: colors.primary)
+  const getNestedValue = (obj: any, path: string): any => {
+    return path.split('.').reduce((current, key) => current?.[key], obj);
+  };
+
+  // Handler para mudanças de propriedades
+  const handlePropertyChange = (schema: OriginalPropertySchema, value: any) => {
+    if (schema.nestedPath) {
+      onNestedPropertyChange(schema.nestedPath, value);
+    } else {
+      onBlockPropertyChange(schema.key, value);
+    }
+  };
+
+  // Handler para arrays
+  const handleArrayAdd = (schema: OriginalPropertySchema) => {
+    const currentValue = selectedBlock?.properties?.[schema.key] || [];
+    const newItem = schema.itemSchema?.reduce((item, itemProp) => {
+      item[itemProp.key] = itemProp.defaultValue || '';
+      return item;
+    }, {} as any) || {};
+    
+    onBlockPropertyChange(schema.key, [...currentValue, newItem]);
+  };
+
+  const handleArrayRemove = (schema: OriginalPropertySchema, index: number) => {
+    const currentValue = selectedBlock?.properties?.[schema.key] || [];
+    const newValue = currentValue.filter((_: any, i: number) => i !== index);
+    onBlockPropertyChange(schema.key, newValue);
+  };
+
+  const handleArrayUpdate = (schema: OriginalPropertySchema, index: number, field: string, value: any) => {
+    const currentValue = selectedBlock?.properties?.[schema.key] || [];
+    const newValue = currentValue.map((item: any, i: number) => 
+      i === index ? { ...item, [field]: value } : item
+    );
+    onBlockPropertyChange(schema.key, newValue);
+  };
+
+  // Se nenhum bloco selecionado, mostrar configurações do funil
   if (!selectedBlock) {
     return (
-      <div className="p-4 text-center">
-        <h4 className="text-sm font-medium text-gray-900 mb-2">
-          Nenhum bloco selecionado
-        </h4>
-        <p className="text-xs text-gray-500">
-          Selecione um bloco no canvas para editar suas propriedades.
-        </p>
-      </div>
+      <ScrollArea className="h-full">
+        <div className="p-4 space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm">Configurações do Funil</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <PropertyInput
+                schema={{
+                  key: 'name',
+                  label: 'Nome do Funil',
+                  type: 'text-input',
+                  placeholder: 'Quiz CaktoQuiz'
+                }}
+                currentValue={funnelConfig.name}
+                onValueChange={(value) => onFunnelConfigChange({ ...funnelConfig, name: value })}
+              />
+              
+              <PropertyInput
+                schema={{
+                  key: 'description',
+                  label: 'Descrição',
+                  type: 'text-area',
+                  placeholder: 'Descrição do funil...',
+                  rows: 3
+                }}
+                currentValue={funnelConfig.description}
+                onValueChange={(value) => onFunnelConfigChange({ ...funnelConfig, description: value })}
+              />
+              
+              <PropertyInput
+                schema={{
+                  key: 'isPublished',
+                  label: 'Publicado',
+                  type: 'boolean-switch'
+                }}
+                currentValue={funnelConfig.isPublished}
+                onValueChange={(value) => onFunnelConfigChange({ ...funnelConfig, isPublished: value })}
+              />
+            </CardContent>
+          </Card>
+        </div>
+      </ScrollArea>
+    );
+  }
+
+  // Encontrar a definição do bloco selecionado
+  const blockDefinition = getBlockDefinition(selectedBlock.type);
+  
+  if (!blockDefinition) {
+    return (
+      <ScrollArea className="h-full">
+        <div className="p-4">
+          <Card>
+            <CardContent className="pt-6">
+              <p className="text-sm text-gray-500">
+                Tipo de bloco não reconhecido: {selectedBlock.type}
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </ScrollArea>
     );
   }
 
   return (
-    <div className="p-4">
-      <div className="mb-4">
-        <h4 className="text-sm font-medium text-gray-900 mb-2">
-          {selectedBlock.type}
-        </h4>
-        <p className="text-xs text-gray-500">
-          ID: {selectedBlock.id}
-        </p>
-      </div>
+    <ScrollArea className="h-full">
+      <div className="p-2 sm:p-4 space-y-3 sm:space-y-6">
+        {/* Cabeçalho do bloco */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-sm">
+                {blockDefinition.name}
+              </CardTitle>
+              {blockDefinition.isNew && (
+                <Badge variant="secondary" className="text-xs">
+                  Novo!
+                </Badge>
+              )}
+            </div>
+            <p className="text-xs text-gray-500">
+              {blockDefinition.description}
+            </p>
+          </CardHeader>
+        </Card>
 
-      <div className="space-y-4">
-        {/* Propriedades básicas comuns */}
-        {selectedBlock.properties?.text && (
-          <div>
-            <Label htmlFor="text" className="text-xs">Texto</Label>
-            <Textarea
-              id="text"
-              value={selectedBlock.properties.text || ''}
-              onChange={(e) => onPropertyChange('text', e.target.value)}
-              className="mt-1"
-              rows={3}
-            />
-          </div>
-        )}
+        {/* Propriedades do bloco */}
+        {blockDefinition.propertiesSchema && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm">Propriedades</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {blockDefinition.propertiesSchema.map((schema) => {
+                const currentValue = schema.nestedPath 
+                  ? getNestedValue(selectedBlock.properties, schema.nestedPath)
+                  : selectedBlock.properties?.[schema.key];
 
-        {selectedBlock.properties?.title && (
-          <div>
-            <Label htmlFor="title" className="text-xs">Título</Label>
-            <Input
-              id="title"
-              value={selectedBlock.properties.title || ''}
-              onChange={(e) => onPropertyChange('title', e.target.value)}
-              className="mt-1"
-            />
-          </div>
-        )}
-
-        {selectedBlock.properties?.subtitle && (
-          <div>
-            <Label htmlFor="subtitle" className="text-xs">Subtítulo</Label>
-            <Input
-              id="subtitle"
-              value={selectedBlock.properties.subtitle || ''}
-              onChange={(e) => onPropertyChange('subtitle', e.target.value)}
-              className="mt-1"
-            />
-          </div>
-        )}
-
-        {selectedBlock.properties?.buttonText && (
-          <div>
-            <Label htmlFor="buttonText" className="text-xs">Texto do Botão</Label>
-            <Input
-              id="buttonText"
-              value={selectedBlock.properties.buttonText || ''}
-              onChange={(e) => onPropertyChange('buttonText', e.target.value)}
-              className="mt-1"
-            />
-          </div>
-        )}
-
-        {selectedBlock.properties?.imageUrl && (
-          <div>
-            <Label htmlFor="imageUrl" className="text-xs">URL da Imagem</Label>
-            <Input
-              id="imageUrl"
-              value={selectedBlock.properties.imageUrl || ''}
-              onChange={(e) => onPropertyChange('imageUrl', e.target.value)}
-              className="mt-1"
-              placeholder="https://..."
-            />
-          </div>
-        )}
-
-        {typeof selectedBlock.properties?.visible !== 'undefined' && (
-          <div className="flex items-center justify-between">
-            <Label htmlFor="visible" className="text-xs">Visível</Label>
-            <Switch
-              id="visible"
-              checked={selectedBlock.properties.visible !== false}
-              onCheckedChange={(checked) => onPropertyChange('visible', checked)}
-            />
-          </div>
-        )}
-
-        {/* Propriedades específicas do tipo */}
-        <div className="pt-4 border-t border-gray-200">
-          <h5 className="text-xs font-medium text-gray-700 mb-2">
-            Propriedades Específicas
-          </h5>
-          <div className="space-y-2">
-            {Object.entries(selectedBlock.properties || {}).map(([key, value]) => {
-              if (['text', 'title', 'subtitle', 'buttonText', 'imageUrl', 'visible'].includes(key)) {
-                return null;
-              }
-              
-              return (
-                <div key={key}>
-                  <Label htmlFor={key} className="text-xs capitalize">
-                    {key.replace(/([A-Z])/g, ' $1').trim()}
-                  </Label>
-                  <Input
-                    id={key}
-                    value={String(value || '')}
-                    onChange={(e) => onPropertyChange(key, e.target.value)}
-                    className="mt-1"
+                return (
+                  <PropertyInput
+                    key={schema.key}
+                    schema={schema as any}
+                    currentValue={currentValue}
+                    onValueChange={(value) => handlePropertyChange(schema, value)}
+                    onAddItem={() => handleArrayAdd(schema)}
+                    onRemoveItem={(index) => handleArrayRemove(schema, index)}
+                    onUpdateItem={(index, field, value) => handleArrayUpdate(schema, index, field, value)}
                   />
-                </div>
-              );
-            })}
-          </div>
-        </div>
+                );
+              })}
+            </CardContent>
+          </Card>
+        )}
       </div>
-    </div>
+    </ScrollArea>
   );
 };
-
-export default DynamicPropertiesPanel;

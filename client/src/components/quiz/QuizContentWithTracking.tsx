@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { QuizQuestion } from '../QuizQuestion';
 import { UserResponse } from '@/types/quiz';
@@ -60,7 +59,12 @@ export const QuizContentWithTracking: React.FC<QuizContentWithTrackingProps> = (
       trackUIInteraction(
         'question_view',
         currentQuestion.id,
-        'question_displayed'
+        'question_displayed',
+        {
+          questionIndex: currentQuestionIndex,
+          questionType: showingStrategicQuestions ? 'strategic' : 'normal',
+          questionText: currentQuestion.question
+        }
       );
     }
   }, [currentQuestion, currentQuestionIndex, showingStrategicQuestions, trackUIInteraction, resetTrackedPercentages]);
@@ -132,16 +136,20 @@ export const QuizContentWithTracking: React.FC<QuizContentWithTrackingProps> = (
       <div className="container mx-auto px-4 py-8 w-full max-w-5xl">
         {showingStrategicQuestions ? (
           <StrategicQuestions
-            currentQuestionIndex={currentStrategicQuestionIndex}
-            answers={{}}
-            onAnswer={handleTrackedAnswerSubmit}
+            currentQuestion={currentQuestion}
+            currentAnswers={currentAnswers}
+            onAnswerSubmit={handleTrackedAnswerSubmit}
+            onOptionClick={handleOptionClick}
+            canProceed={canProceed}
           />
         ) : (
           <QuizQuestion
             question={currentQuestion}
-            onAnswer={handleTrackedAnswerSubmit}
-            currentAnswers={currentAnswers}
-            showQuestionImage={true}
+            selectedAnswers={currentAnswers}
+            onAnswerSubmit={handleTrackedAnswerSubmit}
+            onOptionClick={handleOptionClick}
+            canProceed={canProceed}
+            requiredSelections={requiredSelections}
           />
         )}
 
@@ -181,11 +189,18 @@ export const useQuizElementTracking = () => {
   };
 
   const trackFormInteraction = (formType: string, fieldName: string, action: string) => {
-    trackUIInteraction('form_field', fieldName, action);
+    trackUIInteraction('form_field', fieldName, action, {
+      formType,
+      fieldName
+    });
   };
 
   const trackProgressUpdate = (currentStep: number, totalSteps: number, percentage: number) => {
-    trackUIInteraction('progress_update', 'quiz_progress', 'progress_changed');
+    trackUIInteraction('progress_update', 'quiz_progress', 'progress_changed', {
+      currentStep,
+      totalSteps,
+      percentage
+    });
   };
 
   return {

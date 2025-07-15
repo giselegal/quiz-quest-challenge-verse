@@ -26,10 +26,10 @@ export interface Style {
 
 export interface QuizQuestion {
   id: string;
-  order?: number; // Made optional
-  question?: string; // Made optional
+  order: number;
+  question: string;
   title?: string; // Adicionado para compatibilidade
-  type: 'text' | 'image' | 'both' | 'normal' | 'strategic'; // Fixed to match actual usage
+  type: 'normal' | 'strategic' | 'text' | 'both' | 'image'; // Expandido para compatibilidade
   options: QuizOption[];
   imageUrl?: string;
   multiSelect?: number;
@@ -88,13 +88,9 @@ export interface QuizResult {
 }
 
 // Alias para compatibilidade
-export interface StyleResult {
+export interface StyleResult extends StyleScore {
   category: string;
   score: number;
-  percentage: number;
-  style?: StyleType;
-  points?: number;
-  rank?: number;
   description?: string;
   imageUrl?: string;
   guideImageUrl?: string;

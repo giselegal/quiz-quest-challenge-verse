@@ -127,11 +127,11 @@ export const SPACING = {
 export const BUTTON_STYLES = {
   // Variantes com cores da marca
   variants: {
-    primary: 'bg-amber-700 hover:bg-amber-800 text-white border-amber-700 hover:border-amber-800',
-    secondary: 'bg-amber-900 hover:bg-black text-white border-amber-900 hover:border-black',
-    outline: 'bg-transparent hover:bg-amber-700 text-amber-700 hover:text-white border-amber-700',
-    ghost: 'bg-transparent hover:bg-amber-100 text-amber-700 hover:text-amber-900 border-transparent',
-    accent: 'bg-gradient-to-r from-amber-700 to-amber-800 text-white border-transparent shadow-lg hover:shadow-xl',
+    primary: `bg-[${BRAND_COLORS.primary.main}] hover:bg-[${BRAND_COLORS.primary.hover}] text-white border-[${BRAND_COLORS.primary.main}] hover:border-[${BRAND_COLORS.primary.hover}]`,
+    secondary: `bg-[${BRAND_COLORS.secondary.main}] hover:bg-[${BRAND_COLORS.secondary.hover}] text-white border-[${BRAND_COLORS.secondary.main}] hover:border-[${BRAND_COLORS.secondary.hover}]`,
+    outline: `bg-transparent hover:bg-[${BRAND_COLORS.primary.main}] text-[${BRAND_COLORS.primary.main}] hover:text-white border-[${BRAND_COLORS.primary.main}]`,
+    ghost: `bg-transparent hover:bg-[${BRAND_COLORS.primary.light}] text-[${BRAND_COLORS.primary.main}] hover:text-[${BRAND_COLORS.secondary.main}] border-transparent`,
+    accent: `bg-gradient-to-r ${BRAND_GRADIENTS.primary} text-white border-transparent shadow-lg hover:shadow-xl`,
   },
   
   // Tamanhos responsivos

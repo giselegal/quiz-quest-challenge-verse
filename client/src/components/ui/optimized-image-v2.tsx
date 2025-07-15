@@ -32,7 +32,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
   
-  // Get optimized image URLs - now using the correct function names
+  // Get optimized image URLs
   const optimizedSrc = src ? getOptimizedImageUrl(src, { width, height, quality }) : '';
   const placeholderSrc = src ? getLowQualityPlaceholder(src) : '';
   

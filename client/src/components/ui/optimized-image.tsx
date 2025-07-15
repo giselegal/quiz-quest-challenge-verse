@@ -43,11 +43,7 @@ export const OptimizedImage = ({
   const [blurredLoaded, setBlurredLoaded] = useState(false);
 
   // Obter metadados da imagem do banco de imagens
-  const imageMetadata = useMemo(() => {
-    if (!src) return { width: undefined, height: undefined, alt: undefined };
-    const metadata = getImageMetadata(src);
-    return metadata || { width: undefined, height: undefined, alt: undefined };
-  }, [src]);
+  const imageMetadata = useMemo(() => src ? getImageMetadata(src) : undefined, [src]);
 
   // Gerar placeholders e URLs otimizadas apenas uma vez
   const placeholderSrc = useMemo(() => {

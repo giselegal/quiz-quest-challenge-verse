@@ -1,8 +1,7 @@
-
 import React from 'react';
 
 interface QuizImageProps {
-  src?: string;
+  src?:string;
   alt: string;
   width?: string | number;
   height?: string | number;
@@ -20,8 +19,6 @@ const QuizImage: React.FC<QuizImageProps> = ({
   alignment = 'center',
   className = '',
 }) => {
-  console.log(`[QuizImage] Loading image: ${src}`);
-
   const containerStyle: React.CSSProperties = {
     textAlign: alignment,
     margin: '1rem 0',
@@ -36,11 +33,6 @@ const QuizImage: React.FC<QuizImageProps> = ({
     display: 'inline-block',
   };
 
-  if (!src) {
-    console.warn('[QuizImage] No src provided');
-    return null;
-  }
-
   return (
     <div style={containerStyle} className={className}>
       <img 
@@ -48,8 +40,6 @@ const QuizImage: React.FC<QuizImageProps> = ({
         alt={alt}
         style={imageStyle}
         loading="lazy"
-        onLoad={() => console.log(`[QuizImage] Successfully loaded: ${src}`)}
-        onError={() => console.error(`[QuizImage] Failed to load: ${src}`)}
       />
     </div>
   );
