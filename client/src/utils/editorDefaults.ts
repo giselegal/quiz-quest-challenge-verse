@@ -45,7 +45,7 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
       };
     case 'text':
       return {
-        text: 'Este é um bloco de texto. Clique para editar.',
+        text: 'Descubra como se vestir com confiança e destacar sua personalidade única. Este é o primeiro passo para transformar seu estilo.',
         alignment: 'left' as const,
         style: {
           backgroundColor: '#F9F5F1',
@@ -102,18 +102,33 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
       };
     case 'testimonials':
       return {
-        title: 'Depoimentos',
+        title: 'O que nossos usuários dizem',
         testimonials: [
           {
             id: '1',
             name: 'Ana Silva',
-            text: 'Adorei o resultado do quiz! Realmente reflete meu estilo pessoal.',
+            role: 'Empresária',
+            content: 'Este quiz me ajudou a descobrir aspectos sobre minha personalidade que eu não conhecia. Recomendo!',
+            rating: 5,
+            text: 'Este quiz me ajudou a descobrir aspectos sobre minha personalidade que eu não conhecia. Recomendo!',
             image: 'https://via.placeholder.com/100'
           },
           {
             id: '2',
-            name: 'Carlos Mendes',
-            text: 'A consultoria foi incrível, agora sei exatamente o que combina comigo.',
+            name: 'Carlos Santos',
+            role: 'Designer',
+            content: 'Interface incrível e resultado muito preciso. Compartilhei com todos os meus amigos.',
+            rating: 5,
+            text: 'Interface incrível e resultado muito preciso. Compartilhei com todos os meus amigos.',
+            image: 'https://via.placeholder.com/100'
+          },
+          {
+            id: '3',
+            name: 'Maria Costa',
+            role: 'Psicóloga',
+            content: 'Como profissional da área, posso dizer que este quiz tem uma base sólida e resultados confiáveis.',
+            rating: 5,
+            text: 'Como profissional da área, posso dizer que este quiz tem uma base sólida e resultados confiáveis.',
             image: 'https://via.placeholder.com/100'
           }
         ],
@@ -240,10 +255,115 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
         buildInfo: 'v1.0.0 - 2025-01-15'
       };
       
+    // === TIPOS ADICIONAIS DE BLOCOS ===
+    case 'text-inline':
+      return {
+        text: 'Este é um texto inline editável. Descubra como personalizar seu estilo de forma única e autêntica.',
+        alignment: 'left' as const,
+        style: {
+          backgroundColor: '#F9F5F1',
+          color: '#432818',
+          paddingY: '12px',
+          paddingX: '16px',
+          borderRadius: 'md' as BorderRadiusType
+        }
+      };
+      
+    case 'heading-inline':
+    case 'result-header':
+    case 'result-header-inline':
+      return {
+        title: 'Parabéns! Seu estilo predominante foi identificado.',
+        subtitle: 'Agora você tem clareza sobre sua identidade visual',
+        alignment: 'center' as const,
+        style: {
+          backgroundColor: '#ffffff',
+          color: '#432818',
+          paddingY: '24px',
+          paddingX: '16px',
+          borderRadius: 'md' as BorderRadiusType
+        }
+      };
+      
+    case 'result-description':
+      return {
+        text: 'Descubra como se vestir com confiança e destacar sua personalidade única através do seu estilo pessoal.',
+        alignment: 'center' as const,
+        style: {
+          backgroundColor: '#F9F5F1',
+          color: '#8F7A6A',
+          paddingY: '16px',
+          paddingX: '16px',
+          borderRadius: 'md' as BorderRadiusType
+        }
+      };
+      
+    case 'button-inline':
+    case 'cta-button-inline':
+      return {
+        text: 'Descobrir meu estilo',
+        url: '#next-step',
+        style: {
+          backgroundColor: '#B89B7A',
+          color: '#ffffff',
+          paddingY: '12px',
+          paddingX: '24px',
+          borderRadius: 'md' as BorderRadiusType
+        }
+      };
+      
+    case 'badge-inline':
+      return {
+        text: '✨ Resultado Personalizado',
+        style: {
+          backgroundColor: '#B89B7A',
+          color: '#ffffff',
+          paddingY: '8px',
+          paddingX: '16px',
+          borderRadius: 'full' as BorderRadiusType
+        }
+      };
+      
+    case 'testimonials-grid':
+      return {
+        title: 'O que nossos usuários dizem',
+        testimonials: [
+          {
+            id: '1',
+            name: 'Ana Silva',
+            role: 'Empresária',
+            content: 'Este quiz me ajudou a descobrir aspectos sobre minha personalidade que eu não conhecia. Recomendo!',
+            rating: 5,
+            text: 'Este quiz me ajudou a descobrir aspectos sobre minha personalidade que eu não conhecia. Recomendo!',
+            avatar: ''
+          },
+          {
+            id: '2',
+            name: 'Carlos Santos',
+            role: 'Designer',
+            content: 'Interface incrível e resultado muito preciso. Compartilhei com todos os meus amigos.',
+            rating: 5,
+            text: 'Interface incrível e resultado muito preciso. Compartilhei com todos os meus amigos.',
+            avatar: ''
+          }
+        ],
+        gridColumns: 2,
+        showRating: true,
+        showAvatar: true,
+        alignment: 'center' as const,
+        style: {
+          backgroundColor: '#F9F5F1',
+          color: '#432818',
+          paddingY: '24px',
+          paddingX: '16px',
+          borderRadius: 'md' as BorderRadiusType
+        }
+      };
+      
     // Add more default content types as needed
     default:
       return {
-        text: 'Conteúdo para editar',
+        text: 'Descubra sua verdadeira personalidade através do estilo. Este conteúdo personalizado foi criado especialmente para você.',
         alignment: 'left' as const,
         style: {
           paddingY: '16px',

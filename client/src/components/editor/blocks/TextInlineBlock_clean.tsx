@@ -17,7 +17,7 @@ const TextInlineBlock: React.FC<BlockComponentProps> = ({
 
   // ES7+ Destructuring com default values e optional chaining
   const {
-    content = 'Texto exemplo',
+    content = 'Descubra sua verdadeira personalidade através do estilo. Este conteúdo personalizado foi criado especialmente para você.',
     fontSize = 'medium',
     fontWeight = 'normal',
     textAlign = 'left',
