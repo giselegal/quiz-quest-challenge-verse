@@ -132,7 +132,7 @@ export class QuizCalculationEngine implements StyleCalculationEngine {
     const normalQuestions = getNormalQuestions();
 
     return {
-      id: crypto.randomUUID(),
+      id: crypto.randomUUID?.() ?? Math.random().toString(36),
       participantName,
       responses,
       styleScores,
