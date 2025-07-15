@@ -104,12 +104,16 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
     isSelected,
     onClick,
     onPropertyChange: (key: string, value: any) => {
+      console.log('🔗 UniversalBlockRenderer.onPropertyChange:', { blockId: block.id, key, value, hasOnSaveInline: !!onSaveInline });
       if (onSaveInline) {
         const updatedBlock = {
           ...block,
           properties: { ...block.properties, [key]: value }
         };
+        console.log('💾 Calling onSaveInline:', { blockId: block.id, updatedBlock });
         onSaveInline(block.id, updatedBlock);
+      } else {
+        console.warn('⚠️ onSaveInline callback não fornecido!');
       }
     },
     disabled,

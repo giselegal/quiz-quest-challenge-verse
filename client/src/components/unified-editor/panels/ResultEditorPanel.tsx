@@ -41,7 +41,7 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({
   }, [resultPageConfig, updateBlocks]);
 
   // Update when a block is selected
-  const handleBlockSelect = (blockId: string) => {
+  const handleBlockSelect = (blockId: string | null) => {
     setSelectedBlockId(blockId);
   };
 
@@ -101,6 +101,13 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({
           isPreviewing={isPreviewing}
           primaryStyle={primaryStyle}
           onReorderBlocks={blockActions.handleReorderBlocks}
+          onSaveInline={(blockId: string, updates: any) => {
+            console.log('🔄 ResultEditorPanel received onSaveInline:', { blockId, updates });
+            // Atualizar o bloco usando o sistema de actions
+            if (updates.properties) {
+              blockActions.handleUpdateBlock(blockId, updates.properties);
+            }
+          }}
         />
       </ResizablePanel>
 

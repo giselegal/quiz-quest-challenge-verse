@@ -18,6 +18,7 @@ interface EditorPreviewProps {
   isPreviewing: boolean;
   primaryStyle: StyleResult;
   onReorderBlocks: (sourceIndex: number, destinationIndex: number) => void;
+  onSaveInline?: (blockId: string, updates: any) => void;
 }
 
 // Componente sortável para o UniversalBlockRenderer
@@ -27,6 +28,7 @@ interface SortableBlockProps {
   onClick: () => void;
   isPreviewing: boolean;
   primaryStyle: StyleResult;
+  onSaveInline?: (blockId: string, updates: any) => void;
 }
 
 const SortableBlock: React.FC<SortableBlockProps> = ({
@@ -34,7 +36,8 @@ const SortableBlock: React.FC<SortableBlockProps> = ({
   isSelected,
   onClick,
   isPreviewing,
-  primaryStyle
+  primaryStyle,
+  onSaveInline
 }) => {
   const {
     attributes,
@@ -83,10 +86,11 @@ const SortableBlock: React.FC<SortableBlockProps> = ({
         isSelected={isSelected}
         onClick={onClick}
         disabled={isPreviewing}
-        onSaveInline={(blockId, updates) => {
+        onSaveInline={onSaveInline || ((blockId, updates) => {
           // This would typically update the block content in the parent component
-          console.log('Block updated:', blockId, updates);
-        }}
+          console.log('📝 EditorPreview.onSaveInline called:', { blockId, updates });
+          console.log('⚠️ TODO: Implementar sincronização real com estado do editor');
+        })}
       />
     </div>
   );
@@ -98,7 +102,8 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
   onSelectBlock,
   isPreviewing,
   primaryStyle,
-  onReorderBlocks
+  onReorderBlocks,
+  onSaveInline
 }) => {
   const [viewMode, setViewMode] = React.useState<'desktop' | 'mobile'>('desktop');
   
@@ -196,6 +201,7 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
                       onClick={() => onSelectBlock(block.id)}
                       isPreviewing={isPreviewing}
                       primaryStyle={primaryStyle}
+                      onSaveInline={onSaveInline}
                     />
                   ))}
                 </div>

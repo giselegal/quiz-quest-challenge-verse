@@ -51,8 +51,11 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
   }, []); // Removido todas as dependências para evitar loop
 
   const handlePropertyChange = (key: string, value: any) => {
+    console.log('🎯 OptionsGridBlock.handlePropertyChange:', { key, value, hasCallback: !!onPropertyChange });
     if (onPropertyChange) {
       onPropertyChange(key, value);
+    } else {
+      console.warn('⚠️ onPropertyChange callback não fornecido!');
     }
   };
 
@@ -82,6 +85,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
     }
 
     setInternalSelectedOptions(newSelectedOptions);
+    console.log('🔄 OptionsGridBlock.handleOptionSelect:', { optionId, newSelectedOptions });
     handlePropertyChange('selectedOptions', newSelectedOptions);
     
     // Validar seleção usando configuração de validação
