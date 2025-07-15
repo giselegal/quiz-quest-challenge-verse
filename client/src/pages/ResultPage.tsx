@@ -24,7 +24,7 @@ import ResultSkeleton from '@/components/result/ResultSkeleton';
 import { trackButtonClick } from '@/utils/analytics';
 import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import { loadMockData } from '@/utils/mockResultData';
 
 const ResultPage: React.FC = () => {
