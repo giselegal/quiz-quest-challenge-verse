@@ -112,9 +112,9 @@ const TestimonialsGridBlock: React.FC<TestimonialsGridBlockProps> = ({
             content: string;
             rating: number;
             avatar?: string;
-          }) => (
+          }, index: number) => (
             <div
-              key={testimonial.id}
+              key={testimonial.id || `testimonial-${index}`}
               className="flex-1 min-w-[300px] max-w-md bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300"
             >
               {/* Rating */}
