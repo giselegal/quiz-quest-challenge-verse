@@ -173,9 +173,57 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       'form-input': () => <FormInputBlock {...commonProps} />,
       list: () => <ListBlock {...commonProps} />,
       
+      // === COMPONENTES INLINE PRINCIPAIS ===
+      'main-heading-inline': () => <HeadingInlineBlock {...commonProps} />,
+      'text-inline': () => <TextInlineBlock {...commonProps} />,
+      'heading-inline': () => <HeadingInlineBlock {...commonProps} />,
+      'button-inline': () => <ButtonInlineBlock {...commonProps} />,
+      'image-inline': () => <ImageInlineBlock {...commonProps} />,
+      
+      // === COMPONENTES DE OFERTA/VENDAS ===
+      'sales-offer': () => <PricingCardInlineBlock {...commonProps} />,
+      'dynamic-pricing': () => <PricingCardInlineBlock {...commonProps} />,
+      'quiz-offer-pricing': () => <QuizOfferPricingInlineBlock {...commonProps} />,
+      'quiz-offer-pricing-inline': () => <QuizOfferPricingInlineBlock {...commonProps} />,
+      'value-anchoring': () => <PricingCardInlineBlock {...commonProps} />,
+      'urgency-timer': () => <CountdownInlineBlock {...commonProps} />,
+      'countdown-timer': () => <CountdownInlineBlock {...commonProps} />,
+      'countdown-inline': () => <CountdownInlineBlock {...commonProps} />,
+      
+      // === COMPONENTES DE CONTEÚDO ===
+      'testimonials-grid': () => <TestimonialsGridBlock {...commonProps} />,
+      'testimonials-result': () => <TestimonialsInlineBlock {...commonProps} />,
+      'faq-section': () => <FAQSectionBlock {...commonProps} />,
+      'guarantee-section': () => <GuaranteeBlock {...commonProps} />,
+      'guarantee-inline': () => <GuaranteeBlock {...commonProps} />,
+      'video-player': () => <VideoPlayerBlock {...commonProps} />,
+      'audio': () => <VideoPlayerBlock {...commonProps} />,
+      
       // === COMPONENTES DE RESULTADO ===
       'result-header': () => <HeadingInlineBlock {...commonProps} />,
       'result-description': () => <TextInlineBlock {...commonProps} />,
+      'result-card-inline': () => <ResultCardInlineBlock {...commonProps} />,
+      'result-header-inline': () => <ResultHeaderInlineBlock {...commonProps} />,
+      'transformation-inline': () => <BeforeAfterInlineBlock {...commonProps} />,
+      'before-after': () => <BeforeAfterInlineBlock {...commonProps} />,
+      
+      // === COMPONENTES ESPECIAIS ===
+      'alert': () => <BadgeInlineBlock {...commonProps} />,
+      'quote': () => <TextInlineBlock {...commonProps} />,
+      'pros-cons': () => <ListBlock {...commonProps} />,
+      'carousel': () => <ImageDisplayInlineBlock {...commonProps} />,
+      'product-carousel': () => <PricingCardInlineBlock {...commonProps} />,
+      'marquee': () => <TextInlineBlock {...commonProps} />,
+      'confetti': () => <BadgeInlineBlock {...commonProps} />,
+      'loader': () => <LoadingAnimationBlock {...commonProps} />,
+      'two-columns': () => <TextInlineBlock {...commonProps} />,
+      'terms': () => <TextInlineBlock {...commonProps} />,
+      'script': () => <TextInlineBlock {...commonProps} />,
+      
+      // === COMPONENTES DE GRÁFICOS/DADOS ===
+      'chart-area': () => <StatInlineBlock {...commonProps} />,
+      'chart-compare': () => <StatInlineBlock {...commonProps} />,
+      'chart-level': () => <ProgressInlineBlock {...commonProps} />,
       
       // === COMPONENTES DE OFERTA ===
       'product-offer': () => <PricingCardInlineBlock {...commonProps} />,
