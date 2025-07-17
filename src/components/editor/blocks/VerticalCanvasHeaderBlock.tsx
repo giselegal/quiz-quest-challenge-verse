@@ -1,31 +1,11 @@
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
+import type { BlockComponentProps } from '@/types/blocks';
 
 // Tipo para as propriedades do cabeçalho
-interface VerticalCanvasHeaderProps {
-  // Logo
-  logoSrc?: string;
-  logoAlt?: string;
-  logoWidth?: number;
-  logoHeight?: number;
-  
-  // Progress bar
-  progressValue?: number;
-  progressMax?: number;
-  showProgress?: boolean;
-  
-  // Botão de voltar
-  showBackButton?: boolean;
-  onBackClick?: () => void;
-  
-  // Layout e estilo
-  containerWidth?: string;
-  gap?: string;
-  className?: string;
-  
-  // Estados
-  isSelected?: boolean;
-  onClick?: () => void;
+interface VerticalCanvasHeaderProps extends BlockComponentProps {
+  onPropertyChange?: (key: string, value: any) => void;
+  disabled?: boolean;
 }
 
 export const VerticalCanvasHeaderBlock: React.FC<VerticalCanvasHeaderProps> = ({
