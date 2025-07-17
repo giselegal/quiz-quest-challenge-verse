@@ -57,8 +57,8 @@ export const BoxFlexInlineComponent: React.FC<BoxFlexInlineProps> = ({
 
   const variantStyles = {
     default: 'bg-white border-gray-200 hover:border-brand-primary/30',
-    elegant: `bg-white border-2 border-[${BRAND_COLORS.primary}]/20 hover:border-[${BRAND_COLORS.primary}]/40`,
-    highlight: `bg-gradient-to-r from-[${BRAND_COLORS.surface}] to-white border-[${BRAND_COLORS.accent}]/30`,
+    elegant: `bg-white border-2 border-[#B89B7A]/20 hover:border-[#B89B7A]/40`,
+    highlight: `bg-gradient-to-r from-gray-50 to-white border-[#B89B7A]/30`,
     minimal: 'bg-gray-50 border-gray-100'
   };
   
