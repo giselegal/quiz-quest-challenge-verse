@@ -119,6 +119,9 @@ export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSideb
   console.log('🔍 DEBUG SchemaDrivenComponentsSidebar - funnelPages:', funnelPages.length);
   console.log('🔍 DEBUG SchemaDrivenComponentsSidebar - activeTab:', activeTab);
   console.log('🔍 DEBUG SchemaDrivenComponentsSidebar - pages:', funnelPages.map(p => p.name));
+  console.log('🔍 DEBUG SchemaDrivenComponentsSidebar - allBlocks:', allBlocks.length);
+  console.log('🔍 DEBUG SchemaDrivenComponentsSidebar - categories:', categories);
+  console.log('🔍 DEBUG SchemaDrivenComponentsSidebar - blockDefinitions source:', typeof blockDefinitions);
 
   return (
     <div className="h-full flex flex-col">
