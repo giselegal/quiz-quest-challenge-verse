@@ -35,7 +35,7 @@ import {
 } from './inline';
 
 // Componente header vertical universal
-import VerticalCanvasHeaderBlock from '../../../../../src/components/editor/blocks/VerticalCanvasHeaderBlock';
+import VerticalCanvasHeaderBlock from './VerticalCanvasHeaderBlock';
 
 // Novos componentes BoxFlex da Etapa 20
 import {
@@ -206,6 +206,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       'pricing-card-inline': () => <PricingCardInlineBlock {...commonProps} />,
       
       // === COMPONENTES QUIZ ===
+      'vertical-canvas-header': () => <VerticalCanvasHeaderBlock {...commonProps} />,
       'quiz-intro-header': () => <VerticalCanvasHeaderBlock {...commonProps} />,
       'loading-animation': () => <LoadingAnimationBlock {...commonProps} />,
       'options-grid': () => <OptionsGridBlock {...commonProps} />,
