@@ -21,7 +21,13 @@ import {
 import { restrictToVerticalAxis, restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { createPortal } from 'react-dom';
 import { UniversalBlockRenderer } from '../blocks/UniversalBlockRenderer';
-import type { BlockData } from '../blocks/types';
+
+// Tipo local para BlockData
+interface BlockData {
+  id: string;
+  type: string;
+  properties: Record<string, any>;
+}
 
 interface DndProviderProps {
   children: React.ReactNode;
