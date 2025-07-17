@@ -31,9 +31,11 @@ import {
   QuizOfferPricingInlineBlock,
   CountdownInlineBlock,
   // Componentes especializados para Quiz
-  QuizIntroHeaderBlock,
   LoadingAnimationBlock
 } from './inline';
+
+// Componente header vertical universal
+import VerticalCanvasHeaderBlock from '../../../../../src/components/editor/blocks/VerticalCanvasHeaderBlock';
 
 // Novos componentes BoxFlex da Etapa 20
 import {
@@ -204,7 +206,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       'pricing-card-inline': () => <PricingCardInlineBlock {...commonProps} />,
       
       // === COMPONENTES QUIZ ===
-      'quiz-intro-header': () => <QuizIntroHeaderBlock {...commonProps} />,
+      'quiz-intro-header': () => <VerticalCanvasHeaderBlock {...commonProps} />,
       'loading-animation': () => <LoadingAnimationBlock {...commonProps} />,
       'options-grid': () => <OptionsGridBlock {...commonProps} />,
       'quiz-question': () => <QuizQuestionBlock {...commonProps} />,
@@ -227,7 +229,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       'guarantee-seal-inline': () => <BadgeInlineBlock {...commonProps} />,
       'faq-item-inline': () => <FAQSectionBlock {...commonProps} />,
       'section-header-inline': () => <HeadingInlineBlock {...commonProps} />,
-      'sticky-header-inline': () => <QuizIntroHeaderBlock {...commonProps} />,
+      'sticky-header-inline': () => <VerticalCanvasHeaderBlock {...commonProps} />,
       
       // === COMPONENTES ESTRATÉGICOS ===
       'strategic-question-image': () => <StrategicQuestionBlock {...commonProps} />,
