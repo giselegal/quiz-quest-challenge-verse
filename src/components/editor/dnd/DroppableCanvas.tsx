@@ -1,9 +1,19 @@
 import React from 'react';
 import { useDroppable } from '@dnd-kit/core';
-import { cn } from '@/lib/utils';
 import { SortableBlockItem } from './SortableBlockItem';
 import { Plus } from 'lucide-react';
-import type { BlockData } from '@/types/blocks';
+
+// Utility function for class names
+const cn = (...classes: (string | undefined | boolean)[]): string => {
+  return classes.filter(Boolean).join(' ');
+};
+
+// Tipo local para BlockData
+interface BlockData {
+  id: string;
+  type: string;
+  properties: Record<string, any>;
+}
 
 interface DroppableCanvasProps {
   blocks: BlockData[];

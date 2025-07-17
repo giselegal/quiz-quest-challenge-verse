@@ -1,11 +1,19 @@
 import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { cn } from '@/lib/utils';
-import { UniversalBlockRenderer } from '../blocks/UniversalBlockRenderer';
 import { GripVertical, Trash2, Copy, Eye, EyeOff } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import type { BlockData } from '@/types/blocks';
+
+// Utility function for class names
+const cn = (...classes: (string | undefined | boolean)[]): string => {
+  return classes.filter(Boolean).join(' ');
+};
+
+// Tipo local para BlockData
+interface BlockData {
+  id: string;
+  type: string;
+  properties: Record<string, any>;
+}
 
 interface SortableBlockItemProps {
   block: BlockData;
@@ -78,21 +86,19 @@ export const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
         'md:p-1 p-0.5'
       )}>
         {/* Drag Handle */}
-        <Button
-          variant="ghost"
-          size="sm"
-          className="w-5 h-5 md:w-6 md:h-6 p-0 cursor-grab active:cursor-grabbing hover:bg-gray-100"
+        <button
+          type="button"
+          className="w-5 h-5 md:w-6 md:h-6 p-0 cursor-grab active:cursor-grabbing hover:bg-gray-100 rounded-sm flex items-center justify-center"
           {...attributes}
           {...listeners}
         >
           <GripVertical className="w-2.5 h-2.5 md:w-3 md:h-3 text-gray-600" />
-        </Button>
+        </button>
 
         {/* Toggle Visibility */}
-        <Button
-          variant="ghost"
-          size="sm"
-          className="w-5 h-5 md:w-6 md:h-6 p-0 hover:bg-gray-100"
+        <button
+          type="button"
+          className="w-5 h-5 md:w-6 md:h-6 p-0 hover:bg-gray-100 rounded-sm flex items-center justify-center"
           onClick={(e) => {
             e.stopPropagation();
             onToggleVisibility();
@@ -103,51 +109,48 @@ export const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
           ) : (
             <Eye className="w-2.5 h-2.5 md:w-3 md:h-3 text-gray-600" />
           )}
-        </Button>
+        </button>
 
         {/* Duplicate */}
-        <Button
-          variant="ghost"
-          size="sm"
-          className="w-5 h-5 md:w-6 md:h-6 p-0 hover:bg-gray-100"
+        <button
+          type="button"
+          className="w-5 h-5 md:w-6 md:h-6 p-0 hover:bg-gray-100 rounded-sm flex items-center justify-center"
           onClick={(e) => {
             e.stopPropagation();
             onDuplicate();
           }}
         >
           <Copy className="w-2.5 h-2.5 md:w-3 md:h-3 text-gray-600" />
-        </Button>
+        </button>
 
         {/* Delete */}
-        <Button
-          variant="ghost"
-          size="sm"
-          className="w-5 h-5 md:w-6 md:h-6 p-0 hover:bg-red-100 hover:text-red-600"
+        <button
+          type="button"
+          className="w-5 h-5 md:w-6 md:h-6 p-0 hover:bg-red-100 hover:text-red-600 rounded-sm flex items-center justify-center"
           onClick={(e) => {
             e.stopPropagation();
             onDelete();
           }}
         >
           <Trash2 className="w-2.5 h-2.5 md:w-3 md:h-3 text-gray-600 hover:text-red-600" />
-        </Button>
+        </button>
       </div>
 
-      {/* Block Content */}
-      <div className={cn(
-        'relative w-full flex-1', // Flex item que cresce
-        isHidden && 'pointer-events-none'
-      )}>
-        <UniversalBlockRenderer
-          block={block}
-          isSelected={isSelected}
-          onClick={onSelect}
-          onSaveInline={onSaveInline}
-          disabled={disabled}
-          className={cn(
-            'w-full h-full transition-all duration-200',
-            isDragging && 'pointer-events-none'
+      {/* Block Content - Simplified */}
+      <div className={`relative w-full flex-1 ${isHidden ? 'pointer-events-none' : ''}`}>
+        <div className={`w-full h-full transition-all duration-200 p-4 bg-white border rounded-lg ${
+          isDragging ? 'pointer-events-none' : ''
+        } ${isSelected ? 'ring-2 ring-blue-500 border-blue-400' : 'border-gray-200'}`}>
+          <div className="font-medium text-gray-800">{block.type}</div>
+          <div className="text-sm text-gray-500 mt-1">
+            {Object.keys(block.properties).length} propriedades
+          </div>
+          {block.properties.title && (
+            <div className="text-sm text-gray-700 mt-2 truncate">
+              {block.properties.title}
+            </div>
           )}
-        />
+        </div>
 
         {/* Block Type Label - Bottom Left when selected */}
         {isSelected && (

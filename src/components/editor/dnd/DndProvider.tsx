@@ -20,7 +20,6 @@ import {
 } from '@dnd-kit/sortable';
 import { restrictToVerticalAxis, restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { createPortal } from 'react-dom';
-import { UniversalBlockRenderer } from '../blocks/UniversalBlockRenderer';
 
 // Tipo local para BlockData
 interface BlockData {
@@ -130,13 +129,10 @@ export const DndProvider: React.FC<DndProviderProps> = ({
       {createPortal(
         <DragOverlay>
           {activeBlock ? (
-            <div className="bg-white shadow-2xl rounded-lg border-2 border-blue-500 opacity-95 transform rotate-3">
-              <UniversalBlockRenderer
-                block={activeBlock}
-                isSelected={false}
-                disabled={true}
-                className="pointer-events-none"
-              />
+            <div className="bg-white shadow-2xl rounded-lg border-2 border-blue-500 opacity-95 transform rotate-3 p-4">
+              <div className="text-sm font-medium text-gray-700">
+                Movendo: {activeBlock.type}
+              </div>
             </div>
           ) : null}
         </DragOverlay>,
