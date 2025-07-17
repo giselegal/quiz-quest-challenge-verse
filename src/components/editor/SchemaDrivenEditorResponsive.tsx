@@ -17,7 +17,8 @@ import { useSchemaEditorFixed as useSchemaEditor } from '@/hooks/useSchemaEditor
 import { SchemaDrivenComponentsSidebar } from './sidebar/SchemaDrivenComponentsSidebar';
 import { DynamicPropertiesPanel } from './panels/DynamicPropertiesPanel';
 import { DroppableCanvas } from './dnd/DroppableCanvas';
-import { blockDefinitions } from '@/config/blockDefinitions';
+import { DndProvider } from './dnd/DndProvider';
+import { blockDefinitions } from '@/config/blockDefinitionsClean';
 
 interface SchemaDrivenEditorResponsiveProps {
   funnelId?: string;
@@ -55,7 +56,50 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
     isSaving
   } = useSchemaEditor(funnelId || undefined);
 
-  // Handlers
+  // Handlers para Drag & Drop
+  const handleBlocksReorder = (newBlocks: any[]) => {
+    if (currentPage) {
+      updatePage(currentPage.id, { blocks: newBlocks });
+    }
+  };
+
+  const handleBlockAdd = (blockType: string, position?: number) => {
+    const definition = blockDefinitions.find((def: any) => def.type === blockType);
+    if (definition && currentPage) {
+      const defaultProperties: Record<string, any> = {};
+      definition.propertiesSchema?.forEach((prop: any) => {
+        if (prop.defaultValue !== undefined) {
+          defaultProperties[prop.key] = prop.defaultValue;
+        }
+      });
+
+      const newBlock = {
+        id: `${blockType}-${Date.now()}`,
+        type: blockType,
+        properties: defaultProperties
+      };
+
+      const newBlocks = [...currentPage.blocks];
+      if (position !== undefined && position >= 0 && position <= newBlocks.length) {
+        newBlocks.splice(position, 0, newBlock);
+      } else {
+        newBlocks.push(newBlock);
+      }
+
+      updatePage(currentPage.id, { blocks: newBlocks });
+    }
+  };
+
+  const handleBlockUpdate = (blockId: string, updates: Partial<any>) => {
+    if (currentPage) {
+      const newBlocks = currentPage.blocks.map(block =>
+        block.id === blockId ? { ...block, ...updates } : block
+      );
+      updatePage(currentPage.id, { blocks: newBlocks });
+    }
+  };
+
+  // Handlers originais
   const handleComponentSelect = (type: string) => {
     const definition = blockDefinitions.find((def: any) => def.type === type);
     if (definition && currentPage) {
@@ -169,6 +213,14 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
   }
 
   return (
+    <DndProvider
+      blocks={currentPage?.blocks || []}
+      onBlocksReorder={handleBlocksReorder}
+      onBlockAdd={handleBlockAdd}
+      onBlockSelect={(blockId) => setSelectedBlock(blockId)}
+      selectedBlockId={selectedBlockId || undefined}
+      onBlockUpdate={handleBlockUpdate}
+    >
       <div className={`h-screen flex flex-col overflow-hidden bg-gray-50 ${className}`}>
         {/* Header Responsivo */}
         <div className="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4">
@@ -588,7 +640,8 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
 
         </div>
       </div>
-    );
+    </DndProvider>
+  );
 };
 
 export default SchemaDrivenEditorResponsive;

@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DraggableComponentItem } from '../dnd/DraggableComponentItem';
 import { blockDefinitions } from '@/config/blockDefinitionsClean';
 import { 
   Type, Image, ArrowRight, CheckCircle, Target, Play, Star, FileText, ShoppingCart, Clock, 
@@ -213,35 +214,15 @@ export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSideb
                     </div>
                     <div className="space-y-0.5 sm:space-y-1">
                       {categoryBlocks.map((block, blockIndex) => (
-                        <Button
+                        <DraggableComponentItem
                           key={`${block.type}-${blockIndex}`}
-                          variant="ghost"
-                          className="w-full justify-start p-2 sm:p-3 h-auto hover:bg-[#FAF9F7] transition-colors group"
-                          onClick={() => onComponentSelect(block.type)}
-                        >
-                          <div className="flex items-start space-x-2 sm:space-x-3 w-full">
-                            <div className="text-[#B89B7A] mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform">
-                              {iconMap[block.icon || 'Type'] || <Type className="w-3 h-3 sm:w-4 sm:h-4" />}
-                            </div>
-                            <div className="text-left flex-1 min-w-0">
-                              <div className="flex items-center justify-between w-full">
-                                <span className="font-medium text-xs sm:text-sm text-[#432818] truncate">
-                                  {block.name}
-                                </span>
-                                <div className="flex items-center space-x-1">
-                                  {block.isNew && (
-                                    <Badge variant="secondary" className="text-xs bg-[#B89B7A]/10 text-[#B89B7A] border-[#B89B7A]/20 hidden sm:inline-flex">
-                                      Novo
-                                    </Badge>
-                                  )}
-                                </div>
-                              </div>
-                              <p className="text-xs text-gray-500 mt-0.5 line-clamp-2 hidden sm:block">
-                                {block.description || 'Componente sem descrição'}
-                              </p>
-                            </div>
-                          </div>
-                        </Button>
+                          blockType={block.type}
+                          title={block.name}
+                          description={block.description || 'Componente sem descrição'}
+                          icon={iconMap[block.icon || 'Type'] || <Type className="w-4 h-4" />}
+                          category={category}
+                          className="w-full justify-start hover:bg-[#FAF9F7] transition-colors group"
+                        />
                       ))}
                     </div>
                   </div>
