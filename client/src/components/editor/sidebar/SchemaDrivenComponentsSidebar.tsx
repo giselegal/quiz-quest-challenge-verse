@@ -122,6 +122,12 @@ export const SchemaDrivenComponentsSidebar: React.FC<SchemaDrivenComponentsSideb
   console.log('🔍 DEBUG SchemaDrivenComponentsSidebar - allBlocks:', allBlocks.length);
   console.log('🔍 DEBUG SchemaDrivenComponentsSidebar - categories:', categories);
   console.log('🔍 DEBUG SchemaDrivenComponentsSidebar - blockDefinitions source:', typeof blockDefinitions);
+  console.log('🎯 COMPONENTES POR CATEGORIA:');
+  categories.forEach(category => {
+    const categoryBlocks = getBlocksByCategory(category);
+    console.log(`📦 ${category}: ${categoryBlocks.length} componentes`);
+    console.log(`   Tipos: ${categoryBlocks.map(b => b.type).join(', ')}`);
+  });
 
   return (
     <div className="h-full flex flex-col">
