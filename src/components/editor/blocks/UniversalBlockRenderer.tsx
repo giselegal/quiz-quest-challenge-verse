@@ -32,7 +32,6 @@ import {
   QuizOfferPricingInlineBlock,
   CountdownInlineBlock,
   // Componentes especializados para Quiz
-  QuizIntroHeaderBlock,
   LoadingAnimationBlock
 } from './inline';
 
@@ -185,7 +184,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       'pricing-card-inline': () => <PricingCardInlineBlock {...commonProps} />,
       
       // === COMPONENTES QUIZ ===
-      'quiz-intro-header': () => <QuizIntroHeaderBlock {...commonProps} />,
+      'quiz-intro-header': () => <VerticalCanvasHeaderBlock {...commonProps} />,
       'vertical-canvas-header': () => <VerticalCanvasHeaderBlock {...commonProps} />,
       'loading-animation': () => <LoadingAnimationBlock {...commonProps} />,
       'options-grid': () => <OptionsGridBlock {...commonProps} />,
@@ -209,7 +208,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       'guarantee-seal-inline': () => <BadgeInlineBlock {...commonProps} />,
       'faq-item-inline': () => <FAQSectionBlock {...commonProps} />,
       'section-header-inline': () => <HeadingInlineBlock {...commonProps} />,
-      'sticky-header-inline': () => <QuizIntroHeaderBlock {...commonProps} />,
+      'sticky-header-inline': () => <VerticalCanvasHeaderBlock {...commonProps} />,
       
       // === COMPONENTES ESTRATÉGICOS ===
       'strategic-question-image': () => <StrategicQuestionBlock {...commonProps} />,
