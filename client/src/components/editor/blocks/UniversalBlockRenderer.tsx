@@ -228,28 +228,19 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       // === COMPONENTES DE OFERTA ===
       'product-offer': () => <PricingCardInlineBlock {...commonProps} />,
       
-      // === COMPONENTES DE OFERTA ===
-      'product-offer': () => <PricingCardInlineBlock {...commonProps} />,
-      
       // === COMPONENTES ESPECIAIS ===
       testimonials: () => <TestimonialsGridBlock {...commonProps} />,
       guarantee: () => <GuaranteeBlock {...commonProps} />,
       
-      // === COMPONENTES INLINE ESSENCIAIS ===
-      'text-inline': () => <TextInlineBlock {...commonProps} />,
-      'heading-inline': () => <HeadingInlineBlock {...commonProps} />,
-      'button-inline': () => <ButtonInlineBlock {...commonProps} />,
+      // === COMPONENTES INLINE ESSENCIAIS (removendo duplicatas) ===
       'badge-inline': () => <BadgeInlineBlock {...commonProps} />,
       'progress-inline': () => <ProgressInlineBlock {...commonProps} />,
       'image-display-inline': () => <ImageDisplayInlineBlock {...commonProps} />,
       'style-card-inline': () => <StyleCardInlineBlock {...commonProps} />,
-      'result-card-inline': () => <ResultCardInlineBlock {...commonProps} />,
-      'result-header-inline': () => <ResultHeaderInlineBlock {...commonProps} />,
       'before-after-inline': () => <BeforeAfterInlineBlock {...commonProps} />,
       'bonus-list-inline': () => <BonusListInlineBlock {...commonProps} />,
       'step-header-inline': () => <StepHeaderInlineBlock {...commonProps} />,
       'testimonial-card-inline': () => <TestimonialCardInlineBlock {...commonProps} />,
-      'countdown-inline': () => <CountdownInlineBlock {...commonProps} />,
       'stat-inline': () => <StatInlineBlock {...commonProps} />,
       'pricing-card-inline': () => <PricingCardInlineBlock {...commonProps} />,
       
@@ -261,8 +252,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       'quiz-question': () => <QuizQuestionBlock {...commonProps} />,
       'quiz-progress': () => <QuizProgressBlock {...commonProps} />,
       
-      // === COMPONENTES ETAPA 20/21 (sem duplicação) ===
-      'quiz-offer-pricing-inline': () => <QuizOfferPricingInlineBlock {...commonProps} />,
+      // === COMPONENTES ETAPA 20/21 ===
       'divider-inline': () => <SpacerBlock {...commonProps} />,
       
       // === COMPONENTES ETAPA 21 ESPECÍFICOS ===
