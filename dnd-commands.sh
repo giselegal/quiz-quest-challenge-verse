@@ -114,6 +114,27 @@ run_tests() {
     log "Verificando imports DnD..."
     grep -r "import.*dnd" src/components/editor/ || warning "Nenhum import DnD encontrado"
     
+    log "Verificando novo componente VerticalCanvasHeader..."
+    if [ -f "src/components/editor/blocks/VerticalCanvasHeaderBlock.tsx" ]; then
+        info "✅ VerticalCanvasHeaderBlock.tsx encontrado"
+    else
+        error "❌ VerticalCanvasHeaderBlock.tsx não encontrado"
+    fi
+    
+    log "Verificando definição de bloco..."
+    if grep -q "vertical-canvas-header" src/config/blockDefinitionsClean.ts; then
+        info "✅ Definição 'vertical-canvas-header' encontrada em blockDefinitionsClean.ts"
+    else
+        error "❌ Definição 'vertical-canvas-header' não encontrada"
+    fi
+    
+    log "Verificando integração no UniversalBlockRenderer..."
+    if grep -q "VerticalCanvasHeaderBlock" src/components/editor/blocks/UniversalBlockRenderer.tsx; then
+        info "✅ VerticalCanvasHeaderBlock integrado no UniversalBlockRenderer"
+    else
+        error "❌ VerticalCanvasHeaderBlock não integrado no UniversalBlockRenderer"
+    fi
+    
     info "✅ Verificações básicas concluídas"
 }
 

@@ -13,6 +13,7 @@ import QuestionMultipleBlock from './QuestionMultipleBlock';
 import StrategicQuestionBlock from './StrategicQuestionBlock';
 import QuizTransitionBlock from './QuizTransitionBlock';
 import OptionsGridBlock from './OptionsGridBlock';
+import VerticalCanvasHeaderBlock from './VerticalCanvasHeaderBlock';
 
 // === COMPONENTES INLINE MODULARES (ES7+) ===
 // Importação corrigida e otimizada dos componentes inline
@@ -185,6 +186,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       
       // === COMPONENTES QUIZ ===
       'quiz-intro-header': () => <QuizIntroHeaderBlock {...commonProps} />,
+      'vertical-canvas-header': () => <VerticalCanvasHeaderBlock {...commonProps} />,
       'loading-animation': () => <LoadingAnimationBlock {...commonProps} />,
       'options-grid': () => <OptionsGridBlock {...commonProps} />,
       'quiz-question': () => <QuizQuestionBlock {...commonProps} />,
