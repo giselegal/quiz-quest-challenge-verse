@@ -227,13 +227,13 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       
       // === COMPONENTES DE OFERTA ===
       'product-offer': () => <PricingCardInlineBlock {...commonProps} />,
-      'urgency-timer': () => <CountdownInlineBlock {...commonProps} />,
+      
+      // === COMPONENTES DE OFERTA ===
+      'product-offer': () => <PricingCardInlineBlock {...commonProps} />,
       
       // === COMPONENTES ESPECIAIS ===
-      'faq-section': () => <FAQSectionBlock {...commonProps} />,
       testimonials: () => <TestimonialsGridBlock {...commonProps} />,
       guarantee: () => <GuaranteeBlock {...commonProps} />,
-      'video-player': () => <VideoPlayerBlock {...commonProps} />,
       
       // === COMPONENTES INLINE ESSENCIAIS ===
       'text-inline': () => <TextInlineBlock {...commonProps} />,
