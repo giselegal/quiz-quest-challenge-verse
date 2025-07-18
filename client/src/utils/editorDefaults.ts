@@ -666,28 +666,53 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
 
     case 'product-showcase':
       return {
-        sectionTitle: 'O que você vai receber:',
-        product1Name: 'Guia de Estilo Personalizado',
-        product1Image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/product1.jpg',
-        product1Price: 'R$ 97,00',
-        product1Benefits: 'Análise completa do seu perfil\nRecomendações personalizadas\nGuia de compras',
-        product2Name: 'Consultoria de Estilo Online',
-        product2Image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/product2.jpg',
-        product2Price: 'R$ 197,00',
-        product2Benefits: 'Sessão individual\nPlano personalizado\nSuporte contínuo',
-        totalValue: 'R$ 294,00',
-        backgroundColor: '#ffffff'
+        mainTitle: 'Transformação Completa',
+        subtitle: 'Tudo que você precisa para descobrir e aplicar seu estilo',
+        products: [
+          {
+            image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp',
+            title: 'Guia Personalizado',
+            description: 'Para seu estilo específico',
+            value: 'R$ 67,00'
+          },
+          {
+            image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp',
+            title: 'Bônus: Peças-Chave',
+            description: 'Guarda-roupa funcional',
+            value: 'R$ 79,00'
+          },
+          {
+            image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp',
+            title: 'Bônus: Visagismo',
+            description: 'Valorize seus traços',
+            value: 'R$ 29,00'
+          }
+        ],
+        layout: 'horizontal',
+        showValues: true,
+        backgroundColor: '#ffffff',
+        textColor: '#432818',
+        accentColor: '#B89B7A'
       };
 
     case 'offer-cta':
       return {
-        urgencyText: '🔥 ÚLTIMAS VAGAS DISPONÍVEIS!',
-        discountText: 'DESCONTO ESPECIAL DE 70%',
-        originalPrice: 'R$ 294,00',
-        discountPrice: 'R$ 87,00',
-        installments: 'ou 3x de R$ 29,00',
-        ctaText: 'SIM, QUERO APROVEITAR ESTA OFERTA!',
-        ctaUrl: '/checkout',
+        ctaText: 'Garantir Minha Transformação',
+        ctaUrl: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912',
+        priceInstallments: '5x de R$ 8,83',
+        priceTotal: 'R$ 39,90',
+        discountText: '77% OFF - Economia de R$ 135,10',
+        urgencyText: 'Oferta por tempo limitado',
+        trustElements: [
+          { icon: 'lock', text: '100% Seguro' },
+          { icon: 'shield', text: '7 Dias Garantia' }
+        ],
+        showTrustElements: true,
+        backgroundColor: '#ffffff',
+        textColor: '#432818',
+        buttonColor: '#4CAF50',
+        buttonTextColor: '#ffffff'
+      };
         guaranteeText: '✅ Garantia de 30 dias',
         securityText: '🔒 Compra 100% Segura',
         backgroundColor: '#f8f9fa',
