@@ -263,6 +263,90 @@ export const blockDefinitions: BlockDefinition[] = [
   },
 
   {
+    type: 'button-inline',
+    name: 'Botão Inline',
+    description: 'Botão de ação inline para uso em fluxos e formulários.',
+    icon: 'RectangleHorizontal',
+    category: 'Interação',
+    propertiesSchema: [
+      {
+        key: 'text',
+        label: 'Texto do Botão',
+        type: 'text-input',
+        placeholder: 'Clique aqui',
+        defaultValue: 'Continuar'
+      },
+      {
+        key: 'variant',
+        label: 'Variante',
+        type: 'select',
+        options: [
+          { label: 'Primário', value: 'primary' },
+          { label: 'Secundário', value: 'secondary' },
+          { label: 'Outline', value: 'outline' }
+        ],
+        defaultValue: 'primary'
+      },
+      {
+        key: 'size',
+        label: 'Tamanho',
+        type: 'select',
+        options: [
+          { label: 'Pequeno', value: 'sm' },
+          { label: 'Médio', value: 'md' },
+          { label: 'Grande', value: 'lg' }
+        ],
+        defaultValue: 'md'
+      }
+    ]
+  },
+
+  {
+    type: 'options-grid',
+    name: 'Grid de Opções',
+    description: 'Grade de opções para questionários e formulários com suporte a imagens.',
+    icon: 'List',
+    category: 'Interação',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        placeholder: 'Pergunta ou instrução',
+        defaultValue: ''
+      },
+      {
+        key: 'columns',
+        label: 'Colunas',
+        type: 'number-input',
+        min: 1,
+        max: 4,
+        defaultValue: 2
+      },
+      {
+        key: 'showImages',
+        label: 'Mostrar Imagens',
+        type: 'boolean-switch',
+        defaultValue: true
+      },
+      {
+        key: 'multipleSelection',
+        label: 'Seleção Múltipla',
+        type: 'boolean-switch',
+        defaultValue: false
+      },
+      {
+        key: 'maxSelections',
+        label: 'Máx. Seleções',
+        type: 'number-input',
+        min: 1,
+        max: 10,
+        defaultValue: 1
+      }
+    ]
+  },
+
+  {
     type: 'form-input',
     name: 'Campo de Entrada',
     description: 'Input de texto genérico para formulários.',

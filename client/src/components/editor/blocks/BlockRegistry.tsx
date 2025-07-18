@@ -12,8 +12,11 @@ import ComparisonTableBlock from './ComparisonTableBlock';
 import SocialProofBlock from './SocialProofBlock';
 import AdvancedCTABlock from './AdvancedCTABlock';
 import StatsMetricsBlock from './StatsMetricsBlock';
+import OptionsGridBlock from './OptionsGridBlock';
 import QuizQuestionBlock from './QuizQuestionBlock';
 import QuizResultDisplayBlock from './QuizResultDisplayBlock';
+import ButtonBlock from './ButtonBlock';
+import ButtonInlineBlock from './ButtonInlineBlock';
 
 // Legacy blocks - can be imported if they exist
 // import OptionsGridBlock from './OptionsGridBlock';
@@ -36,12 +39,16 @@ export const BLOCK_COMPONENTS: Record<string, BlockComponent> = {
   'advanced-cta': AdvancedCTABlock as BlockComponent,
   'stats-metrics': StatsMetricsBlock as BlockComponent,
   
+  // Button components
+  'button': ButtonBlock as BlockComponent,
+  'button-inline': ButtonInlineBlock as BlockComponent,
+  
   // Quiz blocks
   'quiz-question': QuizQuestionBlock as BlockComponent,
   'quiz-result-display': QuizResultDisplayBlock as BlockComponent,
+  'options-grid': OptionsGridBlock as BlockComponent,
   
   // Legacy blocks (if they exist)
-  // 'options-grid': OptionsGridBlock,
 } as const;
 
 // Type for valid block types
