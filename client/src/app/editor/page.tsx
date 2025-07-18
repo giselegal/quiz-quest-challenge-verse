@@ -10,6 +10,7 @@ import { Plus, Save, Eye, EyeOff, TestTube, BarChart3, Settings, ExternalLink } 
 import { Block } from '@/types/editor';
 import { StyleResult } from '@/types/quiz';
 import { QuizEditorPanel } from '@/components/editor/QuizEditorPanel';
+import { blockDefinitions, getBlocksByCategory } from '@/config/blockDefinitions';
 
 // Mock data for testing
 const mockStyleResult: StyleResult = {
@@ -35,14 +36,18 @@ export default function EditorPage() {
   const [isPreviewing, setIsPreviewing] = useState(false);
   const [activeTab, setActiveTab] = useState<'components' | 'quiz'>('components');
 
-  // Componentes disponíveis para adicionar
-  const availableComponents = [
-    { type: 'options-grid', name: 'Grid de Opções', icon: '⚡' },
-    { type: 'text-inline', name: 'Texto', icon: '📝' },
-    { type: 'heading-inline', name: 'Título', icon: '🔤' },
-    { type: 'button-inline', name: 'Botão', icon: '🔘' },
-    { type: 'image-display-inline', name: 'Imagem', icon: '🖼️' },
-  ];
+  // Obter componentes do blockDefinitions.ts (dinâmico)
+  const resultComponents = getBlocksByCategory('Resultado');
+  const offerComponents = getBlocksByCategory('Ofertas');
+  const inlineComponents = getBlocksByCategory('Inline');
+  const interactionComponents = getBlocksByCategory('Interação');
+
+  // Debug dos componentes
+  console.log('🔍 DEBUG Editor - Componentes carregados:');
+  console.log('📊 Resultado:', resultComponents.length, resultComponents.map(c => c.type));
+  console.log('💰 Ofertas:', offerComponents.length, offerComponents.map(c => c.type));
+  console.log('⚡ Inline:', inlineComponents.length, inlineComponents.map(c => c.type));
+  console.log('🔘 Interação:', interactionComponents.length, interactionComponents.map(c => c.type));
 
   const handleAddComponent = (type: Block['type']) => {
     console.log('🎯 Adicionando componente:', type);
@@ -109,27 +114,115 @@ export default function EditorPage() {
                 </TabsList>
                 
                 <TabsContent value="components" className="flex-1 p-4 mt-0">
-                  <div className="space-y-2">
-                    {availableComponents.map((component) => (
-                      <Button
-                        key={component.type}
-                        variant="ghost"
-                        className="w-full justify-start text-left h-auto p-3"
-                        onClick={() => handleAddComponent(component.type)}
-                      >
-                        <span className="text-lg mr-3">{component.icon}</span>
-                        <div>
-                          <div className="font-medium text-sm">{component.name}</div>
-                          <div className="text-xs text-gray-500">{component.type}</div>
-                        </div>
-                      </Button>
-                    ))}
-                  </div>
+                  {/* Seção Resultado - Etapa 20 */}
+                  {resultComponents.length > 0 && (
+                    <div className="mb-6">
+                      <h4 className="font-medium text-gray-700 text-sm mb-3 flex items-center">
+                        🎯 Resultado (Etapa 20)
+                        <span className="ml-2 px-2 py-1 bg-green-100 text-green-700 text-xs rounded">
+                          Modulares
+                        </span>
+                      </h4>
+                      <div className="space-y-2">
+                        {resultComponents.map((component) => (
+                          <Button
+                            key={component.type}
+                            variant="ghost"
+                            className="w-full justify-start text-left h-auto p-3 border border-green-200 hover:border-green-300"
+                            onClick={() => handleAddComponent(component.type)}
+                          >
+                            <span className="text-lg mr-3">🔧</span>
+                            <div>
+                              <div className="font-medium text-sm">{component.name}</div>
+                              <div className="text-xs text-gray-500">{component.type}</div>
+                            </div>
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
-                  <div className="mt-6 p-3 bg-blue-50 rounded-lg">
-                    <h4 className="font-medium text-blue-900 text-sm mb-2">💡 Teste o OptionsGrid</h4>
-                    <p className="text-xs text-blue-700">
-                      Adicione um "Grid de Opções" e configure no painel Quiz para ativar validação!
+                  {/* Seção Ofertas - Etapa 21 */}
+                  {offerComponents.length > 0 && (
+                    <div className="mb-6">
+                      <h4 className="font-medium text-gray-700 text-sm mb-3 flex items-center">
+                        💰 Ofertas (Etapa 21)
+                        <span className="ml-2 px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">
+                          Horizontais
+                        </span>
+                      </h4>
+                      <div className="space-y-2">
+                        {offerComponents.map((component) => (
+                          <Button
+                            key={component.type}
+                            variant="ghost"
+                            className="w-full justify-start text-left h-auto p-3 border border-blue-200 hover:border-blue-300"
+                            onClick={() => handleAddComponent(component.type)}
+                          >
+                            <span className="text-lg mr-3">💳</span>
+                            <div>
+                              <div className="font-medium text-sm">{component.name}</div>
+                              <div className="text-xs text-gray-500">{component.type}</div>
+                            </div>
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Seção Inline */}
+                  {inlineComponents.length > 0 && (
+                    <div className="mb-6">
+                      <h4 className="font-medium text-gray-700 text-sm mb-3">� Componentes Inline</h4>
+                      <div className="space-y-2">
+                        {inlineComponents.map((component) => (
+                          <Button
+                            key={component.type}
+                            variant="ghost"
+                            className="w-full justify-start text-left h-auto p-3"
+                            onClick={() => handleAddComponent(component.type)}
+                          >
+                            <span className="text-lg mr-3">⚡</span>
+                            <div>
+                              <div className="font-medium text-sm">{component.name}</div>
+                              <div className="text-xs text-gray-500">{component.type}</div>
+                            </div>
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Seção Interação */}
+                  {interactionComponents.length > 0 && (
+                    <div className="mb-6">
+                      <h4 className="font-medium text-gray-700 text-sm mb-3">🔘 Interação</h4>
+                      <div className="space-y-2">
+                        {interactionComponents.map((component) => (
+                          <Button
+                            key={component.type}
+                            variant="ghost"
+                            className="w-full justify-start text-left h-auto p-3"
+                            onClick={() => handleAddComponent(component.type)}
+                          >
+                            <span className="text-lg mr-3">🎛️</span>
+                            <div>
+                              <div className="font-medium text-sm">{component.name}</div>
+                              <div className="text-xs text-gray-500">{component.type}</div>
+                            </div>
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="mt-6 p-3 bg-emerald-50 rounded-lg border border-emerald-200">
+                    <h4 className="font-medium text-emerald-900 text-sm mb-2">✅ Componentes Modulares Ativos</h4>
+                    <p className="text-xs text-emerald-700">
+                      Total: {resultComponents.length + offerComponents.length + inlineComponents.length + interactionComponents.length} componentes disponíveis
+                    </p>
+                    <p className="text-xs text-emerald-600 mt-1">
+                      Etapas 20 e 21 agora são totalmente editáveis e modulares!
                     </p>
                   </div>
                 </TabsContent>
