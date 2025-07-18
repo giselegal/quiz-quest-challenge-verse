@@ -8,6 +8,7 @@ export interface Block {
 }
 
 export type BlockType = 
+  // Básicos
   | 'heading'
   | 'paragraph'
   | 'image'
@@ -22,6 +23,88 @@ export type BlockType =
   | 'bonus'
   | 'guarantee'
   | 'quiz-question'
+  // Componentes básicos
+  | 'header'
+  | 'spacer'
+  | 'form-input'
+  | 'list'
+  // Componentes de resultado
+  | 'result-header'
+  | 'result-description'
+  // Componentes de oferta
+  | 'product-offer'
+  | 'urgency-timer'
+  // Componentes especiais
+  | 'faq-section'
+  | 'testimonials'
+  | 'video-player'
+  // Componentes inline essenciais
+  | 'text-inline'
+  | 'heading-inline'
+  | 'button-inline'
+  | 'badge-inline'
+  | 'progress-inline'
+  | 'image-display-inline'
+  | 'style-card-inline'
+  | 'result-card-inline'
+  | 'result-header-inline'
+  | 'before-after-inline'
+  | 'bonus-list-inline'
+  | 'step-header-inline'
+  | 'testimonial-card-inline'
+  | 'countdown-inline'
+  | 'stat-inline'
+  | 'pricing-card-inline'
+  // Componentes quiz
+  | 'quiz-intro-header'
+  | 'vertical-canvas-header'
+  | 'loading-animation'
+  | 'options-grid'
+  | 'quiz-progress'
+  // Componentes etapa 20/21
+  | 'quiz-offer-pricing-inline'
+  | 'divider-inline'
+  // Componentes etapa 21 específicos
+  | 'hero-badge-inline'
+  | 'hero-title-inline'
+  | 'problem-list-inline'
+  | 'highlight-box-inline'
+  | 'product-card-inline'
+  | 'price-highlight-inline'
+  | 'cta-button-inline'
+  | 'trust-elements-inline'
+  | 'countdown-timer-inline'
+  | 'guarantee-seal-inline'
+  | 'faq-item-inline'
+  | 'section-header-inline'
+  | 'sticky-header-inline'
+  // Componentes estratégicos
+  | 'strategic-question-image'
+  | 'strategic-question-main'
+  | 'strategic-question-inline'
+  // Blocos quiz específicos
+  | 'QuizQuestionBlock'
+  | 'QuestionMultipleBlock'
+  | 'StrategicQuestionBlock'
+  | 'QuizTransitionBlock'
+  | 'ResultPageBlock'
+  // Mapeamentos adicionais
+  | 'quiz-title'
+  | 'quiz-name-input'
+  | 'quiz-result-header'
+  | 'quiz-result-card'
+  | 'quiz-offer-title'
+  | 'quiz-offer-countdown'
+  | 'quiz-offer-faq'
+  // Componentes modulares originais
+  | 'hero-section'
+  | 'bonus-carousel'
+  | 'headline'
+  | 'benefits'
+  | 'pricing'
+  | 'quiz-result-display'
+  | 'style-result'
+  | 'secondary-styles'
   // Novos componentes modulares para etapas 20 e 21
   | 'result-page-header'
   | 'style-result-card'
