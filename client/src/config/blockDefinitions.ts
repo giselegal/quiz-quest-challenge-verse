@@ -1119,7 +1119,9 @@ export const blockDefinitions: BlockDefinition[] = [
         label: 'Preço Original',
         type: 'text-input',
         defaultValue: 'R$ 175,00'
-      },
+      }
+    ]
+  },
 
   {
     type: 'countdown-inline',
@@ -1133,7 +1135,9 @@ export const blockDefinitions: BlockDefinition[] = [
         label: 'Título',
         type: 'text-input',
         defaultValue: 'Oferta expira em:'
-      },
+      }
+    ]
+  },
 
   {
     type: 'button-inline',
@@ -1148,6 +1152,9 @@ export const blockDefinitions: BlockDefinition[] = [
         type: 'text-input',
         defaultValue: 'Clique Aqui'
       }
+    ]
+  }
+];
 
 
 // =====================================================================
