@@ -455,7 +455,7 @@ const QuizOfferPageBlock: React.FC<QuizOfferPageBlockProps> = ({
                       {bonuses.map((bonus, index) => (
                         <div
                           key={index}
-                          className={`flex-shrink-0 flex-grow w-full md:w-[calc(50%-1rem)] xl:w-[calc(33.333%-1.333rem)] group bg-white rounded-2xl p-6 lg:p-8 border border-[#B89B7A]/15 transition-all duration-500 hover:scale-105 hover:shadow-2xl relative`}
+                          className={`flex-shrink-0 flex-grow w-full md:w-[calc(50%-1rem)] lg:w-[calc(50%-1rem)] group bg-white rounded-2xl p-6 lg:p-8 border border-[#B89B7A]/15 transition-all duration-500 hover:scale-105 hover:shadow-2xl relative`}
                           style={{ boxShadow: tokens.shadows.lg }}
                         >
                           {/* Badge premium */}
