@@ -27,6 +27,7 @@ const LandingPage = lazy(() => import("./pages/LandingPage"));
 const QuizPage = lazy(() => import("./components/QuizPage"));
 const ResultPage = lazy(() => import("./pages/ResultPage"));
 const TestResultPage = lazy(() => import("./pages/TestResultPage"));
+const QuizSystemDemoPage = lazy(() => import("./pages/QuizSystemDemoPage"));
 const QuizDescubraSeuEstilo = lazy(
   () => import("./pages/quiz-descubra-seu-estilo")
 );
@@ -35,6 +36,7 @@ const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
 // Editor Principal - Consolidado
 const SchemaDrivenEditorPage = lazy(() => import("./pages/SchemaDrivenEditorPage"));
 const BlockDefinitionsTest = lazy(() => import("./components/editor/tests/BlockDefinitionsTest"));
+const EditorDiagnosticPage = lazy(() => import("./pages/EditorDiagnosticPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App = () => {
@@ -76,6 +78,8 @@ const App = () => {
                 <Route path="/resultado" component={ResultPage} />
                 {/* Teste do componente de resultado */}
                 <Route path="/test-resultado" component={TestResultPage} />
+                {/* Demo das correções do sistema */}
+                <Route path="/quiz-demo" component={QuizSystemDemoPage} />
                 <Route
                   path="/quiz-descubra-seu-estilo"
                   component={QuizDescubraSeuEstilo}
@@ -101,6 +105,13 @@ const App = () => {
                   path="/test-blocks"
                   component={BlockDefinitionsTest}
                 />
+                
+                {/* Diagnóstico do Editor */}
+                <Route
+                  path="/editor-diagnostic"
+                  component={EditorDiagnosticPage}
+                />
+                
                 {/* Admin - protegido com AdminAuthProvider */}
                 <Route path="/admin/:rest*">
                   {() => (

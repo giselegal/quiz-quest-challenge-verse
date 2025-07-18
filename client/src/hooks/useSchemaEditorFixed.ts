@@ -102,29 +102,30 @@ export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorR
 
   // Ações do funil
   const createNewFunnel = useCallback(async () => {
-    if (!funnel || !funnel.pages || funnel.pages.length === 0) {
-      console.warn('🔍 DEBUG - createNewFunnel: No funnel or pages available');
-      return;
-    }
-    
     setIsLoading(true);
     try {
-      const createdFunnel = await schemaDrivenFunnelService.createFunnel(funnel);
+      // Criar um funil padrão com todas as 21 etapas se não existir
+      const defaultFunnel = schemaDrivenFunnelService.createDefaultFunnel();
+      console.log('🏗️ Criando novo funil com', defaultFunnel.pages.length, 'páginas');
       
-      // Não sobrescrever o funil com páginas se o backend não retornar as páginas
+      const createdFunnel = await schemaDrivenFunnelService.createFunnel(defaultFunnel);
+      
+      // Usar o funil criado, mas preservar as páginas padrão se o backend não retornar
       if (createdFunnel.pages && createdFunnel.pages.length > 0) {
         setFunnel(createdFunnel);
         setCurrentPageId(createdFunnel.pages[0]?.id || null);
       } else {
-        // Manter o funil local com páginas e apenas atualizar o ID
-        setFunnel(prev => prev ? { ...prev, id: createdFunnel.id } : null);
+        // Manter o funil padrão com páginas e apenas atualizar o ID
+        const funnelWithBackendId = { ...defaultFunnel, id: createdFunnel.id };
+        setFunnel(funnelWithBackendId);
+        setCurrentPageId(funnelWithBackendId.pages[0]?.id || null);
       }
       
       setSelectedBlockId(null);
       
       toast({
         title: "Novo funil criado!",
-        description: "Funil criado com sucesso.",
+        description: `Funil criado com ${defaultFunnel.pages.length} etapas configuradas.`,
       });
     } catch (error) {
       toast({
@@ -135,7 +136,7 @@ export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorR
     } finally {
       setIsLoading(false);
     }
-  }, [funnel, toast]);
+  }, [toast]);
 
   const loadFunnel = useCallback(async (funnelId: string) => {
     if (!funnelId || typeof funnelId !== 'string') {

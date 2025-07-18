@@ -68,20 +68,29 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
     if (!canProceed) {
       return currentQuestionType === 'strategic'
         ? 'Selecione 1 opção para continuar'
-        : 'Selecione 3 opções para continuar';
+        : `Selecione ${selectedOptionsCount >= 3 ? '3' : '3'} opções para continuar`;
     }
-    return '';
-  }, [canProceed, currentQuestionType]);
+    return currentQuestionType === 'strategic' 
+      ? 'Pronto para continuar!' 
+      : 'Pronto para avançar!';
+  }, [canProceed, currentQuestionType, selectedOptionsCount]);
 
   const nextButtonText = 'Avançar';
 
   return (
     <div className="mt-6 w-full px-4 md:px-0">
       <div className="flex flex-col items-center w-full">
-        {/* O helper text para questões estratégicas agora é exibido */}
-        {!canProceed && (
-          <p className="text-sm text-[#8F7A6A] mb-3">{getHelperText()}</p>
-        )}
+        {/* Helper text sempre visível com informações úteis */}
+        <div className="mb-3 text-center">
+          <p className={`text-sm ${canProceed ? 'text-green-600' : 'text-[#8F7A6A]'}`}>
+            {getHelperText()}
+          </p>
+          {!canProceed && currentQuestionType === 'normal' && (
+            <p className="text-xs text-gray-500 mt-1">
+              Selecionadas: {selectedOptionsCount} de 3
+            </p>
+          )}
+        </div>
 
         <div className="flex justify-center items-center w-full gap-3">
           {onPrevious && (

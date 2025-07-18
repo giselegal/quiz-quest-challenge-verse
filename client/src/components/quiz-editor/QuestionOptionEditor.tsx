@@ -67,7 +67,7 @@ const QuestionOptionEditor: React.FC<QuestionOptionEditorProps> = ({
           </div>
           
           <div className="grid gap-4 flex-1">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="md:col-span-2">
                 <Label htmlFor={`option-text-${option.id}`}>Texto da opção</Label>
                 <Input
@@ -95,6 +95,20 @@ const QuestionOptionEditor: React.FC<QuestionOptionEditorProps> = ({
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div>
+                <Label htmlFor={`option-points-${option.id}`}>Pontos</Label>
+                <Input
+                  id={`option-points-${option.id}`}
+                  type="number"
+                  min="0"
+                  max="10"
+                  value={option.points || 0}
+                  onChange={(e) => handleChange('points', parseInt(e.target.value) || 0)}
+                  placeholder="0-10"
+                  className="text-center"
+                />
               </div>
             </div>
             
