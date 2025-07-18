@@ -155,7 +155,7 @@ const SectionTitle = React.memo<{
 
       {/* Subtítulo melhorado - Max-width para controle de linha */}
       {subtitle && (
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-xs sm:max-w-lg md:max-w-4xl mx-auto">
           <p className="text-base md:text-lg lg:text-xl text-[#5D4A3A] leading-relaxed font-medium">
             {subtitle}
           </p>
@@ -165,7 +165,7 @@ const SectionTitle = React.memo<{
       {/* Linha decorativa - Usando flex para centralizar */}
       {variant === "primary" && (
         <div className="flex justify-center"> {/* Adicionado flex para centralizar */}
-          <div className="w-24 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mt-8 shadow-sm"></div>
+          <div className="w-16 sm:w-20 md:w-24 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mt-8 shadow-sm"></div>
         </div>
       )}
     </AnimatedWrapper>
@@ -376,7 +376,7 @@ const QuizOfferPageBlock: React.FC<QuizOfferPageBlockProps> = ({
 
       {/* Header minimalista e elegante - Já usa flex para centralizar o logo */}
       <header className="bg-white/95 backdrop-blur-md shadow-sm border-b border-[#B89B7A]/10">
-        <div className="container mx-auto max-w-6xl px-4 py-4 lg:py-6">
+        <div className="container mx-auto max-w-xs sm:max-w-lg md:max-w-6xl px-4 py-4 lg:py-6">
           {/* Flexbox para centralizar o logo horizontalmente */}
           <div className="flex justify-center">
             <img
@@ -389,7 +389,7 @@ const QuizOfferPageBlock: React.FC<QuizOfferPageBlockProps> = ({
       </header>
 
       {/* CONTAINER PRINCIPAL - ESPAÇAMENTO PADRONIZADO */}
-      <main className="container mx-auto px-4 lg:px-6 py-8 lg:py-12 max-w-6xl relative z-10">
+      <main className="container mx-auto px-4 lg:px-6 py-8 lg:py-12 max-w-xs sm:max-w-lg md:max-w-6xl relative z-10">
         
         {/* CTA Final completamente redesenhada - ESPAÇAMENTO PADRONIZADO */}
         <section className="scroll-mt-24 mb-24 lg:mb-28">

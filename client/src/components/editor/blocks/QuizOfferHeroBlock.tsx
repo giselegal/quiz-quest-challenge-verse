@@ -51,7 +51,7 @@ const QuizOfferHeroBlock: React.FC<BlockComponentProps> = ({
       data-block-type={block.type}
     >
       <AnimatedWrapper show={isLoaded}>
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-xs sm:max-w-lg md:max-w-4xl mx-auto text-center">
           {/* Logo */}
           {showLogo && (
             <div className="mb-6">
@@ -70,13 +70,13 @@ const QuizOfferHeroBlock: React.FC<BlockComponentProps> = ({
           </h1>
           
           {/* Subtitle */}
-          <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
+          <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-xs sm:max-w-lg md:max-w-3xl mx-auto">
             {subtitle}
           </p>
           
           {/* Hero Image */}
           {showImage && (
-            <div className="max-w-md mx-auto">
+            <div className="max-w-xs sm:max-w-sm md:max-w-md mx-auto">
               <img
                 src={heroImage}
                 alt="Hero Image"

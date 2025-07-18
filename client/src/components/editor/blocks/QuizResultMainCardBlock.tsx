@@ -90,7 +90,7 @@ const QuizResultMainCardBlock: React.FC<BlockComponentProps> = ({
       data-block-type={block.type}
     >
       <AnimatedWrapper show={isLoaded}>
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-xs sm:max-w-lg md:max-w-4xl mx-auto">
           <Card className="overflow-hidden shadow-xl border-0" style={{ borderColor: accentColor }}>
             <CardHeader className="text-center pb-4" style={{ backgroundColor: `${accentColor}15` }}>
               <div className="flex items-center justify-center mb-4">
@@ -99,7 +99,7 @@ const QuizResultMainCardBlock: React.FC<BlockComponentProps> = ({
                   Estilo {currentStyle.name}
                 </h2>
               </div>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              <p className="text-lg text-gray-600 max-w-xs sm:max-w-lg md:max-w-2xl mx-auto">
                 {currentStyle.description}
               </p>
             </CardHeader>

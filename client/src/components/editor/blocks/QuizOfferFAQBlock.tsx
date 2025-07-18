@@ -59,7 +59,7 @@ const QuizOfferFAQBlock: React.FC<BlockComponentProps> = ({
       data-block-type={block.type}
     >
       <AnimatedWrapper show={isLoaded}>
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-xs sm:max-w-lg md:max-w-4xl mx-auto">
           <h3 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12" style={{ color: textColor }}>
             {title}
           </h3>

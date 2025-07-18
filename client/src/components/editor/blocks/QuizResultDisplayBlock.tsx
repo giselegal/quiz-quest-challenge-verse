@@ -137,7 +137,7 @@ const QuizResultDisplayBlock: React.FC<BlockComponentProps> = ({
   }
 
   const renderCardLayout = () => (
-    <Card className="overflow-hidden shadow-xl border-0 max-w-4xl mx-auto">
+    <Card className="overflow-hidden shadow-xl border-0 max-w-xs sm:max-w-lg md:max-w-4xl mx-auto">
       <CardHeader 
         className="text-center pb-6" 
         style={{ backgroundColor: `${accentColor}15` }}
@@ -192,14 +192,14 @@ const QuizResultDisplayBlock: React.FC<BlockComponentProps> = ({
             <img 
               src={currentResult.image}
               alt={currentResult.title}
-              className="w-64 h-64 object-cover rounded-lg mx-auto shadow-md"
+              className="w-48 sm:w-56 md:w-64 h-48 sm:h-56 md:h-64 object-cover rounded-lg mx-auto shadow-md"
             />
           </div>
         )}
 
         <div className="text-center mb-8">
           <p 
-            className="text-lg leading-relaxed max-w-2xl mx-auto"
+            className="text-lg leading-relaxed max-w-xs sm:max-w-lg md:max-w-2xl mx-auto"
             style={{ color: textColor }}
           >
             {isEditing ? (
@@ -260,7 +260,7 @@ const QuizResultDisplayBlock: React.FC<BlockComponentProps> = ({
 
   const renderHeroLayout = () => (
     <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor }}>
-      <div className="text-center max-w-4xl mx-auto px-4">
+      <div className="text-center max-w-xs sm:max-w-lg md:max-w-4xl mx-auto px-4">
         <AnimatedWrapper show={isLoaded}>
           <Icon className="w-24 h-24 mx-auto mb-6" style={{ color: accentColor }} />
           
@@ -309,7 +309,7 @@ const QuizResultDisplayBlock: React.FC<BlockComponentProps> = ({
   );
 
   const renderMinimalLayout = () => (
-    <div className="max-w-2xl mx-auto text-center py-8">
+    <div className="max-w-xs sm:max-w-lg md:max-w-2xl mx-auto text-center py-8">
       <Icon className="w-12 h-12 mx-auto mb-4" style={{ color: accentColor }} />
       <h2 className="text-2xl font-bold mb-4" style={{ color: textColor }}>
         {currentResult.title}

@@ -53,7 +53,7 @@ const QuizResultHeaderBlock: React.FC<BlockComponentProps> = ({
       data-block-type={block.type}
     >
       <AnimatedWrapper show={isLoaded}>
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-xs sm:max-w-lg md:max-w-4xl mx-auto text-center">
           {/* Logo */}
           {showLogo && (
             <img 

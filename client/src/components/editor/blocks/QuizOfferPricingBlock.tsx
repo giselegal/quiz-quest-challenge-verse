@@ -60,7 +60,7 @@ const QuizOfferPricingBlock: React.FC<BlockComponentProps> = ({
       data-block-type={block.type}
     >
       <AnimatedWrapper show={isLoaded}>
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-xs sm:max-w-lg md:max-w-4xl mx-auto">
           <Card className="shadow-2xl border-0 overflow-hidden">
             <CardHeader className="text-center py-8" style={{ backgroundColor: `${accentColor}15` }}>
               <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full bg-white shadow-sm">
