@@ -3,16 +3,15 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { blockDefinitions } from '@/config/blockDefinitionsClean';
+import { blockDefinitions } from '@/config/blockDefinitionsOptimized';
 import { 
   Type, Image, ArrowRight, CheckCircle, Target, Play, Star, FileText, ShoppingCart, Clock, 
   MessageSquare, HelpCircle, Shield, Video, AlertTriangle, Zap, Volume2, RotateCcw, Loader, 
   BarChart3, Quote, FormInput, List, TrendingUp, Grid, FileCode, BookOpen, Palette, Sparkles, 
   Gift, Award, Layers, Users, Brain, Crown, Heart, Mic, GalleryHorizontalEnd, RotateCw, 
-  Blocks, Layout, MousePointer, Package
-} from 'lucide-react';
-
-interface SchemaDrivenComponentsSidebarProps {
+  Blocks, Layout, MousePointer, Package, CircleDollarSign, ArrowRightLeft, Rows3, RefreshCw,
+  MessageCircle, ShoppingBag, User, Settings
+} from 'lucide-react';interface SchemaDrivenComponentsSidebarProps {
   onComponentSelect: (type: string) => void;
   activeTab?: string;
   onTabChange?: (tab: string) => void;
@@ -83,8 +82,17 @@ const iconMap: { [key: string]: React.ReactNode } = {
   'RotateCw': <RotateCw className="w-4 h-4" />,
   'Blocks': <Blocks className="w-4 h-4" />,
   'Layout': <Layout className="w-4 h-4" />,
+
   'MousePointer': <MousePointer className="w-4 h-4" />,
-  'Package': <Package className="w-4 h-4" />
+  'Package': <Package className="w-4 h-4" />,
+  'CircleDollarSign': <CircleDollarSign className="w-4 h-4" />,
+  'ArrowRightLeft': <ArrowRightLeft className="w-4 h-4" />,
+  'Rows3': <Rows3 className="w-4 h-4" />,
+  'RefreshCw': <RefreshCw className="w-4 h-4" />,
+  'MessageCircle': <MessageCircle className="w-4 h-4" />,
+  'ShoppingBag': <ShoppingBag className="w-4 h-4" />,
+  'User': <User className="w-4 h-4" />,
+  'Settings': <Settings className="w-4 h-4" />
 };
 
 // Função para obter ícone da página baseado no tipo/conteúdo
