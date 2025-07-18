@@ -89,7 +89,7 @@ const ResultCTABlock: React.FC<ResultCTABlockProps> = ({
         </div>
 
         {/* Value Proposition Grid - Mobile First */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center mb-6 md:mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-center mb-6 md:mb-8">
           {/* Value Items */}
           {showValueStack && (
             <div className="space-y-3 md:space-y-4 order-2 md:order-1">
@@ -122,7 +122,7 @@ const ResultCTABlock: React.FC<ResultCTABlockProps> = ({
                   </span>
                 </div>
                 <div>
-                  <span className="text-2xl md:text-4xl font-bold" style={{ color: buttonColor }}>
+                  <span className="text-2xl md:text-3xl font-bold" style={{ color: buttonColor }}>
                     {priceCurrent}
                   </span>
                 </div>
