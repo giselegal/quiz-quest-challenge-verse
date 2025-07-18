@@ -53,6 +53,14 @@ import {
   BuildInfoBoxFlexInline
 } from './inline/BoxFlexInlineComponents';
 
+// Componentes modulares das etapas 20 e 21
+import ResultPageHeaderBlock from './ResultPageHeaderBlock';
+import StyleResultCardBlock from './StyleResultCardBlock';
+import ResultCTABlock from './ResultCTABlock';
+import OfferHeaderBlock from './OfferHeaderBlock';
+import ProductShowcaseBlock from './ProductShowcaseBlock';
+import OfferCTABlock from './OfferCTABlock';
+
 // Componentes básicos (funcionais)
 import { SpacerBlock } from './SpacerBlock';
 import { VideoPlayerBlock } from './VideoPlayerBlock';
@@ -295,6 +303,14 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       'mentor-boxflex-inline': () => <MentorBoxFlexInline {...commonProps} />,
       'value-stack-boxflex-inline': () => <ValueStackBoxFlexInline {...commonProps} />,
       'build-info-boxflex-inline': () => <BuildInfoBoxFlexInline {...commonProps} />,
+      
+      // === COMPONENTES MODULARES ETAPAS 20 & 21 ===
+      'result-page-header': () => <ResultPageHeaderBlock {...commonProps} />,
+      'style-result-card': () => <StyleResultCardBlock {...commonProps} />,
+      'result-cta': () => <ResultCTABlock {...commonProps} />,
+      'offer-header': () => <OfferHeaderBlock {...commonProps} />,
+      'product-showcase': () => <ProductShowcaseBlock {...commonProps} />,
+      'offer-cta': () => <OfferCTABlock {...commonProps} />,
       
       // === MAPEAMENTOS ALTERNATIVOS ETAPA 20 ===
       'etapa20-header': () => <HeaderBoxFlexInline {...commonProps} />,

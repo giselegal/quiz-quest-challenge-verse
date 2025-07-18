@@ -1197,7 +1197,7 @@ class SchemaDrivenFunnelService {
 
     // ==========================================
     // ETAPA 21: OFERTA COMERCIAL - MAPS TO /quiz-descubra-seu-estilo (QuizOfferPage.tsx)
-    // CONFIGURAÇÃO COMPLETA COM COMPONENTES REAIS DA PÁGINA DE OFERTA
+    // USANDO COMPONENTES MODULARES EXISTENTES
     // ==========================================
     console.log('🎯 [FIXED] Creating Step 21: Offer Page → /quiz-descubra-seu-estilo (QuizOfferPage.tsx)');
     pages.push({
@@ -1207,185 +1207,58 @@ class SchemaDrivenFunnelService {
       type: 'offer',
       order: 21,
       blocks: [
-        // 1. Header com logo (como em QuizOfferPage.tsx)
+        // 1. Header modular com logo e countdown
         {
-          id: 'offer-header-logo',
-          type: 'image-display-inline',
+          id: 'offer-header-modular',
+          type: 'offer-header',
           properties: {
-            src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
-            alt: 'Logo Gisele Galvão',
-            width: 180,
-            height: 80,
-            className: 'h-auto object-contain mx-auto'
+            logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+            logoAlt: 'Logo Gisele Galvão',
+            countdownTitle: 'Oferta por tempo limitado!',
+            countdownMinutes: 15,
+            mainTitle: 'OFERTA ESPECIAL PARA VOCÊ!',
+            subtitle: 'Seu Guia de Estilo Personalizado',
+            description: 'Com base no seu resultado, preparamos uma oferta exclusiva...',
+            heroImageUrl: '/images/offer-hero.jpg',
+            backgroundColor: '#f8f9fa',
+            titleColor: '#dc3545'
           }
         },
-        // 2. Badge de credibilidade
+        // 2. Vitrine de produtos modular
         {
-          id: 'offer-credibility-badge',
-          type: 'badge-inline',
+          id: 'offer-products-modular',
+          type: 'product-showcase',
           properties: {
-            icon: 'Award',
-            text: 'Consultora Especialista em Estilo',
-            backgroundColor: '#10b981',
-            textColor: '#ffffff',
-            borderColor: '#10b981'
+            sectionTitle: 'O que você vai receber:',
+            product1Name: 'Guia de Estilo Personalizado',
+            product1Image: '/images/product1.jpg',
+            product1Price: 'R$ 97,00',
+            product1Benefits: 'Análise completa\nRecomendações personalizadas\nGuia de compras',
+            product2Name: 'Consultoria de Estilo',
+            product2Image: '/images/product2.jpg',
+            product2Price: 'R$ 197,00',
+            product2Benefits: 'Sessão individual\nPlano personalizado\nSuporte contínuo',
+            totalValue: 'R$ 294,00',
+            backgroundColor: '#ffffff'
           }
         },
-        // 3. Título principal da oferta
+        // 3. CTA da oferta modular
         {
-          id: 'offer-main-title',
-          type: 'text-inline',
+          id: 'offer-cta-modular',
+          type: 'offer-cta',
           properties: {
-            content: '<span style="color: #B89B7A; font-weight: 700;">Transforme</span> Seu Guarda-Roupa e Sua Confiança',
-            fontSize: 'text-3xl',
-            fontWeight: 'font-bold',
-            textAlign: 'text-center',
-            color: '#432818',
-            marginBottom: 16
-          }
-        },
-        // 4. Subtítulo de urgência
-        {
-          id: 'offer-urgency-subtitle',
-          type: 'text-inline',
-          properties: {
-            content: 'Oferta exclusiva para quem completou o quiz - válida apenas hoje!',
-            fontSize: 'text-lg',
-            textAlign: 'text-center',
-            color: '#B89B7A',
-            marginBottom: 32
-          }
-        },
-        // 5. Countdown timer (como em QuizOfferPage.tsx)
-        {
-          id: 'offer-countdown-timer',
-          type: 'countdown-timer-inline',
-          properties: {
-            title: 'Oferta expira em:',
-            minutes: 15,
-            backgroundColor: '#fee2e2',
-            textColor: '#dc2626',
-            borderColor: '#fca5a5'
-          }
-        },
-        // 6. Destaque de preço principal
-        {
-          id: 'offer-price-main',
-          type: 'price-highlight-inline',
-          properties: {
-            originalPrice: 'R$ 197,00',
-            currentPrice: 'R$ 97,00',
-            discount: '50% OFF',
-            urgencyText: 'Apenas hoje!',
-            installments: '12x R$ 9,70',
-            backgroundColor: '#f8fafc',
-            borderColor: '#B89B7A'
-          }
-        },
-        // 7. Benefícios em grid
-        {
-          id: 'offer-benefits-grid',
-          type: 'benefits-grid-inline',
-          properties: {
-            title: 'O que você vai receber:',
-            benefits: [
-              '✓ Guia personalizado baseado no seu perfil',
-              '✓ 50+ looks para o seu estilo',
-              '✓ Dicas de combinações práticas',
-              '✓ Acesso vitalício ao conteúdo',
-              '✓ Suporte por WhatsApp',
-              '✓ Garantia de 7 dias'
-            ],
-            columns: 2,
-            backgroundColor: '#ffffff',
-            borderColor: '#e5e7eb'
-          }
-        },
-        // 8. CTA principal
-        {
-          id: 'offer-main-cta',
-          type: 'button-inline',
-          properties: {
-            text: 'QUERO TRANSFORMAR MEU ESTILO AGORA!',
-            variant: 'primary',
-            size: 'large',
-            fullWidth: true,
-            backgroundColor: '#B89B7A',
-            textColor: '#ffffff',
-            marginTop: 32,
-            marginBottom: 16,
-            onClick: 'handleCtaClick'
-          }
-        },
-        // 9. Garantia e segurança
-        {
-          id: 'offer-guarantee-security',
-          type: 'text-inline',
-          properties: {
-            content: '🔒 Compra 100% segura • Garantia de 7 dias • Suporte 24/7',
-            fontSize: 'text-sm',
-            textAlign: 'text-center',
-            color: '#666666',
-            marginTop: 16,
-            marginBottom: 32
-          }
-        },
-        // 10. Depoimentos (como em QuizOfferPage.tsx)
-        {
-          id: 'offer-testimonials',
-          type: 'testimonials-inline',
-          properties: {
-            title: 'O que dizem nossas clientes:',
-            testimonials: [
-              {
-                name: 'Maria Silva',
-                text: 'Transformei completamente meu guarda-roupa! Agora me sinto muito mais confiante.',
-                rating: 5
-              },
-              {
-                name: 'Ana Costa',
-                text: 'O guia é incrível! Aprendi a combinar peças que já tinha em casa.',
-                rating: 5
-              }
-            ],
-            backgroundColor: '#f8fafc'
-          }
-        },
-        // 11. FAQ seção
-        {
-          id: 'offer-faq',
-          type: 'faq-inline',
-          properties: {
-            title: 'Perguntas Frequentes:',
-            faqs: [
-              {
-                question: 'Como funciona o guia personalizado?',
-                answer: 'Baseado no seu resultado do quiz, criamos um guia específico para seu perfil de estilo.'
-              },
-              {
-                question: 'Posso pagar parcelado?',
-                answer: 'Sim! Você pode parcelar em até 12x no cartão de crédito.'
-              },
-              {
-                question: 'Há garantia?',
-                answer: 'Sim! Oferecemos garantia de 7 dias. Se não gostar, devolvemos 100% do valor.'
-              }
-            ]
-          }
-        },
-        // 12. CTA final de fechamento
-        {
-          id: 'offer-final-cta',
-          type: 'button-inline',
-          properties: {
-            text: 'GARANTIR MINHA TRANSFORMAÇÃO AGORA!',
-            variant: 'primary',
-            size: 'large',
-            fullWidth: true,
-            backgroundColor: '#B89B7A',
-            textColor: '#ffffff',
-            marginTop: 40,
-            onClick: 'handleCtaClick'
+            urgencyText: '🔥 ÚLTIMAS VAGAS DISPONÍVEIS!',
+            discountText: 'DESCONTO ESPECIAL DE 70%',
+            originalPrice: 'R$ 294,00',
+            discountPrice: 'R$ 87,00',
+            installments: 'ou 3x de R$ 29,00',
+            ctaText: 'SIM, QUERO APROVEITAR ESTA OFERTA!',
+            ctaUrl: '/checkout',
+            guaranteeText: '✅ Garantia de 30 dias',
+            securityText: '🔒 Compra 100% Segura',
+            backgroundColor: '#f8f9fa',
+            ctaColor: '#28a745',
+            urgencyColor: '#dc3545'
           }
         }
       ],
