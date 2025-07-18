@@ -1394,9 +1394,7 @@ class SchemaDrivenFunnelService {
         backgroundColor: '#ffffff',
         textColor: '#432818',
         maxWidth: 'max-w-6xl',
-        padding: 'p-6',
-        usePageConfig: true,
-        pageConfigId: 'quiz-offer-page'
+        padding: 'p-6'
       }
     });
 
