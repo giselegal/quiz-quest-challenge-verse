@@ -601,53 +601,68 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
     case 'result-page-header':
       return {
         logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
-        logoAlt: 'Logo',
-        progressPercentage: 100,
-        progressText: 'Quiz Completo!',
-        userName: 'Usuário',
-        userStyle: 'Clássico Elegante',
+        logoAlt: 'Logo Gisele Galvão',
+        logoHeight: '60px',
+        userName: 'Seu Nome',
+        primaryStyle: 'Elegante',
+        showProgress: true,
+        progressValue: 100,
         backgroundColor: '#ffffff',
-        textColor: '#333333'
+        textColor: '#432818'
       };
 
     case 'style-result-card':
       return {
-        mainStyleName: 'Clássico Elegante',
-        mainStyleDescription: 'Você tem um gosto refinado e aprecia peças atemporais.',
-        mainStyleImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/style-classic.jpg',
-        progressPercentage: 85,
-        secondaryStyle1: 'Moderno Minimalista',
-        secondaryStyle1Percentage: 65,
-        secondaryStyle2: 'Boêmio Chic',
-        secondaryStyle2Percentage: 45,
-        guideTitle: 'Seu Guia de Estilo Personalizado',
-        backgroundColor: '#f8f9fa'
+        styleCategory: 'Elegante',
+        stylePercentage: 85,
+        styleDescription: 'Você tem um estilo sofisticado e refinado, que busca a elegância em cada detalhe.',
+        styleImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp',
+        guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp',
+        secondaryStyles: [
+          { name: 'Clássico', percentage: 20 },
+          { name: 'Contemporâneo', percentage: 15 }
+        ],
+        showSecondaryStyles: true,
+        backgroundColor: '#ffffff',
+        textColor: '#432818',
+        accentColor: '#B89B7A'
       };
 
     case 'result-cta':
       return {
-        mainTitle: 'Descubra Seu Estilo Completo',
-        subtitle: 'Acesse seu guia personalizado agora!',
-        valueItem1: 'Análise completa do seu perfil',
-        valueItem2: 'Recomendações personalizadas',
-        valueItem3: 'Guia de compras exclusivo',
-        originalPrice: 'R$ 197,00',
-        currentPrice: 'R$ 97,00',
-        ctaText: 'QUERO MEU GUIA AGORA',
-        ctaUrl: '/checkout',
-        securityText: 'Compra 100% Segura',
-        backgroundColor: '#ffffff',
-        ctaColor: '#007bff'
+        mainTitle: 'Vista-se de Você — na Prática',
+        subtitle: 'Agora que você conhece seu estilo, é hora de aplicá-lo com clareza e intenção.',
+        ctaText: 'Quero meu Guia de Estilo Agora',
+        ctaUrl: 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912',
+        valueItems: [
+          'Looks com intenção e identidade',
+          'Cores, modelagens e tecidos a seu favor',
+          'Imagem alinhada aos seus objetivos',
+          'Guarda-roupa funcional, sem compras por impulso'
+        ],
+        priceOriginal: 'R$ 175,00',
+        priceCurrent: 'R$ 39,00',
+        showValueStack: true,
+        showSecureElements: true,
+        backgroundColor: '#f9f4ef',
+        textColor: '#432818',
+        buttonColor: '#4CAF50',
+        buttonTextColor: '#ffffff'
       };
 
     case 'offer-header':
       return {
         logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
-        logoAlt: 'Logo',
-        countdownTitle: 'Oferta por tempo limitado!',
-        countdownMinutes: 15,
-        mainTitle: 'OFERTA ESPECIAL PARA VOCÊ!',
-        subtitle: 'Seu Guia de Estilo Personalizado',
+        logoAlt: 'Logo Gisele Galvão',
+        mainTitle: 'Etapa 21: Oferta Exclusiva Para Seu Estilo!',
+        subtitle: 'Leve sua transformação de estilo para o próximo nível com nosso Guia Completo personalizado para seu resultado',
+        badgeText: '3000+ mulheres transformadas',
+        showCountdown: true,
+        initialMinutes: 15,
+        backgroundColor: '#FFFBF7',
+        textColor: '#432818',
+        accentColor: '#B89B7A'
+      };
         description: 'Com base no seu resultado, preparamos uma oferta exclusiva.',
         heroImageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/offer-hero.jpg',
         backgroundColor: '#f8f9fa',
