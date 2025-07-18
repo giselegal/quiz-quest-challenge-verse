@@ -684,7 +684,9 @@ export const blockDefinitions: BlockDefinition[] = [
     icon: 'Award',
     category: 'Resultado',
     propertiesSchema: [
-      { key: 'logoUrl', label: 'URL do Logo', type: 'image-url', defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp' },
+      { key: 'logoUrl', label: 'URL do Logo', type: 'image-url', defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp' }
+    ]
+  },
 
   {
     type: 'testimonials-result',
@@ -693,7 +695,9 @@ export const blockDefinitions: BlockDefinition[] = [
     icon: 'MessageSquare',
     category: 'Resultado',
     propertiesSchema: [
-      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'O que nossas clientes dizem' },
+      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'O que nossas clientes dizem' }
+    ]
+  },
 
   {
     type: 'quiz-offer-pricing',
@@ -846,7 +850,9 @@ export const blockDefinitions: BlockDefinition[] = [
         label: 'Estilos Secundários', 
         type: 'json-editor', 
         defaultValue: [
-          { category: 'Moderno', percentage: 10 },
+          { category: 'Moderno', percentage: 10 }
+        ]
+      },
 
   {
     type: 'before-after-boxflex-inline',
@@ -951,9 +957,13 @@ export const blockDefinitions: BlockDefinition[] = [
         label: 'Lista de Itens', 
         type: 'json-editor', 
         defaultValue: [
-          'Guia principal - R$67',
-          'Peças-chave - R$79',
-          'Visagismo facial - R$29'
+          { name: 'Guia principal', value: 67 },
+          { name: 'Peças-chave', value: 79 },
+          { name: 'Visagismo facial', value: 29 }
+        ]
+      }
+    ]
+  },
         ]
       },
 
@@ -985,7 +995,9 @@ export const blockDefinitions: BlockDefinition[] = [
         type: 'text-input',
         placeholder: 'Seu estilo predominante',
         defaultValue: 'Seu Estilo Predominante'
-      },
+      }
+    ]
+  },
 
   {
     type: 'value-stack-inline',
@@ -999,31 +1011,25 @@ export const blockDefinitions: BlockDefinition[] = [
         label: 'Título',
         type: 'text-input',
         defaultValue: 'O Que Você Recebe Hoje'
-      },
-
-  {
-            key: 'value',
-            label: 'Valor',
-            type: 'text-input',
-            defaultValue: 'R$ 0,00'
-          }
-        ],
-        defaultValue: [
-          { name: 'Guia Principal', value: 'R$ 67,00' },
+      }
+    ]
+  },
 
   {
     type: 'cta-section-inline',
     name: 'Seção CTA (Inline)',
     description: 'Seção de call-to-action com título e botão',
     icon: 'ShoppingCart',
-    category: 'Result Page',
+    category: 'CTA',
     propertiesSchema: [
       {
         key: 'title',
         label: 'Título',
         type: 'text-input',
         defaultValue: 'Descubra Como Aplicar Seu Estilo na Prática'
-      },
+      }
+    ]
+  },
 
   {
     type: 'guarantee-inline',
@@ -1038,6 +1044,8 @@ export const blockDefinitions: BlockDefinition[] = [
         type: 'text-input',
         defaultValue: 'Garantia de 30 Dias'
       }
+    ]
+  },
     ]
   },
 
