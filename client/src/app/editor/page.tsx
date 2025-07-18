@@ -5,9 +5,11 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/componen
 import { EditorPreview } from '@/components/result-editor/EditorPreview';
 import { useBlockOperations } from '@/hooks/editor/useBlockOperations';
 import { Button } from '@/components/ui/button';
-import { Plus, Save, Eye, EyeOff } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Plus, Save, Eye, EyeOff, TestTube, BarChart3, Settings, ExternalLink } from 'lucide-react';
 import { Block } from '@/types/editor';
 import { StyleResult } from '@/types/quiz';
+import { QuizEditorPanel } from '@/components/editor/QuizEditorPanel';
 
 // Mock data for testing
 const mockStyleResult: StyleResult = {
@@ -31,6 +33,7 @@ export default function EditorPage() {
   } = useBlockOperations();
 
   const [isPreviewing, setIsPreviewing] = useState(false);
+  const [activeTab, setActiveTab] = useState<'components' | 'quiz'>('components');
 
   // Componentes disponíveis para adicionar
   const availableComponents = [
