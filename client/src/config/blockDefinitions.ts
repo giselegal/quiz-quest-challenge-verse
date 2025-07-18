@@ -1037,7 +1037,9 @@ export const blockDefinitions: BlockDefinition[] = [
         label: 'Título',
         type: 'text-input',
         defaultValue: 'Garantia de 30 Dias'
-      },
+      }
+    ]
+  },
 
   {
     type: 'transformation-inline',
@@ -1051,7 +1053,9 @@ export const blockDefinitions: BlockDefinition[] = [
         label: 'Título Principal',
         type: 'text-input',
         defaultValue: 'Sua Transformação Começa Aqui'
-      },
+      }
+    ]
+  },
 
   {
     type: 'final-value-proposition-inline',
@@ -1066,8 +1070,7 @@ export const blockDefinitions: BlockDefinition[] = [
         type: 'text-input',
         defaultValue: 'Vista-se de Você — na Prática'
       },
-
-  {
+      {
         key: 'benefits',
         label: 'Benefícios',
         type: 'array-editor',
@@ -1084,9 +1087,9 @@ export const blockDefinitions: BlockDefinition[] = [
           'Cores, modelagens e tecidos a seu favor',
           'Imagem alinhada aos seus objetivos',
           'Guarda-roupa funcional, sem compras por impulso'
-        ],
+        ]
       }
-    ],
+    ]
   },
 
   // =====================================================================
@@ -1105,7 +1108,9 @@ export const blockDefinitions: BlockDefinition[] = [
         label: 'Título do Resultado',
         type: 'text-input',
         defaultValue: 'Seu Estilo Único'
-      },
+      }
+    ]
+  },
 
   {
     type: 'quiz-offer-pricing-inline',
