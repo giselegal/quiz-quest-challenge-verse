@@ -50,6 +50,14 @@ const QuestionOptionEditor: React.FC<QuestionOptionEditorProps> = ({
     });
   };
 
+  const handlePointsChange = (value: string) => {
+    const points = parseInt(value);
+    onUpdate({
+      ...option,
+      points: points
+    });
+  };
+
   return (
     <Card className="shadow-sm border-[#B89B7A]/20">
       <CardContent className="p-4">
@@ -120,24 +128,45 @@ const QuestionOptionEditor: React.FC<QuestionOptionEditorProps> = ({
             )}
             
             <div className="flex justify-between items-center">
-              <div className="flex items-center gap-2">
-                <Label htmlFor={`option-points-${option.id}`} className="mb-0">Pontos:</Label>
-                <Select
-                  value={String(option.points)}
-                  onValueChange={(value) => handleChange('points', parseInt(value))}
-                >
-                  <SelectTrigger id={`option-points-${option.id}`} className="w-16">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="0">0</SelectItem>
-                    <SelectItem value="1">1</SelectItem>
-                    <SelectItem value="2">2</SelectItem>
-                    <SelectItem value="3">3</SelectItem>
-                    <SelectItem value="4">4</SelectItem>
-                    <SelectItem value="5">5</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <Label htmlFor={`option-category-${option.id}`} className="mb-0 text-sm">Categoria:</Label>
+                  <Select
+                    value={option.styleCategory || ''}
+                    onValueChange={(value: any) => handleChange('styleCategory', value)}
+                  >
+                    <SelectTrigger id={`option-category-${option.id}`} className="w-32">
+                      <SelectValue placeholder="Selecione" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {styleCategories.map((category) => (
+                        <SelectItem key={category.value} value={category.value}>
+                          {category.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <Label htmlFor={`option-points-${option.id}`} className="mb-0 text-sm">Pontos:</Label>
+                  <Select
+                    value={String(option.points || 1)}
+                    onValueChange={handlePointsChange}
+                  >
+                    <SelectTrigger id={`option-points-${option.id}`} className="w-16">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="0">0</SelectItem>
+                      <SelectItem value="1">1</SelectItem>
+                      <SelectItem value="2">2</SelectItem>
+                      <SelectItem value="3">3</SelectItem>
+                      <SelectItem value="4">4</SelectItem>
+                      <SelectItem value="5">5</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
               
               <Button 
