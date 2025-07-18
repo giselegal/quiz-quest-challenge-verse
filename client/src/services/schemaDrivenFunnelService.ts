@@ -1123,7 +1123,7 @@ class SchemaDrivenFunnelService {
 
     // ==========================================
     // ETAPA 20: RESULTADO PERSONALIZADO - MAPS TO /resultado (ResultPage.tsx)
-    // BASEADA NOS COMPONENTES REAIS DA RESULTPAGE
+    // USANDO NOVOS COMPONENTES MODULARES HORIZONTAIS
     // ==========================================
     console.log('🎯 [FIXED] Creating Step 20: Result Page → /resultado (ResultPage.tsx)');
     pages.push({
@@ -1133,161 +1133,65 @@ class SchemaDrivenFunnelService {
       type: 'result',
       order: 20,
       blocks: [
-        // 1. Header do resultado (Header component)
+        // 1. Header modular horizontal com logo, progresso e usuário
         {
-          id: 'result-header',
-          type: 'result-header',
+          id: 'result-header-modular',
+          type: 'result-page-header',
           properties: {
             logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
-            showProgress: false,
-            progressValue: 100
+            logoAlt: 'Logo Gisele Galvão',
+            progressPercentage: 100,
+            progressText: 'Quiz Completo!',
+            userName: 'Usuário',
+            userStyle: 'Clássico Elegante',
+            backgroundColor: '#ffffff',
+            textColor: '#333333'
           }
         },
-        // 2. Título principal de congratulações
+        // 2. Card de resultado modular horizontal com 3 colunas
         {
-          id: 'result-congratulations-title',
-          type: 'heading-inline',
-          properties: {
-            content: 'Parabéns! Seu estilo predominante foi identificado.',
-            level: 'h1',
-            textAlign: 'text-center',
-            color: '#432818',
-            marginBottom: 32
-          }
-        },
-        // 3. Card de estilo com progresso (styleConfig based)
-        {
-          id: 'result-style-card',
+          id: 'result-style-card-modular',
           type: 'style-result-card',
           properties: {
-            category: 'Natural',
-            percentage: 85,
-            showSecondaryStyles: true,
-            secondaryStyles: [
-              { name: 'Clássico', percentage: 15 },
-              { name: 'Contemporâneo', percentage: 10 },
-              { name: 'Elegante', percentage: 8 }
-            ]
+            mainStyleName: 'Clássico Elegante',
+            mainStyleDescription: 'Você tem um gosto refinado e aprecia peças atemporais que transmitem sofisticação e elegância.',
+            mainStyleImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/style-classic.jpg',
+            progressPercentage: 85,
+            secondaryStyle1: 'Moderno Minimalista',
+            secondaryStyle1Percentage: 65,
+            secondaryStyle2: 'Boêmio Chic',
+            secondaryStyle2Percentage: 45,
+            guideTitle: 'Seu Guia de Estilo Personalizado',
+            backgroundColor: '#f8f9fa'
           }
         },
-        // 4. Seção de motivação (MotivationSection)
+        // 3. CTA modular horizontal com proposta de valor
         {
-          id: 'result-motivation-section',
-          type: 'motivation-section',
+          id: 'result-cta-modular',
+          type: 'result-cta',
           properties: {
-            title: 'Transforme sua imagem e autoestima',
-            content: 'Descubra como se vestir com confiança e destacar sua personalidade única.',
-            showAnimation: true
-          }
-        },
-        // 5. Seção de estilos secundários (SecondaryStylesSection)
-        {
-          id: 'result-secondary-styles-section',
-          type: 'secondary-styles-section',
-          properties: {
-            secondaryStyles: [
-              { name: 'Clássico', percentage: 15 },
-              { name: 'Contemporâneo', percentage: 10 },
-              { name: 'Elegante', percentage: 8 }
-            ]
-          }
-        },
-        // 6. Depoimentos (Testimonials)
-        {
-          id: 'result-testimonials',
-          type: 'testimonials',
-          properties: {
-            testimonials: [
-              {
-                name: 'Ana Silva',
-                text: 'Transformei completamente meu guarda-roupa! Agora me sinto muito mais confiante.',
-                rating: 5,
-                image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/Mockups_p%C3%A1gina_de_venda_Guia_de_Estilo_1_vostj4.webp'
-              },
-              {
-                name: 'Maria Costa',
-                text: 'O guia é incrível! Aprendi a combinar peças que já tinha em casa.',
-                rating: 5,
-                image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/Mockups_p%C3%A1gina_de_venda_Guia_de_Estilo_1_vostj4.webp'
-              }
-            ]
-          }
-        },
-        // 7. Seção de mentor (MentorSection)
-        {
-          id: 'result-mentor-section',
-          type: 'mentor-section',
-          properties: {
-            mentorName: 'Gisele Galvão',
-            mentorImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.webp',
-            credentials: 'Consultora de Estilo e Imagem',
-            description: 'Especialista em transformação pessoal através do estilo.'
-          }
-        },
-        // 8. Seção de transformação (BeforeAfterTransformation)
-        {
-          id: 'result-transformation-section',
-          type: 'before-after-transformation',
-          properties: {
-            title: 'Veja algumas transformações incríveis:',
-            transformations: [
-              {
-                beforeImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334756/ChatGPT_Image_4_de_mai._de_2025_01_42_42_jlugsc.webp',
-                afterImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_00_30_44_naqom0.webp',
-                description: 'Transformação completa de visual'
-              }
-            ]
-          }
-        },
-        // 9. Seção de garantia (GuaranteeSection)
-        {
-          id: 'result-guarantee-section',
-          type: 'guarantee-section',
-          properties: {
-            guaranteeText: 'Garantia de 7 dias ou seu dinheiro de volta',
-            guaranteeImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916216/C%C3%B3pia_de_01._P%C3%A1gina_-_Produto_de_Entrada_2_hamaox.webp'
-          }
-        },
-        // 10. Seção de bônus (BonusSection)
-        {
-          id: 'result-bonus-section',
-          type: 'bonus-section',
-          properties: {
-            bonuses: [
-              {
-                title: 'Bônus 1: Guia de Peças-Chave',
-                description: 'Descubra as peças essenciais para o seu estilo',
-                image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp'
-              },
-              {
-                title: 'Bônus 2: Visagismo Personalizado',
-                description: 'Aprenda a harmonizar seu visual com seu rosto',
-                image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp'
-              }
-            ]
-          }
-        },
-        // 11. CTA principal com compra segura
-        {
-          id: 'result-main-cta',
-          type: 'secure-purchase-cta',
-          properties: {
-            text: 'QUERO MEU GUIA COMPLETO AGORA!',
-            price: 'R$ 97,00',
+            mainTitle: 'Descubra Seu Estilo Completo',
+            subtitle: 'Acesse seu guia personalizado agora!',
+            valueItem1: 'Análise completa do seu perfil',
+            valueItem2: 'Recomendações personalizadas',
+            valueItem3: 'Guia de compras exclusivo',
             originalPrice: 'R$ 197,00',
-            discount: '50% OFF',
-            securityText: 'Compra 100% segura'
+            currentPrice: 'R$ 97,00',
+            ctaText: 'QUERO MEU GUIA AGORA',
+            ctaUrl: '/checkout',
+            securityText: 'Compra 100% Segura',
+            backgroundColor: '#ffffff',
+            ctaColor: '#007bff'
           }
         }
       ],
       settings: {
         showProgress: false,
+        progressValue: 100,
         backgroundColor: '#fffaf7',
         textColor: '#432818',
-        maxWidth: 'max-w-4xl',
-        padding: 'p-6',
-        usePageConfig: true,
-        pageConfigId: 'result-page'
+        maxWidth: 'max-w-6xl',
+        padding: 'p-6'
       }
     });
 

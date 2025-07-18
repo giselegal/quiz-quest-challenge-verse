@@ -576,6 +576,462 @@ export const blockDefinitions: BlockDefinition[] = [
         defaultValue: 'Leia nossos termos de uso...'
       }
     ]
+  },
+
+  // =====================================================================
+  // Componentes Modulares para Etapas 20 e 21 (Resultado e Ofertas)
+  // =====================================================================
+
+  {
+    type: 'result-page-header',
+    name: 'Cabeçalho da Página de Resultado',
+    description: 'Cabeçalho modular com logo, progresso e informações do usuário para página de resultado.',
+    icon: 'Header',
+    category: 'Resultado',
+    propertiesSchema: [
+      {
+        key: 'logoUrl',
+        label: 'URL do Logo',
+        type: 'text-input',
+        defaultValue: '/images/logo.png'
+      },
+      {
+        key: 'logoAlt',
+        label: 'Texto Alternativo do Logo',
+        type: 'text-input',
+        defaultValue: 'Logo'
+      },
+      {
+        key: 'progressPercentage',
+        label: 'Porcentagem do Progresso',
+        type: 'number-input',
+        defaultValue: 100,
+        min: 0,
+        max: 100
+      },
+      {
+        key: 'progressText',
+        label: 'Texto do Progresso',
+        type: 'text-input',
+        defaultValue: 'Quiz Completo!'
+      },
+      {
+        key: 'userName',
+        label: 'Nome do Usuário',
+        type: 'text-input',
+        defaultValue: 'Usuário'
+      },
+      {
+        key: 'userStyle',
+        label: 'Estilo do Usuário',
+        type: 'text-input',
+        defaultValue: 'Clássico Elegante'
+      },
+      {
+        key: 'backgroundColor',
+        label: 'Cor de Fundo',
+        type: 'color-picker',
+        defaultValue: '#ffffff'
+      },
+      {
+        key: 'textColor',
+        label: 'Cor do Texto',
+        type: 'color-picker',
+        defaultValue: '#333333'
+      }
+    ]
+  },
+
+  {
+    type: 'style-result-card',
+    name: 'Card de Resultado do Estilo',
+    description: 'Card modular horizontal mostrando análise do estilo, imagem e estilos secundários.',
+    icon: 'Card',
+    category: 'Resultado',
+    propertiesSchema: [
+      {
+        key: 'mainStyleName',
+        label: 'Nome do Estilo Principal',
+        type: 'text-input',
+        defaultValue: 'Clássico Elegante'
+      },
+      {
+        key: 'mainStyleDescription',
+        label: 'Descrição do Estilo Principal',
+        type: 'textarea',
+        rows: 3,
+        defaultValue: 'Você tem um gosto refinado e aprecia peças atemporais...'
+      },
+      {
+        key: 'mainStyleImage',
+        label: 'Imagem do Estilo Principal',
+        type: 'text-input',
+        defaultValue: '/images/style-classic.jpg'
+      },
+      {
+        key: 'progressPercentage',
+        label: 'Porcentagem de Compatibilidade',
+        type: 'number-input',
+        defaultValue: 85,
+        min: 0,
+        max: 100
+      },
+      {
+        key: 'secondaryStyle1',
+        label: 'Estilo Secundário 1',
+        type: 'text-input',
+        defaultValue: 'Moderno Minimalista'
+      },
+      {
+        key: 'secondaryStyle1Percentage',
+        label: 'Porcentagem Estilo Secundário 1',
+        type: 'number-input',
+        defaultValue: 65,
+        min: 0,
+        max: 100
+      },
+      {
+        key: 'secondaryStyle2',
+        label: 'Estilo Secundário 2',
+        type: 'text-input',
+        defaultValue: 'Boêmio Chic'
+      },
+      {
+        key: 'secondaryStyle2Percentage',
+        label: 'Porcentagem Estilo Secundário 2',
+        type: 'number-input',
+        defaultValue: 45,
+        min: 0,
+        max: 100
+      },
+      {
+        key: 'guideTitle',
+        label: 'Título do Guia',
+        type: 'text-input',
+        defaultValue: 'Seu Guia de Estilo Personalizado'
+      },
+      {
+        key: 'backgroundColor',
+        label: 'Cor de Fundo',
+        type: 'color-picker',
+        defaultValue: '#f8f9fa'
+      }
+    ]
+  },
+
+  {
+    type: 'result-cta',
+    name: 'CTA da Página de Resultado',
+    description: 'Seção modular horizontal de chamada para ação com proposta de valor e botão de compra.',
+    icon: 'Button',
+    category: 'Resultado',
+    propertiesSchema: [
+      {
+        key: 'mainTitle',
+        label: 'Título Principal',
+        type: 'text-input',
+        defaultValue: 'Descubra Seu Estilo Completo'
+      },
+      {
+        key: 'subtitle',
+        label: 'Subtítulo',
+        type: 'text-input',
+        defaultValue: 'Acesse seu guia personalizado agora!'
+      },
+      {
+        key: 'valueItem1',
+        label: 'Item de Valor 1',
+        type: 'text-input',
+        defaultValue: 'Análise completa do seu perfil'
+      },
+      {
+        key: 'valueItem2',
+        label: 'Item de Valor 2',
+        type: 'text-input',
+        defaultValue: 'Recomendações personalizadas'
+      },
+      {
+        key: 'valueItem3',
+        label: 'Item de Valor 3',
+        type: 'text-input',
+        defaultValue: 'Guia de compras exclusivo'
+      },
+      {
+        key: 'originalPrice',
+        label: 'Preço Original',
+        type: 'text-input',
+        defaultValue: 'R$ 197,00'
+      },
+      {
+        key: 'currentPrice',
+        label: 'Preço Atual',
+        type: 'text-input',
+        defaultValue: 'R$ 97,00'
+      },
+      {
+        key: 'ctaText',
+        label: 'Texto do Botão CTA',
+        type: 'text-input',
+        defaultValue: 'QUERO MEU GUIA AGORA'
+      },
+      {
+        key: 'ctaUrl',
+        label: 'URL do Botão CTA',
+        type: 'text-input',
+        defaultValue: '/checkout'
+      },
+      {
+        key: 'securityText',
+        label: 'Texto de Segurança',
+        type: 'text-input',
+        defaultValue: 'Compra 100% Segura'
+      },
+      {
+        key: 'backgroundColor',
+        label: 'Cor de Fundo',
+        type: 'color-picker',
+        defaultValue: '#ffffff'
+      },
+      {
+        key: 'ctaColor',
+        label: 'Cor do Botão CTA',
+        type: 'color-picker',
+        defaultValue: '#007bff'
+      }
+    ]
+  },
+
+  {
+    type: 'offer-header',
+    name: 'Cabeçalho da Página de Oferta',
+    description: 'Cabeçalho modular horizontal com logo, countdown e mensagem principal da oferta.',
+    icon: 'Header',
+    category: 'Ofertas',
+    propertiesSchema: [
+      {
+        key: 'logoUrl',
+        label: 'URL do Logo',
+        type: 'text-input',
+        defaultValue: '/images/logo.png'
+      },
+      {
+        key: 'logoAlt',
+        label: 'Texto Alternativo do Logo',
+        type: 'text-input',
+        defaultValue: 'Logo'
+      },
+      {
+        key: 'countdownTitle',
+        label: 'Título do Countdown',
+        type: 'text-input',
+        defaultValue: 'Oferta por tempo limitado!'
+      },
+      {
+        key: 'countdownMinutes',
+        label: 'Minutos do Countdown',
+        type: 'number-input',
+        defaultValue: 15,
+        min: 1,
+        max: 60
+      },
+      {
+        key: 'mainTitle',
+        label: 'Título Principal',
+        type: 'text-input',
+        defaultValue: 'OFERTA ESPECIAL PARA VOCÊ!'
+      },
+      {
+        key: 'subtitle',
+        label: 'Subtítulo',
+        type: 'text-input',
+        defaultValue: 'Seu Guia de Estilo Personalizado'
+      },
+      {
+        key: 'description',
+        label: 'Descrição',
+        type: 'textarea',
+        rows: 3,
+        defaultValue: 'Com base no seu resultado, preparamos uma oferta exclusiva...'
+      },
+      {
+        key: 'heroImageUrl',
+        label: 'URL da Imagem Principal',
+        type: 'text-input',
+        defaultValue: '/images/offer-hero.jpg'
+      },
+      {
+        key: 'backgroundColor',
+        label: 'Cor de Fundo',
+        type: 'color-picker',
+        defaultValue: '#f8f9fa'
+      },
+      {
+        key: 'titleColor',
+        label: 'Cor do Título',
+        type: 'color-picker',
+        defaultValue: '#dc3545'
+      }
+    ]
+  },
+
+  {
+    type: 'product-showcase',
+    name: 'Vitrine de Produtos',
+    description: 'Vitrine modular horizontal de produtos com imagens, preços e benefícios.',
+    icon: 'Package',
+    category: 'Ofertas',
+    propertiesSchema: [
+      {
+        key: 'sectionTitle',
+        label: 'Título da Seção',
+        type: 'text-input',
+        defaultValue: 'O que você vai receber:'
+      },
+      {
+        key: 'product1Name',
+        label: 'Nome do Produto 1',
+        type: 'text-input',
+        defaultValue: 'Guia de Estilo Personalizado'
+      },
+      {
+        key: 'product1Image',
+        label: 'Imagem do Produto 1',
+        type: 'text-input',
+        defaultValue: '/images/product1.jpg'
+      },
+      {
+        key: 'product1Price',
+        label: 'Preço do Produto 1',
+        type: 'text-input',
+        defaultValue: 'R$ 97,00'
+      },
+      {
+        key: 'product1Benefits',
+        label: 'Benefícios do Produto 1',
+        type: 'textarea',
+        rows: 3,
+        defaultValue: 'Análise completa\nRecomendações personalizadas\nGuia de compras'
+      },
+      {
+        key: 'product2Name',
+        label: 'Nome do Produto 2',
+        type: 'text-input',
+        defaultValue: 'Consultoria de Estilo'
+      },
+      {
+        key: 'product2Image',
+        label: 'Imagem do Produto 2',
+        type: 'text-input',
+        defaultValue: '/images/product2.jpg'
+      },
+      {
+        key: 'product2Price',
+        label: 'Preço do Produto 2',
+        type: 'text-input',
+        defaultValue: 'R$ 197,00'
+      },
+      {
+        key: 'product2Benefits',
+        label: 'Benefícios do Produto 2',
+        type: 'textarea',
+        rows: 3,
+        defaultValue: 'Sessão individual\nPlano personalizado\nSuporte contínuo'
+      },
+      {
+        key: 'totalValue',
+        label: 'Valor Total',
+        type: 'text-input',
+        defaultValue: 'R$ 294,00'
+      },
+      {
+        key: 'backgroundColor',
+        label: 'Cor de Fundo',
+        type: 'color-picker',
+        defaultValue: '#ffffff'
+      }
+    ]
+  },
+
+  {
+    type: 'offer-cta',
+    name: 'CTA da Página de Oferta',
+    description: 'Seção modular horizontal de call-to-action da oferta com preço especial e urgência.',
+    icon: 'ShoppingCart',
+    category: 'Ofertas',
+    propertiesSchema: [
+      {
+        key: 'urgencyText',
+        label: 'Texto de Urgência',
+        type: 'text-input',
+        defaultValue: '🔥 ÚLTIMAS VAGAS DISPONÍVEIS!'
+      },
+      {
+        key: 'discountText',
+        label: 'Texto do Desconto',
+        type: 'text-input',
+        defaultValue: 'DESCONTO ESPECIAL DE 70%'
+      },
+      {
+        key: 'originalPrice',
+        label: 'Preço Original',
+        type: 'text-input',
+        defaultValue: 'R$ 294,00'
+      },
+      {
+        key: 'discountPrice',
+        label: 'Preço com Desconto',
+        type: 'text-input',
+        defaultValue: 'R$ 87,00'
+      },
+      {
+        key: 'installments',
+        label: 'Parcelamento',
+        type: 'text-input',
+        defaultValue: 'ou 3x de R$ 29,00'
+      },
+      {
+        key: 'ctaText',
+        label: 'Texto do Botão Principal',
+        type: 'text-input',
+        defaultValue: 'SIM, QUERO APROVEITAR ESTA OFERTA!'
+      },
+      {
+        key: 'ctaUrl',
+        label: 'URL do Botão Principal',
+        type: 'text-input',
+        defaultValue: '/checkout'
+      },
+      {
+        key: 'guaranteeText',
+        label: 'Texto da Garantia',
+        type: 'text-input',
+        defaultValue: '✅ Garantia de 30 dias'
+      },
+      {
+        key: 'securityText',
+        label: 'Texto de Segurança',
+        type: 'text-input',
+        defaultValue: '🔒 Compra 100% Segura'
+      },
+      {
+        key: 'backgroundColor',
+        label: 'Cor de Fundo',
+        type: 'color-picker',
+        defaultValue: '#f8f9fa'
+      },
+      {
+        key: 'ctaColor',
+        label: 'Cor do Botão CTA',
+        type: 'color-picker',
+        defaultValue: '#28a745'
+      },
+      {
+        key: 'urgencyColor',
+        label: 'Cor do Texto de Urgência',
+        type: 'color-picker',
+        defaultValue: '#dc3545'
+      }
+    ]
   }
 ];
 
