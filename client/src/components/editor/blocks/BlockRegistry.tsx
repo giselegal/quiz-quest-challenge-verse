@@ -13,6 +13,7 @@ import SocialProofBlock from './SocialProofBlock';
 import AdvancedCTABlock from './AdvancedCTABlock';
 import StatsMetricsBlock from './StatsMetricsBlock';
 import QuizQuestionBlock from './QuizQuestionBlock';
+import QuizResultDisplayBlock from './QuizResultDisplayBlock';
 
 // Legacy blocks - can be imported if they exist
 // import OptionsGridBlock from './OptionsGridBlock';
@@ -37,6 +38,7 @@ export const BLOCK_COMPONENTS: Record<string, BlockComponent> = {
   
   // Quiz blocks
   'quiz-question': QuizQuestionBlock as BlockComponent,
+  'quiz-result-display': QuizResultDisplayBlock as BlockComponent,
   
   // Legacy blocks (if they exist)
   // 'options-grid': OptionsGridBlock,

@@ -15,7 +15,8 @@ import {
   LayoutTemplate,
   Quote,
   ImagePlus,
-  HelpCircle
+  HelpCircle,
+  Trophy
 } from 'lucide-react';
 import { EditorBlock } from '@/types/editor';
 
@@ -39,6 +40,7 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
     { type: 'guarantee', label: 'Garantia', icon: Shield },
     { type: 'cta', label: 'Botão CTA', icon: MousePointer },
     { type: 'quiz-question', label: 'Questão do Quiz', icon: HelpCircle },
+    { type: 'quiz-result-display', label: 'Resultado do Quiz', icon: Trophy },
     { type: 'style-result', label: 'Resultado do Estilo', icon: Award },
     { type: 'secondary-styles', label: 'Estilos Secundários', icon: Layout },
     { type: 'bonus', label: 'Bônus', icon: Gift }

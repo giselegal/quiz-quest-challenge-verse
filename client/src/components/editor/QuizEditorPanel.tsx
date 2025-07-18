@@ -4,7 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { toast } from '@/components/ui/use-toast';
+import { useToast } from '@/components/ui/use-toast';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import ResultsLibrary from './ResultsLibrary';
 import { useQuizConfig } from '@/hooks/useQuizConfig';
 import { 
   Save, TestTube, BarChart3, ExternalLink,
@@ -47,6 +49,7 @@ interface QuizEditorPanelProps {
 }
 
 export const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ className }) => {
+  const { toast } = useToast();
   const { quizConfig: editorQuizConfig, quizQuestions, reloadConfig } = useQuizConfig();
   
   const [quizConfig, setQuizConfig] = useState<QuizConfig>({
@@ -396,187 +399,238 @@ export const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ className }) =
         </Card>
       )}
 
-      {/* Configurações */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Settings className="w-5 h-5" />
-            Configuração
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <Label htmlFor="intro-title">Título</Label>
-            <Input
-              id="intro-title"
-              value={quizConfig.intro.title}
-              onChange={(e) => setQuizConfig(prev => ({
-                ...prev,
-                intro: { ...prev.intro, title: e.target.value }
-              }))}
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="intro-subtitle">Subtítulo</Label>
-            <Input
-              id="intro-subtitle"
-              value={quizConfig.intro.subtitle}
-              onChange={(e) => setQuizConfig(prev => ({
-                ...prev,
-                intro: { ...prev.intro, subtitle: e.target.value }
-              }))}
-            />
-          </div>
-        </CardContent>
-      </Card>
+      {/* Abas principais */}
+      <Tabs defaultValue="config" className="w-full">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="config">⚙️ Configuração</TabsTrigger>
+          <TabsTrigger value="questions">❓ Questões</TabsTrigger>
+          <TabsTrigger value="results">🏆 Resultados</TabsTrigger>
+        </TabsList>
 
-      {/* Questões */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle>Questões ({quizConfig.questions.length})</CardTitle>
-            <Button onClick={addQuestion} size="sm" variant="outline">
-              <Plus className="w-4 h-4 mr-2" />
-              Adicionar
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {quizConfig.questions.map((question, qIndex) => (
-              <div key={question.id} className="border p-4 rounded-lg">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-medium">Questão {qIndex + 1}</h4>
-                  <Button 
-                    size="sm" 
-                    variant="destructive"
-                    onClick={() => {
-                      setQuizConfig(prev => ({
-                        ...prev,
-                        questions: prev.questions.filter(q => q.id !== question.id)
-                      }));
-                    }}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
-                
+        {/* Aba de Configuração */}
+        <TabsContent value="config" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Settings className="w-5 h-5" />
+                Configuração Geral
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label htmlFor="intro-title">Título</Label>
                 <Input
-                  value={question.text}
-                  onChange={(e) => {
-                    const newQuestions = [...quizConfig.questions];
-                    newQuestions[qIndex].text = e.target.value;
-                    setQuizConfig(prev => ({ ...prev, questions: newQuestions }));
-                  }}
-                  placeholder="Texto da questão"
-                  className="mb-2"
-                />
-
-                <div className="text-sm text-gray-600">
-                  {question.options.length} opções configuradas
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Resultados */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle>Resultados ({quizConfig.results.length})</CardTitle>
-            <Button onClick={addResult} size="sm" variant="outline">
-              <Plus className="w-4 h-4 mr-2" />
-              Adicionar
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {quizConfig.results.map((result, rIndex) => (
-              <div key={result.id} className="border p-4 rounded-lg">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-medium">{result.title}</h4>
-                  <Button 
-                    size="sm" 
-                    variant="destructive"
-                    onClick={() => {
-                      setQuizConfig(prev => ({
-                        ...prev,
-                        results: prev.results.filter(r => r.id !== result.id)
-                      }));
-                    }}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
-                
-                <Input
-                  value={result.title}
-                  onChange={(e) => {
-                    const newResults = [...quizConfig.results];
-                    newResults[rIndex].title = e.target.value;
-                    setQuizConfig(prev => ({ ...prev, results: newResults }));
-                  }}
-                  placeholder="Título do resultado"
-                  className="mb-2"
-                />
-                
-                <Textarea
-                  value={result.description}
-                  onChange={(e) => {
-                    const newResults = [...quizConfig.results];
-                    newResults[rIndex].description = e.target.value;
-                    setQuizConfig(prev => ({ ...prev, results: newResults }));
-                  }}
-                  placeholder="Descrição do resultado"
-                  rows={2}
+                  id="intro-title"
+                  value={quizConfig.intro.title}
+                  onChange={(e) => setQuizConfig(prev => ({
+                    ...prev,
+                    intro: { ...prev.intro, title: e.target.value }
+                  }))}
                 />
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Teste */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <TestTube className="w-5 h-5" />
-            Teste do Quiz
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="text-center p-6 border-2 border-dashed border-gray-200 rounded-lg">
-            <div className="text-sm text-gray-600 mb-4">
-              {currentFunnelId && isPublished 
-                ? 'Quiz publicado e pronto para teste'
-                : 'Salve e publique para testar'
-              }
-            </div>
-            
-            <div className="flex gap-2 justify-center">
-              <Button 
-                onClick={handlePublish}
-                disabled={!currentFunnelId}
-                variant="outline"
-              >
-                🚀 Publicar
-              </Button>
               
-              <Button 
-                onClick={handleTest}
-                disabled={!currentFunnelId || !isPublished}
-              >
-                <ExternalLink className="w-4 h-4 mr-2" />
-                Testar Quiz
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+              <div>
+                <Label htmlFor="intro-subtitle">Subtítulo</Label>
+                <Input
+                  id="intro-subtitle"
+                  value={quizConfig.intro.subtitle}
+                  onChange={(e) => setQuizConfig(prev => ({
+                    ...prev,
+                    intro: { ...prev.intro, subtitle: e.target.value }
+                  }))}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="intro-description">Descrição</Label>
+                <Textarea
+                  id="intro-description"
+                  value={quizConfig.intro.description}
+                  onChange={(e) => setQuizConfig(prev => ({
+                    ...prev,
+                    intro: { ...prev.intro, description: e.target.value }
+                  }))}
+                  rows={3}
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Teste */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TestTube className="w-5 h-5" />
+                Teste do Quiz
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="text-center p-6 border-2 border-dashed border-gray-200 rounded-lg">
+                <div className="text-sm text-gray-600 mb-4">
+                  {currentFunnelId && isPublished 
+                    ? 'Quiz publicado e pronto para teste'
+                    : 'Salve e publique para testar'
+                  }
+                </div>
+                
+                <div className="flex gap-2 justify-center">
+                  <Button 
+                    onClick={handlePublish}
+                    disabled={!currentFunnelId}
+                    variant="outline"
+                  >
+                    🚀 Publicar
+                  </Button>
+                  
+                  <Button 
+                    onClick={handleTest}
+                    disabled={!currentFunnelId || !isPublished}
+                  >
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Testar Quiz
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Aba de Questões */}
+        <TabsContent value="questions" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>Questões ({quizConfig.questions.length})</CardTitle>
+                <Button onClick={addQuestion} size="sm" variant="outline">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Adicionar
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {quizConfig.questions.map((question, qIndex) => (
+                  <div key={question.id} className="border p-4 rounded-lg">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-medium">Questão {qIndex + 1}</h4>
+                      <Button 
+                        size="sm" 
+                        variant="destructive"
+                        onClick={() => {
+                          setQuizConfig(prev => ({
+                            ...prev,
+                            questions: prev.questions.filter(q => q.id !== question.id)
+                          }));
+                        }}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    
+                    <Input
+                      value={question.text}
+                      onChange={(e) => {
+                        const newQuestions = [...quizConfig.questions];
+                        newQuestions[qIndex].text = e.target.value;
+                        setQuizConfig(prev => ({ ...prev, questions: newQuestions }));
+                      }}
+                      placeholder="Texto da questão"
+                      className="mb-2"
+                    />
+
+                    <div className="text-sm text-gray-600">
+                      {question.options.length} opções configuradas
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Aba de Resultados */}
+        <TabsContent value="results" className="space-y-6">
+          {/* Biblioteca de Resultados */}
+          <ResultsLibrary 
+            onResultSelect={(result) => {
+              // Adicionar resultado selecionado à configuração
+              const newResult = {
+                id: result.id,
+                title: result.title,
+                description: result.description,
+              };
+              
+              setQuizConfig(prev => ({
+                ...prev,
+                results: [...prev.results, newResult]
+              }));
+
+              toast({
+                title: 'Resultado Adicionado',
+                description: `${result.title} foi adicionado ao quiz.`,
+              });
+            }}
+          />
+
+          {/* Resultados Atuais do Quiz */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>Resultados no Quiz ({quizConfig.results.length})</CardTitle>
+                <Button onClick={addResult} size="sm" variant="outline">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Criar Novo
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {quizConfig.results.map((result, rIndex) => (
+                  <div key={result.id} className="border p-4 rounded-lg">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-medium">{result.title}</h4>
+                      <Button 
+                        size="sm" 
+                        variant="destructive"
+                        onClick={() => {
+                          setQuizConfig(prev => ({
+                            ...prev,
+                            results: prev.results.filter(r => r.id !== result.id)
+                          }));
+                        }}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    
+                    <Input
+                      value={result.title}
+                      onChange={(e) => {
+                        const newResults = [...quizConfig.results];
+                        newResults[rIndex].title = e.target.value;
+                        setQuizConfig(prev => ({ ...prev, results: newResults }));
+                      }}
+                      placeholder="Título do resultado"
+                      className="mb-2"
+                    />
+                    
+                    <Textarea
+                      value={result.description}
+                      onChange={(e) => {
+                        const newResults = [...quizConfig.results];
+                        newResults[rIndex].description = e.target.value;
+                        setQuizConfig(prev => ({ ...prev, results: newResults }));
+                      }}
+                      placeholder="Descrição do resultado"
+                      rows={2}
+                    />
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
