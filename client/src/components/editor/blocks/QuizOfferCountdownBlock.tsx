@@ -57,12 +57,14 @@ const QuizOfferCountdownBlock: React.FC<BlockComponentProps> = ({
       data-block-type={block.type}
     >
       <div className="max-w-4xl mx-auto">
-        <div className="flex items-center justify-center gap-4">
-          <Clock className="w-6 h-6" style={{ color: textColor }} />
-          <span className="text-lg font-semibold" style={{ color: textColor }}>
-            {title}
-          </span>
-          <span className="text-3xl font-bold font-mono" style={{ color: textColor }}>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Clock className="w-5 h-5 sm:w-6 sm:h-6" style={{ color: textColor }} />
+            <span className="text-base sm:text-lg font-semibold" style={{ color: textColor }}>
+              {title}
+            </span>
+          </div>
+          <span className="text-2xl sm:text-3xl font-bold font-mono" style={{ color: textColor }}>
             {formatTime(timeLeft)}
           </span>
         </div>

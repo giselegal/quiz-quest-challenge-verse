@@ -46,7 +46,7 @@ const QuizOfferFAQBlock: React.FC<BlockComponentProps> = ({
   return (
     <div
       className={`
-        w-full py-16 px-4 transition-all duration-200
+        w-full py-8 sm:py-12 lg:py-16 px-4 transition-all duration-200
         ${isSelected 
           ? 'ring-1 ring-gray-400/40 bg-gray-50/30' 
           : 'hover:shadow-sm'
@@ -60,18 +60,18 @@ const QuizOfferFAQBlock: React.FC<BlockComponentProps> = ({
     >
       <AnimatedWrapper show={isLoaded}>
         <div className="max-w-4xl mx-auto">
-          <h3 className="text-3xl font-bold text-center mb-12" style={{ color: textColor }}>
+          <h3 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12" style={{ color: textColor }}>
             {title}
           </h3>
           
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {faqItems.map((item: any, index: number) => (
               <Card key={index} className="shadow-lg border-0">
-                <CardContent className="p-6">
-                  <h4 className="text-xl font-semibold mb-3" style={{ color: textColor }}>
+                <CardContent className="p-4 sm:p-6">
+                  <h4 className="text-lg sm:text-xl font-semibold mb-3" style={{ color: textColor }}>
                     {item.question}
                   </h4>
-                  <p className="text-gray-700 leading-relaxed">
+                  <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
                     {item.answer}
                   </p>
                 </CardContent>
