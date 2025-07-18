@@ -67,11 +67,46 @@ const QuizOfferTestimonialsBlock: React.FC<BlockComponentProps> = ({
     >
       <AnimatedWrapper show={isLoaded}>
         <div className="max-w-6xl mx-auto">
-          <h3 className="text-3xl font-bold text-center mb-12" style={{ color: textColor }}>
+          <h3 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12" style={{ color: textColor }}>
             {title}
           </h3>
           
-          <div className="grid md:grid-cols-2 gap-8">
+          {/* Carrossel para mobile */}
+          <div className="block md:hidden">
+            <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4 px-4 -mx-4">
+              {testimonials.map((testimonial: any, index: number) => (
+                <Card key={index} className="flex-none w-[85vw] snap-start shadow-lg border-0">
+                  <CardContent className="p-6 text-center">
+                    <div className="flex justify-center mb-4">
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <Star key={i} className="w-5 h-5 fill-current text-yellow-400" />
+                      ))}
+                    </div>
+                    <p className="text-sm text-gray-700 mb-4 italic">
+                      "{testimonial.text}"
+                    </p>
+                    <p className="font-semibold" style={{ color: textColor }}>
+                      {testimonial.name}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            {/* Indicador de scroll */}
+            <div className="flex justify-center mt-4">
+              <div className="flex space-x-2">
+                {testimonials.map((_: any, index: number) => (
+                  <div
+                    key={index}
+                    className="w-2 h-2 rounded-full bg-gray-300"
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Grid para desktop */}
+          <div className="hidden md:grid md:grid-cols-2 gap-8">
             {testimonials.map((testimonial: any, index: number) => (
               <Card key={index} className="shadow-lg border-0">
                 <CardContent className="p-6 text-center">
