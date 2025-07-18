@@ -1391,6 +1391,7 @@ class SchemaDrivenFunnelService {
       ],
       settings: {
         showProgress: false,
+        progressValue: 100,
         backgroundColor: '#ffffff',
         textColor: '#432818',
         maxWidth: 'max-w-6xl',
