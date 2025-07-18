@@ -420,7 +420,7 @@ const QuizOfferPageBlock: React.FC<QuizOfferPageBlockProps> = ({
                   <InlineEditText
                     as="h2"
                     value={offerTitle}
-                    onChange={(value) => handlePropertyChange('offerTitle', value)}
+                    onSave={(value) => handlePropertyChange('offerTitle', value)}
                     placeholder="Título da oferta..."
                     disabled={disabled}
                     className="text-4xl lg:text-6xl xl:text-7xl font-playfair font-bold leading-tight mb-8 bg-gradient-to-r from-[#2C1810] via-[#aa6b5d] to-[#2C1810] bg-clip-text text-transparent"
@@ -429,7 +429,7 @@ const QuizOfferPageBlock: React.FC<QuizOfferPageBlockProps> = ({
                   <InlineEditText
                     as="p"
                     value={offerSubtitle}
-                    onChange={(value) => handlePropertyChange('offerSubtitle', value)}
+                    onSave={(value) => handlePropertyChange('offerSubtitle', value)}
                     placeholder="Subtítulo da oferta..."
                     disabled={disabled}
                     className="text-xl lg:text-2xl text-[#5D4A3A] font-medium mb-6"
@@ -603,14 +603,14 @@ const QuizOfferPageBlock: React.FC<QuizOfferPageBlockProps> = ({
                         <InlineEditText
                           as="p"
                           value={finalPrice}
-                          onChange={(value) => handlePropertyChange('finalPrice', value)}
+                          onSave={(value) => handlePropertyChange('finalPrice', value)}
                           disabled={disabled}
                           className="text-4xl lg:text-5xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent"
                         />
                         <InlineEditText
                           as="p"
                           value={paymentOptions}
-                          onChange={(value) => handlePropertyChange('paymentOptions', value)}
+                          onSave={(value) => handlePropertyChange('paymentOptions', value)}
                           disabled={disabled}
                           className="text-lg lg:text-xl font-bold text-[#4CAF50]"
                         />
@@ -655,7 +655,7 @@ const QuizOfferPageBlock: React.FC<QuizOfferPageBlockProps> = ({
                       <InlineEditText
                         as="span"
                         value={ctaText}
-                        onChange={(value) => handlePropertyChange('ctaText', value)}
+                        onSave={(value) => handlePropertyChange('ctaText', value)}
                         placeholder="Texto do CTA..."
                         disabled={disabled}
                         className="leading-tight text-white font-bold"
