@@ -448,16 +448,78 @@ const QuizOfferPageBlock: React.FC<QuizOfferPageBlockProps> = ({
                   )}
                 </div>
 
-                {/* Grid de produtos otimizado - Layout responsivo de múltiplas colunas */}
+                {/* Layout responsivo - Carrossel em mobile, Grid em desktop */}
                 {showBonuses && bonuses && bonuses.length > 0 && (
                   <div className="mb-16">
-                    <div className="flex flex-col md:flex-row md:flex-wrap justify-center gap-8 max-w-6xl mx-auto mb-12">
-                      {bonuses.map((bonus, index) => (
-                        <div
-                          key={index}
-                          className={`flex-shrink-0 flex-grow w-full md:w-[calc(50%-1rem)] lg:w-[calc(50%-1rem)] group bg-white rounded-2xl p-6 lg:p-8 border border-[#B89B7A]/15 transition-all duration-500 hover:scale-105 hover:shadow-2xl relative`}
-                          style={{ boxShadow: tokens.shadows.lg }}
-                        >
+                    {/* Carrossel para mobile */}
+                    <div className="block md:hidden">
+                      <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4 px-4 -mx-4">
+                        {bonuses.map((bonus, index) => (
+                          <div
+                            key={index}
+                            className="flex-none w-[85vw] snap-start group bg-white rounded-2xl p-6 border border-[#B89B7A]/15 transition-all duration-500 hover:scale-105 hover:shadow-2xl relative"
+                            style={{ boxShadow: tokens.shadows.lg }}
+                          >
+                            {/* Badge premium */}
+                            <div className="absolute -top-4 -right-4 z-10">
+                              <span
+                                className={`text-xs font-bold px-4 py-2 rounded-full text-white shadow-lg transform rotate-12 ${
+                                  index === 0
+                                    ? "bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]"
+                                    : "bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A]"
+                                }`}
+                              >
+                                {index === 0 ? "GUIA PRINCIPAL" : "BÔNUS EXCLUSIVO"}
+                              </span>
+                            </div>
+
+                            {/* Conteúdo do card para mobile */}
+                            {bonus.image && (
+                              <div className="relative mb-6 bg-gradient-to-br from-[#f9f4ef] to-[#fff7f3] rounded-xl p-4 overflow-hidden"
+                                   style={{ boxShadow: tokens.shadows.sm }}>
+                                <ProgressiveImage
+                                  src={bonus.image}
+                                  alt={bonus.title}
+                                  className="w-full h-full object-contain transition-all duration-500 group-hover:scale-110"
+                                  loading="lazy"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#B89B7A]/10 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-xl"></div>
+                              </div>
+                            )}
+
+                            <div className="text-left space-y-4">
+                              <h4 className="font-bold text-[#2C1810] text-lg leading-tight">
+                                {bonus.title}
+                              </h4>
+                              <p className="text-sm text-[#5D4A3A] leading-relaxed">
+                                {bonus.description}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      {/* Indicador de scroll */}
+                      <div className="flex justify-center mt-4">
+                        <div className="flex space-x-2">
+                          {bonuses.map((_, index) => (
+                            <div
+                              key={index}
+                              className="w-2 h-2 rounded-full bg-[#B89B7A]/30"
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Grid para desktop */}
+                    <div className="hidden md:block">
+                      <div className="flex flex-col md:flex-row md:flex-wrap justify-center gap-8 max-w-6xl mx-auto mb-12">
+                        {bonuses.map((bonus, index) => (
+                          <div
+                            key={index}
+                            className={`flex-shrink-0 flex-grow w-full md:w-[calc(50%-1rem)] lg:w-[calc(50%-1rem)] group bg-white rounded-2xl p-6 lg:p-8 border border-[#B89B7A]/15 transition-all duration-500 hover:scale-105 hover:shadow-2xl relative`}
+                            style={{ boxShadow: tokens.shadows.lg }}
+                          >
                           {/* Badge premium */}
                           <div className="absolute -top-4 -right-4 z-10">
                             <span
@@ -508,6 +570,7 @@ const QuizOfferPageBlock: React.FC<QuizOfferPageBlockProps> = ({
                           </div>
                         </div>
                       ))}
+                      </div>
                     </div>
                   </div>
                 )}
@@ -529,7 +592,7 @@ const QuizOfferPageBlock: React.FC<QuizOfferPageBlockProps> = ({
                         <InlineEditText
                           as="span"
                           value={originalPrice}
-                          onChange={(value) => handlePropertyChange('originalPrice', value)}
+                          onSave={(value) => handlePropertyChange('originalPrice', value)}
                           disabled={disabled}
                           className="font-bold text-[#B89B7A] text-xl lg:text-2xl line-through"
                         />{" "}
