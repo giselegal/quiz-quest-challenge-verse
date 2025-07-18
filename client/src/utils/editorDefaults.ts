@@ -359,8 +359,245 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
           borderRadius: 'md' as BorderRadiusType
         }
       };
+      
+    // === DEFAULTS PARA TODOS OS COMPONENTES INLINE ===
+    case 'header':
+    case 'result-header':
+    case 'quiz-intro-header':
+    case 'vertical-canvas-header':
+    case 'result-header-inline':
+    case 'step-header-inline':
+    case 'section-header-inline':
+    case 'sticky-header-inline':
+    case 'hero-title-inline':
+    case 'quiz-title':
+    case 'quiz-result-header':
+    case 'quiz-offer-title':
+      return {
+        title: 'Título do Componente',
+        subtitle: 'Subtítulo opcional',
+        alignment: 'center' as const,
+        style: {
+          backgroundColor: '#ffffff',
+          color: '#432818',
+          paddingY: '16px',
+          paddingX: '16px',
+          borderRadius: 'md' as BorderRadiusType
+        }
+      };
 
-    // Novos componentes modulares para etapas 20 e 21
+    case 'text':
+    case 'result-description':
+    case 'text-inline':
+    case 'heading-inline':
+      return {
+        text: 'Texto do componente. Este é um exemplo de conteúdo.',
+        alignment: 'left' as const,
+        style: {
+          paddingY: '12px',
+          paddingX: '16px'
+        }
+      };
+
+    case 'button':
+    case 'button-inline':
+    case 'cta-button-inline':
+      return {
+        text: 'Clique Aqui',
+        variant: 'primary',
+        size: 'medium',
+        backgroundColor: '#B89B7A',
+        textColor: '#ffffff'
+      };
+
+    case 'image':
+    case 'image-display-inline':
+    case 'strategic-question-image':
+      return {
+        src: 'https://via.placeholder.com/400x300',
+        alt: 'Imagem do componente',
+        width: 400,
+        height: 300
+      };
+
+    case 'spacer':
+    case 'divider-inline':
+      return {
+        height: 32,
+        backgroundColor: 'transparent'
+      };
+
+    case 'form-input':
+    case 'quiz-name-input':
+      return {
+        label: 'Campo de Input',
+        placeholder: 'Digite aqui...',
+        type: 'text',
+        required: false
+      };
+
+    case 'list':
+    case 'problem-list-inline':
+    case 'bonus-list-inline':
+      return {
+        items: ['Item 1', 'Item 2', 'Item 3'],
+        listStyle: 'bullet'
+      };
+
+    case 'badge-inline':
+    case 'hero-badge-inline':
+    case 'highlight-box-inline':
+    case 'guarantee-seal-inline':
+      return {
+        text: 'Badge',
+        backgroundColor: '#10b981',
+        textColor: '#ffffff'
+      };
+
+    case 'progress-inline':
+    case 'quiz-progress':
+      return {
+        percentage: 75,
+        showText: true,
+        color: '#B89B7A'
+      };
+
+    case 'style-card-inline':
+    case 'result-card-inline':
+    case 'product-card-inline':
+    case 'pricing-card-inline':
+    case 'quiz-result-card':
+      return {
+        title: 'Card de Componente',
+        description: 'Descrição do card',
+        price: 'R$ 97,00',
+        features: ['Recurso 1', 'Recurso 2', 'Recurso 3']
+      };
+
+    case 'testimonial-card-inline':
+      return {
+        name: 'Nome do Cliente',
+        text: 'Depoimento sobre o produto...',
+        rating: 5,
+        image: 'https://via.placeholder.com/100x100'
+      };
+
+    case 'countdown-inline':
+    case 'countdown-timer-inline':
+    case 'quiz-offer-countdown':
+      return {
+        minutes: 15,
+        title: 'Tempo restante:'
+      };
+
+    case 'stat-inline':
+      return {
+        number: '100+',
+        label: 'Clientes Satisfeitos'
+      };
+
+    case 'loading-animation':
+      return {
+        text: 'Carregando...',
+        duration: 3000
+      };
+
+    case 'options-grid':
+      return {
+        options: [
+          { id: '1', text: 'Opção 1' },
+          { id: '2', text: 'Opção 2' },
+          { id: '3', text: 'Opção 3' }
+        ],
+        columns: 2,
+        multipleSelection: true
+      };
+
+    case 'quiz-offer-pricing-inline':
+    case 'price-highlight-inline':
+      return {
+        originalPrice: 'R$ 197,00',
+        currentPrice: 'R$ 97,00',
+        discount: '50% OFF'
+      };
+
+    case 'before-after-inline':
+      return {
+        beforeImage: 'https://via.placeholder.com/300x200',
+        afterImage: 'https://via.placeholder.com/300x200',
+        title: 'Antes e Depois'
+      };
+
+    case 'strategic-question-main':
+    case 'strategic-question-inline':
+      return {
+        question: 'Pergunta estratégica?',
+        options: [
+          { id: '1', text: 'Opção A' },
+          { id: '2', text: 'Opção B' }
+        ]
+      };
+
+    case 'QuizQuestionBlock':
+    case 'QuestionMultipleBlock':
+    case 'StrategicQuestionBlock':
+      return {
+        question: 'Qual é sua pergunta?',
+        options: [
+          { id: '1', text: 'Resposta 1' },
+          { id: '2', text: 'Resposta 2' }
+        ],
+        multipleSelection: false
+      };
+
+    case 'QuizTransitionBlock':
+      return {
+        title: 'Transição',
+        message: 'Preparando próxima etapa...'
+      };
+
+    case 'ResultPageBlock':
+      return {
+        title: 'Seu Resultado',
+        description: 'Aqui está seu resultado personalizado.'
+      };
+
+    case 'product-offer':
+    case 'urgency-timer':
+    case 'faq-section':
+    case 'faq-item-inline':
+    case 'quiz-offer-faq':
+      return {
+        title: 'Título da Seção',
+        content: 'Conteúdo da seção...'
+      };
+
+    case 'video-player':
+      return {
+        url: 'https://www.youtube.com/watch?v=example',
+        thumbnail: 'https://via.placeholder.com/640x360'
+      };
+
+    case 'trust-elements-inline':
+      return {
+        elements: ['✅ Seguro', '✅ Garantido', '✅ Confiável']
+      };
+
+    case 'hero-section':
+    case 'bonus-carousel':
+    case 'headline':
+    case 'benefits':
+    case 'pricing':
+    case 'quiz-result-display':
+    case 'style-result':
+    case 'secondary-styles':
+    case 'bonus':
+      return {
+        title: 'Componente Modular',
+        content: 'Conteúdo do componente modular.'
+      };
+
+    // === NOVOS COMPONENTES MODULARES MANTIDOS ===
     case 'result-page-header':
       return {
         logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
