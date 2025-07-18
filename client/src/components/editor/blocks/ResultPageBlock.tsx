@@ -224,7 +224,7 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = React.memo(({
     <div
       id="result-page-block"
       className={cn(
-        'relative w-full min-h-[800px] rounded-lg border-2',
+        'relative w-full min-h-screen md:min-h-screen lg:min-h-screen rounded-lg border-2',
         isSelected ? 'border-blue-500 ring-2 ring-blue-200' : 'border-gray-300',
         'cursor-pointer hover:border-gray-400 transition-all duration-300',
         className
@@ -337,8 +337,8 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = React.memo(({
                 </div>
               </div>
               
-              {/* Imagem do Estilo - 238px como no funil real */}
-              <div className="max-w-[238px] mx-auto relative">
+              {/* Imagem do Estilo - Responsiva */}
+              <div className="max-w-xs sm:max-w-sm md:max-w-xs mx-auto relative">
                 <img 
                   src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744992677/estilo-elegante-preview.jpg"
                   alt={`Estilo ${primaryStyle.category}`}
@@ -352,8 +352,8 @@ const ResultPageBlock: React.FC<ResultPageBlockProps> = React.memo(({
               </div>
             </div>
             
-            {/* Imagem do Guia - 540px como no funil real */}
-            <div className="mt-8 max-w-[540px] mx-auto relative">
+            {/* Imagem do Guia - Responsiva */}
+            <div className="mt-8 max-w-full sm:max-w-lg md:max-w-xl lg:max-w-2xl mx-auto relative">
               <img 
                 src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744992677/guia-de-estilo-preview.jpg"
                 alt={`Guia de Estilo ${primaryStyle.category}`}

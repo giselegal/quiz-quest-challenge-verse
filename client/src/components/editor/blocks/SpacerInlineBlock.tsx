@@ -145,7 +145,7 @@ const SpacerInlineBlock: React.FC<BlockComponentProps> = ({
           backgroundColor !== 'transparent' && `bg-${backgroundColor}`,
           
           // Minimum interaction area
-          'min-h-[20px] min-w-[20px]'
+          'min-h-5 min-w-5'
         )}
         style={{
           backgroundColor: backgroundColor !== 'transparent' ? backgroundColor : undefined
