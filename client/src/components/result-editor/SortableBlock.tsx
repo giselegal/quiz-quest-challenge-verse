@@ -1,13 +1,12 @@
 
 import React, { memo } from 'react';
 import { Block } from '@/types/editor';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { GripVertical, Copy, Trash2, Eye, EyeOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { BlockType } from '@/types/quiz';
+import { useStandardSortable, useDragTransforms, useDragAccessibility } from '../drag-drop/hooks';
 
 export interface SortableBlockProps {
   block: Block;
@@ -32,18 +31,18 @@ export const SortableBlock: React.FC<SortableBlockProps> = memo(({
     attributes,
     listeners,
     setNodeRef,
-    transform,
-    transition,
-    isDragging
-  } = useSortable({ 
-    id: block.id,
-    disabled: isPreviewing
-  });
+    style,
+    isDragging,
+    isOver,
+    canDrop
+  } = useStandardSortable(block.id, isPreviewing);
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
+  const { getDragStyle, getDropIndicatorStyle } = useDragTransforms();
+  const { getDragAttributes } = useDragAccessibility();
+
+  const dragStyle = getDragStyle(style.transform || '', style.transition || '', isDragging);
+  const dropIndicatorStyle = getDropIndicatorStyle(!!isOver, !!canDrop);
+  const accessibilityAttributes = getDragAttributes(isDragging, block.type);
 
   const getBlockPreview = () => {
     switch (block.type as BlockType) {
@@ -109,7 +108,7 @@ export const SortableBlock: React.FC<SortableBlockProps> = memo(({
 
   if (isPreviewing) {
     return (
-      <div ref={setNodeRef} style={style} className="transition-opacity duration-200">
+      <div ref={setNodeRef} style={dragStyle} className="transition-opacity duration-200">
         {getBlockPreview()}
       </div>
     );
@@ -118,17 +117,15 @@ export const SortableBlock: React.FC<SortableBlockProps> = memo(({
   return (
     <Card 
       ref={setNodeRef} 
-      style={style}
+      style={{ ...dragStyle, ...dropIndicatorStyle }}
       className={cn(
         'relative transition-all duration-200 cursor-pointer', 
         isSelected ? 'border-primary shadow-md ring-2 ring-primary/20' : 'border-muted hover:border-muted-foreground/50',
-        isDragging && 'opacity-50 rotate-2 scale-105 shadow-2xl',
+        isDragging && 'opacity-50',
         block.content?.isHidden && 'opacity-60 border-dashed'
       )}
       onClick={onSelect}
-      role="button"
-      tabIndex={0}
-      aria-label={`Bloco ${block.type}${isSelected ? ' (selecionado)' : ''}`}
+      {...accessibilityAttributes}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -222,10 +219,21 @@ export const SortableBlock: React.FC<SortableBlockProps> = memo(({
         {isSelected && (
           <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full shadow-sm" />
         )}
+
+        {/* Drop indicator */}
+        {isOver && canDrop && (
+          <div className="absolute inset-0 border-2 border-dashed border-primary bg-primary/5 rounded-lg flex items-center justify-center">
+            <span className="bg-primary text-primary-foreground px-2 py-1 rounded text-xs font-medium">
+              Solte aqui
+            </span>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
 });
+
+SortableBlock.displayName = 'SortableBlock';
 
   return (
     <Card 
