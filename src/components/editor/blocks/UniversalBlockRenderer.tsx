@@ -54,6 +54,9 @@ import BeforeAfterInlineBlock from './inline/BeforeAfterInlineBlock';
 import BonusListInlineBlock from './inline/BonusListInlineBlock';
 import StepHeaderInlineBlock from './inline/StepHeaderInlineBlock';
 
+// Novos componentes modulares para etapas 20 e 21 (temporariamente desabilitados)
+import ResultPageHeaderBlock from './ResultPageHeaderBlock';
+
 // Componentes modernos (funcionais)
 import TestimonialsGridBlock from './TestimonialsGridBlock';
 import FAQSectionBlock from './FAQSectionBlock';
@@ -229,7 +232,15 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       'quiz-result-card': () => <PricingCardInlineBlock {...commonProps} />,
       'quiz-offer-title': () => <HeadingInlineBlock {...commonProps} />,
       'quiz-offer-countdown': () => <CountdownInlineBlock {...commonProps} />,
-      'quiz-offer-faq': () => <FAQSectionBlock {...commonProps} />
+      'quiz-offer-faq': () => <FAQSectionBlock {...commonProps} />,
+      
+      // === NOVOS COMPONENTES MODULARES ===
+      'result-page-header': () => <HeadingInlineBlock {...commonProps} />,
+      'style-result-card': () => <StyleCardInlineBlock {...commonProps} />,
+      'result-cta': () => <CTAInlineBlock {...commonProps} />,
+      'offer-header': () => <HeadingInlineBlock {...commonProps} />,
+      'product-showcase': () => <PricingCardInlineBlock {...commonProps} />,
+      'offer-cta': () => <CTAInlineBlock {...commonProps} />
     };
 
     // ES7+ Return com fallback usando optional chaining

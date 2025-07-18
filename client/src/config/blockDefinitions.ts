@@ -48,7 +48,9 @@ export type IconType =
   | 'GalleryHorizontalEnd'
   | 'Zap'
   | 'Target'
-  | 'TrendingUp';
+  | 'TrendingUp'
+  | 'BarChart3'
+  | 'MousePointer';
 
 // Tipos base para o schema de propriedades
 export type PropertyInputType =
@@ -1030,6 +1032,1082 @@ export const blockDefinitions: BlockDefinition[] = [
         label: 'Cor do Texto de Urgência',
         type: 'color-picker',
         defaultValue: '#dc3545'
+      }
+    ]
+  },
+
+  // =====================================================================
+  // COMPONENTES BÁSICOS FALTANDO
+  // =====================================================================
+  {
+    type: 'header',
+    name: 'Cabeçalho',
+    description: 'Componente de cabeçalho básico',
+    icon: 'Type',
+    category: 'UI',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Título Principal'
+      },
+      {
+        key: 'subtitle',
+        label: 'Subtítulo',
+        type: 'text-input',
+        defaultValue: 'Subtítulo opcional'
+      }
+    ]
+  },
+  {
+    type: 'text',
+    name: 'Texto',
+    description: 'Componente de texto básico',
+    icon: 'Type',
+    category: 'UI',
+    propertiesSchema: [
+      {
+        key: 'content',
+        label: 'Conteúdo',
+        type: 'textarea',
+        defaultValue: 'Seu texto aqui...'
+      }
+    ]
+  },
+  {
+    type: 'image',
+    name: 'Imagem',
+    description: 'Componente de imagem básico',
+    icon: 'Image',
+    category: 'Mídia',
+    propertiesSchema: [
+      {
+        key: 'src',
+        label: 'URL da Imagem',
+        type: 'image-url',
+        defaultValue: '/images/placeholder.jpg'
+      },
+      {
+        key: 'alt',
+        label: 'Texto Alternativo',
+        type: 'text-input',
+        defaultValue: 'Descrição da imagem'
+      }
+    ]
+  },
+  {
+    type: 'list',
+    name: 'Lista',
+    description: 'Componente de lista básico',
+    icon: 'List',
+    category: 'UI',
+    propertiesSchema: [
+      {
+        key: 'items',
+        label: 'Itens da Lista',
+        type: 'textarea',
+        defaultValue: 'Item 1\nItem 2\nItem 3'
+      }
+    ]
+  },
+
+  // =====================================================================
+  // COMPONENTES DE RESULTADO
+  // =====================================================================
+  {
+    type: 'result-header',
+    name: 'Cabeçalho Resultado',
+    description: 'Cabeçalho para página de resultado',
+    icon: 'Award',
+    category: 'Resultado',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Seu Resultado'
+      }
+    ]
+  },
+  {
+    type: 'result-description',
+    name: 'Descrição Resultado',
+    description: 'Descrição do resultado do quiz',
+    icon: 'Type',
+    category: 'Resultado',
+    propertiesSchema: [
+      {
+        key: 'description',
+        label: 'Descrição',
+        type: 'textarea',
+        defaultValue: 'Descrição do resultado...'
+      }
+    ]
+  },
+
+  // =====================================================================
+  // COMPONENTES DE OFERTA
+  // =====================================================================
+  {
+    type: 'product-offer',
+    name: 'Oferta Produto',
+    description: 'Componente de oferta de produto',
+    icon: 'ShoppingCart',
+    category: 'Ofertas',
+    propertiesSchema: [
+      {
+        key: 'productName',
+        label: 'Nome do Produto',
+        type: 'text-input',
+        defaultValue: 'Produto Incrível'
+      },
+      {
+        key: 'price',
+        label: 'Preço',
+        type: 'text-input',
+        defaultValue: 'R$ 97,00'
+      }
+    ]
+  },
+
+  // =====================================================================
+  // COMPONENTES ESPECIAIS
+  // =====================================================================
+  {
+    type: 'faq-section',
+    name: 'Seção FAQ',
+    description: 'Seção de perguntas frequentes',
+    icon: 'HelpCircle',
+    category: 'UI',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título da Seção',
+        type: 'text-input',
+        defaultValue: 'Perguntas Frequentes'
+      }
+    ]
+  },
+  {
+    type: 'testimonials',
+    name: 'Depoimentos',
+    description: 'Componente de depoimentos',
+    icon: 'Quote',
+    category: 'Credibilidade',
+    propertiesSchema: [
+      {
+        key: 'testimonial',
+        label: 'Depoimento',
+        type: 'textarea',
+        defaultValue: 'Depoimento incrível...'
+      }
+    ]
+  },
+  {
+    type: 'guarantee',
+    name: 'Garantia',
+    description: 'Componente de garantia',
+    icon: 'Shield',
+    category: 'Credibilidade',
+    propertiesSchema: [
+      {
+        key: 'guaranteeText',
+        label: 'Texto da Garantia',
+        type: 'text-input',
+        defaultValue: 'Garantia de 30 dias'
+      }
+    ]
+  },
+
+  // =====================================================================
+  // COMPONENTES INLINE ESSENCIAIS
+  // =====================================================================
+  {
+    type: 'heading-inline',
+    name: 'Título Inline',
+    description: 'Título inline editável',
+    icon: 'Type',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'text',
+        label: 'Texto',
+        type: 'text-input',
+        defaultValue: 'Título Inline'
+      }
+    ]
+  },
+  {
+    type: 'badge-inline',
+    name: 'Badge Inline',
+    description: 'Badge inline editável',
+    icon: 'Award',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'text',
+        label: 'Texto',
+        type: 'text-input',
+        defaultValue: 'Badge'
+      }
+    ]
+  },
+  {
+    type: 'progress-inline',
+    name: 'Progresso Inline',
+    description: 'Barra de progresso inline',
+    icon: 'BarChart3',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'percentage',
+        label: 'Porcentagem',
+        type: 'number-input',
+        defaultValue: 75
+      }
+    ]
+  },
+  {
+    type: 'image-display-inline',
+    name: 'Imagem Display Inline',
+    description: 'Imagem display inline editável',
+    icon: 'Image',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'src',
+        label: 'URL da Imagem',
+        type: 'image-url',
+        defaultValue: '/images/placeholder.jpg'
+      }
+    ]
+  },
+  {
+    type: 'style-card-inline',
+    name: 'Card Estilo Inline',
+    description: 'Card de estilo inline editável',
+    icon: 'Award',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'styleName',
+        label: 'Nome do Estilo',
+        type: 'text-input',
+        defaultValue: 'Estilo Natural'
+      }
+    ]
+  },
+  {
+    type: 'result-card-inline',
+    name: 'Card Resultado Inline',
+    description: 'Card de resultado inline editável',
+    icon: 'Award',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'resultTitle',
+        label: 'Título do Resultado',
+        type: 'text-input',
+        defaultValue: 'Seu Resultado'
+      }
+    ]
+  },
+  {
+    type: 'before-after-inline',
+    name: 'Antes/Depois Inline',
+    description: 'Componente antes/depois inline',
+    icon: 'ArrowRightLeft',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'beforeText',
+        label: 'Texto Antes',
+        type: 'text-input',
+        defaultValue: 'Antes'
+      }
+    ]
+  },
+  {
+    type: 'bonus-list-inline',
+    name: 'Lista Bônus Inline',
+    description: 'Lista de bônus inline editável',
+    icon: 'Gift',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'bonuses',
+        label: 'Lista de Bônus',
+        type: 'textarea',
+        defaultValue: 'Bônus 1\nBônus 2\nBônus 3'
+      }
+    ]
+  },
+  {
+    type: 'step-header-inline',
+    name: 'Header Etapa Inline',
+    description: 'Cabeçalho de etapa inline',
+    icon: 'Layers',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'stepTitle',
+        label: 'Título da Etapa',
+        type: 'text-input',
+        defaultValue: 'Etapa 1'
+      }
+    ]
+  },
+  {
+    type: 'testimonial-card-inline',
+    name: 'Card Depoimento Inline',
+    description: 'Card de depoimento inline',
+    icon: 'Quote',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'testimonial',
+        label: 'Depoimento',
+        type: 'textarea',
+        defaultValue: 'Depoimento...'
+      }
+    ]
+  },
+  {
+    type: 'countdown-inline',
+    name: 'Countdown Inline',
+    description: 'Contador regressivo inline',
+    icon: 'Clock',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'targetDate',
+        label: 'Data Alvo',
+        type: 'text-input',
+        defaultValue: '2024-12-31'
+      }
+    ]
+  },
+  {
+    type: 'stat-inline',
+    name: 'Estatística Inline',
+    description: 'Estatística inline editável',
+    icon: 'BarChart3',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'number',
+        label: 'Número',
+        type: 'text-input',
+        defaultValue: '100%'
+      }
+    ]
+  },
+  {
+    type: 'pricing-card-inline',
+    name: 'Card Preço Inline',
+    description: 'Card de preço inline editável',
+    icon: 'CircleDollarSign',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'price',
+        label: 'Preço',
+        type: 'text-input',
+        defaultValue: 'R$ 97,00'
+      }
+    ]
+  },
+
+  // =====================================================================
+  // COMPONENTES QUIZ
+  // =====================================================================
+  {
+    type: 'quiz-intro-header',
+    name: 'Header Intro Quiz',
+    description: 'Cabeçalho de introdução do quiz',
+    icon: 'Play',
+    category: 'Interação',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Descubra Seu Estilo'
+      }
+    ]
+  },
+  {
+    type: 'vertical-canvas-header',
+    name: 'Header Canvas Vertical',
+    description: 'Cabeçalho vertical do canvas',
+    icon: 'Layers',
+    category: 'UI',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Canvas Vertical'
+      }
+    ]
+  },
+  {
+    type: 'loading-animation',
+    name: 'Animação Loading',
+    description: 'Animação de carregamento',
+    icon: 'LoaderCircle',
+    category: 'UI',
+    propertiesSchema: [
+      {
+        key: 'message',
+        label: 'Mensagem',
+        type: 'text-input',
+        defaultValue: 'Carregando...'
+      }
+    ]
+  },
+  {
+    type: 'quiz-question',
+    name: 'Questão Quiz',
+    description: 'Componente de questão do quiz',
+    icon: 'HelpCircle',
+    category: 'Interação',
+    propertiesSchema: [
+      {
+        key: 'question',
+        label: 'Pergunta',
+        type: 'text-input',
+        defaultValue: 'Qual é sua preferência?'
+      }
+    ]
+  },
+  {
+    type: 'quiz-progress',
+    name: 'Progresso Quiz',
+    description: 'Barra de progresso do quiz',
+    icon: 'BarChart3',
+    category: 'Interação',
+    propertiesSchema: [
+      {
+        key: 'currentStep',
+        label: 'Etapa Atual',
+        type: 'number-input',
+        defaultValue: 1
+      }
+    ]
+  },
+
+  // =====================================================================
+  // COMPONENTES ETAPA 20/21
+  // =====================================================================
+  {
+    type: 'quiz-offer-pricing-inline',
+    name: 'Preço Oferta Quiz Inline',
+    description: 'Preço da oferta do quiz inline',
+    icon: 'CircleDollarSign',
+    category: 'Ofertas',
+    propertiesSchema: [
+      {
+        key: 'price',
+        label: 'Preço',
+        type: 'text-input',
+        defaultValue: 'R$ 97,00'
+      }
+    ]
+  },
+  {
+    type: 'divider-inline',
+    name: 'Divisor Inline',
+    description: 'Divisor inline editável',
+    icon: 'Rows3',
+    category: 'UI',
+    propertiesSchema: [
+      {
+        key: 'style',
+        label: 'Estilo',
+        type: 'select',
+        options: [
+          { label: 'Linha', value: 'linha' },
+          { label: 'Pontilhado', value: 'pontilhado' },
+          { label: 'Tracejado', value: 'tracejado' }
+        ],
+        defaultValue: 'linha'
+      }
+    ]
+  },
+
+  // =====================================================================
+  // COMPONENTES ETAPA 21 ESPECÍFICOS
+  // =====================================================================
+  {
+    type: 'hero-badge-inline',
+    name: 'Badge Hero Inline',
+    description: 'Badge hero inline editável',
+    icon: 'Award',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'text',
+        label: 'Texto',
+        type: 'text-input',
+        defaultValue: 'Oferta Especial'
+      }
+    ]
+  },
+  {
+    type: 'hero-title-inline',
+    name: 'Título Hero Inline',
+    description: 'Título hero inline editável',
+    icon: 'Type',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Título Hero'
+      }
+    ]
+  },
+  {
+    type: 'problem-list-inline',
+    name: 'Lista Problemas Inline',
+    description: 'Lista de problemas inline',
+    icon: 'List',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'problems',
+        label: 'Lista de Problemas',
+        type: 'textarea',
+        defaultValue: 'Problema 1\nProblema 2\nProblema 3'
+      }
+    ]
+  },
+  {
+    type: 'highlight-box-inline',
+    name: 'Caixa Destaque Inline',
+    description: 'Caixa de destaque inline',
+    icon: 'Award',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'content',
+        label: 'Conteúdo',
+        type: 'textarea',
+        defaultValue: 'Conteúdo destacado...'
+      }
+    ]
+  },
+  {
+    type: 'product-card-inline',
+    name: 'Card Produto Inline',
+    description: 'Card de produto inline',
+    icon: 'Gift',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'productName',
+        label: 'Nome do Produto',
+        type: 'text-input',
+        defaultValue: 'Produto Incrível'
+      }
+    ]
+  },
+  {
+    type: 'price-highlight-inline',
+    name: 'Destaque Preço Inline',
+    description: 'Destaque de preço inline',
+    icon: 'CircleDollarSign',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'price',
+        label: 'Preço',
+        type: 'text-input',
+        defaultValue: 'R$ 97,00'
+      }
+    ]
+  },
+  {
+    type: 'cta-button-inline',
+    name: 'Botão CTA Inline',
+    description: 'Botão CTA inline editável',
+    icon: 'MousePointer',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'text',
+        label: 'Texto do Botão',
+        type: 'text-input',
+        defaultValue: 'CLIQUE AQUI'
+      }
+    ]
+  },
+  {
+    type: 'trust-elements-inline',
+    name: 'Elementos Confiança Inline',
+    description: 'Elementos de confiança inline',
+    icon: 'Shield',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'trustText',
+        label: 'Texto de Confiança',
+        type: 'text-input',
+        defaultValue: '100% Seguro'
+      }
+    ]
+  },
+  {
+    type: 'countdown-timer-inline',
+    name: 'Timer Countdown Inline',
+    description: 'Timer countdown inline',
+    icon: 'Clock',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'minutes',
+        label: 'Minutos',
+        type: 'number-input',
+        defaultValue: 30
+      }
+    ]
+  },
+  {
+    type: 'guarantee-seal-inline',
+    name: 'Selo Garantia Inline',
+    description: 'Selo de garantia inline',
+    icon: 'Shield',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'guaranteeText',
+        label: 'Texto da Garantia',
+        type: 'text-input',
+        defaultValue: 'Garantia 30 dias'
+      }
+    ]
+  },
+  {
+    type: 'faq-item-inline',
+    name: 'Item FAQ Inline',
+    description: 'Item de FAQ inline',
+    icon: 'HelpCircle',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'question',
+        label: 'Pergunta',
+        type: 'text-input',
+        defaultValue: 'Pergunta frequente?'
+      }
+    ]
+  },
+  {
+    type: 'section-header-inline',
+    name: 'Header Seção Inline',
+    description: 'Cabeçalho de seção inline',
+    icon: 'Layers',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título da Seção',
+        type: 'text-input',
+        defaultValue: 'Nova Seção'
+      }
+    ]
+  },
+  {
+    type: 'sticky-header-inline',
+    name: 'Header Fixo Inline',
+    description: 'Cabeçalho fixo inline',
+    icon: 'Layers',
+    category: 'Inline',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Header Fixo'
+      }
+    ]
+  },
+
+  // =====================================================================
+  // COMPONENTES ESTRATÉGICOS
+  // =====================================================================
+  {
+    type: 'strategic-question-image',
+    name: 'Questão Estratégica Imagem',
+    description: 'Questão estratégica com imagem',
+    icon: 'Image',
+    category: 'Interação',
+    propertiesSchema: [
+      {
+        key: 'question',
+        label: 'Pergunta',
+        type: 'text-input',
+        defaultValue: 'Questão estratégica...'
+      }
+    ]
+  },
+  {
+    type: 'strategic-question-main',
+    name: 'Questão Estratégica Principal',
+    description: 'Questão estratégica principal',
+    icon: 'HelpCircle',
+    category: 'Interação',
+    propertiesSchema: [
+      {
+        key: 'question',
+        label: 'Pergunta',
+        type: 'text-input',
+        defaultValue: 'Questão principal...'
+      }
+    ]
+  },
+  {
+    type: 'strategic-question-inline',
+    name: 'Questão Estratégica Inline',
+    description: 'Questão estratégica inline',
+    icon: 'HelpCircle',
+    category: 'Interação',
+    propertiesSchema: [
+      {
+        key: 'question',
+        label: 'Pergunta',
+        type: 'text-input',
+        defaultValue: 'Questão inline...'
+      }
+    ]
+  },
+
+  // =====================================================================
+  // BLOCOS QUIZ ESPECÍFICOS
+  // =====================================================================
+  {
+    type: 'QuizQuestionBlock',
+    name: 'Bloco Questão Quiz',
+    description: 'Bloco de questão do quiz',
+    icon: 'HelpCircle',
+    category: 'Interação',
+    propertiesSchema: [
+      {
+        key: 'questionText',
+        label: 'Texto da Questão',
+        type: 'text-input',
+        defaultValue: 'Pergunta do quiz...'
+      }
+    ]
+  },
+  {
+    type: 'QuestionMultipleBlock',
+    name: 'Bloco Questão Múltipla',
+    description: 'Bloco de questão múltipla escolha',
+    icon: 'HelpCircle',
+    category: 'Interação',
+    propertiesSchema: [
+      {
+        key: 'questionText',
+        label: 'Texto da Questão',
+        type: 'text-input',
+        defaultValue: 'Questão múltipla escolha...'
+      }
+    ]
+  },
+  {
+    type: 'StrategicQuestionBlock',
+    name: 'Bloco Questão Estratégica',
+    description: 'Bloco de questão estratégica',
+    icon: 'HelpCircle',
+    category: 'Interação',
+    propertiesSchema: [
+      {
+        key: 'questionText',
+        label: 'Texto da Questão',
+        type: 'text-input',
+        defaultValue: 'Questão estratégica...'
+      }
+    ]
+  },
+  {
+    type: 'QuizTransitionBlock',
+    name: 'Bloco Transição Quiz',
+    description: 'Bloco de transição do quiz',
+    icon: 'ArrowRightLeft',
+    category: 'UI',
+    propertiesSchema: [
+      {
+        key: 'message',
+        label: 'Mensagem',
+        type: 'text-input',
+        defaultValue: 'Preparando resultado...'
+      }
+    ]
+  },
+  {
+    type: 'ResultPageBlock',
+    name: 'Bloco Página Resultado',
+    description: 'Bloco da página de resultado',
+    icon: 'Award',
+    category: 'Resultado',
+    propertiesSchema: [
+      {
+        key: 'resultTitle',
+        label: 'Título do Resultado',
+        type: 'text-input',
+        defaultValue: 'Seu Resultado'
+      }
+    ]
+  },
+
+  // =====================================================================
+  // MAPEAMENTOS ADICIONAIS
+  // =====================================================================
+  {
+    type: 'quiz-title',
+    name: 'Título Quiz',
+    description: 'Título do quiz',
+    icon: 'Type',
+    category: 'Interação',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Quiz de Estilo'
+      }
+    ]
+  },
+  {
+    type: 'quiz-name-input',
+    name: 'Input Nome Quiz',
+    description: 'Campo de entrada do nome no quiz',
+    icon: 'TextCursorInput',
+    category: 'Formulário',
+    propertiesSchema: [
+      {
+        key: 'placeholder',
+        label: 'Placeholder',
+        type: 'text-input',
+        defaultValue: 'Digite seu nome...'
+      }
+    ]
+  },
+  {
+    type: 'quiz-result-header',
+    name: 'Header Resultado Quiz',
+    description: 'Cabeçalho do resultado do quiz',
+    icon: 'Award',
+    category: 'Resultado',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Resultado do Quiz'
+      }
+    ]
+  },
+  {
+    type: 'quiz-result-card',
+    name: 'Card Resultado Quiz',
+    description: 'Card com resultado do quiz',
+    icon: 'Award',
+    category: 'Resultado',
+    propertiesSchema: [
+      {
+        key: 'resultText',
+        label: 'Texto do Resultado',
+        type: 'textarea',
+        defaultValue: 'Descrição do resultado...'
+      }
+    ]
+  },
+  {
+    type: 'quiz-offer-title',
+    name: 'Título Oferta Quiz',
+    description: 'Título da oferta no quiz',
+    icon: 'Type',
+    category: 'Ofertas',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Oferta Especial'
+      }
+    ]
+  },
+  {
+    type: 'quiz-offer-countdown',
+    name: 'Countdown Oferta Quiz',
+    description: 'Countdown da oferta do quiz',
+    icon: 'Clock',
+    category: 'Ofertas',
+    propertiesSchema: [
+      {
+        key: 'minutes',
+        label: 'Minutos',
+        type: 'number-input',
+        defaultValue: 15
+      }
+    ]
+  },
+  {
+    type: 'quiz-offer-faq',
+    name: 'FAQ Oferta Quiz',
+    description: 'FAQ da oferta do quiz',
+    icon: 'HelpCircle',
+    category: 'Ofertas',
+    propertiesSchema: [
+      {
+        key: 'faqTitle',
+        label: 'Título FAQ',
+        type: 'text-input',
+        defaultValue: 'Dúvidas Frequentes'
+      }
+    ]
+  },
+
+  // =====================================================================
+  // COMPONENTES MODULARES ORIGINAIS (mantidos)
+  // =====================================================================
+  {
+    type: 'hero-section',
+    name: 'Seção Hero',
+    description: 'Seção hero principal',
+    icon: 'Layers',
+    category: 'UI',
+    propertiesSchema: [
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text-input',
+        defaultValue: 'Título Hero'
+      }
+    ]
+  },
+  {
+    type: 'bonus-carousel',
+    name: 'Carrossel de Bônus',
+    description: 'Carrossel com bônus',
+    icon: 'Gift',
+    category: 'UI',
+    propertiesSchema: [
+      {
+        key: 'bonuses',
+        label: 'Lista de Bônus',
+        type: 'textarea',
+        defaultValue: 'Bônus 1\nBônus 2\nBônus 3'
+      }
+    ]
+  },
+  {
+    type: 'headline',
+    name: 'Título',
+    description: 'Título principal',
+    icon: 'Type',
+    category: 'UI',
+    propertiesSchema: [
+      {
+        key: 'text',
+        label: 'Texto',
+        type: 'text-input',
+        defaultValue: 'Título Principal'
+      }
+    ]
+  },
+  {
+    type: 'benefits',
+    name: 'Benefícios',
+    description: 'Lista de benefícios',
+    icon: 'CheckCircle',
+    category: 'UI',
+    propertiesSchema: [
+      {
+        key: 'benefits',
+        label: 'Lista de Benefícios',
+        type: 'textarea',
+        defaultValue: 'Benefício 1\nBenefício 2\nBenefício 3'
+      }
+    ]
+  },
+  {
+    type: 'pricing',
+    name: 'Preço',
+    description: 'Componente de preço',
+    icon: 'CircleDollarSign',
+    category: 'Vendas',
+    propertiesSchema: [
+      {
+        key: 'price',
+        label: 'Preço',
+        type: 'text-input',
+        defaultValue: 'R$ 97,00'
+      }
+    ]
+  },
+  {
+    type: 'cta',
+    name: 'Botão CTA',
+    description: 'Botão call-to-action',
+    icon: 'MousePointer',
+    category: 'UI',
+    propertiesSchema: [
+      {
+        key: 'text',
+        label: 'Texto do Botão',
+        type: 'text-input',
+        defaultValue: 'CLIQUE AQUI'
+      }
+    ]
+  },
+  {
+    type: 'style-result',
+    name: 'Resultado do Estilo',
+    description: 'Resultado do estilo identificado',
+    icon: 'Award',
+    category: 'Resultado',
+    propertiesSchema: [
+      {
+        key: 'styleName',
+        label: 'Nome do Estilo',
+        type: 'text-input',
+        defaultValue: 'Estilo Natural'
+      }
+    ]
+  },
+  {
+    type: 'secondary-styles',
+    name: 'Estilos Secundários',
+    description: 'Estilos secundários identificados',
+    icon: 'Layers',
+    category: 'Resultado',
+    propertiesSchema: [
+      {
+        key: 'styles',
+        label: 'Estilos',
+        type: 'textarea',
+        defaultValue: 'Estilo 1\nEstilo 2\nEstilo 3'
+      }
+    ]
+  },
+  {
+    type: 'bonus',
+    name: 'Bônus',
+    description: 'Componente de bônus',
+    icon: 'Gift',
+    category: 'Vendas',
+    propertiesSchema: [
+      {
+        key: 'bonusName',
+        label: 'Nome do Bônus',
+        type: 'text-input',
+        defaultValue: 'Bônus Especial'
       }
     ]
   }
