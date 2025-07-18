@@ -586,7 +586,7 @@ export const blockDefinitions: BlockDefinition[] = [
     type: 'result-page-header',
     name: 'Cabeçalho da Página de Resultado',
     description: 'Cabeçalho modular com logo, progresso e informações do usuário para página de resultado.',
-    icon: 'Header',
+    icon: 'Layers',
     category: 'Resultado',
     propertiesSchema: [
       {
@@ -646,7 +646,7 @@ export const blockDefinitions: BlockDefinition[] = [
     type: 'style-result-card',
     name: 'Card de Resultado do Estilo',
     description: 'Card modular horizontal mostrando análise do estilo, imagem e estilos secundários.',
-    icon: 'Card',
+    icon: 'RectangleHorizontal',
     category: 'Resultado',
     propertiesSchema: [
       {
@@ -723,7 +723,7 @@ export const blockDefinitions: BlockDefinition[] = [
     type: 'result-cta',
     name: 'CTA da Página de Resultado',
     description: 'Seção modular horizontal de chamada para ação com proposta de valor e botão de compra.',
-    icon: 'Button',
+    icon: 'CircleDollarSign',
     category: 'Resultado',
     propertiesSchema: [
       {
@@ -805,7 +805,7 @@ export const blockDefinitions: BlockDefinition[] = [
     type: 'offer-header',
     name: 'Cabeçalho da Página de Oferta',
     description: 'Cabeçalho modular horizontal com logo, countdown e mensagem principal da oferta.',
-    icon: 'Header',
+    icon: 'Layers',
     category: 'Ofertas',
     propertiesSchema: [
       {
@@ -878,7 +878,7 @@ export const blockDefinitions: BlockDefinition[] = [
     type: 'product-showcase',
     name: 'Vitrine de Produtos',
     description: 'Vitrine modular horizontal de produtos com imagens, preços e benefícios.',
-    icon: 'Package',
+    icon: 'Gift',
     category: 'Ofertas',
     propertiesSchema: [
       {
