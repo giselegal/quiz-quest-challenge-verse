@@ -69,7 +69,7 @@ function analyzeResponsiveness(content, filePath) {
   ];
 
   // Verificar responsividade geral
-  const hasResponsiveBreakpoints = content.includes('md:') || content.includes('lg:') || content.includes('xl:');
+  const hasResponsiveBreakpoints = content.includes('sm:') || content.includes('md:') || content.includes('lg:') || content.includes('xl:');
   if (!hasResponsiveBreakpoints) {
     score -= 30;
     issues.push('Sem breakpoints responsivos detectados');
