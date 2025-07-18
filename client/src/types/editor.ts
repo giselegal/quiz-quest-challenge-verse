@@ -22,6 +22,13 @@ export type BlockType =
   | 'bonus'
   | 'guarantee'
   | 'quiz-question'
+  // Novos componentes modulares para etapas 20 e 21
+  | 'result-page-header'
+  | 'style-result-card'
+  | 'result-cta'
+  | 'offer-header'
+  | 'product-showcase'
+  | 'offer-cta'
   | string;
 
 // Add missing EditorBlock type which was imported across many files

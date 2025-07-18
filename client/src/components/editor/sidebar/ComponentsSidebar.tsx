@@ -43,7 +43,14 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
     { type: 'quiz-result-display', label: 'Resultado do Quiz', icon: Trophy },
     { type: 'style-result', label: 'Resultado do Estilo', icon: Award },
     { type: 'secondary-styles', label: 'Estilos Secundários', icon: Layout },
-    { type: 'bonus', label: 'Bônus', icon: Gift }
+    { type: 'bonus', label: 'Bônus', icon: Gift },
+    // Novos componentes modulares para etapas 20 e 21
+    { type: 'result-page-header', label: 'Cabeçalho Resultado', icon: Layout },
+    { type: 'style-result-card', label: 'Card Resultado Estilo', icon: Award },
+    { type: 'result-cta', label: 'CTA Resultado', icon: MousePointer },
+    { type: 'offer-header', label: 'Cabeçalho Oferta', icon: Layout },
+    { type: 'product-showcase', label: 'Vitrine Produtos', icon: Gift },
+    { type: 'offer-cta', label: 'CTA Oferta', icon: DollarSign }
   ];
 
   return (
