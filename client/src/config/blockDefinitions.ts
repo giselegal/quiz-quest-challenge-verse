@@ -429,8 +429,7 @@ export const blockDefinitions: BlockDefinition[] = [
     category: 'Credibilidade',
     propertiesSchema: [
       { key: 'title', label: 'Título da Seção', type: 'text-input', placeholder: 'O que nossos clientes dizem', defaultValue: 'Depoimentos' },
-
-  {
+      {
         key: 'testimonials',
         label: 'Depoimentos',
         type: 'array-editor',
@@ -508,7 +507,9 @@ export const blockDefinitions: BlockDefinition[] = [
     icon: 'Scale',
     category: 'Vendas',
     propertiesSchema: [
-      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Prós e Contras' },
+      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Prós e Contras' }
+    ]
+  },
 
   {
     type: 'dynamic-pricing',
@@ -518,8 +519,7 @@ export const blockDefinitions: BlockDefinition[] = [
     category: 'Vendas',
     propertiesSchema: [
       { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Escolha seu Plano' },
-
-  {
+      {
         key: 'plans',
         label: 'Planos',
         type: 'array-editor',
@@ -527,7 +527,11 @@ export const blockDefinitions: BlockDefinition[] = [
           { id: '1', name: 'Básico', price: '97', features: ['Recurso 1', 'Recurso 2'], ctaText: 'Escolher Plano' }
         ],
         itemSchema: [
-          { key: 'id', label: 'ID', type: 'text-input' },
+          { key: 'id', label: 'ID', type: 'text-input' }
+        ]
+      }
+    ]
+  },
 
   {
     type: 'value-anchoring',
@@ -536,7 +540,9 @@ export const blockDefinitions: BlockDefinition[] = [
     icon: 'Target',
     category: 'Vendas',
     propertiesSchema: [
-      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Valor Investido vs Retorno' },
+      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Valor Investido vs Retorno' }
+    ]
+  },
 
   {
     type: 'sales-offer',
@@ -545,7 +551,9 @@ export const blockDefinitions: BlockDefinition[] = [
     icon: 'ShoppingCart', // Corrigido para o nome Lucide correto
     category: 'Vendas',
     propertiesSchema: [
-      { key: 'productName', label: 'Nome do Produto/Serviço', type: 'text-input', defaultValue: 'Consultoria de Estilo Personalizada' },
+      { key: 'productName', label: 'Nome do Produto/Serviço', type: 'text-input', defaultValue: 'Consultoria de Estilo Personalizada' }
+    ]
+  },
 
   {
     type: 'urgency-timer',
@@ -554,7 +562,9 @@ export const blockDefinitions: BlockDefinition[] = [
     icon: 'Clock', // Corrigido para o nome Lucide correto
     category: 'Vendas',
     propertiesSchema: [
-      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Oferta expira em:' },
+      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Oferta expira em:' }
+    ]
+  },
 
   {
     type: 'bonus-section',
@@ -564,8 +574,7 @@ export const blockDefinitions: BlockDefinition[] = [
     category: 'Vendas',
     propertiesSchema: [
       { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Bônus Exclusivos' },
-
-  {
+      {
         key: 'bonuses',
         label: 'Lista de Bônus',
         type: 'array-editor',
@@ -573,12 +582,10 @@ export const blockDefinitions: BlockDefinition[] = [
           { name: 'Guia de Maquiagem', description: 'Técnicas para valorizar seu estilo', value: 97, image: 'https://placehold.co/100x100/cccccc/333333?text=Bonus' }
         ],
         itemSchema: [
-          { key: 'name', label: 'Nome do Bônus', type: 'text-input' },
-
-  { label: 'Grid', value: 'grid' }
+          { key: 'name', label: 'Nome do Bônus', type: 'text-input' }
         ]
       }
-    ],
+    ]
   },
 
   // Categoria: Outros (para blocos genéricos ou de integração)
@@ -601,9 +608,8 @@ export const blockDefinitions: BlockDefinition[] = [
     category: 'Outros',
     propertiesSchema: [
       { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Termos e Condições' },
-
-  { key: 'content', label: 'Conteúdo', type: 'textarea', rows: 5, defaultValue: 'Leia nossos termos de uso...' }
-    ],
+      { key: 'content', label: 'Conteúdo', type: 'textarea', rows: 5, defaultValue: 'Leia nossos termos de uso...' }
+    ]
   },
 
   // Outros blocos (mantidos e ajustados)
@@ -639,7 +645,9 @@ export const blockDefinitions: BlockDefinition[] = [
     category: 'UI',
     isNew: true,
     propertiesSchema: [
-      { key: 'duration', label: 'Duração (ms)', type: 'number-input', defaultValue: 3000, min: 500, description: 'Tempo que o confete fica visível.' },
+      { key: 'duration', label: 'Duração (ms)', type: 'number-input', defaultValue: 3000, min: 500, description: 'Tempo que o confete fica visível.' }
+    ]
+  },
 
   {
     type: 'marquee',
@@ -649,7 +657,9 @@ export const blockDefinitions: BlockDefinition[] = [
     category: 'UI',
     isNew: true,
     propertiesSchema: [
-      { key: 'text', label: 'Texto da Marquise', type: 'text-input', placeholder: 'Texto que rola...' },
+      { key: 'text', label: 'Texto da Marquise', type: 'text-input', placeholder: 'Texto que rola...' }
+    ]
+  },
 
   {
     type: 'options-grid',
@@ -658,7 +668,9 @@ export const blockDefinitions: BlockDefinition[] = [
     icon: 'Rows3',
     category: 'UI',
     propertiesSchema: [
-      { key: 'title', label: 'Título da Seção', type: 'text-input', placeholder: 'Escolha sua opção:' },
+      { key: 'title', label: 'Título da Seção', type: 'text-input', placeholder: 'Escolha sua opção:' }
+    ]
+  },
 
   {
     type: 'script',
@@ -667,7 +679,9 @@ export const blockDefinitions: BlockDefinition[] = [
     icon: 'Code',
     category: 'Outros',
     propertiesSchema: [
-      { key: 'code', label: 'Código JavaScript', type: 'textarea', rows: 10, placeholder: 'console.log("Olá mundo!");', description: 'Insira o código JS que será injetado na página.' },
+      { key: 'code', label: 'Código JavaScript', type: 'textarea', rows: 10, placeholder: 'console.log("Olá mundo!");', description: 'Insira o código JS que será injetado na página.' }
+    ]
+  },
 
   {
     type: 'terms',
@@ -677,9 +691,8 @@ export const blockDefinitions: BlockDefinition[] = [
     category: 'Outros',
     propertiesSchema: [
       { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'Termos e Condições' },
-
-  { key: 'content', label: 'Conteúdo', type: 'textarea', rows: 5, defaultValue: 'Leia nossos termos de uso...' }
-    ],
+      { key: 'content', label: 'Conteúdo', type: 'textarea', rows: 5, defaultValue: 'Leia nossos termos de uso...' }
+    ]
   },
 
   // NOVOS COMPONENTES MODULARES INLINE - ETAPAS 20 E 21
