@@ -589,7 +589,9 @@ export const blockDefinitions: BlockDefinition[] = [
     icon: 'Code', // Corrigido para o nome Lucide correto
     category: 'Outros',
     propertiesSchema: [
-      { key: 'code', label: 'Código JavaScript', type: 'textarea', rows: 10, placeholder: 'console.log("Olá mundo!");', description: 'Insira o código JS que será injetado na página.' },
+      { key: 'code', label: 'Código JavaScript', type: 'textarea', rows: 10, placeholder: 'console.log("Olá mundo!");', description: 'Insira o código JS que será injetado na página.' }
+    ]
+  },
 
   {
     type: 'terms',
@@ -613,7 +615,9 @@ export const blockDefinitions: BlockDefinition[] = [
     category: 'Texto',
     isNew: true,
     propertiesSchema: [
-      { key: 'listType', label: 'Tipo de Lista', type: 'select', options: [{ label: 'Não Ordenada', value: 'ul' },
+      { key: 'listType', label: 'Tipo de Lista', type: 'select', options: [{ label: 'Não Ordenada', value: 'ul' }, { label: 'Ordenada', value: 'ol' }] }
+    ]
+  },
 
   {
     type: 'chart-compare',
@@ -623,7 +627,9 @@ export const blockDefinitions: BlockDefinition[] = [
     category: 'Gráficos',
     isNew: true,
     propertiesSchema: [
-      { key: 'title', label: 'Título da Comparação', type: 'text-input', placeholder: 'Antes vs Depois' },
+      { key: 'title', label: 'Título da Comparação', type: 'text-input', placeholder: 'Antes vs Depois' }
+    ]
+  },
 
   {
     type: 'confetti',
@@ -706,7 +712,9 @@ export const blockDefinitions: BlockDefinition[] = [
     icon: 'ShoppingCart',
     category: 'Oferta',
     propertiesSchema: [
-      { key: 'originalPrice', label: 'Preço Original', type: 'text-input', defaultValue: 'R$ 175,00' },
+      { key: 'originalPrice', label: 'Preço Original', type: 'text-input', defaultValue: 'R$ 175,00' }
+    ]
+  },
 
   {
     type: 'countdown-timer',
@@ -715,7 +723,9 @@ export const blockDefinitions: BlockDefinition[] = [
     icon: 'Clock',
     category: 'Oferta',
     propertiesSchema: [
-      { key: 'initialMinutes', label: 'Minutos Iniciais', type: 'number-input', defaultValue: 15, min: 1, max: 60 },
+      { key: 'initialMinutes', label: 'Minutos Iniciais', type: 'number-input', defaultValue: 15, min: 1, max: 60 }
+    ]
+  },
 
   {
     type: 'bonus-boxflex-inline',
@@ -804,7 +814,9 @@ export const blockDefinitions: BlockDefinition[] = [
           { name: 'Peças-chave', value: 79 },
           { name: 'Visagismo facial', value: 29 }
         ]
-      },
+      }
+    ]
+  },
 
   {
     type: 'build-info-boxflex-inline',
@@ -814,7 +826,7 @@ export const blockDefinitions: BlockDefinition[] = [
     category: 'Resultado',
     propertiesSchema: [
       { key: 'buildInfo', label: 'Informações do Build', type: 'text-input', defaultValue: 'v1.0.0 - 2025-01-15' }
-    ],
+    ]
   },
 
   // ===== ETAPA 20 - COMPONENTES BOXFLEX MODULARES =====
@@ -827,7 +839,9 @@ export const blockDefinitions: BlockDefinition[] = [
     icon: 'Award',
     category: 'Resultado',
     propertiesSchema: [
-      { key: 'logo', label: 'URL do Logo', type: 'image-url', defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp' },
+      { key: 'logo', label: 'URL do Logo', type: 'image-url', defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp' }
+    ]
+  },
 
   {
     type: 'result-main-boxflex-inline',
@@ -1167,7 +1181,7 @@ export const blockDefinitions: BlockDefinition[] = [
       }
     ]
   }
-];
+],
 
 
 // =====================================================================
