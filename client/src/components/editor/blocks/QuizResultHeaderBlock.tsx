@@ -53,26 +53,31 @@ const QuizResultHeaderBlock: React.FC<BlockComponentProps> = ({
       data-block-type={block.type}
     >
       <AnimatedWrapper show={isLoaded}>
-        <div className="max-w-xs sm:max-w-lg md:max-w-4xl mx-auto text-center">
+        <div className="flex flex-col items-center justify-center text-center max-w-xs sm:max-w-lg md:max-w-4xl mx-auto">
           {/* Logo */}
           {showLogo && (
-            <img 
-              src={logoUrl} 
-              alt={logoAlt}
-              style={{ height: logoHeight }}
-              className="mx-auto mb-6"
-            />
+            <div className="flex items-center justify-center mb-6">
+              <img 
+                src={logoUrl} 
+                alt={logoAlt}
+                style={{ height: logoHeight }}
+                className="max-w-full h-auto"
+              />
+            </div>
           )}
 
-          {/* Title */}
-          <h1 className="text-3xl md:text-4xl font-bold mb-2" style={{ color: textColor }}>
-            {formattedTitle}
-          </h1>
-          
-          {/* Subtitle */}
-          <p className="text-lg text-gray-600">
-            {subtitle}
-          </p>
+          {/* Content Container */}
+          <div className="flex flex-col items-center gap-2">
+            {/* Title */}
+            <h1 className="text-3xl md:text-4xl font-bold" style={{ color: textColor }}>
+              {formattedTitle}
+            </h1>
+            
+            {/* Subtitle */}
+            <p className="text-lg text-gray-600">
+              {subtitle}
+            </p>
+          </div>
         </div>
       </AnimatedWrapper>
     </div>

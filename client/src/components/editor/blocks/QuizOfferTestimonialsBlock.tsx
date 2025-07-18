@@ -72,17 +72,17 @@ const QuizOfferTestimonialsBlock: React.FC<BlockComponentProps> = ({
           </h3>
           
           {/* Carrossel para mobile */}
-          <div className="block md:hidden">
-            <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4 px-4 -mx-4">
+          <div className="flex md:hidden">
+            <div className="flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 sm:gap-6 pb-4 px-4 -mx-4 w-full">
               {testimonials.map((testimonial: any, index: number) => (
-                <Card key={index} className="flex-none w-[85vw] snap-start shadow-lg border-0">
-                  <CardContent className="p-6 text-center">
-                    <div className="flex justify-center mb-4">
+                <Card key={index} className="flex-none w-[85vw] sm:w-[80vw] snap-start shadow-lg border-0">
+                  <CardContent className="flex flex-col items-center justify-center p-4 sm:p-6 text-center gap-3 sm:gap-4">
+                    <div className="flex justify-center">
                       {[...Array(testimonial.rating)].map((_, i) => (
-                        <Star key={i} className="w-5 h-5 fill-current text-yellow-400" />
+                        <Star key={i} className="w-4 sm:w-5 h-4 sm:h-5 fill-current text-yellow-400" />
                       ))}
                     </div>
-                    <p className="text-sm text-gray-700 mb-4 italic">
+                    <p className="text-sm text-gray-700 italic">
                       "{testimonial.text}"
                     </p>
                     <p className="font-semibold" style={{ color: textColor }}>
@@ -105,17 +105,17 @@ const QuizOfferTestimonialsBlock: React.FC<BlockComponentProps> = ({
             </div>
           </div>
 
-          {/* Grid para desktop */}
-          <div className="hidden md:grid md:grid-cols-2 gap-8">
+          {/* Layout desktop com Flexbox */}
+          <div className="hidden md:flex md:flex-row md:flex-wrap md:justify-center lg:justify-between gap-6 lg:gap-8">
             {testimonials.map((testimonial: any, index: number) => (
-              <Card key={index} className="shadow-lg border-0">
-                <CardContent className="p-6 text-center">
-                  <div className="flex justify-center mb-4">
+              <Card key={index} className="flex-1 md:max-w-[calc(50%-12px)] lg:max-w-[calc(50%-16px)] shadow-lg border-0">
+                <CardContent className="flex flex-col items-center justify-center p-6 text-center gap-4">
+                  <div className="flex justify-center">
                     {[...Array(testimonial.rating)].map((_, i) => (
                       <Star key={i} className="w-5 h-5 fill-current text-yellow-400" />
                     ))}
                   </div>
-                  <p className="text-gray-700 mb-4 italic">
+                  <p className="text-gray-700 italic">
                     "{testimonial.text}"
                   </p>
                   <p className="font-semibold" style={{ color: textColor }}>
@@ -127,15 +127,15 @@ const QuizOfferTestimonialsBlock: React.FC<BlockComponentProps> = ({
           </div>
           
           {showStats && (
-            <div className="text-center mt-8">
-              <div className="flex items-center justify-center gap-6 text-gray-600">
+            <div className="flex justify-center mt-8">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 text-gray-600">
                 <div className="flex items-center gap-2">
-                  <Users className="w-5 h-5" />
-                  {totalCustomers}
+                  <Users className="w-4 sm:w-5 h-4 sm:h-5" />
+                  <span className="text-sm sm:text-base">{totalCustomers}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Star className="w-5 h-5 fill-current text-yellow-400" />
-                  {averageRating}
+                  <Star className="w-4 sm:w-5 h-4 sm:h-5 fill-current text-yellow-400" />
+                  <span className="text-sm sm:text-base">{averageRating}</span>
                 </div>
               </div>
             </div>
