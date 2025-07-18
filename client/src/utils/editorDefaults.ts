@@ -663,11 +663,6 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
         textColor: '#432818',
         accentColor: '#B89B7A'
       };
-        description: 'Com base no seu resultado, preparamos uma oferta exclusiva.',
-        heroImageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/offer-hero.jpg',
-        backgroundColor: '#f8f9fa',
-        titleColor: '#dc3545'
-      };
 
     case 'product-showcase':
       return {
