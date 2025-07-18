@@ -1,13 +1,14 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/components/ui/use-toast';
+import { useQuizConfig } from '@/hooks/useQuizConfig';
 import { 
   Save, TestTube, BarChart3, ExternalLink,
-  Plus, Trash2, Settings 
+  Plus, Trash2, Settings, Zap 
 } from 'lucide-react';
 
 interface QuizOption {
@@ -46,6 +47,8 @@ interface QuizEditorPanelProps {
 }
 
 export const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ className }) => {
+  const { quizConfig: editorQuizConfig, quizQuestions, reloadConfig } = useQuizConfig();
+  
   const [quizConfig, setQuizConfig] = useState<QuizConfig>({
     intro: {
       title: 'Descubra Seu Estilo Único',
@@ -83,6 +86,14 @@ export const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ className }) =
 
   const [currentFunnelId, setCurrentFunnelId] = useState<string | null>(null);
   const [isPublished, setIsPublished] = useState(false);
+
+  // Sincronizar com dados do editor quando carregados
+  useEffect(() => {
+    if (editorQuizConfig) {
+      console.log('🔄 Sincronizando configurações do editor:', editorQuizConfig);
+      // Carregar dados do editor se disponíveis
+    }
+  }, [editorQuizConfig]);
 
   // Validar regras de pontuação
   const validateScoringRules = async () => {
@@ -167,16 +178,71 @@ export const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ className }) =
   // Salvar configurações
   const handleSave = async () => {
     try {
-      // Salvar no localStorage por enquanto
+      // Salvar configurações do quiz no localStorage
       localStorage.setItem('quiz-editor-config', JSON.stringify(quizConfig));
+      
+      // Também salvar no formato do editor visual
+      const editorConfig = {
+        id: 'quiz-funnel',
+        name: quizConfig.intro.title,
+        pages: [
+          {
+            id: 'intro',
+            title: 'Página Inicial',
+            type: 'intro',
+            progress: 0,
+            showHeader: true,
+            showProgress: false,
+            components: [
+              {
+                id: 'intro-title',
+                type: 'heading',
+                data: { text: quizConfig.intro.title }
+              },
+              {
+                id: 'intro-subtitle', 
+                type: 'paragraph',
+                data: { text: quizConfig.intro.description }
+              }
+            ]
+          },
+          ...quizConfig.questions.map((question, index) => ({
+            id: question.id,
+            title: `Questão ${index + 1}`,
+            type: 'question',
+            progress: ((index + 1) / quizConfig.questions.length) * 100,
+            showHeader: true,
+            showProgress: true,
+            components: [
+              {
+                id: `question-${question.id}`,
+                type: 'options-grid',
+                data: { 
+                  title: question.text,
+                  options: question.options,
+                  validationRules: question.options.map(opt => ({
+                    optionId: opt.id,
+                    points: opt.points
+                  }))
+                }
+              }
+            ]
+          }))
+        ]
+      };
+      
+      localStorage.setItem('quiz_funnel_config', JSON.stringify(editorConfig));
       
       // Simular ID do funil
       const funnelId = Date.now().toString();
       setCurrentFunnelId(funnelId);
+      
+      // Recarregar configurações
+      reloadConfig();
 
       toast({
         title: 'Quiz Salvo! 💾',
-        description: 'Configurações salvas com sucesso.',
+        description: 'Configurações integradas com o editor visual.',
       });
     } catch (error) {
       toast({
@@ -300,14 +366,35 @@ export const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ className }) =
       </div>
 
       {/* Status */}
-      <div className="flex gap-2">
+      <div className="flex gap-2 flex-wrap">
         <span className={`px-2 py-1 rounded text-xs ${currentFunnelId ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}>
           {currentFunnelId ? `ID: ${currentFunnelId}` : 'Não salvo'}
         </span>
         <span className={`px-2 py-1 rounded text-xs ${isPublished ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-600'}`}>
           {isPublished ? 'Publicado' : 'Rascunho'}
         </span>
+        <span className={`px-2 py-1 rounded text-xs ${editorQuizConfig ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-600'}`}>
+          <Zap className="w-3 h-3 inline mr-1" />
+          {editorQuizConfig ? 'Conectado ao Editor' : 'Desconectado'}
+        </span>
       </div>
+
+      {/* Informações de Integração */}
+      {editorQuizConfig && (
+        <Card className="border-green-200 bg-green-50">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Zap className="w-4 h-4 text-green-600" />
+              <span className="font-medium text-green-800">Integração Ativa</span>
+            </div>
+            <div className="text-sm text-green-700">
+              <p>✅ Editor visual conectado: <strong>{editorQuizConfig.name}</strong></p>
+              <p>✅ Páginas disponíveis: <strong>{editorQuizConfig.pages?.length || 0}</strong></p>
+              <p>✅ Questões detectadas: <strong>{quizQuestions.length}</strong></p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Configurações */}
       <Card>

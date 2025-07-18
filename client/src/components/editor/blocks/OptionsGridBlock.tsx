@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { InlineEditableText } from './InlineEditableText';
-import { Rows3, Check } from 'lucide-react';
+import { Rows3, Check, Zap } from 'lucide-react';
 import type { BlockComponentProps } from '@/types/blocks';
+import { useQuizValidation } from '@/hooks/useQuizValidation';
 import { 
   OptionsGridUtils, 
   IMAGE_SIZE_CLASSES, 
@@ -22,6 +23,12 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
   onPropertyChange,
   className = ''
 }) => {
+  const { 
+    validateOptionSelection, 
+    isQuizConfigured, 
+    getValidationRulesForBlock 
+  } = useQuizValidation();
+  
   const {
     title = '',
     options = [
@@ -42,6 +49,7 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
   // Estado local para gerenciar seleções
   const [internalSelectedOptions, setInternalSelectedOptions] = useState<string[]>(selectedOptions || []);
   const [validationError, setValidationError] = useState<string>('');
+  const [quizValidationStatus, setQuizValidationStatus] = useState<'none' | 'valid' | 'invalid'>('none');
 
   // Sincronizar estado interno com propriedades do bloco apenas na inicialização
   useEffect(() => {
@@ -84,9 +92,34 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
       newSelectedOptions = internalSelectedOptions.includes(optionId) ? [] : [optionId];
     }
 
+    // Validação de quiz integrada
+    if (isQuizConfigured) {
+      const validationResult = validateOptionSelection(block.id, optionId, newSelectedOptions);
+      
+      if (!validationResult.isValid) {
+        setValidationError(validationResult.errors.join(', '));
+        setQuizValidationStatus('invalid');
+        console.log('❌ Validação de quiz falhou:', validationResult.errors);
+        // Permitir seleção mas mostrar erro
+      } else {
+        setValidationError('');
+        setQuizValidationStatus('valid');
+        console.log('✅ Validação de quiz OK');
+      }
+    }
+
     setInternalSelectedOptions(newSelectedOptions);
-    console.log('🔄 OptionsGridBlock.handleOptionSelect:', { optionId, newSelectedOptions });
-    handlePropertyChange('selectedOptions', newSelectedOptions);
+    console.log('🔄 OptionsGridBlock.handleOptionSelect:', { 
+      optionId, 
+      newSelectedOptions, 
+      quizConfigured: isQuizConfigured,
+      validationStatus: quizValidationStatus 
+    });
+    
+    const handlePropertyChange = onPropertyChange;
+    if (handlePropertyChange) {
+      handlePropertyChange('selectedOptions', newSelectedOptions);
+    }
     
     // Validar seleção usando configuração de validação
     if (newSelectedOptions.length < minSelections) {
@@ -147,14 +180,41 @@ const OptionsGridBlock: React.FC<BlockComponentProps> = ({
       data-block-type={block.type}
     >
       {title && (
-        <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#432818] mb-3 sm:mb-4 md:mb-6 px-1 sm:px-2">
-          <InlineEditableText
-            value={title}
-            onChange={(value: string) => handlePropertyChange('title', value)}
-            className="inline-block"
-            placeholder="Título das opções"
-          />
-        </h3>
+        <div className="mb-3 sm:mb-4 md:mb-6 px-1 sm:px-2">
+          <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#432818] mb-2">
+            <InlineEditableText
+              value={title}
+              onChange={(value: string) => onPropertyChange && onPropertyChange('title', value)}
+              className="inline-block"
+              placeholder="Título das opções"
+            />
+          </h3>
+          
+          {/* Indicador de Status do Quiz */}
+          {isQuizConfigured && (
+            <div className="flex items-center gap-2 text-sm">
+              <Zap className="w-4 h-4 text-green-600" />
+              <span className="text-green-700 font-medium">Quiz Integrado</span>
+              {quizValidationStatus === 'valid' && (
+                <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs">
+                  ✅ Validação OK
+                </span>
+              )}
+              {quizValidationStatus === 'invalid' && (
+                <span className="px-2 py-1 bg-red-100 text-red-800 rounded text-xs">
+                  ❌ Erro de Validação
+                </span>
+              )}
+            </div>
+          )}
+          
+          {!isQuizConfigured && isSelected && (
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+              <Zap className="w-4 h-4" />
+              <span>Configure o quiz na aba Quiz para ativar validação</span>
+            </div>
+          )}
+        </div>
       )}
       
       {/* Detectar se tem imagens para escolher layout automaticamente */}

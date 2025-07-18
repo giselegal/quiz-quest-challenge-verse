@@ -70,10 +70,13 @@ export default function EditorPage() {
       {/* Header */}
       <div className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6">
         <div className="flex items-center gap-4">
-          <h1 className="text-xl font-semibold text-gray-900">Editor Principal</h1>
+          <h1 className="text-xl font-semibold text-gray-900">Editor Unificado</h1>
           <div className="text-sm text-gray-500">
             {blocks.length} bloco{blocks.length !== 1 ? 's' : ''}
           </div>
+          <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">
+            ✅ Quiz Integrado
+          </span>
         </div>
         
         <div className="flex items-center gap-2">
@@ -98,32 +101,43 @@ export default function EditorPage() {
         <ResizablePanelGroup direction="horizontal" className="h-full">
           {/* Sidebar - Componentes */}
           <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-            <div className="h-full bg-white border-r border-gray-200 p-4">
-              <h3 className="font-medium text-gray-900 mb-4">Componentes</h3>
-              
-              <div className="space-y-2">
-                {availableComponents.map((component) => (
-                  <Button
-                    key={component.type}
-                    variant="ghost"
-                    className="w-full justify-start text-left h-auto p-3"
-                    onClick={() => handleAddComponent(component.type)}
-                  >
-                    <span className="text-lg mr-3">{component.icon}</span>
-                    <div>
-                      <div className="font-medium text-sm">{component.name}</div>
-                      <div className="text-xs text-gray-500">{component.type}</div>
-                    </div>
-                  </Button>
-                ))}
-              </div>
+            <div className="h-full bg-white border-r border-gray-200">
+              <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'components' | 'quiz')} className="h-full flex flex-col">
+                <TabsList className="grid w-full grid-cols-2 m-2">
+                  <TabsTrigger value="components">Componentes</TabsTrigger>
+                  <TabsTrigger value="quiz">Quiz</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="components" className="flex-1 p-4 mt-0">
+                  <div className="space-y-2">
+                    {availableComponents.map((component) => (
+                      <Button
+                        key={component.type}
+                        variant="ghost"
+                        className="w-full justify-start text-left h-auto p-3"
+                        onClick={() => handleAddComponent(component.type)}
+                      >
+                        <span className="text-lg mr-3">{component.icon}</span>
+                        <div>
+                          <div className="font-medium text-sm">{component.name}</div>
+                          <div className="text-xs text-gray-500">{component.type}</div>
+                        </div>
+                      </Button>
+                    ))}
+                  </div>
 
-              <div className="mt-6 p-3 bg-blue-50 rounded-lg">
-                <h4 className="font-medium text-blue-900 text-sm mb-2">💡 Teste o OptionsGrid</h4>
-                <p className="text-xs text-blue-700">
-                  Adicione um "Grid de Opções" e clique nas opções para ver o callback funcionando!
-                </p>
-              </div>
+                  <div className="mt-6 p-3 bg-blue-50 rounded-lg">
+                    <h4 className="font-medium text-blue-900 text-sm mb-2">💡 Teste o OptionsGrid</h4>
+                    <p className="text-xs text-blue-700">
+                      Adicione um "Grid de Opções" e configure no painel Quiz para ativar validação!
+                    </p>
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="quiz" className="flex-1 mt-0 overflow-auto">
+                  <QuizEditorPanel className="p-4" />
+                </TabsContent>
+              </Tabs>
             </div>
           </ResizablePanel>
 
@@ -214,6 +228,8 @@ export default function EditorPage() {
           <span>Blocks: {blocks.length}</span>
           <span>Selected: {selectedBlockId || 'None'}</span>
           <span>Preview: {isPreviewing ? 'ON' : 'OFF'}</span>
+          <span>Tab: {activeTab}</span>
+          <span className="text-green-300">✅ Quiz Integration Active</span>
         </div>
       )}
     </div>
