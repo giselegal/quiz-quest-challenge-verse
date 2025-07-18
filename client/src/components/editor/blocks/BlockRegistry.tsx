@@ -18,6 +18,16 @@ import QuizResultDisplayBlock from './QuizResultDisplayBlock';
 import ButtonBlock from './ButtonBlock';
 import ButtonInlineBlock from './ButtonInlineBlock';
 
+// Import Result Page Components (Etapa 20)
+import ResultPageHeaderBlock from './ResultPageHeaderBlock';
+import StyleResultCardBlock from './StyleResultCardBlock';
+import ResultCTABlock from './ResultCTABlock';
+
+// Import Offer Page Components (Etapa 21)
+import OfferHeaderBlock from './OfferHeaderBlock';
+import ProductShowcaseBlock from './ProductShowcaseBlock';
+import OfferCTABlock from './OfferCTABlock';
+
 // Legacy blocks - can be imported if they exist
 // import OptionsGridBlock from './OptionsGridBlock';
 
@@ -47,6 +57,16 @@ export const BLOCK_COMPONENTS: Record<string, BlockComponent> = {
   'quiz-question': QuizQuestionBlock as BlockComponent,
   'quiz-result-display': QuizResultDisplayBlock as BlockComponent,
   'options-grid': OptionsGridBlock as BlockComponent,
+  
+  // Result Page Components (Etapa 20)
+  'result-page-header': ResultPageHeaderBlock as BlockComponent,
+  'style-result-card': StyleResultCardBlock as BlockComponent,
+  'result-cta': ResultCTABlock as BlockComponent,
+  
+  // Offer Page Components (Etapa 21)
+  'offer-header': OfferHeaderBlock as BlockComponent,
+  'product-showcase': ProductShowcaseBlock as BlockComponent,
+  'offer-cta': OfferCTABlock as BlockComponent,
   
   // Legacy blocks (if they exist)
 } as const;
