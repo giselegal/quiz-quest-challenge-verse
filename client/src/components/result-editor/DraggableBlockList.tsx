@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 import { Block } from '@/types/editor';
 import { SortableBlock } from './SortableBlock';
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
-import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { restrictToVerticalAxis, restrictToParentElement } from '@dnd-kit/modifiers';
-import { ResultPageBlock } from '@/types/quizResult';
+import { DragEndEvent } from '@dnd-kit/core';
+import { StandardDndContext } from '../drag-drop/StandardDndKit';
 
 interface DraggableBlockListProps {
   blocks: Block[];
@@ -25,18 +23,7 @@ export const DraggableBlockList: React.FC<DraggableBlockListProps> = ({
   onDuplicateBlock,
   onDeleteBlock
 }) => {
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 8,
-      },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
-
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;
     
     if (over && active.id !== over.id) {
@@ -47,33 +34,50 @@ export const DraggableBlockList: React.FC<DraggableBlockListProps> = ({
         onReorderBlocks(oldIndex, newIndex);
       }
     }
-  };
+  }, [blocks, onReorderBlocks]);
+
+  const renderOverlay = useCallback((activeId: string | null, activeItem: Block | null) => {
+    if (!activeItem) return null;
+
+    return (
+      <div className="bg-white shadow-2xl border-2 border-primary/50 rounded-lg p-3 transform rotate-2 scale-105 max-w-xs">
+        <div className="flex items-center space-x-2">
+          <div className="w-3 h-3 bg-primary rounded-full flex-shrink-0" />
+          <span className="font-medium text-sm truncate">
+            {activeItem.type} - {activeItem.content?.text || activeItem.id}
+          </span>
+        </div>
+        <div className="text-xs text-gray-500 mt-1">Movendo bloco...</div>
+      </div>
+    );
+  }, []);
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
+    <StandardDndContext
+      items={blocks}
       onDragEnd={handleDragEnd}
-      modifiers={[restrictToVerticalAxis, restrictToParentElement]}
+      config={{
+        sortingStrategy: 'vertical',
+        direction: 'vertical',
+        activationDistance: 8,
+        restrictToParent: true
+      }}
+      disabled={isPreviewing}
+      renderOverlay={renderOverlay}
     >
-      <SortableContext
-        items={blocks.map(block => block.id)}
-        strategy={verticalListSortingStrategy}
-      >
-        <div className="space-y-4 p-4">
-          {blocks.map((block) => (
-            <SortableBlock
-              key={block.id}
-              block={block}
-              isSelected={selectedBlockId === block.id}
-              isPreviewing={isPreviewing}
-              onSelect={() => onSelectBlock(block.id)}
-              onDuplicate={onDuplicateBlock ? () => onDuplicateBlock(block.id) : undefined}
-              onDelete={onDeleteBlock ? () => onDeleteBlock(block.id) : undefined}
-            />
-          ))}
-        </div>
-      </SortableContext>
-    </DndContext>
+      <div className="space-y-4 p-4">
+        {blocks.map((block) => (
+          <SortableBlock
+            key={block.id}
+            block={block}
+            isSelected={selectedBlockId === block.id}
+            isPreviewing={isPreviewing}
+            onSelect={() => onSelectBlock(block.id)}
+            onDuplicate={onDuplicateBlock ? () => onDuplicateBlock(block.id) : undefined}
+            onDelete={onDeleteBlock ? () => onDeleteBlock(block.id) : undefined}
+          />
+        ))}
+      </div>
+    </StandardDndContext>
   );
 };
