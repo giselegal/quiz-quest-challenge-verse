@@ -359,6 +359,94 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
           borderRadius: 'md' as BorderRadiusType
         }
       };
+
+    // Novos componentes modulares para etapas 20 e 21
+    case 'result-page-header':
+      return {
+        logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+        logoAlt: 'Logo',
+        progressPercentage: 100,
+        progressText: 'Quiz Completo!',
+        userName: 'Usuário',
+        userStyle: 'Clássico Elegante',
+        backgroundColor: '#ffffff',
+        textColor: '#333333'
+      };
+
+    case 'style-result-card':
+      return {
+        mainStyleName: 'Clássico Elegante',
+        mainStyleDescription: 'Você tem um gosto refinado e aprecia peças atemporais.',
+        mainStyleImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/style-classic.jpg',
+        progressPercentage: 85,
+        secondaryStyle1: 'Moderno Minimalista',
+        secondaryStyle1Percentage: 65,
+        secondaryStyle2: 'Boêmio Chic',
+        secondaryStyle2Percentage: 45,
+        guideTitle: 'Seu Guia de Estilo Personalizado',
+        backgroundColor: '#f8f9fa'
+      };
+
+    case 'result-cta':
+      return {
+        mainTitle: 'Descubra Seu Estilo Completo',
+        subtitle: 'Acesse seu guia personalizado agora!',
+        valueItem1: 'Análise completa do seu perfil',
+        valueItem2: 'Recomendações personalizadas',
+        valueItem3: 'Guia de compras exclusivo',
+        originalPrice: 'R$ 197,00',
+        currentPrice: 'R$ 97,00',
+        ctaText: 'QUERO MEU GUIA AGORA',
+        ctaUrl: '/checkout',
+        securityText: 'Compra 100% Segura',
+        backgroundColor: '#ffffff',
+        ctaColor: '#007bff'
+      };
+
+    case 'offer-header':
+      return {
+        logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+        logoAlt: 'Logo',
+        countdownTitle: 'Oferta por tempo limitado!',
+        countdownMinutes: 15,
+        mainTitle: 'OFERTA ESPECIAL PARA VOCÊ!',
+        subtitle: 'Seu Guia de Estilo Personalizado',
+        description: 'Com base no seu resultado, preparamos uma oferta exclusiva.',
+        heroImageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/offer-hero.jpg',
+        backgroundColor: '#f8f9fa',
+        titleColor: '#dc3545'
+      };
+
+    case 'product-showcase':
+      return {
+        sectionTitle: 'O que você vai receber:',
+        product1Name: 'Guia de Estilo Personalizado',
+        product1Image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/product1.jpg',
+        product1Price: 'R$ 97,00',
+        product1Benefits: 'Análise completa do seu perfil\nRecomendações personalizadas\nGuia de compras',
+        product2Name: 'Consultoria de Estilo Online',
+        product2Image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/product2.jpg',
+        product2Price: 'R$ 197,00',
+        product2Benefits: 'Sessão individual\nPlano personalizado\nSuporte contínuo',
+        totalValue: 'R$ 294,00',
+        backgroundColor: '#ffffff'
+      };
+
+    case 'offer-cta':
+      return {
+        urgencyText: '🔥 ÚLTIMAS VAGAS DISPONÍVEIS!',
+        discountText: 'DESCONTO ESPECIAL DE 70%',
+        originalPrice: 'R$ 294,00',
+        discountPrice: 'R$ 87,00',
+        installments: 'ou 3x de R$ 29,00',
+        ctaText: 'SIM, QUERO APROVEITAR ESTA OFERTA!',
+        ctaUrl: '/checkout',
+        guaranteeText: '✅ Garantia de 30 dias',
+        securityText: '🔒 Compra 100% Segura',
+        backgroundColor: '#f8f9fa',
+        ctaColor: '#28a745',
+        urgencyColor: '#dc3545'
+      };
       
     // Add more default content types as needed
     default:
