@@ -28,7 +28,7 @@ export const StyleResultBlockEditor: React.FC<BlockEditorProps> = ({
             value={block.content.description || ''}
             onChange={(e) => onUpdate({ description: e.target.value })}
             placeholder="Descreva o estilo predominante..."
-            className="min-h-[100px]"
+            className="min-h-20 sm:min-h-24 md:min-h-28"
           />
         </div>
 

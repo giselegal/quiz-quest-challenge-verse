@@ -141,8 +141,8 @@ export const QuizStepBlock: React.FC<QuizStepBlockProps> = ({
     switch (layout) {
       case '1-column': return 'grid-cols-1';
       case '2-columns': return 'grid-cols-1 md:grid-cols-2';
-      case '3-columns': return 'grid-cols-1 md:grid-cols-2';
-      case '4-columns': return 'grid-cols-1 md:grid-cols-2';
+      case '3-columns': return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3';
+      case '4-columns': return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4';
       default: return 'grid-cols-1 md:grid-cols-2';
     }
   };
@@ -317,7 +317,7 @@ export const QuizStepBlock: React.FC<QuizStepBlockProps> = ({
                       ${getOptionStyleClasses(optionStyle)}
                       ${getBorderRadiusClass(borderRadius)}
                       ${getDispositionClasses(disposition)}
-                      p-4 min-h-[80px] flex gap-3 overflow-hidden
+                      p-2 sm:p-3 md:p-4 min-h-16 sm:min-h-18 md:min-h-20 flex gap-2 sm:gap-3 overflow-hidden
                       ${isOptionSelected ? 'ring-2 ring-offset-2' : ''}
                     `}
                     style={{

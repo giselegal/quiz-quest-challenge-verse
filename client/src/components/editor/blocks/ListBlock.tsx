@@ -32,7 +32,7 @@ const ListBlock: React.FC<BlockComponentProps> = ({
     return (
       <div
         className={`
-          bg-gray-100 p-8 rounded-lg text-gray-500 flex flex-col items-center justify-center min-h-[100px] cursor-pointer transition-all duration-200
+          bg-gray-100 p-4 sm:p-6 md:p-8 rounded-lg text-gray-500 flex flex-col items-center justify-center min-h-20 sm:min-h-24 md:min-h-28 cursor-pointer transition-all duration-200
           ${isSelected 
             ? 'ring-1 ring-gray-400/40 bg-gray-50/30' 
             : 'hover:shadow-sm'
@@ -52,7 +52,7 @@ const ListBlock: React.FC<BlockComponentProps> = ({
   return (
     <div
       className={`
-        py-4 px-4 cursor-pointer transition-all duration-200
+        py-2 sm:py-3 md:py-4 px-2 sm:px-3 md:px-4 cursor-pointer transition-all duration-200
         ${isSelected 
           ? 'ring-1 ring-gray-400/40 bg-gray-50/30' 
           : 'hover:shadow-sm'
@@ -63,7 +63,7 @@ const ListBlock: React.FC<BlockComponentProps> = ({
       data-block-id={block.id}
       data-block-type={block.type}
     >
-      <ListTag className={`space-y-2 text-[#432818] ${listType === 'ul' ? 'list-disc' : 'list-decimal'} list-inside`}>
+      <ListTag className={`space-y-1 sm:space-y-2 text-[#432818] text-sm sm:text-base ${listType === 'ul' ? 'list-disc' : 'list-decimal'} list-inside`}>
         {(items || []).map((item: any, index: number) => (
           <li key={index} className="leading-relaxed">
             {item.text}

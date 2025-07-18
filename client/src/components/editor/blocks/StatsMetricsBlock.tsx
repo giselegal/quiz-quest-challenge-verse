@@ -233,7 +233,7 @@ const StatsMetricsBlock: React.FC<StatsBlockProps> = ({
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.1 }}
         className={`
-          ${layout === 'vertical' ? 'w-full' : 'flex-1 min-w-[200px] max-w-sm'}
+          ${layout === 'vertical' ? 'w-full' : 'flex-1 min-w-0 max-w-xs sm:max-w-sm'}
         `}
       >
         <Card className={getCardStyleClasses()}>
@@ -319,7 +319,7 @@ const StatsMetricsBlock: React.FC<StatsBlockProps> = ({
     return (
       <div
         className={`
-          bg-gray-100 p-8 rounded-lg text-gray-500 flex flex-col items-center justify-center min-h-[300px] cursor-pointer transition-all duration-200
+          bg-gray-100 p-4 sm:p-6 md:p-8 rounded-lg text-gray-500 flex flex-col items-center justify-center min-h-48 sm:min-h-56 md:min-h-64 cursor-pointer transition-all duration-200
           ${isSelected 
             ? 'ring-1 ring-gray-400/40 bg-gray-50/30' 
             : 'hover:shadow-sm'

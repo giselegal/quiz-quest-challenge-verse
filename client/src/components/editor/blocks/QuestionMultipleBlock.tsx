@@ -59,7 +59,7 @@ const QuestionMultipleBlock: React.FC<QuestionMultipleBlockProps> = ({
   return (
     <div
       className={cn(
-        'relative w-full min-h-[500px] p-8 rounded-lg border-2 border-dashed',
+        'relative w-full min-h-96 sm:min-h-[28rem] md:min-h-[32rem] p-4 sm:p-6 md:p-8 rounded-lg border-2 border-dashed',
         isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-white',
         'cursor-pointer hover:border-gray-400 transition-colors',
         className

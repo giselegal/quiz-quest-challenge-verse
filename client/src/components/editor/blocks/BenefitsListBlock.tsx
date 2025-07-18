@@ -225,7 +225,7 @@ const BenefitsListBlock: React.FC<BenefitsListBlockProps> = ({
         transition={{ delay: index * 0.1 }}
         className={cn(
           'group cursor-pointer',
-          layout === 'list' ? 'w-full' : 'flex-1 min-w-[280px] max-w-md'
+          layout === 'list' ? 'w-full' : 'flex-1 min-w-0 max-w-xs sm:max-w-sm md:max-w-md'
         )}
         onClick={() => hasDescription && toggleExpanded(benefit.id)}
       >
@@ -313,7 +313,7 @@ const BenefitsListBlock: React.FC<BenefitsListBlockProps> = ({
     return (
       <div
         className={cn(
-          'bg-gray-100 p-8 rounded-lg text-gray-500 flex flex-col items-center justify-center min-h-[200px] cursor-pointer transition-all duration-200',
+          'bg-gray-100 p-4 sm:p-6 md:p-8 rounded-lg text-gray-500 flex flex-col items-center justify-center min-h-32 sm:min-h-40 md:min-h-48 cursor-pointer transition-all duration-200',
           isSelected && 'ring-1 ring-gray-400/40 bg-gray-50/30',
           !isSelected && 'hover:shadow-sm',
           className

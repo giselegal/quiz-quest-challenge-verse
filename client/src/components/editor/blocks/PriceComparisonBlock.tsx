@@ -224,7 +224,7 @@ const PriceComparisonBlock: React.FC<PriceComparisonBlockProps> = ({
       transition={{ delay: index * 0.1 }}
       className={cn(
         'relative',
-        layout === 'cards' ? 'flex-1 min-w-[280px] max-w-sm' : 'w-full'
+        layout === 'cards' ? 'flex-1 min-w-0 max-w-xs sm:max-w-sm' : 'w-full'
       )}
       onMouseEnter={() => !isEditing && setHoveredPlan(plan.id)}
       onMouseLeave={() => !isEditing && setHoveredPlan(null)}
@@ -312,7 +312,7 @@ const PriceComparisonBlock: React.FC<PriceComparisonBlockProps> = ({
     return (
       <div
         className={cn(
-          'bg-gray-100 p-8 rounded-lg text-gray-500 flex flex-col items-center justify-center min-h-[300px] cursor-pointer transition-all duration-200',
+          'bg-gray-100 p-4 sm:p-6 md:p-8 rounded-lg text-gray-500 flex flex-col items-center justify-center min-h-48 sm:min-h-56 md:min-h-64 cursor-pointer transition-all duration-200',
           isSelected && 'ring-1 ring-gray-400/40 bg-gray-50/30',
           !isSelected && 'hover:shadow-sm',
           className

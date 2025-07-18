@@ -32,7 +32,7 @@ const CarouselBlock: React.FC<BlockComponentProps> = ({
     return (
       <div
         className={`
-          bg-gray-100 p-8 rounded-lg text-gray-500 flex flex-col items-center justify-center min-h-[200px] cursor-pointer transition-all duration-200
+          bg-gray-100 p-4 sm:p-6 md:p-8 rounded-lg text-gray-500 flex flex-col items-center justify-center min-h-32 sm:min-h-40 md:min-h-48 cursor-pointer transition-all duration-200
           ${isSelected 
             ? 'ring-1 ring-gray-400/40 bg-gray-50/30' 
             : 'hover:shadow-sm'
