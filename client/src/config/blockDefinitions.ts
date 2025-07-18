@@ -796,9 +796,9 @@ export const blockDefinitions: BlockDefinition[] = [
         label: 'Lista de Itens', 
         type: 'json-editor', 
         defaultValue: [
-          'Guia principal - R$67',
-          'Peças-chave - R$79',
-          'Visagismo facial - R$29'
+          { name: 'Guia principal', value: 67 },
+          { name: 'Peças-chave', value: 79 },
+          { name: 'Visagismo facial', value: 29 }
         ]
       },
 
