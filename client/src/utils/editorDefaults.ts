@@ -397,8 +397,6 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
       };
 
     case 'button':
-    case 'button-inline':
-    case 'cta-button-inline':
       return {
         text: 'Clique Aqui',
         variant: 'primary',
