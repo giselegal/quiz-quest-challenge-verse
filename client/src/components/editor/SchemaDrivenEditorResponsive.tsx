@@ -131,6 +131,20 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
   };
 
   const handleSave = () => {
+    console.log('🎯 handleSave clicked - Debug Info:', {
+      funnelExists: !!funnel,
+      funnelId: funnel?.id,
+      funnelName: funnel?.name,
+      pagesCount: funnel?.pages?.length || 0,
+      currentPageId,
+      currentPageBlocks: currentPage?.blocks?.length || 0
+    });
+    
+    if (!funnel) {
+      console.error('❌ handleSave: No funnel to save!');
+      return;
+    }
+    
     saveFunnel(true);
   };
 

@@ -172,11 +172,30 @@ export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorR
   }, [toast]);
 
   const saveFunnel = useCallback(async (manual: boolean = true) => {
-    if (!funnel) return;
+    console.log('📡 saveFunnel called:', {
+      manual,
+      funnelExists: !!funnel,
+      funnelId: funnel?.id,
+      funnelName: funnel?.name,
+      funnelPages: funnel?.pages?.length || 0,
+      isSaving
+    });
+    
+    if (!funnel) {
+      console.error('❌ saveFunnel: No funnel to save!');
+      return;
+    }
     
     setIsSaving(true);
     try {
       const savedFunnel = await schemaDrivenFunnelService.saveFunnel(funnel, !manual);
+      
+      console.log('✅ saveFunnel success:', {
+        savedFunnelId: savedFunnel.id,
+        savedFunnelVersion: savedFunnel.version,
+        savedFunnelPages: savedFunnel.pages?.length || 0
+      });
+      
       setFunnel(savedFunnel);
       
       if (manual) {
@@ -186,6 +205,7 @@ export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorR
         });
       }
     } catch (error) {
+      console.error('❌ saveFunnel error:', error);
       if (manual) {
         toast({
           title: "Erro ao salvar",
@@ -430,15 +450,29 @@ export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorR
       // Debug adicional para verificar se o estado está sendo atualizado
       console.log('🔍 DEBUG - Estado após setFunnel:', {
         pagesSet: defaultFunnel.pages.length,
-        currentPageIdSet: defaultFunnel.pages[0]?.id
+        currentPageIdSet: defaultFunnel.pages[0]?.id,
+        defaultFunnelId: defaultFunnel.id,
+        defaultFunnelName: defaultFunnel.name,
+        hasBlocks: defaultFunnel.pages[0]?.blocks?.length || 0
       });
       
       // Verificar se o estado foi realmente atualizado
       setTimeout(() => {
         console.log('🔍 DEBUG - Estado após timeout:', {
           funnelState: !!defaultFunnel,
-          pagesInState: defaultFunnel.pages.length
+          pagesInState: defaultFunnel.pages.length,
+          funnelIdInState: defaultFunnel.id
         });
+        
+        // Tentar salvar imediatamente o funnel padrão
+        console.log('💾 Tentando salvar funnel padrão imediatamente...');
+        try {
+          schemaDrivenFunnelService.saveFunnel(defaultFunnel, false)
+            .then(() => console.log('✅ Funnel padrão salvo com sucesso!'))
+            .catch(err => console.error('❌ Erro ao salvar funnel padrão:', err));
+        } catch (error) {
+          console.error('❌ Erro síncrono ao tentar salvar funnel padrão:', error);
+        }
       }, 100);
       
       try {
