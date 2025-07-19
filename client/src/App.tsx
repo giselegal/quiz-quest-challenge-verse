@@ -34,7 +34,7 @@ const QuizDescubraSeuEstilo = lazy(
 const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
 
 // Editor Principal - Consolidado
-const SchemaDrivenEditorPage = lazy(() => import("./pages/SchemaDrivenEditorPage"));
+const EditorPage = lazy(() => import("./app/editor/page"));
 const BlockDefinitionsTest = lazy(() => import("./components/editor/tests/BlockDefinitionsTest"));
 const EditorDiagnosticPage = lazy(() => import("./pages/EditorDiagnosticPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
@@ -92,12 +92,12 @@ const App = () => {
                 {/* Editor Principal - ÚNICO EDITOR para Quiz e Funis Completos */}
                 <Route
                   path="/editor"
-                  component={SchemaDrivenEditorPage}
+                  component={EditorPage}
                 />
                 {/* Editor com ID específico */}
                 <Route
                   path="/editor/:id"
-                  component={SchemaDrivenEditorPage}
+                  component={EditorPage}
                 />
                 
                 {/* Teste de definições de blocos */}
