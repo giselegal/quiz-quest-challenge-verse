@@ -374,60 +374,43 @@ class SchemaDrivenFunnelService {
     return null;
   }
 
-  // Backend operations
+  // Backend operations - CORRIGIDO: Funcionar apenas com localStorage
   async saveFunnel(funnel: SchemaDrivenFunnelData, isAutoSave: boolean = false): Promise<SchemaDrivenFunnelData> {
+    console.log('💾 SchemaDrivenFunnelService: Salvando funnel', {
+      id: funnel.id,
+      name: funnel.name,
+      isAutoSave,
+      pagesCount: funnel.pages?.length || 0,
+      blocksCount: funnel.pages?.reduce((total, page) => total + (page.blocks?.length || 0), 0) || 0
+    });
+
     try {
-      // Tentar salvar no backend primeiro
-      const response = await fetch(`${this.baseUrl}/funnels/${funnel.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...funnel,
-          lastModified: new Date().toISOString()
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      const savedFunnel = {
-        ...result.data,
-        lastModified: new Date(result.data.lastModified),
-        createdAt: new Date(result.data.createdAt)
-      };
-
-      // Salvar versão se sucesso no backend
-      if (!isAutoSave) {
-        this.saveVersion(savedFunnel, 'Manual save from backend');
-      }
-
-      // Atualizar localStorage com dados do backend
-      this.saveLocalFunnel(savedFunnel);
-      
-      console.log('☁️ Funnel saved to backend successfully');
-      return savedFunnel;
-
-    } catch (error) {
-      console.warn('⚠️ Backend unavailable, saving locally only:', error);
-      
-      // Fallback para localStorage
+      // ✅ CORREÇÃO: Salvar apenas localmente (não tentar backend)
       const updatedFunnel = {
         ...funnel,
         lastModified: new Date(),
-        version: funnel.version + (isAutoSave ? 0 : 1)
+        version: funnel.version + 1
       };
-      
+
+      // Salvar versão se não for auto-save
+      if (!isAutoSave) {
+        this.saveVersion(updatedFunnel, 'Manual save - localStorage only');
+      }
+
+      // Salvar no localStorage
       this.saveLocalFunnel(updatedFunnel);
       
-      if (!isAutoSave) {
-        this.saveVersion(updatedFunnel, 'Manual save (offline)');
-      }
+      console.log('✅ Funnel saved successfully to localStorage', {
+        id: updatedFunnel.id,
+        version: updatedFunnel.version,
+        timestamp: updatedFunnel.lastModified
+      });
       
       return updatedFunnel;
+
+    } catch (error) {
+      console.error('❌ Failed to save funnel:', error);
+      throw error;
     }
   }
 
