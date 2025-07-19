@@ -148,7 +148,7 @@ export default function EditorPage() {
       const latestProject = savedProjects[savedProjects.length - 1];
       
       if (latestProject.blocks) {
-        blockActions.updateBlocks(latestProject.blocks);
+        updateBlocks(latestProject.blocks);
         console.log('✅ Projeto carregado:', latestProject);
         alert(`✅ Projeto carregado!\n\n📊 ${latestProject.blocks.length} blocos restaurados\n🕒 Salvo em: ${new Date(latestProject.timestamp).toLocaleString()}`);
       }
@@ -176,6 +176,15 @@ export default function EditorPage() {
           <Button
             variant="outline"
             size="sm"
+            onClick={handleLoadProject}
+          >
+            <ExternalLink className="w-4 h-4 mr-2" />
+            Carregar
+          </Button>
+          
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => setIsPreviewing(!isPreviewing)}
           >
             {isPreviewing ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
@@ -185,6 +194,11 @@ export default function EditorPage() {
           <Button onClick={handleSaveProject} size="sm">
             <Save className="w-4 h-4 mr-2" />
             Salvar
+          </Button>
+          
+          <Button onClick={handlePublishProject} size="sm" variant="default" className="bg-green-600 hover:bg-green-700">
+            <Upload className="w-4 h-4 mr-2" />
+            Publicar
           </Button>
         </div>
       </div>
