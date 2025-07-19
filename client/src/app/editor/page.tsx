@@ -35,6 +35,7 @@ export default function EditorPage() {
     blocks,
     selectedBlockId,
     setSelectedBlockId,
+    updateBlocks,
     actions: blockActions
   } = useBlockOperations();
 
