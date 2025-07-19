@@ -256,7 +256,34 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
       };
       
     // === TIPOS ADICIONAIS DE BLOCOS ===
-    // ...existing code...
+    case 'text-inline':
+      return {
+        text: 'Este é um texto inline editável. Descubra como personalizar seu estilo de forma única e autêntica.',
+        alignment: 'left' as const,
+        style: {
+          backgroundColor: '#F9F5F1',
+          color: '#432818',
+          paddingY: '12px',
+          paddingX: '16px',
+          borderRadius: 'md' as BorderRadiusType
+        }
+      };
+      
+    case 'heading-inline':
+    case 'result-header':
+    case 'result-header-inline':
+      return {
+        title: 'Parabéns! Seu estilo predominante foi identificado.',
+        subtitle: 'Agora você tem clareza sobre sua identidade visual',
+        alignment: 'center' as const,
+        style: {
+          backgroundColor: '#ffffff',
+          color: '#432818',
+          paddingY: '24px',
+          paddingX: '16px',
+          borderRadius: 'md' as BorderRadiusType
+        }
+      };
       
     case 'result-description':
       return {
@@ -334,8 +361,12 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
       };
       
     // === DEFAULTS PARA TODOS OS COMPONENTES INLINE ===
+    case 'result-header':
     case 'quiz-intro-header':
     case 'vertical-canvas-header':
+    case 'result-header-inline':
+    case 'step-header-inline':
+    case 'section-header-inline':
     case 'sticky-header-inline':
     case 'hero-title-inline':
     case 'quiz-title':
@@ -353,7 +384,17 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
           borderRadius: 'md' as BorderRadiusType
         }
       };
-    // ...existing code...
+
+    case 'text-inline':
+    case 'heading-inline':
+      return {
+        text: 'Texto do componente. Este é um exemplo de conteúdo.',
+        alignment: 'left' as const,
+        style: {
+          paddingY: '12px',
+          paddingX: '16px'
+        }
+      };
 
     case 'button':
       return {
