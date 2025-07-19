@@ -53,8 +53,37 @@ interface UseSchemaEditorReturn {
 export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorReturn => {
   console.log('🚀 useSchemaEditorFixed INIT:', { initialFunnelId, timestamp: new Date().toISOString() });
   
-  const [funnel, setFunnel] = useState<SchemaDrivenFunnelData | null>(null);
-  const [currentPageId, setCurrentPageId] = useState<string | null>(null);
+  // ✅ CORREÇÃO: Inicializar com funnel padrão em vez de null
+  const [funnel, setFunnel] = useState<SchemaDrivenFunnelData | null>(() => {
+    console.log('🚀 Initializing funnel state...');
+    // Tentar carregar do localStorage primeiro
+    const existingFunnel = schemaDrivenFunnelService.getLocalFunnel();
+    if (existingFunnel) {
+      console.log('📁 Found existing funnel in localStorage:', existingFunnel.id);
+      return existingFunnel;
+    }
+    
+    // Se não encontrou, criar um padrão imediatamente
+    console.log('🔧 Creating default funnel immediately...');
+    const defaultFunnel = schemaDrivenFunnelService.createDefaultFunnel();
+    
+    // Salvar no localStorage imediatamente
+    try {
+      schemaDrivenFunnelService.saveLocalFunnel(defaultFunnel);
+      console.log('✅ Default funnel saved to localStorage immediately');
+    } catch (error) {
+      console.error('❌ Failed to save default funnel:', error);
+    }
+    
+    return defaultFunnel;
+  });
+  
+  const [currentPageId, setCurrentPageId] = useState<string | null>(() => {
+    // Se já temos um funnel, definir a primeira página
+    console.log('🎯 Setting initial currentPageId from funnel:', funnel?.pages?.[0]?.id);
+    return funnel?.pages?.[0]?.id || null;
+  });
+  
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -193,14 +222,49 @@ export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorR
       isSaving
     });
     
-    if (!funnel) {
-      console.error('❌ saveFunnel: No funnel to save!');
+    // ✅ CORREÇÃO CRÍTICA: Se não há funnel, criar um imediatamente
+    let funnelToSave = funnel;
+    if (!funnelToSave) {
+      console.warn('⚠️ No funnel to save! Creating emergency funnel...');
+      
+      // Tentar recuperar do localStorage primeiro
+      funnelToSave = schemaDrivenFunnelService.getLocalFunnel();
+      
+      if (!funnelToSave) {
+        // Criar um novo funnel de emergência
+        console.log('🚨 Creating emergency default funnel...');
+        funnelToSave = schemaDrivenFunnelService.createDefaultFunnel();
+        
+        // Atualizar o estado imediatamente
+        setFunnel(funnelToSave);
+        setCurrentPageId(funnelToSave.pages[0]?.id || null);
+        
+        console.log('✅ Emergency funnel created and state updated:', funnelToSave.id);
+      } else {
+        // Atualizar o estado com o funnel do localStorage
+        setFunnel(funnelToSave);
+        setCurrentPageId(funnelToSave.pages[0]?.id || null);
+        console.log('✅ Funnel recovered from localStorage:', funnelToSave.id);
+      }
+    }
+    
+    // Agora temos certeza que há um funnel para salvar
+    if (!funnelToSave) {
+      const errorMsg = 'Critical error: Unable to create or recover funnel';
+      console.error('❌', errorMsg);
+      if (manual) {
+        toast({
+          title: "Erro crítico",
+          description: errorMsg,
+          variant: "destructive",
+        });
+      }
       return;
     }
     
     setIsSaving(true);
     try {
-      const savedFunnel = await schemaDrivenFunnelService.saveFunnel(funnel, !manual);
+      const savedFunnel = await schemaDrivenFunnelService.saveFunnel(funnelToSave, !manual);
       
       console.log('✅ saveFunnel success:', {
         savedFunnelId: savedFunnel.id,

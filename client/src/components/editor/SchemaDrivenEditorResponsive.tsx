@@ -165,24 +165,7 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
       currentPageBlocks: currentPage?.blocks?.length || 0
     });
     
-    if (!funnel) {
-      console.error('❌ handleSave: No funnel to save! Tentando criar um novo...');
-      
-      // Tentar recriar o funnel se não existir
-      createNewFunnel()
-        .then(() => {
-          console.log('✅ Novo funnel criado, tentando salvar novamente em 1 segundo...');
-          setTimeout(() => {
-            saveFunnel(true);
-          }, 1000);
-        })
-        .catch(error => {
-          console.error('❌ Erro ao criar novo funnel:', error);
-        });
-      return;
-    }
-    
-    console.log('✅ Funnel exists, calling saveFunnel...');
+    console.log('✅ Calling saveFunnel (emergency recovery built-in)...');
     saveFunnel(true);
   };
 
