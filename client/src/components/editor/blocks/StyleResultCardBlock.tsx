@@ -85,10 +85,10 @@ const StyleResultCardBlock: React.FC<StyleResultCardBlockProps> = ({
           </div>
         </div>
 
-        {/* Content Layout - Mobile-First Vertical Stack */}
-        <div className="space-y-8 lg:grid lg:grid-cols-2 lg:gap-6 lg:space-y-0 items-start">
+        {/* Content Layout - Mobile: Single Column Vertical Stack */}
+        <div className="space-y-8 lg:grid lg:grid-cols-2 lg:gap-6 lg:space-y-0">
           {/* Text Content */}
-          <div className="space-y-6 order-1">
+          <div className="space-y-6">
             <h3 className="text-2xl font-bold" style={{ color: accentColor }}>
               {styleCategory}
             </h3>
@@ -116,8 +116,8 @@ const StyleResultCardBlock: React.FC<StyleResultCardBlockProps> = ({
             )}
           </div>
 
-          {/* Images Section - Simple Mobile-First Layout */}
-          <div className="space-y-6 lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0 order-2">
+          {/* Images Section - Mobile: Single Column Vertical Stack */}
+          <div className="space-y-6 lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0">
             {/* Style Image */}
             <div className="flex justify-center">
               <div className="relative w-full max-w-[300px]">
