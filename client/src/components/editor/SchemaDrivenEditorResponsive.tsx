@@ -12,7 +12,11 @@ import {
   Eye,
   Plus,
   Upload,
-  ExternalLink
+  ExternalLink,
+  Globe,
+  Copy,
+  Link,
+  X
 } from 'lucide-react';
 import { useSchemaEditorFixed as useSchemaEditor } from '@/hooks/useSchemaEditorFixed';
 import { SchemaDrivenComponentsSidebar } from './sidebar/SchemaDrivenComponentsSidebar';
@@ -35,6 +39,13 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
   const [showLeftSidebar, setShowLeftSidebar] = useState(true); 
   const [showRightSidebar, setShowRightSidebar] = useState(true);
   const [activeTab, setActiveTab] = useState<'components' | 'pages'>('pages');
+
+  // Estados para URL personalizada e preview
+  const [showPublishModal, setShowPublishModal] = useState(false);
+  const [customUrl, setCustomUrl] = useState('');
+  const [urlSlug, setUrlSlug] = useState('');
+  const [showPreview, setShowPreview] = useState(false);
+  const [publishedUrl, setPublishedUrl] = useState('');
 
   // Função para gerar ID único (integrada do EditorPage)
   const generateId = () => {
