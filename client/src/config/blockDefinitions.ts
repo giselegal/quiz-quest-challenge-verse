@@ -1832,21 +1832,6 @@ export const blockDefinitions: BlockDefinition[] = [
       }
     ]
   },
-  {
-    type: 'ResultPageBlock',
-    name: 'Bloco Página Resultado',
-    description: 'Bloco da página de resultado',
-    icon: 'Award',
-    category: 'Resultado',
-    propertiesSchema: [
-      {
-        key: 'resultTitle',
-        label: 'Título do Resultado',
-        type: 'text-input',
-        defaultValue: 'Seu Resultado'
-      }
-    ]
-  },
 
   // =====================================================================
   // MAPEAMENTOS ADICIONAIS

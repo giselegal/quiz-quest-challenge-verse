@@ -556,12 +556,6 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
         message: 'Preparando próxima etapa...'
       };
 
-    case 'ResultPageBlock':
-      return {
-        title: 'Seu Resultado',
-        description: 'Aqui está seu resultado personalizado.'
-      };
-
     case 'product-offer':
     case 'urgency-timer':
     case 'faq-section':
@@ -712,12 +706,6 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
         textColor: '#432818',
         buttonColor: '#4CAF50',
         buttonTextColor: '#ffffff'
-      };
-        guaranteeText: '✅ Garantia de 30 dias',
-        securityText: '🔒 Compra 100% Segura',
-        backgroundColor: '#f8f9fa',
-        ctaColor: '#28a745',
-        urgencyColor: '#dc3545'
       };
       
     // Add more default content types as needed

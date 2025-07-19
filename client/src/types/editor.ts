@@ -87,7 +87,7 @@ export type BlockType =
   | 'QuestionMultipleBlock'
   | 'StrategicQuestionBlock'
   | 'QuizTransitionBlock'
-  | 'ResultPageBlock'
+
   // Mapeamentos adicionais
   | 'quiz-title'
   | 'quiz-name-input'

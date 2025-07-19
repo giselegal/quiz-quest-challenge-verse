@@ -106,7 +106,7 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
     { type: 'QuestionMultipleBlock', label: 'Bloco Questão Múltipla', icon: HelpCircle },
     { type: 'StrategicQuestionBlock', label: 'Bloco Questão Estratégica', icon: HelpCircle },
     { type: 'QuizTransitionBlock', label: 'Bloco Transição Quiz', icon: Layout },
-    { type: 'ResultPageBlock', label: 'Bloco Página Resultado', icon: Award },
+
     
     // === MAPEAMENTOS ADICIONAIS ===
     { type: 'quiz-title', label: 'Título Quiz', icon: Type },

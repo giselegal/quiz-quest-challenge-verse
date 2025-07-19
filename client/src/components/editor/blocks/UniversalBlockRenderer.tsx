@@ -3,9 +3,6 @@ import { cn } from '@/lib/utils';
 import type { BlockData } from '@/types/blocks';
 
 // === COMPONENTES PRINCIPAIS DO SISTEMA ===
-// Componentes de página completa (funcionais)
-import ResultPageBlock from './ResultPageBlock';
-
 // Componentes de quiz (funcionais)
 import QuizQuestionBlock from './QuizQuestionBlock';
 import QuizProgressBlock from './QuizProgressBlock';
@@ -287,7 +284,6 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       QuestionMultipleBlock: () => <QuestionMultipleBlock {...commonProps} />,
       StrategicQuestionBlock: () => <StrategicQuestionBlock {...commonProps} />,
       QuizTransitionBlock: () => <QuizTransitionBlock {...commonProps} />,
-      ResultPageBlock: () => <ResultPageBlock {...commonProps} />,
       
       // === COMPONENTES ETAPA 20 - BOXFLEX HORIZONTAL ===
       'header-boxflex-inline': () => <HeaderBoxFlexInline {...commonProps} />,

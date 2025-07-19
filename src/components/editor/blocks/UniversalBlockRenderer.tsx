@@ -4,7 +4,7 @@ import type { BlockData } from '@/types/blocks';
 
 // === COMPONENTES PRINCIPAIS DO SISTEMA ===
 // Componentes de página completa (funcionais)
-import ResultPageBlock from './ResultPageBlock';
+
 
 // Componentes de quiz (funcionais)
 import QuizQuestionBlock from './QuizQuestionBlock';
@@ -223,7 +223,7 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       QuestionMultipleBlock: () => <QuestionMultipleBlock {...commonProps} />,
       StrategicQuestionBlock: () => <StrategicQuestionBlock {...commonProps} />,
       QuizTransitionBlock: () => <QuizTransitionBlock {...commonProps} />,
-      ResultPageBlock: () => <ResultPageBlock {...commonProps} />,
+
       
       // === MAPEAMENTOS ADICIONAIS ===
       'quiz-title': () => <HeadingInlineBlock {...commonProps} />,
