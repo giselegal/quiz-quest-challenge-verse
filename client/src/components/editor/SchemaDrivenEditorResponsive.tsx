@@ -75,6 +75,18 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
   // Debug - verificar se o funnel está chegando corretamente
   console.log('🔍 DEBUG SchemaDrivenEditorResponsive - funnel:', funnel);
   console.log('🔍 DEBUG SchemaDrivenEditorResponsive - funnel.pages:', funnel?.pages?.length || 0);
+  console.log('🔍 DEBUG SchemaDrivenEditorResponsive - currentPage:', currentPage?.name || 'null');
+  console.log('🔍 DEBUG SchemaDrivenEditorResponsive - isLoading:', isLoading);
+
+  // Effect para monitorar mudanças no funnel
+  useEffect(() => {
+    console.log('🔄 Funnel changed in SchemaDrivenEditorResponsive:', {
+      funnelExists: !!funnel,
+      funnelId: funnel?.id,
+      funnelName: funnel?.name,
+      pagesCount: funnel?.pages?.length || 0
+    });
+  }, [funnel]);
 
   // Handlers
   const handleComponentSelect = (type: string) => {
@@ -141,10 +153,23 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
     });
     
     if (!funnel) {
-      console.error('❌ handleSave: No funnel to save!');
+      console.error('❌ handleSave: No funnel to save! Tentando criar um novo...');
+      
+      // Tentar recriar o funnel se não existir
+      createNewFunnel()
+        .then(() => {
+          console.log('✅ Novo funnel criado, tentando salvar novamente em 1 segundo...');
+          setTimeout(() => {
+            saveFunnel(true);
+          }, 1000);
+        })
+        .catch(error => {
+          console.error('❌ Erro ao criar novo funnel:', error);
+        });
       return;
     }
     
+    console.log('✅ Funnel exists, calling saveFunnel...');
     saveFunnel(true);
   };
 

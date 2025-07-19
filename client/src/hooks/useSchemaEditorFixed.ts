@@ -426,6 +426,11 @@ export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorR
     if (initializedRef.current) return;
     initializedRef.current = true;
 
+    console.log('🚀 Inicializando hook useSchemaEditorFixed:', {
+      initialFunnelId,
+      isValidId: initialFunnelId ? isValidUUID(initialFunnelId) : false
+    });
+
     if (initialFunnelId && typeof initialFunnelId === 'string' && initialFunnelId !== 'new' && isValidUUID(initialFunnelId)) {
       console.log('🔄 Loading funnel with valid UUID:', initialFunnelId);
       loadFunnel(initialFunnelId);
@@ -433,62 +438,53 @@ export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorR
       if (initialFunnelId && !isValidUUID(initialFunnelId)) {
         console.warn('⚠️ Invalid UUID provided, creating default funnel instead:', initialFunnelId);
       }
+      
       console.log('🆕 Creating default funnel');
-      const defaultFunnel = schemaDrivenFunnelService.createDefaultFunnel();
-      console.log('🔍 DEBUG - Funnel criado:', {
-        id: defaultFunnel.id,
-        name: defaultFunnel.name,
-        pagesCount: defaultFunnel.pages.length,
-        pageNames: defaultFunnel.pages.map(p => p.name),
-        firstPageBlocks: defaultFunnel.pages[0]?.blocks?.length || 0
-      });
       
-      // Forçar atualização do estado
-      setFunnel(defaultFunnel);
-      setCurrentPageId(defaultFunnel.pages[0]?.id || null);
+      // Primeiro, verificar se já existe um funnel no localStorage
+      const existingFunnel = schemaDrivenFunnelService.getLocalFunnel();
       
-      // Debug adicional para verificar se o estado está sendo atualizado
-      console.log('🔍 DEBUG - Estado após setFunnel:', {
-        pagesSet: defaultFunnel.pages.length,
-        currentPageIdSet: defaultFunnel.pages[0]?.id,
-        defaultFunnelId: defaultFunnel.id,
-        defaultFunnelName: defaultFunnel.name,
-        hasBlocks: defaultFunnel.pages[0]?.blocks?.length || 0
-      });
-      
-      // Verificar se o estado foi realmente atualizado
-      setTimeout(() => {
-        console.log('🔍 DEBUG - Estado após timeout:', {
-          funnelState: !!defaultFunnel,
-          pagesInState: defaultFunnel.pages.length,
-          funnelIdInState: defaultFunnel.id
+      if (existingFunnel) {
+        console.log('� Funnel encontrado no localStorage:', {
+          id: existingFunnel.id,
+          name: existingFunnel.name,
+          pages: existingFunnel.pages?.length || 0
         });
         
-        // Tentar salvar imediatamente o funnel padrão
-        console.log('💾 Tentando salvar funnel padrão imediatamente...');
+        setFunnel(existingFunnel);
+        setCurrentPageId(existingFunnel.pages[0]?.id || null);
+      } else {
+        console.log('� Criando novo funnel padrão');
+        const defaultFunnel = schemaDrivenFunnelService.createDefaultFunnel();
+        
+        console.log('🔍 DEBUG - Funnel criado:', {
+          id: defaultFunnel.id,
+          name: defaultFunnel.name,
+          pagesCount: defaultFunnel.pages.length,
+          pageNames: defaultFunnel.pages.map(p => p.name),
+          firstPageBlocks: defaultFunnel.pages[0]?.blocks?.length || 0
+        });
+        
+        // Salvar imediatamente no localStorage
         try {
-          schemaDrivenFunnelService.saveFunnel(defaultFunnel, false)
-            .then(() => console.log('✅ Funnel padrão salvo com sucesso!'))
-            .catch(err => console.error('❌ Erro ao salvar funnel padrão:', err));
+          schemaDrivenFunnelService.saveLocalFunnel(defaultFunnel);
+          console.log('💾 Funnel salvo no localStorage');
         } catch (error) {
-          console.error('❌ Erro síncrono ao tentar salvar funnel padrão:', error);
+          console.error('❌ Erro ao salvar no localStorage:', error);
         }
-      }, 100);
-      
-      try {
-        schemaDrivenFunnelService.saveLocalFunnel(defaultFunnel);
-      } catch (error) {
-        console.warn('⚠️ Failed to save default funnel to localStorage:', error);
+        
+        // Definir estado
+        setFunnel(defaultFunnel);
+        setCurrentPageId(defaultFunnel.pages[0]?.id || null);
+        
+        console.log('✅ Estado do funnel definido:', {
+          funnelId: defaultFunnel.id,
+          funnelName: defaultFunnel.name,
+          pagesCount: defaultFunnel.pages.length
+        });
       }
-      
-      console.log('🎯 Funil carregado com', defaultFunnel.pages.length, 'etapas:', defaultFunnel.pages.map(p => p.name));
-      
-      // Criar o funil no backend com as páginas (sem aguardar)
-      setTimeout(() => {
-        createNewFunnel();
-      }, 500);
     }
-  }, [initialFunnelId, loadFunnel, createNewFunnel]);
+  }, [initialFunnelId, loadFunnel]);
 
   // Atualizar estado do auto-save menos frequentemente
   useEffect(() => {
