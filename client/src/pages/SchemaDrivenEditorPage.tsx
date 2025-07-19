@@ -1,13 +1,13 @@
 import React from 'react';
 import { useRoute } from 'wouter';
-import EditorPage from '../app/editor/page';
+import SchemaDrivenEditorResponsive from '../components/editor/SchemaDrivenEditorResponsive';
 
 const SchemaDrivenEditorPage: React.FC = () => {
   const [match, params] = useRoute('/editor/:id');
   const funnelId = params?.id;
 
-  // Use nosso editor principal melhorado
-  return <EditorPage />;
+  // Use o editor responsivo com sistema Save/Publish integrado
+  return <SchemaDrivenEditorResponsive funnelId={funnelId} />;
 };
 
 export default SchemaDrivenEditorPage;
