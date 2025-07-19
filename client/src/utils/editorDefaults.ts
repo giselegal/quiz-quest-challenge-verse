@@ -383,17 +383,6 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
         }
       };
 
-    case 'text-inline':
-    case 'heading-inline':
-      return {
-        text: 'Texto do componente. Este é um exemplo de conteúdo.',
-        alignment: 'left' as const,
-        style: {
-          paddingY: '12px',
-          paddingX: '16px'
-        }
-      };
-
     case 'button':
       return {
         text: 'Clique Aqui',
