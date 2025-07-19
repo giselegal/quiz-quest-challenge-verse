@@ -182,16 +182,26 @@ class SchemaDrivenFunnelService {
   }
 
   getLocalFunnel(): SchemaDrivenFunnelData | null {
+    console.log('📁 getLocalFunnel called');
     try {
       const stored = localStorage.getItem(this.localStorageKey);
+      console.log('📁 localStorage data:', stored ? 'found' : 'not found');
+      
       if (stored) {
         const parsed = JSON.parse(stored);
+        console.log('📁 parsed funnel:', {
+          id: parsed.id,
+          name: parsed.name,
+          pages: parsed.pages?.length || 0
+        });
+        
         return {
           ...parsed,
           lastModified: new Date(parsed.lastModified),
           createdAt: new Date(parsed.createdAt)
         };
       }
+      console.log('📁 No stored funnel found');
       return null;
     } catch (error) {
       console.error('❌ Failed to load funnel from local storage:', error);
@@ -523,9 +533,10 @@ class SchemaDrivenFunnelService {
 
   // Utility methods
   createDefaultFunnel(): SchemaDrivenFunnelData {
+    console.log('🏗️ createDefaultFunnel called');
     const now = new Date();
     
-    return {
+    const defaultFunnel = {
       id: generateTimestampId('funnel'),
       name: 'Quiz CaktoQuiz - Descubra Seu Estilo',
       description: 'Funil completo para descoberta do estilo pessoal - 21 etapas modulares',
@@ -555,6 +566,14 @@ class SchemaDrivenFunnelService {
       lastModified: now,
       createdAt: now
     };
+    
+    console.log('✅ createDefaultFunnel completed:', {
+      id: defaultFunnel.id,
+      name: defaultFunnel.name,
+      pagesCount: defaultFunnel.pages.length
+    });
+    
+    return defaultFunnel;
   }
 
   /**

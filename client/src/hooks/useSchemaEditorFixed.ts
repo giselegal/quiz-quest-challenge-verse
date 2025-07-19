@@ -51,6 +51,8 @@ interface UseSchemaEditorReturn {
 }
 
 export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorReturn => {
+  console.log('🚀 useSchemaEditorFixed INIT:', { initialFunnelId, timestamp: new Date().toISOString() });
+  
   const [funnel, setFunnel] = useState<SchemaDrivenFunnelData | null>(null);
   const [currentPageId, setCurrentPageId] = useState<string | null>(null);
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
@@ -60,6 +62,16 @@ export const useSchemaEditorFixed = (initialFunnelId?: string): UseSchemaEditorR
   
   const { toast } = useToast();
   const initializedRef = useRef(false);
+
+  console.log('🔍 useSchemaEditorFixed STATE:', {
+    funnelExists: !!funnel,
+    funnelId: funnel?.id,
+    currentPageId,
+    selectedBlockId,
+    isLoading,
+    isSaving,
+    initializedRef: initializedRef.current
+  });
 
   // Computed values
   const currentPage = funnel?.pages?.find(page => page.id === currentPageId) || null;

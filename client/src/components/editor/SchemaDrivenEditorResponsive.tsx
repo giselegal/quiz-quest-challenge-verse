@@ -73,6 +73,7 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
   } = useSchemaEditor(funnelId || undefined);
 
   // Debug - verificar se o funnel está chegando corretamente
+  console.log('🔍 DEBUG SchemaDrivenEditorResponsive - PROPS:', { funnelId });
   console.log('🔍 DEBUG SchemaDrivenEditorResponsive - funnel:', funnel);
   console.log('🔍 DEBUG SchemaDrivenEditorResponsive - funnel.pages:', funnel?.pages?.length || 0);
   console.log('🔍 DEBUG SchemaDrivenEditorResponsive - currentPage:', currentPage?.name || 'null');
@@ -87,6 +88,18 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
       pagesCount: funnel?.pages?.length || 0
     });
   }, [funnel]);
+
+  // Estado de debug para mostrar na tela
+  const [debugInfo, setDebugInfo] = useState('');
+
+  useEffect(() => {
+    const info = `
+    Funnel: ${funnel ? `✅ ${funnel.id} (${funnel.pages?.length || 0} páginas)` : '❌ NULL'}
+    Loading: ${isLoading ? '⏳' : '✅'}
+    Current Page: ${currentPage ? currentPage.name : 'null'}
+    `;
+    setDebugInfo(info);
+  }, [funnel, isLoading, currentPage]);
 
   // Handlers
   const handleComponentSelect = (type: string) => {
@@ -414,16 +427,23 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
 
   return (
       <div className={`h-screen flex flex-col overflow-hidden bg-gray-50 ${className}`}>
+        {/* Debug Info - Temporário */}
+        <div className="bg-red-100 border-b border-red-200 p-2 text-xs font-mono text-red-800">
+          <strong>🐛 DEBUG INFO:</strong> {debugInfo}
+        </div>
+        
         {/* Header Responsivo */}
         <div className="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4">
           <div className="flex items-center space-x-4 min-w-0 flex-1">
             {/* Info do funil */}
             <div className="flex items-center space-x-2 min-w-0">
               <FileText className="w-5 h-5 text-gray-500 flex-shrink-0" />
-              <span className="font-medium text-gray-800 truncate">{funnel.name}</span>
-              <Badge variant={funnel.isPublished ? 'default' : 'secondary'} className="text-xs hidden sm:inline-flex">
-                {funnel.isPublished ? 'Publicado' : 'Rascunho'}
-              </Badge>
+              <span className="font-medium text-gray-800 truncate">{funnel?.name || 'Carregando...'}</span>
+              {funnel && (
+                <Badge variant={funnel.isPublished ? 'default' : 'secondary'} className="text-xs hidden sm:inline-flex">
+                  {funnel.isPublished ? 'Publicado' : 'Rascunho'}
+                </Badge>
+              )}
             </div>
 
             {/* Info da página atual */}
