@@ -1373,33 +1373,6 @@ export const blockDefinitions: BlockDefinition[] = [
   },
 
   {
-    type: 'testimonials-result',
-    name: 'Depoimentos de Resultado (Modular)',
-    description: 'Seção modular de depoimentos para página de resultado',
-    icon: 'MessageSquare',
-    category: 'Resultado',
-    propertiesSchema: [
-      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'O que nossas clientes dizem' },
-      { key: 'backgroundColor', label: 'Cor de Fundo', type: 'color-picker', defaultValue: '#ffffff' },
-      { key: 'textColor', label: 'Cor do Texto', type: 'color-picker', defaultValue: '#432818' },
-      { key: 'accentColor', label: 'Cor de Destaque', type: 'color-picker', defaultValue: '#B89B7A' },
-      { key: 'layout', label: 'Layout', type: 'select', options: [
-        { label: 'Grade', value: 'grid' },
-        { label: 'Carrossel', value: 'carousel' }
-      ], defaultValue: 'grid' },
-      { key: 'showRatings', label: 'Mostrar Avaliações', type: 'boolean-switch', defaultValue: true },
-      { key: 'showProfessions', label: 'Mostrar Profissões', type: 'boolean-switch', defaultValue: true },
-      { key: 'gridColumns', label: 'Colunas no Grid', type: 'number-input', defaultValue: 1, min: 1, max: 2 },
-      { key: 'spacing', label: 'Espaçamento', type: 'select', options: [
-        { label: 'Pequeno', value: 'sm' },
-        { label: 'Médio', value: 'md' },
-        { label: 'Grande', value: 'lg' },
-        { label: 'Extra Grande', value: 'xl' }
-      ], defaultValue: 'lg' }
-    ]
-  },
-
-  {
     type: 'quiz-offer-pricing',
     name: 'Preços da Oferta (Modular)',
     description: 'Seção modular de preços para página de oferta',

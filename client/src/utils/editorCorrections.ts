@@ -191,8 +191,7 @@ export class EditorCorrections {
             const correctionMap: Record<string, string> = {
               'result-header': 'result-header-inline',
               'style-result-card': 'quiz-result-display',
-              'before-after-inline': 'image-inline',
-              'testimonials-real-inline': 'testimonials-result'
+              'before-after-inline': 'image-inline'
             };
             
             if (correctionMap[block.type]) {
@@ -262,7 +261,6 @@ export class EditorCorrections {
       const requiredBlocks = [
         'quiz-result-display',
         'result-header-inline', 
-        'testimonials-result',
         'urgency-timer',
         'sales-offer',
         'text-inline',

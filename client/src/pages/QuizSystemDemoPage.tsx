@@ -155,7 +155,6 @@ const QuizSystemDemoPage: React.FC = () => {
                 <ul className="text-sm space-y-2 text-[#8F7A6A]">
                   <li>• <strong>quiz-result-display:</strong> Componente principal de resultado</li>
                   <li>• <strong>result-header-inline:</strong> Cabeçalho modular</li>
-                  <li>• <strong>testimonials-result:</strong> Depoimentos específicos</li>
                   <li>• <strong>QuizResultDisplayBlock:</strong> Layout Card, Hero, Minimal</li>
                 </ul>
               </div>

@@ -522,22 +522,6 @@ export const blockDefinitions: BlockDefinition[] = [
     ]
   },
 
-  {
-    type: 'testimonials-result',
-    name: 'Depoimentos de Resultado (Modular)',
-    description: 'Seção modular de depoimentos para página de resultado',
-    icon: 'MessageSquare',
-    category: 'Resultado',
-    propertiesSchema: [
-      {
-        key: 'title',
-        label: 'Título',
-        type: 'text-input',
-        defaultValue: 'O que nossas clientes dizem'
-      }
-    ]
-  },
-
   // Categoria: Outros
   {
     type: 'script',

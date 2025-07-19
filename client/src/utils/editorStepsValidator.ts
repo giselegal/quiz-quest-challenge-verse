@@ -175,7 +175,6 @@ class EditorStepsValidator {
       'style-result-card': 'quiz-result-display',
       'before-after-inline': 'image-inline',
       'bonus-section-inline': 'text-inline',
-      'testimonials-real-inline': 'testimonials-result',
       'guarantee-section-inline': 'text-inline',
       'mentor-section-inline': 'text-inline'
     };

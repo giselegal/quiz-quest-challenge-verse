@@ -200,7 +200,6 @@ export const UniversalBlockRenderer: React.FC<BlockRendererProps> = ({
       
       // === COMPONENTES DE CONTEÚDO ===
       'testimonials-grid': () => <TestimonialsGridBlock {...commonProps} />,
-      'testimonials-result': () => <TestimonialsInlineBlock {...commonProps} />,
       'faq-section': () => <FAQSectionBlock {...commonProps} />,
       'guarantee-section': () => <GuaranteeBlock {...commonProps} />,
       'guarantee-inline': () => <GuaranteeBlock {...commonProps} />,

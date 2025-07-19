@@ -684,16 +684,9 @@ export const blockDefinitions: BlockDefinition[] = [
     icon: 'Award',
     category: 'Resultado',
     propertiesSchema: [
-      { key: 'logoUrl', label: 'URL do Logo', type: 'image-url', defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp' },
-
-  {
-    type: 'testimonials-result',
-    name: 'Depoimentos de Resultado (Modular)',
-    description: 'Seção modular de depoimentos para página de resultado',
-    icon: 'MessageSquare',
-    category: 'Resultado',
-    propertiesSchema: [
-      { key: 'title', label: 'Título', type: 'text-input', defaultValue: 'O que nossas clientes dizem' },
+      { key: 'logoUrl', label: 'URL do Logo', type: 'image-url', defaultValue: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp' }
+    ]
+  },
 
   {
     type: 'quiz-offer-pricing',
