@@ -116,11 +116,11 @@ const StyleResultCardBlock: React.FC<StyleResultCardBlockProps> = ({
             )}
           </div>
 
-          {/* Images Section */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-4 lg:gap-6 order-2">
+          {/* Images Section - Single Column Mobile */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-4 lg:gap-6 order-2">
             {/* Style Image */}
             <div className="flex justify-center">
-              <div className="relative w-full max-w-[280px] sm:max-w-[160px] md:max-w-[180px]">
+              <div className="relative w-full max-w-[320px] sm:max-w-[280px] md:max-w-[180px]">
                 <img 
                   src={styleImage}
                   alt={`Estilo ${styleCategory}`}
@@ -133,7 +133,7 @@ const StyleResultCardBlock: React.FC<StyleResultCardBlockProps> = ({
 
             {/* Guide Preview */}
             <div className="flex justify-center">
-              <div className="relative w-full max-w-[280px] sm:max-w-[160px] md:max-w-[180px]">
+              <div className="relative w-full max-w-[320px] sm:max-w-[280px] md:max-w-[180px]">
                 <img 
                   src={guideImage}
                   alt={`Guia de Estilo ${styleCategory}`}

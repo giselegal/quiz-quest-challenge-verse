@@ -88,8 +88,8 @@ const ResultCTABlock: React.FC<ResultCTABlockProps> = ({
           </p>
         </div>
 
-        {/* Value Proposition Grid - Mobile First */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-6 items-start mb-6 sm:mb-8">
+        {/* Value Proposition Grid - Single Column Mobile */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 xl:gap-6 items-start mb-8">
           {/* Value Items */}
           {showValueStack && (
             <div className="space-y-4 sm:space-y-3 md:space-y-4 order-1">
@@ -145,7 +145,7 @@ const ResultCTABlock: React.FC<ResultCTABlockProps> = ({
 
               {/* Security Elements */}
               {showSecureElements && (
-                <div className="flex flex-col xs:flex-row flex-wrap justify-center gap-2 xs:gap-3 sm:gap-4 text-sm text-gray-500">
+                <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 text-sm text-gray-500">
                   <div className="flex items-center justify-center space-x-1">
                     <Lock className="w-4 h-4" />
                     <span>100% Seguro</span>
