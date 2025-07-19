@@ -361,7 +361,6 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
       };
       
     // === DEFAULTS PARA TODOS OS COMPONENTES INLINE ===
-    case 'header':
     case 'result-header':
     case 'quiz-intro-header':
     case 'vertical-canvas-header':
@@ -386,8 +385,6 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
         }
       };
 
-    case 'text':
-    case 'result-description':
     case 'text-inline':
     case 'heading-inline':
       return {
