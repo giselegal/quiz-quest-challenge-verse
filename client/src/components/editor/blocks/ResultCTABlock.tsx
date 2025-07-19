@@ -89,7 +89,7 @@ const ResultCTABlock: React.FC<ResultCTABlockProps> = ({
         </div>
 
         {/* Value Proposition Grid - Mobile First */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-6 items-start mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-6 items-start mb-6 sm:mb-8">
           {/* Value Items */}
           {showValueStack && (
             <div className="space-y-4 sm:space-y-3 md:space-y-4 order-1">
@@ -132,7 +132,7 @@ const ResultCTABlock: React.FC<ResultCTABlockProps> = ({
               {/* CTA Button */}
               <button
                 onClick={handleCTAClick}
-                className="w-full py-4 sm:py-3 md:py-4 px-6 sm:px-4 md:px-6 rounded-lg font-semibold text-lg md:text-lg transition-all duration-200 hover:scale-105 hover:shadow-lg flex items-center justify-center space-x-2 mb-4"
+                className="w-full py-3 sm:py-4 md:py-4 px-6 sm:px-4 md:px-6 rounded-lg font-semibold text-lg md:text-lg transition-all duration-200 hover:scale-105 hover:shadow-lg flex items-center justify-center space-x-2 mb-4"
                 style={{
                   backgroundColor: buttonColor,
                   color: buttonTextColor,
@@ -145,12 +145,12 @@ const ResultCTABlock: React.FC<ResultCTABlockProps> = ({
 
               {/* Security Elements */}
               {showSecureElements && (
-                <div className="flex flex-row flex-wrap justify-center gap-3 sm:gap-4 text-sm text-gray-500">
-                  <div className="flex items-center space-x-1">
+                <div className="flex flex-col xs:flex-row flex-wrap justify-center gap-2 xs:gap-3 sm:gap-4 text-sm text-gray-500">
+                  <div className="flex items-center justify-center space-x-1">
                     <Lock className="w-4 h-4" />
                     <span>100% Seguro</span>
                   </div>
-                  <div className="flex items-center space-x-1">
+                  <div className="flex items-center justify-center space-x-1">
                     <CheckCircle className="w-4 h-4" />
                     <span>7 Dias Garantia</span>
                   </div>
