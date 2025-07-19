@@ -46,9 +46,17 @@ interface QuizConfig {
 
 interface QuizEditorPanelProps {
   className?: string;
+  blocks?: any[];
+  onBlocksChange?: (blocks: any[]) => void;
+  testMode?: string;
 }
 
-export const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ className }) => {
+export const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ 
+  className,
+  blocks = [],
+  onBlocksChange,
+  testMode 
+}) => {
   const { toast } = useToast();
   const { quizConfig: editorQuizConfig, quizQuestions, reloadConfig } = useQuizConfig();
   
@@ -92,11 +100,16 @@ export const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ className }) =
 
   // Sincronizar com dados do editor quando carregados
   useEffect(() => {
+    if (testMode) {
+      console.log(`🧪 QuizEditorPanel inicializado em modo: ${testMode}`);
+      console.log(`📊 Blocos recebidos: ${blocks.length}`);
+    }
+    
     if (editorQuizConfig) {
       console.log('🔄 Sincronizando configurações do editor:', editorQuizConfig);
       // Carregar dados do editor se disponíveis
     }
-  }, [editorQuizConfig]);
+  }, [editorQuizConfig, testMode, blocks.length]);
 
   // Validar regras de pontuação
   const validateScoringRules = async () => {
