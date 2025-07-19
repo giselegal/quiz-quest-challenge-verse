@@ -23,6 +23,11 @@ export const generateTimestampId = (prefix: string = 'item'): string => {
   return `${prefix}-${Date.now()}`;
 };
 
+// Generate simple ID for editor blocks
+export const generateId = (): string => {
+  return `block_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+};
+
 // Check if a string is a valid UUID
 export const isValidUUID = (id: string): boolean => {
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
