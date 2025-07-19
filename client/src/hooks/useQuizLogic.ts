@@ -1,10 +1,27 @@
 import { useState, useCallback, useEffect } from "react";
 import { quizQuestions } from "../data/quizQuestions";
-import { QuizResult, StyleResult } from "../types/quiz";
+import { StyleResult } from "../types/quiz";
 import {
   preloadImagesByUrls,
   preloadCriticalImages,
 } from "../utils/imageManager";
+
+// Interface local específica para o resultado do quiz
+interface StyleResultLocal {
+  category: string;
+  score: number;
+  percentage: number;
+  style: string;
+  points: number; 
+  rank: number;
+}
+
+interface QuizResult {
+  primaryStyle: StyleResultLocal | null;
+  secondaryStyles: StyleResultLocal[];
+  totalSelections: number;
+  userName: string;
+}
 
 export const useQuizLogic = () => {
   console.log("useQuizLogic: Hook inicializado");
@@ -226,7 +243,7 @@ export const useQuizLogic = () => {
 
         optionIds.forEach((optionId) => {
           const option = question.options.find((o) => o.id === optionId);
-          if (option) {
+          if (option && option.styleCategory) {
             styleCounter[option.styleCategory]++;
             totalSelections++;
           }
@@ -236,14 +253,17 @@ export const useQuizLogic = () => {
       console.log("Style counts:", styleCounter);
       console.log("Total selections:", totalSelections);
 
-      const styleResults: StyleResult[] = Object.entries(styleCounter)
-        .map(([category, score]) => ({
-          category: category as StyleResult["category"],
+      const styleResults: StyleResultLocal[] = Object.entries(styleCounter)
+        .map(([category, score], index) => ({
+          category: category,
           score,
           percentage:
             totalSelections > 0
               ? Math.round((score / totalSelections) * 100)
               : 0,
+          style: category.toLowerCase(),
+          points: score,
+          rank: index + 1,
         }))
         .sort((a, b) => {
           if (a.score === b.score && clickOrderInternal.length > 0) {
@@ -261,11 +281,14 @@ export const useQuizLogic = () => {
       const primaryStyle = styleResults[0] || null;
       const secondaryStyles = styleResults.slice(1);
 
+      // ✅ CORREÇÃO: Capturar nome do localStorage
+      const savedUserName = localStorage.getItem('userName') || 'User';
+
       const result: QuizResult = {
         primaryStyle,
         secondaryStyles,
         totalSelections,
-        userName: "User", // Add default userName to fix type error
+        userName: savedUserName, // ✅ Agora usa o nome real do usuário
       };
 
       setQuizResult(result);
