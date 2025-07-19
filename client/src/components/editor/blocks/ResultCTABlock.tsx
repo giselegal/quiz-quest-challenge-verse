@@ -80,7 +80,7 @@ const ResultCTABlock: React.FC<ResultCTABlockProps> = ({
       <div className="bg-white rounded-lg shadow-md border border-gray-100 p-4 md:p-8">
         {/* Header */}
         <div className="text-center mb-6 md:mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4" style={{ color: textColor, fontFamily: 'Playfair Display, serif' }}>
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 md:mb-4" style={{ color: textColor, fontFamily: 'Playfair Display, serif' }}>
             {mainTitle}
           </h2>
           <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
@@ -88,12 +88,12 @@ const ResultCTABlock: React.FC<ResultCTABlockProps> = ({
           </p>
         </div>
 
-        {/* Value Proposition Grid - Single Column Mobile */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 xl:gap-6 items-start mb-8">
+        {/* Value Proposition - Force Vertical in Mobile */}
+        <div className="space-y-8 lg:grid lg:grid-cols-2 lg:gap-8 lg:space-y-0 items-start mb-8">
           {/* Value Items */}
           {showValueStack && (
             <div className="space-y-4 sm:space-y-3 md:space-y-4 order-1">
-              <h3 className="text-xl md:text-xl font-semibold" style={{ color: textColor }}>
+              <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold" style={{ color: textColor }}>
                 O que você vai receber:
               </h3>
               {valueItems.map((item, index) => (
@@ -110,7 +110,7 @@ const ResultCTABlock: React.FC<ResultCTABlockProps> = ({
           {/* Price Stack */}
           <div className="bg-gradient-to-br from-gray-50 to-white p-6 md:p-6 rounded-lg border border-gray-100 order-2">
             <div className="text-center">
-              <h3 className="text-lg md:text-lg font-semibold mb-4 md:mb-4" style={{ color: textColor }}>
+              <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold mb-4 md:mb-4" style={{ color: textColor }}>
                 Oferta Especial
               </h3>
               
@@ -122,7 +122,7 @@ const ResultCTABlock: React.FC<ResultCTABlockProps> = ({
                   </span>
                 </div>
                 <div>
-                  <span className="text-3xl sm:text-2xl md:text-3xl font-bold" style={{ color: buttonColor }}>
+                  <span className="text-2xl sm:text-3xl lg:text-4xl font-bold" style={{ color: buttonColor }}>
                     {priceCurrent}
                   </span>
                 </div>
@@ -132,7 +132,7 @@ const ResultCTABlock: React.FC<ResultCTABlockProps> = ({
               {/* CTA Button */}
               <button
                 onClick={handleCTAClick}
-                className="w-full py-3 sm:py-4 md:py-4 px-6 sm:px-4 md:px-6 rounded-lg font-semibold text-lg md:text-lg transition-all duration-200 hover:scale-105 hover:shadow-lg flex items-center justify-center space-x-2 mb-4"
+                className="w-full py-3 sm:py-4 md:py-4 px-6 sm:px-4 md:px-6 rounded-lg font-semibold text-base sm:text-lg lg:text-xl transition-all duration-200 hover:scale-105 hover:shadow-lg flex items-center justify-center space-x-2 mb-4"
                 style={{
                   backgroundColor: buttonColor,
                   color: buttonTextColor,
@@ -140,7 +140,7 @@ const ResultCTABlock: React.FC<ResultCTABlockProps> = ({
                 }}
               >
                 <ShoppingCart className="w-5 h-5 md:w-5 md:h-5" />
-                <span className="text-base md:text-base font-semibold">{ctaText}</span>
+                <span className="text-base sm:text-lg lg:text-xl font-semibold">{ctaText}</span>
               </button>
 
               {/* Security Elements */}
