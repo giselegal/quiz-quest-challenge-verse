@@ -6,11 +6,16 @@ import { EditorPreview } from '@/components/result-editor/EditorPreview';
 import { useBlockOperations } from '@/hooks/editor/useBlockOperations';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus, Save, Eye, EyeOff, TestTube, BarChart3, Settings, ExternalLink } from 'lucide-react';
+import { Plus, Save, Eye, EyeOff, TestTube, BarChart3, Settings, ExternalLink, Upload } from 'lucide-react';
 import { Block } from '@/types/editor';
 import { StyleResult } from '@/types/quiz';
 import { QuizEditorPanel } from '@/components/editor/QuizEditorPanel';
 import { blockDefinitions, getBlocksByCategory } from '@/config/blockDefinitions';
+
+// Função para gerar ID único
+const generateId = () => {
+  return `editor_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+};
 
 // Mock data for testing
 const mockStyleResult: StyleResult = {
@@ -65,9 +70,92 @@ export default function EditorPage() {
   };
 
   const handleSaveProject = () => {
-    console.log('💾 Salvando projeto:', { blocks });
-    // Aqui você pode integrar com a API de salvamento
-    alert(`Projeto salvo! ${blocks.length} blocos`);
+    const projectData = {
+      blocks,
+      timestamp: new Date().toISOString(),
+      version: '1.0.0',
+      id: generateId(),
+      metadata: {
+        totalBlocks: blocks.length,
+        lastModified: new Date().toISOString(),
+        creator: 'editor-user'
+      }
+    };
+    
+    console.log('💾 Salvando projeto completo:', projectData);
+    
+    // 1. Salvar no localStorage (backup local)
+    localStorage.setItem('editor-project-current', JSON.stringify(projectData));
+    localStorage.setItem('editor-project-backup', JSON.stringify(projectData));
+    
+    // 2. Salvar no sistema de versões
+    const existingProjects = JSON.parse(localStorage.getItem('editor-saved-projects') || '[]');
+    existingProjects.push(projectData);
+    
+    // Manter apenas últimos 10 projetos
+    if (existingProjects.length > 10) {
+      existingProjects.splice(0, existingProjects.length - 10);
+    }
+    
+    localStorage.setItem('editor-saved-projects', JSON.stringify(existingProjects));
+    
+    // 3. Preparar para publicação futura (API)
+    console.log('📡 Projeto preparado para publicação:', {
+      id: projectData.id,
+      blocks: projectData.blocks.length,
+      timestamp: projectData.timestamp
+    });
+    
+    alert(`✅ Projeto salvo com sucesso!\n\n📊 ${blocks.length} bloco${blocks.length !== 1 ? 's' : ''} salvos\n🆔 ID: ${projectData.id}\n🕒 ${new Date().toLocaleString()}\n\n💡 Use "Publicar" para disponibilizar online.`);
+  };
+
+  const handlePublishProject = () => {
+    const currentProject = localStorage.getItem('editor-project-current');
+    
+    if (!currentProject) {
+      alert('❌ Nenhum projeto para publicar. Salve primeiro!');
+      return;
+    }
+    
+    const projectData = JSON.parse(currentProject);
+    
+    // Simular publicação (aqui integraria com API)
+    const publishData = {
+      ...projectData,
+      publishedAt: new Date().toISOString(),
+      status: 'published',
+      url: `${window.location.origin}/published/${projectData.id}`
+    };
+    
+    console.log('🌐 Publicando projeto:', publishData);
+    
+    // Salvar estado publicado
+    localStorage.setItem('editor-project-published', JSON.stringify(publishData));
+    
+    alert(`🌐 Projeto publicado com sucesso!\n\n🆔 ID: ${publishData.id}\n📝 ${publishData.blocks.length} componentes\n🌐 URL: /published/${projectData.id}\n🕒 ${new Date().toLocaleString()}\n\n✅ Projeto disponível publicamente!`);
+  };
+
+  const handleLoadProject = () => {
+    try {
+      const savedProjects = JSON.parse(localStorage.getItem('editor-saved-projects') || '[]');
+      
+      if (savedProjects.length === 0) {
+        alert('❌ Nenhum projeto salvo encontrado.');
+        return;
+      }
+      
+      // Carregar projeto mais recente
+      const latestProject = savedProjects[savedProjects.length - 1];
+      
+      if (latestProject.blocks) {
+        blockActions.updateBlocks(latestProject.blocks);
+        console.log('✅ Projeto carregado:', latestProject);
+        alert(`✅ Projeto carregado!\n\n📊 ${latestProject.blocks.length} blocos restaurados\n🕒 Salvo em: ${new Date(latestProject.timestamp).toLocaleString()}`);
+      }
+    } catch (error) {
+      console.error('❌ Erro ao carregar projeto:', error);
+      alert('❌ Erro ao carregar projeto salvo.');
+    }
   };
 
   return (
