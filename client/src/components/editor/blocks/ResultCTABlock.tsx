@@ -89,69 +89,69 @@ const ResultCTABlock: React.FC<ResultCTABlockProps> = ({
         </div>
 
         {/* Value Proposition Grid - Mobile First */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-center mb-6 md:mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-6 items-start mb-8">
           {/* Value Items */}
           {showValueStack && (
-            <div className="space-y-3 md:space-y-4 order-2 md:order-1">
-              <h3 className="text-lg md:text-xl font-semibold" style={{ color: textColor }}>
+            <div className="space-y-4 sm:space-y-3 md:space-y-4 order-1">
+              <h3 className="text-xl md:text-xl font-semibold" style={{ color: textColor }}>
                 O que você vai receber:
               </h3>
               {valueItems.map((item, index) => (
-                <div key={index} className="flex items-start space-x-2 md:space-x-3">
-                  <div className="flex-shrink-0 w-4 h-4 md:w-5 md:h-5 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center mt-0.5">
-                    <CheckCircle className="h-2.5 w-2.5 md:h-3 md:w-3 text-white" />
+                <div key={index} className="flex items-start space-x-3 md:space-x-3">
+                  <div className="flex-shrink-0 w-5 h-5 md:w-5 md:h-5 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center mt-0.5">
+                    <CheckCircle className="h-3 w-3 md:h-3 md:w-3 text-white" />
                   </div>
-                  <span className="text-sm md:text-base text-gray-700">{item}</span>
+                  <span className="text-base md:text-base text-gray-700 leading-relaxed">{item}</span>
                 </div>
               ))}
             </div>
           )}
 
           {/* Price Stack */}
-          <div className="bg-gradient-to-br from-gray-50 to-white p-4 md:p-6 rounded-lg border border-gray-100 order-1 md:order-2">
+          <div className="bg-gradient-to-br from-gray-50 to-white p-6 md:p-6 rounded-lg border border-gray-100 order-2">
             <div className="text-center">
-              <h3 className="text-base md:text-lg font-semibold mb-3 md:mb-4" style={{ color: textColor }}>
+              <h3 className="text-lg md:text-lg font-semibold mb-4 md:mb-4" style={{ color: textColor }}>
                 Oferta Especial
               </h3>
               
               {/* Preço com desconto */}
-              <div className="space-y-2 mb-4 md:mb-6">
+              <div className="space-y-2 mb-6 md:mb-6">
                 <div className="relative">
-                  <span className="text-gray-500 text-base md:text-lg line-through">
+                  <span className="text-gray-500 text-lg md:text-lg line-through">
                     {priceOriginal}
                   </span>
                 </div>
                 <div>
-                  <span className="text-2xl md:text-3xl font-bold" style={{ color: buttonColor }}>
+                  <span className="text-3xl sm:text-2xl md:text-3xl font-bold" style={{ color: buttonColor }}>
                     {priceCurrent}
                   </span>
                 </div>
-                <p className="text-xs md:text-sm text-gray-600">Pagamento único</p>
+                <p className="text-sm md:text-sm text-gray-600">Pagamento único</p>
               </div>
 
               {/* CTA Button */}
               <button
                 onClick={handleCTAClick}
-                className="w-full py-3 md:py-4 px-4 md:px-6 rounded-lg font-semibold text-base md:text-lg transition-all duration-200 hover:scale-105 hover:shadow-lg flex items-center justify-center space-x-2"
+                className="w-full py-4 sm:py-3 md:py-4 px-6 sm:px-4 md:px-6 rounded-lg font-semibold text-lg md:text-lg transition-all duration-200 hover:scale-105 hover:shadow-lg flex items-center justify-center space-x-2 mb-4"
                 style={{
                   backgroundColor: buttonColor,
                   color: buttonTextColor,
                   boxShadow: `0 4px 14px ${buttonColor}40`
                 }}
               >
-                <ShoppingCart className="w-4 h-4 md:w-5 md:h-5" />
-                <span className="text-sm md:text-base">{ctaText}</span>
+                <ShoppingCart className="w-5 h-5 md:w-5 md:h-5" />
+                <span className="text-base md:text-base font-semibold">{ctaText}</span>
               </button>
 
               {/* Security Elements */}
               {showSecureElements && (
-                <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4 mt-3 md:mt-4 text-xs md:text-sm text-gray-500">
+                <div className="flex flex-row flex-wrap justify-center gap-3 sm:gap-4 text-sm text-gray-500">
                   <div className="flex items-center space-x-1">
-                    <Lock className="w-3 h-3" />
+                    <Lock className="w-4 h-4" />
                     <span>100% Seguro</span>
                   </div>
                   <div className="flex items-center space-x-1">
-                    <CheckCircle className="w-3 h-3" />
+                    <CheckCircle className="w-4 h-4" />
                     <span>7 Dias Garantia</span>
                   </div>
                 </div>

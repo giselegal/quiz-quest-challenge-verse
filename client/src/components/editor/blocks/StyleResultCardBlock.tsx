@@ -79,34 +79,34 @@ const StyleResultCardBlock: React.FC<StyleResultCardBlockProps> = ({
             </div>
             <Progress 
               value={stylePercentage} 
-              className="h-3 bg-gray-100" 
-              indicatorClassName="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]"
+              className="h-4 sm:h-3 bg-gray-100 rounded-full" 
+              indicatorClassName="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full"
             />
           </div>
         </div>
 
         {/* Content Grid - Mobile First Responsive */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-6 items-start">
           {/* Text Content */}
-          <div className="space-y-4 order-1 lg:order-1">
-            <h3 className="text-xl md:text-2xl font-bold" style={{ color: accentColor }}>
+          <div className="space-y-6 sm:space-y-4 order-1">
+            <h3 className="text-2xl sm:text-xl md:text-2xl font-bold" style={{ color: accentColor }}>
               {styleCategory}
             </h3>
-            <p className="text-gray-700 leading-relaxed text-sm md:text-base">
+            <p className="text-gray-700 leading-relaxed text-base sm:text-sm md:text-base">
               {styleDescription}
             </p>
             
             {/* Secondary Styles */}
             {showSecondaryStyles && secondaryStyles.length > 0 && (
-              <div className="bg-gray-50 rounded-lg p-3 md:p-4">
-                <h4 className="text-xs md:text-sm font-semibold mb-2 md:mb-3" style={{ color: textColor }}>
+              <div className="bg-gray-50 rounded-lg p-4 sm:p-3 md:p-4 space-y-3 sm:space-y-2">
+                <h4 className="text-sm md:text-base font-semibold mb-3 md:mb-2" style={{ color: textColor }}>
                   Estilos Complementares
                 </h4>
-                <div className="space-y-1 md:space-y-2">
+                <div className="space-y-2 md:space-y-1">
                   {secondaryStyles.map((style, index) => (
                     <div key={index} className="flex items-center justify-between">
-                      <span className="text-xs md:text-sm text-gray-600">{style.name}</span>
-                      <span className="text-xs md:text-sm font-semibold" style={{ color: accentColor }}>
+                      <span className="text-sm md:text-sm text-gray-600">{style.name}</span>
+                      <span className="text-sm md:text-sm font-semibold" style={{ color: accentColor }}>
                         {style.percentage}%
                       </span>
                     </div>
@@ -116,29 +116,32 @@ const StyleResultCardBlock: React.FC<StyleResultCardBlockProps> = ({
             )}
           </div>
 
-          {/* Style Image */}
-          <div className="flex justify-center order-2 lg:order-2">
-            <div className="relative max-w-[120px] sm:max-w-[150px] md:max-w-[180px] lg:max-w-[200px] w-full">
-              <img 
-                src={styleImage}
-                alt={`Estilo ${styleCategory}`}
-                className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
-              />
-              <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-4 h-4 sm:w-6 sm:h-6 border-t-2 border-r-2" style={{ borderColor: accentColor }}></div>
-              <div className="absolute -bottom-1 -left-1 sm:-bottom-2 sm:-left-2 w-4 h-4 sm:w-6 sm:h-6 border-b-2 border-l-2" style={{ borderColor: accentColor }}></div>
+          {/* Images Section */}
+          <div className="grid grid-cols-2 gap-4 lg:gap-6 order-2">
+            {/* Style Image */}
+            <div className="flex justify-center">
+              <div className="relative w-full max-w-[200px] sm:max-w-[160px] md:max-w-[180px]">
+                <img 
+                  src={styleImage}
+                  alt={`Estilo ${styleCategory}`}
+                  className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-4 h-4 sm:w-6 sm:h-6 border-t-2 border-r-2" style={{ borderColor: accentColor }}></div>
+                <div className="absolute -bottom-1 -left-1 sm:-bottom-2 sm:-left-2 w-4 h-4 sm:w-6 sm:h-6 border-b-2 border-l-2" style={{ borderColor: accentColor }}></div>
+              </div>
             </div>
-          </div>
 
-          {/* Guide Preview */}
-          <div className="flex justify-center order-3 lg:order-3">
-            <div className="relative max-w-[120px] sm:max-w-[150px] md:max-w-[180px] lg:max-w-[200px] w-full">
-              <img 
-                src={guideImage}
-                alt={`Guia de Estilo ${styleCategory}`}
-                className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
-              />
-              <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-2 py-1 sm:px-3 sm:py-1 rounded-full shadow-lg text-xs font-medium transform rotate-12">
-                Exclusivo
+            {/* Guide Preview */}
+            <div className="flex justify-center">
+              <div className="relative w-full max-w-[200px] sm:max-w-[160px] md:max-w-[180px]">
+                <img 
+                  src={guideImage}
+                  alt={`Guia de Estilo ${styleCategory}`}
+                  className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-2 py-1 sm:px-3 sm:py-1 rounded-full shadow-lg text-xs font-medium transform rotate-12">
+                  Exclusivo
+                </div>
               </div>
             </div>
           </div>
