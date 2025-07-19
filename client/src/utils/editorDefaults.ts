@@ -569,12 +569,7 @@ export const getDefaultContentForType = (type: BlockType): EditableContent => {
       };
 
     case 'hero-section':
-
-    case 'hero-section':
     case 'bonus-carousel':
-    case 'headline':
-    case 'benefits':
-    case 'pricing':
     case 'quiz-result-display':
     case 'style-result':
     case 'secondary-styles':
