@@ -41,6 +41,7 @@ const EditorDiagnosticPage = lazy(() => import("./pages/EditorDiagnosticPage"));
 // Páginas de Teste e Publicação
 const Teste5Page = lazy(() => import("./pages/Teste5Page"));
 const PublishedProjectPage = lazy(() => import("./pages/PublishedProjectPage"));
+const PreviewPage = lazy(() => import("./pages/PreviewPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App = () => {
@@ -120,6 +121,12 @@ const App = () => {
                 <Route
                   path="/teste5"
                   component={Teste5Page}
+                />
+                
+                {/* Preview de Projetos */}
+                <Route
+                  path="/preview"
+                  component={PreviewPage}
                 />
                 
                 {/* Projetos Publicados */}

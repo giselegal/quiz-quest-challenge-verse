@@ -207,22 +207,86 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
       return;
     }
     
+    // Abrir modal para configurar URL personalizada
+    setShowPublishModal(true);
     const projectData = JSON.parse(currentProject);
     
-    // Simular publicação (aqui integraria com API)
+    // Gerar slug padrão baseado no nome do funil
+    const defaultSlug = projectData.funnel?.name
+      ?.toLowerCase()
+      ?.replace(/[^a-z0-9]/g, '-')
+      ?.replace(/-+/g, '-')
+      ?.replace(/^-|-$/g, '') || `quiz-${Date.now()}`;
+    
+    setUrlSlug(defaultSlug);
+  };
+
+  const handleConfirmPublish = () => {
+    const currentProject = localStorage.getItem('schema-editor-project-current');
+    if (!currentProject) return;
+    
+    const projectData = JSON.parse(currentProject);
+    const finalSlug = urlSlug || `quiz-${projectData.id}`;
+    const baseUrl = customUrl || window.location.origin;
+    const fullUrl = `${baseUrl}/${finalSlug}`;
+    
+    // Criar dados de publicação
     const publishData = {
       ...projectData,
       publishedAt: new Date().toISOString(),
       status: 'published',
-      url: `${window.location.origin}/published/${projectData.id}`
+      url: fullUrl,
+      slug: finalSlug,
+      customDomain: customUrl,
+      publishSettings: {
+        allowIndexing: true,
+        socialSharing: true,
+        analytics: true
+      }
     };
     
-    console.log('🌐 Publicando projeto Schema:', publishData);
+    console.log('🌐 Publicando projeto com URL personalizada:', publishData);
     
     // Salvar estado publicado
     localStorage.setItem('schema-editor-project-published', JSON.stringify(publishData));
+    localStorage.setItem(`published-quiz-${finalSlug}`, JSON.stringify(publishData));
     
-    alert(`🌐 Projeto Schema publicado com sucesso!\n\n🆔 ID: ${publishData.id}\n📊 Funil: ${publishData.funnel?.name}\n📄 ${publishData.metadata.totalPages} páginas\n🧩 ${publishData.metadata.totalBlocks} componentes\n🌐 URL: /published/${projectData.id}\n🕒 ${new Date().toLocaleString()}\n\n✅ Projeto disponível publicamente!`);
+    // Atualizar estado
+    setPublishedUrl(fullUrl);
+    setShowPublishModal(false);
+    
+    alert(`🌐 Quiz publicado com sucesso!\n\n📊 ${publishData.funnel?.name}\n🌐 URL: ${fullUrl}\n� ${publishData.metadata.totalPages} páginas\n🧩 ${publishData.metadata.totalBlocks} componentes\n🕒 ${new Date().toLocaleString()}\n\n✅ Acesse seu quiz pela URL personalizada!`);
+  };
+
+  const handlePreview = () => {
+    const currentProject = localStorage.getItem('schema-editor-project-current');
+    if (!currentProject) {
+      alert('❌ Salve o projeto primeiro para visualizar o preview!');
+      return;
+    }
+    
+    const projectData = JSON.parse(currentProject);
+    
+    // Salvar dados temporários para preview
+    const previewData = {
+      ...projectData,
+      isPreview: true,
+      previewId: `preview-${Date.now()}`
+    };
+    
+    localStorage.setItem('quiz-preview-data', JSON.stringify(previewData));
+    
+    // Abrir preview em nova aba
+    const previewUrl = `/preview?id=${previewData.previewId}`;
+    window.open(previewUrl, '_blank');
+  };
+
+  const copyUrlToClipboard = () => {
+    if (publishedUrl) {
+      navigator.clipboard.writeText(publishedUrl).then(() => {
+        alert('📋 URL copiada para a área de transferência!');
+      });
+    }
   };
 
   const handleLoadProject = () => {
@@ -457,14 +521,36 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
             </Button>
 
             <Button 
+              onClick={handlePreview} 
+              size="sm" 
+              variant="outline"
+              className="bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200"
+            >
+              <Eye className="w-4 h-4 sm:mr-1" />
+              <span className="hidden sm:inline">Preview</span>
+            </Button>
+
+            <Button 
               onClick={handlePublishProject} 
               size="sm" 
               variant="default" 
               className="bg-green-600 hover:bg-green-700"
             >
-              <Upload className="w-4 h-4 sm:mr-1" />
+              <Globe className="w-4 h-4 sm:mr-1" />
               <span className="hidden sm:inline">Publicar</span>
             </Button>
+
+            {publishedUrl && (
+              <Button 
+                onClick={copyUrlToClipboard}
+                size="sm" 
+                variant="outline"
+                className="bg-green-50 hover:bg-green-100 text-green-700 border-green-200"
+              >
+                <Copy className="w-4 h-4 sm:mr-1" />
+                <span className="hidden sm:inline">Copiar URL</span>
+              </Button>
+            )}
 
             <Button 
               size="sm" 
@@ -780,6 +866,110 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
             <span className="text-purple-300">
               � Saved: {JSON.parse(localStorage.getItem('schema-editor-saved-projects') || '[]').length}
             </span>
+          </div>
+        )}
+
+        {/* Modal de Publicação */}
+        {showPublishModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+                    <Globe className="w-5 h-5 text-green-600" />
+                    Publicar Quiz
+                  </h2>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => setShowPublishModal(false)}
+                    className="h-8 w-8 p-0"
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Nome do Quiz
+                    </label>
+                    <p className="text-sm text-gray-600 bg-gray-50 p-2 rounded">
+                      {funnel?.name || 'Sem nome'}
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      URL Personalizada (Opcional)
+                    </label>
+                    <input
+                      type="url"
+                      value={customUrl}
+                      onChange={(e) => setCustomUrl(e.target.value)}
+                      placeholder="https://meudominio.com"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Deixe vazio para usar o domínio atual
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Slug da URL
+                    </label>
+                    <input
+                      type="text"
+                      value={urlSlug}
+                      onChange={(e) => setUrlSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-'))}
+                      placeholder="meu-quiz-incrivel"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Apenas letras, números e hífens
+                    </p>
+                  </div>
+
+                  <div className="bg-blue-50 p-3 rounded-md">
+                    <p className="text-sm text-blue-800 font-medium mb-1">
+                      URL Final:
+                    </p>
+                    <p className="text-sm text-blue-600 font-mono break-all">
+                      {customUrl || window.location.origin}/{urlSlug || 'meu-quiz'}
+                    </p>
+                  </div>
+
+                  <div className="bg-gray-50 p-3 rounded-md">
+                    <h4 className="text-sm font-medium text-gray-700 mb-2">Resumo:</h4>
+                    <ul className="text-xs text-gray-600 space-y-1">
+                      <li>📄 {funnel?.pages?.length || 0} páginas</li>
+                      <li>🧩 {currentPage?.blocks.length || 0} componentes</li>
+                      <li>📱 Layout responsivo</li>
+                      <li>🔒 URL personalizada</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="flex gap-3 mt-6">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setShowPublishModal(false)}
+                    className="flex-1"
+                  >
+                    Cancelar
+                  </Button>
+                  <Button 
+                    onClick={handleConfirmPublish}
+                    className="flex-1 bg-green-600 hover:bg-green-700"
+                    disabled={!urlSlug.trim()}
+                  >
+                    <Globe className="w-4 h-4 mr-2" />
+                    Publicar Agora
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>
