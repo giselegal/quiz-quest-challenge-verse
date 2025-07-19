@@ -37,6 +37,10 @@ const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
 const SchemaDrivenEditorPage = lazy(() => import("./pages/SchemaDrivenEditorPage"));
 const BlockDefinitionsTest = lazy(() => import("./components/editor/tests/BlockDefinitionsTest"));
 const EditorDiagnosticPage = lazy(() => import("./pages/EditorDiagnosticPage"));
+
+// Páginas de Teste e Publicação
+const Teste5Page = lazy(() => import("./pages/Teste5Page"));
+const PublishedProjectPage = lazy(() => import("./pages/PublishedProjectPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App = () => {
@@ -110,6 +114,18 @@ const App = () => {
                 <Route
                   path="/editor-diagnostic"
                   component={EditorDiagnosticPage}
+                />
+                
+                {/* Página de Teste 5 */}
+                <Route
+                  path="/teste5"
+                  component={Teste5Page}
+                />
+                
+                {/* Projetos Publicados */}
+                <Route
+                  path="/published/:id"
+                  component={PublishedProjectPage}
                 />
                 
                 {/* Admin - protegido com AdminAuthProvider */}
