@@ -2,7 +2,6 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import QuizResultDisplayBlock from '@/components/editor/blocks/QuizResultDisplayBlock';
 import QuizResultMainCardBlock from '@/components/editor/blocks/QuizResultMainCardBlock';
-import ResultPageBlock from '@/components/editor/blocks/ResultPageBlock';
 import ResultsLibrary from '@/components/editor/ResultsLibrary';
 
 const ResultsShowcase = () => {
