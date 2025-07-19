@@ -79,17 +79,17 @@ const StyleResultCardBlock: React.FC<StyleResultCardBlockProps> = ({
             </div>
             <Progress 
               value={stylePercentage} 
-              className="h-4 sm:h-3 bg-gray-100 rounded-full" 
+              className="h-2 sm:h-2.5 bg-gray-100 rounded-full" 
               indicatorClassName="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full"
             />
           </div>
         </div>
 
-        {/* Content Grid - Mobile First Responsive */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-6 items-start">
+        {/* Content Grid - Force Vertical in Mobile */}
+        <div className="space-y-8 lg:grid lg:grid-cols-2 lg:gap-6 lg:space-y-0 items-start">
           {/* Text Content */}
           <div className="space-y-6 sm:space-y-4 order-1">
-            <h3 className="text-2xl sm:text-xl md:text-2xl font-bold" style={{ color: accentColor }}>
+            <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold" style={{ color: accentColor }}>
               {styleCategory}
             </h3>
             <p className="text-gray-700 leading-relaxed text-base sm:text-sm md:text-base">
@@ -116,15 +116,18 @@ const StyleResultCardBlock: React.FC<StyleResultCardBlockProps> = ({
             )}
           </div>
 
-          {/* Images Section - Single Column Mobile */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-4 lg:gap-6 order-2">
+          {/* Images Section - Single Column Mobile, Grid Only on Desktop */}
+          <div className="space-y-6 lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0 order-2">
             {/* Style Image */}
             <div className="flex justify-center">
-              <div className="relative w-full max-w-[320px] sm:max-w-[280px] md:max-w-[180px]">
+              <div className="relative w-full max-w-[300px] lg:max-w-[200px]">
                 <img 
                   src={styleImage}
                   alt={`Estilo ${styleCategory}`}
                   className="w-full h-auto aspect-[4/5] object-cover rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+                  onError={(e) => {
+                    e.currentTarget.src = '/placeholder-image.jpg';
+                  }}
                 />
                 <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-4 h-4 sm:w-6 sm:h-6 border-t-2 border-r-2" style={{ borderColor: accentColor }}></div>
                 <div className="absolute -bottom-1 -left-1 sm:-bottom-2 sm:-left-2 w-4 h-4 sm:w-6 sm:h-6 border-b-2 border-l-2" style={{ borderColor: accentColor }}></div>
@@ -133,11 +136,14 @@ const StyleResultCardBlock: React.FC<StyleResultCardBlockProps> = ({
 
             {/* Guide Preview */}
             <div className="flex justify-center">
-              <div className="relative w-full max-w-[320px] sm:max-w-[280px] md:max-w-[180px]">
+              <div className="relative w-full max-w-[300px] lg:max-w-[200px]">
                 <img 
                   src={guideImage}
                   alt={`Guia de Estilo ${styleCategory}`}
                   className="w-full h-auto aspect-[4/5] object-cover rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+                  onError={(e) => {
+                    e.currentTarget.src = '/placeholder-guide.jpg';
+                  }}
                 />
                 <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-2 py-1 sm:px-3 sm:py-1 rounded-full shadow-lg text-xs font-medium transform rotate-12">
                   Exclusivo

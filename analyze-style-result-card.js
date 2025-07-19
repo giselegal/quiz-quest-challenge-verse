@@ -4,7 +4,7 @@
 console.log('🔍 ANÁLISE COMPLETA: StyleResultCardBlock');
 console.log('='.repeat(50));
 
-con// Análise Completa do StyleResultCardBlock
+// Análise Completa do StyleResultCardBlock
 // Arquivo: analyze-style-result-card.js
 
 console.log('🔍 ANÁLISE COMPLETA: StyleResultCardBlock');
