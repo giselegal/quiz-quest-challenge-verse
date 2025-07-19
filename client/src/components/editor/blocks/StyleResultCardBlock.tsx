@@ -117,14 +117,14 @@ const StyleResultCardBlock: React.FC<StyleResultCardBlockProps> = ({
           </div>
 
           {/* Images Section */}
-          <div className="grid grid-cols-2 gap-4 lg:gap-6 order-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-4 lg:gap-6 order-2">
             {/* Style Image */}
             <div className="flex justify-center">
-              <div className="relative w-full max-w-[200px] sm:max-w-[160px] md:max-w-[180px]">
+              <div className="relative w-full max-w-[280px] sm:max-w-[160px] md:max-w-[180px]">
                 <img 
                   src={styleImage}
                   alt={`Estilo ${styleCategory}`}
-                  className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+                  className="w-full h-auto aspect-[4/5] object-cover rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-4 h-4 sm:w-6 sm:h-6 border-t-2 border-r-2" style={{ borderColor: accentColor }}></div>
                 <div className="absolute -bottom-1 -left-1 sm:-bottom-2 sm:-left-2 w-4 h-4 sm:w-6 sm:h-6 border-b-2 border-l-2" style={{ borderColor: accentColor }}></div>
@@ -133,11 +133,11 @@ const StyleResultCardBlock: React.FC<StyleResultCardBlockProps> = ({
 
             {/* Guide Preview */}
             <div className="flex justify-center">
-              <div className="relative w-full max-w-[200px] sm:max-w-[160px] md:max-w-[180px]">
+              <div className="relative w-full max-w-[280px] sm:max-w-[160px] md:max-w-[180px]">
                 <img 
                   src={guideImage}
                   alt={`Guia de Estilo ${styleCategory}`}
-                  className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+                  className="w-full h-auto aspect-[4/5] object-cover rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-2 py-1 sm:px-3 sm:py-1 rounded-full shadow-lg text-xs font-medium transform rotate-12">
                   Exclusivo
