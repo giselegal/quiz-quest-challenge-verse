@@ -15,6 +15,8 @@
 
 // Blocos principais do quiz (implementados)
 export { default as QuizQuestionBlock } from './QuizQuestionBlock';
+export { default as TrueFalseQuestionBlock } from './TrueFalseQuestionBlock';
+export { default as ShortTextQuestionBlock } from './ShortTextQuestionBlock';
 export { default as QuizProgressBlock } from './QuizProgressBlock';
 export { default as QuizNavigationBlock } from './QuizNavigationBlock';
 export { default as QuizTransitionBlock } from './QuizTransitionBlock';
@@ -28,6 +30,8 @@ export { default as LoadingTransitionBlock } from './LoadingTransitionBlock';
 
 // Re-export types para facilitar importação
 export type { QuizQuestionBlockProps, QuestionOption } from './QuizQuestionBlock';
+export type { TrueFalseQuestionBlockProps } from './TrueFalseQuestionBlock';
+export type { ShortTextQuestionBlockProps } from './ShortTextQuestionBlock';
 export type { QuizProgressBlockProps } from './QuizProgressBlock';
 export type { QuizNavigationBlockProps } from './QuizNavigationBlock';
 export type { QuizTransitionBlockProps } from './QuizTransitionBlock';

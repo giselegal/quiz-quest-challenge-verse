@@ -26,6 +26,9 @@ import ResultPageBlock from '@/components/editor/blocks/ResultPageBlock';
 import QuizOfferPageBlock from '@/components/editor/blocks/QuizOfferPageBlock';
 import ResultHeaderBlock from '@/components/editor/blocks/ResultHeaderBlock';
 
+// New question types
+import { TrueFalseQuestionBlock, ShortTextQuestionBlock } from '@/components/blocks/quiz';
+
 // Blocos de seções
 import FAQSectionBlock from '@/components/editor/blocks/FAQSectionBlock';
 import TestimonialsBlock from '@/components/editor/blocks/TestimonialsBlock';
@@ -63,6 +66,10 @@ export const EDITOR_BLOCKS_MAP: Record<string, ComponentType<any>> = {
   'QuizStartPageBlock': QuizStartPageBlock,
   'quiz-question': QuizQuestionBlock,
   'QuizQuestionBlock': QuizQuestionBlock,
+  'true-false-question': TrueFalseQuestionBlock,
+  'TrueFalseQuestionBlock': TrueFalseQuestionBlock,
+  'short-text-question': ShortTextQuestionBlock,
+  'ShortTextQuestionBlock': ShortTextQuestionBlock,
   'question-multiple': QuestionMultipleBlock,
   'QuestionMultipleBlock': QuestionMultipleBlock,
   'strategic-question': StrategicQuestionBlock,

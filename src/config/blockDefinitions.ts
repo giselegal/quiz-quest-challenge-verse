@@ -702,6 +702,107 @@ export const blockDefinitions: BlockDefinition[] = [
       src: 'https://via.placeholder.com/400x300',
       alt: 'Image description'
     }
+  },
+  {
+    type: 'true-false-question',
+    name: 'Verdadeiro/Falso',
+    description: 'Pergunta com resposta verdadeiro ou falso',
+    icon: 'HelpCircle',
+    category: 'quiz',
+    propertiesSchema: [
+      {
+        key: 'question',
+        label: 'Pergunta',
+        type: 'textarea',
+        defaultValue: 'Esta afirmação é verdadeira?'
+      },
+      {
+        key: 'description',
+        label: 'Descrição (opcional)',
+        type: 'textarea',
+        defaultValue: ''
+      },
+      {
+        key: 'correctAnswer',
+        label: 'Resposta Correta',
+        type: 'boolean',
+        defaultValue: true
+      },
+      {
+        key: 'required',
+        label: 'Obrigatório',
+        type: 'boolean',
+        defaultValue: true
+      }
+    ],
+    defaultProperties: {
+      question: 'Esta afirmação é verdadeira?',
+      description: '',
+      correctAnswer: true,
+      required: true,
+      alignment: 'center'
+    }
+  },
+  {
+    type: 'short-text-question',
+    name: 'Texto Livre',
+    description: 'Pergunta com resposta em texto livre',
+    icon: 'Type',
+    category: 'quiz',
+    propertiesSchema: [
+      {
+        key: 'question',
+        label: 'Pergunta',
+        type: 'textarea',
+        defaultValue: 'Digite sua resposta:'
+      },
+      {
+        key: 'description',
+        label: 'Descrição (opcional)',
+        type: 'textarea',
+        defaultValue: ''
+      },
+      {
+        key: 'placeholder',
+        label: 'Placeholder',
+        type: 'text',
+        defaultValue: 'Digite sua resposta aqui...'
+      },
+      {
+        key: 'maxLength',
+        label: 'Máximo de caracteres',
+        type: 'number',
+        defaultValue: 500
+      },
+      {
+        key: 'minLength',
+        label: 'Mínimo de caracteres',
+        type: 'number',
+        defaultValue: 1
+      },
+      {
+        key: 'multiline',
+        label: 'Múltiplas linhas',
+        type: 'boolean',
+        defaultValue: false
+      },
+      {
+        key: 'required',
+        label: 'Obrigatório',
+        type: 'boolean',
+        defaultValue: true
+      }
+    ],
+    defaultProperties: {
+      question: 'Digite sua resposta:',
+      description: '',
+      placeholder: 'Digite sua resposta aqui...',
+      maxLength: 500,
+      minLength: 1,
+      multiline: false,
+      required: true,
+      alignment: 'center'
+    }
   }
 ];
 
