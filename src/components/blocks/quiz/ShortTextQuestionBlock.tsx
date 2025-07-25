@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { ArrowLeft, Type } from 'lucide-react';
+import { analyticsService } from '../../../services/analyticsService';
 
 /**
  * ShortTextQuestionBlock - Componente para perguntas de resposta curta/texto livre
@@ -139,6 +140,15 @@ const ShortTextQuestionBlock: React.FC<ShortTextQuestionBlockProps> = ({
   const handleSubmit = () => {
     const trimmedAnswer = answer.trim();
     if (validateAnswer(trimmedAnswer) && onAnswer) {
+      // Track analytics
+      analyticsService.trackEvent('quiz_question_answered', {
+        question_type: 'short_text',
+        question_id: blockId,
+        answer_length: trimmedAnswer.length,
+        is_multiline: multiline,
+        time_to_answer: Date.now() // Could be improved with actual timing
+      });
+      
       onAnswer(trimmedAnswer);
     }
   };

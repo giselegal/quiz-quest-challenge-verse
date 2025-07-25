@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Check, X } from 'lucide-react';
+import { analyticsService } from '../../../services/analyticsService';
 
 /**
  * TrueFalseQuestionBlock - Componente para perguntas de Verdadeiro/Falso
@@ -93,6 +94,15 @@ const TrueFalseQuestionBlock: React.FC<TrueFalseQuestionBlockProps> = ({
     
     setCurrentAnswer(answer);
     setHasAnswered(true);
+    
+    // Track analytics
+    analyticsService.trackEvent('quiz_question_answered', {
+      question_type: 'true_false',
+      question_id: blockId,
+      answer: answer,
+      is_correct: correctAnswer !== undefined ? answer === correctAnswer : null,
+      time_to_answer: Date.now() // Could be improved with actual timing
+    });
     
     if (onAnswer) {
       onAnswer(answer);

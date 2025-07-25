@@ -31,11 +31,14 @@ import { TestDeleteComponent } from './TestDeleteComponent';
 import { blockDefinitions } from '../../config/blockDefinitions';
 import { useLocation } from 'wouter';
 import { saveDiagnostic } from '../../utils/saveDiagnostic';
+// Import analytics service
+import { analyticsService } from '../../services/analyticsService';
 // Importar novos serviços e componentes
 import { TemplateSelector } from '../templates/TemplateSelector';
 import { VersioningService } from '../../services/versioningService';
 import { ReportService } from '../../services/reportService';
 import { ABTestService } from '../../services/abTestService';
+import AnalyticsDashboard from '../analytics/AnalyticsDashboard';
 
 interface SchemaDrivenEditorResponsiveProps {
   funnelId?: string;
@@ -98,6 +101,7 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
   const [showVersionHistory, setShowVersionHistory] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const [showABTestModal, setShowABTestModal] = useState(false);
+  const [showAnalyticsDashboard, setShowAnalyticsDashboard] = useState(false);
 
   // Hook principal do editor
   const {
@@ -214,6 +218,14 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
         type,
         properties: defaultProperties
       });
+      
+      // Track analytics
+      analyticsService.trackEditorAction('create', 'block', type, {
+        block_type: type,
+        block_name: definition.name,
+        page_id: currentPage.id
+      });
+      
       showToast(`Componente "${type}" adicionado!`, 'success');
     }
   }, [addBlock, currentPage, pushToUndoStack, showToast]);
@@ -280,6 +292,16 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
     console.log('🔘 [DEBUG] handleSave button clicked!');
     console.log('🔘 [DEBUG] Current funnel:', funnel);
     console.log('🔘 [DEBUG] isSaving state:', isSaving);
+    
+    // Track analytics
+    if (funnel) {
+      analyticsService.trackEditorAction('save', 'funnel', funnel.id, {
+        pages_count: funnel.pages?.length || 0,
+        blocks_count: funnel.pages?.reduce((total, page) => total + (page.blocks?.length || 0), 0) || 0,
+        is_published: funnel.config?.isPublished || false
+      });
+    }
+    
     saveFunnel(true);
     showToast('Funil salvo com sucesso!', 'success');
   }, [saveFunnel, showToast, funnel, isSaving]);
@@ -780,6 +802,17 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
              <BarChart3 className="w-4 h-4 sm:mr-1" />
              <span className="hidden sm:inline">A/B Test</span>
            </Button>
+
+           <Button
+             size="sm"
+             onClick={() => setShowAnalyticsDashboard(true)}
+             variant="outline"
+             className="px-3"
+             title="Analytics Dashboard"
+           >
+             <BarChart3 className="w-4 h-4 sm:mr-1" />
+             <span className="hidden sm:inline">Analytics</span>
+           </Button>
         </div>
       </div>
 
@@ -1006,6 +1039,27 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
                 onSelectTemplate={handleTemplateSelect}
                 onClose={() => setShowTemplateSelector(false)}
               />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Analytics Dashboard Modal */}
+      {showAnalyticsDashboard && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-6xl w-full max-h-[90vh] overflow-auto">
+            <div className="flex justify-between items-center p-4 border-b">
+              <h2 className="text-xl font-semibold">Analytics Dashboard</h2>
+              <Button
+                onClick={() => setShowAnalyticsDashboard(false)}
+                variant="outline"
+                size="sm"
+              >
+                ✕
+              </Button>
+            </div>
+            <div className="p-4">
+              <AnalyticsDashboard />
             </div>
           </div>
         </div>
