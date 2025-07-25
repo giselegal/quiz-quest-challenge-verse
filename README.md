@@ -11,8 +11,10 @@ Sistema avançado de criação de quizzes interativos e funis de conversão com 
 - **Estilização**: Tailwind CSS
 - **Drag & Drop**: @dnd-kit
 - **Ícones**: Lucide React
-- **Persistência**: localStorage (sistema v2.0)
+- **Persistência**: localStorage (sistema v2.0) + MCP Protocol
 - **Design System**: Sistema unificado de componentes responsivos
+- **Banco de Dados**: Supabase (PostgreSQL) + SQLite local
+- **MCP Protocol**: Model Context Protocol para padronização de dados
 
 ## 🏗️ Arquitetura
 
@@ -65,9 +67,31 @@ npm run dev
 
 ### Scripts Disponíveis
 ```bash
-npm run dev        # Servidor de desenvolvimento (localhost:5000)
+npm run dev        # Servidor de desenvolvimento (localhost:8080)
 npm run build      # Build para produção
 npm run preview    # Preview do build
+npm run check      # Verificação de tipos TypeScript
+
+# Scripts MCP
+npm run dev:server # Servidor backend (se configurado)
+npm run dev:full   # Frontend + Backend simultaneamente
+```
+
+### Configuração MCP
+```bash
+# 1. Configure o ambiente
+cp .env.mcp.example .env.local
+
+# 2. Atualize as credenciais do Supabase
+# REACT_APP_SUPABASE_URL=sua_url_supabase
+# REACT_APP_SUPABASE_ANON_KEY=sua_chave_anonima
+
+# 3. Escolha o provedor primário
+# MCP_PRIMARY_DB=supabase (para produção)
+# MCP_PRIMARY_DB=sqlite (para desenvolvimento local)
+
+# 4. Configure fallback (opcional)
+# MCP_FALLBACK_DB=sqlite
 ```
 
 ## 📱 Funcionalidades
@@ -97,8 +121,83 @@ npm run preview    # Preview do build
 - `/editor`: Editor visual principal (SchemaDrivenEditorResponsive)
 - `/teste5`: Editor alternativo para testes
 - `/quiz/:id`: Visualização de quiz publicado
+- `/mcp-demo`: Demonstração do MCP Protocol (desenvolvimento)
+
+## 🔌 Integração MCP
+
+### Uso Básico em Componentes
+
+```tsx
+import { useFunnelService } from '@/contexts/MCPContext';
+
+export const MyComponent = () => {
+  const { funnelService, isReady, error } = useFunnelService();
+  
+  const handleCreateFunnel = async () => {
+    if (!isReady) return;
+    
+    const response = await funnelService.createFunnel({
+      name: 'Meu Novo Funil',
+      user_id: 'user-123'
+    });
+    
+    if (response.success) {
+      console.log('Funil criado:', response.data);
+    } else {
+      console.error('Erro:', response.error);
+    }
+  };
+  
+  return (
+    <div>
+      {error && <div>Erro: {error}</div>}
+      <button onClick={handleCreateFunnel} disabled={!isReady}>
+        Criar Funil
+      </button>
+    </div>
+  );
+};
+```
+
+### Configuração do Provider
+
+```tsx
+import { MCPProvider } from '@/contexts/MCPContext';
+
+export const App = () => (
+  <MCPProvider>
+    <YourAppComponents />
+  </MCPProvider>
+);
+```
 
 ## 📊 Sistema de Dados
+
+### MCP Protocol (Model Context Protocol)
+
+O projeto implementa o **MCP Protocol** para padronizar a comunicação entre múltiplos sistemas de banco de dados:
+
+- **📄 Documentação**: [MCP_PROTOCOL.md](./MCP_PROTOCOL.md)
+- **🔧 Implementação**: [src/lib/mcp-adapter.ts](./src/lib/mcp-adapter.ts)
+- **🎯 Serviços**: [src/services/mcp-services.ts](./src/services/mcp-services.ts)
+- **⚛️ React Context**: [src/contexts/MCPContext.tsx](./src/contexts/MCPContext.tsx)
+
+#### Características do MCP:
+- **Múltiplos Provedores**: Supabase (produção) + SQLite (desenvolvimento)
+- **Sistema de Fallback**: Continuidade operacional automática
+- **Interface Unificada**: CRUD padronizado entre sistemas
+- **Error Handling**: Tratamento robusto de erros e retry automático
+- **Monitoramento**: Logging e métricas de performance integradas
+
+#### Configuração Rápida:
+```bash
+# Copie o arquivo de configuração
+cp .env.mcp.example .env.local
+
+# Configure suas credenciais do Supabase
+# MCP_PRIMARY_DB=supabase (produção)
+# MCP_PRIMARY_DB=sqlite (desenvolvimento)
+```
 
 ### Estrutura de Projeto
 ```typescript
