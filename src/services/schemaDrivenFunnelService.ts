@@ -613,16 +613,14 @@ class SchemaDrivenFunnelService {
       // Salvar no Supabase
       console.log('🌐 [DEBUG] Saving to Supabase...');
       
+      // Prepare data for the correct 'funnels' table schema
       const supabaseData = {
         id: funnel.id,
-        title: funnel.name,
+        name: funnel.name,
         description: funnel.description || '',
-        category: 'geral',
-        difficulty: 'medium' as const,
-        data: {
-          funnel: funnel,
-          pages: funnel.pages || [],
-          config: funnel.config || {}
+        settings: {
+          ...funnel.config,
+          pages: funnel.pages || []
         },
         is_published: funnel.config?.isPublished || false,
         updated_at: new Date().toISOString()
@@ -632,7 +630,7 @@ class SchemaDrivenFunnelService {
 
       // Verificar se já existe
       const { data: existing } = await supabase
-        .from('quizzes')
+        .from('funnels')
         .select('id')
         .eq('id', funnel.id)
         .single();
@@ -641,7 +639,7 @@ class SchemaDrivenFunnelService {
       if (existing) {
         // Atualizar existente
         const { data, error } = await supabase
-          .from('quizzes')
+          .from('funnels')
           .update(supabaseData)
           .eq('id', funnel.id)
           .select()
@@ -652,7 +650,7 @@ class SchemaDrivenFunnelService {
       } else {
         // Criar novo
         const { data, error } = await supabase
-          .from('quizzes')
+          .from('funnels')
           .insert([{ ...supabaseData, created_at: new Date().toISOString() }])
           .select()
           .single();
@@ -713,7 +711,7 @@ class SchemaDrivenFunnelService {
       // Tentar carregar do Supabase primeiro
       console.log('🌐 [DEBUG] Loading from Supabase...');
       const { data, error } = await supabase
-        .from('quizzes')
+        .from('funnels')
         .select('*')
         .eq('id', funnelId)
         .single();
@@ -780,14 +778,11 @@ class SchemaDrivenFunnelService {
       
       const supabaseData = {
         id: funnel.id,
-        title: funnel.name,
+        name: funnel.name,
         description: funnel.description || '',
-        category: 'geral',
-        difficulty: 'medium' as const,
-        data: {
-          funnel: funnel,
-          pages: funnel.pages || [],
-          config: funnel.config || {}
+        settings: {
+          ...funnel.config,
+          pages: funnel.pages || []
         },
         is_published: funnel.isPublished || false,
         created_at: now.toISOString(),
@@ -795,7 +790,7 @@ class SchemaDrivenFunnelService {
       };
 
       const { data: result, error } = await supabase
-        .from('quizzes')
+        .from('funnels')
         .insert([supabaseData])
         .select()
         .single();
