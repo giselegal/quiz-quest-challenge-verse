@@ -93,6 +93,23 @@ function App() {
                   )}
                 />
 
+                {/* TEMPORARY: Unprotected Editor for Testing */}
+                <Route path="/test/editor-fixed">
+                  {() => (
+                    <Suspense fallback={<PageLoading />}>
+                      <ErrorBoundary>
+                        <EditorProvider>
+                          <ScrollSyncProvider>
+                            <div className="relative">
+                              <EditorFixedPageWithDragDrop />
+                            </div>
+                          </ScrollSyncProvider>
+                        </EditorProvider>
+                      </ErrorBoundary>
+                    </Suspense>
+                  )}
+                </Route>
+
                 {/* Editor Fixed Minimal Route */}
 
                 {/* Templates IA Route - Protected */}
