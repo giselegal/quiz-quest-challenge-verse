@@ -51,7 +51,7 @@ const TestNavigation = lazy(() => import('./pages/TestNavigation'));
 const EditorDebugMinimal = lazy(() => import('./pages/editor-debug-minimal'));
 const TestBasico = lazy(() => import('./pages/test-basico'));
 const EditorFixedSimples = lazy(() => import('./pages/editor-fixed-simples'));
-const LiveEditorPage = lazy(() => import('./pages/LiveEditorPage'));
+const LiveEditorPage = lazy(() => import('./pages/admin/LiveEditorPage'));
 
 // Loading component
 const PageLoading = () => (
@@ -122,6 +122,29 @@ function App() {
                   path="/live-editor"
                   component={() => {
                     console.log('🚀 App: Carregando LiveEditorPage');
+                    return (
+                      <Suspense fallback={<PageLoading />}>
+                        <ErrorBoundary>
+                          <EditorProvider>
+                            <ScrollSyncProvider>
+                              <PreviewProvider totalSteps={21} funnelId="live-editor">
+                                <div className="relative">
+                                  <LiveEditorPage />
+                                </div>
+                              </PreviewProvider>
+                            </ScrollSyncProvider>
+                          </EditorProvider>
+                        </ErrorBoundary>
+                      </Suspense>
+                    );
+                  }}
+                />
+
+                {/* Live Editor with ID - for editing specific quizzes */}
+                <ProtectedRoute
+                  path="/live-editor/:id"
+                  component={() => {
+                    console.log('🚀 App: Carregando LiveEditorPage com ID na rota /live-editor/:id');
                     return (
                       <Suspense fallback={<PageLoading />}>
                         <ErrorBoundary>

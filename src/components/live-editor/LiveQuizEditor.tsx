@@ -1,8 +1,10 @@
 // @ts-nocheck
+import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface LiveQuizEditorProps {
   quizId?: string;
+  onSave?: (quiz: any) => void;
 }
 
 export const LiveQuizEditor: React.FC<LiveQuizEditorProps> = ({ quizId, onSave }) => {
