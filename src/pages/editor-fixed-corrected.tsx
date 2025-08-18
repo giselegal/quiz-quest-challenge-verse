@@ -1,13 +1,13 @@
-import React from 'react';
-import { EditorProvider } from '@/context/EditorContext';
-import { FunnelsProvider } from '@/context/FunnelsContext';
-import { EditorQuizProvider } from '@/context/EditorQuizContext';
-import { Quiz21StepsProvider } from '@/components/quiz/Quiz21StepsProvider';
 import SchemaDrivenEditorResponsive from '@/components/editor/SchemaDrivenEditorResponsive';
+import { Quiz21StepsProvider } from '@/components/quiz/Quiz21StepsProvider';
+import { EditorProvider } from '@/context/EditorContext';
+import { EditorQuizProvider } from '@/context/EditorQuizContext';
+import { FunnelsProvider } from '@/context/FunnelsContext';
+import React from 'react';
 
 /**
  * 🎯 PÁGINA DO EDITOR CORRIGIDA E ATUALIZADA
- * 
+ *
  * Versão mais recente com todas as integrações:
  * - FunnelsProvider: Dados das etapas
  * - EditorProvider: Estado do editor
@@ -21,10 +21,7 @@ const EditorFixedCorrectedPage: React.FC = () => {
         <EditorQuizProvider>
           <Quiz21StepsProvider debug={true} initialStep={1}>
             <div className="h-screen w-full overflow-hidden bg-background">
-              <SchemaDrivenEditorResponsive 
-                mode="editor"
-                className="editor-main-container"
-              />
+              <SchemaDrivenEditorResponsive mode="editor" className="editor-main-container" />
             </div>
           </Quiz21StepsProvider>
         </EditorQuizProvider>

@@ -9,9 +9,11 @@
 ## � **CORREÇÃO IMPORTANTE REALIZADA**
 
 ### **❌ PROBLEMA IDENTIFICADO:**
+
 O sistema estava usando `SchemaDrivenEditorResponsive` como editor principal quando o correto é o `EditorWithPreview`.
 
 ### **✅ CORREÇÃO APLICADA:**
+
 - **Rota `/editor`** → Agora usa `EditorWithPreview` (editor completo)
 - **Rota `/editor-schema`** → Usa `SchemaDrivenEditorResponsive` (editor alternativo)
 - **Rota `/editor-fixed`** → Usa `EditorWithPreview` (editor completo)
@@ -52,6 +54,7 @@ O sistema estava usando `SchemaDrivenEditorResponsive` como editor principal qua
 ## 🔧 **1. DEFINIÇÃO DOS COMPONENTES**
 
 ### **📦 Templates das 21 Etapas**
+
 ```typescript
 // src/templates/quiz21StepsComplete.ts
 export const QUIZ_STYLE_21_STEPS_TEMPLATE: Record<string, Block[]> = {
@@ -65,8 +68,9 @@ export const QUIZ_STYLE_21_STEPS_TEMPLATE: Record<string, Block[]> = {
 **✅ CONFIRMADO: Todas as 21 etapas estão definidas no template**
 
 ### **🧩 Tipos de Blocos Disponíveis**
+
 - `quiz-intro-header` - Cabeçalho com logo e progresso
-- `quiz-question` - Questões com opções múltiplas  
+- `quiz-question` - Questões com opções múltiplas
 - `quiz-transition` - Páginas de transição
 - `quiz-result` - Página de resultado personalizada
 - `quiz-offer` - Página de oferta/CTA
@@ -77,6 +81,7 @@ export const QUIZ_STYLE_21_STEPS_TEMPLATE: Record<string, Block[]> = {
 ## ⚙️ **2. CONFIGURAÇÃO DOS COMPONENTES**
 
 ### **🎛️ FunnelsContext - Carrega Templates**
+
 ```typescript
 // src/context/FunnelsContext.tsx
 const FUNNEL_TEMPLATES = {
@@ -85,25 +90,31 @@ const FUNNEL_TEMPLATES = {
     defaultSteps: Object.keys(QUIZ_QUESTIONS_COMPLETE).map(stepNum => ({
       id: `step-${stepNumber}`,
       name: `Etapa ${stepNumber}`,
-      type: stepNumber === 1 ? 'lead-collection' 
-           : stepNumber >= 2 && stepNumber <= 11 ? 'scored-question'
-           : stepNumber === 12 ? 'transition'
-           : stepNumber >= 13 && stepNumber <= 18 ? 'strategic-question'
-           : 'result-or-offer'
-    }))
-  }
-}
+      type:
+        stepNumber === 1
+          ? 'lead-collection'
+          : stepNumber >= 2 && stepNumber <= 11
+            ? 'scored-question'
+            : stepNumber === 12
+              ? 'transition'
+              : stepNumber >= 13 && stepNumber <= 18
+                ? 'strategic-question'
+                : 'result-or-offer',
+    })),
+  },
+};
 ```
 
 ### **🏪 useStepNavigationStore - Configurações NoCode**
+
 ```typescript
 // src/stores/useStepNavigationStore.ts
 interface StepNavigationConfig {
-  requiredSelections: number;      // Quantas seleções obrigatórias
-  maxSelections: number;           // Máximo de seleções
-  autoAdvanceOnComplete: boolean;  // Auto-avanço
-  showProgressMessage: boolean;    // Mostrar progresso
-  validationMessage: string;       // Mensagem de validação
+  requiredSelections: number; // Quantas seleções obrigatórias
+  maxSelections: number; // Máximo de seleções
+  autoAdvanceOnComplete: boolean; // Auto-avanço
+  showProgressMessage: boolean; // Mostrar progresso
+  validationMessage: string; // Mensagem de validação
 }
 ```
 
@@ -113,7 +124,8 @@ interface StepNavigationConfig {
 
 ### **📱 Modos de Renderização**
 
-#### **A) Modo Editor** *(Padrão)*
+#### **A) Modo Editor** _(Padrão)_
+
 ```typescript
 // SchemaDrivenEditorResponsive.tsx
 <FourColumnLayout
@@ -125,16 +137,18 @@ interface StepNavigationConfig {
 ```
 
 #### **B) Modo Interativo/Preview**
+
 ```typescript
 // QuizMainDemo.tsx
 <QuizDemoApp />  // ← Renderiza quiz funcional para teste
 ```
 
 ### **🗂️ FunnelStagesPanel - Navegação das Etapas**
+
 ```typescript
 // Renderiza as 21 etapas com:
 stages.map(stage => (
-  <StageCard 
+  <StageCard
     key={stage.id}
     title={stage.name}           // "Etapa 1", "Etapa 2", etc.
     type={stage.type}            // 'lead-collection', 'scored-question', etc.
@@ -146,6 +160,7 @@ stages.map(stage => (
 ```
 
 ### **🎯 CanvasDropZone - Área de Edição**
+
 ```typescript
 // Renderiza blocos da etapa ativa
 blocks.map(block => (
@@ -164,6 +179,7 @@ blocks.map(block => (
 ## ✏️ **4. EDIÇÃO DOS COMPONENTES**
 
 ### **🎛️ PropertiesPanel - Configurações Detalhadas**
+
 ```typescript
 // Campos editáveis por tipo de bloco:
 switch(selectedBlock.type) {
@@ -179,17 +195,18 @@ switch(selectedBlock.type) {
 ```
 
 ### **🔧 EditorContext - Estado Global**
+
 ```typescript
 // src/context/EditorContext.tsx
 const EditorContext = {
   // Estado das etapas
   stages: Stage[];                 // ← Todas as 21 etapas
   activeStageId: string;          // ← Etapa atualmente selecionada
-  
+
   // Estado dos blocos
   blocks: Block[];                // ← Blocos da etapa ativa
   selectedBlockId: string;        // ← Bloco selecionado para edição
-  
+
   // Ações
   setActiveStage: (id) => void;   // ← Mudar de etapa
   addBlock: (type) => void;       // ← Adicionar novo bloco
@@ -203,6 +220,7 @@ const EditorContext = {
 ## 📊 **5. INTEGRAÇÃO COM QUIZ21STEPSPROVIDER**
 
 ### **🔗 Conexão Editor ↔ Sistema de Quiz**
+
 ```typescript
 // src/pages/editor.tsx
 <FunnelsProvider debug={true}>
@@ -217,18 +235,19 @@ const EditorContext = {
 ```
 
 ### **🎯 useQuizQuestion Hook**
+
 ```typescript
 // src/hooks/useQuizQuestion.ts
 const {
-  selections,               // ← Seleções atuais da questão
-  isComplete,              // ← Se questão está completa
-  addSelection,            // ← Adicionar seleção
-  removeSelection,         // ← Remover seleção
-  progress                // ← Progresso "2/3"
+  selections, // ← Seleções atuais da questão
+  isComplete, // ← Se questão está completa
+  addSelection, // ← Adicionar seleção
+  removeSelection, // ← Remover seleção
+  progress, // ← Progresso "2/3"
 } = useQuizQuestion({
   questionId: 'q1',
   requiredSelections: 3,
-  maxSelections: 3
+  maxSelections: 3,
 });
 ```
 
@@ -241,7 +260,7 @@ const {
 ```typescript
 // ETAPAS DEFINIDAS NO TEMPLATE:
 ✅ step-1:  Coleta de nome (lead-collection)
-✅ step-2:  Questão pontuada 1 (scored-question)  
+✅ step-2:  Questão pontuada 1 (scored-question)
 ✅ step-3:  Questão pontuada 2 (scored-question)
 ✅ step-4:  Questão pontuada 3 (scored-question)
 ✅ step-5:  Questão pontuada 4 (scored-question)
@@ -273,7 +292,7 @@ const {
 // src/App.tsx - CORREÇÃO APLICADA
 {
   '/editor'         → EditorWithPreview         // 🏆 EDITOR PRINCIPAL
-  '/editor-schema'  → SchemaDrivenEditorResponsive // 🔧 EDITOR ALTERNATIVO  
+  '/editor-schema'  → SchemaDrivenEditorResponsive // 🔧 EDITOR ALTERNATIVO
   '/editor-fixed'   → EditorWithPreview         // 🏆 EDITOR PRINCIPAL
 }
 ```
@@ -281,6 +300,7 @@ const {
 ### **🎯 Funcionalidades por Editor:**
 
 #### **🥇 EditorWithPreview** (Principal)
+
 - ✅ Drag & Drop avançado
 - ✅ Sistema de Preview integrado
 - ✅ Auto-save com debounce
@@ -289,7 +309,8 @@ const {
 - ✅ Layout responsivo completo
 - ✅ Painel de propriedades avançado
 
-#### **🥈 SchemaDrivenEditorResponsive** (Alternativo)  
+#### **🥈 SchemaDrivenEditorResponsive** (Alternativo)
+
 - ✅ Layout básico de 4 colunas
 - ✅ Navegação das 21 etapas
 - ✅ Modo interativo/preview
@@ -324,6 +345,7 @@ const {
 ## 🎯 **RESULTADO FINAL CORRIGIDO**
 
 ### **✅ Status Atual:**
+
 - **21 Etapas:** ✅ Completamente definidas e navegáveis
 - **Editor Principal:** ✅ EditorWithPreview em `/editor` (CORRETO!)
 - **Editor Alternativo:** ✅ SchemaDrivenEditorResponsive em `/editor-schema`
@@ -335,6 +357,7 @@ const {
 **🎯 Sistema CORRIGIDO e 100% funcional com o editor principal adequado!**
 
 ### **� Para Testar:**
+
 - **Editor Principal:** `http://localhost:8081/editor` (EditorWithPreview - COMPLETO)
 - **Editor Alternativo:** `http://localhost:8081/editor-schema` (SchemaDrivenEditorResponsive)
 

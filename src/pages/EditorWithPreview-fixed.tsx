@@ -28,6 +28,7 @@ import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useSyncedScroll } from '@/hooks/useSyncedScroll';
 import { saveEditor } from '@/services/editorService';
 import { useLocation } from 'wouter';
+import { cn } from '@/lib/utils';
 
 /**
  * Editor Fixed - Versão Corrigida do Editor Principal
@@ -52,14 +53,12 @@ const EditorFixedPageWithDragDrop: React.FC = () => {
   // Estado local
   const [showFunnelSettings, setShowFunnelSettings] = useState(false);
   const [showSaveTemplateModal, setShowSaveTemplateModal] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
 
   // Editor Context - Estado centralizado do editor
   const {
     activeStageId,
     selectedBlockId,
     blockActions: { setSelectedBlockId, deleteBlock, updateBlock },
-    persistenceActions: {},
     uiState: { isPreviewing, setIsPreviewing, viewportSize },
     computed: { currentBlocks, selectedBlock },
   } = useEditor();
@@ -75,10 +74,7 @@ const EditorFixedPageWithDragDrop: React.FC = () => {
     onSave: async data => {
       try {
         console.log('🔄 Auto-save ativado:', data);
-
-        // Usar o novo serviço otimizado
         await saveEditor(data, false); // false = não mostrar toast para auto-save
-
         console.log('✅ Auto-save realizado com sucesso');
       } catch (error) {
         console.warn('⚠️ Auto-save: Erro:', error);
@@ -98,24 +94,13 @@ const EditorFixedPageWithDragDrop: React.FC = () => {
       case 'sm':
         return `${baseClasses} w-[375px] min-h-[600px]`;
       case 'md':
-        return `${baseClasses} w-[768px] min-h-[800px]`;
+        return `${baseClasses} w-[768px] min-h-[1024px]`;
       case 'lg':
-      case 'xl':
+        return `${baseClasses} w-[1200px] min-h-[1024px]`;
+      case 'full':
       default:
-        return `${baseClasses} w-full max-w-4xl min-h-[900px]`;
+        return `${baseClasses} w-full min-h-full`;
     }
-  };
-
-  // 🆕 HANDLER DE SAVE MANUAL MELHORADO
-  const handleDeleteBlock = (blockId: string) => {
-    if (window.confirm('Tem certeza que deseja deletar este bloco?')) {
-      deleteBlock(blockId);
-      setSelectedBlockId(null);
-    }
-  };
-
-  const handleStageSelect = (_stageId: string) => {
-    // O EditorContext já gerencia internamente
   };
 
   const handleDeleteBlock = (blockId: string) => {
@@ -127,42 +112,6 @@ const EditorFixedPageWithDragDrop: React.FC = () => {
 
   const handleStageSelect = (_stageId: string) => {
     // O EditorContext já gerencia internamente
-  };
-
-  const handleImportTemplate = (template: any) => {
-    try {
-      console.log('📥 Importando template:', template);
-      // TODO: Implement template import logic
-      // 1. Clear current blocks
-      // 2. Load template components
-      // 3. Update funnel data
-
-      toast({
-        title: 'Template importado',
-        description: 'Template carregado com sucesso!',
-        variant: 'default',
-      });
-
-      console.log('✅ Template importado com sucesso!');
-    } catch (error) {
-      console.error('❌ Erro ao importar template:', error);
-
-      toast({
-        title: 'Erro ao importar',
-        description: 'Não foi possível carregar o template.',
-        variant: 'destructive',
-      });
-    }
-  };
-
-  const handleOpenMyTemplates = () => {
-    setLocation('/meus-templates');
-  };
-
-  const getStepNumberFromStageId = (stageId: string | null): number => {
-    if (!stageId) return 1;
-    const match = stageId.match(/step-(\d+)/);
-    return match ? parseInt(match[1], 10) : 1;
   };
 
   // Configurar atalhos de teclado
@@ -256,14 +205,6 @@ const EditorFixedPageWithDragDrop: React.FC = () => {
             currentBlocks={currentBlocks}
             currentFunnelId="quiz-estilo-completo"
           />
-        )}
-
-        {/* 🆕 INDICADOR DE STATUS DE SALVAMENTO */}
-        {isSaving && (
-          <div className="fixed bottom-4 right-4 bg-[#B89B7A] text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 z-50">
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-            <span className="text-sm font-medium">Salvando...</span>
-          </div>
         )}
       </div>
     </PreviewProvider>
