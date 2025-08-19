@@ -15,7 +15,6 @@ import { PreviewProvider } from '@/contexts/PreviewContext';
 // 🎯 QUIZ 21 STEPS SYSTEM
 import { Quiz21StepsNavigation } from '@/components/quiz/Quiz21StepsNavigation';
 import { Quiz21StepsProvider, useQuiz21Steps } from '@/components/quiz/Quiz21StepsProvider';
-import { FunnelsContextTest } from '@/components/test/FunnelsContextTest';
 // 🆕 NOVO PAINEL DE PROPRIEDADES (AGORA PADRÃO)
 import { PropertiesPanel } from '@/components/editor/properties/PropertiesPanel';
 
@@ -206,17 +205,14 @@ const EditorFixedPageWithDragDrop: React.FC = () => {
                           ✅ {totalSteps} etapas carregadas | Etapa atual: {currentStep}
                         </div>
                         <div className="text-sm mt-1">
-                          Navegação: {canGoNext ? '➡️' : '🚫'} Próximo |{' '}
-                          {canGoPrevious ? '⬅️' : '🚫'} Anterior
+                          Navegação: {canGoNext ? '➡️' : '🚫'} Próximo | {canGoPrevious ? '⬅️' : '🚫'} Anterior
                         </div>
                         {!canGoNext && !canGoPrevious && (
-                          <small className="text-orange-600">
-                            ⚠️ Navegação bloqueada - verificar configurações
-                          </small>
+                          <small className="text-orange-600">⚠️ Navegação bloqueada - verificar configurações</small>
                         )}
                       </div>
                     )}
-
+                    
                     <Quiz21StepsNavigation
                       position="static"
                       variant="full"
@@ -299,7 +295,6 @@ export const EditorWithPreview: React.FC = () => {
         <EditorQuizProvider>
           <PreviewProvider>
             <Quiz21StepsProvider debug={true} initialStep={1}>
-              <FunnelsContextTest />
               <EditorFixedPageWithDragDrop />
             </Quiz21StepsProvider>
           </PreviewProvider>

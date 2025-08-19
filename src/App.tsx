@@ -18,13 +18,6 @@ const QuizIntegratedPage = lazy(() => import('./pages/QuizIntegratedPage'));
 // Lazy load das páginas admin
 const DashboardPage = lazy(() => import('./pages/admin/DashboardPage'));
 
-// Página de teste de sincronização
-const SyncValidationTestPage = lazy(() =>
-  import('./components/test/SyncValidationTestPage').then(module => ({
-    default: module.SyncValidationTestPage,
-  }))
-);
-
 // Loading component
 const PageLoading = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -82,13 +75,6 @@ function App() {
                 {/* 📊 DASHBOARD ADMINISTRATIVO */}
                 <Route path="/admin" component={DashboardPage} />
                 <Route path="/dashboard" component={DashboardPage} />
-
-                {/* 🧪 TESTE DE SINCRONIZAÇÃO */}
-                <Route path="/test-sync">
-                  <Suspense fallback={<PageLoading />}>
-                    <SyncValidationTestPage />
-                  </Suspense>
-                </Route>
 
                 {/* 🔐 AUTENTICAÇÃO */}
                 <Route path="/auth">

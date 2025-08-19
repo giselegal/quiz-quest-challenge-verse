@@ -1,10 +1,10 @@
 // 🔗 HOOK PARA GERENCIAR TEMPLATES CONECTADOS AO SISTEMA DE QUIZ
 // Facilita a integração entre templates TSX e hooks de quiz
 
-import { QUIZ_QUESTIONS_COMPLETE } from '@/templates/quiz21StepsComplete';
 import { useCallback, useMemo } from 'react';
 import { useQuizLogic } from './useQuizLogic';
 import { useSupabaseQuiz } from './useSupabaseQuiz';
+import { COMPLETE_QUIZ_QUESTIONS } from '@/data/correctQuizQuestions';
 
 export interface ConnectedTemplateConfig {
   stepNumber: number;
@@ -27,33 +27,17 @@ export const useConnectedTemplates = () => {
   const templateConfigs = useMemo(() => {
     const configs: Record<number, ConnectedTemplateConfig> = {};
 
-    // Steps 1-21 usando QUIZ_QUESTIONS_COMPLETE como fonte única
-    for (let step = 1; step <= 21; step++) {
-      const questionText = QUIZ_QUESTIONS_COMPLETE[step];
+    // Steps 2-11 são questões principais (q0-q9 no COMPLETE_QUIZ_QUESTIONS)
+    for (let step = 2; step <= 11; step++) {
+      const questionIndex = step - 2; // Step 2 = questão index 0
+      const questionData = COMPLETE_QUIZ_QUESTIONS[questionIndex];
 
       configs[step] = {
         stepNumber: step,
-        questionId: `step-${step}`,
-        questionData: {
-          id: `step-${step}`,
-          text: questionText,
-          title: questionText,
-          order: step,
-          type:
-            step === 1
-              ? 'intro'
-              : step === 2
-                ? 'name-input'
-                : step >= 3 && step <= 12
-                  ? 'multiple-choice'
-                  : step >= 13 && step <= 19
-                    ? 'strategic'
-                    : step === 20
-                      ? 'result'
-                      : 'offer',
-        },
-        isConnected: step <= 3, // Apenas Steps 1-3 estão conectados por enquanto
-        hasRealData: !!questionText,
+        questionId: questionData?.id || `q${questionIndex}`,
+        questionData: questionData,
+        isConnected: step <= 3, // Apenas Steps 2-3 estão conectados por enquanto
+        hasRealData: !!questionData,
         progressValue: ((step - 1) / 21) * 100, // Calcular progresso
       };
     }

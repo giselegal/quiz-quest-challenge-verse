@@ -354,14 +354,14 @@ export const EditorProvider: React.FC<{
 
   // Real data for stages (21 stages) from stepTemplatesMapping
   const [realStages, setRealStages] = useState<any[]>([]);
-
+  
   // Load real stages from templates on mount
   useEffect(() => {
     const loadTemplates = async () => {
       try {
         const { getAllSteps } = await import('../config/stepTemplatesMapping');
         const stepTemplates = getAllSteps();
-
+        
         const mappedStages = stepTemplates.map(template => ({
           id: `step-${template.stepNumber}`,
           name: template.name,
@@ -370,7 +370,7 @@ export const EditorProvider: React.FC<{
           blocksCount: 0,
           metadata: { blocksCount: 0 },
         }));
-
+        
         console.log('✅ Loaded real stages from templates:', mappedStages.length);
         setRealStages(mappedStages);
       } catch (error) {
@@ -396,7 +396,7 @@ export const EditorProvider: React.FC<{
     if (realStages.length > 0) {
       return realStages;
     }
-
+    
     // Fallback to basic 21 steps while loading
     return Array.from({ length: 21 }, (_, i) => ({
       id: `step-${i + 1}`,
@@ -410,51 +410,49 @@ export const EditorProvider: React.FC<{
 
   // ✅ MOVER PARA FORA DO useMemo - no nível do componente
   const [isLoadingStage, setIsLoadingStage] = useState(false);
-
+  
   // Stage actions with real template loading
   const stageActions = useMemo(
-    () => ({
-      setActiveStage: async (id: string) => {
-        setIsLoadingStage(true);
-        console.log('🔄 Setting active stage:', id);
-
-        try {
-          setActiveStageId(id);
-
-          const stepNumber = parseInt(id.replace('step-', ''));
-
-          if (stepNumber && stepNumber >= 1 && stepNumber <= 21) {
-            const { templateService } = await import('../services/templateService');
-            const template = await templateService.getTemplateByStep(stepNumber);
-
-            if (template && template.blocks && template.blocks.length > 0) {
-              const editorBlocks = templateService.convertTemplateBlocksToEditorBlocks(
-                template.blocks
-              );
-              dispatch({ type: 'SET_BLOCKS', payload: editorBlocks });
-              console.log(`✅ Loaded ${editorBlocks.length} blocks for step ${stepNumber}`);
-            } else {
-              console.warn(`⚠️ No blocks found for step ${stepNumber}`);
-              dispatch({ type: 'SET_BLOCKS', payload: [] });
-            }
+  () => ({
+    setActiveStage: async (id: string) => {
+      setIsLoadingStage(true);
+      console.log('🔄 Setting active stage:', id);
+      
+      try {
+        setActiveStageId(id);
+        
+        const stepNumber = parseInt(id.replace('step-', ''));
+        
+        if (stepNumber && stepNumber >= 1 && stepNumber <= 21) {
+          const { templateService } = await import('../services/templateService');
+          const template = await templateService.getTemplateByStep(stepNumber);
+          
+          if (template && template.blocks && template.blocks.length > 0) {
+            const editorBlocks = templateService.convertTemplateBlocksToEditorBlocks(template.blocks);
+            dispatch({ type: 'SET_BLOCKS', payload: editorBlocks });
+            console.log(`✅ Loaded ${editorBlocks.length} blocks for step ${stepNumber}`);
+          } else {
+            console.warn(`⚠️ No blocks found for step ${stepNumber}`);
+            dispatch({ type: 'SET_BLOCKS', payload: [] });
           }
-        } catch (error) {
-          console.error(`❌ Error loading template for step ${id}:`, error);
-        } finally {
-          setIsLoadingStage(false);
         }
-      },
-      addStage: () => {
-        console.log('Add stage not implemented yet');
-        return `step-${stages.length + 1}`;
-      },
-      removeStage: (id: string) => {
-        console.log('Remove stage not implemented:', id);
-      },
-      isLoadingStage, // ✅ Expor o estado de loading
-    }),
-    [stages.length, dispatch, setIsLoadingStage, isLoadingStage] // ✅ Adicionar isLoadingStage às dependências
-  );
+      } catch (error) {
+        console.error(`❌ Error loading template for step ${id}:`, error);
+      } finally {
+        setIsLoadingStage(false);
+      }
+    },
+    addStage: () => {
+      console.log('Add stage not implemented yet');
+      return `step-${stages.length + 1}`;
+    },
+    removeStage: (id: string) => {
+      console.log('Remove stage not implemented:', id);
+    },
+    isLoadingStage, // ✅ Expor o estado de loading
+  }),
+  [stages.length, dispatch, setIsLoadingStage, isLoadingStage] // ✅ Adicionar isLoadingStage às dependências
+);
 
   // Block actions object
   const blockActions = useMemo(
@@ -582,11 +580,11 @@ export const EditorProvider: React.FC<{
 
   // Integrar sistema de validação
   // const validation = useTemplateValidation();
-  const validation = {
+  const validation = { 
     validateTemplate: () => ({ isValid: true, errors: {} }),
     validateStep: () => ({ isValid: true, errors: {} }),
     validateTemplateField: () => ({ success: true, errors: [] }),
-    hasTemplateErrors: false,
+    hasTemplateErrors: false
   };
 
   const contextValue: EditorContextType = {

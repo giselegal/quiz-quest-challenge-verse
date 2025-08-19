@@ -1,11 +1,9 @@
-import { getStepInfo, STEP_TEMPLATES_MAPPING } from '@/config/stepTemplatesMapping';
 import { useEditor } from '@/context/EditorContext';
 import { useTemplateConfig } from '@/hooks/useTemplateConfig';
-import { runValidation } from '@/utils/validateDataSync';
-import { useState } from 'react';
 import ConnectedStep01Template from '../steps/ConnectedStep01Template';
 import { ConnectedStep13Template } from '../steps/Step13Template';
 import Step20Result from '../steps/Step20Result';
+import { useState } from 'react';
 
 interface TemplateRendererProps {
   stepNumber?: number;
@@ -25,26 +23,18 @@ interface TemplateRendererProps {
  * - Fallback para templates JSON quando necessário
  * - Integração completa com EditorContext e hooks de quiz
  */
-export function TemplateRenderer({
-  stepNumber,
-  templateId,
-  fallbackStep = 1,
-  sessionId,
-  onContinue,
-}: TemplateRendererProps) {
+export const TemplateRenderer = ({ stepNumber, fallbackStep, sessionId, onContinue }: TemplateRendererProps) => {
   const { quizState } = useEditor();
   const actualStepNumber = stepNumber || fallbackStep || 1;
   const { config, loading } = useTemplateConfig(actualStepNumber);
   const [renderMode, setRenderMode] = useState<'connected' | 'fallback'>('connected');
 
-  // 🔍 EXECUTAR VALIDAÇÃO DE SINCRONIZAÇÃO
-  if (process.env.NODE_ENV === 'development') {
-    runValidation();
-  }
-
-  // 🎯 NOVA ABORDAGEM: Usar stepTemplatesMapping como fonte única
-  const stepTemplate = STEP_TEMPLATES_MAPPING[actualStepNumber];
-  const stepInfo = getStepInfo(actualStepNumber);
+  // Mapa de templates conectados disponíveis
+  const connectedTemplates = {
+    1: ConnectedStep01Template,
+    13: ConnectedStep13Template,
+    20: Step20Result,
+  };
 
   if (loading) {
     return (
@@ -52,81 +42,24 @@ export function TemplateRenderer({
         <div className="text-center space-y-4">
           <div className="animate-spin w-8 h-8 border-2 border-[#B89B7A] border-t-transparent rounded-full mx-auto"></div>
           <p className="text-[#432818]">Carregando template...</p>
-          <p className="text-sm text-gray-600">
-            Step {actualStepNumber}: {stepInfo?.name || 'Carregando...'}
-          </p>
+          <p className="text-sm text-gray-600">Step {actualStepNumber}</p>
         </div>
       </div>
     );
   }
 
-  // 🎯 PRIORIDADE 1: Usar template do stepTemplatesMapping
-  if (stepTemplate?.templateFunction && renderMode === 'connected') {
-    console.log(`✅ TemplateRenderer: Usando stepTemplatesMapping para step ${actualStepNumber}`);
-    console.log(`📋 Template info:`, stepInfo);
+  // Verificar se existe template conectado para este step
+  const ConnectedTemplate = connectedTemplates[actualStepNumber as keyof typeof connectedTemplates];
 
-    try {
-      // Obter blocos do template
-      const blocks = stepTemplate.templateFunction(quizState);
+  if (ConnectedTemplate && renderMode === 'connected') {
+    console.log(`✅ TemplateRenderer: Usando template conectado para step ${actualStepNumber}`);
 
-      if (blocks && blocks.length > 0) {
-        // Renderizar usando o sistema de blocos JSON
-        return (
-          <div className="min-h-screen bg-[#FAF9F7] flex flex-col">
-            {/* Header com info do step */}
-            <div className="w-full py-6 px-4">
-              <div className="max-w-4xl mx-auto flex items-center justify-between">
-                <img
-                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
-                  alt="Logo Gisele Galvão"
-                  className="w-16 h-16 object-contain"
-                />
-                <div className="text-right text-sm text-gray-600">
-                  Step {actualStepNumber} de 21 - {stepInfo?.name}
-                </div>
-              </div>
-            </div>
-
-            {/* Conteúdo dos blocos */}
-            <div className="flex-1 flex items-center justify-center px-6">
-              <div className="max-w-2xl w-full space-y-6">
-                {blocks.map((block, index) => (
-                  <div key={block.id || index} className="block-container">
-                    {/* Aqui seria renderizado o bloco - por agora placeholder */}
-                    <div className="p-4 border border-gray-200 rounded-lg bg-white">
-                      <div className="text-sm text-gray-500 mb-2">Bloco: {block.type}</div>
-                      <div className="text-lg">
-                        {block.content || block.properties?.content || 'Conteúdo do bloco'}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        );
-      }
-    } catch (error) {
-      console.error(`❌ Erro ao renderizar template ${actualStepNumber}:`, error);
-    }
-  }
-
-  // 🎯 PRIORIDADE 2: Fallback para templates React legados
-  const legacyTemplates = {
-    1: ConnectedStep01Template,
-    13: ConnectedStep13Template,
-    20: Step20Result,
-  };
-
-  const LegacyTemplate = legacyTemplates[actualStepNumber as keyof typeof legacyTemplates];
-
-  if (LegacyTemplate) {
-    console.log(`🔄 TemplateRenderer: Usando template React legado para step ${actualStepNumber}`);
-
+    // Renderizar template conectado com props apropriadas
     if (actualStepNumber === 20) {
-      return <LegacyTemplate sessionId={sessionId || 'demo'} onContinue={onContinue} />;
+      return <ConnectedTemplate sessionId={sessionId || 'demo'} onContinue={onContinue} />;
     }
-    return <LegacyTemplate sessionId={sessionId || 'demo'} onContinue={onContinue} />;
+
+    return <ConnectedTemplate sessionId={sessionId || 'demo'} onContinue={onContinue} />;
   }
 
   // Fallback: renderizar baseado na configuração JSON
@@ -193,9 +126,7 @@ export function TemplateRenderer({
                 {config?.metadata.name || `Etapa ${actualStepNumber}`}
               </h1>
               <div className="p-8 bg-white rounded-lg border border-gray-200">
-                <p className="text-gray-500">
-                  Template em desenvolvimento para step {actualStepNumber}
-                </p>
+                <p className="text-gray-500">Template em desenvolvimento para step {actualStepNumber}</p>
               </div>
             </div>
           )}
@@ -227,7 +158,7 @@ export function TemplateRenderer({
           </div>
           <div>Step: {actualStepNumber}</div>
           <div>Mode: {renderMode}</div>
-          <div>Template: {stepTemplate ? 'Conectado' : 'Fallback'}</div>
+          <div>Connected: {!!ConnectedTemplate ? 'Sim' : 'Não'}</div>
           <div>Config: {config ? 'Carregado' : 'Ausente'}</div>
           <div>User: {quizState.userName || 'não definido'}</div>
           <div>Respostas: {quizState.answers.length}</div>
@@ -244,6 +175,6 @@ export function TemplateRenderer({
       )}
     </div>
   );
-}
+};
 
 export default TemplateRenderer;

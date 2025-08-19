@@ -1,22 +1,12 @@
 // 🔗 CONNECTED STEP 02 TEMPLATE - Versão Corrigida sem Hooks
 // Template que retorna array de blocos JSON puro, sem dependência de React hooks
 
-import { QUIZ_QUESTIONS_COMPLETE } from '@/templates/quiz21StepsComplete';
+import { COMPLETE_QUIZ_QUESTIONS } from '@/data/correctQuizQuestions';
 
 export const ConnectedStep02Template = () => {
-  // 🎯 Buscar questão real dos dados (FONTE ÚNICA)
-  const questionText = QUIZ_QUESTIONS_COMPLETE[2] || 'VAMOS NOS CONHECER?';
-
-  // 🔄 ADAPTADOR: Criar estrutura compatível com dados simples
-  const questionData = {
-    id: 'step-2',
-    text: questionText,
-    title: questionText,
-    order: 2,
-    type: 'name-input', // Step 2 é coleta de nome
-    multiSelect: 1, // Para compatibilidade
-    options: [], // Nome não tem opções múltiplas
-  };
+  // 🎯 Buscar questão real dos dados (SEM HOOKS)
+  const questionData =
+    COMPLETE_QUIZ_QUESTIONS.find(q => q.id === 'q1') || COMPLETE_QUIZ_QUESTIONS[1];
 
   return [
     // 📱 CABEÇALHO COM LOGO E PROGRESSO

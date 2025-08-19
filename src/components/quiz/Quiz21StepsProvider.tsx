@@ -76,40 +76,12 @@ export const Quiz21StepsProvider: React.FC<Quiz21StepsProviderProps> = ({
   debug = false,
 }) => {
   // 🎯 INTEGRAÇÃO: FunnelsContext para dados das etapas
-  let funnels;
-  let steps: any[] = [];
-  
-  try {
-    funnels = useFunnels();
-    steps = funnels.steps || [];
-    console.log('✅ Quiz21StepsProvider: FunnelsContext obtido com sucesso:', {
-      stepsLength: steps.length,
-      currentFunnelId: funnels.currentFunnelId
-    });
-  } catch (error) {
-    console.error('❌ Quiz21StepsProvider: Erro ao acessar FunnelsContext:', error);
-    // Fallback temporário para debug
-    steps = [];
-    funnels = {
-      steps: [],
-      setActiveStageId: () => {},
-      currentFunnelId: 'fallback',
-      loading: false,
-      error: String(error)
-    };
-  }
+  const funnels = useFunnels() || {
+    steps: [],
+    setActiveStageId: () => {},
+  };
 
-  // 🔍 DEBUG CRÍTICO: Verificar se o contexto está funcionando
-  React.useEffect(() => {
-    console.log('🔍 CONTEXT DEBUG:', {
-      funnelsExists: !!funnels,
-      funnelsType: typeof funnels,
-      stepsExists: !!steps,
-      stepsLength: steps?.length || 0,
-      funnelsKeys: funnels ? Object.keys(funnels) : 'null',
-      stepsSample: steps?.slice(0, 2),
-    });
-  }, [funnels, steps]);
+  const { steps } = funnels;
 
   // 🔍 VERIFICAÇÃO CRÍTICA: Garantir que as etapas foram carregadas
   React.useEffect(() => {
@@ -167,7 +139,7 @@ export const Quiz21StepsProvider: React.FC<Quiz21StepsProviderProps> = ({
     startQuiz: startSupabaseQuiz,
   } = useSupabaseQuiz();
 
-  const totalSteps = steps?.length || 21; // ✅ Usar steps.length quando disponível
+  const totalSteps = 21;
 
   // Navegação
   const canGoNext = currentStep < totalSteps;

@@ -1,11 +1,8 @@
 // src/config/stepTemplatesMapping.ts
 // Mapeamento das 21 etapas para seus templates específicos (usando templates TSX reais)
 
-// ✅ IMPORTS DOS TEMPLATES CORRIGIDOS - TODAS AS 21 STEPS
-import { getConnectedStep01Template } from '@/components/steps/ConnectedStep01Template';
+// ✅ IMPORTS DOS TEMPLATES CORRIGIDOS
 import { getConnectedStep02Template } from '@/components/steps/ConnectedStep02Template';
-import { getConnectedStep20Template } from '@/components/steps/ConnectedStep20Template';
-import { getConnectedStep21Template } from '@/components/steps/ConnectedStep21Template';
 import {
   getConnectedStep03Template,
   getConnectedStep04Template,
@@ -40,116 +37,59 @@ export interface StepConfig {
   description: string;
 }
 
-// 🎯 FONTE ÚNICA DE VERDADE - DADOS REAIS DAS QUESTÕES
-import {
-  QUIZ_QUESTIONS_COMPLETE,
-  QUIZ_STYLE_21_STEPS_TEMPLATE,
-} from '@/templates/quiz21StepsComplete';
+// 🎯 DADOS REAIS DAS QUESTÕES (usados pelos templates conectados)
+// import { COMPLETE_QUIZ_QUESTIONS } from '@/data/correctQuizQuestions';
 
-// 🎯 CONFIGURAÇÃO DAS 21 ETAPAS COM NOMES REAIS DAS QUESTÕES (FONTE ÚNICA)
+// 🎯 CONFIGURAÇÃO DAS 21 ETAPAS COM NOMES REAIS DAS QUESTÕES
 const STEP_CONFIGS = [
+  { name: 'Quiz de Estilo Pessoal', description: 'Descubra seu estilo único' },
+  { name: 'VAMOS NOS CONHECER?', description: 'Digite seu nome para personalizar' },
+  { name: 'QUAL O SEU TIPO DE ROUPA FAVORITA?', description: 'Primeira questão do quiz' },
+  { name: 'RESUMA A SUA PERSONALIDADE:', description: 'Segunda questão do quiz' },
+  { name: 'QUAL VISUAL VOCÊ MAIS SE IDENTIFICA?', description: 'Terceira questão do quiz' },
+  { name: 'QUAIS DETALHES VOCÊ GOSTA?', description: 'Quarta questão do quiz' },
+  { name: 'QUAIS ESTAMPAS VOCÊ MAIS SE IDENTIFICA?', description: 'Quinta questão do quiz' },
+  { name: 'QUAL CASACO É SEU FAVORITO?', description: 'Sexta questão do quiz' },
+  { name: 'QUAL SUA CALÇA FAVORITA?', description: 'Sétima questão do quiz' },
+  { name: 'QUAL DESSES SAPATOS VOCÊ TEM OU MAIS GOSTA?', description: 'Oitava questão do quiz' },
+  { name: 'QUE TIPO DE ACESSÓRIOS VOCÊ GOSTA?', description: 'Nona questão do quiz' },
   {
-    name: QUIZ_QUESTIONS_COMPLETE[1] || 'Coleta do nome',
-    description: 'Página inicial - coleta do nome',
-  },
-  {
-    name: QUIZ_QUESTIONS_COMPLETE[2] || 'QUAL O SEU TIPO DE ROUPA FAVORITA?',
-    description: 'Primeira questão pontuada do quiz',
-  },
-  {
-    name: QUIZ_QUESTIONS_COMPLETE[3] || 'QUAL O SEU TIPO DE ROUPA FAVORITA?',
-    description: 'Primeira questão do quiz',
-  },
-  {
-    name: QUIZ_QUESTIONS_COMPLETE[4] || 'RESUMA A SUA PERSONALIDADE:',
-    description: 'Segunda questão do quiz',
-  },
-  {
-    name: QUIZ_QUESTIONS_COMPLETE[5] || 'QUAL VISUAL VOCÊ MAIS SE IDENTIFICA?',
-    description: 'Terceira questão do quiz',
-  },
-  {
-    name: QUIZ_QUESTIONS_COMPLETE[6] || 'QUAIS DETALHES VOCÊ GOSTA?',
-    description: 'Quarta questão do quiz',
-  },
-  {
-    name: QUIZ_QUESTIONS_COMPLETE[7] || 'QUAIS ESTAMPAS VOCÊ MAIS SE IDENTIFICA?',
-    description: 'Quinta questão do quiz',
-  },
-  {
-    name: QUIZ_QUESTIONS_COMPLETE[8] || 'QUAL CASACO É SEU FAVORITO?',
-    description: 'Sexta questão do quiz',
-  },
-  {
-    name: QUIZ_QUESTIONS_COMPLETE[9] || 'QUAL SUA CALÇA FAVORITA?',
-    description: 'Sétima questão do quiz',
-  },
-  {
-    name: QUIZ_QUESTIONS_COMPLETE[10] || 'QUAL DESSES SAPATOS VOCÊ TEM OU MAIS GOSTA?',
-    description: 'Oitava questão do quiz',
-  },
-  {
-    name: QUIZ_QUESTIONS_COMPLETE[11] || 'QUE TIPO DE ACESSÓRIOS VOCÊ GOSTA?',
-    description: 'Nona questão do quiz',
-  },
-  {
-    name:
-      QUIZ_QUESTIONS_COMPLETE[12] || 'VOCÊ ESCOLHE CERTOS TECIDOS, PRINCIPALMENTE PORQUE ELES...',
+    name: 'VOCÊ ESCOLHE CERTOS TECIDOS, PRINCIPALMENTE PORQUE ELES...',
     description: 'Décima questão do quiz',
   },
   {
-    name: QUIZ_QUESTIONS_COMPLETE[13] || 'Enquanto calculamos o seu resultado...',
+    name: 'Enquanto calculamos o seu resultado...',
     description: 'Transição para questões estratégicas',
   },
+  { name: 'Como você se vê hoje?', description: 'Primeira questão estratégica' },
   {
-    name: QUIZ_QUESTIONS_COMPLETE[14] || 'Como você se vê hoje?',
-    description: 'Primeira questão estratégica',
-  },
-  {
-    name: QUIZ_QUESTIONS_COMPLETE[15] || 'O que mais te desafia na hora de se vestir?',
+    name: 'O que mais te desafia na hora de se vestir?',
     description: 'Segunda questão estratégica',
   },
   {
-    name:
-      QUIZ_QUESTIONS_COMPLETE[16] ||
-      'Com que frequência você se pega pensando: "Com que roupa eu vou?"',
+    name: 'Com que frequência você se pega pensando: "Com que roupa eu vou?"',
     description: 'Terceira questão estratégica',
   },
   {
-    name: QUIZ_QUESTIONS_COMPLETE[17] || 'Se esse conteúdo completo custasse R$ 97,00...',
+    name: 'Ter acesso a um material estratégico faria diferença?',
     description: 'Quarta questão estratégica',
   },
   {
-    name: QUIZ_QUESTIONS_COMPLETE[18] || 'Qual desses resultados você mais gostaria de alcançar?',
+    name: 'Você consideraria R$ 97,00 um bom investimento?',
     description: 'Quinta questão estratégica',
   },
   {
-    name: QUIZ_QUESTIONS_COMPLETE[19] || 'Página de transição para resultado',
+    name: 'Qual resultado você mais gostaria de alcançar?',
     description: 'Sexta questão estratégica',
   },
-  {
-    name: QUIZ_QUESTIONS_COMPLETE[20] || 'Página de resultado personalizada',
-    description: 'Apresentação do resultado',
-  },
-  {
-    name: QUIZ_QUESTIONS_COMPLETE[21] || 'Página de oferta direta',
-    description: 'Página de conversão',
-  },
+  { name: 'Obrigada por compartilhar...', description: 'Transição para resultado' },
+  { name: 'SEU ESTILO PESSOAL É:', description: 'Apresentação do resultado' },
+  { name: 'RECEBA SEU GUIA DE ESTILO COMPLETO', description: 'Página de conversão' },
 ];
 
-// Template padrão para fallback (usa QUIZ_STYLE_21_STEPS_TEMPLATE se disponível)
+// Template padrão para fallback
 const getDefaultTemplate = (stepNumber: number) => {
-  const stepId = `step-${stepNumber}`;
-
-  // 🎯 PRIORIDADE 1: Usar blocos reais do QUIZ_STYLE_21_STEPS_TEMPLATE
-  if (QUIZ_STYLE_21_STEPS_TEMPLATE[stepId]) {
-    console.log(`✅ Usando template real para ${stepId}`);
-    return QUIZ_STYLE_21_STEPS_TEMPLATE[stepId];
-  }
-
-  // 🎯 PRIORIDADE 2: Fallback com dados da QUIZ_QUESTIONS_COMPLETE
   const config = STEP_CONFIGS[stepNumber - 1];
-  console.log(`⚠️ Fallback para ${stepId}:`, config?.name);
 
   return [
     {
@@ -171,7 +111,7 @@ const getDefaultTemplate = (stepNumber: number) => {
       id: `step${stepNumber}-title`,
       type: 'text-inline',
       properties: {
-        content: config?.name || `Etapa ${stepNumber}`,
+        content: config.name,
         fontSize: 'text-2xl',
         fontWeight: 'font-bold',
         textAlign: 'text-center',
@@ -182,7 +122,7 @@ const getDefaultTemplate = (stepNumber: number) => {
       id: `step${stepNumber}-description`,
       type: 'text-inline',
       properties: {
-        content: config?.description || 'Descrição da etapa',
+        content: config.description,
         fontSize: 'text-lg',
         fontWeight: 'font-normal',
         textAlign: 'text-center',
@@ -199,7 +139,20 @@ const getDefaultTemplate = (stepNumber: number) => {
 export const STEP_TEMPLATES_MAPPING: Record<number, StepTemplate> = {
   1: {
     stepNumber: 1,
-    templateFunction: getConnectedStep01Template,
+    templateFunction: () => [
+      {
+        id: 'step1-title',
+        type: 'heading',
+        content: 'Quiz de Estilo Pessoal',
+        styles: { fontSize: '2rem', textAlign: 'center' }
+      },
+      {
+        id: 'step1-description', 
+        type: 'text',
+        content: 'Descubra seu estilo único respondendo algumas perguntas',
+        styles: { textAlign: 'center' }
+      }
+    ],
     name: STEP_CONFIGS[0]?.name || 'Quiz de Estilo Pessoal',
     description: STEP_CONFIGS[0]?.description || 'Descubra seu estilo único',
   },
@@ -313,43 +266,57 @@ export const STEP_TEMPLATES_MAPPING: Record<number, StepTemplate> = {
   },
   20: {
     stepNumber: 20,
-    templateFunction: getConnectedStep20Template,
+    templateFunction: (userData?: any) => {
+      const userName = localStorage.getItem('quizUserName') || userData?.userName || '';
+      const styleCategory =
+        localStorage.getItem('quizPrimaryStyle') || userData?.styleCategory || 'Elegante';
+      const sessionId = userData?.sessionId || 'default-session';
+
+      console.log('🎨 Step20 personalized data:', { userName, styleCategory, sessionId });
+
+      return [];
+    },
     name: STEP_CONFIGS[19]?.name || 'SEU ESTILO PESSOAL É:',
     description: STEP_CONFIGS[19]?.description || 'Apresentação do resultado',
   },
   21: {
     stepNumber: 21,
-    templateFunction: getConnectedStep21Template,
+    templateFunction: () => [
+      {
+        id: 'step21-title',
+        type: 'heading', 
+        content: 'RECEBA SEU GUIA DE ESTILO COMPLETO',
+        styles: { fontSize: '2rem', textAlign: 'center' }
+      },
+      {
+        id: 'step21-cta',
+        type: 'button',
+        content: 'Baixar Guia Gratuito',
+        styles: { backgroundColor: '#007bff', color: 'white' }
+      }
+    ],
     name: STEP_CONFIGS[20]?.name || 'RECEBA SEU GUIA COMPLETO',
     description: STEP_CONFIGS[20]?.description || 'Página de conversão',
   },
 };
 
-// 🔧 FUNÇÕES UTILITÁRIAS ATUALIZADAS (FONTE ÚNICA: quiz21StepsComplete.ts)
+// 🔧 FUNÇÕES UTILITÁRIAS ATUALIZADAS
 export const getStepTemplate = (stepNumber: number, userData?: any): any[] => {
-  const stepId = `step-${stepNumber}`;
-
-  // 🎯 PRIORIDADE 1: Usar dados reais do QUIZ_STYLE_21_STEPS_TEMPLATE
-  if (QUIZ_STYLE_21_STEPS_TEMPLATE[stepId]) {
-    console.log(`✅ Template real carregado para step-${stepNumber}`);
-    return QUIZ_STYLE_21_STEPS_TEMPLATE[stepId];
-  }
-
-  // 🎯 PRIORIDADE 2: Usar função conectada se existir
   const stepTemplate = STEP_TEMPLATES_MAPPING[stepNumber];
+
   if (stepTemplate) {
+    // Para Step 20, passa dados do usuário se disponíveis
     if (stepNumber === 20 && typeof stepTemplate.templateFunction === 'function') {
-      console.log(`🎨 Template conectado personalizado para step-${stepNumber}`);
       return stepTemplate.templateFunction(userData);
     }
+    // Para outras etapas, usa função normal
     if (typeof stepTemplate.templateFunction === 'function') {
-      console.log(`🔧 Template conectado para step-${stepNumber}`);
       return stepTemplate.templateFunction();
     }
+    return [];
   }
 
-  // 🎯 PRIORIDADE 3: Fallback para template padrão
-  console.log(`⚠️ Fallback para step-${stepNumber}`);
+  // Fallback para template padrão
   return getDefaultTemplate(stepNumber);
 };
 
@@ -387,12 +354,13 @@ export const getTemplateStats = () => {
     totalTemplates: getTotalSteps(),
     introSteps: 1, // Step 1 - Quiz intro
     nameSteps: 1, // Step 2 - Nome
-    questionSteps: 10, // Steps 3-12 (perguntas principais)
-    strategicSteps: 7, // Steps 13-19 (perguntas estratégicas)
-    resultSteps: 1, // Step 20 (resultado)
+    questionSteps: 9, // Steps 3-11 (perguntas principais)
+    strategicSteps: 3, // Steps 12-14 (perguntas estratégicas)
+    transitionSteps: 2, // Steps 15-16 (transição/processamento)
+    resultSteps: 4, // Steps 17-20 (resultado/lead)
     conversionSteps: 1, // Step 21 (oferta)
-    connectedTemplates: 21, // TODAS as steps agora têm templates conectados
-    pendingConnections: 0, // Nenhuma pendente
+    connectedTemplates: 2, // Steps 2-3 já conectados aos hooks
+    pendingConnections: 19, // Steps restantes para conectar
   };
 };
 

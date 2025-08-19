@@ -389,26 +389,10 @@ export const FunnelsProvider: React.FC<FunnelsProviderProps> = ({ children, debu
     console.log('🚀 FunnelsContext: Inicialização IMEDIATA com template completo');
     console.log('📊 Steps carregadas na inicialização:', initialTemplate.defaultSteps.length);
     console.log('🎯 Template ID forçado:', 'quiz-estilo-completo');
-    console.log('🔍 QUIZ_QUESTIONS_COMPLETE keys:', Object.keys(QUIZ_QUESTIONS_COMPLETE));
-    console.log('📋 QUIZ_STYLE_21_STEPS_TEMPLATE keys:', Object.keys(QUIZ_STYLE_21_STEPS_TEMPLATE));
     return initialTemplate.defaultSteps;
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  // 🔍 DEBUG CRÍTICO: Monitor de contexto
-  React.useEffect(() => {
-    if (debug) {
-      console.log('🔍 FUNNELS CONTEXT DEBUG:', {
-        currentFunnelId,
-        stepsLength: steps.length,
-        loading,
-        error,
-        stepsIds: steps.map(s => s.id),
-        stepsNames: steps.map(s => s.name),
-      });
-    }
-  }, [steps, currentFunnelId, loading, error, debug]);
 
   const getTemplate = useCallback((templateId: string) => {
     const template = FUNNEL_TEMPLATES[templateId as keyof typeof FUNNEL_TEMPLATES];
@@ -445,16 +429,8 @@ export const FunnelsProvider: React.FC<FunnelsProviderProps> = ({ children, debu
   useEffect(() => {
     const timestamp = new Date().toLocaleTimeString();
 
-    console.log(`🔍 [${timestamp}] FunnelsContext Debug Completo:`);
-    console.log(`📂 currentFunnelId:`, currentFunnelId);
-    console.log(`📊 FUNNEL_TEMPLATES keys:`, Object.keys(FUNNEL_TEMPLATES));
-    console.log(`📋 QUIZ_STYLE_21_STEPS_TEMPLATE keys:`, Object.keys(QUIZ_STYLE_21_STEPS_TEMPLATE));
-    console.log(`🎯 Template existe?`, !!FUNNEL_TEMPLATES[currentFunnelId]);
-
     if (FUNNEL_TEMPLATES[currentFunnelId]) {
       const template = FUNNEL_TEMPLATES[currentFunnelId];
-      console.log(`✅ [${timestamp}] Template encontrado:`, template.name);
-      console.log(`📊 [${timestamp}] Steps no template:`, template.defaultSteps.length);
 
       // ✅ FASE 3: Fallback robusto - só atualiza se realmente necessário
       if (steps.length === 0 || steps[0]?.id !== template.defaultSteps[0]?.id) {
@@ -467,7 +443,7 @@ export const FunnelsProvider: React.FC<FunnelsProviderProps> = ({ children, debu
       console.log(`📊 [${timestamp}] Steps disponíveis:`, template.defaultSteps.length);
       console.log(
         `🎯 [${timestamp}] Dados das steps:`,
-        template.defaultSteps.map(s => `${s.id}: ${s.name}`)
+        template.defaultSteps.map(s => s.name)
       );
     } else {
       console.error(`❌ [${timestamp}] FunnelsContext: Template não encontrado:`, currentFunnelId);
@@ -475,12 +451,8 @@ export const FunnelsProvider: React.FC<FunnelsProviderProps> = ({ children, debu
 
       // ✅ FASE 3: Fallback para template padrão
       const fallbackTemplate = FUNNEL_TEMPLATES['funil-21-etapas'];
-      if (fallbackTemplate) {
-        setSteps(fallbackTemplate.defaultSteps);
-        console.log(`🔄 [${timestamp}] Aplicando fallback para template padrão`);
-      } else {
-        console.error(`❌ [${timestamp}] Template de fallback também não encontrado!`);
-      }
+      setSteps(fallbackTemplate.defaultSteps);
+      console.log(`🔄 [${timestamp}] Aplicando fallback para template padrão`);
     }
   }, [currentFunnelId, debug]);
 
@@ -571,13 +543,7 @@ export const FunnelsProvider: React.FC<FunnelsProviderProps> = ({ children, debu
 
 export const useFunnels = (): FunnelsContextType => {
   const context = useContext(FunnelsContext);
-  console.log('🔍 useFunnels called:', {
-    contextExists: !!context,
-    contextType: typeof context,
-    contextKeys: context ? Object.keys(context) : 'null'
-  });
   if (context === undefined) {
-    console.error('🔴 useFunnels: Context is undefined!');
     throw new Error('useFunnels must be used within a FunnelsProvider');
   }
   return context;
