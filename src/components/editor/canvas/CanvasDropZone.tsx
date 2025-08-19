@@ -117,14 +117,14 @@ export const CanvasDropZone: React.FC<CanvasDropZoneProps> = ({
                     const stepNumber = parseInt(stepId.replace('step-', ''), 10) || 1;
 
                     // Importar dinamicamente o templateService
-                    const templateServiceModule = await import('@/services/templateService');
-                    const template =
-                      await templateServiceModule.default.getTemplateByStep(stepNumber);
+                    const { templateService } = await import('@/services/templateService');
+                    const template = await templateService.getTemplateByStep(stepNumber);
 
                     if (template && template.blocks && template.blocks.length > 0) {
-                      // Converter para formato do editor (método simplificado)
-                      const editorBlocks =
-                        templateServiceModule.default.convertTemplateBlocksToEditorBlocks();
+                      // Converter para formato do editor
+                      const editorBlocks = templateService.convertTemplateBlocksToEditorBlocks(
+                        template.blocks
+                      );
                       // Atualizar os blocos no estado (via callback para acesso direto)
                       onUpdateBlock('template-update', { blocks: editorBlocks });
                     }
@@ -135,26 +135,6 @@ export const CanvasDropZone: React.FC<CanvasDropZoneProps> = ({
               >
                 🔄 Recarregar Template
               </Button>
-            </div>
-          )}
-
-          {/* BOTÃO PARA MODO PREVIEW: Carregar templates */}
-          {isPreviewing && (
-            <div className="mt-4">
-              <Button
-                variant="outline"
-                className="mx-auto border-dashed bg-orange-50 border-orange-300 text-orange-700"
-                onClick={() => {
-                  alert('🔄 Recarregue a página (F5) para atualizar os templates das etapas');
-                  window.location.reload();
-                }}
-              >
-                🔄 Recarregar Página
-              </Button>
-              <p className="text-xs text-gray-500 mt-2 max-w-md mx-auto">
-                ⚠️ As etapas estão configuradas nos templates, mas pode ser necessário recarregar a
-                página
-              </p>
             </div>
           )}
 

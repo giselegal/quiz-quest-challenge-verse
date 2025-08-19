@@ -3,7 +3,6 @@ import { LoadingFallback } from '@/components/ui/loading-fallback';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/context/AuthContext';
 import { EditorProvider } from '@/context/EditorContext';
-import { FunnelsProvider } from '@/context/FunnelsContext';
 import { Suspense, lazy } from 'react';
 import { Route, Router, Switch } from 'wouter';
 
@@ -11,7 +10,7 @@ import { Route, Router, Switch } from 'wouter';
 const Home = lazy(() => import('./pages/Home'));
 const AuthPage = lazy(() => import('./pages/AuthPage'));
 const EditorWithPreview = lazy(() => import('./pages/EditorWithPreview'));
-const EditorWithPreviewFixed = lazy(() => import('./pages/EditorWithPreview-fixed'));
+const EditorSchemaPage = lazy(() => import('./pages/editor')); // Editor alternativo
 const QuizPage = lazy(() => import('./pages/Quiz'));
 const QuizFlowPage = lazy(() => import('./pages/QuizFlowPage'));
 const QuizIntegratedPage = lazy(() => import('./pages/QuizIntegratedPage'));
@@ -38,7 +37,7 @@ const PageLoading = () => (
  *
  * Estrutura de roteamento unificada com:
  * ✅ EditorWithPreview - Editor principal completo (/editor)
- * ✅ EditorWithPreviewFixed - Versão com navegação limpa (/editor-fixed, /editor-clean)
+ * ✅ SchemaDrivenEditorResponsive - Editor alternativo (/editor-schema)
  * ✅ Sistema de lazy loading
  * ✅ Providers centralizados
  */
@@ -55,35 +54,29 @@ function App() {
 
                 {/* 🎯 EDITOR PRINCIPAL */}
                 <Route path="/editor">
-                  <FunnelsProvider>
-                    <EditorProvider>
-                      <Suspense fallback={<PageLoading />}>
-                        <EditorWithPreview />
-                      </Suspense>
-                    </EditorProvider>
-                  </FunnelsProvider>
+                  <EditorProvider>
+                    <Suspense fallback={<PageLoading />}>
+                      <EditorWithPreview />
+                    </Suspense>
+                  </EditorProvider>
                 </Route>
 
-                {/* 🏆 EDITOR FIXED - Versão com navegação limpa */}
+                {/* 🔧 EDITOR ALTERNATIVO */}
+                <Route path="/editor-schema">
+                  <EditorProvider>
+                    <Suspense fallback={<PageLoading />}>
+                      <EditorSchemaPage />
+                    </Suspense>
+                  </EditorProvider>
+                </Route>
+
+                {/* 🏆 EDITOR FIXED */}
                 <Route path="/editor-fixed">
-                  <FunnelsProvider>
-                    <EditorProvider>
-                      <Suspense fallback={<PageLoading />}>
-                        <EditorWithPreviewFixed />
-                      </Suspense>
-                    </EditorProvider>
-                  </FunnelsProvider>
-                </Route>
-
-                {/* 🧪 EDITOR CLEAN - Versão experimental com sistema limpo */}
-                <Route path="/editor-clean">
-                  <FunnelsProvider>
-                    <EditorProvider>
-                      <Suspense fallback={<PageLoading />}>
-                        <EditorWithPreviewFixed />
-                      </Suspense>
-                    </EditorProvider>
-                  </FunnelsProvider>
+                  <EditorProvider>
+                    <Suspense fallback={<PageLoading />}>
+                      <EditorWithPreview />
+                    </Suspense>
+                  </EditorProvider>
                 </Route>
 
                 {/* 📊 DASHBOARD ADMINISTRATIVO */}

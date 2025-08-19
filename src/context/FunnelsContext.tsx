@@ -574,7 +574,7 @@ export const useFunnels = (): FunnelsContextType => {
   console.log('🔍 useFunnels called:', {
     contextExists: !!context,
     contextType: typeof context,
-    contextKeys: context ? Object.keys(context) : 'null',
+    contextKeys: context ? Object.keys(context) : 'null'
   });
   if (context === undefined) {
     console.error('🔴 useFunnels: Context is undefined!');

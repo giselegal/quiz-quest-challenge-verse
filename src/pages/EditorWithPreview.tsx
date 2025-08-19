@@ -15,10 +15,9 @@ import { PreviewProvider } from '@/contexts/PreviewContext';
 // 🎯 QUIZ 21 STEPS SYSTEM
 import { Quiz21StepsNavigation } from '@/components/quiz/Quiz21StepsNavigation';
 import { Quiz21StepsProvider, useQuiz21Steps } from '@/components/quiz/Quiz21StepsProvider';
+import { FunnelsContextTest } from '@/components/test/FunnelsContextTest';
 // 🆕 NOVO PAINEL DE PROPRIEDADES (AGORA PADRÃO)
 import { PropertiesPanel } from '@/components/editor/properties/PropertiesPanel';
-// 🔍 DEBUG COMPONENT
-import { StepsDebugPanel } from '@/components/debug/StepsDebugPanel';
 
 // Context & Hooks
 import { EditorProvider, useEditor } from '@/context/EditorContext';
@@ -30,7 +29,7 @@ import { useSyncedScroll } from '@/hooks/useSyncedScroll';
 import { saveEditor } from '@/services/editorService';
 
 /**
- * Editor Fixed - Versão Estável do Editor Principal
+ * Editor Fixed - Versão Corrigida do Editor Principal
  *
  * Editor de funil com drag & drop completo, incluindo:
  * - Layout de 4 colunas responsivo
@@ -165,11 +164,9 @@ const EditorFixedPageWithDragDrop: React.FC = () => {
     <PreviewProvider>
       <div className="min-h-screen bg-gradient-to-br from-[#FAF9F7] via-[#F5F2E9] to-[#EEEBE1]">
         {/* 🚀 TOOLBAR PRINCIPAL - Versão simplificada integrada */}
-        <div className="flex items-center justify-between bg-white border-b border-stone-200 shadow-sm p-4">
-          <EditorToolbar />
-        </div>
+        <EditorToolbar />
 
-        {/* 🎯 LAYOUT PRINCIPAL - Layout de 4 colunas estável */}
+        {/* 🎯 LAYOUT PRINCIPAL */}
         <FourColumnLayout
           stagesPanel={
             <div className="flex flex-col h-full gap-4">
@@ -267,9 +264,6 @@ const EditorFixedPageWithDragDrop: React.FC = () => {
           }
         />
 
-        {/* 🔍 DEBUG PANEL - Para analisar o problema das etapas */}
-        <StepsDebugPanel />
-
         {/* MODAIS */}
         {showFunnelSettings && (
           <FunnelSettingsPanel
@@ -292,7 +286,7 @@ const EditorFixedPageWithDragDrop: React.FC = () => {
   );
 };
 
-// EXPORT WRAPPER - Component com Preview System, FunnelsProvider e Quiz21StepsProvider
+//   EXPORT WRAPPER - Component com Preview System, FunnelsProvider e Quiz21StepsProvider
 export const EditorWithPreview: React.FC = () => {
   // 🎯 FORÇAR ID CORRETO PARA CARREGAMENTO DAS 21 ETAPAS
   React.useEffect(() => {
@@ -305,6 +299,7 @@ export const EditorWithPreview: React.FC = () => {
         <EditorQuizProvider>
           <PreviewProvider>
             <Quiz21StepsProvider debug={true} initialStep={1}>
+              <FunnelsContextTest />
               <EditorFixedPageWithDragDrop />
             </Quiz21StepsProvider>
           </PreviewProvider>

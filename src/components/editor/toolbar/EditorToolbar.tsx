@@ -5,7 +5,7 @@ import { useEditor } from '@/context/EditorContext';
 import { useFunnelNavigation } from '@/hooks/useFunnelNavigation';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { LayoutGrid, Monitor, Save, Settings, Smartphone, Tablet } from 'lucide-react';
+import { Eye, EyeOff, LayoutGrid, Monitor, Save, Settings, Smartphone, Tablet } from 'lucide-react';
 
 interface EditorToolbarProps {
   className?: string;
@@ -22,8 +22,8 @@ interface EditorToolbarProps {
  */
 export const EditorToolbar: React.FC<EditorToolbarProps> = ({ className = '' }) => {
   const {
-    // isPreviewing, // Removido: não usado mais
-    // setIsPreviewing, // Removido: não usado mais
+    isPreviewing,
+    setIsPreviewing,
     uiState: { viewportSize, setViewportSize },
     persistenceActions: { save },
     computed: { totalBlocks },
@@ -109,8 +109,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ className = '' }) 
 
       {/* Botões de ação à direita */}
       <div className="flex items-center space-x-3">
-        {/* Preview button removido */}
-        {/* <Button
+        <Button
           variant="outline"
           size="sm"
           onClick={() => setIsPreviewing(!isPreviewing)}
@@ -127,7 +126,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ className = '' }) 
               Preview
             </>
           )}
-        </Button> */}
+        </Button>
 
         <Button onClick={handleSave} size="sm" style={{ backgroundColor: '#FAF9F7' }}>
           <Save className="mr-2 h-4 w-4" />

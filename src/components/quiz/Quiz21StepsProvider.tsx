@@ -1,4 +1,4 @@
-// import { useFunnels } from '@/context/FunnelsContext'; // Comentado - propriedade não utilizada
+import { useFunnels } from '@/context/FunnelsContext';
 import { useQuizAnalytics } from '@/hooks/useQuizAnalytics';
 import { useQuizLogic } from '@/hooks/useQuizLogic';
 import { useSupabaseQuiz } from '@/hooks/useSupabaseQuiz';
@@ -75,62 +75,47 @@ export const Quiz21StepsProvider: React.FC<Quiz21StepsProviderProps> = ({
   initialStep = 1,
   debug = false,
 }) => {
-  // 🔍 DEBUG: Log inicial detalhado
-  console.log('🚀 Quiz21StepsProvider: Iniciando com debug =', debug);
-
-  // 🎯 INTEGRAÇÃO COM FUNNELS CONTEXT
-  // const funnelsContext = useFunnels(); // Comentado - propriedade não utilizada
-
-  // 🔍 DEBUG: Verificar se o FunnelsContext está disponível
-  // console.log('🔍 Quiz21StepsProvider: FunnelsContext disponível?', !!funnelsContext);
-  // console.log('🔍 Quiz21StepsProvider: FunnelsContext data:', {
-  //   hasSteps: !!funnelsContext?.steps,
-  //   stepsLength: funnelsContext?.steps?.length || 0,
-  //   currentFunnelId: funnelsContext?.currentFunnelId,
-  //   // activeStageId: funnelsContext?.activeStageId // Removido - propriedade não existe
-  // });
-
   // 🎯 INTEGRAÇÃO: FunnelsContext para dados das etapas
-  // let funnels; // Comentado - variável não utilizada
+  let funnels;
   let steps: any[] = [];
-
+  
   try {
-    // funnels = useFunnels(); // Comentado - propriedade não utilizada
-    // steps = funnels.steps || [];
+    funnels = useFunnels();
+    steps = funnels.steps || [];
     console.log('✅ Quiz21StepsProvider: FunnelsContext obtido com sucesso:', {
       stepsLength: steps.length,
-      // currentFunnelId: funnels.currentFunnelId,
+      currentFunnelId: funnels.currentFunnelId
     });
   } catch (error) {
     console.error('❌ Quiz21StepsProvider: Erro ao acessar FunnelsContext:', error);
     // Fallback temporário para debug
     steps = [];
-    // funnels = { // Comentado - variável não utilizada
-    //   steps: [],
-    //   setActiveStageId: () => {},
-    //   currentFunnelId: 'fallback',
-    //   loading: false,
-    //   error: String(error),
-    // };
+    funnels = {
+      steps: [],
+      setActiveStageId: () => {},
+      currentFunnelId: 'fallback',
+      loading: false,
+      error: String(error)
+    };
   }
 
   // 🔍 DEBUG CRÍTICO: Verificar se o contexto está funcionando
   React.useEffect(() => {
     console.log('🔍 CONTEXT DEBUG:', {
-      // funnelsExists: !!funnels, // Comentado - variável não utilizada
-      // funnelsType: typeof funnels, // Comentado - variável não utilizada
+      funnelsExists: !!funnels,
+      funnelsType: typeof funnels,
       stepsExists: !!steps,
       stepsLength: steps?.length || 0,
-      // funnelsKeys: funnels ? Object.keys(funnels) : 'null', // Comentado - variável não utilizada
+      funnelsKeys: funnels ? Object.keys(funnels) : 'null',
       stepsSample: steps?.slice(0, 2),
     });
-  }, [steps]); // Removido 'funnels' das dependências
+  }, [funnels, steps]);
 
   // 🔍 VERIFICAÇÃO CRÍTICA: Garantir que as etapas foram carregadas
   React.useEffect(() => {
     if (debug) {
       console.log('🔍 VERIFICAÇÃO CRÍTICA - Quiz21StepsProvider:');
-      console.log('  - FunnelsContext disponível:', false); // !!funnels comentado
+      console.log('  - FunnelsContext disponível:', !!funnels);
       console.log('  - Steps disponíveis:', !!steps);
       console.log('  - Quantidade de steps:', steps?.length || 0);
       console.log('  - Primeira step:', steps?.[0] || 'nenhuma');
@@ -144,7 +129,7 @@ export const Quiz21StepsProvider: React.FC<Quiz21StepsProviderProps> = ({
         console.error('  3. Verificar se inicialização do FunnelsProvider está correta');
       }
     }
-  }, [steps, debug]); // Removido 'funnels' das dependências
+  }, [funnels, steps, debug]);
 
   // Para compatibilidade, criar activeStageId e setActiveStageId localmente
   const [activeStageId, setActiveStageId] = useState(`step-${initialStep}`);
