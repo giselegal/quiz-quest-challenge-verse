@@ -3,6 +3,7 @@ import { StyleResult } from '@/types/quiz';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import React, { useState } from 'react';
+import UniversalBlockRenderer from '../blocks/UniversalBlockRenderer';
 
 interface SortablePreviewBlockWrapperProps {
   block: Block;
@@ -79,7 +80,10 @@ export const SortablePreviewBlockWrapper: React.FC<SortablePreviewBlockWrapperPr
 
       {/* Renderização do bloco */}
       <div
-        className={`block-content p-4 relative ${isSelected ? 'bg-blue-50' : isHovered ? 'bg-gray-50' : 'bg-white'}`}
+        className={`block-content relative ${
+          isSelected ? 'ring-2 ring-blue-400 ring-opacity-50' : 
+          isHovered ? 'ring-1 ring-gray-300' : ''
+        }`}
       >
         {/* Alça para arrastar (visível apenas no modo editor e quando não está previsualizando) */}
         {!isPreviewing && (
@@ -91,10 +95,23 @@ export const SortablePreviewBlockWrapper: React.FC<SortablePreviewBlockWrapperPr
           </div>
         )}
 
-        <div className="text-sm text-gray-600 mb-2">
-          {block.type} - {block.id.slice(0, 8)}
-        </div>
-        <div className="text-gray-800">{JSON.stringify((block as any).data || {}, null, 2)}</div>
+        {/* ✅ CORREÇÃO: Renderizar componente real ao invés de debug */}
+        <UniversalBlockRenderer
+          block={block}
+          isSelected={isSelected}
+          onClick={onClick}
+          onPropertyChange={(key: string, value: any) => {
+            // onUpdate callback implementation
+            console.log(`Updating ${key}:`, value);
+          }}
+        />
+        
+        {/* Debug info apenas em modo desenvolvimento */}
+        {renderConfig?.showIds && (
+          <div className="text-xs text-gray-500 mt-2 p-2 bg-gray-100 rounded">
+            {block.type} - {block.id.slice(0, 8)}
+          </div>
+        )}
       </div>
 
       {/* Indicadores visuais (modo editor) */}

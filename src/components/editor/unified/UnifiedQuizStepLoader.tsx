@@ -7,7 +7,7 @@
 
 import { useEditor } from '@/context/EditorContext';
 import { loadStepBlocks } from '@/utils/quiz21StepsRenderer';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface UnifiedQuizStepLoaderProps {
   stepNumber: number;
@@ -20,15 +20,26 @@ export const UnifiedQuizStepLoader: React.FC<UnifiedQuizStepLoaderProps> = ({
   onStepLoaded,
   onStepError,
 }) => {
-  const { blockActions } = useEditor();
+  const { blockActions, computed } = useEditor();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+  const [lastLoadedStep, setLastLoadedStep] = useState<number | null>(null);
+  
+  // ✅ CORREÇÃO: Use ref para armazenar blockActions e evitar dependência instável
+  const blockActionsRef = useRef(blockActions);
+  blockActionsRef.current = blockActions;
 
   useEffect(() => {
     let isMounted = true;
 
     const loadStep = async () => {
       if (!stepNumber || stepNumber < 1 || stepNumber > 21) return;
+      
+      // ✅ CORREÇÃO CRÍTICA: Evitar re-carregamentos desnecessários
+      if (lastLoadedStep === stepNumber && computed.currentBlocks.length > 0) {
+        console.log(`⚡ UnifiedQuizStepLoader: Etapa ${stepNumber} já carregada, pulando...`);
+        return;
+      }
 
       if (isMounted) setIsLoading(true);
 
@@ -44,7 +55,8 @@ export const UnifiedQuizStepLoader: React.FC<UnifiedQuizStepLoaderProps> = ({
 
         // Atualiza o EditorContext com os novos blocos usando a API unificada
         if (stepBlocks.length > 0 && isMounted) {
-          blockActions.replaceBlocks(stepBlocks);
+          blockActionsRef.current.replaceBlocks(stepBlocks);
+          setLastLoadedStep(stepNumber);
           onStepLoaded?.(stepBlocks.length);
         } else if (isMounted) {
           const error = new Error(`Nenhum bloco encontrado para etapa ${stepNumber}`);
@@ -69,7 +81,7 @@ export const UnifiedQuizStepLoader: React.FC<UnifiedQuizStepLoaderProps> = ({
     return () => {
       isMounted = false;
     };
-  }, [stepNumber, blockActions, onStepLoaded, onStepError]);
+  }, [stepNumber, onStepLoaded, onStepError]); // ✅ CORREÇÃO: Removidas dependências problemáticas
 
   // Exibir informação de status
   return (
