@@ -26,10 +26,11 @@ export const DraggableComponentItem: React.FC<DraggableComponentItemProps> = ({
   disabled = false,
   className,
 }) => {
-  console.log(`🧩 DraggableComponentItem renderizado: ${blockType}`);
+  const dragId = `sidebar-component-${blockType}-${Date.now()}`;
+  console.log(`🧩 DraggableComponentItem renderizado: ${blockType} com ID: ${dragId}`);
 
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-    id: `sidebar-item-${blockType}`, // ID mais específico para evitar conflitos
+    id: dragId,
     data: {
       type: 'sidebar-component', // TIPO CRUCIAL que o DndProvider espera
       blockType: blockType,
@@ -41,11 +42,13 @@ export const DraggableComponentItem: React.FC<DraggableComponentItemProps> = ({
   });
 
   console.log(`🔧 useDraggable config para ${blockType}:`, {
-    id: `sidebar-item-${blockType}`,
+    id: dragId,
     disabled,
+    isDragging,
     hasListeners: !!listeners,
     hasAttributes: !!attributes,
     hasSetNodeRef: !!setNodeRef,
+    transform,
   });
 
   // Debug: verificar se o draggable está sendo configurado
@@ -75,31 +78,41 @@ export const DraggableComponentItem: React.FC<DraggableComponentItemProps> = ({
     <div
       ref={setNodeRef}
       className={cn(
-        'w-full h-auto p-3 flex flex-col items-start gap-2 text-left transition-all duration-200 border border-stone-200 rounded-lg bg-white',
-        // Simplificar classes para debugging
-        'cursor-grab hover:bg-stone-50',
-        isDragging && 'opacity-50 cursor-grabbing shadow-lg',
-        disabled && 'opacity-50 cursor-not-allowed',
+        'component-drag-item w-full h-auto p-3 flex flex-col items-start gap-2 text-left transition-all duration-200 border border-stone-200 rounded-lg bg-white',
+        // Enhanced drag states
+        !disabled && 'cursor-grab hover:bg-blue-50 hover:border-blue-300 hover:shadow-md',
+        isDragging && 'opacity-50 cursor-grabbing shadow-xl border-blue-500 bg-blue-50 transform scale-105',
+        disabled && 'opacity-50 cursor-not-allowed bg-gray-50',
         className
       )}
       style={style}
       onMouseDown={handleMouseDown}
       {...attributes}
       {...listeners}
+      data-testid={`draggable-${blockType}`}
     >
-      {/* Icon and Title */}
-      <div className="flex items-center gap-2 w-full">
-        <div className="flex-shrink-0 text-primary">{icon}</div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <h4 className="text-sm font-medium text-stone-900 truncate">{title}</h4>
-            {blockType.includes('step01') && (
-              <span className="bg-blue-500 text-white text-xs px-1.5 py-0.5 rounded">STEP1</span>
+      {/* Drag handle indicator */}
+      <div className="w-full flex items-center justify-between">
+        <div className="flex items-center gap-2 flex-1">
+          <div className="flex-shrink-0 text-primary">{icon}</div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <h4 className="text-sm font-medium text-stone-900 truncate">{title}</h4>
+              {blockType.includes('step01') && (
+                <span className="bg-blue-500 text-white text-xs px-1.5 py-0.5 rounded">STEP1</span>
+              )}
+            </div>
+            {category && (
+              <span className="text-xs text-stone-500 uppercase tracking-wide">{category}</span>
             )}
           </div>
-          {category && (
-            <span className="text-xs text-stone-500 uppercase tracking-wide">{category}</span>
-          )}
+        </div>
+        
+        {/* Visual drag handle */}
+        <div className="drag-handle flex flex-col gap-0.5 opacity-40 group-hover:opacity-70">
+          <div className="w-1 h-1 bg-current rounded-full"></div>
+          <div className="w-1 h-1 bg-current rounded-full"></div>
+          <div className="w-1 h-1 bg-current rounded-full"></div>
         </div>
       </div>
 
@@ -107,7 +120,9 @@ export const DraggableComponentItem: React.FC<DraggableComponentItemProps> = ({
       {description && <p className="text-xs text-stone-600 line-clamp-2 w-full">{description}</p>}
 
       {/* Drag Indicator */}
-      {isDragging && <div style={{ backgroundColor: '#FAF9F7' }} />}
+      {isDragging && (
+        <div className="absolute inset-0 bg-blue-200/30 border-2 border-dashed border-blue-400 rounded-lg pointer-events-none" />
+      )}
     </div>
   );
 };
