@@ -29,7 +29,7 @@ export const SortablePreviewBlockWrapper: React.FC<SortablePreviewBlockWrapperPr
   onClick,
   // onUpdate, // unused
   onSelect,
-  debug = false, // Forçar false para teste
+  // debug unused parameter removed
 }) => {
   console.log(`🔄 SortablePreviewBlockWrapper renderizado: ${block.id} (${block.type})`);
 
