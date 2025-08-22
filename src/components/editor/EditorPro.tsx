@@ -647,7 +647,7 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
             items={currentStepData.map(b => b.id || `block-${currentStepData.indexOf(b)}`)}
             strategy={verticalListSortingStrategy}
           >
-            <div className="absolute inset-0 pointer-events-auto z-50">
+            <div className="absolute inset-0 pointer-events-none z-50">
               {currentStepData.map((block: Block, index: number) => {
                 const blockId = block.id || `block-${index}`;
                 const isSelected = state.selectedBlockId === blockId;
