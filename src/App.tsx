@@ -9,7 +9,9 @@ import { AuthProvider } from './context/AuthContext';
 // 🎯 PÁGINAS ESSENCIAIS - SEM CONFLITOS
 const Home = lazy(() => import('./pages/Home'));
 const AuthPage = lazy(() => import('./pages/AuthPage'));
+const QuizModularPage = lazy(() => import('./pages/QuizModularPage'));
 const MainEditor = lazy(() => import('./pages/MainEditor'));
+const QuizIntegratedPage = lazy(() => import('./pages/QuizIntegratedPage'));
 const DashboardPage = lazy(() => import('./pages/admin/DashboardPage'));
 
 // Loading component
@@ -54,7 +56,19 @@ function App() {
                   </Suspense>
                 </Route>
 
-                {/* Rotas de quiz desativadas temporariamente para evitar conflitos de DnD */}
+                {/* 🎮 QUIZ DE PRODUÇÃO */}
+                <Route path="/quiz">
+                  <Suspense fallback={<PageLoading />}>
+                    <QuizModularPage />
+                  </Suspense>
+                </Route>
+
+                {/* 🎯 QUIZ INTEGRADO */}
+                <Route path="/quiz-integrated">
+                  <Suspense fallback={<PageLoading />}>
+                    <QuizIntegratedPage />
+                  </Suspense>
+                </Route>
 
                 {/* 📊 DASHBOARD ADMINISTRATIVO */}
                 <ProtectedRoute path="/admin" component={DashboardPage} requireAuth={true} />
