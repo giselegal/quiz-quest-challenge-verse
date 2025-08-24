@@ -48,7 +48,7 @@ function App() {
                   <MainEditor />
                 </Route>
 
-                {/* �🔐 AUTENTICAÇÃO */}
+                {/* 🔐 AUTENTICAÇÃO */}
                 <Route path="/auth">
                   <Suspense fallback={<PageLoading />}>
                     <AuthPage />
