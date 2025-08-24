@@ -9,7 +9,8 @@ import { AuthProvider } from './context/AuthContext';
 // 🎯 PÁGINAS ESSENCIAIS - SEM CONFLITOS
 const Home = lazy(() => import('./pages/Home'));
 const AuthPage = lazy(() => import('./pages/AuthPage'));
-const MainEditor = lazy(() => import('./pages/MainEditor'));
+// Import estático para evitar falhas de dynamic import em alguns ambientes (ex.: Lovable)
+import MainEditor from './pages/MainEditor';
 const DashboardPage = lazy(() => import('./pages/admin/DashboardPage'));
 
 // Loading component
@@ -42,9 +43,8 @@ function App() {
 
                 {/* 🎯 EDITOR PRINCIPAL ÚNICO - SEM ANINHAMENTO */}
                 <Route path="/editor">
-                  <Suspense fallback={<PageLoading />}>
-                    <MainEditor />
-                  </Suspense>
+                  {/* MainEditor importado estaticamente para maior estabilidade */}
+                  <MainEditor />
                 </Route>
 
                 {/* 🔐 AUTENTICAÇÃO */}
