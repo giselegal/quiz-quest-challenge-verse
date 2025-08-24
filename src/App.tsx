@@ -12,8 +12,8 @@ const AuthPage = lazy(() => import('./pages/AuthPage'));
 // Import estático para evitar falhas de dynamic import em alguns ambientes (ex.: Lovable)
 import MainEditor from './pages/MainEditor';
 const DashboardPage = lazy(() => import('./pages/admin/DashboardPage'));
-// ✅ Página de publicação com HTML configurado (cliente final)
-const PublishedQuizPage = lazy(() => import('./pages/quiz-descubra-seu-estilo'));
+// ✅ Runner publicado (21 etapas, sem colunas)
+const QuizFlowPage = lazy(() => import('./pages/QuizFlowPage'));
 
 // Loading component
 const PageLoading = () => (
@@ -64,10 +64,10 @@ function App() {
                   }}
                 </Route>
 
-                {/* 🌐 VERSÃO PUBLICADA SEM COLUNAS (HTML configurado) */}
+                {/* 🌐 VERSÃO PUBLICADA SEM COLUNAS (Runner 21 etapas) */}
                 <Route path="/quiz">
                   <Suspense fallback={<PageLoading />}>
-                    <PublishedQuizPage />
+                    <QuizFlowPage />
                   </Suspense>
                 </Route>
 
