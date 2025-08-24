@@ -5,11 +5,11 @@ import { ThemeProvider } from './components/theme-provider';
 import { LoadingFallback } from './components/ui/loading-fallback';
 import { Toaster } from './components/ui/toaster';
 import { AuthProvider } from './context/AuthContext';
+import MainEditor from './pages/MainEditor';
 
 // 🎯 PÁGINAS ESSENCIAIS - SEM CONFLITOS
 const Home = lazy(() => import('./pages/Home'));
 const AuthPage = lazy(() => import('./pages/AuthPage'));
-const MainEditor = lazy(() => import('./pages/MainEditor'));
 const DashboardPage = lazy(() => import('./pages/admin/DashboardPage'));
 
 // Loading component
