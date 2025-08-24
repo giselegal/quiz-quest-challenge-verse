@@ -12,8 +12,6 @@ const AuthPage = lazy(() => import('./pages/AuthPage'));
 // Import estático para evitar falhas de dynamic import em alguns ambientes (ex.: Lovable)
 import MainEditor from './pages/MainEditor';
 const DashboardPage = lazy(() => import('./pages/admin/DashboardPage'));
-// 🔄 Página modular com colunas (ambiente de desenvolvimento)
-const QuizModularDevPage = lazy(() => import('./pages/QuizModularPage'));
 // ✅ Página de publicação com HTML configurado (cliente final)
 const PublishedQuizPage = lazy(() => import('./pages/quiz-descubra-seu-estilo'));
 
@@ -58,21 +56,16 @@ function App() {
                   </Suspense>
                 </Route>
 
-                {/* ✅ QUIZ MODULAR - deve usar o mesmo fluxo do /editor */}
+                {/* 🔀 Compat: Redirecionar /quiz-modular para a versão publicada (/quiz) para evitar duplicidade com /editor */}
                 <Route path="/quiz-modular">
-                  {/* Usar exatamente o mesmo fluxo do /editor */}
-                  <MainEditor />
+                  {() => {
+                    if (typeof window !== 'undefined') window.location.replace('/quiz');
+                    return null;
+                  }}
                 </Route>
 
-                {/* 🧪 Versão modular com colunas de edição (somente dev) */}
-                <Route path="/quiz-modular-dev">
-                  <Suspense fallback={<PageLoading />}>
-                    <QuizModularDevPage />
-                  </Suspense>
-                </Route>
-
-                {/* 🌐 Rota da versão publicada (conforme solicitado): /quiz-modualr */}
-                <Route path="/quiz-modualr">
+                {/* 🌐 VERSÃO PUBLICADA SEM COLUNAS (HTML configurado) */}
+                <Route path="/quiz">
                   <Suspense fallback={<PageLoading />}>
                     <PublishedQuizPage />
                   </Suspense>
