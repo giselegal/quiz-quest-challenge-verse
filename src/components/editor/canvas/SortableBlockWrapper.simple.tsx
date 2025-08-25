@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Block } from '@/types/editor';
 import { getOptimizedBlockComponent, normalizeBlockProps } from '@/utils/optimizedRegistry';
+import { useDroppable } from '@dnd-kit/core';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical, Trash2 } from 'lucide-react';
@@ -27,14 +28,32 @@ const SortableBlockWrapper: React.FC<SortableBlockWrapperProps> = ({
   // Buscar componente no registry simplificado
   const Component = getOptimizedBlockComponent(normalizedBlock.type);
 
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+  // Make block draggable for reordering
+  const { attributes, listeners, setNodeRef: setSortableRef, transform, transition, isDragging } = useSortable({
     id: String(block.id),
     data: {
       type: 'canvas-block',
-      blockId: String(block.id),
+      blockId: String(block.id), // Required by validateDrop
       block: block,
     },
   });
+
+  // Make block droppable so you can drop other items on top of it (insert before)
+  const { setNodeRef: setDropRef, isOver } = useDroppable({
+    id: String(block.id), // Same ID as draggable - this allows dropping ON the block
+    data: {
+      type: 'canvas-drop-zone', // Use the same type that validateDrop expects
+      accepts: ['sidebar-component', 'canvas-block'],
+      blockId: String(block.id),
+      position: 'before', // Indicates this will insert before this block
+    },
+  });
+
+  // Combine refs properly for both draggable and droppable functionality
+  const setNodeRef = (node: HTMLElement | null) => {
+    setSortableRef(node);
+    setDropRef(node);
+  };
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -50,8 +69,8 @@ const SortableBlockWrapper: React.FC<SortableBlockWrapperProps> = ({
   // Fallback se componente não for encontrado
   if (!Component) {
     return (
-      <div ref={setNodeRef} style={style} className="my-1">
-        <div className="border border-dashed border-gray-300 rounded">
+      <div className="my-1">
+        <div ref={setNodeRef} style={style} className="border border-dashed border-gray-300 rounded">
           <div className="p-4 text-center text-gray-600">
             <p className="font-medium">Componente não encontrado: {block.type}</p>
             <p className="text-xs mt-1">Verifique se o tipo está registrado</p>
@@ -88,11 +107,14 @@ const SortableBlockWrapper: React.FC<SortableBlockWrapperProps> = ({
   };
 
   return (
-    <div ref={setNodeRef} style={style} className="my-0">
+    <div className="my-0">
       <div
+        ref={setNodeRef}
+        style={style}
         className={cn(
           'relative group transition-all duration-200',
-          isSelected ? 'ring-2 ring-blue-500 ring-offset-1' : ''
+          isSelected ? 'ring-2 ring-blue-500 ring-offset-1' : '',
+          isOver ? 'ring-2 ring-green-500 ring-offset-1 bg-green-50' : '' // Visual feedback when dropping on block
         )}
         onClick={handleContainerClick}
         onMouseDown={handleContainerMouseDown}
