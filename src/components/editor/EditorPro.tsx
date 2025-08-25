@@ -29,7 +29,7 @@ import {
   validateEditorJSON,
 } from '../../utils/editorUtils';
 import { useNotification } from '../ui/Notification';
-import { CanvasDropZone } from './canvas/CanvasDropZone.simple';
+// import { CanvasDropZone } from './canvas/CanvasDropZone.simple';
 import { DnDMonitor } from './debug/DnDMonitor';
 import { DraggableComponentItem } from './dnd/DraggableComponentItem';
 import { DraggableComponentItemForce } from './dnd/DraggableComponentItemForce';
@@ -91,18 +91,7 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
 
   const { state, actions } = editorContext;
   const [viewport, setViewport] = useState<'full' | 'sm' | 'md' | 'lg'>('full');
-  const viewportWidth = useMemo(() => {
-    switch (viewport) {
-      case 'sm':
-        return 375;
-      case 'md':
-        return 768;
-      case 'lg':
-        return 1024;
-      default:
-        return '100%';
-    }
-  }, [viewport]);
+  // viewportWidth não está sendo usado diretamente; manter lógica simples só com state 'viewport'
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [customTitle, setCustomTitle] = useState('Quiz Quest - Editor Principal');
   const notification = useNotification();
@@ -869,100 +858,8 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
 
         {/* Banner de modo removido */}
       </div>
-
-      <CanvasDropZone
-        isEmpty={currentStepData.length === 0 && mode === 'edit'}
-        data-testid="canvas-dropzone"
-      >
-        <QuizRenderer
-          mode={mode === 'preview' ? 'preview' : 'editor'}
-          onStepChange={handleStepSelect}
-          initialStep={safeCurrentStep}
-        />
-
-        {mode === 'edit' && (
-          <SortableContext
-            items={currentStepData.map(b => b.id || `block-${currentStepData.indexOf(b)}`)}
-            strategy={verticalListSortingStrategy}
-          >
-            <div className="absolute inset-0 pointer-events-auto z-50">
-              {currentStepData.map((block: Block, index: number) => {
-                const blockId = block.id || `block-${index}`;
-                const isSelected = state.selectedBlockId === blockId;
-
-                // topOffset/height heurístico (pode ser substituído por medidas reais)
-                let topOffset = 60 + index * 100;
-                let height = 80;
-                switch (block.type) {
-                  case 'quiz-intro-header':
-                    topOffset = 20;
-                    height = 120;
-                    break;
-                  case 'options-grid':
-                    topOffset = 150 + index * 200;
-                    height = 300;
-                    break;
-                  case 'form-container':
-                    topOffset = 200 + index * 150;
-                    height = 120;
-                    break;
-                  case 'button':
-                    topOffset = 400 + index * 100;
-                    height = 60;
-                    break;
-                }
-
-                return (
-                  <SortableBlock
-                    key={blockId}
-                    id={blockId}
-                    block={block}
-                    isSelected={isSelected}
-                    topOffset={topOffset}
-                    height={height}
-                    onSelect={handleBlockSelect}
-                    onMoveUp={() => {
-                      const currentIndex = currentStepData.findIndex(b => b.id === blockId);
-                      if (currentIndex > 0)
-                        actions.reorderBlocks(currentStepKey, currentIndex, currentIndex - 1);
-                    }}
-                    onMoveDown={() => {
-                      const currentIndex = currentStepData.findIndex(b => b.id === blockId);
-                      if (currentIndex < currentStepData.length - 1)
-                        actions.reorderBlocks(currentStepKey, currentIndex, currentIndex + 1);
-                    }}
-                    onDuplicate={() => handleBlockDuplicate(blockId)}
-                    onDelete={() => handleBlockDelete(blockId)}
-                    data-testid={`editor-block-${blockId}`}
-                  />
-                );
-              })}
-            </div>
-            <div className="text-xs mt-2 px-2">
-              Clique em um bloco no canvas para ver suas propriedades
-            </div>
-            <div className="mt-6 p-4 bg-gray-50 rounded-lg text-left">
-              <h4 className="text-sm font-medium text-gray-900 mb-3">
-                Estatísticas da Etapa {safeCurrentStep}
-              </h4>
-              <div className="space-y-2 text-xs">
-                <div className="flex justify-between">
-                  <span>Blocos configurados:</span>
-                  <span className="font-medium">{currentStepData.length}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Tipo da etapa:</span>
-                  <span className="font-medium">{getStepAnalysis(safeCurrentStep).label}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Função:</span>
-                  <span className="font-medium">{getStepAnalysis(safeCurrentStep).desc}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* CanvasArea já encapsula o canvas/editor e propriedades relevantes */}
+      <CanvasArea />
     </div>
   );
 
