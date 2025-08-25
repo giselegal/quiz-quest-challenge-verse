@@ -515,10 +515,7 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
               } else if (overIdStr) {
                 const m = overIdStr.match(/^drop-zone-(\d+)$/);
                 if (m) {
-                  targetIndex = Math.max(
-                    0,
-                    Math.min(parseInt(m[1], 10), currentStepData.length)
-                  );
+                  targetIndex = Math.max(0, Math.min(parseInt(m[1], 10), currentStepData.length));
                 } else {
                   const overIndex = currentStepData.findIndex(
                     block => String(block.id) === overIdStr
@@ -857,14 +854,16 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
 
         {/* Banner de modo removido */}
       </div>
-      
+
       {/* Canvas principal com drag & drop */}
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto p-4" data-canvas-container>
         <CanvasDropZone
           blocks={currentStepData}
           selectedBlockId={state.selectedBlockId}
           onSelectBlock={actions.setSelectedBlockId}
-          onUpdateBlock={(id: string, updates: any) => actions.updateBlock(currentStepKey, id, updates)}
+          onUpdateBlock={(id: string, updates: any) =>
+            actions.updateBlock(currentStepKey, id, updates)
+          }
           onDeleteBlock={(id: string) => actions.removeBlock(currentStepKey, id)}
           className="max-w-4xl mx-auto"
         />
