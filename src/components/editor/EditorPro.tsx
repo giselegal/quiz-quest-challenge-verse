@@ -29,7 +29,7 @@ import {
   validateEditorJSON,
 } from '../../utils/editorUtils';
 import { useNotification } from '../ui/Notification';
-// import { CanvasDropZone } from './canvas/CanvasDropZone.simple';
+import { CanvasDropZone } from './canvas/CanvasDropZone.simple';
 import { DnDMonitor } from './debug/DnDMonitor';
 import { DraggableComponentItem } from './dnd/DraggableComponentItem';
 import { DraggableComponentItemForce } from './dnd/DraggableComponentItemForce';
@@ -858,8 +858,18 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
 
         {/* Banner de modo removido */}
       </div>
-      {/* CanvasArea já encapsula o canvas/editor e propriedades relevantes */}
-      <CanvasArea />
+      
+      {/* Canvas principal com drag & drop */}
+      <div className="flex-1 overflow-y-auto p-4">
+        <CanvasDropZone
+          blocks={currentStepData}
+          selectedBlockId={state.selectedBlockId}
+          onSelectBlock={actions.setSelectedBlockId}
+          onUpdateBlock={(id: string, updates: any) => actions.updateBlock(currentStepKey, id, updates)}
+          onDeleteBlock={(id: string) => actions.removeBlock(currentStepKey, id)}
+          className="max-w-4xl mx-auto"
+        />
+      </div>
     </div>
   );
 
