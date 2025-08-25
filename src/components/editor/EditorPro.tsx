@@ -1,23 +1,3 @@
-import { QuizRenderer } from '@/components/core/QuizRenderer';
-import CanvasDropZone from '@/components/editor/canvas/CanvasDropZone';
-import { DraggableComponentItem } from '@/components/editor/dnd/DraggableComponentItem';
-import { useNotification } from '@/components/ui/Notification';
-import { getBlocksForStep } from '@/config/quizStepsComplete';
-import { cn } from '@/lib/utils';
-import { Block } from '@/types/editor';
-import {
-  extractDragData,
-  getDragFeedback,
-  logDragEvent,
-  validateDrop,
-} from '@/utils/dragDropUtils';
-import {
-  copyToClipboard,
-  createBlockFromComponent,
-  devLog,
-  duplicateBlock,
-  validateEditorJSON,
-} from '@/utils/editorUtils';
 import {
   closestCenter,
   DndContext,
@@ -25,18 +5,36 @@ import {
   DragStartEvent,
   KeyboardSensor,
   PointerSensor,
+  pointerWithin,
   rectIntersection,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
+import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { getBlocksForStep } from '../../config/quizStepsComplete';
+import { cn } from '../../lib/utils';
+import '../../styles/dnd-fixes.css'; // ✅ CSS de força bruta para DnD
+import { Block } from '../../types/editor';
 import {
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-import React, { Suspense, useCallback, useMemo, useRef, useState } from 'react';
+  extractDragData,
+  getDragFeedback,
+  logDragEvent,
+  validateDrop,
+} from '../../utils/dragDropUtils';
+import {
+  copyToClipboard,
+  createBlockFromComponent,
+  devLog,
+  validateEditorJSON,
+} from '../../utils/editorUtils';
+import { useNotification } from '../ui/Notification';
+import { CanvasDropZone } from './canvas/CanvasDropZone.simple';
+import { DnDMonitor } from './debug/DnDMonitor';
+import { DraggableComponentItem } from './dnd/DraggableComponentItem';
+import { DraggableComponentItemForce } from './dnd/DraggableComponentItemForce';
 import { useEditor } from './EditorProvider';
-import { SortableBlock } from './SortableBlock';
+// import { SortableBlock } from './SortableBlock';
 
 /**
  * EditorPro - versão modularizada / otimizada do QuizEditorPro
@@ -92,7 +90,21 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
   }
 
   const { state, actions } = editorContext;
-  const [mode, setMode] = useState<'edit' | 'preview'>('edit');
+  const [viewport, setViewport] = useState<'full' | 'sm' | 'md' | 'lg'>('full');
+  const viewportWidth = useMemo(() => {
+    switch (viewport) {
+      case 'sm':
+        return 375;
+      case 'md':
+        return 768;
+      case 'lg':
+        return 1024;
+      default:
+        return '100%';
+    }
+  }, [viewport]);
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [customTitle, setCustomTitle] = useState('Quiz Quest - Editor Principal');
   const notification = useNotification();
   const NotificationContainer = (notification as any)?.NotificationContainer ?? null;
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -124,28 +136,116 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
     });
   }
 
-  // DnD sensors (mantém ativação por distância e suporte teclado)
+  // DnD sensors - configuração ULTRA sensível para garantir funcionamento
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 0, // Imediato - qualquer movimento inicia drag
+        delay: 0,
+        tolerance: 0,
+      },
+    }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
   // Collision detection strategy com assinatura correta
   const collisionDetectionStrategy = useCallback((args: any) => {
+    // Para itens da sidebar, priorize pointerWithin para "enxergar" o canvas e zonas grandes
     try {
-      const { active } = args;
-      const activeType = extractDragData(active)?.type;
+      const activeType = extractDragData(args?.active)?.type;
       if (activeType === 'sidebar-component') {
-        return rectIntersection(args);
+        const pointerCollisions = pointerWithin(args);
+        if (pointerCollisions && pointerCollisions.length > 0) return pointerCollisions;
+        // fallback seguro
+        return closestCenter(args);
       }
     } catch (err) {
-      // fallback silencioso para evitar quebrar o DnD
       if (process.env.NODE_ENV === 'development') {
         // eslint-disable-next-line no-console
-        console.debug('collisionDetectionStrategy error, fallback to closestCenter:', err);
+        console.debug('collisionDetection (sidebar) erro:', err);
       }
     }
+
+    // Para reordenação de blocos do canvas, mantenha estratégia mais precisa
+    try {
+      const collisions = rectIntersection(args);
+      if (collisions && collisions.length > 0) return collisions;
+    } catch (err) {
+      if (process.env.NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
+        console.debug('rectIntersection erro:', err);
+      }
+    }
+
+    try {
+      const pointerCollisions = pointerWithin(args);
+      if (pointerCollisions && pointerCollisions.length > 0) return pointerCollisions;
+    } catch (err) {
+      if (process.env.NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
+        console.debug('pointerWithin erro:', err);
+      }
+    }
+
     return closestCenter(args);
+  }, []);
+
+  // 🔗 Escutar eventos de navegação disparados pelos blocos (ex.: botão da etapa 1)
+  useEffect(() => {
+    const parseStepNumber = (stepId: unknown): number | null => {
+      if (typeof stepId === 'number') return stepId;
+      if (typeof stepId !== 'string') return null;
+      const digits = stepId.replace(/[^0-9]/g, '');
+      const num = parseInt(digits || stepId, 10);
+      return Number.isFinite(num) ? num : null;
+    };
+
+    const handleNavigate = (ev: Event) => {
+      const e = ev as CustomEvent<{ stepId?: string | number; source?: string }>;
+      const target = parseStepNumber(e.detail?.stepId);
+      if (!target || target < 1 || target > 21) return;
+      actions.setCurrentStep(target);
+      if (process.env.NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
+        console.log(
+          '➡️ EditorPro: navegação por evento',
+          e.detail?.stepId,
+          '→',
+          target,
+          'origem:',
+          e.detail?.source
+        );
+      }
+    };
+
+    window.addEventListener('navigate-to-step', handleNavigate as EventListener);
+    window.addEventListener('quiz-navigate-to-step', handleNavigate as EventListener);
+    return () => {
+      window.removeEventListener('navigate-to-step', handleNavigate as EventListener);
+      window.removeEventListener('quiz-navigate-to-step', handleNavigate as EventListener);
+    };
+  }, [actions]);
+
+  // Expor etapa atual globalmente para unificar comportamento de blocos (produção/edição)
+  useEffect(() => {
+    try {
+      (window as any).__quizCurrentStep = safeCurrentStep;
+    } catch {}
+  }, [safeCurrentStep]);
+
+  // Desabilitar auto-scroll e sincronização de scroll enquanto o editor estiver montado
+  useEffect(() => {
+    try {
+      (window as any).__DISABLE_AUTO_SCROLL = true;
+      (window as any).__DISABLE_SCROLL_SYNC = true;
+    } catch {}
+
+    return () => {
+      try {
+        (window as any).__DISABLE_AUTO_SCROLL = false;
+        (window as any).__DISABLE_SCROLL_SYNC = false;
+      } catch {}
+    };
   }, []);
 
   // componentes disponíveis - ideal extrair para config
@@ -274,64 +374,106 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
 
   // Handlers básicos
   const handleStepSelect = useCallback((step: number) => actions.setCurrentStep(step), [actions]);
-  const handleBlockSelect = useCallback(
-    (blockId: string) => actions.setSelectedBlockId(blockId),
-    [actions]
-  );
-  const handleBlockUpdate = useCallback(
-    (blockId: string, updates: Record<string, any>) =>
-      actions.updateBlock(currentStepKey, blockId, updates),
-    [currentStepKey, actions]
-  );
-  const handleBlockDelete = useCallback(
-    (blockId: string) => actions.removeBlock(currentStepKey, blockId),
-    [currentStepKey, actions]
-  );
 
-  const handleBlockDuplicate = useCallback(
-    (blockId: string) => {
-      const blockToDuplicate = currentStepData.find(b => b.id === blockId);
-      if (!blockToDuplicate) return;
-      const newBlock = duplicateBlock(blockToDuplicate, currentStepData);
-      actions.addBlock(currentStepKey, newBlock);
-      actions.setSelectedBlockId(newBlock.id);
-    },
-    [currentStepData, currentStepKey, actions]
-  );
+  // Duplicação inline é gerenciada no wrapper simples quando necessário
 
   // Drag handlers (reutilizam utilitários)
+  const isDebug = () => {
+    try {
+      // Vite: import.meta.env.DEV; fallback: NODE_ENV; override: window.__DND_DEBUG
+      return (
+        ((import.meta as any)?.env?.DEV ?? false) ||
+        (typeof process !== 'undefined' && (process as any)?.env?.NODE_ENV === 'development') ||
+        (typeof window !== 'undefined' && (window as any).__DND_DEBUG === true)
+      );
+    } catch {
+      return false;
+    }
+  };
+
   const handleDragStart = useCallback((event: DragStartEvent) => {
     const { active } = event;
     const dragData = extractDragData(active);
+
+    // ✅ LOG CRÍTICO SEMPRE VISÍVEL - Se isso não aparecer, o sensor não está funcionando
+    console.log('🚀🚀🚀 DRAG START FUNCIONANDO! 🚀🚀🚀', {
+      activeId: active.id,
+      dragData,
+      activeDataCurrent: (active as any)?.data?.current,
+      timestamp: new Date().toISOString(),
+      event: event,
+    });
+
+    // Removido alert intrusivo durante drag start
+
+    if (isDebug()) {
+      // eslint-disable-next-line no-console
+      console.log('🎯 DragStart - dados completos:', event);
+    }
+
     logDragEvent('start', active);
     if (process.env.NODE_ENV === 'development') devLog('Drag start', dragData);
   }, []);
-
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event;
+      const activeIdStr = active?.id != null ? String(active.id) : null;
+      const overIdStr = over?.id != null ? String(over.id) : null;
+      const activeData = (active as any)?.data?.current;
+      const overData = (over as any)?.data?.current;
+      if (isDebug()) {
+        // eslint-disable-next-line no-console
+        console.groupCollapsed('🎯 DRAG END DEBUG');
+        // eslint-disable-next-line no-console
+        console.log('active.id:', activeIdStr);
+        // eslint-disable-next-line no-console
+        console.log('active.data.current:', activeData);
+        // eslint-disable-next-line no-console
+        console.log('over.id:', overIdStr);
+        // eslint-disable-next-line no-console
+        console.log('over.data.current:', overData);
+      }
+
       if (!over) {
+        // Sem alvo: para drags da sidebar, permitir append ao final; para reorder, cancelar
         const dragData = extractDragData(active);
+        if (dragData?.type === 'sidebar-component' && dragData.blockType) {
+          const newBlock = createBlockFromComponent(dragData.blockType as any, currentStepData);
+          const targetIndex = currentStepData.length;
+          actions.addBlockAtIndex(currentStepKey, newBlock, targetIndex);
+          actions.setSelectedBlockId(newBlock.id);
+          notification?.success?.(`Componente ${dragData.blockType} adicionado ao final!`);
+          if (isDebug()) console.groupEnd();
+          return;
+        }
+        if (isDebug()) console.warn('❌ Drop cancelado - sem alvo');
         const feedback = getDragFeedback(dragData, {
           isValid: false,
           message: 'Sem alvo de drop',
         } as any);
         notification?.warning?.(feedback.message);
+        if (isDebug()) console.groupEnd();
         return;
       }
 
       const validation = validateDrop(active, over, currentStepData);
+      if (isDebug()) {
+        // eslint-disable-next-line no-console
+        console.log('validateDrop →', validation);
+      }
       logDragEvent('end', active, over, validation);
 
       if (!validation.isValid) {
         const feedback = getDragFeedback(extractDragData(active), validation);
         notification?.warning?.(feedback.message);
+        if (isDebug()) console.groupEnd();
         return;
       }
 
       const dragData = extractDragData(active);
       if (!dragData) {
         notification?.error?.('Dados de drag corrompidos');
+        console.groupEnd();
         return;
       }
 
@@ -340,18 +482,69 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
           case 'add':
             if (dragData.type === 'sidebar-component' && dragData.blockType) {
               const newBlock = createBlockFromComponent(dragData.blockType as any, currentStepData);
-              actions.addBlock(currentStepKey, newBlock);
+              // Inserção precisa por posição quando drop-zone-<n>
+              let targetIndex = currentStepData.length;
+              if (overIdStr) {
+                const m = overIdStr.match(/^drop-zone-(\d+)$/);
+                if (m)
+                  targetIndex = Math.max(0, Math.min(parseInt(m[1], 10), currentStepData.length));
+                else if (
+                  overIdStr === 'canvas-drop-zone' ||
+                  overIdStr.startsWith('canvas-drop-zone') ||
+                  overIdStr.startsWith('canvas-')
+                )
+                  targetIndex = currentStepData.length;
+                else {
+                  // Se soltou sobre um bloco, inserir antes dele
+                  const overIndex = currentStepData.findIndex(b => String(b.id) === overIdStr);
+                  if (overIndex >= 0) {
+                    // Se é o último bloco, tratar como append (inserir depois)
+                    targetIndex =
+                      overIndex === currentStepData.length - 1 ? overIndex + 1 : overIndex;
+                  }
+                }
+              } else if (currentStepData.length === 0) {
+                // Canvas vazio: inserir no índice 0
+                targetIndex = 0;
+              }
+              actions.addBlockAtIndex(currentStepKey, newBlock, targetIndex);
               actions.setSelectedBlockId(newBlock.id);
-              notification?.success?.(`Componente ${dragData.blockType} adicionado!`);
+              notification?.success?.(
+                `Componente ${dragData.blockType} adicionado na posição ${targetIndex}!`
+              );
             }
             break;
           case 'reorder':
-            if (dragData.type === 'canvas-block' && typeof over.id === 'string') {
-              const activeIndex = currentStepData.findIndex(block => block.id === active.id);
-              const overIndex = currentStepData.findIndex(block => block.id === over.id);
-              if (activeIndex !== -1 && overIndex !== -1 && activeIndex !== overIndex) {
-                actions.reorderBlocks(currentStepKey, activeIndex, overIndex);
-                notification?.info?.('Blocos reordenados');
+            if (dragData.type === 'canvas-block') {
+              const activeIndex = currentStepData.findIndex(
+                block => String(block.id) === activeIdStr
+              );
+              if (activeIndex === -1) break;
+
+              let targetIndex = activeIndex;
+              if (overIdStr === 'canvas-drop-zone') {
+                targetIndex = currentStepData.length - 1;
+              } else if (overIdStr) {
+                const m = overIdStr.match(/^drop-zone-(\d+)$/);
+                if (m) {
+                  targetIndex = Math.max(
+                    0,
+                    Math.min(parseInt(m[1], 10), currentStepData.length - 1)
+                  );
+                } else {
+                  const overIndex = currentStepData.findIndex(
+                    block => String(block.id) === overIdStr
+                  );
+                  if (overIndex !== -1) {
+                    // Se é o último bloco, mover para o final; caso contrário, antes do over
+                    targetIndex = overIndex === currentStepData.length - 1 ? overIndex : overIndex;
+                  }
+                }
+              }
+
+              if (activeIndex !== targetIndex) {
+                actions.reorderBlocks(currentStepKey, activeIndex, targetIndex);
+                notification?.info?.(`Bloco movido para a posição ${targetIndex}`);
               }
             }
             break;
@@ -362,6 +555,8 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
       } catch (error) {
         console.error('Erro durante drag & drop:', error);
         notification?.error?.('Erro ao processar drag & drop');
+      } finally {
+        if (isDebug()) console.groupEnd();
       }
     },
     [actions, currentStepData, currentStepKey, notification]
@@ -434,6 +629,31 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
 
       <div className="flex-1 overflow-y-auto">
         <div className="p-3">
+          {/* ✅ SEÇÃO DE TESTE - Versão Force vs Normal */}
+          <div className="mb-6 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <h4 className="text-xs font-semibold text-yellow-800 mb-2 uppercase tracking-wide">
+              🧪 TESTE DnD - Force vs Normal
+            </h4>
+            <div className="space-y-2">
+              <DraggableComponentItemForce
+                blockType="test-force"
+                title="TESTE Force Wrapper"
+                description="Usa ForceDraggableWrapper"
+                icon={<span className="text-lg">🧪</span>}
+                category="Teste"
+                className="bg-yellow-100 border-yellow-300"
+              />
+              <DraggableComponentItem
+                blockType="test-normal"
+                title="TESTE Normal"
+                description="Usa implementação normal"
+                icon={<span className="text-lg">🔧</span>}
+                category="Teste"
+                className="bg-blue-100 border-blue-300"
+              />
+            </div>
+          </div>
+
           {Object.entries(groupedComponents).map(([category, components]) => (
             <div key={category} className="mb-4">
               <h4 className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">
@@ -460,13 +680,31 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
   );
 
   const CanvasArea: React.FC = () => (
-    <div className="flex-1 flex flex-col bg-gray-100">
+    <div className="flex-1 flex flex-col bg-gray-100 min-h-0">
       <div className="bg-white border-b border-gray-200 p-4">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-              {mode === 'edit' ? '✏️ Editor' : '👁️ Preview'} - Etapa {safeCurrentStep}
-            </h3>
+            {isEditingTitle ? (
+              <input
+                type="text"
+                value={customTitle}
+                onChange={e => setCustomTitle(e.target.value)}
+                onBlur={() => setIsEditingTitle(false)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter') setIsEditingTitle(false);
+                }}
+                className="font-semibold text-gray-900 bg-transparent border-b-2 border-blue-500 outline-none text-lg"
+                autoFocus
+              />
+            ) : (
+              <h3
+                className="font-semibold text-gray-900 flex items-center gap-2 cursor-pointer hover:text-blue-600 transition-colors"
+                onClick={() => setIsEditingTitle(true)}
+                title="Clique para editar o título"
+              >
+                🎯 {customTitle} - Etapa {safeCurrentStep}
+              </h3>
+            )}
             <p className="text-sm text-gray-600">
               {getStepAnalysis(safeCurrentStep).label}: {getStepAnalysis(safeCurrentStep).desc}
             </p>
@@ -565,30 +803,61 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
               </button>
             </div>
 
+            {/* Alternância de modo removida: somente preview */}
+
+            {/* Seletor de viewport responsivo */}
             <div className="flex bg-gray-100 rounded-lg p-1">
               <button
                 type="button"
-                onClick={() => setMode('edit')}
+                onClick={() => setViewport('sm')}
                 className={cn(
-                  'px-4 py-2 text-sm rounded-md transition-all duration-200 font-medium',
-                  mode === 'edit'
+                  'px-3 py-2 text-sm rounded-md transition-all duration-200 font-medium',
+                  viewport === 'sm'
                     ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                 )}
+                title="Mobile (375px)"
               >
-                ✏️ Editar
+                📱 375
               </button>
               <button
                 type="button"
-                onClick={() => setMode('preview')}
+                onClick={() => setViewport('md')}
                 className={cn(
-                  'px-4 py-2 text-sm rounded-md transition-all duration-200 font-medium',
-                  mode === 'preview'
+                  'px-3 py-2 text-sm rounded-md transition-all duration-200 font-medium',
+                  viewport === 'md'
                     ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                 )}
+                title="Tablet (768px)"
               >
-                👁️ Preview
+                📟 768
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewport('lg')}
+                className={cn(
+                  'px-3 py-2 text-sm rounded-md transition-all duration-200 font-medium',
+                  viewport === 'lg'
+                    ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                )}
+                title="Desktop (1024px)"
+              >
+                🖥️ 1024
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewport('full')}
+                className={cn(
+                  'px-3 py-2 text-sm rounded-md transition-all duration-200 font-medium',
+                  viewport === 'full'
+                    ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                )}
+                title="Largura total"
+              >
+                🧭 Full
               </button>
             </div>
 
@@ -598,38 +867,7 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
           </div>
         </div>
 
-        <div className="mt-3 p-3 rounded-lg border">
-          {mode === 'edit' ? (
-            <div
-              className={cn(
-                'flex items-center justify-between text-sm',
-                'bg-blue-50 border-blue-200 text-blue-900'
-              )}
-            >
-              <div>
-                <strong>✏️ Modo Edição Visual:</strong> Conteúdo real com overlays de seleção
-                interativos
-              </div>
-              <div className="text-blue-700">
-                {state.selectedBlockId
-                  ? `Editando: ${state.selectedBlockId}`
-                  : `${currentStepData.length} blocos disponíveis - Clique para editar`}
-              </div>
-            </div>
-          ) : (
-            <div
-              className={cn(
-                'flex items-center justify-between text-sm',
-                'bg-green-50 border-green-200 text-green-900'
-              )}
-            >
-              <div>
-                <strong>👁️ Modo Preview:</strong> Visualização idêntica à produção final
-              </div>
-              <div className="text-green-700">Navegação e interações funcionais</div>
-            </div>
-          )}
-        </div>
+        {/* Banner de modo removido */}
       </div>
 
       <CanvasDropZone
@@ -647,7 +885,7 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
             items={currentStepData.map(b => b.id || `block-${currentStepData.indexOf(b)}`)}
             strategy={verticalListSortingStrategy}
           >
-            <div className="absolute inset-0 pointer-events-none z-50">
+            <div className="absolute inset-0 pointer-events-auto z-50">
               {currentStepData.map((block: Block, index: number) => {
                 const blockId = block.id || `block-${index}`;
                 const isSelected = state.selectedBlockId === blockId;
@@ -700,39 +938,9 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
                 );
               })}
             </div>
-          </SortableContext>
-        )}
-      </CanvasDropZone>
-    </div>
-  );
-
-  const PropertiesColumn: React.FC = () => (
-    <div className="w-[380px] bg-white border-l border-gray-200 flex flex-col">
-      <div className="p-4 border-b border-gray-200">
-        <h3 className="font-semibold text-sm text-gray-900">Painel de Propriedades</h3>
-        {selectedBlock ? (
-          <p className="text-xs text-gray-500 mt-1">Editando: {selectedBlock.type}</p>
-        ) : (
-          <p className="text-xs text-gray-500 mt-1">Selecione um bloco para editar</p>
-        )}
-      </div>
-
-      <div className="flex-1 overflow-y-auto">
-        {selectedBlock ? (
-          <Suspense fallback={<div className="p-6">Carregando painel de propriedades...</div>}>
-            <EnhancedUniversalPropertiesPanelFixed
-              selectedBlock={selectedBlock}
-              onUpdate={handleBlockUpdate}
-              onClose={() => actions.setSelectedBlockId(null)}
-              onDelete={handleBlockDelete}
-            />
-          </Suspense>
-        ) : (
-          <div className="p-6 text-center text-gray-500">
-            <div className="text-2xl mb-3">⚙️</div>
-            <div className="text-sm font-medium mb-2">Nenhum bloco selecionado</div>
-            <div className="text-xs">Clique em um bloco no canvas para ver suas propriedades</div>
-
+            <div className="text-xs mt-2 px-2">
+              Clique em um bloco no canvas para ver suas propriedades
+            </div>
             <div className="mt-6 p-4 bg-gray-50 rounded-lg text-left">
               <h4 className="text-sm font-medium text-gray-900 mb-3">
                 Estatísticas da Etapa {safeCurrentStep}
@@ -753,10 +961,76 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
               </div>
             </div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
+
+  // Coluna de propriedades (direita)
+  const PropertiesColumn: React.FC = () => (
+    <div className="w-[360px] min-w-[300px] bg-white border-l border-gray-200 flex flex-col">
+      {selectedBlock ? (
+        <Suspense
+          fallback={<div className="p-4 text-sm text-gray-600">Carregando propriedades…</div>}
+        >
+          <EnhancedUniversalPropertiesPanelFixed
+            selectedBlock={selectedBlock as any}
+            onUpdate={(blockId: string, updates: Record<string, any>) =>
+              actions.updateBlock(currentStepKey, blockId, updates)
+            }
+            onClose={() => actions.setSelectedBlockId(null)}
+            onDelete={(blockId: string) => actions.removeBlock(currentStepKey, blockId)}
+          />
+        </Suspense>
+      ) : (
+        <div className="h-full p-6 text-sm text-gray-600">
+          Selecione um bloco no canvas para editar suas propriedades.
+        </div>
+      )}
+    </div>
+  );
+
+  // ✅ VERIFICAÇÃO CRÍTICA - Debug do DndContext
+  React.useEffect(() => {
+    if (isDebug()) {
+      // eslint-disable-next-line no-console
+      console.log('🎯 DndContext sendo montado no EditorPro');
+
+      // Verificar elementos DnD após renderização
+      setTimeout(() => {
+        const draggables = document.querySelectorAll('[data-dnd-kit-draggable-handle]');
+        const droppables = document.querySelectorAll('[data-dnd-kit-droppable]');
+        // eslint-disable-next-line no-console
+        console.log('🔍 CONTAGEM DnD após montagem:', {
+          draggables: draggables.length,
+          droppables: droppables.length,
+          draggableIds: Array.from(draggables).map(el => el.id),
+          droppableIds: Array.from(droppables).map(el => el.id),
+        });
+
+        if (draggables.length === 0) {
+          // eslint-disable-next-line no-console
+          console.error('❌ NENHUM ELEMENTO DRAGGABLE ENCONTRADO! Problema na renderização.');
+        } else {
+          // eslint-disable-next-line no-console
+          console.log('✅ Elementos draggable encontrados, testando eventos...');
+
+          // Testar eventos no primeiro draggable
+          const firstDraggable = draggables[0];
+          if (firstDraggable) {
+            firstDraggable.addEventListener(
+              'mousedown',
+              () => {
+                // eslint-disable-next-line no-console
+                console.log('🖱️ MouseDown funcionando no primeiro draggable!');
+              },
+              { once: true }
+            );
+          }
+        }
+      }, 1000);
+    }
+  }, []);
 
   /* -------------------------
      Render principal
@@ -767,6 +1041,20 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
         sensors={sensors}
         collisionDetection={collisionDetectionStrategy}
         onDragStart={handleDragStart}
+        onDragOver={event => {
+          // ✅ CONFIRMAR que o drag está ativo
+          console.log('🎯 DRAG OVER DETECTADO:', {
+            overId: event.over?.id,
+            activeId: event.active?.id,
+            timestamp: new Date().toISOString(),
+          });
+
+          if (isDebug()) {
+            // eslint-disable-next-line no-console
+            console.log('🎯 DragOver', event);
+          }
+          // Sem logDragEvent para over pois não existe esse tipo
+        }}
         onDragEnd={handleDragEnd}
       >
         <div className={`editor-pro h-screen bg-gray-50 flex ${className}`}>
@@ -775,6 +1063,9 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
           <CanvasArea />
           <PropertiesColumn />
         </div>
+
+        {/* Monitor de debug em tempo real */}
+        <DnDMonitor />
       </DndContext>
 
       {NotificationContainer ? <NotificationContainer /> : null}

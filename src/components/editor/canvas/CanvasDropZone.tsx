@@ -1,6 +1,6 @@
-import { cn } from '@/lib/utils';
 import { useDroppable } from '@dnd-kit/core';
 import React from 'react';
+import { cn } from '../../../lib/utils';
 
 interface CanvasDropZoneProps {
   children: React.ReactNode;
@@ -19,19 +19,33 @@ const CanvasDropZone: React.FC<CanvasDropZoneProps> = ({
     id: 'canvas-drop-zone',
     data: {
       type: 'canvas',
-      accepts: ['sidebar-component'],
+      accepts: ['sidebar-component', 'canvas-element'],
     },
   });
+
+  // 🔧 DEBUG: Log quando componente monta
+  React.useEffect(() => {
+    console.log('🎯 CanvasDropZone montado!', {
+      id: 'canvas-drop-zone',
+      isEmpty,
+      isOver,
+    });
+  }, [isEmpty, isOver]);
 
   return (
     <div
       ref={setNodeRef}
       className={cn(
-        'flex-1 p-6 overflow-auto transition-all duration-200',
+        'flex-1 p-6 transition-all duration-200',
+        'overflow-visible', // 🚨 CORREÇÃO: Permitir eventos de drag
         isOver && 'bg-blue-50',
         className
       )}
+      role="button"
+      aria-roledescription="sortable"
+      aria-describedby="DndDescribedBy-2"
       data-testid={dataTestId}
+      style={{ minHeight: '600px' }} // 🚨 CORREÇÃO: Garantir área mínima
     >
       <div className="max-w-4xl mx-auto">
         <div
@@ -44,7 +58,7 @@ const CanvasDropZone: React.FC<CanvasDropZoneProps> = ({
 
           {/* Drop indicator overlay */}
           {isOver && (
-            <div className="absolute inset-0 bg-blue-100 bg-opacity-20 rounded-lg border-2 border-dashed border-blue-300 flex items-center justify-center z-40">
+            <div className="absolute inset-0 bg-blue-100 bg-opacity-20 rounded-lg border-2 border-dashed border-blue-300 flex items-center justify-center z-40 pointer-events-none">
               <div className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg font-medium text-sm">
                 ✨ Solte aqui o componente
               </div>
@@ -73,3 +87,4 @@ const CanvasDropZone: React.FC<CanvasDropZoneProps> = ({
 };
 
 export default CanvasDropZone;
+export { CanvasDropZone };
