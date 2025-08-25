@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-import { cn } from '@/lib/utils';
-import { useDraggable } from '@dnd-kit/core';
-=======
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
->>>>>>> c8c6b53419af1a60212ddbd0423ea8dc9d53c662
 import React from 'react';
 
 // Utility function for class names
@@ -57,7 +52,7 @@ export const DraggableComponentItem: React.FC<DraggableComponentItemProps> = ({
       category: category || 'default',
       source: 'sidebar',
     },
-    disabled,
+    disabled: false, // ✅ FORÇAR SEMPRE HABILITADO para debug
   });
 
   if (isDebug()) {
@@ -78,7 +73,25 @@ export const DraggableComponentItem: React.FC<DraggableComponentItemProps> = ({
     console.log('🔧 Item configurado:', blockType, 'disabled:', disabled);
     // eslint-disable-next-line no-console
     console.log('✅ setNodeRef disponível para', blockType);
-  }, [blockType, disabled]);
+
+    // Verificar se listeners foram aplicados
+    if (listeners) {
+      // eslint-disable-next-line no-console
+      console.log('🎧 Listeners aplicados a', blockType, Object.keys(listeners));
+    } else {
+      // eslint-disable-next-line no-console
+      console.warn('⚠️ Listeners NÃO aplicados a', blockType);
+    }
+
+    // Verificar se attributes foram aplicados
+    if (attributes) {
+      // eslint-disable-next-line no-console
+      console.log('🏷️ Attributes aplicados a', blockType, Object.keys(attributes));
+    } else {
+      // eslint-disable-next-line no-console
+      console.warn('⚠️ Attributes NÃO aplicados a', blockType);
+    }
+  }, [blockType, disabled, listeners, attributes]);
 
   // Debug simples para mouse events
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -90,16 +103,33 @@ export const DraggableComponentItem: React.FC<DraggableComponentItemProps> = ({
       target: e.currentTarget,
       isDragging,
       transform,
+      button: e.button,
+      buttons: e.buttons,
     });
   };
 
-  // ✅ CORRIGIDO: CSS Transform sem zoom indesejado
+  const handleMouseEnter = () => {
+    if (!isDebug()) return;
+    // eslint-disable-next-line no-console
+    console.log('🖱️ MouseEnter no item:', blockType);
+  };
+
+  const handleMouseLeave = () => {
+    if (!isDebug()) return;
+    // eslint-disable-next-line no-console
+    console.log('🖱️ MouseLeave no item:', blockType);
+  };
+
+  // ✅ CORRIGIDO: CSS Transform + pointer-events garantidos
   const style = transform
     ? {
         transform: CSS.Transform.toString(transform),
         zIndex: isDragging ? 999 : 'auto',
+        pointerEvents: 'auto' as const,
       }
-    : undefined;
+    : {
+        pointerEvents: 'auto' as const,
+      };
 
   return (
     <div
@@ -112,11 +142,15 @@ export const DraggableComponentItem: React.FC<DraggableComponentItemProps> = ({
         isDragging && 'opacity-50 cursor-grabbing shadow-2xl bg-blue-100 border-blue-500',
         // 🔧 DEBUG: Ring azul forte para identificar draggables
         'ring-2 ring-blue-200 hover:ring-blue-400',
+        // ✅ INTERATIVIDADE: Garantir que o elemento seja clicável
+        'pointer-events-auto touch-manipulation select-none',
         disabled && 'opacity-30 cursor-not-allowed bg-gray-100',
         className
       )}
       style={style}
       onMouseDown={handleMouseDown}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       {...attributes}
       {...listeners}
     >

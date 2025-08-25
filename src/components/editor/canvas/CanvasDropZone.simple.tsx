@@ -1,14 +1,9 @@
 import { cn } from '@/lib/utils';
 import { Block } from '@/types/editor';
-<<<<<<< HEAD
-import { useDraggable, useDroppable } from '@dnd-kit/core';
-import React from 'react';
-=======
-import { useDroppable, useDndContext } from '@dnd-kit/core';
+import { useDndContext, useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import React from 'react';
 import { SortableBlockWrapper } from './SortableBlockWrapper.simple';
->>>>>>> c8c6b53419af1a60212ddbd0423ea8dc9d53c662
 
 // Componente para drop zone entre blocos
 const InterBlockDropZone: React.FC<{
@@ -29,20 +24,20 @@ const InterBlockDropZone: React.FC<{
       ref={setNodeRef}
       className={cn(
         'transition-all duration-200 relative pointer-events-auto flex items-center justify-center',
-        'h-6 min-h-[24px]', // Altura mínima mais generosa para facilitar drop
-        isOver && 'h-16 bg-brand/10 border-2 border-dashed border-brand/40 rounded-lg',
-        isActive && !isOver && 'h-3 bg-brand/20 rounded-full opacity-50'
+        'h-8 min-h-[32px]', // Altura maior para facilitar drop
+        isOver && 'h-20 bg-brand/10 border-2 border-dashed border-brand/40 rounded-lg',
+        isActive && !isOver && 'h-4 bg-brand/20 rounded-full opacity-50'
       )}
     >
       {isOver && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <p className="text-brand font-medium text-sm bg-white/80 px-2 py-1 rounded">
+        <div className="absolute inset-0 flex items-center justify-center z-10">
+          <p className="text-brand font-medium text-sm bg-white/90 px-3 py-2 rounded shadow-sm">
             Inserir aqui (posição {position})
           </p>
         </div>
       )}
-      {/* Área invisível para melhor hit detection */}
-      <div className="absolute inset-x-0 -inset-y-2 pointer-events-none" />
+      {/* Área invisível estendida para melhor hit detection */}
+      <div className="absolute inset-x-0 -inset-y-4 pointer-events-none" />
     </div>
   );
 };
@@ -65,11 +60,12 @@ export const CanvasDropZone: React.FC<CanvasDropZoneProps> = ({
   className,
 }) => {
   const { setNodeRef, isOver } = useDroppable({
-    id: 'canvas-drop-zone',
+    id: 'canvas-drop-zone-main', // ID único e bem definido
     data: {
       type: 'canvas-drop-zone',
       accepts: ['sidebar-component', 'canvas-block'],
       position: blocks.length, // Posição no final
+      debug: 'main-canvas-zone', // Para debug
     },
   });
 
@@ -84,21 +80,8 @@ export const CanvasDropZone: React.FC<CanvasDropZoneProps> = ({
     return t === 'sidebar-component' || t === 'canvas-block' || overId.startsWith('sidebar-item-');
   }, [active]);
 
-<<<<<<< HEAD
-    const style: React.CSSProperties = drag.transform
-      ? {
-          transform: `translate3d(${drag.transform.x}px, ${drag.transform.y}px, 0)`,
-          zIndex: drag.isDragging ? 1000 : 'auto',
-        }
-      : {};
-=======
-  // Debug do drop zone
+  // Debug do drop zone - SEMPRE ATIVO para investigação
   React.useEffect(() => {
-    const debug =
-      ((import.meta as any)?.env?.DEV ?? false) ||
-      (typeof process !== 'undefined' && (process as any)?.env?.NODE_ENV === 'development') ||
-      (typeof window !== 'undefined' && (window as any).__DND_DEBUG === true);
-    if (!debug) return;
     // eslint-disable-next-line no-console
     console.log('🎯 CanvasDropZone: isOver =', isOver, 'active =', active?.id);
     if (active?.data.current?.type === 'sidebar-component') {
@@ -109,7 +92,6 @@ export const CanvasDropZone: React.FC<CanvasDropZoneProps> = ({
       console.log('🔄 Reordenando bloco do canvas:', active?.id);
     }
   }, [isOver, active]);
->>>>>>> c8c6b53419af1a60212ddbd0423ea8dc9d53c662
 
   // Usando isPreviewing como false por padrão (modo de edição)
   const isPreviewing = false;
@@ -118,8 +100,9 @@ export const CanvasDropZone: React.FC<CanvasDropZoneProps> = ({
     <div
       ref={setNodeRef}
       className={cn(
-        'min-h-[240px] transition-all duration-200 pointer-events-auto',
+        'min-h-[300px] transition-all duration-200 pointer-events-auto p-4',
         isOver && !isPreviewing && 'bg-brand/5 ring-2 ring-brand/20 ring-dashed',
+        'border border-dashed border-gray-200 rounded-lg',
         className
       )}
     >
