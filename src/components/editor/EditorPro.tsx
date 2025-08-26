@@ -257,6 +257,36 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
     };
   }, [actions]);
 
+  // 🔗 Fallback: inserir componente via evento (ex.: duplo clique na sidebar)
+  useEffect(() => {
+    const handleAddComponent = (ev: Event) => {
+      const e = ev as CustomEvent<{ blockType?: string; source?: string } | undefined>;
+      const blockType = e?.detail?.blockType;
+      if (!blockType) return;
+
+      try {
+        const newBlock = createBlockFromComponent(blockType as any, currentStepData);
+        actions.addBlockAtIndex(currentStepKey, newBlock, currentStepData.length);
+        actions.setSelectedBlockId(newBlock.id);
+        if (notification?.success) {
+          notification.success(`Componente ${blockType} adicionado (duplo clique).`);
+        }
+        if (process.env.NODE_ENV === 'development') {
+          // eslint-disable-next-line no-console
+          console.log('🧩 Fallback add via evento:', { blockType, step: safeCurrentStep });
+        }
+      } catch (err) {
+        console.error('Erro ao adicionar componente via evento:', err);
+        notification?.error?.('Falha ao adicionar componente');
+      }
+    };
+
+    window.addEventListener('editor-add-component', handleAddComponent as EventListener);
+    return () => {
+      window.removeEventListener('editor-add-component', handleAddComponent as EventListener);
+    };
+  }, [actions, currentStepData, currentStepKey, notification, safeCurrentStep]);
+
   // Expor etapa atual globalmente para unificar comportamento de blocos (produção/edição)
   useEffect(() => {
     try {
