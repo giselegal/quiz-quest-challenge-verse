@@ -13,8 +13,8 @@ const AuthPage = lazy(() => import('./pages/AuthPage'));
 import MainEditor from './pages/MainEditor';
 const DashboardPage = lazy(() => import('./pages/admin/DashboardPage'));
 const StepPage = lazy(() => import('./pages/StepPage'));
-// ✅ Página de publicação com HTML configurado (cliente final)
-const PublishedQuizPage = lazy(() => import('./pages/quiz-descubra-seu-estilo'));
+// ✅ Página de produção modular limpa (cliente final)
+const QuizModularPage = lazy(() => import('./pages/QuizModularPage'));
 
 // Loading component
 const PageLoading = () => (
@@ -79,10 +79,10 @@ function App() {
                   }}
                 </Route>
 
-                {/* 🌐 VERSÃO PUBLICADA SEM COLUNAS (HTML configurado) */}
+        {/* 🌐 VERSÃO DE PRODUÇÃO MODULAR (sem colunas de edição) */}
                 <Route path="/quiz">
                   <Suspense fallback={<PageLoading />}>
-                    <PublishedQuizPage />
+          <QuizModularPage />
                   </Suspense>
                 </Route>
 
