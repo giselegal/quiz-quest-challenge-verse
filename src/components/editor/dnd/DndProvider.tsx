@@ -303,39 +303,44 @@ export const DndProvider: React.FC<DndProviderProps> = ({ children, className = 
     [actions, currentStepData, currentStepKey, notification, getTargetIndexFromOver]
   );
 
-  // ✅ VERIFICAÇÃO CRÍTICA - Debug do DndContext
+  // ✅ VERIFICAÇÃO CRÍTICA - Debug do DndContext (only in debug mode)
   React.useEffect(() => {
-    if (isDebug()) {
-      console.log('🎯 DndProvider sendo montado');
+    if (!isDebug()) return;
+    
+    console.log('🎯 DndProvider sendo montado');
 
-      // Injetar estilos de debug para visualizar droppables/handles
-      try {
-        const existing = document.getElementById('dnd-debug-styles');
-        if (!existing) {
-          const style = document.createElement('style');
-          style.id = 'dnd-debug-styles';
-          style.textContent = `
-            /* Highlight droppables e draggables em modo debug */
-            .dnd-provider [data-dnd-kit-droppable] { outline: 1px dashed rgba(59,130,246,0.5); outline-offset: -2px; }
-            .dnd-provider [data-dnd-dropzone-type] { outline: 1px dashed rgba(16,185,129,0.7); outline-offset: -2px; }
-            .dnd-provider [data-dnd-kit-draggable-handle] { box-shadow: 0 0 0 2px rgba(99,102,241,0.5) inset; }
-          `;
-          document.head.appendChild(style);
-        }
-      } catch {}
+    // Injetar estilos de debug para visualizar droppables/handles
+    try {
+      const existing = document.getElementById('dnd-debug-styles');
+      if (!existing) {
+        const style = document.createElement('style');
+        style.id = 'dnd-debug-styles';
+        style.textContent = `
+          /* Highlight droppables e draggables em modo debug */
+          .dnd-provider [data-dnd-kit-droppable] { outline: 1px dashed rgba(59,130,246,0.5); outline-offset: -2px; }
+          .dnd-provider [data-dnd-dropzone-type] { outline: 1px dashed rgba(16,185,129,0.7); outline-offset: -2px; }
+          .dnd-provider [data-dnd-kit-draggable-handle] { box-shadow: 0 0 0 2px rgba(99,102,241,0.5) inset; }
+        `;
+        document.head.appendChild(style);
+      }
+    } catch {}
 
-      // Verificar elementos DnD após renderização
-      setTimeout(() => {
-        const draggables = document.querySelectorAll('[data-dnd-kit-draggable-handle]');
-        const droppables = document.querySelectorAll('[data-dnd-kit-droppable]');
-        console.log('🔍 CONTAGEM DnD após montagem DndProvider:', {
-          draggables: draggables.length,
-          droppables: droppables.length,
-          draggableIds: Array.from(draggables).map(el => el.id),
-          droppableIds: Array.from(droppables).map(el => el.id),
-        });
-      }, 1000);
-    }
+    // Verificar elementos DnD após renderização - otimizado com requestAnimationFrame
+    const checkElements = () => {
+      const draggables = document.querySelectorAll('[data-dnd-kit-draggable-handle]');
+      const droppables = document.querySelectorAll('[data-dnd-kit-droppable]');
+      console.log('🔍 CONTAGEM DnD após montagem DndProvider:', {
+        draggables: draggables.length,
+        droppables: droppables.length,
+        draggableIds: Array.from(draggables).map(el => el.id),
+        droppableIds: Array.from(droppables).map(el => el.id),
+      });
+    };
+    
+    // Use requestAnimationFrame instead of setTimeout for better performance
+    requestAnimationFrame(() => {
+      requestAnimationFrame(checkElements);
+    });
   }, []);
 
   return (
