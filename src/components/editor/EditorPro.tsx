@@ -280,7 +280,7 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
   }, []);
 
   // componentes disponíveis - ideal extrair para config
-    const availableComponentsRaw = useMemo(
+  const availableComponentsRaw = useMemo(
     () => [
       {
         type: 'quiz-intro-header',
@@ -690,7 +690,7 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
         return;
       }
 
-  const validation = validateDrop(active, over, currentStepData);
+      const validation = validateDrop(active, over, currentStepData);
       if (isDebug()) {
         // eslint-disable-next-line no-console
         console.log('validateDrop →', validation);
@@ -1154,7 +1154,7 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
       } catch {}
 
       // Verificar elementos DnD após renderização
-  setTimeout(() => {
+      setTimeout(() => {
         const draggables = document.querySelectorAll('[data-dnd-kit-draggable-handle]');
         const droppables = document.querySelectorAll('[data-dnd-kit-droppable]');
         // eslint-disable-next-line no-console
@@ -1168,7 +1168,9 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
         // Logs de camadas/estilos do canvas e dropzones
         const canvasRoots = document.querySelectorAll('[data-id="canvas-drop-zone"]');
         if (canvasRoots.length > 1) {
-          console.warn(`⚠️ Há ${canvasRoots.length} canvas roots com data-id="canvas-drop-zone". Mantenha apenas um por tela.`);
+          console.warn(
+            `⚠️ Há ${canvasRoots.length} canvas roots com data-id="canvas-drop-zone". Mantenha apenas um por tela.`
+          );
         }
         const canvasRoot = (canvasRoots[0] as HTMLElement) || null;
         if (canvasRoot) {
@@ -1235,7 +1237,7 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
         sensors={sensors}
         collisionDetection={collisionDetectionStrategy}
         onDragStart={handleDragStart}
-  onDragCancel={handleDragCancel}
+        onDragCancel={handleDragCancel}
         onDragOver={event => {
           // ✅ CONFIRMAR que o drag está ativo
           console.log('🎯 DRAG OVER DETECTADO:', {
