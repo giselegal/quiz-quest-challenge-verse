@@ -5,14 +5,16 @@ import {
   DragStartEvent,
   KeyboardSensor,
   PointerSensor,
+  pointerWithin,
   rectIntersection,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import React, { Suspense, useCallback, useMemo, useRef, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { getBlocksForStep } from '../../config/quizStepsComplete';
 import { cn } from '../../lib/utils';
+import '../../styles/dnd-fixes.css'; // ✅ CSS de força bruta para DnD
 import { Block } from '../../types/editor';
 import {
   extractDragData,
@@ -26,9 +28,11 @@ import {
   devLog,
   validateEditorJSON,
 } from '../../utils/editorUtils';
-import { QuizRenderer } from '../core/QuizRenderer';
 import { useNotification } from '../ui/Notification';
+import { CanvasDropZone } from './canvas/CanvasDropZone.simple';
+import { DnDMonitor } from './debug/DnDMonitor';
 import { DraggableComponentItem } from './dnd/DraggableComponentItem';
+import { DraggableComponentItemForce } from './dnd/DraggableComponentItemForce';
 import { useEditor } from './EditorProvider';
 // import { SortableBlock } from './SortableBlock';
 
@@ -87,18 +91,7 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
 
   const { state, actions } = editorContext;
   const [viewport, setViewport] = useState<'full' | 'sm' | 'md' | 'lg'>('full');
-  const viewportWidth = useMemo(() => {
-    switch (viewport) {
-      case 'sm':
-        return 375;
-      case 'md':
-        return 768;
-      case 'lg':
-        return 1024;
-      default:
-        return '100%';
-    }
-  }, [viewport]);
+  // viewportWidth não está sendo usado diretamente; manter lógica simples só com state 'viewport'
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [customTitle, setCustomTitle] = useState('Quiz Quest - Editor Principal');
   const notification = useNotification();
@@ -132,34 +125,162 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
     });
   }
 
-  // DnD sensors - configuração mais permissiva para debug
+  // DnD sensors - configuração balanceada para UX otimizada
   const sensors = useSensors(
     useSensor(PointerSensor, {
-      activationConstraint: { distance: 3 }, // Reduzido de 8 para 3
+      activationConstraint: {
+        distance: 8, // 8px mínimo para evitar drag acidental
+        delay: 100, // 100ms delay para touch devices
+        tolerance: 5, // Tolerância para movements
+      },
     }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
   // Collision detection strategy com assinatura correta
   const collisionDetectionStrategy = useCallback((args: any) => {
+    // Para itens da sidebar, priorize pointerWithin para "enxergar" o canvas e zonas grandes
     try {
-      const { active } = args;
-      const activeType = extractDragData(active)?.type;
+      const activeType = extractDragData(args?.active)?.type;
       if (activeType === 'sidebar-component') {
-        return rectIntersection(args);
+        const pointerCollisions = pointerWithin(args);
+        if (pointerCollisions && pointerCollisions.length > 0) return pointerCollisions;
+        // fallback seguro
+        return closestCenter(args);
       }
     } catch (err) {
-      // fallback silencioso para evitar quebrar o DnD
       if (process.env.NODE_ENV === 'development') {
         // eslint-disable-next-line no-console
-        console.debug('collisionDetectionStrategy error, fallback to closestCenter:', err);
+        console.debug('collisionDetection (sidebar) erro:', err);
       }
     }
+
+    // Para reordenação de blocos do canvas, mantenha estratégia mais precisa
+    try {
+      const collisions = rectIntersection(args);
+      if (collisions && collisions.length > 0) return collisions;
+    } catch (err) {
+      if (process.env.NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
+        console.debug('rectIntersection erro:', err);
+      }
+    }
+
+    try {
+      const pointerCollisions = pointerWithin(args);
+      if (pointerCollisions && pointerCollisions.length > 0) return pointerCollisions;
+    } catch (err) {
+      if (process.env.NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
+        console.debug('pointerWithin erro:', err);
+      }
+    }
+
     return closestCenter(args);
   }, []);
 
+  // Helper centralizado: calcula índice alvo com base no alvo de drop
+  function getTargetIndexFromOver(
+    overIdStrLocal: string | null,
+    overDataLocal: any,
+    mode: 'add' | 'reorder'
+  ): number {
+    // 0) Compatibilidade com OptimizedCanvasDropZone: ids no formato dnd-block-<blockId>
+    let cleanedOverId: string | null = overIdStrLocal;
+    if (cleanedOverId && cleanedOverId.startsWith('dnd-block-')) {
+      cleanedOverId = cleanedOverId.replace(/^dnd-block-/, '');
+    }
+    // 1) Preferir posição explícita vinda da drop-zone
+    const pos = overDataLocal?.position;
+    if (typeof pos === 'number' && Number.isFinite(pos)) {
+      return Math.max(0, Math.min(pos, currentStepData.length));
+    }
+
+    // 2) Pela convenção do ID drop-zone-<n>
+    if (overIdStrLocal) {
+      const m = overIdStrLocal.match(/^drop-zone-(\d+)$/);
+      if (m) return Math.max(0, Math.min(parseInt(m[1], 10), currentStepData.length));
+    }
+
+    // 3) Canvas root → final
+    if (
+      overIdStrLocal === 'canvas-drop-zone' ||
+      (overIdStrLocal &&
+        (overIdStrLocal.startsWith('canvas-drop-zone') || overIdStrLocal.startsWith('canvas-')))
+    ) {
+      return currentStepData.length;
+    }
+
+    // 4) Alvo é um bloco existente
+    if (cleanedOverId) {
+      const overIndex = currentStepData.findIndex(b => String(b.id) === cleanedOverId);
+      if (overIndex >= 0) return mode === 'add' ? overIndex + 1 : overIndex;
+    }
+
+    // 5) Fallback → final
+    return currentStepData.length;
+  }
+
+  // 🔗 Escutar eventos de navegação disparados pelos blocos (ex.: botão da etapa 1)
+  useEffect(() => {
+    const parseStepNumber = (stepId: unknown): number | null => {
+      if (typeof stepId === 'number') return stepId;
+      if (typeof stepId !== 'string') return null;
+      const digits = stepId.replace(/[^0-9]/g, '');
+      const num = parseInt(digits || stepId, 10);
+      return Number.isFinite(num) ? num : null;
+    };
+
+    const handleNavigate = (ev: Event) => {
+      const e = ev as CustomEvent<{ stepId?: string | number; source?: string }>;
+      const target = parseStepNumber(e.detail?.stepId);
+      if (!target || target < 1 || target > 21) return;
+      actions.setCurrentStep(target);
+      if (process.env.NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
+        console.log(
+          '➡️ EditorPro: navegação por evento',
+          e.detail?.stepId,
+          '→',
+          target,
+          'origem:',
+          e.detail?.source
+        );
+      }
+    };
+
+    window.addEventListener('navigate-to-step', handleNavigate as EventListener);
+    window.addEventListener('quiz-navigate-to-step', handleNavigate as EventListener);
+    return () => {
+      window.removeEventListener('navigate-to-step', handleNavigate as EventListener);
+      window.removeEventListener('quiz-navigate-to-step', handleNavigate as EventListener);
+    };
+  }, [actions]);
+
+  // Expor etapa atual globalmente para unificar comportamento de blocos (produção/edição)
+  useEffect(() => {
+    try {
+      (window as any).__quizCurrentStep = safeCurrentStep;
+    } catch {}
+  }, [safeCurrentStep]);
+
+  // Desabilitar auto-scroll e sincronização de scroll enquanto o editor estiver montado
+  useEffect(() => {
+    try {
+      (window as any).__DISABLE_AUTO_SCROLL = true;
+      (window as any).__DISABLE_SCROLL_SYNC = true;
+    } catch {}
+
+    return () => {
+      try {
+        (window as any).__DISABLE_AUTO_SCROLL = false;
+        (window as any).__DISABLE_SCROLL_SYNC = false;
+      } catch {}
+    };
+  }, []);
+
   // componentes disponíveis - ideal extrair para config
-  const availableComponents = useMemo(
+  const availableComponentsRaw = useMemo(
     () => [
       {
         type: 'quiz-intro-header',
@@ -252,10 +373,182 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
         category: 'Conversão',
         description: 'Call-to-action para ofertas especiais',
       },
+      // Extras de teste (catálogo ampliado)
+      {
+        type: 'headline',
+        name: 'Headline',
+        icon: '📰',
+        category: 'Extras',
+        description: 'Título destacado',
+      },
+      {
+        type: 'image',
+        name: 'Imagem',
+        icon: '🖼️',
+        category: 'Extras',
+        description: 'Imagem simples',
+      },
+      {
+        type: 'video',
+        name: 'Vídeo',
+        icon: '🎬',
+        category: 'Extras',
+        description: 'Vídeo incorporado',
+      },
+      {
+        type: 'spacer',
+        name: 'Espaçador',
+        icon: '↕️',
+        category: 'Extras',
+        description: 'Espaço vertical',
+      },
+      {
+        type: 'divider',
+        name: 'Divisor',
+        icon: '➖',
+        category: 'Extras',
+        description: 'Linha divisória',
+      },
+      {
+        type: 'container',
+        name: 'Container',
+        icon: '📦',
+        category: 'Extras',
+        description: 'Container de layout',
+      },
+      { type: 'grid', name: 'Grid', icon: '🔲', category: 'Extras', description: 'Layout em grid' },
+      {
+        type: 'two-column',
+        name: 'Duas Colunas',
+        icon: '🧱',
+        category: 'Extras',
+        description: 'Layout 2 colunas',
+      },
+      {
+        type: 'lead-form',
+        name: 'Form Lead',
+        icon: '✍️',
+        category: 'Extras',
+        description: 'Formulário de lead',
+      },
+      {
+        type: 'quiz-header',
+        name: 'Quiz Header',
+        icon: '🏁',
+        category: 'Extras',
+        description: 'Cabeçalho do quiz',
+      },
+      {
+        type: 'quiz-navigation',
+        name: 'Quiz Navegação',
+        icon: '🧭',
+        category: 'Extras',
+        description: 'Barra de navegação',
+      },
+      {
+        type: 'quiz-result-inline',
+        name: 'Resultado Inline',
+        icon: '📈',
+        category: 'Extras',
+        description: 'Resultado do quiz',
+      },
+      {
+        type: 'step-header-inline',
+        name: 'Header Etapa',
+        icon: '🔖',
+        category: 'Extras',
+        description: 'Cabeçalho de etapa',
+      },
+      {
+        type: 'style-result',
+        name: 'Resultado Estilo',
+        icon: '🎨',
+        category: 'Extras',
+        description: 'Resumo do estilo',
+      },
+      {
+        type: 'result-display',
+        name: 'Exibir Resultado',
+        icon: '🏆',
+        category: 'Extras',
+        description: 'Bloco de resultado',
+      },
+      {
+        type: 'faq',
+        name: 'FAQ',
+        icon: '❓',
+        category: 'Extras',
+        description: 'Perguntas frequentes',
+      },
+      {
+        type: 'pricing',
+        name: 'Pricing',
+        icon: '💵',
+        category: 'Extras',
+        description: 'Tabela de preços',
+      },
+      {
+        type: 'cta',
+        name: 'CTA',
+        icon: '📣',
+        category: 'Extras',
+        description: 'Chamada para ação',
+      },
+      {
+        type: 'offer-cta',
+        name: 'Oferta CTA',
+        icon: '🏷️',
+        category: 'Extras',
+        description: 'Oferta com CTA',
+      },
+      {
+        type: 'benefits',
+        name: 'Benefícios',
+        icon: '✅',
+        category: 'Extras',
+        description: 'Lista de benefícios',
+      },
+      {
+        type: 'testimonials',
+        name: 'Depoimentos',
+        icon: '🗣️',
+        category: 'Extras',
+        description: 'Seção de depoimentos',
+      },
+      {
+        type: 'testimonial',
+        name: 'Depoimento',
+        icon: '💬',
+        category: 'Extras',
+        description: 'Depoimento individual',
+      },
+      {
+        type: 'pricing-card-inline',
+        name: 'Card Pricing',
+        icon: '💳',
+        category: 'Extras',
+        description: 'Card de preço',
+      },
+      {
+        type: 'testimonial-card-inline',
+        name: 'Card Depoimento',
+        icon: '📝',
+        category: 'Extras',
+        description: 'Card de depoimento',
+      },
     ],
     []
   );
 
+  // Deduplicar por `type` para evitar draggables duplicados na sidebar
+  const availableComponents = useMemo(() => {
+    const seen = new Set<string>();
+    return availableComponentsRaw.filter(c => {
+      if (seen.has(c.type)) return false;
+      seen.add(c.type);
+      return true;
+    });
+  }, [availableComponentsRaw]);
   const groupedComponents = useMemo(
     () =>
       availableComponents.reduce(
@@ -285,53 +578,153 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
   // Handlers básicos
   const handleStepSelect = useCallback((step: number) => actions.setCurrentStep(step), [actions]);
 
+  // Handler seguro para adicionar nova etapa, com fallback caso actions.addStep não esteja tipado
+  const handleAddStep = useCallback(() => {
+    const maybeAddStep = (actions as any)?.addStep;
+    if (typeof maybeAddStep === 'function') {
+      maybeAddStep();
+      return;
+    }
+    // Fallback: calcula próximo índice e garante carregamento
+    const keys = Object.keys(state.stepBlocks || {});
+    const nums = keys
+      .map(k => {
+        const m = k.match(/(\d+)/);
+        return m ? parseInt(m[1], 10) : 0;
+      })
+      .filter(n => Number.isFinite(n) && n > 0);
+    const next = (nums.length > 0 ? Math.max(...nums) : 0) + 1;
+    actions.setCurrentStep(next);
+    actions.ensureStepLoaded(next);
+  }, [actions, state.stepBlocks]);
+
   // Duplicação inline é gerenciada no wrapper simples quando necessário
 
   // Drag handlers (reutilizam utilitários)
+  const isDebug = () => {
+    try {
+      // Vite: import.meta.env.DEV; fallback: NODE_ENV; override: window.__DND_DEBUG
+      return (
+        ((import.meta as any)?.env?.DEV ?? false) ||
+        (typeof process !== 'undefined' && (process as any)?.env?.NODE_ENV === 'development') ||
+        (typeof window !== 'undefined' && (window as any).__DND_DEBUG === true)
+      );
+    } catch {
+      return false;
+    }
+  };
+
+  // Throttle para logs de onDragOver em modo debug
+  const dragOverLogRef = React.useRef(0);
+
   const handleDragStart = useCallback((event: DragStartEvent) => {
     const { active } = event;
     const dragData = extractDragData(active);
-    console.log('🚀 DRAG START CAPTURADO!', {
-      activeId: active.id,
-      dragData,
-      activeDataCurrent: active.data.current,
-    });
+
+    // ✅ Log apenas em modo debug para não poluir/perf impactar
+    if (isDebug()) {
+      // eslint-disable-next-line no-console
+      console.log('🚀🚀🚀 DRAG START FUNCIONANDO! 🚀🚀🚀', {
+        activeId: active.id,
+        dragData,
+        activeDataCurrent: (active as any)?.data?.current,
+        timestamp: new Date().toISOString(),
+        event: event,
+      });
+    }
+
+    // Removido alert intrusivo durante drag start
+
+    if (isDebug()) {
+      // eslint-disable-next-line no-console
+      console.log('🎯 DragStart - dados completos:', event);
+    }
+
     logDragEvent('start', active);
     if (process.env.NODE_ENV === 'development') devLog('Drag start', dragData);
+
+    // ✅ Body-flag para desabilitar overlays/portais durante o drag
+    try {
+      document.body.classList.add('dnd-dragging');
+    } catch {}
   }, []);
 
+  const handleDragCancel = useCallback(() => {
+    try {
+      document.body.classList.remove('dnd-dragging');
+    } catch {}
+  }, []);
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event;
-      console.log('🎯 DRAG END CAPTURADO!', {
-        activeId: active.id,
-        overId: over?.id,
-        overData: over?.data?.current,
-      });
+      const activeIdStr = active?.id != null ? String(active.id) : null;
+      const overIdStr = over?.id != null ? String(over.id) : null;
+      const activeData = (active as any)?.data?.current;
+      const overData = (over as any)?.data?.current;
+      if (isDebug()) {
+        // eslint-disable-next-line no-console
+        console.groupCollapsed('🎯 DRAG END DEBUG');
+        // eslint-disable-next-line no-console
+        console.log('active.id:', activeIdStr);
+        // eslint-disable-next-line no-console
+        console.log('active.data.current:', activeData);
+        // eslint-disable-next-line no-console
+        console.log('over.id:', overIdStr);
+        // eslint-disable-next-line no-console
+        console.log('over.data.current:', overData);
+      }
 
       if (!over) {
-        console.log('❌ Drop cancelado - sem alvo');
+        // Sem alvo: para drags da sidebar, permitir append ao final; para reorder, cancelar
         const dragData = extractDragData(active);
+        if (dragData?.type === 'sidebar-component' && dragData.blockType) {
+          const newBlock = createBlockFromComponent(dragData.blockType as any, currentStepData);
+          const targetIndex = currentStepData.length;
+          actions.addBlockAtIndex(currentStepKey, newBlock, targetIndex);
+          actions.setSelectedBlockId(newBlock.id);
+          notification?.success?.(`Componente ${dragData.blockType} adicionado ao final!`);
+          if (isDebug()) console.groupEnd();
+          return;
+        }
+        if (isDebug()) console.warn('❌ Drop cancelado - sem alvo');
         const feedback = getDragFeedback(dragData, {
           isValid: false,
           message: 'Sem alvo de drop',
         } as any);
         notification?.warning?.(feedback.message);
+        if (isDebug()) console.groupEnd();
         return;
       }
 
       const validation = validateDrop(active, over, currentStepData);
+      if (isDebug()) {
+        // eslint-disable-next-line no-console
+        console.log('validateDrop →', validation);
+      }
       logDragEvent('end', active, over, validation);
 
       if (!validation.isValid) {
+        // 🔧 Fallback de curto prazo: se veio da sidebar, adiciona ao final para destravar o fluxo
+        const dragData = extractDragData(active);
+        if (dragData?.type === 'sidebar-component' && dragData.blockType) {
+          const newBlock = createBlockFromComponent(dragData.blockType as any, currentStepData);
+          const targetIndex = currentStepData.length;
+          actions.addBlockAtIndex(currentStepKey, newBlock, targetIndex);
+          actions.setSelectedBlockId(newBlock.id);
+          notification?.info?.(`(Fallback) Componente ${dragData.blockType} adicionado ao final.`);
+          if (isDebug()) console.groupEnd();
+          return;
+        }
         const feedback = getDragFeedback(extractDragData(active), validation);
         notification?.warning?.(feedback.message);
+        if (isDebug()) console.groupEnd();
         return;
       }
 
       const dragData = extractDragData(active);
       if (!dragData) {
         notification?.error?.('Dados de drag corrompidos');
+        console.groupEnd();
         return;
       }
 
@@ -340,19 +733,7 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
           case 'add':
             if (dragData.type === 'sidebar-component' && dragData.blockType) {
               const newBlock = createBlockFromComponent(dragData.blockType as any, currentStepData);
-              // Inserção precisa por posição quando drop-zone-<n>
-              let targetIndex = currentStepData.length;
-              if (typeof over.id === 'string') {
-                const m = over.id.match(/^drop-zone-(\d+)$/);
-                if (m)
-                  targetIndex = Math.max(0, Math.min(parseInt(m[1], 10), currentStepData.length));
-                else if (over.id === 'canvas-drop-zone') targetIndex = currentStepData.length;
-                else {
-                  // Se soltou sobre um bloco, inserir antes dele
-                  const overIndex = currentStepData.findIndex(b => b.id === over.id);
-                  if (overIndex >= 0) targetIndex = overIndex;
-                }
-              }
+              const targetIndex = getTargetIndexFromOver(overIdStr, overData, 'add');
               actions.addBlockAtIndex(currentStepKey, newBlock, targetIndex);
               actions.setSelectedBlockId(newBlock.id);
               notification?.success?.(
@@ -361,27 +742,17 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
             }
             break;
           case 'reorder':
-            if (dragData.type === 'canvas-block') {
+            if (dragData.type === 'canvas-block' || dragData.type === 'block') {
+              // Compat: Optimized usa id 'dnd-block-<blockId>'
+              const normalizedActiveId = activeIdStr?.startsWith('dnd-block-')
+                ? activeIdStr.replace(/^dnd-block-/, '')
+                : activeIdStr;
               const activeIndex = currentStepData.findIndex(
-                block => block.id === String(active.id)
+                block => String(block.id) === normalizedActiveId
               );
               if (activeIndex === -1) break;
 
-              let targetIndex = activeIndex;
-              if (over.id === 'canvas-drop-zone') {
-                targetIndex = currentStepData.length - 1;
-              } else if (typeof over.id === 'string') {
-                const m = over.id.match(/^drop-zone-(\d+)$/);
-                if (m) {
-                  targetIndex = Math.max(
-                    0,
-                    Math.min(parseInt(m[1], 10), currentStepData.length - 1)
-                  );
-                } else {
-                  const overIndex = currentStepData.findIndex(block => block.id === over.id);
-                  if (overIndex !== -1) targetIndex = overIndex;
-                }
-              }
+              const targetIndex = getTargetIndexFromOver(overIdStr, overData, 'reorder');
 
               if (activeIndex !== targetIndex) {
                 actions.reorderBlocks(currentStepKey, activeIndex, targetIndex);
@@ -396,6 +767,12 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
       } catch (error) {
         console.error('Erro durante drag & drop:', error);
         notification?.error?.('Erro ao processar drag & drop');
+      } finally {
+        // ✅ Remover body-flag ao finalizar drag
+        try {
+          document.body.classList.remove('dnd-dragging');
+        } catch {}
+        if (isDebug()) console.groupEnd();
       }
     },
     [actions, currentStepData, currentStepKey, notification]
@@ -406,15 +783,15 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
      ------------------------- */
 
   const StepSidebar: React.FC = () => (
-    <div className="w-[200px] bg-white border-r border-gray-200 flex flex-col">
+    <div className="w-[220px] bg-white border-r border-gray-200 flex flex-col">
       <div className="p-4 border-b border-gray-200">
         <h3 className="font-semibold text-sm text-gray-900">Etapas do Quiz</h3>
-        <p className="text-xs text-gray-500 mt-1">21 etapas configuradas</p>
+        <p className="text-xs text-gray-500 mt-1">Gerencie suas etapas</p>
       </div>
 
       <div className="flex-1 overflow-y-auto">
         <div className="p-2 space-y-1">
-          {Array.from({ length: 21 }, (_, i) => i + 1).map(step => {
+          {Array.from({ length: Math.max(21, safeCurrentStep, 1) }, (_, i) => i + 1).map(step => {
             const analysis = getStepAnalysis(step);
             const isActive = step === safeCurrentStep;
             const hasBlocks = stepHasBlocks[step];
@@ -448,11 +825,19 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
         </div>
       </div>
 
-      <div className="p-3 border-t border-gray-200 text-xs text-gray-500">
+      <div className="p-3 border-t border-gray-200 text-xs text-gray-700 space-y-2">
         <div className="flex items-center justify-between">
           <span>Etapa atual:</span>
-          <span className="font-medium">{safeCurrentStep}/21</span>
+          <span className="font-medium">{safeCurrentStep}</span>
         </div>
+        <button
+          type="button"
+          onClick={handleAddStep}
+          className="w-full text-center py-2 px-3 rounded-md bg-blue-600 text-white hover:bg-blue-700 text-xs font-medium"
+          title="Adicionar nova etapa"
+        >
+          + Nova etapa
+        </button>
       </div>
     </div>
   );
@@ -468,6 +853,33 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
 
       <div className="flex-1 overflow-y-auto">
         <div className="p-3">
+          {/* ✅ SEÇÃO DE TESTE - Versão Force vs Normal */}
+          <div className="mb-6 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <h4 className="text-xs font-semibold text-yellow-800 mb-2 uppercase tracking-wide">
+              🧪 TESTE DnD - Force vs Normal
+            </h4>
+            <div className="space-y-2">
+              <DraggableComponentItemForce
+                blockType="test-force"
+                title="TESTE Force Wrapper"
+                description="Usa ForceDraggableWrapper"
+                icon={<span className="text-lg">🧪</span>}
+                category="Teste"
+                className="bg-yellow-100 border-yellow-300"
+                idSuffix={String(safeCurrentStep)}
+              />
+              <DraggableComponentItem
+                blockType="test-normal"
+                title="TESTE Normal"
+                description="Usa implementação normal"
+                icon={<span className="text-lg">🔧</span>}
+                category="Teste"
+                className="bg-blue-100 border-blue-300"
+                idSuffix={String(safeCurrentStep)}
+              />
+            </div>
+          </div>
+
           {Object.entries(groupedComponents).map(([category, components]) => (
             <div key={category} className="mb-4">
               <h4 className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">
@@ -483,6 +895,7 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
                     icon={<span className="text-lg">{component.icon}</span>}
                     category={component.category}
                     className="bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-blue-300"
+                    idSuffix={String(safeCurrentStep)}
                   />
                 ))}
               </div>
@@ -684,51 +1097,18 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
         {/* Banner de modo removido */}
       </div>
 
-      {/* Área scrollável do canvas */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="w-full">
-          <div
-            className="mx-auto transition-all editor-pro-canvas"
-            style={{ width: viewportWidth as number | string, maxWidth: '100%' }}
-          >
-            <div className={cn('rounded-xl shadow-sm', viewport !== 'full' && 'border bg-white')}>
-              <div>
-                <QuizRenderer
-                  mode="preview"
-                  onStepChange={handleStepSelect}
-                  initialStep={safeCurrentStep}
-                  blocksOverride={currentStepData}
-                  currentStepOverride={safeCurrentStep}
-                  previewEditable
-                  selectedBlockId={state.selectedBlockId}
-                  onBlockClick={(id: string) => actions.setSelectedBlockId(id)}
-                />
-              </div>
-            </div>
-            <div className="text-xs mt-2 px-2">
-              Clique em um bloco no canvas para ver suas propriedades
-            </div>
-            <div className="mt-6 p-4 bg-gray-50 rounded-lg text-left">
-              <h4 className="text-sm font-medium text-gray-900 mb-3">
-                Estatísticas da Etapa {safeCurrentStep}
-              </h4>
-              <div className="space-y-2 text-xs">
-                <div className="flex justify-between">
-                  <span>Blocos configurados:</span>
-                  <span className="font-medium">{currentStepData.length}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Tipo da etapa:</span>
-                  <span className="font-medium">{getStepAnalysis(safeCurrentStep).label}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Função:</span>
-                  <span className="font-medium">{getStepAnalysis(safeCurrentStep).desc}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* Canvas principal com drag & drop - sistema unificado simples */}
+      <div className="flex-1 p-4" data-canvas-container>
+        <CanvasDropZone
+          blocks={currentStepData}
+          selectedBlockId={state.selectedBlockId}
+          onSelectBlock={actions.setSelectedBlockId}
+          onUpdateBlock={(id: string, updates: any) =>
+            actions.updateBlock(currentStepKey, id, updates)
+          }
+          onDeleteBlock={(id: string) => actions.removeBlock(currentStepKey, id)}
+          className="max-w-4xl mx-auto"
+        />
       </div>
     </div>
   );
@@ -757,6 +1137,103 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
     </div>
   );
 
+  // ✅ VERIFICAÇÃO CRÍTICA - Debug do DndContext
+  React.useEffect(() => {
+    if (isDebug()) {
+      // eslint-disable-next-line no-console
+      console.log('🎯 DndContext sendo montado no EditorPro');
+
+      // Injetar estilos de debug para visualizar droppables/handles
+      try {
+        const existing = document.getElementById('dnd-debug-styles');
+        if (!existing) {
+          const style = document.createElement('style');
+          style.id = 'dnd-debug-styles';
+          style.textContent = `
+            /* Highlight droppables e draggables em modo debug */
+            .editor-pro [data-dnd-kit-droppable] { outline: 1px dashed rgba(59,130,246,0.5); outline-offset: -2px; }
+            .editor-pro [data-dnd-dropzone-type] { outline: 1px dashed rgba(16,185,129,0.7); outline-offset: -2px; }
+            .editor-pro [data-dnd-kit-draggable-handle] { box-shadow: 0 0 0 2px rgba(99,102,241,0.5) inset; }
+          `;
+          document.head.appendChild(style);
+        }
+      } catch {}
+
+      // Verificar elementos DnD após renderização
+      setTimeout(() => {
+        const draggables = document.querySelectorAll('[data-dnd-kit-draggable-handle]');
+        const droppables = document.querySelectorAll('[data-dnd-kit-droppable]');
+        // eslint-disable-next-line no-console
+        console.log('🔍 CONTAGEM DnD após montagem:', {
+          draggables: draggables.length,
+          droppables: droppables.length,
+          draggableIds: Array.from(draggables).map(el => el.id),
+          droppableIds: Array.from(droppables).map(el => el.id),
+        });
+
+        // Logs de camadas/estilos do canvas e dropzones
+        const canvasRoots = document.querySelectorAll('[data-id="canvas-drop-zone"]');
+        if (canvasRoots.length > 1) {
+          console.warn(
+            `⚠️ Há ${canvasRoots.length} canvas roots com data-id="canvas-drop-zone". Mantenha apenas um por tela.`
+          );
+        }
+        const canvasRoot = (canvasRoots[0] as HTMLElement) || null;
+        if (canvasRoot) {
+          const cs = window.getComputedStyle(canvasRoot);
+          console.log('🎨 Canvas styles:', {
+            pointerEvents: cs.pointerEvents,
+            overflow: cs.overflow,
+            overflowY: cs.overflowY,
+            position: cs.position,
+            zIndex: cs.zIndex,
+            rect: canvasRoot.getBoundingClientRect(),
+          });
+        } else {
+          console.warn('⚠️ Canvas root não encontrado (data-id=canvas-drop-zone)');
+        }
+
+        const zones = document.querySelectorAll('[data-dnd-dropzone-type]');
+        zones.forEach((z: Element) => {
+          const el = z as HTMLElement;
+          const cs = window.getComputedStyle(el);
+          console.log(
+            '🧩 DropZone:',
+            el.getAttribute('data-dnd-dropzone-type'),
+            el.getAttribute('data-position'),
+            {
+              rect: el.getBoundingClientRect(),
+              pointerEvents: cs.pointerEvents,
+              zIndex: cs.zIndex,
+              visibility: cs.visibility,
+            }
+          );
+        });
+
+        if (draggables.length === 0) {
+          // eslint-disable-next-line no-console
+          console.error('❌ NENHUM ELEMENTO DRAGGABLE ENCONTRADO! Problema na renderização.');
+        } else {
+          // eslint-disable-next-line no-console
+          console.log('✅ Elementos draggable encontrados, testando eventos...');
+
+          // Testar eventos no primeiro draggable
+          const firstDraggable = draggables[0];
+          if (firstDraggable) {
+            firstDraggable.addEventListener(
+              'mousedown',
+              () => {
+                // eslint-disable-next-line no-console
+                console.log('🖱️ MouseDown funcionando no primeiro draggable!');
+              },
+              { once: true }
+            );
+          }
+        }
+      }, 1000);
+    }
+  }, []);
+
   /* -------------------------
      Render principal
      ------------------------- */
@@ -766,6 +1243,24 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
         sensors={sensors}
         collisionDetection={collisionDetectionStrategy}
         onDragStart={handleDragStart}
+        onDragCancel={handleDragCancel}
+        onDragOver={event => {
+          if (isDebug()) {
+            // Throttle leve: logar no máximo a cada ~200ms
+            const now = Date.now();
+            const last = dragOverLogRef.current || 0;
+            if (now - last > 200) {
+              // eslint-disable-next-line no-console
+              console.log('🎯 DragOver', {
+                overId: event.over?.id,
+                activeId: event.active?.id,
+                ts: new Date().toISOString(),
+              });
+              dragOverLogRef.current = now;
+            }
+          }
+          // Sem logDragEvent para over pois não existe esse tipo
+        }}
         onDragEnd={handleDragEnd}
       >
         <div className={`editor-pro h-screen bg-gray-50 flex ${className}`}>
@@ -774,6 +1269,9 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
           <CanvasArea />
           <PropertiesColumn />
         </div>
+
+        {/* Monitor de debug em tempo real (apenas debug) */}
+        {isDebug() ? <DnDMonitor /> : null}
       </DndContext>
 
       {NotificationContainer ? <NotificationContainer /> : null}

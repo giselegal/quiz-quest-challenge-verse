@@ -9,8 +9,12 @@ import { AuthProvider } from './context/AuthContext';
 // 🎯 PÁGINAS ESSENCIAIS - SEM CONFLITOS
 const Home = lazy(() => import('./pages/Home'));
 const AuthPage = lazy(() => import('./pages/AuthPage'));
-const MainEditor = lazy(() => import('./pages/MainEditor'));
+// Import estático para evitar falhas de dynamic import em alguns ambientes (ex.: Lovable)
+import MainEditor from './pages/MainEditor';
 const DashboardPage = lazy(() => import('./pages/admin/DashboardPage'));
+const StepPage = lazy(() => import('./pages/StepPage'));
+// ✅ Página de publicação com HTML configurado (cliente final)
+const PublishedQuizPage = lazy(() => import('./pages/quiz-descubra-seu-estilo'));
 
 // Loading component
 const PageLoading = () => (
@@ -42,9 +46,8 @@ function App() {
 
                 {/* 🎯 EDITOR PRINCIPAL ÚNICO - SEM ANINHAMENTO */}
                 <Route path="/editor">
-                  <Suspense fallback={<PageLoading />}>
-                    <MainEditor />
-                  </Suspense>
+                  {/* MainEditor importado estaticamente para maior estabilidade */}
+                  <MainEditor />
                 </Route>
 
                 {/* 🔐 AUTENTICAÇÃO */}
@@ -54,7 +57,41 @@ function App() {
                   </Suspense>
                 </Route>
 
-                {/* Rotas de quiz desativadas temporariamente para evitar conflitos de DnD */}
+                {/* � Compat: Redirecionar acessos legados para manter apenas /editor */}
+                <Route path="/MainEditor">
+                  {() => {
+                    if (typeof window !== 'undefined') window.location.replace('/editor');
+                    return null;
+                  }}
+                </Route>
+                <Route path="/main-editor">
+                  {() => {
+                    if (typeof window !== 'undefined') window.location.replace('/editor');
+                    return null;
+                  }}
+                </Route>
+
+                {/* �🔀 Compat: Redirecionar /quiz-modular para a versão publicada (/quiz) para evitar duplicidade com /editor */}
+                <Route path="/quiz-modular">
+                  {() => {
+                    if (typeof window !== 'undefined') window.location.replace('/quiz');
+                    return null;
+                  }}
+                </Route>
+
+                {/* 🌐 VERSÃO PUBLICADA SEM COLUNAS (HTML configurado) */}
+                <Route path="/quiz">
+                  <Suspense fallback={<PageLoading />}>
+                    <PublishedQuizPage />
+                  </Suspense>
+                </Route>
+
+                {/* 👁️ PREVIEW POR ETAPA DO EDITOR */}
+                <Route path="/step/:step">
+                  <Suspense fallback={<PageLoading />}>
+                    <StepPage />
+                  </Suspense>
+                </Route>
 
                 {/* 📊 DASHBOARD ADMINISTRATIVO */}
                 <ProtectedRoute path="/admin" component={DashboardPage} requireAuth={true} />
