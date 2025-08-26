@@ -125,13 +125,13 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
     });
   }
 
-  // DnD sensors - configuração balanceada para UX otimizada
+  // DnD sensors - configuração ULTRA sensível para garantir funcionamento (alinhado ao commit bom)
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 8, // 8px mínimo para evitar drag acidental
-        delay: 100, // 100ms delay para touch devices
-        tolerance: 5, // Tolerância para movements
+        distance: 0, // imediato
+        delay: 0,
+        tolerance: 0,
       },
     }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
@@ -621,17 +621,14 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
     const { active } = event;
     const dragData = extractDragData(active);
 
-    // ✅ Log apenas em modo debug para não poluir/perf impactar
-    if (isDebug()) {
-      // eslint-disable-next-line no-console
-      console.log('🚀🚀🚀 DRAG START FUNCIONANDO! 🚀🚀🚀', {
-        activeId: active.id,
-        dragData,
-        activeDataCurrent: (active as any)?.data?.current,
-        timestamp: new Date().toISOString(),
-        event: event,
-      });
-    }
+    // Log crítico sempre visível para diagnosticar início do drag
+    // eslint-disable-next-line no-console
+    console.log('🚀 DRAG START', {
+      activeId: active.id,
+      dragData,
+      activeDataCurrent: (active as any)?.data?.current,
+      timestamp: new Date().toISOString(),
+    });
 
     // Removido alert intrusivo durante drag start
 
@@ -661,18 +658,19 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
       const overIdStr = over?.id != null ? String(over.id) : null;
       const activeData = (active as any)?.data?.current;
       const overData = (over as any)?.data?.current;
-      if (isDebug()) {
-        // eslint-disable-next-line no-console
-        console.groupCollapsed('🎯 DRAG END DEBUG');
-        // eslint-disable-next-line no-console
-        console.log('active.id:', activeIdStr);
-        // eslint-disable-next-line no-console
-        console.log('active.data.current:', activeData);
-        // eslint-disable-next-line no-console
-        console.log('over.id:', overIdStr);
-        // eslint-disable-next-line no-console
-        console.log('over.data.current:', overData);
-      }
+      // Log sempre visível de fim de drag
+      // eslint-disable-next-line no-console
+      console.groupCollapsed('🎯 DRAG END');
+      // eslint-disable-next-line no-console
+      console.log('active.id:', activeIdStr);
+      // eslint-disable-next-line no-console
+      console.log('active.data.current:', activeData);
+      // eslint-disable-next-line no-console
+      console.log('over.id:', overIdStr);
+      // eslint-disable-next-line no-console
+      console.log('over.data.current:', overData);
+
+      let handled = false;
 
       if (!over) {
         // Sem alvo: para drags da sidebar, permitir append ao final; para reorder, cancelar
@@ -683,24 +681,23 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
           actions.addBlockAtIndex(currentStepKey, newBlock, targetIndex);
           actions.setSelectedBlockId(newBlock.id);
           notification?.success?.(`Componente ${dragData.blockType} adicionado ao final!`);
-          if (isDebug()) console.groupEnd();
+          handled = true;
+          console.groupEnd();
           return;
         }
-        if (isDebug()) console.warn('❌ Drop cancelado - sem alvo');
+        console.warn('❌ Drop cancelado - sem alvo');
         const feedback = getDragFeedback(dragData, {
           isValid: false,
           message: 'Sem alvo de drop',
         } as any);
         notification?.warning?.(feedback.message);
-        if (isDebug()) console.groupEnd();
+        console.groupEnd();
         return;
       }
 
       const validation = validateDrop(active, over, currentStepData);
-      if (isDebug()) {
-        // eslint-disable-next-line no-console
-        console.log('validateDrop →', validation);
-      }
+      // eslint-disable-next-line no-console
+      console.log('validateDrop →', validation);
       logDragEvent('end', active, over, validation);
 
       if (!validation.isValid) {
@@ -712,12 +709,13 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
           actions.addBlockAtIndex(currentStepKey, newBlock, targetIndex);
           actions.setSelectedBlockId(newBlock.id);
           notification?.info?.(`(Fallback) Componente ${dragData.blockType} adicionado ao final.`);
-          if (isDebug()) console.groupEnd();
+          handled = true;
+          console.groupEnd();
           return;
         }
         const feedback = getDragFeedback(extractDragData(active), validation);
         notification?.warning?.(feedback.message);
-        if (isDebug()) console.groupEnd();
+        console.groupEnd();
         return;
       }
 
@@ -739,6 +737,7 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
               notification?.success?.(
                 `Componente ${dragData.blockType} adicionado na posição ${targetIndex}!`
               );
+              handled = true;
             }
             break;
           case 'reorder':
@@ -758,6 +757,7 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
                 actions.reorderBlocks(currentStepKey, activeIndex, targetIndex);
                 notification?.info?.(`Bloco movido para a posição ${targetIndex}`);
               }
+              handled = true;
             }
             break;
           default:
@@ -772,7 +772,17 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
         try {
           document.body.classList.remove('dnd-dragging');
         } catch {}
-        if (isDebug()) console.groupEnd();
+        // Fallback final garantido: se veio da sidebar e nada foi feito, adiciona ao final
+        if (!handled) {
+          const data = extractDragData(active);
+          if (data?.type === 'sidebar-component' && data.blockType) {
+            const nb = createBlockFromComponent(data.blockType as any, currentStepData);
+            actions.addBlockAtIndex(currentStepKey, nb, currentStepData.length);
+            actions.setSelectedBlockId(nb.id);
+            console.warn('[DnD] Fallback final aplicado: componente adicionado ao final.');
+          }
+        }
+        console.groupEnd();
       }
     },
     [actions, currentStepData, currentStepKey, notification]
