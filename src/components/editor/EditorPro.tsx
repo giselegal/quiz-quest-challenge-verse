@@ -1,3 +1,4 @@
+import { makeStepKey } from '@/utils/stepKey';
 import {
   closestCenter,
   DndContext,
@@ -99,7 +100,7 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const safeCurrentStep = state.currentStep || 1;
-  const currentStepKey = `step-${safeCurrentStep}`;
+  const currentStepKey = makeStepKey(safeCurrentStep);
 
   const currentStepData = useMemo(
     () => getBlocksForStep(safeCurrentStep, state.stepBlocks) || [],
