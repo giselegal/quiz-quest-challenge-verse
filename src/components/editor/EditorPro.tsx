@@ -16,6 +16,7 @@ import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } fr
 import { getBlocksForStep } from '../../config/quizStepsComplete';
 import { cn } from '../../lib/utils';
 import '../../styles/dnd-fixes.css'; // ✅ CSS de força bruta para DnD
+import { TemplateManager } from '@/utils/TemplateManager';
 import { Block } from '../../types/editor';
 import {
   extractDragData,
@@ -1188,9 +1189,62 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
               </button>
             </div>
 
-            <button className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors">
-              💾 Salvar
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors"
+                title="Publicar etapa atual"
+                onClick={() => {
+                  try {
+                    const stepId = currentStepKey;
+                    const blocks = currentStepData;
+                    TemplateManager.publishStep(stepId, blocks as any);
+                    notification?.success?.('Etapa publicada! /quiz refletirá esta versão.');
+                  } catch (err) {
+                    console.error('Falha ao salvar/publicar etapa:', err);
+                    notification?.error?.('Erro ao salvar/publicar etapa');
+                  }
+                }}
+              >
+                💾 Salvar
+              </button>
+              <button
+                className="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm rounded-md hover:bg-gray-50 transition-colors"
+                title="Remover publicação da etapa atual"
+                onClick={() => {
+                  try {
+                    TemplateManager.unpublishStep(currentStepKey);
+                    notification?.info?.('Publicação da etapa removida. Voltará ao template base.');
+                  } catch (err) {
+                    console.error('Falha ao despublicar etapa:', err);
+                    notification?.error?.('Erro ao despublicar etapa');
+                  }
+                }}
+              >
+                ⏏️ Despublicar
+              </button>
+              <button
+                className="px-4 py-2 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 transition-colors"
+                title="Publicar todas as etapas com conteúdo"
+                onClick={() => {
+                  try {
+                    const entries = Object.entries(state.stepBlocks || {});
+                    let published = 0;
+                    for (const [key, blocks] of entries) {
+                      if (Array.isArray(blocks) && blocks.length > 0) {
+                        TemplateManager.publishStep(key, blocks as any);
+                        published += 1;
+                      }
+                    }
+                    notification?.success?.(`Publicadas ${published} etapas com conteúdo.`);
+                  } catch (err) {
+                    console.error('Falha ao publicar todas as etapas:', err);
+                    notification?.error?.('Erro ao publicar todas as etapas');
+                  }
+                }}
+              >
+                🚀 Publicar tudo
+              </button>
+            </div>
           </div>
         </div>
 
