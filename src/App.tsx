@@ -1,18 +1,19 @@
-import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-import { ThemeProvider } from '@/components/theme-provider';
-import { LoadingFallback } from '@/components/ui/loading-fallback';
-import { Toaster } from '@/components/ui/toaster';
-import { AuthProvider } from '@/context/AuthContext';
 import { Suspense, lazy } from 'react';
 import { Route, Router, Switch } from 'wouter';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { ThemeProvider } from './components/theme-provider';
+import { LoadingFallback } from './components/ui/loading-fallback';
+import { Toaster } from './components/ui/toaster';
+import { AuthProvider } from './context/AuthContext';
 
 // 🎯 PÁGINAS ESSENCIAIS - SEM CONFLITOS
 const Home = lazy(() => import('./pages/Home'));
 const AuthPage = lazy(() => import('./pages/AuthPage'));
-const QuizModularPage = lazy(() => import('./pages/QuizModularPage'));
-const MainEditor = lazy(() => import('./pages/MainEditor'));
-const QuizIntegratedPage = lazy(() => import('./pages/QuizIntegratedPage'));
+// Import estático para evitar falhas de dynamic import em alguns ambientes (ex.: Lovable)
+import MainEditor from './pages/MainEditor';
 const DashboardPage = lazy(() => import('./pages/admin/DashboardPage'));
+// ✅ Página de publicação com HTML configurado (cliente final)
+const PublishedQuizPage = lazy(() => import('./pages/quiz-descubra-seu-estilo'));
 
 // Loading component
 const PageLoading = () => (
@@ -44,9 +45,8 @@ function App() {
 
                 {/* 🎯 EDITOR PRINCIPAL ÚNICO - SEM ANINHAMENTO */}
                 <Route path="/editor">
-                  <Suspense fallback={<PageLoading />}>
-                    <MainEditor />
-                  </Suspense>
+                  {/* MainEditor importado estaticamente para maior estabilidade */}
+                  <MainEditor />
                 </Route>
 
                 {/* 🔐 AUTENTICAÇÃO */}
@@ -56,17 +56,18 @@ function App() {
                   </Suspense>
                 </Route>
 
-                {/* 🎮 QUIZ DE PRODUÇÃO */}
-                <Route path="/quiz">
-                  <Suspense fallback={<PageLoading />}>
-                    <QuizModularPage />
-                  </Suspense>
+                {/* 🔀 Compat: Redirecionar /quiz-modular para a versão publicada (/quiz) para evitar duplicidade com /editor */}
+                <Route path="/quiz-modular">
+                  {() => {
+                    if (typeof window !== 'undefined') window.location.replace('/quiz');
+                    return null;
+                  }}
                 </Route>
 
-                {/* 🎯 QUIZ INTEGRADO */}
-                <Route path="/quiz-integrated">
+                {/* 🌐 VERSÃO PUBLICADA SEM COLUNAS (HTML configurado) */}
+                <Route path="/quiz">
                   <Suspense fallback={<PageLoading />}>
-                    <QuizIntegratedPage />
+                    <PublishedQuizPage />
                   </Suspense>
                 </Route>
 
