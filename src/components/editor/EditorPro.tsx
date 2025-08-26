@@ -1,40 +1,20 @@
-import {
-  closestCenter,
-  DndContext,
-  DragEndEvent,
-  DragStartEvent,
-  KeyboardSensor,
-  PointerSensor,
-  pointerWithin,
-  rectIntersection,
-  useSensor,
-  useSensors,
-} from '@dnd-kit/core';
-import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { getBlocksForStep } from '../../config/quizStepsComplete';
 import { cn } from '../../lib/utils';
 import '../../styles/dnd-fixes.css'; // ✅ CSS de força bruta para DnD
 import { Block } from '../../types/editor';
 import {
-  extractDragData,
-  getDragFeedback,
-  logDragEvent,
-  validateDrop,
-} from '../../utils/dragDropUtils';
-import {
   copyToClipboard,
-  createBlockFromComponent,
   devLog,
   validateEditorJSON,
 } from '../../utils/editorUtils';
 import { useNotification } from '../ui/Notification';
 import { CanvasDropZone } from './canvas/CanvasDropZone.simple';
 import { DnDMonitor } from './debug/DnDMonitor';
+import { DndProvider } from './dnd/DndProvider';
 import { DraggableComponentItem } from './dnd/DraggableComponentItem';
 import { DraggableComponentItemForce } from './dnd/DraggableComponentItemForce';
 import { useEditor } from './EditorProvider';
-// import { SortableBlock } from './SortableBlock';
 
 /**
  * EditorPro - versão modularizada / otimizada do QuizEditorPro
@@ -42,7 +22,8 @@ import { useEditor } from './EditorProvider';
  * Principais mudanças:
  * - Modularização das colunas (facilita testes e lazy-loading)
  * - Lazy-load do painel de propriedades (reduz TTI/hidratação)
- * - Preserva DnD e lógica existente (reaproveite handlers)
+ * - Drag & Drop agora centralizado no DndProvider
+ * - Interface limpa e responsiva
  *
  * Observações de otimização sugeridas:
  * - Virtualizar a lista de etapas se houver muitas etapas
@@ -91,7 +72,6 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
 
   const { state, actions } = editorContext;
   const [viewport, setViewport] = useState<'full' | 'sm' | 'md' | 'lg'>('full');
-  // viewportWidth não está sendo usado diretamente; manter lógica simples só com state 'viewport'
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [customTitle, setCustomTitle] = useState('Quiz Quest - Editor Principal');
   const notification = useNotification();
@@ -123,102 +103,6 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
       currentStepKey,
       totalBlocks: currentStepData.length,
     });
-  }
-
-  // DnD sensors - configuração balanceada para UX otimizada
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 8, // 8px mínimo para evitar drag acidental
-        delay: 100, // 100ms delay para touch devices
-        tolerance: 5, // Tolerância para movements
-      },
-    }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
-  );
-
-  // Collision detection strategy com assinatura correta
-  const collisionDetectionStrategy = useCallback((args: any) => {
-    // Para itens da sidebar, priorize pointerWithin para "enxergar" o canvas e zonas grandes
-    try {
-      const activeType = extractDragData(args?.active)?.type;
-      if (activeType === 'sidebar-component') {
-        const pointerCollisions = pointerWithin(args);
-        if (pointerCollisions && pointerCollisions.length > 0) return pointerCollisions;
-        // fallback seguro
-        return closestCenter(args);
-      }
-    } catch (err) {
-      if (process.env.NODE_ENV === 'development') {
-        // eslint-disable-next-line no-console
-        console.debug('collisionDetection (sidebar) erro:', err);
-      }
-    }
-
-    // Para reordenação de blocos do canvas, mantenha estratégia mais precisa
-    try {
-      const collisions = rectIntersection(args);
-      if (collisions && collisions.length > 0) return collisions;
-    } catch (err) {
-      if (process.env.NODE_ENV === 'development') {
-        // eslint-disable-next-line no-console
-        console.debug('rectIntersection erro:', err);
-      }
-    }
-
-    try {
-      const pointerCollisions = pointerWithin(args);
-      if (pointerCollisions && pointerCollisions.length > 0) return pointerCollisions;
-    } catch (err) {
-      if (process.env.NODE_ENV === 'development') {
-        // eslint-disable-next-line no-console
-        console.debug('pointerWithin erro:', err);
-      }
-    }
-
-    return closestCenter(args);
-  }, []);
-
-  // Helper centralizado: calcula índice alvo com base no alvo de drop
-  function getTargetIndexFromOver(
-    overIdStrLocal: string | null,
-    overDataLocal: any,
-    mode: 'add' | 'reorder'
-  ): number {
-    // 0) Compatibilidade com OptimizedCanvasDropZone: ids no formato dnd-block-<blockId>
-    let cleanedOverId: string | null = overIdStrLocal;
-    if (cleanedOverId && cleanedOverId.startsWith('dnd-block-')) {
-      cleanedOverId = cleanedOverId.replace(/^dnd-block-/, '');
-    }
-    // 1) Preferir posição explícita vinda da drop-zone
-    const pos = overDataLocal?.position;
-    if (typeof pos === 'number' && Number.isFinite(pos)) {
-      return Math.max(0, Math.min(pos, currentStepData.length));
-    }
-
-    // 2) Pela convenção do ID drop-zone-<n>
-    if (overIdStrLocal) {
-      const m = overIdStrLocal.match(/^drop-zone-(\d+)$/);
-      if (m) return Math.max(0, Math.min(parseInt(m[1], 10), currentStepData.length));
-    }
-
-    // 3) Canvas root → final
-    if (
-      overIdStrLocal === 'canvas-drop-zone' ||
-      (overIdStrLocal &&
-        (overIdStrLocal.startsWith('canvas-drop-zone') || overIdStrLocal.startsWith('canvas-')))
-    ) {
-      return currentStepData.length;
-    }
-
-    // 4) Alvo é um bloco existente
-    if (cleanedOverId) {
-      const overIndex = currentStepData.findIndex(b => String(b.id) === cleanedOverId);
-      if (overIndex >= 0) return mode === 'add' ? overIndex + 1 : overIndex;
-    }
-
-    // 5) Fallback → final
-    return currentStepData.length;
   }
 
   // 🔗 Escutar eventos de navegação disparados pelos blocos (ex.: botão da etapa 1)
@@ -549,6 +433,7 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
       return true;
     });
   }, [availableComponentsRaw]);
+  
   const groupedComponents = useMemo(
     () =>
       availableComponents.reduce(
@@ -597,186 +482,6 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
     actions.setCurrentStep(next);
     actions.ensureStepLoaded(next);
   }, [actions, state.stepBlocks]);
-
-  // Duplicação inline é gerenciada no wrapper simples quando necessário
-
-  // Drag handlers (reutilizam utilitários)
-  const isDebug = () => {
-    try {
-      // Vite: import.meta.env.DEV; fallback: NODE_ENV; override: window.__DND_DEBUG
-      return (
-        ((import.meta as any)?.env?.DEV ?? false) ||
-        (typeof process !== 'undefined' && (process as any)?.env?.NODE_ENV === 'development') ||
-        (typeof window !== 'undefined' && (window as any).__DND_DEBUG === true)
-      );
-    } catch {
-      return false;
-    }
-  };
-
-  // Throttle para logs de onDragOver em modo debug
-  const dragOverLogRef = React.useRef(0);
-
-  const handleDragStart = useCallback((event: DragStartEvent) => {
-    const { active } = event;
-    const dragData = extractDragData(active);
-
-    // ✅ Log apenas em modo debug para não poluir/perf impactar
-    if (isDebug()) {
-      // eslint-disable-next-line no-console
-      console.log('🚀🚀🚀 DRAG START FUNCIONANDO! 🚀🚀🚀', {
-        activeId: active.id,
-        dragData,
-        activeDataCurrent: (active as any)?.data?.current,
-        timestamp: new Date().toISOString(),
-        event: event,
-      });
-    }
-
-    // Removido alert intrusivo durante drag start
-
-    if (isDebug()) {
-      // eslint-disable-next-line no-console
-      console.log('🎯 DragStart - dados completos:', event);
-    }
-
-    logDragEvent('start', active);
-    if (process.env.NODE_ENV === 'development') devLog('Drag start', dragData);
-
-    // ✅ Body-flag para desabilitar overlays/portais durante o drag
-    try {
-      document.body.classList.add('dnd-dragging');
-    } catch {}
-  }, []);
-
-  const handleDragCancel = useCallback(() => {
-    try {
-      document.body.classList.remove('dnd-dragging');
-    } catch {}
-  }, []);
-  const handleDragEnd = useCallback(
-    (event: DragEndEvent) => {
-      const { active, over } = event;
-      const activeIdStr = active?.id != null ? String(active.id) : null;
-      const overIdStr = over?.id != null ? String(over.id) : null;
-      const activeData = (active as any)?.data?.current;
-      const overData = (over as any)?.data?.current;
-      if (isDebug()) {
-        // eslint-disable-next-line no-console
-        console.groupCollapsed('🎯 DRAG END DEBUG');
-        // eslint-disable-next-line no-console
-        console.log('active.id:', activeIdStr);
-        // eslint-disable-next-line no-console
-        console.log('active.data.current:', activeData);
-        // eslint-disable-next-line no-console
-        console.log('over.id:', overIdStr);
-        // eslint-disable-next-line no-console
-        console.log('over.data.current:', overData);
-      }
-
-      if (!over) {
-        // Sem alvo: para drags da sidebar, permitir append ao final; para reorder, cancelar
-        const dragData = extractDragData(active);
-        if (dragData?.type === 'sidebar-component' && dragData.blockType) {
-          const newBlock = createBlockFromComponent(dragData.blockType as any, currentStepData);
-          const targetIndex = currentStepData.length;
-          actions.addBlockAtIndex(currentStepKey, newBlock, targetIndex);
-          actions.setSelectedBlockId(newBlock.id);
-          notification?.success?.(`Componente ${dragData.blockType} adicionado ao final!`);
-          if (isDebug()) console.groupEnd();
-          return;
-        }
-        if (isDebug()) console.warn('❌ Drop cancelado - sem alvo');
-        const feedback = getDragFeedback(dragData, {
-          isValid: false,
-          message: 'Sem alvo de drop',
-        } as any);
-        notification?.warning?.(feedback.message);
-        if (isDebug()) console.groupEnd();
-        return;
-      }
-
-      const validation = validateDrop(active, over, currentStepData);
-      if (isDebug()) {
-        // eslint-disable-next-line no-console
-        console.log('validateDrop →', validation);
-      }
-      logDragEvent('end', active, over, validation);
-
-      if (!validation.isValid) {
-        // 🔧 Fallback de curto prazo: se veio da sidebar, adiciona ao final para destravar o fluxo
-        const dragData = extractDragData(active);
-        if (dragData?.type === 'sidebar-component' && dragData.blockType) {
-          const newBlock = createBlockFromComponent(dragData.blockType as any, currentStepData);
-          const targetIndex = currentStepData.length;
-          actions.addBlockAtIndex(currentStepKey, newBlock, targetIndex);
-          actions.setSelectedBlockId(newBlock.id);
-          notification?.info?.(`(Fallback) Componente ${dragData.blockType} adicionado ao final.`);
-          if (isDebug()) console.groupEnd();
-          return;
-        }
-        const feedback = getDragFeedback(extractDragData(active), validation);
-        notification?.warning?.(feedback.message);
-        if (isDebug()) console.groupEnd();
-        return;
-      }
-
-      const dragData = extractDragData(active);
-      if (!dragData) {
-        notification?.error?.('Dados de drag corrompidos');
-        console.groupEnd();
-        return;
-      }
-
-      try {
-        switch (validation.action) {
-          case 'add':
-            if (dragData.type === 'sidebar-component' && dragData.blockType) {
-              const newBlock = createBlockFromComponent(dragData.blockType as any, currentStepData);
-              const targetIndex = getTargetIndexFromOver(overIdStr, overData, 'add');
-              actions.addBlockAtIndex(currentStepKey, newBlock, targetIndex);
-              actions.setSelectedBlockId(newBlock.id);
-              notification?.success?.(
-                `Componente ${dragData.blockType} adicionado na posição ${targetIndex}!`
-              );
-            }
-            break;
-          case 'reorder':
-            if (dragData.type === 'canvas-block' || dragData.type === 'block') {
-              // Compat: Optimized usa id 'dnd-block-<blockId>'
-              const normalizedActiveId = activeIdStr?.startsWith('dnd-block-')
-                ? activeIdStr.replace(/^dnd-block-/, '')
-                : activeIdStr;
-              const activeIndex = currentStepData.findIndex(
-                block => String(block.id) === normalizedActiveId
-              );
-              if (activeIndex === -1) break;
-
-              const targetIndex = getTargetIndexFromOver(overIdStr, overData, 'reorder');
-
-              if (activeIndex !== targetIndex) {
-                actions.reorderBlocks(currentStepKey, activeIndex, targetIndex);
-                notification?.info?.(`Bloco movido para a posição ${targetIndex}`);
-              }
-            }
-            break;
-          default:
-            if (process.env.NODE_ENV === 'development')
-              devLog('Ação de drop não implementada:', validation.action);
-        }
-      } catch (error) {
-        console.error('Erro durante drag & drop:', error);
-        notification?.error?.('Erro ao processar drag & drop');
-      } finally {
-        // ✅ Remover body-flag ao finalizar drag
-        try {
-          document.body.classList.remove('dnd-dragging');
-        } catch {}
-        if (isDebug()) console.groupEnd();
-      }
-    },
-    [actions, currentStepData, currentStepKey, notification]
-  );
 
   /* -------------------------
      Sub-componentes locais
@@ -1030,8 +735,6 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
               </button>
             </div>
 
-            {/* Alternância de modo removida: somente preview */}
-
             {/* Seletor de viewport responsivo */}
             <div className="flex bg-gray-100 rounded-lg p-1">
               <button
@@ -1093,8 +796,6 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
             </button>
           </div>
         </div>
-
-        {/* Banner de modo removido */}
       </div>
 
       {/* Canvas principal com drag & drop - sistema unificado simples */}
@@ -1137,142 +838,22 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
     </div>
   );
 
-  // ✅ VERIFICAÇÃO CRÍTICA - Debug do DndContext
-  React.useEffect(() => {
-    if (isDebug()) {
-      // eslint-disable-next-line no-console
-      console.log('🎯 DndContext sendo montado no EditorPro');
-
-      // Injetar estilos de debug para visualizar droppables/handles
-      try {
-        const existing = document.getElementById('dnd-debug-styles');
-        if (!existing) {
-          const style = document.createElement('style');
-          style.id = 'dnd-debug-styles';
-          style.textContent = `
-            /* Highlight droppables e draggables em modo debug */
-            .editor-pro [data-dnd-kit-droppable] { outline: 1px dashed rgba(59,130,246,0.5); outline-offset: -2px; }
-            .editor-pro [data-dnd-dropzone-type] { outline: 1px dashed rgba(16,185,129,0.7); outline-offset: -2px; }
-            .editor-pro [data-dnd-kit-draggable-handle] { box-shadow: 0 0 0 2px rgba(99,102,241,0.5) inset; }
-          `;
-          document.head.appendChild(style);
-        }
-      } catch {}
-
-      // Verificar elementos DnD após renderização
-      setTimeout(() => {
-        const draggables = document.querySelectorAll('[data-dnd-kit-draggable-handle]');
-        const droppables = document.querySelectorAll('[data-dnd-kit-droppable]');
-        // eslint-disable-next-line no-console
-        console.log('🔍 CONTAGEM DnD após montagem:', {
-          draggables: draggables.length,
-          droppables: droppables.length,
-          draggableIds: Array.from(draggables).map(el => el.id),
-          droppableIds: Array.from(droppables).map(el => el.id),
-        });
-
-        // Logs de camadas/estilos do canvas e dropzones
-        const canvasRoots = document.querySelectorAll('[data-id="canvas-drop-zone"]');
-        if (canvasRoots.length > 1) {
-          console.warn(
-            `⚠️ Há ${canvasRoots.length} canvas roots com data-id="canvas-drop-zone". Mantenha apenas um por tela.`
-          );
-        }
-        const canvasRoot = (canvasRoots[0] as HTMLElement) || null;
-        if (canvasRoot) {
-          const cs = window.getComputedStyle(canvasRoot);
-          console.log('🎨 Canvas styles:', {
-            pointerEvents: cs.pointerEvents,
-            overflow: cs.overflow,
-            overflowY: cs.overflowY,
-            position: cs.position,
-            zIndex: cs.zIndex,
-            rect: canvasRoot.getBoundingClientRect(),
-          });
-        } else {
-          console.warn('⚠️ Canvas root não encontrado (data-id=canvas-drop-zone)');
-        }
-
-        const zones = document.querySelectorAll('[data-dnd-dropzone-type]');
-        zones.forEach((z: Element) => {
-          const el = z as HTMLElement;
-          const cs = window.getComputedStyle(el);
-          console.log(
-            '🧩 DropZone:',
-            el.getAttribute('data-dnd-dropzone-type'),
-            el.getAttribute('data-position'),
-            {
-              rect: el.getBoundingClientRect(),
-              pointerEvents: cs.pointerEvents,
-              zIndex: cs.zIndex,
-              visibility: cs.visibility,
-            }
-          );
-        });
-
-        if (draggables.length === 0) {
-          // eslint-disable-next-line no-console
-          console.error('❌ NENHUM ELEMENTO DRAGGABLE ENCONTRADO! Problema na renderização.');
-        } else {
-          // eslint-disable-next-line no-console
-          console.log('✅ Elementos draggable encontrados, testando eventos...');
-
-          // Testar eventos no primeiro draggable
-          const firstDraggable = draggables[0];
-          if (firstDraggable) {
-            firstDraggable.addEventListener(
-              'mousedown',
-              () => {
-                // eslint-disable-next-line no-console
-                console.log('🖱️ MouseDown funcionando no primeiro draggable!');
-              },
-              { once: true }
-            );
-          }
-        }
-      }, 1000);
-    }
-  }, []);
-
   /* -------------------------
      Render principal
      ------------------------- */
   return (
     <>
-      <DndContext
-        sensors={sensors}
-        collisionDetection={collisionDetectionStrategy}
-        onDragStart={handleDragStart}
-        onDragCancel={handleDragCancel}
-        onDragOver={event => {
-          if (isDebug()) {
-            // Throttle leve: logar no máximo a cada ~200ms
-            const now = Date.now();
-            const last = dragOverLogRef.current || 0;
-            if (now - last > 200) {
-              // eslint-disable-next-line no-console
-              console.log('🎯 DragOver', {
-                overId: event.over?.id,
-                activeId: event.active?.id,
-                ts: new Date().toISOString(),
-              });
-              dragOverLogRef.current = now;
-            }
-          }
-          // Sem logDragEvent para over pois não existe esse tipo
-        }}
-        onDragEnd={handleDragEnd}
-      >
-        <div className={`editor-pro h-screen bg-gray-50 flex ${className}`}>
+      <DndProvider className={className}>
+        <div className={`editor-pro h-screen bg-gray-50 flex`}>
           <StepSidebar />
           <ComponentsSidebar />
           <CanvasArea />
           <PropertiesColumn />
         </div>
 
-        {/* Monitor de debug em tempo real (apenas debug) */}
-        {isDebug() ? <DnDMonitor /> : null}
-      </DndContext>
+        {/* Monitor de debug em tempo real */}
+        <DnDMonitor />
+      </DndProvider>
 
       {NotificationContainer ? <NotificationContainer /> : null}
     </>
