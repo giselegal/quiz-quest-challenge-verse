@@ -190,6 +190,9 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
     if (cleanedOverId && cleanedOverId.startsWith('dnd-block-')) {
       cleanedOverId = cleanedOverId.replace(/^dnd-block-/, '');
     }
+    if (cleanedOverId && cleanedOverId.startsWith('block-')) {
+      cleanedOverId = cleanedOverId.replace(/^block-/, '');
+    }
     // 1) Preferir posição explícita vinda da drop-zone
     const pos = overDataLocal?.position;
     if (typeof pos === 'number' && Number.isFinite(pos)) {
