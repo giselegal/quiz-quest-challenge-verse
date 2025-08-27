@@ -307,7 +307,7 @@ export const EditorProvider: React.FC<{
           }
         } catch (error) {
           console.error('❌ AUTO-LOAD: Erro ao carregar template via service:', error);
-            if (!isCancelled) dispatch({ type: 'SET_BLOCKS', payload: [] });
+          if (!isCancelled) dispatch({ type: 'SET_BLOCKS', payload: [] });
         }
       } catch (error) {
         console.error('❌ AUTO-LOAD: Erro geral ao carregar template da etapa:', error);

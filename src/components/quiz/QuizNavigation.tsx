@@ -242,8 +242,10 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
                         ? 'bg-[#B89B7A] hover:bg-[#A68A6E] text-white'
                         : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                     } ${showActivationEffect ? 'scale-105 shadow-lg' : ''}`}
-                    aria-label={currentStep === totalSteps ? 'Finalizar quiz' : 'Ir para a próxima etapa'}
-                    onKeyDown={(e) => {
+                    aria-label={
+                      currentStep === totalSteps ? 'Finalizar quiz' : 'Ir para a próxima etapa'
+                    }
+                    onKeyDown={e => {
                       if (!canProceed) return;
                       if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
