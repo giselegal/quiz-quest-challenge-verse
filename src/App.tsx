@@ -79,10 +79,10 @@ function App() {
                   }}
                 </Route>
 
-        {/* 🌐 VERSÃO DE PRODUÇÃO MODULAR (sem colunas de edição) */}
+                {/* 🌐 VERSÃO DE PRODUÇÃO MODULAR (sem colunas de edição) */}
                 <Route path="/quiz">
                   <Suspense fallback={<PageLoading />}>
-          <QuizModularPage />
+                    <QuizModularPage />
                   </Suspense>
                 </Route>
 

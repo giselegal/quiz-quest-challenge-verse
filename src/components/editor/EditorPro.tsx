@@ -1,4 +1,5 @@
 import { makeStepKey } from '@/utils/stepKey';
+import { TemplateManager } from '@/utils/TemplateManager';
 import {
   closestCenter,
   DndContext,
@@ -16,7 +17,6 @@ import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } fr
 import { getBlocksForStep } from '../../config/quizStepsComplete';
 import { cn } from '../../lib/utils';
 import '../../styles/dnd-fixes.css'; // ✅ CSS de força bruta para DnD
-import { TemplateManager } from '@/utils/TemplateManager';
 import { Block } from '../../types/editor';
 import {
   extractDragData,
@@ -1039,6 +1039,18 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
           </div>
 
           <div className="flex items-center gap-3">
+            {/* Indicador de modo de dados */}
+            <div
+              className={cn(
+                'px-2 py-1 rounded text-xs font-medium border',
+                state.isSupabaseEnabled
+                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                  : 'bg-stone-100 text-stone-600 border-stone-200'
+              )}
+              title={state.isSupabaseEnabled ? 'Supabase habilitado' : 'Modo local'}
+            >
+              {state.isSupabaseEnabled ? 'Supabase' : 'Local'}
+            </div>
             <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
               <button
                 type="button"
@@ -1129,6 +1141,16 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
               >
                 📥 Import
               </button>
+              {state.isSupabaseEnabled && (actions as any)?.loadSupabaseComponents ? (
+                <button
+                  type="button"
+                  onClick={() => (actions as any).loadSupabaseComponents?.()}
+                  className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+                  title="Recarregar componentes do Supabase"
+                >
+                  🔄 Sync
+                </button>
+              ) : null}
             </div>
 
             {/* Alternância de modo removida: somente preview */}
@@ -1197,8 +1219,28 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
                   try {
                     const stepId = currentStepKey;
                     const blocks = currentStepData;
-                    TemplateManager.publishStep(stepId, blocks as any);
-                    notification?.success?.('Etapa publicada! /quiz refletirá esta versão.');
+                    // Tentar Supabase se disponível
+                    if (state.isSupabaseEnabled && (actions as any)?.publishStepToSupabase) {
+                      (actions as any)
+                        .publishStepToSupabase(stepId, blocks)
+                        .then((ok: boolean) => {
+                          if (ok) {
+                            // Também publica localmente para refletir em /quiz e disparar evento
+                            TemplateManager.publishStep(stepId, blocks as any);
+                            notification?.success?.('Etapa publicada (Supabase + local)!');
+                          } else {
+                            TemplateManager.publishStep(stepId, blocks as any);
+                            notification?.success?.('Etapa publicada localmente!');
+                          }
+                        })
+                        .catch(() => {
+                          TemplateManager.publishStep(stepId, blocks as any);
+                          notification?.success?.('Etapa publicada localmente!');
+                        });
+                    } else {
+                      TemplateManager.publishStep(stepId, blocks as any);
+                      notification?.success?.('Etapa publicada localmente!');
+                    }
                   } catch (err) {
                     console.error('Falha ao salvar/publicar etapa:', err);
                     notification?.error?.('Erro ao salvar/publicar etapa');
@@ -1212,8 +1254,23 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
                 title="Remover publicação da etapa atual"
                 onClick={() => {
                   try {
-                    TemplateManager.unpublishStep(currentStepKey);
-                    notification?.info?.('Publicação da etapa removida. Voltará ao template base.');
+                    if (state.isSupabaseEnabled && (actions as any)?.unpublishStepFromSupabase) {
+                      (actions as any)
+                        .unpublishStepFromSupabase(currentStepKey)
+                        .then(() => {
+                          TemplateManager.unpublishStep(currentStepKey);
+                          notification?.info?.(
+                            'Publicação da etapa removida do Supabase e localmente.'
+                          );
+                        })
+                        .catch(() => {
+                          TemplateManager.unpublishStep(currentStepKey);
+                          notification?.info?.('Publicação local da etapa removida.');
+                        });
+                    } else {
+                      TemplateManager.unpublishStep(currentStepKey);
+                      notification?.info?.('Publicação local da etapa removida.');
+                    }
                   } catch (err) {
                     console.error('Falha ao despublicar etapa:', err);
                     notification?.error?.('Erro ao despublicar etapa');
@@ -1229,13 +1286,27 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
                   try {
                     const entries = Object.entries(state.stepBlocks || {});
                     let published = 0;
+                    const publishOne = (key: string, blocks: any[]) => {
+                      if (state.isSupabaseEnabled && (actions as any)?.publishStepToSupabase) {
+                        return (actions as any).publishStepToSupabase(key, blocks).then(() => {
+                          // Sempre publica localmente também para refletir no /quiz
+                          TemplateManager.publishStep(key, blocks as any);
+                        });
+                      } else {
+                        TemplateManager.publishStep(key, blocks as any);
+                        return Promise.resolve();
+                      }
+                    };
+                    const tasks: Promise<any>[] = [];
                     for (const [key, blocks] of entries) {
                       if (Array.isArray(blocks) && blocks.length > 0) {
-                        TemplateManager.publishStep(key, blocks as any);
+                        tasks.push(publishOne(key, blocks));
                         published += 1;
                       }
                     }
-                    notification?.success?.(`Publicadas ${published} etapas com conteúdo.`);
+                    Promise.allSettled(tasks).then(() => {
+                      notification?.success?.(`Publicadas ${published} etapas com conteúdo.`);
+                    });
                   } catch (err) {
                     console.error('Falha ao publicar todas as etapas:', err);
                     notification?.error?.('Erro ao publicar todas as etapas');
