@@ -299,6 +299,24 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
     } catch {}
   }, [safeCurrentStep]);
 
+  // Carregar stepBlocks de um template via evento externo (inicialização pelo Dashboard / modelos)
+  useEffect(() => {
+    const handler = (ev: Event) => {
+      const e = ev as CustomEvent<{ stepBlocks?: Record<string, Block[]> }>;
+      const incoming = e.detail?.stepBlocks;
+      if (!incoming) return;
+      // Merge não destrutivo mantendo IDs
+      Object.entries(incoming).forEach(([key, list]) => {
+        list.forEach(b => {
+          // inserir em sequência
+          actions.addBlockAtIndex(key, b as any, (getBlocksForStep(Number(key.replace('step-','')), state.stepBlocks) || []).length);
+        });
+      });
+    };
+    window.addEventListener('editor-load-template', handler as EventListener);
+    return () => window.removeEventListener('editor-load-template', handler as EventListener);
+  }, [actions, state.stepBlocks]);
+
   // Desabilitar auto-scroll e sincronização de scroll enquanto o editor estiver montado
   useEffect(() => {
     try {
