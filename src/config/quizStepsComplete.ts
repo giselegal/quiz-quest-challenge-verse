@@ -88,12 +88,12 @@ export function mergeStepBlocks(base: StepBlocks, incoming: RawStepBlocks): Step
   for (const [stepKey, incomingBlocks] of Object.entries(normalizedIncoming)) {
     const existing = base[stepKey] ?? [];
 
-  // Índice de existentes por ID para merge profundo quando IDs coincidirem
-  const existingById = new Map<string, any>();
-  existing.forEach(b => existingById.set(String((b as any)?.id ?? ''), b));
+    // Índice de existentes por ID para merge profundo quando IDs coincidirem
+    const existingById = new Map<string, any>();
+    existing.forEach(b => existingById.set(String((b as any)?.id ?? ''), b));
 
-  // Política de sobrescrita por etapa: usamos somente a ordem e conjunto do incoming,
-  // fundindo propriedades/conteúdo quando o ID existir em ambos.
+    // Política de sobrescrita por etapa: usamos somente a ordem e conjunto do incoming,
+    // fundindo propriedades/conteúdo quando o ID existir em ambos.
     const mergedForStep: any[] = [];
     for (const inc of incomingBlocks as any[]) {
       const incId = String(inc?.id ?? '');
@@ -109,7 +109,7 @@ export function mergeStepBlocks(base: StepBlocks, incoming: RawStepBlocks): Step
       mergedForStep.push(mergedBlock);
     }
 
-  // Ordenar por 'order' se existir
+    // Ordenar por 'order' se existir
     mergedForStep.sort((a, b) => {
       const ao = (a as any)?.order ?? 0;
       const bo = (b as any)?.order ?? 0;
