@@ -1,5 +1,8 @@
+import { QuizFlowProvider } from '@/context/QuizFlowProvider';
+import { templateLibraryService } from '@/services/templateLibraryService';
 import React from 'react';
-import { EditorPro } from '../components/editor/EditorPro';
+import { useLocation } from 'wouter';
+// EditorPro será usado via require dinâmico no EditorInitializer para evitar ciclos
 import { EditorProvider } from '../components/editor/EditorProvider';
 import { ErrorBoundary } from '../components/editor/ErrorBoundary';
 
@@ -15,16 +18,81 @@ import { ErrorBoundary } from '../components/editor/ErrorBoundary';
  * - Cabeçalho editável DENTRO do EditorPro ✅
  */
 const MainEditor: React.FC = () => {
+  const [location] = useLocation();
+  const params = React.useMemo(() => new URLSearchParams(location.split('?')[1] || ''), [location]);
+  const templateId = params.get('template');
+  const funnelId = params.get('funnel');
+
   return (
     <div>
       <ErrorBoundary>
-        <EditorProvider enableSupabase={false} storageKey="main-editor-state">
-          {/* 🎯 EDITOR PRINCIPAL COM CABEÇALHO EDITÁVEL */}
-          <EditorPro />
-        </EditorProvider>
+        <QuizFlowProvider>
+          <EditorProvider
+            enableSupabase={(import.meta as any)?.env?.VITE_ENABLE_SUPABASE === 'true'}
+            funnelId={(import.meta as any)?.env?.VITE_SUPABASE_FUNNEL_ID}
+            quizId={(import.meta as any)?.env?.VITE_SUPABASE_QUIZ_ID}
+            storageKey="main-editor-state"
+          >
+            {/* 🎯 EDITOR PRINCIPAL COM CABEÇALHO EDITÁVEL */}
+            <EditorInitializer
+              templateId={templateId || undefined}
+              funnelId={funnelId || undefined}
+            />
+          </EditorProvider>
+        </QuizFlowProvider>
       </ErrorBoundary>
     </div>
   );
+};
+
+const EditorInitializer: React.FC<{ templateId?: string; funnelId?: string }> = ({
+  templateId,
+}) => {
+  // Carregar EditorPro dinamicamente para evitar ciclos e manter ESM compatível
+  const [EditorProComp, setEditorProComp] = React.useState<React.ComponentType | null>(null);
+
+  React.useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const mod = await import('../components/editor/EditorPro');
+        if (!cancelled) setEditorProComp(() => mod.EditorPro);
+      } catch (e) {
+        console.error('Falha ao carregar EditorPro dinamicamente:', e);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (!EditorProComp || !templateId) return;
+    // const { useEditor } = editor.current!; // reservado para futuras integrações
+    try {
+      const tpl = templateLibraryService.getById(templateId);
+      if (!tpl) return;
+      const stepBlocks: any = {};
+      Object.entries(tpl.steps).forEach(([k, arr]: any) => {
+        stepBlocks[k] = (arr || []).map((b: any, idx: number) => ({
+          id: `${k}-${b.type}-${idx}`,
+          type: b.type,
+          order: idx,
+          properties: b.properties || {},
+          content: b.properties || {},
+        }));
+      });
+      // apply into editor state
+      // Hook must be used inside component; instead, dispatch via window event and let EditorPro handle if needed
+      window.dispatchEvent(new CustomEvent('editor-load-template', { detail: { stepBlocks } }));
+    } catch (e) {
+      console.warn('Falha ao aplicar template:', e);
+    }
+  }, [EditorProComp, templateId]);
+
+  if (!EditorProComp) return null;
+  const EditorPro = EditorProComp as React.ComponentType;
+  return <EditorPro />;
 };
 
 export default MainEditor;

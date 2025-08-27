@@ -1,14 +1,14 @@
 // @ts-nocheck
-import { CanvasDropZone } from '@/components/editor/canvas/CanvasDropZone';
+// Usar a variante simples e padronizada do Canvas
+import { CanvasDropZone } from '@/components/editor/canvas/CanvasDropZone.simple';
 import QuizNavigation from '@/components/quiz/QuizNavigation';
-import { useStepNavigationOffline } from '@/hooks/useStepNavigationOffline';
+import { QuizFlowProvider, useQuizFlow } from '@/context/QuizFlowProvider';
 import { templateService } from '@/services/templateService';
 import { Block } from '@/types/editor';
-import React, { lazy, Suspense, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'wouter';
 
-// Lazy loading dos componentes de step
-const Step20Result = lazy(() => import('@/components/steps/Step20Result'));
+// Removido Step20Result inexistente; usar blocos do templateService
 
 /**
  * 🎯 Página genérica para todas as etapas do quiz de 21 passos
@@ -42,7 +42,7 @@ const STEPS_CONFIG = [
   { step: 17, name: 'Resultado Parcial', description: 'Primeiro resultado', component: 'generic' },
   { step: 18, name: 'Resultado Completo', description: 'Análise completa', component: 'generic' },
   { step: 19, name: 'Resultado Final', description: 'Apresentação final', component: 'generic' },
-  { step: 20, name: 'Lead Capture', description: 'Captura de contato', component: 'Step20Result' },
+  { step: 20, name: 'Lead Capture', description: 'Captura de contato', component: 'generic' },
   { step: 21, name: 'Oferta', description: 'Página de oferta final', component: 'generic' },
 ];
 
@@ -55,12 +55,12 @@ const LoadingSpinner = () => (
   </div>
 );
 
-const StepPage: React.FC = () => {
+const StepContent: React.FC = () => {
   const { step } = useParams<{ step: string }>();
   const [, setLocation] = useLocation();
 
   const stepNumber = parseInt(step || '1');
-  const navigation = useStepNavigationOffline();
+  const { currentStep, next, previous, canProceed } = useQuizFlow();
 
   // Estados para o sistema de blocos
   const [blocks, setBlocks] = useState<Block[]>([]);
@@ -118,19 +118,8 @@ const StepPage: React.FC = () => {
   }
 
   // Função para navegar entre etapas
-  const handleNext = () => {
-    const nextStep = stepNumber + 1;
-    if (nextStep <= 21) {
-      setLocation(`/step/${nextStep}`);
-    }
-  };
-
-  const handlePrevious = () => {
-    const previousStep = stepNumber - 1;
-    if (previousStep >= 1) {
-      setLocation(`/step/${previousStep}`);
-    }
-  };
+  const handleNext = () => next();
+  const handlePrevious = () => previous();
 
   // Funções para sistema de blocos (modo preview)
   const handleSelectBlock = (id: string) => {
@@ -147,7 +136,7 @@ const StepPage: React.FC = () => {
 
   // Renderizar conteúdo da etapa usando sistema de blocos
   const renderStepContent = () => {
-    const sessionId = navigation.session?.id || `session-${Date.now()}`;
+    const sessionId = `session-${Date.now()}`;
 
     // Loading state
     if (isLoadingTemplate) {
@@ -186,31 +175,25 @@ const StepPage: React.FC = () => {
       // ✅ REMOVIDO: Caso especial Step01 - agora usa sistema de blocos
       // Step01 agora utiliza template JSON com lead-form como outros steps
 
-      if (stepConfig.component === 'Step20Result') {
-        return (
-          <Suspense fallback={<LoadingSpinner />}>
-            <Step20Result sessionId={sessionId} onContinue={handleNext} />
-          </Suspense>
-        );
-      }
+      // Step20Result removido; renderização segue via sistema de blocos
 
       // 🚀 SISTEMA DE BLOCOS - RENDERIZAÇÃO COMO PREVIEW DO EDITOR
       return (
         <>
           {/* 🚀 NAVEGAÇÃO PREMIUM INTEGRADA */}
           <QuizNavigation
-            canProceed={true}
+            canProceed={canProceed}
             onNext={handleNext}
             onPrevious={handlePrevious}
             currentQuestionType="normal"
             selectedOptionsCount={3}
-            isLastQuestion={stepNumber === 21}
-            currentStep={stepNumber}
+            isLastQuestion={currentStep === 21}
+            currentStep={currentStep}
             totalSteps={21}
             stepName={stepConfig.name}
             showUserInfo={true}
-            userName={navigation.session?.userData?.name}
-            sessionId={navigation.session?.id}
+            userName={undefined}
+            sessionId={sessionId}
           />
 
           {/* 🎯 CONTEÚDO RENDERIZADO COM SISTEMA DE BLOCOS */}
@@ -292,6 +275,22 @@ const StepPage: React.FC = () => {
         </div>
       )}
     </>
+  );
+};
+
+const StepPage: React.FC = () => {
+  const { step } = useParams<{ step: string }>();
+  const [, setLocation] = useLocation();
+  const stepNumber = parseInt(step || '1');
+  return (
+    <QuizFlowProvider
+      initialStep={stepNumber}
+      totalSteps={21}
+      autoAdvance={true}
+      onNavigate={n => setLocation(`/step/${n}`)}
+    >
+      <StepContent />
+    </QuizFlowProvider>
   );
 };
 

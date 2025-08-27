@@ -1,3 +1,5 @@
+import { makeStepKey } from '@/utils/stepKey';
+import { TemplateManager } from '@/utils/TemplateManager';
 import {
   closestCenter,
   DndContext,
@@ -99,7 +101,7 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const safeCurrentStep = state.currentStep || 1;
-  const currentStepKey = `step-${safeCurrentStep}`;
+  const currentStepKey = makeStepKey(safeCurrentStep);
 
   const currentStepData = useMemo(
     () => getBlocksForStep(safeCurrentStep, state.stepBlocks) || [],
@@ -125,11 +127,11 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
     });
   }
 
-  // DnD sensors - configuração ULTRA sensível para garantir funcionamento
+  // DnD sensors - configuração ULTRA sensível para garantir funcionamento (alinhado ao commit bom)
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 0, // Imediato - qualquer movimento inicia drag
+        distance: 0, // imediato
         delay: 0,
         tolerance: 0,
       },
@@ -179,6 +181,51 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
     return closestCenter(args);
   }, []);
 
+  // Helper centralizado: calcula índice alvo com base no alvo de drop
+  function getTargetIndexFromOver(
+    overIdStrLocal: string | null,
+    overDataLocal: any,
+    mode: 'add' | 'reorder'
+  ): number {
+    // 0) Compatibilidade com OptimizedCanvasDropZone: ids no formato dnd-block-<blockId>
+    let cleanedOverId: string | null = overIdStrLocal;
+    if (cleanedOverId && cleanedOverId.startsWith('dnd-block-')) {
+      cleanedOverId = cleanedOverId.replace(/^dnd-block-/, '');
+    }
+    if (cleanedOverId && cleanedOverId.startsWith('block-')) {
+      cleanedOverId = cleanedOverId.replace(/^block-/, '');
+    }
+    // 1) Preferir posição explícita vinda da drop-zone
+    const pos = overDataLocal?.position;
+    if (typeof pos === 'number' && Number.isFinite(pos)) {
+      return Math.max(0, Math.min(pos, currentStepData.length));
+    }
+
+    // 2) Pela convenção do ID drop-zone-<n>
+    if (overIdStrLocal) {
+      const m = overIdStrLocal.match(/^drop-zone-(\d+)$/);
+      if (m) return Math.max(0, Math.min(parseInt(m[1], 10), currentStepData.length));
+    }
+
+    // 3) Canvas root → final
+    if (
+      overIdStrLocal === 'canvas-drop-zone' ||
+      (overIdStrLocal &&
+        (overIdStrLocal.startsWith('canvas-drop-zone') || overIdStrLocal.startsWith('canvas-')))
+    ) {
+      return currentStepData.length;
+    }
+
+    // 4) Alvo é um bloco existente
+    if (cleanedOverId) {
+      const overIndex = currentStepData.findIndex(b => String(b.id) === cleanedOverId);
+      if (overIndex >= 0) return mode === 'add' ? overIndex + 1 : overIndex;
+    }
+
+    // 5) Fallback → final
+    return currentStepData.length;
+  }
+
   // 🔗 Escutar eventos de navegação disparados pelos blocos (ex.: botão da etapa 1)
   useEffect(() => {
     const parseStepNumber = (stepId: unknown): number | null => {
@@ -215,12 +262,64 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
     };
   }, [actions]);
 
+  // 🔗 Fallback: inserir componente via evento (ex.: duplo clique na sidebar)
+  useEffect(() => {
+    const handleAddComponent = (ev: Event) => {
+      const e = ev as CustomEvent<{ blockType?: string; source?: string } | undefined>;
+      const blockType = e?.detail?.blockType;
+      if (!blockType) return;
+
+      try {
+        const newBlock = createBlockFromComponent(blockType as any, currentStepData);
+        actions.addBlockAtIndex(currentStepKey, newBlock, currentStepData.length);
+        actions.setSelectedBlockId(newBlock.id);
+        if (notification?.success) {
+          notification.success(`Componente ${blockType} adicionado (duplo clique).`);
+        }
+        if (process.env.NODE_ENV === 'development') {
+          // eslint-disable-next-line no-console
+          console.log('🧩 Fallback add via evento:', { blockType, step: safeCurrentStep });
+        }
+      } catch (err) {
+        console.error('Erro ao adicionar componente via evento:', err);
+        notification?.error?.('Falha ao adicionar componente');
+      }
+    };
+
+    window.addEventListener('editor-add-component', handleAddComponent as EventListener);
+    return () => {
+      window.removeEventListener('editor-add-component', handleAddComponent as EventListener);
+    };
+  }, [actions, currentStepData, currentStepKey, notification, safeCurrentStep]);
+
   // Expor etapa atual globalmente para unificar comportamento de blocos (produção/edição)
   useEffect(() => {
     try {
       (window as any).__quizCurrentStep = safeCurrentStep;
     } catch {}
   }, [safeCurrentStep]);
+
+  // Carregar stepBlocks de um template via evento externo (inicialização pelo Dashboard / modelos)
+  useEffect(() => {
+    const handler = (ev: Event) => {
+      const e = ev as CustomEvent<{ stepBlocks?: Record<string, Block[]> }>;
+      const incoming = e.detail?.stepBlocks;
+      if (!incoming) return;
+      // Merge não destrutivo mantendo IDs
+      Object.entries(incoming).forEach(([key, list]) => {
+        list.forEach(b => {
+          // inserir em sequência
+          actions.addBlockAtIndex(
+            key,
+            b as any,
+            (getBlocksForStep(Number(key.replace('step-', '')), state.stepBlocks) || []).length
+          );
+        });
+      });
+    };
+    window.addEventListener('editor-load-template', handler as EventListener);
+    return () => window.removeEventListener('editor-load-template', handler as EventListener);
+  }, [actions, state.stepBlocks]);
 
   // Desabilitar auto-scroll e sincronização de scroll enquanto o editor estiver montado
   useEffect(() => {
@@ -238,7 +337,7 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
   }, []);
 
   // componentes disponíveis - ideal extrair para config
-  const availableComponents = useMemo(
+  const availableComponentsRaw = useMemo(
     () => [
       {
         type: 'quiz-intro-header',
@@ -331,10 +430,182 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
         category: 'Conversão',
         description: 'Call-to-action para ofertas especiais',
       },
+      // Extras de teste (catálogo ampliado)
+      {
+        type: 'headline',
+        name: 'Headline',
+        icon: '📰',
+        category: 'Extras',
+        description: 'Título destacado',
+      },
+      {
+        type: 'image',
+        name: 'Imagem',
+        icon: '🖼️',
+        category: 'Extras',
+        description: 'Imagem simples',
+      },
+      {
+        type: 'video',
+        name: 'Vídeo',
+        icon: '🎬',
+        category: 'Extras',
+        description: 'Vídeo incorporado',
+      },
+      {
+        type: 'spacer',
+        name: 'Espaçador',
+        icon: '↕️',
+        category: 'Extras',
+        description: 'Espaço vertical',
+      },
+      {
+        type: 'divider',
+        name: 'Divisor',
+        icon: '➖',
+        category: 'Extras',
+        description: 'Linha divisória',
+      },
+      {
+        type: 'container',
+        name: 'Container',
+        icon: '📦',
+        category: 'Extras',
+        description: 'Container de layout',
+      },
+      { type: 'grid', name: 'Grid', icon: '🔲', category: 'Extras', description: 'Layout em grid' },
+      {
+        type: 'two-column',
+        name: 'Duas Colunas',
+        icon: '🧱',
+        category: 'Extras',
+        description: 'Layout 2 colunas',
+      },
+      {
+        type: 'lead-form',
+        name: 'Form Lead',
+        icon: '✍️',
+        category: 'Extras',
+        description: 'Formulário de lead',
+      },
+      {
+        type: 'quiz-header',
+        name: 'Quiz Header',
+        icon: '🏁',
+        category: 'Extras',
+        description: 'Cabeçalho do quiz',
+      },
+      {
+        type: 'quiz-navigation',
+        name: 'Quiz Navegação',
+        icon: '🧭',
+        category: 'Extras',
+        description: 'Barra de navegação',
+      },
+      {
+        type: 'quiz-result-inline',
+        name: 'Resultado Inline',
+        icon: '📈',
+        category: 'Extras',
+        description: 'Resultado do quiz',
+      },
+      {
+        type: 'step-header-inline',
+        name: 'Header Etapa',
+        icon: '🔖',
+        category: 'Extras',
+        description: 'Cabeçalho de etapa',
+      },
+      {
+        type: 'style-result',
+        name: 'Resultado Estilo',
+        icon: '🎨',
+        category: 'Extras',
+        description: 'Resumo do estilo',
+      },
+      {
+        type: 'result-display',
+        name: 'Exibir Resultado',
+        icon: '🏆',
+        category: 'Extras',
+        description: 'Bloco de resultado',
+      },
+      {
+        type: 'faq',
+        name: 'FAQ',
+        icon: '❓',
+        category: 'Extras',
+        description: 'Perguntas frequentes',
+      },
+      {
+        type: 'pricing',
+        name: 'Pricing',
+        icon: '💵',
+        category: 'Extras',
+        description: 'Tabela de preços',
+      },
+      {
+        type: 'cta',
+        name: 'CTA',
+        icon: '📣',
+        category: 'Extras',
+        description: 'Chamada para ação',
+      },
+      {
+        type: 'offer-cta',
+        name: 'Oferta CTA',
+        icon: '🏷️',
+        category: 'Extras',
+        description: 'Oferta com CTA',
+      },
+      {
+        type: 'benefits',
+        name: 'Benefícios',
+        icon: '✅',
+        category: 'Extras',
+        description: 'Lista de benefícios',
+      },
+      {
+        type: 'testimonials',
+        name: 'Depoimentos',
+        icon: '🗣️',
+        category: 'Extras',
+        description: 'Seção de depoimentos',
+      },
+      {
+        type: 'testimonial',
+        name: 'Depoimento',
+        icon: '💬',
+        category: 'Extras',
+        description: 'Depoimento individual',
+      },
+      {
+        type: 'pricing-card-inline',
+        name: 'Card Pricing',
+        icon: '💳',
+        category: 'Extras',
+        description: 'Card de preço',
+      },
+      {
+        type: 'testimonial-card-inline',
+        name: 'Card Depoimento',
+        icon: '📝',
+        category: 'Extras',
+        description: 'Card de depoimento',
+      },
     ],
     []
   );
 
+  // Deduplicar por `type` para evitar draggables duplicados na sidebar
+  const availableComponents = useMemo(() => {
+    const seen = new Set<string>();
+    return availableComponentsRaw.filter(c => {
+      if (seen.has(c.type)) return false;
+      seen.add(c.type);
+      return true;
+    });
+  }, [availableComponentsRaw]);
   const groupedComponents = useMemo(
     () =>
       availableComponents.reduce(
@@ -364,6 +635,26 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
   // Handlers básicos
   const handleStepSelect = useCallback((step: number) => actions.setCurrentStep(step), [actions]);
 
+  // Handler seguro para adicionar nova etapa, com fallback caso actions.addStep não esteja tipado
+  const handleAddStep = useCallback(() => {
+    const maybeAddStep = (actions as any)?.addStep;
+    if (typeof maybeAddStep === 'function') {
+      maybeAddStep();
+      return;
+    }
+    // Fallback: calcula próximo índice e garante carregamento
+    const keys = Object.keys(state.stepBlocks || {});
+    const nums = keys
+      .map(k => {
+        const m = k.match(/(\d+)/);
+        return m ? parseInt(m[1], 10) : 0;
+      })
+      .filter(n => Number.isFinite(n) && n > 0);
+    const next = (nums.length > 0 ? Math.max(...nums) : 0) + 1;
+    actions.setCurrentStep(next);
+    actions.ensureStepLoaded(next);
+  }, [actions, state.stepBlocks]);
+
   // Duplicação inline é gerenciada no wrapper simples quando necessário
 
   // Drag handlers (reutilizam utilitários)
@@ -380,17 +671,20 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
     }
   };
 
+  // Throttle para logs de onDragOver em modo debug
+  const dragOverLogRef = React.useRef(0);
+
   const handleDragStart = useCallback((event: DragStartEvent) => {
     const { active } = event;
     const dragData = extractDragData(active);
 
-    // ✅ LOG CRÍTICO SEMPRE VISÍVEL - Se isso não aparecer, o sensor não está funcionando
-    console.log('🚀🚀🚀 DRAG START FUNCIONANDO! 🚀🚀🚀', {
+    // Log crítico sempre visível para diagnosticar início do drag
+    // eslint-disable-next-line no-console
+    console.log('🚀 DRAG START', {
       activeId: active.id,
       dragData,
       activeDataCurrent: (active as any)?.data?.current,
       timestamp: new Date().toISOString(),
-      event: event,
     });
 
     // Removido alert intrusivo durante drag start
@@ -402,6 +696,30 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
 
     logDragEvent('start', active);
     if (process.env.NODE_ENV === 'development') devLog('Drag start', dragData);
+
+    // ✅ Body-flag para desabilitar overlays/portais durante o drag
+    try {
+      document.body.classList.add('dnd-dragging');
+    } catch {}
+
+    // 🔔 Evento de debug para monitores externos
+    try {
+      window.dispatchEvent(
+        new CustomEvent('dnd-start', {
+          detail: {
+            activeId: active.id,
+            data: (active as any)?.data?.current,
+            ts: Date.now(),
+          },
+        })
+      );
+    } catch {}
+  }, []);
+
+  const handleDragCancel = useCallback(() => {
+    try {
+      document.body.classList.remove('dnd-dragging');
+    } catch {}
   }, []);
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
@@ -410,18 +728,19 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
       const overIdStr = over?.id != null ? String(over.id) : null;
       const activeData = (active as any)?.data?.current;
       const overData = (over as any)?.data?.current;
-      if (isDebug()) {
-        // eslint-disable-next-line no-console
-        console.groupCollapsed('🎯 DRAG END DEBUG');
-        // eslint-disable-next-line no-console
-        console.log('active.id:', activeIdStr);
-        // eslint-disable-next-line no-console
-        console.log('active.data.current:', activeData);
-        // eslint-disable-next-line no-console
-        console.log('over.id:', overIdStr);
-        // eslint-disable-next-line no-console
-        console.log('over.data.current:', overData);
-      }
+      // Log sempre visível de fim de drag
+      // eslint-disable-next-line no-console
+      console.groupCollapsed('🎯 DRAG END');
+      // eslint-disable-next-line no-console
+      console.log('active.id:', activeIdStr);
+      // eslint-disable-next-line no-console
+      console.log('active.data.current:', activeData);
+      // eslint-disable-next-line no-console
+      console.log('over.id:', overIdStr);
+      // eslint-disable-next-line no-console
+      console.log('over.data.current:', overData);
+
+      let handled = false;
 
       if (!over) {
         // Sem alvo: para drags da sidebar, permitir append ao final; para reorder, cancelar
@@ -432,30 +751,84 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
           actions.addBlockAtIndex(currentStepKey, newBlock, targetIndex);
           actions.setSelectedBlockId(newBlock.id);
           notification?.success?.(`Componente ${dragData.blockType} adicionado ao final!`);
-          if (isDebug()) console.groupEnd();
+          handled = true;
+          // 🔔 Debug: fim sem over (fallback add final)
+          try {
+            window.dispatchEvent(
+              new CustomEvent('dnd-end', {
+                detail: {
+                  activeId: activeIdStr,
+                  overId: null,
+                  validation: { isValid: false, reason: 'Sem alvo (over=null)' },
+                  action: 'fallback-add-final',
+                  targetIndex,
+                  ts: Date.now(),
+                },
+              })
+            );
+          } catch {}
+          console.groupEnd();
           return;
         }
-        if (isDebug()) console.warn('❌ Drop cancelado - sem alvo');
+        console.warn('❌ Drop cancelado - sem alvo');
         const feedback = getDragFeedback(dragData, {
           isValid: false,
           message: 'Sem alvo de drop',
         } as any);
         notification?.warning?.(feedback.message);
-        if (isDebug()) console.groupEnd();
+        // 🔔 Debug: cancelado sem over
+        try {
+          window.dispatchEvent(
+            new CustomEvent('dnd-end', {
+              detail: {
+                activeId: activeIdStr,
+                overId: null,
+                validation: { isValid: false, reason: 'Sem alvo (over=null)' },
+                action: 'cancel',
+                ts: Date.now(),
+              },
+            })
+          );
+        } catch {}
+        console.groupEnd();
         return;
       }
 
       const validation = validateDrop(active, over, currentStepData);
-      if (isDebug()) {
-        // eslint-disable-next-line no-console
-        console.log('validateDrop →', validation);
-      }
+      // eslint-disable-next-line no-console
+      console.log('validateDrop →', validation);
       logDragEvent('end', active, over, validation);
 
+      // 🔔 Debug: validação calculada
+      try {
+        window.dispatchEvent(
+          new CustomEvent('dnd-end', {
+            detail: {
+              activeId: activeIdStr,
+              overId: overIdStr,
+              validation,
+              ts: Date.now(),
+            },
+          })
+        );
+      } catch {}
+
       if (!validation.isValid) {
+        // 🔧 Fallback de curto prazo: se veio da sidebar, adiciona ao final para destravar o fluxo
+        const dragData = extractDragData(active);
+        if (dragData?.type === 'sidebar-component' && dragData.blockType) {
+          const newBlock = createBlockFromComponent(dragData.blockType as any, currentStepData);
+          const targetIndex = currentStepData.length;
+          actions.addBlockAtIndex(currentStepKey, newBlock, targetIndex);
+          actions.setSelectedBlockId(newBlock.id);
+          notification?.info?.(`(Fallback) Componente ${dragData.blockType} adicionado ao final.`);
+          handled = true;
+          console.groupEnd();
+          return;
+        }
         const feedback = getDragFeedback(extractDragData(active), validation);
         notification?.warning?.(feedback.message);
-        if (isDebug()) console.groupEnd();
+        console.groupEnd();
         return;
       }
 
@@ -471,70 +844,33 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
           case 'add':
             if (dragData.type === 'sidebar-component' && dragData.blockType) {
               const newBlock = createBlockFromComponent(dragData.blockType as any, currentStepData);
-              // Inserção precisa por posição quando drop-zone-<n>
-              let targetIndex = currentStepData.length;
-              if (overIdStr) {
-                const m = overIdStr.match(/^drop-zone-(\d+)$/);
-                if (m)
-                  targetIndex = Math.max(0, Math.min(parseInt(m[1], 10), currentStepData.length));
-                else if (
-                  overIdStr === 'canvas-drop-zone' ||
-                  overIdStr.startsWith('canvas-drop-zone') ||
-                  overIdStr.startsWith('canvas-')
-                )
-                  targetIndex = currentStepData.length;
-                else {
-                  // Se soltou sobre um bloco, inserir antes dele
-                  const overIndex = currentStepData.findIndex(b => String(b.id) === overIdStr);
-                  if (overIndex >= 0) {
-                    // Se é o último bloco, tratar como append (inserir depois)
-                    targetIndex =
-                      overIndex === currentStepData.length - 1 ? overIndex + 1 : overIndex;
-                  }
-                }
-              } else if (currentStepData.length === 0) {
-                // Canvas vazio: inserir no índice 0
-                targetIndex = 0;
-              }
+              const targetIndex = getTargetIndexFromOver(overIdStr, overData, 'add');
               actions.addBlockAtIndex(currentStepKey, newBlock, targetIndex);
               actions.setSelectedBlockId(newBlock.id);
               notification?.success?.(
                 `Componente ${dragData.blockType} adicionado na posição ${targetIndex}!`
               );
+              handled = true;
             }
             break;
           case 'reorder':
-            if (dragData.type === 'canvas-block') {
+            if (dragData.type === 'canvas-block' || dragData.type === 'block') {
+              // Compat: Optimized usa id 'dnd-block-<blockId>'
+              const normalizedActiveId = activeIdStr?.startsWith('dnd-block-')
+                ? activeIdStr.replace(/^dnd-block-/, '')
+                : activeIdStr;
               const activeIndex = currentStepData.findIndex(
-                block => String(block.id) === activeIdStr
+                block => String(block.id) === normalizedActiveId
               );
               if (activeIndex === -1) break;
 
-              let targetIndex = activeIndex;
-              if (overIdStr === 'canvas-drop-zone') {
-                targetIndex = currentStepData.length - 1;
-              } else if (overIdStr) {
-                const m = overIdStr.match(/^drop-zone-(\d+)$/);
-                if (m) {
-                  targetIndex = Math.max(
-                    0,
-                    Math.min(parseInt(m[1], 10), currentStepData.length - 1)
-                  );
-                } else {
-                  const overIndex = currentStepData.findIndex(
-                    block => String(block.id) === overIdStr
-                  );
-                  if (overIndex !== -1) {
-                    // Se é o último bloco, mover para o final; caso contrário, antes do over
-                    targetIndex = overIndex === currentStepData.length - 1 ? overIndex : overIndex;
-                  }
-                }
-              }
+              const targetIndex = getTargetIndexFromOver(overIdStr, overData, 'reorder');
 
               if (activeIndex !== targetIndex) {
                 actions.reorderBlocks(currentStepKey, activeIndex, targetIndex);
                 notification?.info?.(`Bloco movido para a posição ${targetIndex}`);
               }
+              handled = true;
             }
             break;
           default:
@@ -545,7 +881,21 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
         console.error('Erro durante drag & drop:', error);
         notification?.error?.('Erro ao processar drag & drop');
       } finally {
-        if (isDebug()) console.groupEnd();
+        // ✅ Remover body-flag ao finalizar drag
+        try {
+          document.body.classList.remove('dnd-dragging');
+        } catch {}
+        // Fallback final garantido: se veio da sidebar e nada foi feito, adiciona ao final
+        if (!handled) {
+          const data = extractDragData(active);
+          if (data?.type === 'sidebar-component' && data.blockType) {
+            const nb = createBlockFromComponent(data.blockType as any, currentStepData);
+            actions.addBlockAtIndex(currentStepKey, nb, currentStepData.length);
+            actions.setSelectedBlockId(nb.id);
+            console.warn('[DnD] Fallback final aplicado: componente adicionado ao final.');
+          }
+        }
+        console.groupEnd();
       }
     },
     [actions, currentStepData, currentStepKey, notification]
@@ -556,15 +906,15 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
      ------------------------- */
 
   const StepSidebar: React.FC = () => (
-    <div className="w-[200px] bg-white border-r border-gray-200 flex flex-col">
+    <div className="w-[220px] bg-white border-r border-gray-200 flex flex-col">
       <div className="p-4 border-b border-gray-200">
         <h3 className="font-semibold text-sm text-gray-900">Etapas do Quiz</h3>
-        <p className="text-xs text-gray-500 mt-1">21 etapas configuradas</p>
+        <p className="text-xs text-gray-500 mt-1">Gerencie suas etapas</p>
       </div>
 
       <div className="flex-1 overflow-y-auto">
         <div className="p-2 space-y-1">
-          {Array.from({ length: 21 }, (_, i) => i + 1).map(step => {
+          {Array.from({ length: Math.max(21, safeCurrentStep, 1) }, (_, i) => i + 1).map(step => {
             const analysis = getStepAnalysis(step);
             const isActive = step === safeCurrentStep;
             const hasBlocks = stepHasBlocks[step];
@@ -598,11 +948,19 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
         </div>
       </div>
 
-      <div className="p-3 border-t border-gray-200 text-xs text-gray-500">
+      <div className="p-3 border-t border-gray-200 text-xs text-gray-700 space-y-2">
         <div className="flex items-center justify-between">
           <span>Etapa atual:</span>
-          <span className="font-medium">{safeCurrentStep}/21</span>
+          <span className="font-medium">{safeCurrentStep}</span>
         </div>
+        <button
+          type="button"
+          onClick={handleAddStep}
+          className="w-full text-center py-2 px-3 rounded-md bg-blue-600 text-white hover:bg-blue-700 text-xs font-medium"
+          title="Adicionar nova etapa"
+        >
+          + Nova etapa
+        </button>
       </div>
     </div>
   );
@@ -631,6 +989,7 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
                 icon={<span className="text-lg">🧪</span>}
                 category="Teste"
                 className="bg-yellow-100 border-yellow-300"
+                idSuffix={String(safeCurrentStep)}
               />
               <DraggableComponentItem
                 blockType="test-normal"
@@ -639,6 +998,7 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
                 icon={<span className="text-lg">🔧</span>}
                 category="Teste"
                 className="bg-blue-100 border-blue-300"
+                idSuffix={String(safeCurrentStep)}
               />
             </div>
           </div>
@@ -658,6 +1018,7 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
                     icon={<span className="text-lg">{component.icon}</span>}
                     category={component.category}
                     className="bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-blue-300"
+                    idSuffix={String(safeCurrentStep)}
                   />
                 ))}
               </div>
@@ -700,6 +1061,18 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
           </div>
 
           <div className="flex items-center gap-3">
+            {/* Indicador de modo de dados */}
+            <div
+              className={cn(
+                'px-2 py-1 rounded text-xs font-medium border',
+                state.isSupabaseEnabled
+                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                  : 'bg-stone-100 text-stone-600 border-stone-200'
+              )}
+              title={state.isSupabaseEnabled ? 'Supabase habilitado' : 'Modo local'}
+            >
+              {state.isSupabaseEnabled ? 'Supabase' : 'Local'}
+            </div>
             <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
               <button
                 type="button"
@@ -790,6 +1163,16 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
               >
                 📥 Import
               </button>
+              {state.isSupabaseEnabled && (actions as any)?.loadSupabaseComponents ? (
+                <button
+                  type="button"
+                  onClick={() => (actions as any).loadSupabaseComponents?.()}
+                  className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+                  title="Recarregar componentes do Supabase"
+                >
+                  🔄 Sync
+                </button>
+              ) : null}
             </div>
 
             {/* Alternância de modo removida: somente preview */}
@@ -850,22 +1233,126 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
               </button>
             </div>
 
-            <button className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors">
-              💾 Salvar
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors"
+                title="Publicar etapa atual"
+                onClick={() => {
+                  try {
+                    const stepId = currentStepKey;
+                    const blocks = currentStepData;
+                    // Tentar Supabase se disponível
+                    if (state.isSupabaseEnabled && (actions as any)?.publishStepToSupabase) {
+                      (actions as any)
+                        .publishStepToSupabase(stepId, blocks)
+                        .then((ok: boolean) => {
+                          if (ok) {
+                            // Também publica localmente para refletir em /quiz e disparar evento
+                            TemplateManager.publishStep(stepId, blocks as any);
+                            notification?.success?.('Etapa publicada (Supabase + local)!');
+                          } else {
+                            TemplateManager.publishStep(stepId, blocks as any);
+                            notification?.success?.('Etapa publicada localmente!');
+                          }
+                        })
+                        .catch(() => {
+                          TemplateManager.publishStep(stepId, blocks as any);
+                          notification?.success?.('Etapa publicada localmente!');
+                        });
+                    } else {
+                      TemplateManager.publishStep(stepId, blocks as any);
+                      notification?.success?.('Etapa publicada localmente!');
+                    }
+                  } catch (err) {
+                    console.error('Falha ao salvar/publicar etapa:', err);
+                    notification?.error?.('Erro ao salvar/publicar etapa');
+                  }
+                }}
+              >
+                💾 Salvar
+              </button>
+              <button
+                className="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm rounded-md hover:bg-gray-50 transition-colors"
+                title="Remover publicação da etapa atual"
+                onClick={() => {
+                  try {
+                    if (state.isSupabaseEnabled && (actions as any)?.unpublishStepFromSupabase) {
+                      (actions as any)
+                        .unpublishStepFromSupabase(currentStepKey)
+                        .then(() => {
+                          TemplateManager.unpublishStep(currentStepKey);
+                          notification?.info?.(
+                            'Publicação da etapa removida do Supabase e localmente.'
+                          );
+                        })
+                        .catch(() => {
+                          TemplateManager.unpublishStep(currentStepKey);
+                          notification?.info?.('Publicação local da etapa removida.');
+                        });
+                    } else {
+                      TemplateManager.unpublishStep(currentStepKey);
+                      notification?.info?.('Publicação local da etapa removida.');
+                    }
+                  } catch (err) {
+                    console.error('Falha ao despublicar etapa:', err);
+                    notification?.error?.('Erro ao despublicar etapa');
+                  }
+                }}
+              >
+                ⏏️ Despublicar
+              </button>
+              <button
+                className="px-4 py-2 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 transition-colors"
+                title="Publicar todas as etapas com conteúdo"
+                onClick={() => {
+                  try {
+                    const entries = Object.entries(state.stepBlocks || {});
+                    let published = 0;
+                    const publishOne = (key: string, blocks: any[]) => {
+                      if (state.isSupabaseEnabled && (actions as any)?.publishStepToSupabase) {
+                        return (actions as any).publishStepToSupabase(key, blocks).then(() => {
+                          // Sempre publica localmente também para refletir no /quiz
+                          TemplateManager.publishStep(key, blocks as any);
+                        });
+                      } else {
+                        TemplateManager.publishStep(key, blocks as any);
+                        return Promise.resolve();
+                      }
+                    };
+                    const tasks: Promise<any>[] = [];
+                    for (const [key, blocks] of entries) {
+                      if (Array.isArray(blocks) && blocks.length > 0) {
+                        tasks.push(publishOne(key, blocks));
+                        published += 1;
+                      }
+                    }
+                    Promise.allSettled(tasks).then(() => {
+                      notification?.success?.(`Publicadas ${published} etapas com conteúdo.`);
+                    });
+                  } catch (err) {
+                    console.error('Falha ao publicar todas as etapas:', err);
+                    notification?.error?.('Erro ao publicar todas as etapas');
+                  }
+                }}
+              >
+                🚀 Publicar tudo
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Banner de modo removido */}
       </div>
-      
-      {/* Canvas principal com drag & drop */}
-      <div className="flex-1 overflow-y-auto p-4">
+
+      {/* Canvas principal com drag & drop - sistema unificado simples */}
+      <div className="flex-1 p-4" data-canvas-container>
         <CanvasDropZone
           blocks={currentStepData}
           selectedBlockId={state.selectedBlockId}
           onSelectBlock={actions.setSelectedBlockId}
-          onUpdateBlock={(id: string, updates: any) => actions.updateBlock(currentStepKey, id, updates)}
+          onUpdateBlock={(id: string, updates: any) =>
+            actions.updateBlock(currentStepKey, id, updates)
+          }
           onDeleteBlock={(id: string) => actions.removeBlock(currentStepKey, id)}
           className="max-w-4xl mx-auto"
         />
@@ -903,6 +1390,22 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
       // eslint-disable-next-line no-console
       console.log('🎯 DndContext sendo montado no EditorPro');
 
+      // Injetar estilos de debug para visualizar droppables/handles
+      try {
+        const existing = document.getElementById('dnd-debug-styles');
+        if (!existing) {
+          const style = document.createElement('style');
+          style.id = 'dnd-debug-styles';
+          style.textContent = `
+            /* Highlight droppables e draggables em modo debug */
+            .editor-pro [data-dnd-kit-droppable] { outline: 1px dashed rgba(59,130,246,0.5); outline-offset: -2px; }
+            .editor-pro [data-dnd-dropzone-type] { outline: 1px dashed rgba(16,185,129,0.7); outline-offset: -2px; }
+            .editor-pro [data-dnd-kit-draggable-handle] { box-shadow: 0 0 0 2px rgba(99,102,241,0.5) inset; }
+          `;
+          document.head.appendChild(style);
+        }
+      } catch {}
+
       // Verificar elementos DnD após renderização
       setTimeout(() => {
         const draggables = document.querySelectorAll('[data-dnd-kit-draggable-handle]');
@@ -913,6 +1416,45 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
           droppables: droppables.length,
           draggableIds: Array.from(draggables).map(el => el.id),
           droppableIds: Array.from(droppables).map(el => el.id),
+        });
+
+        // Logs de camadas/estilos do canvas e dropzones
+        const canvasRoots = document.querySelectorAll('[data-id="canvas-drop-zone"]');
+        if (canvasRoots.length > 1) {
+          console.warn(
+            `⚠️ Há ${canvasRoots.length} canvas roots com data-id="canvas-drop-zone". Mantenha apenas um por tela.`
+          );
+        }
+        const canvasRoot = (canvasRoots[0] as HTMLElement) || null;
+        if (canvasRoot) {
+          const cs = window.getComputedStyle(canvasRoot);
+          console.log('🎨 Canvas styles:', {
+            pointerEvents: cs.pointerEvents,
+            overflow: cs.overflow,
+            overflowY: cs.overflowY,
+            position: cs.position,
+            zIndex: cs.zIndex,
+            rect: canvasRoot.getBoundingClientRect(),
+          });
+        } else {
+          console.warn('⚠️ Canvas root não encontrado (data-id=canvas-drop-zone)');
+        }
+
+        const zones = document.querySelectorAll('[data-dnd-dropzone-type]');
+        zones.forEach((z: Element) => {
+          const el = z as HTMLElement;
+          const cs = window.getComputedStyle(el);
+          console.log(
+            '🧩 DropZone:',
+            el.getAttribute('data-dnd-dropzone-type'),
+            el.getAttribute('data-position'),
+            {
+              rect: el.getBoundingClientRect(),
+              pointerEvents: cs.pointerEvents,
+              zIndex: cs.zIndex,
+              visibility: cs.visibility,
+            }
+          );
         });
 
         if (draggables.length === 0) {
@@ -948,17 +1490,21 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
         sensors={sensors}
         collisionDetection={collisionDetectionStrategy}
         onDragStart={handleDragStart}
+        onDragCancel={handleDragCancel}
         onDragOver={event => {
-          // ✅ CONFIRMAR que o drag está ativo
-          console.log('🎯 DRAG OVER DETECTADO:', {
-            overId: event.over?.id,
-            activeId: event.active?.id,
-            timestamp: new Date().toISOString(),
-          });
-
           if (isDebug()) {
-            // eslint-disable-next-line no-console
-            console.log('🎯 DragOver', event);
+            // Throttle leve: logar no máximo a cada ~200ms
+            const now = Date.now();
+            const last = dragOverLogRef.current || 0;
+            if (now - last > 200) {
+              // eslint-disable-next-line no-console
+              console.log('🎯 DragOver', {
+                overId: event.over?.id,
+                activeId: event.active?.id,
+                ts: new Date().toISOString(),
+              });
+              dragOverLogRef.current = now;
+            }
           }
           // Sem logDragEvent para over pois não existe esse tipo
         }}
@@ -971,8 +1517,8 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
           <PropertiesColumn />
         </div>
 
-        {/* Monitor de debug em tempo real */}
-        <DnDMonitor />
+        {/* Monitor de debug em tempo real (apenas debug) */}
+        {isDebug() ? <DnDMonitor /> : null}
       </DndContext>
 
       {NotificationContainer ? <NotificationContainer /> : null}

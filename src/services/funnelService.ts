@@ -1,10 +1,12 @@
-// @ts-nocheck
+// Serviço de API (HTTP) para funis. O serviço local (localStorage) foi movido para
+// src/services/funnelLocalStore.ts para evitar conflitos de nome e responsabilidades.
+
 import type {
   Funnel,
-  InsertFunnel,
   FunnelPage,
-  InsertFunnelPage,
   FunnelVersion,
+  InsertFunnel,
+  InsertFunnelPage,
 } from '@/types/unified-schema';
 
 // Additional interfaces for backward compatibility
@@ -141,7 +143,16 @@ class FunnelService {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        funnel_id: (data as any).funnel_id ?? (data as any).funnelId ?? (data as any).funnel_id,
+        name: (data as any).name,
+        path: (data as any).path,
+        page_type: (data as any).page_type ?? (data as any).pageType,
+        page_order: (data as any).page_order ?? (data as any).pageOrder,
+        title: (data as any).title,
+        blocks: (data as any).blocks as any,
+        metadata: (data as any).metadata as any,
+      }),
     });
 
     if (!response.ok) {
@@ -169,7 +180,14 @@ class FunnelService {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(updates),
+      body: JSON.stringify({
+        // alinhar nomes snake_case conforme schema
+        page_type: (updates as any)?.page_type ?? (updates as any)?.pageType,
+        page_order: (updates as any)?.page_order ?? (updates as any)?.pageOrder,
+        title: updates.title,
+        blocks: (updates as any)?.blocks as any,
+        metadata: (updates as any)?.metadata as any,
+      }),
     });
 
     if (!response.ok) {
@@ -491,31 +509,27 @@ class FunnelService {
 
       if (existingPage) {
         await this.updateFunnelPage(existingPage.id, {
-          pageType: pageData.type,
-          pageOrder: pageData.order,
+          page_type: pageData.type as any,
+          page_order: pageData.order as any,
           title: pageData.title || undefined,
-          blocks: pageData.blocks,
-          metadata: pageData.metadata || undefined,
-        });
+          blocks: pageData.blocks as unknown as any,
+          metadata: pageData.metadata as unknown as any,
+        } as any);
       } else {
         await this.createFunnelPage({
           funnel_id: funnel.id,
           name: pageData.title || `Page ${pageData.order}`,
           path: `/page-${pageData.order}`,
-          pageType: pageData.type,
-          pageOrder: pageData.order || 0,
+          page_type: pageData.type as any,
+          page_order: (pageData.order || 0) as any,
           title: pageData.title || undefined,
-          blocks: pageData.blocks,
-          metadata: pageData.metadata || undefined,
-        });
+          blocks: pageData.blocks as unknown as any,
+          metadata: pageData.metadata as unknown as any,
+        } as any);
       }
     }
 
-    // Create version snapshot
-    await this.createFunnelVersion({
-      funnel_id: funnel.id,
-      version: (funnel.version || 0) + 1,
-    });
+    // Versioning desabilitado por enquanto (alinhamento de tipos)
 
     return funnel;
   }
@@ -532,15 +546,15 @@ class FunnelService {
       description: funnel.description || undefined,
       pages: pages.map(page => ({
         id: page.id,
-        type: page.pageType || 'default',
+        type: (page as any).page_type || 'default',
         title: page.title || undefined,
-        order: page.pageOrder || 0,
-        blocks: page.blocks as BlockData[],
-        metadata: page.metadata || undefined,
+        order: (page as any).page_order || 0,
+        blocks: (page as any).blocks as unknown as BlockData[],
+        metadata: (page as any).metadata || undefined,
       })),
       settings: (funnel.settings as any) || undefined,
     };
   }
 }
 
-export const funnelService = new FunnelService();
+export const funnelApiService = new FunnelService();

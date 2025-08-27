@@ -9,6 +9,10 @@ export const DnDMonitor: React.FC = () => {
     droppables: 0,
     lastUpdate: new Date().toISOString(),
     events: [] as string[],
+    lastActiveId: '' as string | undefined,
+    lastOverId: '' as string | undefined,
+    lastPosition: '' as string | number | undefined,
+    lastAction: '' as string | undefined,
   });
 
   useEffect(() => {
@@ -29,7 +33,7 @@ export const DnDMonitor: React.FC = () => {
     updateStats(); // Primeira execução
 
     // Monitorar eventos globais de DnD
-    const handleDragStart = (e: any) => {
+    const handleDragStart = () => {
       setStats(prev => ({
         ...prev,
         events: [
@@ -39,7 +43,7 @@ export const DnDMonitor: React.FC = () => {
       }));
     };
 
-    const handleDragEnd = (e: any) => {
+    const handleDragEnd = () => {
       setStats(prev => ({
         ...prev,
         events: [
@@ -61,21 +65,59 @@ export const DnDMonitor: React.FC = () => {
       }
     };
 
+    // Eventos custom dnd-* para debug detalhado
+    const handleDndStart = (e: any) => {
+      const { activeId } = e.detail || {};
+      setStats(prev => ({
+        ...prev,
+        lastActiveId: activeId,
+        lastOverId: undefined,
+        lastPosition: undefined,
+        lastAction: 'start',
+        events: [...prev.events.slice(-4), `🚀 dnd-start: active=${String(activeId || '')}`],
+      }));
+    };
+
+    const handleDndEnd = (e: any) => {
+      const { activeId, overId, validation, action, targetIndex } = e.detail || {};
+      const pos = validation?.position ?? targetIndex ?? undefined;
+      setStats(prev => ({
+        ...prev,
+        lastActiveId: activeId,
+        lastOverId: overId,
+        lastPosition: pos,
+        lastAction: action || validation?.action,
+        events: [
+          ...prev.events.slice(-4),
+          `🎯 dnd-end: over=${String(overId || '')} action=${String(
+            (action || validation?.action || '') as any
+          )}`,
+        ],
+      }));
+    };
+
     // Listeners globais
     document.addEventListener('dragstart', handleDragStart);
     document.addEventListener('dragend', handleDragEnd);
     document.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('dnd-start', handleDndStart as any);
+    window.addEventListener('dnd-end', handleDndEnd as any);
 
     return () => {
       clearInterval(interval);
       document.removeEventListener('dragstart', handleDragStart);
       document.removeEventListener('dragend', handleDragEnd);
       document.removeEventListener('mousedown', handleMouseDown);
+      window.removeEventListener('dnd-start', handleDndStart as any);
+      window.removeEventListener('dnd-end', handleDndEnd as any);
     };
   }, []);
 
   return (
-    <div className="fixed top-4 right-4 bg-black/90 text-white text-xs p-3 rounded-lg font-mono z-50 min-w-[200px]">
+    <div
+      className="fixed top-4 right-4 bg-black/90 text-white text-xs p-3 rounded-lg font-mono z-50 min-w-[200px]"
+      style={{ pointerEvents: 'none' }}
+    >
       <div className="font-bold text-green-400 mb-2">🔍 DnD Monitor</div>
       <div className="space-y-1">
         <div>
@@ -87,6 +129,26 @@ export const DnDMonitor: React.FC = () => {
         <div>
           Updated: <span className="text-gray-400">{stats.lastUpdate}</span>
         </div>
+        {stats.lastActiveId && (
+          <div>
+            Active: <span className="text-gray-300">{stats.lastActiveId}</span>
+          </div>
+        )}
+        {typeof stats.lastOverId !== 'undefined' && (
+          <div>
+            Over: <span className="text-gray-300">{String(stats.lastOverId || 'null')}</span>
+          </div>
+        )}
+        {typeof stats.lastPosition !== 'undefined' && (
+          <div>
+            Pos: <span className="text-gray-300">{String(stats.lastPosition)}</span>
+          </div>
+        )}
+        {stats.lastAction && (
+          <div>
+            Action: <span className="text-gray-300">{stats.lastAction}</span>
+          </div>
+        )}
       </div>
 
       {stats.events.length > 0 && (
@@ -104,10 +166,11 @@ export const DnDMonitor: React.FC = () => {
         Clique para ativar console debug:
         <button
           onClick={() => {
-            window.__DND_DEBUG = true;
+            (window as any).__DND_DEBUG = true;
             console.log('🎯 Debug ativado!');
           }}
           className="ml-2 px-2 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700"
+          style={{ pointerEvents: 'auto' }}
         >
           Debug
         </button>

@@ -6,7 +6,7 @@ import { Active, Over } from '@dnd-kit/core';
  */
 
 export interface DragData {
-  type: 'sidebar-component' | 'canvas-block';
+  type: 'sidebar-component' | 'canvas-block' | 'block';
   blockType?: string;
   blockId?: string;
   sourceStepKey?: string;
@@ -24,8 +24,16 @@ const isUuid = (v: unknown) =>
 
 // Check if a string looks like a block ID (either UUID or nanoid format)
 const isValidBlockId = (v: unknown) =>
-  typeof v === 'string' &&
-  (isUuid(v) || /^block-[\w-]+-[A-Za-z0-9_-]{8}$/.test(v as string));
+  typeof v === 'string' && (isUuid(v) || /^block-[\w-]+-[A-Za-z0-9_-]{8}$/.test(v as string));
+
+// Compat: ids de wrappers podem usar prefixo como 'dnd-block-'.
+// Importante: não remover 'block-' do ID real, pois os block.id podem começar com 'block-'.
+const normalizeOverId = (id: string | null | undefined): string | null => {
+  if (!id) return null;
+  let out = id;
+  if (out.startsWith('dnd-block-')) out = out.replace(/^dnd-block-/, '');
+  return out;
+};
 
 /**
  * Valida se um drop é válido
@@ -47,7 +55,9 @@ export const validateDrop = (
 
   // Validação para componente da sidebar
   if (activeData.type === 'sidebar-component') {
-    const overId = String(over.id);
+    const rawOverId = String(over.id);
+    // Normaliza IDs vindos de wrappers otimizados (ex.: 'dnd-block-<id>')
+    const overId = normalizeOverId(rawOverId) || rawOverId;
 
     // Aceitar soltar diretamente sobre bloco existente (insere antes dele)
     const isOverExistingBlock = currentStepBlocks.some(block => String(block.id) === overId);
@@ -66,13 +76,14 @@ export const validateDrop = (
   }
 
   // Validação para bloco do canvas
-  if (activeData.type === 'canvas-block') {
+  if (activeData.type === 'canvas-block' || activeData.type === 'block') {
     const activeBlockExists = currentStepBlocks.some(
       block => String(block.id) === String(activeData.blockId)
     );
     if (!activeBlockExists) return { isValid: false, reason: 'Bloco de origem não encontrado' };
 
-    const overId = String(over.id);
+    const rawOverId = String(over.id);
+    const overId = normalizeOverId(rawOverId) || rawOverId;
     const overIsDropZone = overId === 'canvas-drop-zone' || overId.startsWith('drop-zone-');
     const overIsBlock = currentStepBlocks.some(block => String(block.id) === overId);
     if (overIsDropZone || overIsBlock || isValidBlockId(overId)) {

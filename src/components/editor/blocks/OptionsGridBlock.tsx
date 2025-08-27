@@ -152,6 +152,8 @@ const OptionsGridBlock: React.FC<OptionsGridBlockProps> = ({
     imageHeight,
     imagePosition = 'top',
     imageLayout = 'vertical',
+    layout = 'grid', // 'grid' | 'list'
+    layoutOrientation, // compat: pode vir como alias de imageLayout
     // 🎯 PROPRIEDADES DE LAYOUT
     gridGap = 16,
     responsiveColumns = true,
@@ -241,19 +243,17 @@ const OptionsGridBlock: React.FC<OptionsGridBlockProps> = ({
 
   const { width: imgW, height: imgH } = getImageSize();
 
+  const effectiveImageLayout = (layoutOrientation as any) || imageLayout || 'vertical';
   const cardLayoutClass =
-    imageLayout === 'horizontal' && (imagePosition === 'left' || imagePosition === 'right')
+    effectiveImageLayout === 'horizontal' && (imagePosition === 'left' || imagePosition === 'right')
       ? 'flex items-center'
       : 'flex flex-col';
 
   const gridColsClass = (() => {
-    const colNum = typeof columns === 'string' ? parseInt(columns, 10) : columns;
+    const raw = typeof columns === 'string' ? parseInt(columns, 10) : columns;
+    const colNum = isNaN(Number(raw)) ? 2 : Math.max(1, Math.min(Number(raw), 2));
     if (colNum === 1) return 'grid-cols-1';
-    if (colNum === 2) return responsiveColumns ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-2';
-    if (colNum === 3)
-      return responsiveColumns ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-3';
-    if (colNum === 4)
-      return responsiveColumns ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4' : 'grid-cols-4';
+    // colNum === 2 (máximo)
     return responsiveColumns ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-2';
   })();
 
@@ -396,9 +396,18 @@ const OptionsGridBlock: React.FC<OptionsGridBlockProps> = ({
       let newSelections: string[];
       if (multipleSelection) {
         const currentSelections = selectedOptions || [];
-        newSelections = currentSelections.includes(optionId)
-          ? currentSelections.filter((id: string) => id !== optionId)
-          : [...currentSelections, optionId];
+        if (currentSelections.includes(optionId)) {
+          newSelections = allowDeselection
+            ? currentSelections.filter((id: string) => id !== optionId)
+            : currentSelections;
+        } else {
+          // Respeitar maxSelections também no editor
+          if ((currentSelections?.length || 0) < (maxSelections || 1)) {
+            newSelections = [...currentSelections, optionId];
+          } else {
+            newSelections = currentSelections;
+          }
+        }
         onPropertyChange?.('selectedOptions', newSelections);
       } else {
         newSelections = [optionId];
@@ -512,32 +521,48 @@ const OptionsGridBlock: React.FC<OptionsGridBlockProps> = ({
       )}
 
       <div
-        className={`grid ${gridColsClass} ${blockClassName || ''}`}
+        className={`${layout === 'list' ? 'flex flex-col' : `grid ${gridColsClass}`} ${
+          blockClassName || ''
+        }`}
         style={{ gap: `${gridGap}px` }}
       >
-        {(options || []).map((opt: any) => (
-          <div
-            key={opt.id}
-            className={`rounded-lg border border-neutral-200 bg-white p-4 hover:shadow-md transition-all duration-200 cursor-pointer ${cardLayoutClass}`}
-            onClick={() => handleOptionSelect(opt.id)}
-          >
-            {opt.imageUrl && showImages && (
-              <img
-                src={opt.imageUrl}
-                alt={opt.text || 'opção'}
-                className={`object-cover rounded-md flex-shrink-0 ${imageOrderClass}`}
-                width={imgW}
-                height={imgH}
-                style={{ width: `${imgW}px`, height: `${imgH}px` }}
-                loading="lazy"
-                decoding="async"
-              />
-            )}
-            <p className={`${imageLayout === 'horizontal' ? 'flex-1' : 'text-center'} font-medium`}>
-              {opt.text}
-            </p>
-          </div>
-        ))}
+        {(options || []).map((opt: any) => {
+          // contentType suporta: 'text-and-image' | 'image-only' | 'text-only'
+          const ct = (block?.properties as any)?.contentType as string | undefined;
+          const showImageEffective =
+            (ct === 'image-only' || ct === 'text-and-image' || ct == null) && showImages;
+          const showTextEffective = ct === 'image-only' ? false : true;
+
+          return (
+            <div
+              key={opt.id}
+              className={`rounded-lg border border-neutral-200 bg-white p-4 hover:shadow-md transition-all duration-200 cursor-pointer ${cardLayoutClass}`}
+              onClick={() => handleOptionSelect(opt.id)}
+            >
+              {opt.imageUrl && showImageEffective && (
+                <img
+                  src={opt.imageUrl}
+                  alt={opt.text || 'opção'}
+                  className={`object-cover rounded-md flex-shrink-0 ${imageOrderClass}`}
+                  width={imgW}
+                  height={imgH}
+                  style={{ width: `${imgW}px`, height: `${imgH}px` }}
+                  loading="lazy"
+                  decoding="async"
+                />
+              )}
+              {showTextEffective && (
+                <p
+                  className={`${
+                    effectiveImageLayout === 'horizontal' ? 'flex-1' : 'text-center'
+                  } font-medium`}
+                >
+                  {opt.text}
+                </p>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

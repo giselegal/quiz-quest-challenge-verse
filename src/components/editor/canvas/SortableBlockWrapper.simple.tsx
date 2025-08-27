@@ -6,6 +6,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical, Trash2 } from 'lucide-react';
 import React from 'react';
+import { BLOCK_ID_PREFIX } from '../dnd/constants';
 
 interface SortableBlockWrapperProps {
   block: Block;
@@ -36,7 +37,7 @@ const SortableBlockWrapper: React.FC<SortableBlockWrapperProps> = ({
     transition,
     isDragging,
   } = useSortable({
-    id: String(block.id),
+    id: `${BLOCK_ID_PREFIX}${String(block.id)}`,
     data: {
       type: 'canvas-block',
       blockId: String(block.id), // Required by validateDrop
@@ -107,12 +108,14 @@ const SortableBlockWrapper: React.FC<SortableBlockWrapperProps> = ({
   return (
     <div className="my-0">
       <div
+        id={`${BLOCK_ID_PREFIX}${String(block.id)}`}
         ref={setNodeRef}
         style={style}
         className={cn(
           'relative group transition-all duration-200',
           isSelected ? 'ring-2 ring-blue-500 ring-offset-1' : ''
         )}
+        data-dnd-dropzone-type="bloco"
         onClick={handleContainerClick}
         onMouseDown={handleContainerMouseDown}
       >

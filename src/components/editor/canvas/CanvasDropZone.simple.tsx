@@ -3,44 +3,51 @@ import { Block } from '@/types/editor';
 import { useDndContext, useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import React from 'react';
+import { CANVAS_ROOT_ID, SLOT_ID_PREFIX } from '../dnd/constants';
 import { SortableBlockWrapper } from './SortableBlockWrapper.simple';
 
-// Componente para drop zone entre blocos
-const InterBlockDropZone: React.FC<{
+// Componente para drop zone entre blocos (sempre presente para maximizar detecção)
+const InterBlockDropZoneBase: React.FC<{
   position: number;
-  isActive: boolean;
-}> = ({ position, isActive }) => {
+  isActive?: boolean;
+}> = ({ position, isActive = true }) => {
+  // Evitar recriar arrays/objetos a cada render (impede re-registro contínuo no dnd-kit)
+  const accepts = React.useMemo(() => ['sidebar-component', 'canvas-block'], []);
+  const data = React.useMemo(() => ({ type: 'dropzone', accepts, position }), [accepts, position]);
+
   const { setNodeRef, isOver } = useDroppable({
-    id: `drop-zone-${position}`,
-    data: {
-      type: 'canvas-drop-zone',
-      accepts: ['sidebar-component', 'canvas-block'], // Aceita tanto componentes da sidebar quanto blocos do canvas
-      position: position,
-    },
+    id: `${SLOT_ID_PREFIX}${position}`,
+    data,
   });
 
   return (
     <div
       ref={setNodeRef}
       className={cn(
-        'transition-all duration-200 relative pointer-events-auto flex items-center justify-center',
-        'h-8 min-h-[32px]', // Altura maior para facilitar drop
-        isOver && 'h-20 bg-brand/10 border-2 border-dashed border-brand/40 rounded-lg',
-        isActive && !isOver && 'h-4 bg-brand/20 rounded-full opacity-50'
+        'transition-all duration-150 relative pointer-events-auto flex items-center justify-center w-full',
+        'z-10',
+        // Sempre renderizado: manter hit area perceptível
+        'min-h-[16px]',
+        // Ao arrastar sobre: ampliar e dar feedback visual
+        isOver && 'min-h-[56px] bg-brand/10 border-2 border-dashed border-brand/40 rounded-lg',
+        // Quando ativo (há drag em andamento) mas não está over: indicar posição sutil
+        isActive && !isOver && 'min-h-[40px] bg-brand/5 rounded-full'
       )}
+      data-dnd-dropzone-type="slot"
+      data-position={position}
     >
       {isOver && (
-        <div className="absolute inset-0 flex items-center justify-center z-10">
-          <p className="text-brand font-medium text-sm bg-white/90 px-3 py-2 rounded shadow-sm">
+        <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+          <p className="text-brand font-medium text-xs sm:text-sm bg-white/90 px-2 sm:px-3 py-1.5 rounded shadow-sm">
             Inserir aqui (posição {position})
           </p>
         </div>
       )}
-      {/* Área invisível estendida para melhor hit detection */}
-      <div className="absolute inset-x-0 -inset-y-4 pointer-events-none" />
     </div>
   );
 };
+
+const InterBlockDropZone = React.memo(InterBlockDropZoneBase);
 
 interface CanvasDropZoneProps {
   blocks: Block[];
@@ -49,24 +56,33 @@ interface CanvasDropZoneProps {
   onUpdateBlock: (id: string, updates: any) => void;
   onDeleteBlock: (id: string) => void;
   className?: string;
+  isPreviewing?: boolean;
 }
 
-export const CanvasDropZone: React.FC<CanvasDropZoneProps> = ({
+const CanvasDropZoneBase: React.FC<CanvasDropZoneProps> = ({
   blocks,
   selectedBlockId,
   onSelectBlock,
   onUpdateBlock,
   onDeleteBlock,
   className,
+  isPreviewing: isPreviewingProp = false,
 }) => {
-  const { setNodeRef, isOver } = useDroppable({
-    id: 'canvas-drop-zone', // Padroniza id principal para facilitar validação
-    data: {
-      type: 'canvas-drop-zone',
-      accepts: ['sidebar-component', 'canvas-block'],
+  // Evitar recriar arrays/objetos a cada render (impede re-registro contínuo no dnd-kit)
+  const rootAccepts = React.useMemo(() => ['sidebar-component', 'canvas-block'], []);
+  const rootData = React.useMemo(
+    () => ({
+      type: 'dropzone',
+      accepts: rootAccepts,
       position: blocks.length, // Posição no final
       debug: 'main-canvas-zone', // Para debug
-    },
+    }),
+    [rootAccepts, blocks.length]
+  );
+
+  const { setNodeRef, isOver } = useDroppable({
+    id: CANVAS_ROOT_ID, // Padroniza id principal para facilitar validação
+    data: rootData,
   });
 
   // Usa useDndContext para obter active do contexto DnD
@@ -80,8 +96,21 @@ export const CanvasDropZone: React.FC<CanvasDropZoneProps> = ({
     return t === 'sidebar-component' || t === 'canvas-block' || overId.startsWith('sidebar-item-');
   }, [active]);
 
-  // Debug do drop zone - SEMPRE ATIVO para investigação
+  // Debug do drop zone - somente quando explicitamente habilitado
+  const isDebug = React.useCallback(() => {
+    try {
+      return (
+        ((import.meta as any)?.env?.DEV ?? false) ||
+        (typeof process !== 'undefined' && (process as any)?.env?.NODE_ENV === 'development') ||
+        (typeof window !== 'undefined' && (window as any).__DND_DEBUG === true)
+      );
+    } catch {
+      return false;
+    }
+  }, []);
+
   React.useEffect(() => {
+    if (!isDebug()) return;
     // eslint-disable-next-line no-console
     console.log('🎯 CanvasDropZone: isOver =', isOver, 'active =', active?.id);
     if (active?.data.current?.type === 'sidebar-component') {
@@ -91,16 +120,19 @@ export const CanvasDropZone: React.FC<CanvasDropZoneProps> = ({
       // eslint-disable-next-line no-console
       console.log('🔄 Reordenando bloco do canvas:', active?.id);
     }
-  }, [isOver, active]);
+  }, [isOver, active, isDebug]);
 
-  // Usando isPreviewing como false por padrão (modo de edição)
-  const isPreviewing = false;
+  // Modo preview controlado por prop (default: false)
+  const isPreviewing = !!isPreviewingProp;
 
   return (
     <div
+      id={CANVAS_ROOT_ID}
       ref={setNodeRef}
       className={cn(
-        'min-h-[300px] transition-all duration-200 pointer-events-auto p-4',
+        'min-h-[300px] transition-all duration-200 pointer-events-auto p-4 overflow-visible',
+        // Evitar qualquer bloqueio de eventos no canvas
+        'z-0',
         isOver && !isPreviewing && 'bg-brand/5 ring-2 ring-brand/20 ring-dashed',
         'border border-dashed border-gray-200 rounded-lg',
         // ✅ CLASSE CSS DE FORÇA BRUTA
@@ -110,6 +142,7 @@ export const CanvasDropZone: React.FC<CanvasDropZoneProps> = ({
       data-over={isOver}
       data-preview={isPreviewing}
       data-id="canvas-drop-zone"
+      data-dnd-dropzone-type="raiz-da-tela"
     >
       {blocks.length === 0 ? (
         <div className="text-center py-12">
@@ -126,12 +159,12 @@ export const CanvasDropZone: React.FC<CanvasDropZoneProps> = ({
         </div>
       ) : (
         <SortableContext
-          items={blocks.map(block => String(block.id))}
+          items={blocks.map(block => `dnd-block-${String(block.id)}`)}
           strategy={verticalListSortingStrategy}
         >
           <div className="space-y-6">
-            {/* Drop zone no início - agora aparece para QUALQUER item válido */}
-            {isDraggingAnyValidComponent && <InterBlockDropZone position={0} isActive={true} />}
+            {/* Drop zone no início - sempre presente (ativa durante drag) */}
+            <InterBlockDropZone position={0} isActive={isDraggingAnyValidComponent} />
 
             {blocks.map((block, index) => (
               <React.Fragment key={String(block.id)}>
@@ -151,10 +184,8 @@ export const CanvasDropZone: React.FC<CanvasDropZoneProps> = ({
                   }}
                 />
 
-                {/* Drop zone entre blocos - agora aparece para QUALQUER item válido */}
-                {isDraggingAnyValidComponent && (
-                  <InterBlockDropZone position={index + 1} isActive={true} />
-                )}
+                {/* Drop zone entre blocos - sempre presente (ativa durante drag) */}
+                <InterBlockDropZone position={index + 1} isActive={isDraggingAnyValidComponent} />
               </React.Fragment>
             ))}
           </div>
@@ -163,5 +194,7 @@ export const CanvasDropZone: React.FC<CanvasDropZoneProps> = ({
     </div>
   );
 };
+
+export const CanvasDropZone = React.memo(CanvasDropZoneBase);
 
 export default CanvasDropZone;

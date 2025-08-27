@@ -67,6 +67,8 @@ const OptionsListEditor: React.FC<{
     text: string;
     value?: string;
     category?: string;
+    keyword?: string;
+    styleCategory?: string;
     imageUrl?: string;
     description?: string;
     points?: number;
@@ -76,6 +78,8 @@ const OptionsListEditor: React.FC<{
       text: string;
       value?: string;
       category?: string;
+      keyword?: string;
+      styleCategory?: string;
       imageUrl?: string;
       description?: string;
       points?: number;
@@ -126,18 +130,30 @@ const OptionsListEditor: React.FC<{
       <div className="space-y-2">
         <h4 className="text-sm font-medium text-foreground">Opções ({(value || []).length})</h4>
         {(value || []).map((opt, idx) => (
-          <div key={idx} className="flex gap-2 p-2 bg-background border rounded-lg">
+          <div key={idx} className="flex flex-col gap-2 p-2 bg-background border rounded-lg">
             {/* Miniatura da Imagem */}
-            <div className="flex-shrink-0 w-12 h-12 border-2 border-dashed rounded-lg flex items-center justify-center bg-muted/50 cursor-pointer hover:border-primary transition-colors">
-              {opt.imageUrl ? (
-                <img
-                  src={opt.imageUrl}
-                  alt="Preview"
-                  className="w-full h-full object-cover rounded"
-                />
-              ) : (
-                <span className="text-xs text-muted-foreground">📷</span>
-              )}
+            <div className="flex items-center gap-2">
+              <div className="flex-shrink-0 w-12 h-12 border-2 border-dashed rounded-lg flex items-center justify-center bg-muted/50 cursor-pointer hover:border-primary transition-colors overflow-hidden">
+                {opt.imageUrl ? (
+                  <img
+                    src={opt.imageUrl}
+                    alt="Preview"
+                    className="w-full h-full object-cover rounded"
+                  />
+                ) : (
+                  <span className="text-xs text-muted-foreground">📷</span>
+                )}
+              </div>
+              <Input
+                placeholder="URL da imagem"
+                value={opt.imageUrl || ''}
+                onChange={e => {
+                  const arr = [...value];
+                  arr[idx] = { ...arr[idx], imageUrl: e.target.value };
+                  onChange(arr);
+                }}
+                className="text-xs flex-1"
+              />
             </div>
 
             {/* Texto Descritivo */}
@@ -163,20 +179,79 @@ const OptionsListEditor: React.FC<{
                 className="text-xs resize-none"
                 rows={2}
               />
+              <div className="grid grid-cols-2 gap-2 mt-2">
+                <Input
+                  placeholder="Categoria"
+                  value={opt.category || ''}
+                  onChange={e => {
+                    const arr = [...value];
+                    arr[idx] = { ...arr[idx], category: e.target.value };
+                    onChange(arr);
+                  }}
+                  className="text-xs"
+                />
+                <Input
+                  placeholder="Categoria de Estilo"
+                  value={opt.styleCategory || ''}
+                  onChange={e => {
+                    const arr = [...value];
+                    arr[idx] = { ...arr[idx], styleCategory: e.target.value };
+                    onChange(arr);
+                  }}
+                  className="text-xs"
+                />
+                <Input
+                  placeholder="Palavra-chave"
+                  value={opt.keyword || ''}
+                  onChange={e => {
+                    const arr = [...value];
+                    arr[idx] = { ...arr[idx], keyword: e.target.value };
+                    onChange(arr);
+                  }}
+                  className="text-xs"
+                />
+                <Input
+                  placeholder="Valor/ID"
+                  value={opt.value || ''}
+                  onChange={e => {
+                    const arr = [...value];
+                    arr[idx] = { ...arr[idx], value: e.target.value };
+                    onChange(arr);
+                  }}
+                  className="text-xs"
+                />
+                <Input
+                  placeholder="Pontos"
+                  type="number"
+                  value={Number.isFinite(opt.points as any) ? String(opt.points) : ''}
+                  onChange={e => {
+                    const arr = [...value];
+                    const n = parseInt(e.target.value || '0', 10);
+                    arr[idx] = { ...arr[idx], points: isNaN(n) ? 0 : n };
+                    onChange(arr);
+                  }}
+                  className="text-xs"
+                />
+              </div>
             </div>
 
             {/* Ações */}
-            <div className="flex-shrink-0 flex flex-col gap-1">
+            <div className="flex-shrink-0 flex gap-2">
               <button
                 type="button"
-                className="text-xs p-1 border rounded hover:bg-muted"
-                title="Editar"
+                className="text-xs py-1 px-2 border rounded hover:bg-muted"
+                title="Duplicar"
+                onClick={() => {
+                  const arr = [...value];
+                  arr.splice(idx + 1, 0, { ...arr[idx] });
+                  onChange(arr);
+                }}
               >
-                ✏️
+                ⎘
               </button>
               <button
                 type="button"
-                className="text-xs p-1 border rounded hover:bg-destructive/10 text-destructive"
+                className="text-xs py-1 px-2 border rounded hover:bg-destructive/10 text-destructive"
                 onClick={() => onChange(value.filter((_, i) => i !== idx))}
                 title="Remover"
               >
@@ -194,7 +269,16 @@ const OptionsListEditor: React.FC<{
           onClick={() =>
             onChange([
               ...(value || []),
-              { text: '', value: '', category: '', imageUrl: '', description: '', points: 0 },
+              {
+                text: '',
+                value: '',
+                category: '',
+                styleCategory: '',
+                keyword: '',
+                imageUrl: '',
+                description: '',
+                points: 0,
+              },
             ])
           }
         >
@@ -314,13 +398,15 @@ function PropertyField({
           />
         </FieldWrapper>
       );
-    case 'options-list':
+    case 'options-list': {
+      const listValue = Array.isArray(effectiveValue) ? effectiveValue : [];
       return (
         <FieldWrapper>
           <Label>{field.label}</Label>
-          <OptionsListEditor value={effectiveValue} onChange={onChange} />
+          <OptionsListEditor value={listValue} onChange={onChange} />
         </FieldWrapper>
       );
+    }
     case 'json':
       return (
         <FieldWrapper>

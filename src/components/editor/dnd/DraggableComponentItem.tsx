@@ -15,6 +15,7 @@ interface DraggableComponentItemProps {
   category?: string;
   disabled?: boolean;
   className?: string;
+  idSuffix?: string; // usado para garantir unicidade quando houver múltiplas sidebars
 }
 
 export const DraggableComponentItem: React.FC<DraggableComponentItemProps> = ({
@@ -25,6 +26,7 @@ export const DraggableComponentItem: React.FC<DraggableComponentItemProps> = ({
   category,
   disabled = false,
   className,
+  idSuffix,
 }) => {
   const isDebug = () => {
     try {
@@ -42,8 +44,11 @@ export const DraggableComponentItem: React.FC<DraggableComponentItemProps> = ({
     console.log(`🧩 DraggableComponentItem renderizado: ${blockType}`);
   }
 
+  const catSlug = (category || 'default').toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  const draggableId = `sidebar-item-${blockType}-${catSlug}${idSuffix ? `-${idSuffix}` : ''}`;
+
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-    id: `sidebar-item-${blockType}`,
+    id: draggableId,
     data: {
       type: 'sidebar-component',
       blockType: String(blockType),
@@ -58,7 +63,7 @@ export const DraggableComponentItem: React.FC<DraggableComponentItemProps> = ({
   if (isDebug()) {
     // eslint-disable-next-line no-console
     console.log(`🔧 useDraggable config para ${blockType}:`, {
-      id: `sidebar-item-${blockType}`,
+      id: draggableId,
       disabled,
       hasListeners: !!listeners,
       hasAttributes: !!attributes,
@@ -164,6 +169,14 @@ export const DraggableComponentItem: React.FC<DraggableComponentItemProps> = ({
       onMouseDown={handleMouseDown}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onDoubleClick={() => {
+        try {
+          const ev = new CustomEvent('editor-add-component', {
+            detail: { blockType, source: 'sidebar-double-click' },
+          });
+          window.dispatchEvent(ev);
+        } catch {}
+      }}
       {...attributes}
       {...listeners}
     >

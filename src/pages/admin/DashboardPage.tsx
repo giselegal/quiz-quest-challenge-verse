@@ -7,6 +7,7 @@ import { AdminSidebar } from '../../components/admin/AdminSidebar';
 const DashboardOverview = lazy(() => import('./OverviewPage'));
 const QuizPage = lazy(() => import('./QuizPage'));
 const FunnelPanelPage = lazy(() => import('./FunnelPanelPage'));
+const MyFunnelsPage = lazy(() => import('./MyFunnelsPage'));
 const ABTestPage = lazy(() => import('./ABTestPage'));
 const SettingsPage = lazy(() => import('./SettingsPage'));
 const CreativesPage = lazy(() => import('./CreativesPage'));
@@ -14,12 +15,15 @@ const AnalyticsPage = lazy(() => import('./AnalyticsPage'));
 const MetricsPage = lazy(() => import('./MetricsPage'));
 const NoCodeConfigPage = lazy(() => import('./NoCodeConfigPage'));
 const EditorPage = lazy(() => import('./EditorPage'));
+const FunnelSettingsPage = lazy(() => import('./FunnelSettingsPage'));
 // Templates page is temporarily disabled - will be recreated later
 // const TemplatesPage = lazy(() => import('./TemplatesPage'));
-const TemplatePlaceholder = () => <div className="p-8">
-  <h1 className="text-2xl font-bold mb-4">Templates</h1>
-  <p className="text-muted-foreground">This section is under construction.</p>
-</div>;
+const TemplatePlaceholder = () => (
+  <div className="p-8">
+    <h1 className="text-2xl font-bold mb-4">Templates</h1>
+    <p className="text-muted-foreground">This section is under construction.</p>
+  </div>
+);
 
 // Componente de loading
 const LoadingFallback = () => (
@@ -49,6 +53,7 @@ const DashboardPage: React.FC = () => {
               {/* Rotas do dashboard */}
               <Route path="/admin/quiz" component={QuizPage} />
               <Route path="/admin/funis" component={FunnelPanelPage} />
+              <Route path="/admin/meus-funis" component={MyFunnelsPage} />
               <Route path="/admin/metricas" component={MetricsPage} />
               <Route path="/admin/configuracao" component={NoCodeConfigPage} />
               <Route path="/admin/ab-tests" component={ABTestPage} />
@@ -56,6 +61,7 @@ const DashboardPage: React.FC = () => {
               <Route path="/admin/criativos" component={CreativesPage} />
               <Route path="/admin/analytics" component={AnalyticsPage} />
               <Route path="/admin/editor" component={EditorPage} />
+              <Route path="/admin/funnel-settings/:id" component={FunnelSettingsPage} />
               <Route path="/admin/templates" component={TemplatePlaceholder} />
             </Switch>
           </Suspense>

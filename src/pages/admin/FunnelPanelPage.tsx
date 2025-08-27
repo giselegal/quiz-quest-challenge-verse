@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { funnelLocalStore } from '@/services/funnelLocalStore';
 import { BarChart3, Edit, Eye, Play, Plus, Sparkles, Zap } from 'lucide-react';
 import { useLocation } from 'wouter';
 
@@ -56,6 +57,15 @@ const FunnelPanelPage: React.FC = () => {
   const [, setLocation] = useLocation();
 
   const handleUseTemplate = (templateId: string) => {
+    // Criar instância local do funil em rascunho e navegar ao editor com template
+    try {
+      const now = new Date().toISOString();
+      const newId = `${templateId}-${Date.now()}`;
+      const name = funnelTemplates.find(t => t.id === templateId)?.name || 'Funil';
+      const list = funnelLocalStore.list();
+      list.push({ id: newId, name, status: 'draft', updatedAt: now });
+      funnelLocalStore.saveList(list);
+    } catch {}
     // Navigate to editor with the template ID
     setLocation(`/editor?template=${templateId}`);
   };

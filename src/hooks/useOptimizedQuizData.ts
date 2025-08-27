@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Optimized Quiz Data Hook - Replaces localStorage with Supabase for critical data
  *
@@ -129,6 +128,15 @@ export const useOptimizedQuizData = (): QuizDataHookReturn => {
       return newBuffer;
     });
   }, []);
+
+  // Referência leve ao tamanho do buffer para evitar warning de variável não usada
+  useEffect(() => {
+    // noop: apenas garante que o React saiba que utilizamos clickBuffer
+    if (clickBuffer.length > 1000) {
+      // nunca deve acontecer; segurança para truncar
+      setClickBuffer(prev => prev.slice(-100));
+    }
+  }, [clickBuffer]);
 
   // User name management
   const setUserName = useCallback(
