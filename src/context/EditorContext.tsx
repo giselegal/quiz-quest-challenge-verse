@@ -184,9 +184,15 @@ export const EditorProvider: React.FC<{
 
   // Efeito para carregar o template inicial automaticamente
   useEffect(() => {
+    let isCancelled = false;
     const loadInitialTemplate = async () => {
       try {
+        if (isCancelled) return;
         setIsLoading(true);
+        if (typeof window === 'undefined') {
+          if (!isCancelled) setIsLoading(false);
+          return;
+        }
         console.log('🚀 Carregando template inicial para etapa 1...');
 
         // Importar o serviço de template dinamicamente
@@ -202,7 +208,7 @@ export const EditorProvider: React.FC<{
           const editorBlocks = templateService.convertTemplateBlocksToEditorBlocks(template.blocks);
 
           // Atualizar os blocos no estado do editor
-          dispatch({ type: 'SET_BLOCKS', payload: editorBlocks });
+          if (!isCancelled) dispatch({ type: 'SET_BLOCKS', payload: editorBlocks });
         } else {
           console.warn('⚠️ Template inicial não contém blocos, carregando blocos padrão');
 
@@ -241,25 +247,33 @@ export const EditorProvider: React.FC<{
             },
           ];
 
-          dispatch({ type: 'SET_BLOCKS', payload: fallbackBlocks });
+          if (!isCancelled) dispatch({ type: 'SET_BLOCKS', payload: fallbackBlocks });
         }
       } catch (error) {
         console.error('❌ Erro ao carregar template inicial:', error);
       } finally {
-        setIsLoading(false);
+        if (!isCancelled) setIsLoading(false);
       }
     };
 
     loadInitialTemplate();
+    return () => {
+      isCancelled = true;
+    };
   }, []);
 
   // ✅ NOVO: Carregar templates automaticamente quando muda de etapa
   useEffect(() => {
+    let isCancelled = false;
     if (!activeStageId) return;
 
     const loadStepTemplate = async () => {
       try {
         console.log(`🔄 AUTO-LOAD: Iniciando carregamento para etapa: ${activeStageId}`);
+        if (typeof window === 'undefined') {
+          if (!isCancelled) dispatch({ type: 'SET_BLOCKS', payload: [] });
+          return;
+        }
 
         // Carregar via templateService diretamente
         try {
@@ -283,7 +297,7 @@ export const EditorProvider: React.FC<{
             );
 
             console.log(`🔄 AUTO-LOAD: Convertidos ${editorBlocks.length} blocos para o editor`);
-            dispatch({ type: 'SET_BLOCKS', payload: editorBlocks });
+            if (!isCancelled) dispatch({ type: 'SET_BLOCKS', payload: editorBlocks });
 
             console.log(`✅ AUTO-LOAD: Blocos carregados no estado do editor!`);
           } else {
@@ -293,7 +307,7 @@ export const EditorProvider: React.FC<{
           }
         } catch (error) {
           console.error('❌ AUTO-LOAD: Erro ao carregar template via service:', error);
-          dispatch({ type: 'SET_BLOCKS', payload: [] });
+            if (!isCancelled) dispatch({ type: 'SET_BLOCKS', payload: [] });
         }
       } catch (error) {
         console.error('❌ AUTO-LOAD: Erro geral ao carregar template da etapa:', error);
@@ -301,6 +315,9 @@ export const EditorProvider: React.FC<{
     };
 
     loadStepTemplate();
+    return () => {
+      isCancelled = true;
+    };
   }, [activeStageId]);
 
   // Block management functions
