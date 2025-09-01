@@ -48,10 +48,10 @@ export const userResponseService = {
   enqueuePending(response: any) {
     if (!isBrowser) return;
     try {
-  const arr = StorageService.safeGetJSON<any[]>('quiz_pending_responses') || [];
-  arr.push(response);
-  StorageService.safeSetJSON('quiz_pending_responses', arr);
-    } catch {}
+      const arr = StorageService.safeGetJSON<any[]>('quiz_pending_responses') || [];
+      arr.push(response);
+      StorageService.safeSetJSON('quiz_pending_responses', arr);
+    } catch { }
   },
 
   async flushPending(): Promise<{ success: boolean; sent: number; remaining: number }> {
@@ -65,7 +65,7 @@ export const userResponseService = {
           .length,
       };
 
-  const pending: any[] = StorageService.safeGetJSON<any[]>('quiz_pending_responses') || [];
+    const pending: any[] = StorageService.safeGetJSON<any[]>('quiz_pending_responses') || [];
     if (!pending.length) return { success: true, sent: 0, remaining: 0 };
 
     let sent = 0;
@@ -78,7 +78,7 @@ export const userResponseService = {
         remaining.push(item);
       }
     }
-  StorageService.safeSetJSON('quiz_pending_responses', remaining);
+    StorageService.safeSetJSON('quiz_pending_responses', remaining);
     return { success: remaining.length === 0, sent, remaining: remaining.length };
   },
   async createQuizUser(userData: {
@@ -179,7 +179,7 @@ export const userResponseService = {
         StorageService.safeSetJSON(`quiz_response_${fallbackResponse.id}`, fallbackResponse);
         // Enfileirar para tentar enviar quando obtivermos uma sessão UUID
         this.enqueuePending(response);
-      } catch {}
+      } catch { }
       return fallbackResponse;
     }
     try {
@@ -256,7 +256,7 @@ export const userResponseService = {
         if (componentKey) {
           StorageService.safeSetJSON(`quiz_response_${componentKey}`, fallbackResponse);
         }
-      } catch {}
+      } catch { }
       console.log('📦 Saved response to localStorage as fallback');
       return fallbackResponse;
     }
@@ -304,13 +304,13 @@ export const userResponseService = {
       }
 
       // Fallback to localStorage
-  const stored = StorageService.safeGetJSON<any>(`quiz_response_${componentId}`);
-  return stored ? stored.data : '';
+      const stored = StorageService.safeGetJSON<any>(`quiz_response_${componentId}`);
+      return stored ? stored.data : '';
     } catch (error) {
       console.error('❌ Failed to get response:', error);
-  // Fallback
-  const stored = StorageService.safeGetJSON<any>(`quiz_response_${componentId}`);
-  return stored ? stored.data : '';
+      // Fallback
+      const stored = StorageService.safeGetJSON<any>(`quiz_response_${componentId}`);
+      return stored ? stored.data : '';
     }
   },
 
@@ -329,7 +329,7 @@ export const userResponseService = {
               if (val && (val.sessionId === userId || val.userId === userId)) {
                 out.push(val);
               }
-            } catch {}
+            } catch { }
           });
         return out;
       }
@@ -398,12 +398,12 @@ export default userResponseService;
 if (typeof window !== 'undefined') {
   window.addEventListener('quiz-session-started', () => {
     setTimeout(() => {
-      userResponseService.flushPending().catch(() => {});
+      userResponseService.flushPending().catch(() => { });
     }, 0);
   });
   window.addEventListener('online', () => {
     setTimeout(() => {
-      userResponseService.flushPending().catch(() => {});
+      userResponseService.flushPending().catch(() => { });
     }, 0);
   });
 }
