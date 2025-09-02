@@ -75,8 +75,12 @@ export const QuizRenderer: React.FC<QuizRendererProps> = React.memo(({
 
   // 🔄 Sincronizar passo interno com o passo do Editor/Preview
   useEffect(() => {
-    handleStepSync();
-  }, [handleStepSync]);
+    if (typeof currentStepOverride === 'number' && currentStepOverride !== currentStep) {
+      try {
+        goToStep?.(currentStepOverride);
+      } catch { }
+    }
+  }, [currentStepOverride, currentStep, goToStep]);
 
   // Metadata da etapa (se necessário futuramente)
   // const stepData: StepData = {
@@ -147,7 +151,7 @@ export const QuizRenderer: React.FC<QuizRendererProps> = React.memo(({
         } catch { }
       }
     } catch { }
-  }, [mode, previewEditable, currentStep, currentStepOverride]);
+  }, [mode, previewEditable, currentStep, currentStepOverride]); // Proper dependency array
 
   // Gating passa a ser feito via validação centralizada (quizState.stepValidation)
 
@@ -159,17 +163,17 @@ export const QuizRenderer: React.FC<QuizRendererProps> = React.memo(({
     } catch { }
   }, [currentStep, currentStepOverride]);
 
-  // Escutar eventos globais de blocos
+  // Escutar eventos globais de blocos - STABLE VERSION
   useEffect(() => {
     const handleSelectionChange = (ev: Event) => {
       const e = ev as CustomEvent<{ isValid?: boolean; valid?: boolean; selectionCount?: number }>;
       const valid = (e.detail?.isValid ?? e.detail?.valid) ?? false;
-      setStepValid?.(currentStep, valid);
+      if (setStepValid) setStepValid(currentStep, valid);
     };
     const handleInputChange = (ev: Event) => {
       const e = ev as CustomEvent<{ value?: string; valid?: boolean }>;
       const ok = typeof e.detail?.value === 'string' ? (e.detail.value?.trim().length ?? 0) > 0 : !!e.detail?.valid;
-      setStepValid?.(currentStep, ok);
+      if (setStepValid) setStepValid(currentStep, ok);
     };
     window.addEventListener('quiz-selection-change', handleSelectionChange as EventListener);
     window.addEventListener('quiz-input-change', handleInputChange as EventListener);
@@ -177,7 +181,7 @@ export const QuizRenderer: React.FC<QuizRendererProps> = React.memo(({
       window.removeEventListener('quiz-selection-change', handleSelectionChange as EventListener);
       window.removeEventListener('quiz-input-change', handleInputChange as EventListener);
     };
-  }, [currentStep]);
+  }, [currentStep, setStepValid]); // Added setStepValid to dependencies
 
   // Memoize stepBlocks to prevent infinite re-renders
   const stableStepBlocks = useMemo(() => stepBlocks || [], [stepBlocks]);
