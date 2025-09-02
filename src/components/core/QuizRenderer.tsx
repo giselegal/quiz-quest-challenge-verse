@@ -1,7 +1,7 @@
 import UniversalBlockRenderer from '@/components/editor/blocks/UniversalBlockRenderer';
 import { useQuizFlow } from '@/hooks/core/useQuizFlow';
 import { Block } from '@/types/editor';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { cn } from '@/lib/utils';
 // Validação centralizada cobre regras por etapa
 import { useCentralizedStepValidation } from '@/hooks/useCentralizedStepValidation';
@@ -30,7 +30,7 @@ interface QuizRendererProps {
  * Renderiza etapas usando dados reais do template
  * Funciona idêntico em produção e preview
  */
-export const QuizRenderer: React.FC<QuizRendererProps> = ({
+export const QuizRenderer: React.FC<QuizRendererProps> = React.memo(({
   mode = 'production',
   onStepChange,
   initialStep = 1,
@@ -42,11 +42,14 @@ export const QuizRenderer: React.FC<QuizRendererProps> = ({
   selectedBlockId = null,
   contentOverride,
 }) => {
-  const { quizState, actions } = useQuizFlow({
+  // Memoize the quiz flow configuration to prevent re-initialization
+  const quizFlowConfig = useMemo(() => ({
     mode,
     onStepChange,
     initialStep,
-  });
+  }), [mode, onStepChange, initialStep]);
+  
+  const { quizState, actions } = useQuizFlow(quizFlowConfig);
 
   const { currentStep, totalSteps, progress, isLoading } = quizState;
   const { prevStep, nextStep, getStepData, setStepValid, goToStep } = actions;
@@ -56,16 +59,24 @@ export const QuizRenderer: React.FC<QuizRendererProps> = ({
   const canUseOverrides =
     (mode === 'editor' || (mode === 'preview' && previewEditable)) && Array.isArray(blocksOverride);
 
-  const stepBlocks = canUseOverrides ? (blocksOverride as Block[]) : getStepData();
+  // Memoize step data to prevent unnecessary recalculations
+  const stepBlocks = useMemo(() => {
+    return canUseOverrides ? (blocksOverride as Block[]) : getStepData();
+  }, [canUseOverrides, blocksOverride, getStepData]);
 
-  // 🔄 Sincronizar passo interno com o passo do Editor/Preview
-  useEffect(() => {
+  // Stable step synchronization
+  const handleStepSync = useCallback(() => {
     if (typeof currentStepOverride === 'number' && currentStepOverride !== currentStep) {
       try {
         goToStep?.(currentStepOverride);
       } catch { }
     }
   }, [currentStepOverride, currentStep, goToStep]);
+
+  // 🔄 Sincronizar passo interno com o passo do Editor/Preview
+  useEffect(() => {
+    handleStepSync();
+  }, [handleStepSync]);
 
   // Metadata da etapa (se necessário futuramente)
   // const stepData: StepData = {
@@ -357,4 +368,7 @@ export const QuizRenderer: React.FC<QuizRendererProps> = ({
       </div>
     </div>
   );
-};
+});
+
+// Display name for debugging
+QuizRenderer.displayName = 'QuizRenderer';

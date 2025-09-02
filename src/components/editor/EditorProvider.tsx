@@ -361,7 +361,7 @@ export const EditorProvider: React.FC<EditorProviderProps> = ({
         console.error('Failed to ensure step loaded:', error);
       }
     },
-    [setState, state.isSupabaseEnabled, supabaseIntegration, quizId]
+    [setState, state.isSupabaseEnabled, supabaseIntegration, funnelId, quizId]
   );
 
   // Stable ref to ensureStepLoaded for effects that should not re-run on identity change
@@ -421,37 +421,12 @@ export const EditorProvider: React.FC<EditorProviderProps> = ({
 
   // 🚨 CORREÇÃO: Ensure step is loaded when currentStep changes
   useEffect(() => {
-    if (rawState.currentStep) {
-      // Em testes, não auto-carregar templates ao mudar de etapa
-      if (process.env.NODE_ENV !== 'test') {
-        ensureStepLoadedRef.current?.(rawState.currentStep);
-      }
-
-      // 🚨 FORÇA VERIFICAÇÃO: If step blocks are empty, force reload template
-      const currentStepBlocks = getBlocksForStep(rawState.currentStep, rawState.stepBlocks);
-      if (process.env.NODE_ENV !== 'test' && (!currentStepBlocks || currentStepBlocks.length === 0)) {
-        console.log('🚨 EMPTY STEP DETECTED - FORCE RELOAD:', rawState.currentStep);
-        const normalizedBlocks = normalizeStepBlocks(QUIZ_STYLE_21_STEPS_TEMPLATE);
-        setState(prev => {
-          const mergedBlocks = mergeStepBlocks(prev.stepBlocks, normalizedBlocks);
-          const validationUpdate: Record<number, boolean> = {};
-          for (let i = 1; i <= 21; i++) {
-            const key = `step-${i}`;
-            validationUpdate[i] = Array.isArray((mergedBlocks as any)[key]) && (mergedBlocks as any)[key].length > 0;
-          }
-          const next = {
-            ...prev,
-            stepBlocks: mergedBlocks,
-            stepValidation: {
-              ...(prev.stepValidation || {}),
-              ...validationUpdate,
-            },
-          } as typeof prev;
-          return next;
-        });
-      }
+    const currentStep = rawState.currentStep;
+    if (currentStep && process.env.NODE_ENV !== 'test') {
+      // Only load step if needed, and avoid triggering infinite loops
+      ensureStepLoadedRef.current?.(currentStep);
     }
-  }, [rawState.currentStep]);
+  }, [rawState.currentStep]); // Only depend on currentStep, not the entire rawState
 
   // (movido para baixo após actions/contextValue p/ evitar TDZ em builds minificados)
 
@@ -534,12 +509,12 @@ export const EditorProvider: React.FC<EditorProviderProps> = ({
 
   const setSelectedBlockId = useCallback(
     (blockId: string | null) => {
-      setState({
-        ...rawState,
+      setState(prev => ({
+        ...prev,
         selectedBlockId: blockId,
-      });
+      }));
     },
-    [setState, rawState]
+    [setState]
   );
 
   // Reflect step validation for editor UX (navigation/buttons/indicators)
@@ -647,7 +622,7 @@ export const EditorProvider: React.FC<EditorProviderProps> = ({
         // Local mode already applied optimistic update — nothing else to do
       }
     },
-    [setState, state.isSupabaseEnabled, supabaseIntegration, rawState, quizId]
+    [setState, state.isSupabaseEnabled, supabaseIntegration, quizId, funnelId]
   );
 
   const addBlockAtIndex = useCallback(
@@ -729,26 +704,26 @@ export const EditorProvider: React.FC<EditorProviderProps> = ({
         }
       }
     },
-    [setState, state.isSupabaseEnabled, supabaseIntegration, rawState, quizId]
+    [setState, state.isSupabaseEnabled, supabaseIntegration, quizId, funnelId]
   );
 
   const removeBlock = useCallback(
     async (stepKey: string, blockId: string) => {
-      const nextBlocks = (rawState.stepBlocks[stepKey] || []).filter(b => b.id !== blockId);
-      setState({
-        ...rawState,
-        stepBlocks: {
-          ...rawState.stepBlocks,
-          [stepKey]: nextBlocks,
-        },
-        selectedBlockId: rawState.selectedBlockId === blockId ? null : rawState.selectedBlockId,
-      });
-
-      // Persist draft
-      {
+      setState(prev => {
+        const nextBlocks = (prev.stepBlocks[stepKey] || []).filter(b => b.id !== blockId);
+        // Persist draft
         const draftKey = quizId || funnelId || 'local-funnel';
         try { DraftPersistence.saveStepDraft(draftKey, stepKey, nextBlocks); } catch { }
-      }
+        
+        return {
+          ...prev,
+          stepBlocks: {
+            ...prev.stepBlocks,
+            [stepKey]: nextBlocks,
+          },
+          selectedBlockId: prev.selectedBlockId === blockId ? null : prev.selectedBlockId,
+        };
+      });
 
       // If supabase mode, delegate deletion
       if (state.isSupabaseEnabled && supabaseIntegration?.deleteBlockById) {
@@ -759,7 +734,7 @@ export const EditorProvider: React.FC<EditorProviderProps> = ({
         }
       }
     },
-    [setState, state.isSupabaseEnabled, supabaseIntegration, rawState, quizId]
+    [setState, state.isSupabaseEnabled, supabaseIntegration, quizId, funnelId]
   );
 
   const reorderBlocks = useCallback(
@@ -797,50 +772,54 @@ export const EditorProvider: React.FC<EditorProviderProps> = ({
         }
       }
     },
-    [setState, state.isSupabaseEnabled, supabaseIntegration, rawState, quizId]
+    [setState, state.isSupabaseEnabled, supabaseIntegration, quizId, funnelId]
   );
 
   const updateBlock = useCallback(
     async (stepKey: string, blockId: string, updates: Record<string, any>) => {
       // Sempre mesclar alterações em properties por padrão.
       // Se o payload já vier com { properties }, respeitar e mesclar também.
-      const nextBlocks = (rawState.stepBlocks[stepKey] || []).map(b => {
-        if (b.id !== blockId) return b;
-        const incomingProps = updates.properties ?? updates;
-        const mergedProps = {
-          ...(b.properties || {}),
-          ...(incomingProps || {}),
-        };
-        return { ...b, properties: mergedProps };
-      });
+      setState(prev => {
+        const nextBlocks = (prev.stepBlocks[stepKey] || []).map(b => {
+          if (b.id !== blockId) return b;
+          const incomingProps = updates.properties ?? updates;
+          const mergedProps = {
+            ...(b.properties || {}),
+            ...(incomingProps || {}),
+          };
+          return { ...b, properties: mergedProps };
+        });
 
-      const nextState = {
-        ...rawState,
-        stepBlocks: {
-          ...rawState.stepBlocks,
-          [stepKey]: nextBlocks,
-        },
-      };
-      setState(nextState);
-
-      // Persist draft
-      {
+        // Persist draft
         const draftKey = quizId || funnelId || 'local-funnel';
         try { DraftPersistence.saveStepDraft(draftKey, stepKey, nextBlocks); } catch { }
-      }
+
+        return {
+          ...prev,
+          stepBlocks: {
+            ...prev.stepBlocks,
+            [stepKey]: nextBlocks,
+          },
+        };
+      });
 
       if (state.isSupabaseEnabled && supabaseIntegration?.updateBlockById) {
         try {
-          const updated = nextBlocks.find(b => b.id === blockId);
-          await supabaseIntegration.updateBlockById(blockId, {
-            properties: updated?.properties,
+          setState(prev => {
+            const updated = (prev.stepBlocks[stepKey] || []).find(b => b.id === blockId);
+            if (updated) {
+              supabaseIntegration.updateBlockById(blockId, {
+                properties: updated.properties,
+              }).catch(err => console.error('Failed to update block in supabase', err));
+            }
+            return prev;
           });
         } catch (err) {
           console.error('Failed to update block in supabase', err);
         }
       }
     },
-    [setState, state.isSupabaseEnabled, supabaseIntegration, rawState, quizId]
+    [setState, state.isSupabaseEnabled, supabaseIntegration, quizId, funnelId]
   );
 
   const exportJSON = useCallback(() => {
@@ -967,51 +946,59 @@ export const EditorProvider: React.FC<EditorProviderProps> = ({
 
   // � DIAGNÓSTICO: Expor análise básica de estado (após actions/contextValue)
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const w = window as any;
-      const analysis = {
-        timestamp: Date.now(),
-        totalSteps: 21,
-        currentStep: state.currentStep,
-        stepBlocksKeys: Object.keys(state.stepBlocks || {}),
-        stepsWithBlocks: Object.entries(state.stepBlocks || {}).map(([key, blocks]) => ({
-          step: key,
-          count: Array.isArray(blocks) ? blocks.length : 0,
-          types: Array.isArray(blocks) ? (blocks as any[]).map((b: any) => b.type) : [],
-        })),
-        validationSummary: state.stepValidation || {},
-        contextHealth: 'healthy',
-      };
-      w.__EDITOR_STATE_ANALYSIS__ = analysis;
-      if (process.env.NODE_ENV === 'development') {
-        console.log('🔧 Editor context exposed for debugging:', analysis);
+    const timeoutId = setTimeout(() => {
+      if (typeof window !== 'undefined') {
+        const w = window as any;
+        const analysis = {
+          timestamp: Date.now(),
+          totalSteps: 21,
+          currentStep: state.currentStep,
+          stepBlocksKeys: Object.keys(state.stepBlocks || {}),
+          stepsWithBlocks: Object.entries(state.stepBlocks || {}).map(([key, blocks]) => ({
+            step: key,
+            count: Array.isArray(blocks) ? blocks.length : 0,
+            types: Array.isArray(blocks) ? (blocks as any[]).map((b: any) => b.type) : [],
+          })),
+          validationSummary: state.stepValidation || {},
+          contextHealth: 'healthy',
+        };
+        w.__EDITOR_STATE_ANALYSIS__ = analysis;
+        if (process.env.NODE_ENV === 'development') {
+          console.log('🔧 Editor context exposed for debugging:', analysis);
+        }
       }
-    }
-  }, [state]);
+    }, 100); // Debounce to prevent excessive updates
+
+    return () => clearTimeout(timeoutId);
+  }, [state.currentStep, Object.keys(state.stepBlocks || {}).length]); // Only depend on key values that matter
 
   // �🔍 DIAGNÓSTICO: Expor contexto globalmente para debugging
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      (window as any).__EDITOR_CONTEXT__ = {
-        ...state,
-        actions,
-      };
+    const timeoutId = setTimeout(() => {
+      if (typeof window !== 'undefined') {
+        (window as any).__EDITOR_CONTEXT__ = {
+          ...state,
+          actions,
+        };
 
-      // Detectar erros de contexto
-      if (!state || typeof state !== 'object') {
-        if (!(window as any).__EDITOR_CONTEXT_ERROR__) {
-          (window as any).__EDITOR_CONTEXT_ERROR__ = [];
+        // Detectar erros de contexto
+        if (!state || typeof state !== 'object') {
+          if (!(window as any).__EDITOR_CONTEXT_ERROR__) {
+            (window as any).__EDITOR_CONTEXT_ERROR__ = [];
+          }
+          (window as any).__EDITOR_CONTEXT_ERROR__.push({
+            error: 'Estado do editor inválido',
+            state: state,
+            timestamp: Date.now(),
+            stack: new Error().stack
+          });
+          console.error('🚨 ERRO DE CONTEXTO DO EDITOR: Estado inválido detectado', state);
         }
-        (window as any).__EDITOR_CONTEXT_ERROR__.push({
-          error: 'Estado do editor inválido',
-          state: state,
-          timestamp: Date.now(),
-          stack: new Error().stack
-        });
-        console.error('🚨 ERRO DE CONTEXTO DO EDITOR: Estado inválido detectado', state);
       }
-    }
-  }, [state, actions]);
+    }, 200); // Debounce to prevent excessive updates
+
+    return () => clearTimeout(timeoutId);
+  }, [state.currentStep, state.isLoading]); // Only depend on key state changes
 
   return <EditorContext.Provider value={contextValue}>{children}</EditorContext.Provider>;
 };
