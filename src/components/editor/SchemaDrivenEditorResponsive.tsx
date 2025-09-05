@@ -1,4 +1,4 @@
-import RegistryPropertiesPanel from '@/components/universal/RegistryPropertiesPanel';
+import { PropertiesColumn } from '@/components/editor/properties/PropertiesColumn';
 import { useEditor } from './EditorProvider';
 import { BlockType } from '@/types/editor';
 import { QuizMainDemo } from './QuizMainDemo';
@@ -37,7 +37,7 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
 
   const [isInteractiveMode, setIsInteractiveMode] = useState(mode === 'interactive');
 
-  // 🎯 FASE 2: Integrar fallback para etapa 20
+  // 🏹 FASE 2: Integrar fallback para etapa 20
   const isStep20 = state.currentStep === 20;
   const hasResultHeaderBlock = currentBlocks.some(block => block.type === 'result-header-inline');
 
@@ -51,17 +51,6 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
       }
     } catch (error) {
       console.error('❌ Erro ao adicionar bloco:', error);
-    }
-  };
-
-  const handleUpdateSelectedBlock = async (blockId: string, updates: any) => {
-    if (blockId) {
-      try {
-        await actions.updateBlock(currentStepKey, blockId, updates);
-        console.log('✅ Bloco atualizado via editor responsivo:', blockId);
-      } catch (error) {
-        console.error('❌ Erro ao atualizar bloco:', error);
-      }
     }
   };
 
@@ -108,8 +97,8 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
           <button
             onClick={handleModeToggle}
             className={`px-3 py-2 text-sm rounded-lg transition-colors ${isInteractiveMode
-                ? 'bg-blue-600 text-white hover:bg-blue-700'
-                : 'bg-green-100 hover:bg-green-200 text-green-700'
+              ? 'bg-blue-600 text-white hover:bg-blue-700'
+              : 'bg-green-100 hover:bg-green-200 text-green-700'
               }`}
           >
             {isInteractiveMode ? '✏️ Editor' : '🎮 Quiz Interativo'}
@@ -117,7 +106,7 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
         </div>
       </div>
 
-      {/* 📐 LAYOUT DE 4 COLUNAS */}
+      {/* 📘 LAYOUT DE 4 COLUNAS */}
       <div className="h-[calc(100%-56px)]">
         <FourColumnLayout
           stagesPanel={<FunnelStagesPanel />}
@@ -146,11 +135,15 @@ const SchemaDrivenEditorResponsive: React.FC<SchemaDrivenEditorResponsiveProps> 
             </>
           }
           propertiesPanel={
-            <RegistryPropertiesPanel
-              selectedBlock={selectedBlock || null}
-              onUpdate={handleUpdateSelectedBlock}
+            <PropertiesColumn
+              selectedBlock={selectedBlock as any}
+              onUpdate={(updates: Record<string, any>) =>
+                selectedBlock ? actions.updateBlock(currentStepKey, selectedBlock.id, updates) : undefined
+              }
               onClose={() => setSelectedBlockId(null)}
-              onDelete={blockId => actions.removeBlock(currentStepKey, blockId)}
+              onDelete={() =>
+                selectedBlock ? actions.removeBlock(currentStepKey, selectedBlock.id) : undefined
+              }
             />
           }
         />

@@ -6,6 +6,7 @@ import { useFunnelNavigation } from '@/hooks/useFunnelNavigation';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { LayoutGrid, Monitor, Save, Settings, Smartphone, Tablet } from 'lucide-react';
+import FunnelSelector from './FunnelSelector';
 
 interface EditorToolbarProps {
   className?: string;
@@ -82,6 +83,11 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ className = '' }) 
           <span>
             Etapa {funnelNavigation.currentStepNumber || 1} de {funnelNavigation.totalSteps || 21}
           </span>
+        </div>
+
+        {/* Seletor de Funil */}
+        <div className="ml-4">
+          <FunnelSelector />
         </div>
       </div>
 
