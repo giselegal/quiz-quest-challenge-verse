@@ -24,6 +24,7 @@ const AgentStyleFunnelTestPage = lazy(() => import('./pages/AgentStyleFunnelTest
 const StepsShowcasePage = lazy(() => import('./pages/StepsShowcase'));
 const SchemaEditorPage = lazy(() => import('./pages/SchemaEditorPage'));
 const EnhancedPropertiesPanelDemo = lazy(() => import('./components/demo/EnhancedPropertiesPanelDemo'));
+const CommentDemo = lazy(() => import('./components/editor/comments/CommentDemo'));
 const FunnelDashboardPage = lazy(() => import('./pages/FunnelDashboardPage'));
 
 // Loading component
@@ -160,6 +161,13 @@ function App() {
                 <Route path="/demo/properties-panel">
                   <Suspense fallback={<PageLoading />}>
                     <EnhancedPropertiesPanelDemo />
+                  </Suspense>
+                </Route>
+
+                {/* 💬 DEMO DO SISTEMA DE COMENTÁRIOS */}
+                <Route path="/demo/comments">
+                  <Suspense fallback={<PageLoading />}>
+                    <CommentDemo />
                   </Suspense>
                 </Route>
 

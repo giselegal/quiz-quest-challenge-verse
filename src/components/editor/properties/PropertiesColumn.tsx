@@ -1,6 +1,8 @@
 import React, { Suspense } from 'react';
 import { Block } from '@/types/editor';
 import { cn } from '@/lib/utils';
+import { CommentSystem } from '../comments/CommentSystem';
+import { useEditor } from '../EditorProvider';
 
 // Import the enhanced properties panel with 100% coverage
 const EnhancedPropertiesPanel = React.lazy(
@@ -30,6 +32,8 @@ export const PropertiesColumn: React.FC<PropertiesColumnProps> = ({
   onPreviewModeChange: _onPreviewModeChange,
   className = '',
 }) => {
+  const { state } = useEditor();
+
   return (
     <div
       className={cn(
@@ -55,6 +59,15 @@ export const PropertiesColumn: React.FC<PropertiesColumnProps> = ({
               onClose={onClose}
               onDelete={onDelete}
               onDuplicate={onDuplicate}
+            />
+          </div>
+          
+          {/* Comment System - Clearly separated from editing functionality */}
+          <div className="border-t border-gray-200 p-4 bg-gray-50">
+            <CommentSystem 
+              blockId={selectedBlock.id}
+              stepKey={`step-${state.currentStep}`}
+              className="max-h-60 overflow-y-auto"
             />
           </div>
         </Suspense>
