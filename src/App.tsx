@@ -44,6 +44,9 @@ const FunnelDashboardPage = lazy(() => import('./pages/FunnelDashboardPage'));
 const TestParticipantsPage = lazy(() => import('./pages/TestParticipantsPage'));
 const TestDataPanel = lazy(() => import('./components/TestDataPanel'));
 
+// 🚀 DIRECT TEMPLATE ACCESS - URGENT SOLUTION
+const DirectTemplateAccessPage = lazy(() => import('./pages/DirectTemplateAccessPage'));
+
 // Loading component
 const PageLoading = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -113,6 +116,13 @@ function App() {
                   <Route path="/editor" component={() =>
                     <Suspense fallback={<LoadingFallback />}>
                       <MainEditorUnified />
+                    </Suspense>
+                  } />
+
+                  {/* 🚀 DIRECT TEMPLATE ACCESS - URGENT SOLUTION FOR USER */}
+                  <Route path="/direct-template-access" component={() =>
+                    <Suspense fallback={<LoadingFallback />}>
+                      <DirectTemplateAccessPage />
                     </Suspense>
                   } />
 
