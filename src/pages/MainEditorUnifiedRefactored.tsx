@@ -26,6 +26,7 @@ import { EditorUnifiedProvider } from '@/context/EditorUnifiedProvider';
 import { EditorProUnified } from '@/legacy/editor/EditorProUnified';
 import { logger } from '@/utils/debugLogger';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import { optimizedFunnelService } from '@/services/OptimizedFunnelService';
 
 /**
  * Loading Spinner Component
@@ -126,11 +127,37 @@ export const MainEditorUnified: React.FC = () => {
         logger.info('⚠️ MainEditorUnified: No funnel ID, checking for template or creating new funnel', { templateId });
 
         if (templateId) {
-            // Se há um template, criar novo funil com esse template
-            logger.info('🎨 MainEditorUnified: Template detected, creating new funnel', { templateId });
-            const newFunnelId = `template-${templateId}-${Date.now()}`;
-            setLocation(`/editor/${newFunnelId}?template=${templateId}`);
-            return <LoadingSpinner />;
+            // ✅ SOLUÇÃO OTIMIZADA: Verificar se é o template large quiz21StepsComplete
+            if (templateId === 'quiz21StepsComplete') {
+                logger.info('🚀 MainEditorUnified: Large template detected, using optimized service', { templateId });
+                
+                // Criar funil otimizado usando nosso novo service
+                const createOptimizedFunnel = async () => {
+                    try {
+                        const editorUrl = await optimizedFunnelService.openInEditor(templateId);
+                        const funnelIdFromUrl = editorUrl.split('funnel=')[1];
+                        if (funnelIdFromUrl) {
+                            setLocation(`/editor/${funnelIdFromUrl}`);
+                        } else {
+                            setLocation(editorUrl.replace('/editor', '/editor'));
+                        }
+                    } catch (error) {
+                        logger.error('❌ MainEditorUnified: Failed to create optimized funnel', error);
+                        // Fallback to original behavior
+                        const newFunnelId = `template-${templateId}-${Date.now()}`;
+                        setLocation(`/editor/${newFunnelId}?template=${templateId}`);
+                    }
+                };
+                
+                createOptimizedFunnel();
+                return <LoadingSpinner />;
+            } else {
+                // Template normal - comportamento original
+                logger.info('🎨 MainEditorUnified: Standard template detected, creating normal funnel', { templateId });
+                const newFunnelId = `template-${templateId}-${Date.now()}`;
+                setLocation(`/editor/${newFunnelId}?template=${templateId}`);
+                return <LoadingSpinner />;
+            }
         }
 
         return (
