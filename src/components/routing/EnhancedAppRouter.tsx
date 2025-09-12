@@ -6,8 +6,8 @@ import { Route, Router, Switch, useLocation } from 'wouter';
 const PageLoader: React.FC = () => (
   <div style={{ backgroundColor: '#FAF9F7' }}>
     <div className="text-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#B89B7A] mx-auto"></div>
-      <p style={{ color: '#6B4F43' }}>Carregando...</p>
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-lightBlue mx-auto"></div>
+      <p className="text-brand-darkBlue">Carregando...</p>
     </div>
   </div>
 );
@@ -28,10 +28,12 @@ const ErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         <div className="text-center">
           <div style={{ color: '#432818' }}>❌</div>
           <h1 className="text-2xl font-bold mb-2">Ops! Algo deu errado</h1>
-          <p style={{ color: '#6B4F43' }}>Ocorreu um erro inesperado</p>
+-          <p style={{ color: '#6B4F43' }}>Ocorreu um erro inesperado</p>
++          <p className="text-brand-darkBlue/80">Ocorreu um erro inesperado</p>
           <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-[#B89B7A]/100 text-white rounded hover:bg-[#B89B7A]"
+             onClick={() => window.location.reload()}
+-            className="px-4 py-2 bg-[#B89B7A]/100 text-white rounded hover:bg-[#B89B7A]"
++            className="px-4 py-2 bg-brand-darkBlue text-white rounded hover:bg-brand-mediumBlue"
           >
             Recarregar Página
           </button>
@@ -104,20 +106,27 @@ const SimpleDashboard: React.FC = () => (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
           <div className="text-center">
             <div className="text-2xl font-bold text-green-600">7/7</div>
-            <div style={{ color: '#6B4F43' }}>Sistemas</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-[#B89B7A]">100%</div>
-            <div style={{ color: '#6B4F43' }}>Completo</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-[#B89B7A]">✅</div>
-            <div style={{ color: '#6B4F43' }}>Pronto</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-[#B89B7A]">🔧</div>
-            <div style={{ color: '#6B4F43' }}>Testando</div>
-          </div>
+-          <div style={{ color: '#6B4F43' }}>Sistemas</div>
++          <div className="text-brand-darkBlue/80">Sistemas</div>
+        </div>
+        <div className="text-center">
+-          <div className="text-2xl font-bold text-[#B89B7A]">100%</div>
+-          <div style={{ color: '#6B4F43' }}>Completo</div>
++          <div className="text-2xl font-bold text-brand-lightBlue">100%</div>
++          <div className="text-brand-darkBlue/80">Completo</div>
+        </div>
+        <div className="text-center">
+-          <div className="text-2xl font-bold text-[#B89B7A]">✅</div>
+-          <div style={{ color: '#6B4F43' }}>Pronto</div>
++          <div className="text-2xl font-bold text-brand-lightBlue">✅</div>
++          <div className="text-brand-darkBlue/80">Pronto</div>
+        </div>
+        <div className="text-center">
+-          <div className="text-2xl font-bold text-[#B89B7A]">🔧</div>
+-          <div style={{ color: '#6B4F43' }}>Testando</div>
++          <div className="text-2xl font-bold text-brand-lightBlue">🔧</div>
++          <div className="text-brand-darkBlue/80">Testando</div>
+        </div>
         </div>
       </div>
     </div>

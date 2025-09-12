@@ -1,5 +1,5 @@
-/**
- * 🎯 PÁGINA DE SHOWCASE DAS FUNCIONALIDADES AVANÇADAS
+﻿/**
+ * ðŸŽ¯ PÃGINA DE SHOWCASE DAS FUNCIONALIDADES AVANÃ‡ADAS
  * 
  * Demonstra todas as funcionalidades empresariais ativadas
  */
@@ -32,39 +32,39 @@ const FuncionalidadesAvancadasPage: React.FC = () => {
         {
             id: 'analytics',
             title: 'Analytics Empresarial',
-            description: 'Dashboard completo com métricas em tempo real, funil de conversão e análise de comportamento',
+            description: 'Dashboard completo com mÃ©tricas em tempo real, funil de conversÃ£o e anÃ¡lise de comportamento',
             icon: Activity,
             badge: 'Empresarial',
             color: 'from-blue-500 to-blue-600',
             link: '/admin/analytics',
             features: [
                 'Dashboard em tempo real',
-                'Funil de conversão detalhado',
-                'Análise de comportamento do usuário',
-                'Métricas de performance',
-                'Relatórios automatizados',
+                'Funil de conversÃ£o detalhado',
+                'AnÃ¡lise de comportamento do usuÃ¡rio',
+                'MÃ©tricas de performance',
+                'RelatÃ³rios automatizados',
             ],
         },
         {
             id: 'abtest',
-            title: 'Testes A/B Avançados',
-            description: 'Comparação estatística de versões, otimização automática e análise de significância',
+            title: 'Testes A/B AvanÃ§ados',
+            description: 'ComparaÃ§Ã£o estatÃ­stica de versÃµes, otimizaÃ§Ã£o automÃ¡tica e anÃ¡lise de significÃ¢ncia',
             icon: Target,
-            badge: 'Otimização',
+            badge: 'OtimizaÃ§Ã£o',
             color: 'from-purple-500 to-purple-600',
             link: '/admin/ab-tests',
             features: [
                 'Testes A/B automatizados',
-                'Análise de significância estatística',
-                'Otimização automática',
-                'Comparação de versões',
-                'ROI por variação',
+                'AnÃ¡lise de significÃ¢ncia estatÃ­stica',
+                'OtimizaÃ§Ã£o automÃ¡tica',
+                'ComparaÃ§Ã£o de versÃµes',
+                'ROI por variaÃ§Ã£o',
             ],
         },
         {
             id: 'dragdrop',
             title: 'Editor Drag & Drop',
-            description: 'Sistema avançado de arrastar e soltar com componentes modulares e preview em tempo real',
+            description: 'Sistema avanÃ§ado de arrastar e soltar com componentes modulares e preview em tempo real',
             icon: Layers,
             badge: 'Visual',
             color: 'from-green-500 to-green-600',
@@ -79,49 +79,49 @@ const FuncionalidadesAvancadasPage: React.FC = () => {
         },
         {
             id: 'automation',
-            title: 'Automação & Webhooks',
-            description: 'Integração automática com CRMs, email marketing e sistemas externos',
+            title: 'AutomaÃ§Ã£o & Webhooks',
+            description: 'IntegraÃ§Ã£o automÃ¡tica com CRMs, email marketing e sistemas externos',
             icon: Zap,
-            badge: 'Automação',
+            badge: 'AutomaÃ§Ã£o',
             color: 'from-yellow-500 to-yellow-600',
             link: '/admin/configuracao',
             features: [
                 'Webhooks em tempo real',
-                'Integração com CRMs',
-                'Email marketing automático',
+                'IntegraÃ§Ã£o com CRMs',
+                'Email marketing automÃ¡tico',
                 'Triggers personalizados',
                 'API completa',
             ],
         },
         {
             id: 'scoring',
-            title: 'Sistema de Pontuação IA',
-            description: 'Algoritmos inteligentes para scoring de leads e personalização de conteúdo',
+            title: 'Sistema de PontuaÃ§Ã£o IA',
+            description: 'Algoritmos inteligentes para scoring de leads e personalizaÃ§Ã£o de conteÃºdo',
             icon: Brain,
-            badge: 'Inteligência',
+            badge: 'InteligÃªncia',
             color: 'from-indigo-500 to-indigo-600',
             link: '/admin/analytics',
             features: [
                 'Scoring inteligente de leads',
-                'Personalização por IA',
-                'Algoritmos de recomendação',
-                'Segmentação automática',
-                'Predição de conversão',
+                'PersonalizaÃ§Ã£o por IA',
+                'Algoritmos de recomendaÃ§Ã£o',
+                'SegmentaÃ§Ã£o automÃ¡tica',
+                'PrediÃ§Ã£o de conversÃ£o',
             ],
         },
         {
             id: 'themes',
-            title: 'Temas Dinâmicos',
-            description: 'Sistema avançado de temas com customização completa e brand consistency',
+            title: 'Temas DinÃ¢micos',
+            description: 'Sistema avanÃ§ado de temas com customizaÃ§Ã£o completa e brand consistency',
             icon: Palette,
             badge: 'Design',
             color: 'from-pink-500 to-pink-600',
             link: '/admin/criativos',
             features: [
-                'Temas dinâmicos',
-                'Customização completa',
+                'Temas dinÃ¢micos',
+                'CustomizaÃ§Ã£o completa',
                 'Brand consistency',
-                'Variações automáticas',
+                'VariaÃ§Ãµes automÃ¡ticas',
                 'Design system integrado',
             ],
         },
@@ -129,21 +129,21 @@ const FuncionalidadesAvancadasPage: React.FC = () => {
 
     const stats = [
         { label: 'Funcionalidades Ativas', value: '15+', icon: CheckCircle },
-        { label: 'Componentes Avançados', value: '50+', icon: Layers },
-        { label: 'Integrações Disponíveis', value: '25+', icon: Globe },
+        { label: 'Componentes AvanÃ§ados', value: '50+', icon: Layers },
+        { label: 'IntegraÃ§Ãµes DisponÃ­veis', value: '25+', icon: Globe },
         { label: 'Performance Score', value: '98%', icon: Star },
     ];
 
     return (
         <div className="p-6 space-y-8">
-            {/* Header com estatísticas */}
+            {/* Header com estatÃ­sticas */}
             <div className="text-center space-y-4">
                 <div className="flex items-center justify-center gap-3 mb-4">
                     <h1
-                        className="text-4xl font-bold text-[#432818]"
+                        className="text-4xl font-bold text-[#1A0F3D]"
                         style={{ fontFamily: 'Playfair Display, serif' }}
                     >
-                        Funcionalidades Avançadas
+                        Funcionalidades AvanÃ§adas
                     </h1>
                     <Badge className="bg-gradient-to-r from-green-500 to-blue-500 text-white">
                         <Rocket className="w-4 h-4 mr-1" />
@@ -152,16 +152,16 @@ const FuncionalidadesAvancadasPage: React.FC = () => {
                 </div>
 
                 <p className="text-[#8F7A6A] text-lg max-w-3xl mx-auto">
-                    Sua plataforma agora possui recursos empresariais completos para criação,
-                    análise e otimização de quizzes e funis de alta conversão.
+                    Sua plataforma agora possui recursos empresariais completos para criaÃ§Ã£o,
+                    anÃ¡lise e otimizaÃ§Ã£o de quizzes e funis de alta conversÃ£o.
                 </p>
 
-                {/* Estatísticas */}
+                {/* EstatÃ­sticas */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
                     {stats.map((stat, index) => (
                         <div key={index} className="bg-white border border-[#E5DDD5] rounded-lg p-4 text-center">
                             <stat.icon className="w-6 h-6 mx-auto mb-2 text-[#B89B7A]" />
-                            <div className="text-2xl font-bold text-[#432818]">{stat.value}</div>
+                            <div className="text-2xl font-bold text-[#1A0F3D]">{stat.value}</div>
                             <div className="text-sm text-[#8F7A6A]">{stat.label}</div>
                         </div>
                     ))}
@@ -188,8 +188,8 @@ const FuncionalidadesAvancadasPage: React.FC = () => {
                                 </Badge>
                             </div>
 
-                            {/* Conteúdo */}
-                            <h3 className="text-lg font-semibold text-[#432818] mb-2">
+                            {/* ConteÃºdo */}
+                            <h3 className="text-lg font-semibold text-[#1A0F3D] mb-2">
                                 {feature.title}
                             </h3>
                             <p className="text-[#8F7A6A] text-sm mb-4 line-clamp-2">
@@ -208,7 +208,7 @@ const FuncionalidadesAvancadasPage: React.FC = () => {
                                 </div>
                             )}
 
-                            {/* Ações */}
+                            {/* AÃ§Ãµes */}
                             <div className="flex gap-2">
                                 <Link href={feature.link} className="flex-1">
                                     <Button
@@ -242,12 +242,12 @@ const FuncionalidadesAvancadasPage: React.FC = () => {
                     Plataforma Completa Ativada
                 </h2>
                 <p className="text-white/90 mb-6 max-w-2xl mx-auto">
-                    Você agora tem acesso a todas as funcionalidades empresariais.
+                    VocÃª agora tem acesso a todas as funcionalidades empresariais.
                     Comece criando seu primeiro funil otimizado ou analise os dados existentes.
                 </p>
                 <div className="flex flex-wrap gap-4 justify-center">
                     <Link href="/editor">
-                        <Button className="bg-white text-[#432818] hover:bg-gray-100">
+                        <Button className="bg-white text-[#1A0F3D] hover:bg-gray-100">
                             <Layers className="w-4 h-4 mr-2" />
                             Criar Funil
                         </Button>
@@ -267,12 +267,12 @@ const FuncionalidadesAvancadasPage: React.FC = () => {
                 </div>
             </div>
 
-            {/* Indicador de atualização */}
+            {/* Indicador de atualizaÃ§Ã£o */}
             <div className="text-center">
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 border border-green-200 rounded-lg text-green-700">
                     <RefreshCw className="w-4 h-4" />
                     <span className="text-sm font-medium">
-                        Atualização aplicada com sucesso • Todas as funcionalidades estão operacionais
+                        AtualizaÃ§Ã£o aplicada com sucesso â€¢ Todas as funcionalidades estÃ£o operacionais
                     </span>
                 </div>
             </div>
@@ -281,3 +281,4 @@ const FuncionalidadesAvancadasPage: React.FC = () => {
 };
 
 export default FuncionalidadesAvancadasPage;
+

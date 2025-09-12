@@ -1,7 +1,7 @@
-/**
- * 🧠 PÁGINA COMPLETA DE FUNCIONALIDADES DE IA
+﻿/**
+ * ðŸ§  PÃGINA COMPLETA DE FUNCIONALIDADES DE IA
  * 
- * Demonstra todas as capacidades de inteligência artificial do projeto
+ * Demonstra todas as capacidades de inteligÃªncia artificial do projeto
  */
 
 import React, { useState, useEffect } from 'react';
@@ -47,13 +47,13 @@ const FuncionalidadesIAPage: React.FC = () => {
             icon: Bot,
             badge: 'Core AI',
             color: 'from-purple-500 to-indigo-600',
-            complexity: 'Avançado',
+            complexity: 'AvanÃ§ado',
             capabilities: [
-                'Geração automática de 21 etapas',
+                'GeraÃ§Ã£o automÃ¡tica de 21 etapas',
                 'Design system inteligente',
-                'Lógica de cálculo automática',
-                'Otimização de performance',
-                'Deploy automático',
+                'LÃ³gica de cÃ¡lculo automÃ¡tica',
+                'OtimizaÃ§Ã£o de performance',
+                'Deploy automÃ¡tico',
             ],
             techStack: ['TypeScript', 'Semantic ID Generation', 'JSON Processing'],
             file: '/src/services/FunnelAIAgent.ts',
@@ -62,15 +62,15 @@ const FuncionalidadesIAPage: React.FC = () => {
         {
             id: 'gemini-integration',
             title: 'Gemini AI Integration',
-            description: 'Integração com Google Gemini para geração de texto personalizado e imagens',
+            description: 'IntegraÃ§Ã£o com Google Gemini para geraÃ§Ã£o de texto personalizado e imagens',
             icon: Sparkles,
             badge: 'LLM',
             color: 'from-green-500 to-teal-600',
             complexity: 'Empresarial',
             capabilities: [
-                'Geração de texto com Gemini 2.0 Flash',
-                'Geração de imagens com Imagen 3.0',
-                'Prompts dinâmicos personalizados',
+                'GeraÃ§Ã£o de texto com Gemini 2.0 Flash',
+                'GeraÃ§Ã£o de imagens com Imagen 3.0',
+                'Prompts dinÃ¢micos personalizados',
                 'Processamento de contexto complexo',
                 'Respostas em tempo real',
             ],
@@ -81,16 +81,16 @@ const FuncionalidadesIAPage: React.FC = () => {
         {
             id: 'scoring-engine',
             title: 'Sistema de Scoring Inteligente',
-            description: 'Algoritmo multicamada para análise e pontuação de respostas do quiz',
+            description: 'Algoritmo multicamada para anÃ¡lise e pontuaÃ§Ã£o de respostas do quiz',
             icon: Target,
             badge: 'ML Algorithm',
             color: 'from-orange-500 to-red-600',
-            complexity: 'Avançado',
+            complexity: 'AvanÃ§ado',
             capabilities: [
                 'Scoring por categoria com pesos',
-                'Validação multilevel automática',
-                'Análise de preferências complexas',
-                'Segmentação inteligente',
+                'ValidaÃ§Ã£o multilevel automÃ¡tica',
+                'AnÃ¡lise de preferÃªncias complexas',
+                'SegmentaÃ§Ã£o inteligente',
                 'Metadados comportamentais',
             ],
             techStack: ['Mathematical Algorithms', 'Weight Systems', 'Category Analysis'],
@@ -99,18 +99,18 @@ const FuncionalidadesIAPage: React.FC = () => {
         },
         {
             id: 'recommendation-engine',
-            title: 'Engine de Recomendações',
-            description: 'Sistema de recomendações personalizadas baseado em perfil e comportamento',
+            title: 'Engine de RecomendaÃ§Ãµes',
+            description: 'Sistema de recomendaÃ§Ãµes personalizadas baseado em perfil e comportamento',
             icon: Lightbulb,
             badge: 'Recommendation',
             color: 'from-blue-500 to-cyan-600',
-            complexity: 'Avançado',
+            complexity: 'AvanÃ§ado',
             capabilities: [
-                'Recomendações por categoria de estilo',
-                'Análise de estilos secundários',
-                'Priorização por confiança',
-                'Personalização por nome de usuário',
-                'Múltiplos tipos de recomendação',
+                'RecomendaÃ§Ãµes por categoria de estilo',
+                'AnÃ¡lise de estilos secundÃ¡rios',
+                'PriorizaÃ§Ã£o por confianÃ§a',
+                'PersonalizaÃ§Ã£o por nome de usuÃ¡rio',
+                'MÃºltiplos tipos de recomendaÃ§Ã£o',
             ],
             techStack: ['React Hooks', 'Style Config', 'Confidence Algorithms'],
             file: '/src/hooks/usePersonalizedRecommendations.ts',
@@ -119,17 +119,17 @@ const FuncionalidadesIAPage: React.FC = () => {
         {
             id: 'abtest-optimizer',
             title: 'Otimizador A/B Testing',
-            description: 'Sistema inteligente de testes A/B com análise estatística automática',
+            description: 'Sistema inteligente de testes A/B com anÃ¡lise estatÃ­stica automÃ¡tica',
             icon: TrendingUp,
             badge: 'Optimization',
             color: 'from-pink-500 to-purple-600',
             complexity: 'Empresarial',
             capabilities: [
-                'Análise de significância estatística',
-                'Recomendações automáticas',
-                'Cálculo de ROI por variação',
-                'Detecção de padrões',
-                'Otimização contínua',
+                'AnÃ¡lise de significÃ¢ncia estatÃ­stica',
+                'RecomendaÃ§Ãµes automÃ¡ticas',
+                'CÃ¡lculo de ROI por variaÃ§Ã£o',
+                'DetecÃ§Ã£o de padrÃµes',
+                'OtimizaÃ§Ã£o contÃ­nua',
             ],
             techStack: ['Statistical Analysis', 'Conversion Tracking', 'Performance Metrics'],
             file: '/src/services/abTestService.ts',
@@ -137,18 +137,18 @@ const FuncionalidadesIAPage: React.FC = () => {
         },
         {
             id: 'behavioral-analysis',
-            title: 'Análise Comportamental',
-            description: 'IA para análise de padrões de comportamento e predição de abandono',
+            title: 'AnÃ¡lise Comportamental',
+            description: 'IA para anÃ¡lise de padrÃµes de comportamento e prediÃ§Ã£o de abandono',
             icon: Network,
             badge: 'Behavior AI',
             color: 'from-yellow-500 to-orange-600',
             complexity: 'Experimental',
             capabilities: [
-                'Análise de funil de conversão',
-                'Predição de abandono',
-                'Segmentação por comportamento',
+                'AnÃ¡lise de funil de conversÃ£o',
+                'PrediÃ§Ã£o de abandono',
+                'SegmentaÃ§Ã£o por comportamento',
                 'Heatmaps inteligentes',
-                'Insights automáticos',
+                'Insights automÃ¡ticos',
             ],
             techStack: ['Pattern Recognition', 'Behavioral Analytics', 'Predictive Models'],
             file: '/src/components/analytics/',
@@ -160,13 +160,13 @@ const FuncionalidadesIAPage: React.FC = () => {
         { label: 'Algoritmos IA Ativos', value: '6+', icon: Brain },
         { label: 'Modelos Integrados', value: '3', icon: Cpu },
         { label: 'Processamento/min', value: '1000+', icon: Zap },
-        { label: 'Precisão Média', value: '94%', icon: Target },
+        { label: 'PrecisÃ£o MÃ©dia', value: '94%', icon: Target },
     ];
 
     const demoProcesses = [
-        'Analisando padrões de resposta...',
+        'Analisando padrÃµes de resposta...',
         'Aplicando algoritmos de ML...',
-        'Gerando recomendações personalizadas...',
+        'Gerando recomendaÃ§Ãµes personalizadas...',
         'Otimizando resultados com IA...',
         'Finalizando processamento inteligente...',
     ];
@@ -193,10 +193,10 @@ const FuncionalidadesIAPage: React.FC = () => {
                 <div className="flex items-center justify-center gap-3 mb-4">
                     <Brain className="w-10 h-10 text-purple-600" />
                     <h1
-                        className="text-4xl font-bold text-[#432818]"
+                        className="text-4xl font-bold text-[#1A0F3D]"
                         style={{ fontFamily: 'Playfair Display, serif' }}
                     >
-                        Inteligência Artificial
+                        InteligÃªncia Artificial
                     </h1>
                     <Badge className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
                         <Cpu className="w-4 h-4 mr-1" />
@@ -205,8 +205,8 @@ const FuncionalidadesIAPage: React.FC = () => {
                 </div>
 
                 <p className="text-[#8F7A6A] text-lg max-w-4xl mx-auto">
-                    Sua plataforma possui um conjunto completo de tecnologias de IA para análise,
-                    recomendação, otimização e geração automática de conteúdo.
+                    Sua plataforma possui um conjunto completo de tecnologias de IA para anÃ¡lise,
+                    recomendaÃ§Ã£o, otimizaÃ§Ã£o e geraÃ§Ã£o automÃ¡tica de conteÃºdo.
                 </p>
 
                 {/* Demo de processamento de IA */}
@@ -243,24 +243,24 @@ const FuncionalidadesIAPage: React.FC = () => {
                     {aiStatus === 'completed' && (
                         <div className="flex items-center gap-2 text-green-700">
                             <CheckCircle className="w-5 h-5" />
-                            <span className="font-medium">Processamento IA concluído com sucesso!</span>
+                            <span className="font-medium">Processamento IA concluÃ­do com sucesso!</span>
                         </div>
                     )}
 
                     {aiStatus === 'idle' && (
                         <div className="text-sm text-purple-600">
-                            Clique para ver uma demonstração do processamento de IA em tempo real
+                            Clique para ver uma demonstraÃ§Ã£o do processamento de IA em tempo real
                         </div>
                     )}
                 </div>
             </div>
 
-            {/* Estatísticas de IA */}
+            {/* EstatÃ­sticas de IA */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {aiStats.map((stat, index) => (
                     <div key={index} className="bg-white border border-[#E5DDD5] rounded-lg p-4 text-center">
                         <stat.icon className="w-6 h-6 mx-auto mb-2 text-purple-600" />
-                        <div className="text-2xl font-bold text-[#432818]">{stat.value}</div>
+                        <div className="text-2xl font-bold text-[#1A0F3D]">{stat.value}</div>
                         <div className="text-sm text-[#8F7A6A]">{stat.label}</div>
                     </div>
                 ))}
@@ -289,8 +289,8 @@ const FuncionalidadesIAPage: React.FC = () => {
                                 </div>
                             </div>
 
-                            {/* Conteúdo */}
-                            <h3 className="text-lg font-semibold text-[#432818] mb-2">
+                            {/* ConteÃºdo */}
+                            <h3 className="text-lg font-semibold text-[#1A0F3D] mb-2">
                                 {feature.title}
                             </h3>
                             <p className="text-[#8F7A6A] text-sm mb-4">
@@ -314,7 +314,7 @@ const FuncionalidadesIAPage: React.FC = () => {
                             {activeDemo === feature.id && (
                                 <div className="space-y-3 mb-4 animate-in slide-in-from-top-2 duration-300">
                                     <div>
-                                        <h4 className="font-medium text-[#432818] mb-2">Capacidades:</h4>
+                                        <h4 className="font-medium text-[#1A0F3D] mb-2">Capacidades:</h4>
                                         <div className="space-y-1">
                                             {feature.capabilities.map((capability, index) => (
                                                 <div key={index} className="flex items-center gap-2 text-sm">
@@ -326,7 +326,7 @@ const FuncionalidadesIAPage: React.FC = () => {
                                     </div>
 
                                     <div>
-                                        <h4 className="font-medium text-[#432818] mb-2">Tech Stack:</h4>
+                                        <h4 className="font-medium text-[#1A0F3D] mb-2">Tech Stack:</h4>
                                         <div className="flex flex-wrap gap-1">
                                             {feature.techStack.map((tech, index) => (
                                                 <Badge key={index} variant="outline" className="text-xs">
@@ -338,18 +338,18 @@ const FuncionalidadesIAPage: React.FC = () => {
                                 </div>
                             )}
 
-                            {/* Ações */}
+                            {/* AÃ§Ãµes */}
                             <div className="flex gap-2 mt-4">
                                 <Button
                                     className="flex-1 bg-[#B89B7A] hover:bg-[#A08968] text-white"
                                     size="sm"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        // Lógica para acessar a funcionalidade específica
+                                        // LÃ³gica para acessar a funcionalidade especÃ­fica
                                     }}
                                 >
                                     <Code className="w-4 h-4 mr-2" />
-                                    Ver Código
+                                    Ver CÃ³digo
                                 </Button>
                                 <Button
                                     variant="outline"
@@ -367,11 +367,11 @@ const FuncionalidadesIAPage: React.FC = () => {
                 })}
             </div>
 
-            {/* Demonstração técnica */}
+            {/* DemonstraÃ§Ã£o tÃ©cnica */}
             <div className="bg-gradient-to-r from-gray-900 to-blue-900 rounded-xl p-8 text-white">
                 <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
                     <Code className="w-6 h-6" />
-                    Demonstração Técnica
+                    DemonstraÃ§Ã£o TÃ©cnica
                 </h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -430,7 +430,7 @@ const calculateStyleScore = (responses) => {
                 </h2>
                 <p className="text-white/90 mb-6 max-w-2xl mx-auto">
                     Seu projeto possui um ecossistema completo de IA com 6 sistemas diferentes
-                    trabalhando em conjunto para oferecer uma experiência inteligente e personalizada.
+                    trabalhando em conjunto para oferecer uma experiÃªncia inteligente e personalizada.
                 </p>
                 <div className="flex flex-wrap gap-4 justify-center">
                     <Link href="/admin/analytics">
@@ -457,7 +457,7 @@ const calculateStyleScore = (responses) => {
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-50 border border-purple-200 rounded-lg text-purple-700">
                     <Brain className="w-4 h-4" />
                     <span className="text-sm font-medium">
-                        Powered by Gemini AI • Imagen 3.0 • Custom ML Algorithms • Real-time Processing
+                        Powered by Gemini AI â€¢ Imagen 3.0 â€¢ Custom ML Algorithms â€¢ Real-time Processing
                     </span>
                 </div>
             </div>
@@ -466,3 +466,4 @@ const calculateStyleScore = (responses) => {
 };
 
 export default FuncionalidadesIAPage;
+

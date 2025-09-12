@@ -1,6 +1,6 @@
-// @ts-nocheck
-// Exemplo de Integração do Editor Melhorado
-// Substitui ou complementa páginas existentes como FunnelPanelPage.tsx
+﻿// @ts-nocheck
+// Exemplo de IntegraÃ§Ã£o do Editor Melhorado
+// Substitui ou complementa pÃ¡ginas existentes como FunnelPanelPage.tsx
 import React, { useState, useEffect } from 'react';
 import { useRoute } from 'wouter';
 import { Button } from '../../components/ui/button';
@@ -11,12 +11,12 @@ import { ArrowLeft, Settings, Eye, Edit3, BarChart3, Users, Calendar, Globe } fr
 // Importar o editor melhorado
 import EnhancedEditor from '../../components/editor/EnhancedEditor';
 
-// Componente de integração para a página de edição
+// Componente de integraÃ§Ã£o para a pÃ¡gina de ediÃ§Ã£o
 const EditorPage: React.FC = () => {
   const [match, params] = useRoute('/admin/funis/:funnelId/editor');
   const funnelId = params?.funnelId;
 
-  // Verificar se a rota está correta
+  // Verificar se a rota estÃ¡ correta
   if (!match || !funnelId) {
     return (
       <div style={{ backgroundColor: '#FAF9F7' }}>
@@ -25,7 +25,7 @@ const EditorPage: React.FC = () => {
             <CardTitle className="text-center">Erro</CardTitle>
           </CardHeader>
           <CardContent className="text-center">
-            <p style={{ color: '#6B4F43' }}>Funil não encontrado</p>
+            <p style={{ color: '#6B4F43' }}>Funil nÃ£o encontrado</p>
             <Button onClick={() => window.history.back()}>
               <ArrowLeft className="h-4 w-4 mr-2" />
               Voltar
@@ -115,12 +115,12 @@ const FunnelManagementPage: React.FC = () => {
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Voltar
               </Button>
-              <h2 className="text-lg font-semibold">Analytics Avançado</h2>
+              <h2 className="text-lg font-semibold">Analytics AvanÃ§ado</h2>
             </div>
-            {/* Aqui você pode importar e usar o AdvancedAnalytics diretamente */}
+            {/* Aqui vocÃª pode importar e usar o AdvancedAnalytics diretamente */}
             <Card>
               <CardContent className="p-6">
-                <p style={{ color: '#6B4F43' }}>Dashboard de Analytics estará aqui</p>
+                <p style={{ color: '#6B4F43' }}>Dashboard de Analytics estarÃ¡ aqui</p>
               </CardContent>
             </Card>
           </div>
@@ -130,7 +130,7 @@ const FunnelManagementPage: React.FC = () => {
         return (
           <div className="p-6">
             <div className="flex items-center justify-between mb-6">
-              <h1 className="text-2xl font-bold">Gestão de Funis</h1>
+              <h1 className="text-2xl font-bold">GestÃ£o de Funis</h1>
               <Button onClick={() => setSelectedFunnel('new')}>
                 <Edit3 className="h-4 w-4 mr-2" />
                 Novo Funil
@@ -151,11 +151,11 @@ const FunnelManagementPage: React.FC = () => {
                         <div style={{ color: '#6B4F43' }}>
                           <div className="flex items-center gap-1">
                             <Eye className="h-4 w-4" />
-                            {funnel.views} visualizações
+                            {funnel.views} visualizaÃ§Ãµes
                           </div>
                           <div className="flex items-center gap-1">
                             <Users className="h-4 w-4" />
-                            {funnel.conversions} conversões
+                            {funnel.conversions} conversÃµes
                           </div>
                           <div className="flex items-center gap-1">
                             <Calendar className="h-4 w-4" />
@@ -210,7 +210,7 @@ const FunnelManagementPage: React.FC = () => {
   return <div style={{ backgroundColor: '#FAF9F7' }}>{renderView()}</div>;
 };
 
-// Hook personalizado para facilitar integração
+// Hook personalizado para facilitar integraÃ§Ã£o
 const useEnhancedEditor = (funnelId: string) => {
   const [isEditorReady, setIsEditorReady] = useState(false);
   const [funnelData, setFunnelData] = useState<any>(null);
@@ -232,7 +232,7 @@ const useEnhancedEditor = (funnelId: string) => {
         setIsLoading(true);
         setError(null);
 
-        // Importar o serviço existente
+        // Importar o serviÃ§o existente
         const { funnelService } = await import('../../services/funnelService');
         const data = await funnelService.loadFunnelData(funnelId);
 
@@ -242,7 +242,7 @@ const useEnhancedEditor = (funnelId: string) => {
           setFunnelData(data);
           setIsEditorReady(true);
         } else {
-          setError('Funil não encontrado');
+          setError('Funil nÃ£o encontrado');
         }
       } catch (error) {
         console.error('Erro ao carregar funil:', error);
@@ -263,13 +263,13 @@ const useEnhancedEditor = (funnelId: string) => {
     };
   }, [funnelId]);
 
-  // Métodos para ações do funil
+  // MÃ©todos para aÃ§Ãµes do funil
   const saveFunnel = async (updatedData: any) => {
     try {
       const { funnelService } = await import('../../services/funnelService');
       const result = await funnelService.saveFunnelData(updatedData);
       if (result) {
-        // Recarregar dados após salvar
+        // Recarregar dados apÃ³s salvar
         const freshData = await funnelService.loadFunnelData(funnelId);
         if (freshData) {
           setFunnelData(freshData);
@@ -312,22 +312,22 @@ const useEnhancedEditor = (funnelId: string) => {
     isLoading,
     error,
 
-    // Métodos de ação
+    // MÃ©todos de aÃ§Ã£o
     saveFunnel,
     publishFunnel,
     deleteFunnel,
 
-    // Métodos de navegação
+    // MÃ©todos de navegaÃ§Ã£o
     openEditor: () => window.open(`/admin/funis/${funnelId}/editor`, '_blank'),
     openPreview: () => window.open(`/preview/${funnelId}`, '_blank'),
     openAnalytics: () => window.open(`/admin/funis/${funnelId}/analytics`, '_blank'),
 
-    // Método para recarregar dados
+    // MÃ©todo para recarregar dados
     refresh: () => {
       setIsEditorReady(false);
       setIsLoading(true);
       setError(null);
-      // O useEffect será chamado novamente devido à mudança de estado
+      // O useEffect serÃ¡ chamado novamente devido Ã  mudanÃ§a de estado
     },
   };
 };
@@ -366,8 +366,8 @@ const ExistingComponentExample: React.FC = () => {
       <Card>
         <CardContent className="p-6">
           <div className="text-center">
-            <div style={{ color: '#432818' }}>❌</div>
-            <p style={{ color: '#432818' }}>{error}</p>
+            <div style={{ color: '#1A0F3D' }}>âŒ</div>
+            <p style={{ color: '#1A0F3D' }}>{error}</p>
             <Button onClick={refresh} size="sm">
               Tentar Novamente
             </Button>
@@ -381,7 +381,7 @@ const ExistingComponentExample: React.FC = () => {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
-          Ações do Funil
+          AÃ§Ãµes do Funil
           {funnelData && (
             <Badge variant="outline" className="text-xs">
               {funnelData.name || 'Sem nome'}
@@ -441,10 +441,10 @@ const ExistingComponentExample: React.FC = () => {
               <strong>ID:</strong> {funnelData.id}
             </p>
             <p>
-              <strong>Páginas:</strong> {funnelData.pages?.length || 0}
+              <strong>PÃ¡ginas:</strong> {funnelData.pages?.length || 0}
             </p>
             <p>
-              <strong>Última atualização:</strong> {new Date().toLocaleDateString()}
+              <strong>Ãšltima atualizaÃ§Ã£o:</strong> {new Date().toLocaleDateString()}
             </p>
           </div>
         )}
@@ -455,3 +455,4 @@ const ExistingComponentExample: React.FC = () => {
 
 export default EditorPage;
 export { EmbeddedEditor, FunnelManagementPage, useEnhancedEditor, ExistingComponentExample };
+

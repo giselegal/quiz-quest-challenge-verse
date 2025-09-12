@@ -1,4 +1,4 @@
-import { Badge } from '@/components/ui/badge';
+﻿import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -13,7 +13,7 @@ const STYLE_CONSULTANT_TEMPLATE: FunnelTemplate = {
   meta: {
     name: 'Com que Roupa eu Vou? - Consultora de Estilo IA',
     description:
-      'Funil completo para consultoria de estilo personalizada com inteligência artificial. Gera looks, imagens e ofertas diretas.',
+      'Funil completo para consultoria de estilo personalizada com inteligÃªncia artificial. Gera looks, imagens e ofertas diretas.',
     version: '2.0.0',
     author: 'giselegal',
   },
@@ -50,9 +50,9 @@ const STYLE_CONSULTANT_TEMPLATE: FunnelTemplate = {
       type: 'intro',
       title: 'Com que Roupa eu Vou?',
       description:
-        'Sua consultora de estilo pessoal com IA! Descubra o look perfeito para qualquer ocasião.',
+        'Sua consultora de estilo pessoal com IA! Descubra o look perfeito para qualquer ocasiÃ£o.',
       imageUrl: 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=800&h=600&fit=crop',
-      cta: 'Começar Consulta de Estilo',
+      cta: 'ComeÃ§ar Consulta de Estilo',
     },
     {
       type: 'form',
@@ -62,17 +62,17 @@ const STYLE_CONSULTANT_TEMPLATE: FunnelTemplate = {
           id: 'compromisso',
           type: 'text',
           label: 'Compromisso',
-          placeholder: 'Ex: Reunião de trabalho, Jantar com amigos, Festa de aniversário',
+          placeholder: 'Ex: ReuniÃ£o de trabalho, Jantar com amigos, Festa de aniversÃ¡rio',
           required: true,
         },
         {
           id: 'horario',
           type: 'select',
-          label: 'Horário',
+          label: 'HorÃ¡rio',
           options: [
-            { value: 'Manhã', label: 'Manhã (até 12h)' },
-            { value: 'Tarde', label: 'Tarde (12h às 18h)' },
-            { value: 'Noite', label: 'Noite (após 18h)' },
+            { value: 'ManhÃ£', label: 'ManhÃ£ (atÃ© 12h)' },
+            { value: 'Tarde', label: 'Tarde (12h Ã s 18h)' },
+            { value: 'Noite', label: 'Noite (apÃ³s 18h)' },
           ],
           required: true,
         },
@@ -99,7 +99,7 @@ const STYLE_CONSULTANT_TEMPLATE: FunnelTemplate = {
             { value: 'Esportivo', label: 'Esportivo' },
             { value: 'Criativo', label: 'Criativo' },
             { value: 'Boho', label: 'Boho' },
-            { value: 'Clássico', label: 'Clássico' },
+            { value: 'ClÃ¡ssico', label: 'ClÃ¡ssico' },
             { value: 'Moderno', label: 'Moderno' },
           ],
           required: true,
@@ -108,13 +108,13 @@ const STYLE_CONSULTANT_TEMPLATE: FunnelTemplate = {
     },
     {
       type: 'processing',
-      title: 'Gerando sua sugestão personalizada...',
+      title: 'Gerando sua sugestÃ£o personalizada...',
       steps: [
         'Analisando seu estilo pessoal',
-        'Considerando clima e ocasião',
-        'Criando combinações perfeitas',
-        'Gerando imagem de inspiração',
-        'Buscando referências visuais',
+        'Considerando clima e ocasiÃ£o',
+        'Criando combinaÃ§Ãµes perfeitas',
+        'Gerando imagem de inspiraÃ§Ã£o',
+        'Buscando referÃªncias visuais',
       ],
     },
     {
@@ -123,17 +123,17 @@ const STYLE_CONSULTANT_TEMPLATE: FunnelTemplate = {
       sections: [
         {
           type: 'text',
-          title: 'Sugestão Personalizada',
+          title: 'SugestÃ£o Personalizada',
           content: '{{generated_text}}',
         },
         {
           type: 'image',
-          title: 'Imagem de Inspiração',
+          title: 'Imagem de InspiraÃ§Ã£o',
           content: '{{generated_image}}',
         },
         {
           type: 'gallery',
-          title: 'Referências de Estilo',
+          title: 'ReferÃªncias de Estilo',
           content: '{{reference_images}}',
         },
       ],
@@ -142,17 +142,17 @@ const STYLE_CONSULTANT_TEMPLATE: FunnelTemplate = {
       type: 'offer',
       title: 'Desbloqueie seu Estilo Pessoal!',
       description:
-        'Receba um **Guia Exclusivo de Estilo** personalizado para você, com dicas e truques para montar looks incríveis em qualquer ocasião.',
+        'Receba um **Guia Exclusivo de Estilo** personalizado para vocÃª, com dicas e truques para montar looks incrÃ­veis em qualquer ocasiÃ£o.',
       offerImage:
         'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&h=400&fit=crop',
       benefits: [
-        '✨ Guia personalizado do seu estilo',
-        '👗 30 combinações exclusivas',
-        '📱 Acesso ao app premium',
-        '💎 Consultoria com especialista',
+        'âœ¨ Guia personalizado do seu estilo',
+        'ðŸ‘— 30 combinaÃ§Ãµes exclusivas',
+        'ðŸ“± Acesso ao app premium',
+        'ðŸ’Ž Consultoria com especialista',
       ],
       cta: {
-        text: 'Quero Meu Guia Grátis!',
+        text: 'Quero Meu Guia GrÃ¡tis!',
         style: 'primary',
       },
       form: {
@@ -169,15 +169,15 @@ const STYLE_CONSULTANT_TEMPLATE: FunnelTemplate = {
   ],
   logic: {
     selection: {
-      form: 'Todos os campos obrigatórios devem ser preenchidos',
-      processing: 'IA processa os dados do formulário',
+      form: 'Todos os campos obrigatÃ³rios devem ser preenchidos',
+      processing: 'IA processa os dados do formulÃ¡rio',
     },
     calculation: {
-      method: 'Geração dinâmica com API de IA',
-      resultado: 'Look personalizado baseado nas preferências',
+      method: 'GeraÃ§Ã£o dinÃ¢mica com API de IA',
+      resultado: 'Look personalizado baseado nas preferÃªncias',
     },
     transitions: {
-      betweenSteps: 'Animações suaves slide-up e fade',
+      betweenSteps: 'AnimaÃ§Ãµes suaves slide-up e fade',
     },
   },
   integrations: {
@@ -186,13 +186,13 @@ const STYLE_CONSULTANT_TEMPLATE: FunnelTemplate = {
         provider: 'gemini',
         model: 'gemini-2.0-flash',
         prompt:
-          "Sugira um look completo (roupas, calçados, acessórios e maquiagem/cabelo se relevante) para um compromisso de '{{compromisso}}' que acontecerá na '{{horario}}', com o clima '{{clima}}'. Meu estilo pessoal é '{{estilo}}'. Seja conciso, criativo e forneça uma descrição detalhada do look.",
+          "Sugira um look completo (roupas, calÃ§ados, acessÃ³rios e maquiagem/cabelo se relevante) para um compromisso de '{{compromisso}}' que acontecerÃ¡ na '{{horario}}', com o clima '{{clima}}'. Meu estilo pessoal Ã© '{{estilo}}'. Seja conciso, criativo e forneÃ§a uma descriÃ§Ã£o detalhada do look.",
       },
       imageGeneration: {
         provider: 'imagen',
         model: 'imagen-3.0-generate-002',
         prompt:
-          'Um look de moda para um compromisso de {{compromisso}} na {{horario}} com clima {{clima}}, no estilo {{estilo}}. Foto de corpo inteiro, alta qualidade, iluminação natural, contexto apropriado.',
+          'Um look de moda para um compromisso de {{compromisso}} na {{horario}} com clima {{clima}}, no estilo {{estilo}}. Foto de corpo inteiro, alta qualidade, iluminaÃ§Ã£o natural, contexto apropriado.',
       },
     },
     analytics: {
@@ -233,7 +233,7 @@ const STYLE_QUIZ_TEMPLATE: FunnelTemplate = {
   },
   design: {
     primaryColor: '#B89B7A',
-    secondaryColor: '#432818',
+    secondaryColor: '#1A0F3D',
     accentColor: '#aa6b5d',
     backgroundColor: '#FAF9F7',
     fontFamily: "'Playfair Display', 'Inter', serif",
@@ -263,16 +263,16 @@ const STYLE_QUIZ_TEMPLATE: FunnelTemplate = {
     {
       type: 'intro',
       title: 'Bem-vinda ao Quiz de Estilo',
-      descriptionTop: 'Chega de um guarda-roupa lotado e da sensação de que nada combina com Você.',
+      descriptionTop: 'Chega de um guarda-roupa lotado e da sensaÃ§Ã£o de que nada combina com VocÃª.',
       imageIntro:
         'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg',
       descriptionBottom:
-        'Em poucos minutos, descubra seu Estilo Predominante — e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.',
+        'Em poucos minutos, descubra seu Estilo Predominante â€” e aprenda a montar looks que realmente refletem sua essÃªncia, com praticidade e confianÃ§a.',
     },
     {
       type: 'questions',
       title: 'Perguntas Principais',
-      description: 'Selecione 3 opções por pergunta para avançar.',
+      description: 'Selecione 3 opÃ§Ãµes por pergunta para avanÃ§ar.',
       questions: [
         {
           id: '1',
@@ -289,10 +289,10 @@ const STYLE_QUIZ_TEMPLATE: FunnelTemplate = {
             },
             {
               id: '1b',
-              text: 'Discrição, caimento clássico e sobriedade.',
+              text: 'DiscriÃ§Ã£o, caimento clÃ¡ssico e sobriedade.',
               imageUrl:
                 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp',
-              styleCategory: 'Clássico',
+              styleCategory: 'ClÃ¡ssico',
             },
           ],
         },
@@ -300,17 +300,17 @@ const STYLE_QUIZ_TEMPLATE: FunnelTemplate = {
     },
     {
       type: 'strategicQuestions',
-      title: 'Perguntas Estratégicas',
+      title: 'Perguntas EstratÃ©gicas',
       questions: [
         {
           id: 'strategic-1',
-          title: 'Como você se sente em relação ao seu estilo pessoal hoje?',
+          title: 'Como vocÃª se sente em relaÃ§Ã£o ao seu estilo pessoal hoje?',
           imageUrl:
             'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_00_30_44_naqom0.webp',
           layout: '1col',
           options: [
-            { id: 'strategic-1-1', text: 'Completamente perdida, não sei o que combina comigo' },
-            { id: 'strategic-1-2', text: 'Tenho algumas ideias, mas não sei como aplicá-las' },
+            { id: 'strategic-1-1', text: 'Completamente perdida, nÃ£o sei o que combina comigo' },
+            { id: 'strategic-1-2', text: 'Tenho algumas ideias, mas nÃ£o sei como aplicÃ¡-las' },
           ],
         },
       ],
@@ -318,7 +318,7 @@ const STYLE_QUIZ_TEMPLATE: FunnelTemplate = {
     {
       type: 'result',
       title: 'Resultado',
-      description: 'Baseado nas suas respostas, seu estilo predominante é:',
+      description: 'Baseado nas suas respostas, seu estilo predominante Ã©:',
       styles: [
         {
           name: 'Natural',
@@ -326,7 +326,7 @@ const STYLE_QUIZ_TEMPLATE: FunnelTemplate = {
           guideImage:
             'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
           description:
-            'Você valoriza o conforto e a praticidade, com um visual descontraído e autêntico.',
+            'VocÃª valoriza o conforto e a praticidade, com um visual descontraÃ­do e autÃªntico.',
         },
       ],
       cta: {
@@ -337,15 +337,15 @@ const STYLE_QUIZ_TEMPLATE: FunnelTemplate = {
   ],
   logic: {
     selection: {
-      normal: 'Avança apenas se o mínimo de seleções (multiSelect) for atingido',
-      strategic: 'Só avança se selecionar uma opção',
+      normal: 'AvanÃ§a apenas se o mÃ­nimo de seleÃ§Ãµes (multiSelect) for atingido',
+      strategic: 'SÃ³ avanÃ§a se selecionar uma opÃ§Ã£o',
     },
     calculation: {
-      method: 'Soma ponto por categoria de cada opção marcada',
-      resultado: 'O estilo com maior pontuação é o predominante',
+      method: 'Soma ponto por categoria de cada opÃ§Ã£o marcada',
+      resultado: 'O estilo com maior pontuaÃ§Ã£o Ã© o predominante',
     },
     transitions: {
-      betweenSteps: 'Usa animação fade/scale',
+      betweenSteps: 'Usa animaÃ§Ã£o fade/scale',
     },
   },
   config: {
@@ -392,63 +392,63 @@ const AGENT_STEPS: AgentStep[] = [
   },
   {
     id: 'intro',
-    name: 'Criando Página de Introdução',
-    description: 'Gerando formulário de entrada com validação...',
+    name: 'Criando PÃ¡gina de IntroduÃ§Ã£o',
+    description: 'Gerando formulÃ¡rio de entrada com validaÃ§Ã£o...',
     status: 'pending',
     progress: 0,
   },
   {
     id: 'questions',
     name: 'Configurando Perguntas Principais',
-    description: 'Criando grids de opções com imagens e validação multiselect...',
+    description: 'Criando grids de opÃ§Ãµes com imagens e validaÃ§Ã£o multiselect...',
     status: 'pending',
     progress: 0,
   },
   {
     id: 'transition1',
-    name: 'Tela de Transição 1',
-    description: 'Implementando animação e loading entre etapas...',
+    name: 'Tela de TransiÃ§Ã£o 1',
+    description: 'Implementando animaÃ§Ã£o e loading entre etapas...',
     status: 'pending',
     progress: 0,
   },
   {
     id: 'strategic',
-    name: 'Perguntas Estratégicas',
-    description: 'Configurando questões de segmentação e qualificação...',
+    name: 'Perguntas EstratÃ©gicas',
+    description: 'Configurando questÃµes de segmentaÃ§Ã£o e qualificaÃ§Ã£o...',
     status: 'pending',
     progress: 0,
   },
   {
     id: 'transition2',
-    name: 'Tela de Transição 2',
-    description: 'Preparando cálculo de resultados...',
+    name: 'Tela de TransiÃ§Ã£o 2',
+    description: 'Preparando cÃ¡lculo de resultados...',
     status: 'pending',
     progress: 0,
   },
   {
     id: 'result',
-    name: 'Página de Resultado',
+    name: 'PÃ¡gina de Resultado',
     description: 'Gerando resultados personalizados com CTAs...',
     status: 'pending',
     progress: 0,
   },
   {
     id: 'logic',
-    name: 'Sistema de Cálculo',
-    description: 'Implementando lógica de pontuação por categoria...',
+    name: 'Sistema de CÃ¡lculo',
+    description: 'Implementando lÃ³gica de pontuaÃ§Ã£o por categoria...',
     status: 'pending',
     progress: 0,
   },
   {
     id: 'analytics',
     name: 'Configurando Analytics',
-    description: 'Integrando eventos de tracking e conversão...',
+    description: 'Integrando eventos de tracking e conversÃ£o...',
     status: 'pending',
     progress: 0,
   },
   {
     id: 'optimize',
-    name: 'Otimizações Finais',
+    name: 'OtimizaÃ§Ãµes Finais',
     description: 'Aplicando performance e responsividade...',
     status: 'pending',
     progress: 0,
@@ -456,7 +456,7 @@ const AGENT_STEPS: AgentStep[] = [
   {
     id: 'deploy',
     name: 'Publicando Funil',
-    description: 'Disponibilizando funil para acesso público...',
+    description: 'Disponibilizando funil para acesso pÃºblico...',
     status: 'pending',
     progress: 0,
   },
@@ -480,11 +480,11 @@ const TemplatesIA: React.FC = () => {
 
   const getCurrentTemplate = () => AVAILABLE_TEMPLATES[selectedTemplate];
 
-  // Validações de seleção
+  // ValidaÃ§Ãµes de seleÃ§Ã£o
   const validateSelection = () => {
     if (!selectedTemplate) {
       toast({
-        title: '⚠️ Template não selecionado',
+        title: 'âš ï¸ Template nÃ£o selecionado',
         description: 'Por favor, selecione um template antes de continuar.',
         variant: 'destructive',
       });
@@ -494,8 +494,8 @@ const TemplatesIA: React.FC = () => {
     const template = getCurrentTemplate();
     if (!template) {
       toast({
-        title: '❌ Erro no Template',
-        description: 'Template selecionado não encontrado. Tente novamente.',
+        title: 'âŒ Erro no Template',
+        description: 'Template selecionado nÃ£o encontrado. Tente novamente.',
         variant: 'destructive',
       });
       return false;
@@ -534,7 +534,7 @@ const TemplatesIA: React.FC = () => {
 
       const templateName = getCurrentTemplate().meta.name;
       toast({
-        title: '✅ Funil Criado com Sucesso!',
+        title: 'âœ… Funil Criado com Sucesso!',
         description: `${templateName} criado dinamicamente com IA. ID: ${funnelId}`,
       });
     } catch (error) {
@@ -543,7 +543,7 @@ const TemplatesIA: React.FC = () => {
       setCurrentStep(-1);
 
       toast({
-        title: '❌ Erro na Geração',
+        title: 'âŒ Erro na GeraÃ§Ã£o',
         description: 'Houve um problema ao gerar o funil. Tente novamente.',
         variant: 'destructive',
       });
@@ -572,9 +572,9 @@ const TemplatesIA: React.FC = () => {
               <Bot className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 style={{ color: '#432818' }}>Templates IA</h1>
+              <h1 style={{ color: '#1A0F3D' }}>Templates IA</h1>
               <p style={{ color: '#6B4F43' }}>
-                Criação dinâmica de funis com Inteligência Artificial
+                CriaÃ§Ã£o dinÃ¢mica de funis com InteligÃªncia Artificial
               </p>
             </div>
           </div>
@@ -599,7 +599,7 @@ const TemplatesIA: React.FC = () => {
                   <div className="flex items-center gap-3">
                     <Sparkles style={{ color: '#B89B7A' }} />
                     <div className="flex-1">
-                      <CardTitle style={{ color: '#432818' }}>Quiz de Estilo Pessoal</CardTitle>
+                      <CardTitle style={{ color: '#1A0F3D' }}>Quiz de Estilo Pessoal</CardTitle>
                       <p style={{ color: '#B89B7A' }}>Template Premium - 21 Etapas</p>
                     </div>
                     {selectedTemplate === 'STYLE_QUIZ' && <Check style={{ color: '#B89B7A' }} />}
@@ -619,7 +619,7 @@ const TemplatesIA: React.FC = () => {
                   <div className="flex items-center gap-3">
                     <Bot style={{ color: '#B89B7A' }} />
                     <div className="flex-1">
-                      <CardTitle style={{ color: '#432818' }}>Com que Roupa eu Vou?</CardTitle>
+                      <CardTitle style={{ color: '#1A0F3D' }}>Com que Roupa eu Vou?</CardTitle>
                       <p style={{ color: '#B89B7A' }}>Consultora de Estilo IA - Nova!</p>
                     </div>
                     {selectedTemplate === 'STYLE_CONSULTANT' && (
@@ -640,7 +640,7 @@ const TemplatesIA: React.FC = () => {
                     <Bot style={{ color: '#B89B7A' }} />
                   )}
                   <div>
-                    <CardTitle style={{ color: '#432818' }}>
+                    <CardTitle style={{ color: '#1A0F3D' }}>
                       {getCurrentTemplate().meta.name}
                     </CardTitle>
                     <p style={{ color: '#B89B7A' }}>{getCurrentTemplate().meta.description}</p>
@@ -667,21 +667,21 @@ const TemplatesIA: React.FC = () => {
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div className="bg-white/50 rounded-lg p-3">
                     <div style={{ color: '#6B4F43' }}>Etapas</div>
-                    <div style={{ color: '#432818' }}>
-                      {getCurrentTemplate().steps.length} Páginas
+                    <div style={{ color: '#1A0F3D' }}>
+                      {getCurrentTemplate().steps.length} PÃ¡ginas
                     </div>
                   </div>
                   <div className="bg-white/50 rounded-lg p-3">
                     <div style={{ color: '#6B4F43' }}>Tipos</div>
-                    <div style={{ color: '#432818' }}>8 Estilos</div>
+                    <div style={{ color: '#1A0F3D' }}>8 Estilos</div>
                   </div>
                   <div className="bg-white/50 rounded-lg p-3">
                     <div style={{ color: '#6B4F43' }}>Imagens</div>
-                    <div style={{ color: '#432818' }}>40+ Assets</div>
+                    <div style={{ color: '#1A0F3D' }}>40+ Assets</div>
                   </div>
                   <div className="bg-white/50 rounded-lg p-3">
                     <div style={{ color: '#6B4F43' }}>Analytics</div>
-                    <div style={{ color: '#432818' }}>Completo</div>
+                    <div style={{ color: '#1A0F3D' }}>Completo</div>
                   </div>
                 </div>
 
@@ -697,7 +697,7 @@ const TemplatesIA: React.FC = () => {
                     Analytics
                   </Badge>
                   <Badge variant="secondary" style={{ backgroundColor: '#E5DDD5' }}>
-                    Conversão
+                    ConversÃ£o
                   </Badge>
                 </div>
 
@@ -765,8 +765,8 @@ const TemplatesIA: React.FC = () => {
                   <div className="flex items-center gap-3">
                     <Bot style={{ color: '#B89B7A' }} />
                     <div>
-                      <CardTitle>Agente IA em Ação</CardTitle>
-                      <p style={{ color: '#6B4F43' }}>Processamento automático do template</p>
+                      <CardTitle>Agente IA em AÃ§Ã£o</CardTitle>
+                      <p style={{ color: '#6B4F43' }}>Processamento automÃ¡tico do template</p>
                     </div>
                   </div>
                   {isGenerating && (
@@ -805,7 +805,7 @@ const TemplatesIA: React.FC = () => {
                             )}
                           </div>
                           <div>
-                            <div style={{ color: '#432818' }}>{step.name}</div>
+                            <div style={{ color: '#1A0F3D' }}>{step.name}</div>
                             <div style={{ color: '#8B7355' }}>{step.description}</div>
                           </div>
                         </div>
@@ -832,15 +832,15 @@ const TemplatesIA: React.FC = () => {
               </CardContent>
             </Card>
 
-            {/* Informações do Template */}
+            {/* InformaÃ§Ãµes do Template */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Especificações Técnicas</CardTitle>
+                <CardTitle className="text-lg">EspecificaÃ§Ãµes TÃ©cnicas</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <div style={{ color: '#6B4F43' }}>Versão Template</div>
+                    <div style={{ color: '#6B4F43' }}>VersÃ£o Template</div>
                     <div className="font-mono">{getCurrentTemplate().meta.version}</div>
                   </div>
                   <div>
@@ -848,7 +848,7 @@ const TemplatesIA: React.FC = () => {
                     <div className="font-medium">{getCurrentTemplate().meta.author}</div>
                   </div>
                   <div>
-                    <div style={{ color: '#6B4F43' }}>Cor Primária</div>
+                    <div style={{ color: '#6B4F43' }}>Cor PrimÃ¡ria</div>
                     <div className="flex items-center gap-2">
                       <div
                         className="w-4 h-4 rounded border"
@@ -866,49 +866,49 @@ const TemplatesIA: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <div style={{ color: '#6B4F43' }}>Funcionalidades Incluídas:</div>
+                  <div style={{ color: '#6B4F43' }}>Funcionalidades IncluÃ­das:</div>
                   <div className="flex flex-wrap gap-1">
                     {selectedTemplate === 'STYLE_QUIZ'
                       ? [
                           'Multiselect',
-                          'Validação',
-                          'Animações',
+                          'ValidaÃ§Ã£o',
+                          'AnimaÃ§Ãµes',
                           'Analytics',
                           'Responsive',
-                          'Cálculo IA',
-                          'CTAs Dinâmicos',
+                          'CÃ¡lculo IA',
+                          'CTAs DinÃ¢micos',
                           'Tracking UTM',
                         ]
                       : [
-                          'Geração de IA',
+                          'GeraÃ§Ã£o de IA',
                           'Processamento de Imagem',
                           'Captura de Email',
                           'Compartilhamento Social',
-                          'Formulários Inteligentes',
+                          'FormulÃ¡rios Inteligentes',
                           'CTA Personalizado',
-                          'Analytics Avançado',
+                          'Analytics AvanÃ§ado',
                           'API Integrations',
                         ]}
 
                     {(selectedTemplate === 'STYLE_QUIZ'
                       ? [
                           'Multiselect',
-                          'Validação',
-                          'Animações',
+                          'ValidaÃ§Ã£o',
+                          'AnimaÃ§Ãµes',
                           'Analytics',
                           'Responsive',
-                          'Cálculo IA',
-                          'CTAs Dinâmicos',
+                          'CÃ¡lculo IA',
+                          'CTAs DinÃ¢micos',
                           'Tracking UTM',
                         ]
                       : [
-                          'Geração de IA',
+                          'GeraÃ§Ã£o de IA',
                           'Processamento de Imagem',
                           'Captura de Email',
                           'Compartilhamento Social',
-                          'Formulários Inteligentes',
+                          'FormulÃ¡rios Inteligentes',
                           'CTA Personalizado',
-                          'Analytics Avançado',
+                          'Analytics AvanÃ§ado',
                           'API Integrations',
                         ]
                     ).map(feature => (
@@ -930,7 +930,7 @@ const TemplatesIA: React.FC = () => {
             <span className="text-sm">Powered by IA Agent System</span>
           </div>
           <div className="text-xs">
-            © 2025 Quiz Quest Challenge Verse - Templates dinâmicos com Inteligência Artificial
+            Â© 2025 Quiz Quest Challenge Verse - Templates dinÃ¢micos com InteligÃªncia Artificial
           </div>
         </div>
       </div>
@@ -939,3 +939,4 @@ const TemplatesIA: React.FC = () => {
 };
 
 export default TemplatesIA;
+

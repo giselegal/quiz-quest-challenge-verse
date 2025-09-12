@@ -29,13 +29,38 @@ function createSupabaseStub() {
       signOut: async () => okNoError,
     },
     from: () => ({
-      select: async () => ok,
+      select: () => ({
+        eq: () => ({
+          single: async () => ok,
+          data: async () => ok,
+        }),
+        single: async () => ok,
+        data: async () => ok,
+      }),
       insert: async () => ok,
       upsert: async () => ok,
-      update: async () => ok,
-      delete: async () => ok,
-      eq: () => ({ select: async () => ok, update: async () => ok, delete: async () => ok }),
-      single: async () => ok,  // ✅ Adicionado método single faltante
+      update: () => ({
+        eq: () => ({
+          select: async () => ok,
+          single: async () => ok,
+        }),
+      }),
+      delete: () => ({
+        eq: () => ({
+          select: async () => ok,
+          single: async () => ok,
+        }),
+      }),
+      eq: () => ({
+        select: () => ({
+          single: async () => ok,
+          data: async () => ok,
+        }),
+        update: async () => ok,
+        delete: async () => ok,
+        single: async () => ok,
+      }),
+      single: async () => ok,
     }),
   } as unknown as ReturnType<typeof createClient<Database>>;
 }

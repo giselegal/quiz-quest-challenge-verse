@@ -202,7 +202,7 @@ const Home = () => {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="border-brand-light text-brand-text hover:bg-brand-light/10 px-8 py-4 text-lg"
+                  className="border-brand-lightBlue text-brand-darkBlue hover:bg-brand-lightBlue/10 px-8 py-4 text-lg"
                 >
                   <Eye className="h-5 w-5 mr-2" />
                   Ver Demo

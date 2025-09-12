@@ -1,4 +1,4 @@
-import { Badge } from '@/components/ui/badge';
+﻿import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -37,7 +37,7 @@ const IAInsightsPage: React.FC = () => {
                 {
                     id: '1',
                     title: 'Otimizar Etapa 3 do Quiz',
-                    description: 'A análise mostra que 23% dos usuários abandonam na etapa 3. Recomendamos simplificar a pergunta ou adicionar mais contexto visual.',
+                    description: 'A anÃ¡lise mostra que 23% dos usuÃ¡rios abandonam na etapa 3. Recomendamos simplificar a pergunta ou adicionar mais contexto visual.',
                     type: 'optimization',
                     impact: 'high',
                     confidence: 87,
@@ -45,8 +45,8 @@ const IAInsightsPage: React.FC = () => {
                 },
                 {
                     id: '2',
-                    title: 'Público-Alvo Emergente Detectado',
-                    description: 'Identificamos um novo segmento de usuários (25-35 anos, interesse em sustentabilidade) com alta taxa de conversão.',
+                    title: 'PÃºblico-Alvo Emergente Detectado',
+                    description: 'Identificamos um novo segmento de usuÃ¡rios (25-35 anos, interesse em sustentabilidade) com alta taxa de conversÃ£o.',
                     type: 'prediction',
                     impact: 'medium',
                     confidence: 92,
@@ -54,8 +54,8 @@ const IAInsightsPage: React.FC = () => {
                 },
                 {
                     id: '3',
-                    title: 'Melhor Horário para Publicação',
-                    description: 'Baseado em dados históricos, publicar entre 14h-16h aumenta o engajamento em 28%.',
+                    title: 'Melhor HorÃ¡rio para PublicaÃ§Ã£o',
+                    description: 'Baseado em dados histÃ³ricos, publicar entre 14h-16h aumenta o engajamento em 28%.',
                     type: 'recommendation',
                     impact: 'medium',
                     confidence: 83,
@@ -63,8 +63,8 @@ const IAInsightsPage: React.FC = () => {
                 },
                 {
                     id: '4',
-                    title: 'Tendência de Queda Detectada',
-                    description: 'Alertamos sobre uma possível queda na conversão nos próximos 7 dias se o padrão atual continuar.',
+                    title: 'TendÃªncia de Queda Detectada',
+                    description: 'Alertamos sobre uma possÃ­vel queda na conversÃ£o nos prÃ³ximos 7 dias se o padrÃ£o atual continuar.',
                     type: 'alert',
                     impact: 'high',
                     confidence: 76,
@@ -115,7 +115,7 @@ const IAInsightsPage: React.FC = () => {
                             <Brain className="h-6 w-6 text-white" />
                         </div>
                         <div>
-                            <h1 className="text-3xl font-bold bg-gradient-to-r from-[#432818] to-purple-600 bg-clip-text text-transparent">
+                            <h1 className="text-3xl font-bold bg-gradient-to-r from-[#1A0F3D] to-purple-600 bg-clip-text text-transparent">
                                 Insights de IA
                             </h1>
                             <div className="flex items-center space-x-2 mt-1">
@@ -134,7 +134,7 @@ const IAInsightsPage: React.FC = () => {
                         </div>
                     </div>
                     <p className="text-lg text-[#6B4F43] max-w-2xl">
-                        Recomendações inteligentes baseadas em análise de dados e machine learning para otimizar seus quizzes e funis.
+                        RecomendaÃ§Ãµes inteligentes baseadas em anÃ¡lise de dados e machine learning para otimizar seus quizzes e funis.
                     </p>
                 </div>
 
@@ -142,7 +142,7 @@ const IAInsightsPage: React.FC = () => {
                     <Link href="/admin/analytics/real-time">
                         <Button
                             variant="outline"
-                            className="border-[#B89B7A]/40 text-[#432818] hover:bg-[#B89B7A]/10"
+                            className="border-[#B89B7A]/40 text-[#1A0F3D] hover:bg-[#B89B7A]/10"
                         >
                             <BarChart3 className="h-4 w-4 mr-2" />
                             Ver Analytics
@@ -151,7 +151,7 @@ const IAInsightsPage: React.FC = () => {
                     <Link href="/admin/ab-testing">
                         <Button
                             variant="outline"
-                            className="border-[#B89B7A]/40 text-[#432818] hover:bg-[#B89B7A]/10"
+                            className="border-[#B89B7A]/40 text-[#1A0F3D] hover:bg-[#B89B7A]/10"
                         >
                             <Target className="h-4 w-4 mr-2" />
                             Criar Teste A/B
@@ -160,21 +160,21 @@ const IAInsightsPage: React.FC = () => {
                 </div>
             </div>
 
-            {/* Métricas de Performance da IA */}
+            {/* MÃ©tricas de Performance da IA */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <Card className="border-0 shadow-lg bg-white">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-semibold text-[#432818]">
-                            Precisão da IA
+                        <CardTitle className="text-sm font-semibold text-[#1A0F3D]">
+                            PrecisÃ£o da IA
                         </CardTitle>
                         <Brain className="h-5 w-5 text-purple-500" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-3xl font-bold text-[#432818] mb-1">87%</div>
+                        <div className="text-3xl font-bold text-[#1A0F3D] mb-1">87%</div>
                         <div className="flex items-center text-sm mb-3">
                             <ArrowUpRight className="h-4 w-4 text-green-500 mr-1" />
                             <span className="text-green-500 font-semibold">+3.2%</span>
-                            <span className="ml-1 text-[#6B4F43]">vs mês anterior</span>
+                            <span className="ml-1 text-[#6B4F43]">vs mÃªs anterior</span>
                         </div>
                         <Progress value={87} className="h-2" />
                     </CardContent>
@@ -182,16 +182,16 @@ const IAInsightsPage: React.FC = () => {
 
                 <Card className="border-0 shadow-lg bg-white">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-semibold text-[#432818]">
+                        <CardTitle className="text-sm font-semibold text-[#1A0F3D]">
                             Insights Aplicados
                         </CardTitle>
                         <Target className="h-5 w-5 text-[#B89B7A]" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-3xl font-bold text-[#432818] mb-1">12</div>
+                        <div className="text-3xl font-bold text-[#1A0F3D] mb-1">12</div>
                         <div className="flex items-center text-sm mb-3">
                             <ArrowUpRight className="h-4 w-4 text-[#B89B7A] mr-1" />
-                            <span className="text-[#B89B7A] font-semibold">+5 este mês</span>
+                            <span className="text-[#B89B7A] font-semibold">+5 este mÃªs</span>
                         </div>
                         <Progress value={75} className="h-2" />
                     </CardContent>
@@ -199,16 +199,16 @@ const IAInsightsPage: React.FC = () => {
 
                 <Card className="border-0 shadow-lg bg-white">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-semibold text-[#432818]">
-                            Impacto Médio
+                        <CardTitle className="text-sm font-semibold text-[#1A0F3D]">
+                            Impacto MÃ©dio
                         </CardTitle>
                         <TrendingUp className="h-5 w-5 text-green-500" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-3xl font-bold text-[#432818] mb-1">+18%</div>
+                        <div className="text-3xl font-bold text-[#1A0F3D] mb-1">+18%</div>
                         <div className="flex items-center text-sm mb-3">
                             <ArrowUpRight className="h-4 w-4 text-green-500 mr-1" />
-                            <span className="text-green-500 font-semibold">Conversão</span>
+                            <span className="text-green-500 font-semibold">ConversÃ£o</span>
                         </div>
                         <Progress value={85} className="h-2" />
                     </CardContent>
@@ -218,7 +218,7 @@ const IAInsightsPage: React.FC = () => {
             {/* Lista de Insights */}
             <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                    <h2 className="text-2xl font-bold text-[#432818]">Insights Recomendados</h2>
+                    <h2 className="text-2xl font-bold text-[#1A0F3D]">Insights Recomendados</h2>
                     <Badge className="bg-purple-100 text-purple-700">
                         {insights.filter(i => i.impact === 'high').length} alta prioridade
                     </Badge>
@@ -236,15 +236,15 @@ const IAInsightsPage: React.FC = () => {
                                                 <IconComponent className="h-5 w-5 text-white" />
                                             </div>
                                             <div>
-                                                <CardTitle className="text-lg font-bold text-[#432818]">
+                                                <CardTitle className="text-lg font-bold text-[#1A0F3D]">
                                                     {insight.title}
                                                 </CardTitle>
                                                 <div className="flex items-center gap-2 mt-1">
                                                     <Badge className={getImpactColor(insight.impact)}>
-                                                        {insight.impact === 'high' ? 'Alta' : insight.impact === 'medium' ? 'Média' : 'Baixa'} prioridade
+                                                        {insight.impact === 'high' ? 'Alta' : insight.impact === 'medium' ? 'MÃ©dia' : 'Baixa'} prioridade
                                                     </Badge>
                                                     <Badge variant="outline" className="text-xs">
-                                                        {insight.confidence}% confiança
+                                                        {insight.confidence}% confianÃ§a
                                                     </Badge>
                                                 </div>
                                             </div>
@@ -256,12 +256,12 @@ const IAInsightsPage: React.FC = () => {
                                         {insight.description}
                                     </p>
 
-                                    {/* Dados específicos do insight */}
+                                    {/* Dados especÃ­ficos do insight */}
                                     {insight.type === 'optimization' && (
                                         <div className="bg-[#FAF9F7] rounded-lg p-3 space-y-2">
                                             <div className="flex justify-between text-sm">
-                                                <span className="text-[#6B4F43]">Conversão atual:</span>
-                                                <span className="font-semibold text-[#432818]">{insight.data.currentConversion}%</span>
+                                                <span className="text-[#6B4F43]">ConversÃ£o atual:</span>
+                                                <span className="font-semibold text-[#1A0F3D]">{insight.data.currentConversion}%</span>
                                             </div>
                                             <div className="flex justify-between text-sm">
                                                 <span className="text-[#6B4F43]">Melhoria potencial:</span>
@@ -274,10 +274,10 @@ const IAInsightsPage: React.FC = () => {
                                         <div className="bg-[#FAF9F7] rounded-lg p-3 space-y-2">
                                             <div className="flex justify-between text-sm">
                                                 <span className="text-[#6B4F43]">Tamanho do segmento:</span>
-                                                <span className="font-semibold text-[#432818]">{insight.data.segmentSize.toLocaleString()} usuários</span>
+                                                <span className="font-semibold text-[#1A0F3D]">{insight.data.segmentSize.toLocaleString()} usuÃ¡rios</span>
                                             </div>
                                             <div className="flex justify-between text-sm">
-                                                <span className="text-[#6B4F43]">Taxa de conversão:</span>
+                                                <span className="text-[#6B4F43]">Taxa de conversÃ£o:</span>
                                                 <span className="font-semibold text-green-600">{insight.data.conversionRate}%</span>
                                             </div>
                                         </div>
@@ -300,19 +300,19 @@ const IAInsightsPage: React.FC = () => {
                 </div>
             </div>
 
-            {/* Ações e Integrações */}
+            {/* AÃ§Ãµes e IntegraÃ§Ãµes */}
             <Card className="border-0 shadow-lg bg-white">
                 <CardHeader>
-                    <CardTitle className="text-xl font-bold text-[#432818]">Integrações de IA Disponíveis</CardTitle>
-                    <p className="text-[#6B4F43]">Funcionalidades de inteligência artificial ativas no sistema</p>
+                    <CardTitle className="text-xl font-bold text-[#1A0F3D]">IntegraÃ§Ãµes de IA DisponÃ­veis</CardTitle>
+                    <p className="text-[#6B4F43]">Funcionalidades de inteligÃªncia artificial ativas no sistema</p>
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="flex items-center gap-3 p-4 bg-[#FAF9F7] rounded-lg">
                             <Brain className="h-8 w-8 text-purple-500" />
                             <div>
-                                <h4 className="font-semibold text-[#432818]">Análise Preditiva</h4>
-                                <p className="text-xs text-[#6B4F43]">Previsão de comportamento</p>
+                                <h4 className="font-semibold text-[#1A0F3D]">AnÃ¡lise Preditiva</h4>
+                                <p className="text-xs text-[#6B4F43]">PrevisÃ£o de comportamento</p>
                             </div>
                             <Badge className="ml-auto bg-green-100 text-green-700">Ativo</Badge>
                         </div>
@@ -320,7 +320,7 @@ const IAInsightsPage: React.FC = () => {
                         <div className="flex items-center gap-3 p-4 bg-[#FAF9F7] rounded-lg">
                             <Target className="h-8 w-8 text-[#B89B7A]" />
                             <div>
-                                <h4 className="font-semibold text-[#432818]">Otimização A/B</h4>
+                                <h4 className="font-semibold text-[#1A0F3D]">OtimizaÃ§Ã£o A/B</h4>
                                 <p className="text-xs text-[#6B4F43]">Testes automatizados</p>
                             </div>
                             <Badge className="ml-auto bg-green-100 text-green-700">Ativo</Badge>
@@ -329,8 +329,8 @@ const IAInsightsPage: React.FC = () => {
                         <div className="flex items-center gap-3 p-4 bg-[#FAF9F7] rounded-lg">
                             <Users className="h-8 w-8 text-blue-500" />
                             <div>
-                                <h4 className="font-semibold text-[#432818]">Segmentação Smart</h4>
-                                <p className="text-xs text-[#6B4F43]">Identificação de públicos</p>
+                                <h4 className="font-semibold text-[#1A0F3D]">SegmentaÃ§Ã£o Smart</h4>
+                                <p className="text-xs text-[#6B4F43]">IdentificaÃ§Ã£o de pÃºblicos</p>
                             </div>
                             <Badge className="ml-auto bg-green-100 text-green-700">Ativo</Badge>
                         </div>
@@ -342,3 +342,4 @@ const IAInsightsPage: React.FC = () => {
 };
 
 export default IAInsightsPage;
+

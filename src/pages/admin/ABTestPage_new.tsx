@@ -1,4 +1,4 @@
-import { Badge } from '@/components/ui/badge';
+﻿import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -11,13 +11,13 @@ const ABTestPage: React.FC = () => {
       <div className="flex justify-between items-center">
         <div>
           <h1
-            className="text-3xl font-bold text-[#432818]"
+            className="text-3xl font-bold text-[#1A0F3D]"
             style={{ fontFamily: 'Playfair Display, serif' }}
           >
             Testes A/B
           </h1>
           <p className="text-[#8F7A6A] mt-2">
-            Configure e monitore testes A/B para otimizar conversões
+            Configure e monitore testes A/B para otimizar conversÃµes
           </p>
         </div>
         <Button className="bg-[#B89B7A] hover:bg-[#A0895B] text-white">
@@ -26,7 +26,7 @@ const ABTestPage: React.FC = () => {
         </Button>
       </div>
 
-      {/* Estatísticas Gerais */}
+      {/* EstatÃ­sticas Gerais */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -34,7 +34,7 @@ const ABTestPage: React.FC = () => {
             <Target className="h-4 w-4 text-[#B89B7A]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-[#432818]">3</div>
+            <div className="text-2xl font-bold text-[#1A0F3D]">3</div>
             <p className="text-xs text-[#8F7A6A]">2 aguardando resultados</p>
           </CardContent>
         </Card>
@@ -45,8 +45,8 @@ const ABTestPage: React.FC = () => {
             <BarChart3 className="h-4 w-4 text-[#B89B7A]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-[#432818]">+23.5%</div>
-            <p className="text-xs text-[#8F7A6A]">Variação B - Quiz v2</p>
+            <div className="text-2xl font-bold text-[#1A0F3D]">+23.5%</div>
+            <p className="text-xs text-[#8F7A6A]">VariaÃ§Ã£o B - Quiz v2</p>
           </CardContent>
         </Card>
 
@@ -58,21 +58,21 @@ const ABTestPage: React.FC = () => {
             <Eye className="h-4 w-4 text-[#B89B7A]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-[#432818]">8,234</div>
-            <p className="text-xs text-[#8F7A6A]">Últimos 30 dias</p>
+            <div className="text-2xl font-bold text-[#1A0F3D]">8,234</div>
+            <p className="text-xs text-[#8F7A6A]">Ãšltimos 30 dias</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-[#8F7A6A]">
-              Taxa de Significância
+              Taxa de SignificÃ¢ncia
             </CardTitle>
             <Target className="h-4 w-4 text-[#B89B7A]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-[#432818]">95%</div>
-            <p className="text-xs text-[#8F7A6A]">Confiança estatística</p>
+            <div className="text-2xl font-bold text-[#1A0F3D]">95%</div>
+            <p className="text-xs text-[#8F7A6A]">ConfianÃ§a estatÃ­stica</p>
           </CardContent>
         </Card>
       </div>
@@ -80,7 +80,7 @@ const ABTestPage: React.FC = () => {
       {/* Lista de Testes A/B */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-[#432818]">Testes A/B Ativos</CardTitle>
+          <CardTitle className="text-[#1A0F3D]">Testes A/B Ativos</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-6">
@@ -88,7 +88,7 @@ const ABTestPage: React.FC = () => {
             <div className="border border-[#D4C4A0] rounded-lg p-6">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="font-semibold text-[#432818] text-lg">Quiz vs Oferta Direta</h3>
+                  <h3 className="font-semibold text-[#1A0F3D] text-lg">Quiz vs Oferta Direta</h3>
                   <p className="text-sm text-[#8F7A6A]">
                     Testando /resultado vs /descubra-seu-estilo
                   </p>
@@ -106,24 +106,24 @@ const ABTestPage: React.FC = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-3">
-                  <h4 className="font-medium text-[#432818]">Variação A (Controle)</h4>
+                  <h4 className="font-medium text-[#1A0F3D]">VariaÃ§Ã£o A (Controle)</h4>
                   <p className="text-sm text-[#8F7A6A]">/resultado - Quiz como isca</p>
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span>Visitantes: 1,234</span>
-                      <span>Conversões: 89 (7.2%)</span>
+                      <span>ConversÃµes: 89 (7.2%)</span>
                     </div>
                     <Progress value={50} className="h-2" />
                   </div>
                 </div>
 
                 <div className="space-y-3">
-                  <h4 className="font-medium text-[#432818]">Variação B (Teste)</h4>
+                  <h4 className="font-medium text-[#1A0F3D]">VariaÃ§Ã£o B (Teste)</h4>
                   <p className="text-sm text-[#8F7A6A]">/descubra-seu-estilo - Oferta direta</p>
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span>Visitantes: 1,156</span>
-                      <span>Conversões: 127 (11.0%)</span>
+                      <span>ConversÃµes: 127 (11.0%)</span>
                     </div>
                     <Progress value={50} className="h-2" />
                   </div>
@@ -132,8 +132,8 @@ const ABTestPage: React.FC = () => {
 
               <div className="mt-4 p-3 bg-green-50 rounded-lg">
                 <p className="text-sm text-green-800">
-                  <strong>Resultado:</strong> Variação B está performando 52.8% melhor
-                  (Significância: 95% | Duração: 14 dias)
+                  <strong>Resultado:</strong> VariaÃ§Ã£o B estÃ¡ performando 52.8% melhor
+                  (SignificÃ¢ncia: 95% | DuraÃ§Ã£o: 14 dias)
                 </p>
               </div>
             </div>
@@ -142,8 +142,8 @@ const ABTestPage: React.FC = () => {
             <div className="border border-[#D4C4A0] rounded-lg p-6">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="font-semibold text-[#432818] text-lg">
-                    Criativos - Imagem vs Vídeo
+                  <h3 className="font-semibold text-[#1A0F3D] text-lg">
+                    Criativos - Imagem vs VÃ­deo
                   </h3>
                   <p className="text-sm text-[#8F7A6A]">Testando diferentes tipos de creative</p>
                 </div>
@@ -160,8 +160,8 @@ const ABTestPage: React.FC = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-3">
-                  <h4 className="font-medium text-[#432818]">Variação A - Imagem</h4>
-                  <p className="text-sm text-[#8F7A6A]">Creative estático</p>
+                  <h4 className="font-medium text-[#1A0F3D]">VariaÃ§Ã£o A - Imagem</h4>
+                  <p className="text-sm text-[#8F7A6A]">Creative estÃ¡tico</p>
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span>Cliques: 456</span>
@@ -172,7 +172,7 @@ const ABTestPage: React.FC = () => {
                 </div>
 
                 <div className="space-y-3">
-                  <h4 className="font-medium text-[#432818]">Variação B - Vídeo</h4>
+                  <h4 className="font-medium text-[#1A0F3D]">VariaÃ§Ã£o B - VÃ­deo</h4>
                   <p className="text-sm text-[#8F7A6A]">Creative em movimento</p>
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
@@ -187,7 +187,7 @@ const ABTestPage: React.FC = () => {
               <div className="mt-4 p-3 bg-stone-50 rounded-lg">
                 <p className="text-sm text-stone-800">
                   <strong>Status:</strong> Teste em andamento. Precisa de mais 3 dias para
-                  significância estatística.
+                  significÃ¢ncia estatÃ­stica.
                 </p>
               </div>
             </div>
@@ -199,3 +199,4 @@ const ABTestPage: React.FC = () => {
 };
 
 export default ABTestPage;
+

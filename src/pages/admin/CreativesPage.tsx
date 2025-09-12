@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+﻿import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Plus, Image, Video, FileText } from 'lucide-react';
 
@@ -9,12 +9,12 @@ const CreativesPage: React.FC = () => {
       <div className="flex justify-between items-center">
         <div>
           <h1
-            className="text-3xl font-bold text-[#432818]"
+            className="text-3xl font-bold text-[#1A0F3D]"
             style={{ fontFamily: 'Playfair Display, serif' }}
           >
             Biblioteca de Criativos
           </h1>
-          <p className="text-[#8F7A6A] mt-2">Gerencie suas imagens, vídeos e materiais criativos</p>
+          <p className="text-[#8F7A6A] mt-2">Gerencie suas imagens, vÃ­deos e materiais criativos</p>
         </div>
         <Button className="bg-[#B89B7A] hover:bg-[#A0895B] text-white">
           <Plus className="w-4 h-4 mr-2" />
@@ -30,19 +30,19 @@ const CreativesPage: React.FC = () => {
             <Image className="h-4 w-4 text-[#B89B7A]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-[#432818]">47</div>
+            <div className="text-2xl font-bold text-[#1A0F3D]">47</div>
             <p className="text-xs text-[#8F7A6A]">arquivos de imagem</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-[#8F7A6A]">Vídeos</CardTitle>
+            <CardTitle className="text-sm font-medium text-[#8F7A6A]">VÃ­deos</CardTitle>
             <Video className="h-4 w-4 text-[#B89B7A]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-[#432818]">12</div>
-            <p className="text-xs text-[#8F7A6A]">arquivos de vídeo</p>
+            <div className="text-2xl font-bold text-[#1A0F3D]">12</div>
+            <p className="text-xs text-[#8F7A6A]">arquivos de vÃ­deo</p>
           </CardContent>
         </Card>
 
@@ -52,7 +52,7 @@ const CreativesPage: React.FC = () => {
             <FileText className="h-4 w-4 text-[#B89B7A]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-[#432818]">8</div>
+            <div className="text-2xl font-bold text-[#1A0F3D]">8</div>
             <p className="text-xs text-[#8F7A6A]">documentos</p>
           </CardContent>
         </Card>
@@ -61,7 +61,7 @@ const CreativesPage: React.FC = () => {
       {/* Biblioteca */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-[#432818]">Arquivos Recentes</CardTitle>
+          <CardTitle className="text-[#1A0F3D]">Arquivos Recentes</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
@@ -78,3 +78,4 @@ const CreativesPage: React.FC = () => {
 };
 
 export default CreativesPage;
+

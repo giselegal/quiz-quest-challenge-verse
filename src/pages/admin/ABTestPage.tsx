@@ -1,4 +1,4 @@
-import { Badge } from '@/components/ui/badge';
+﻿import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Pause, Plus, TrendingUp } from 'lucide-react';
@@ -10,12 +10,12 @@ const ABTestPage: React.FC = () => {
       <div className="flex justify-between items-center">
         <div>
           <h1
-            className="text-3xl font-bold text-[#432818]"
+            className="text-3xl font-bold text-[#1A0F3D]"
             style={{ fontFamily: 'Playfair Display, serif' }}
           >
             Testes A/B
           </h1>
-          <p className="text-[#8F7A6A] mt-2">Otimize suas conversões com testes A/B</p>
+          <p className="text-[#8F7A6A] mt-2">Otimize suas conversÃµes com testes A/B</p>
         </div>
         <Button className="bg-[#B89B7A] hover:bg-[#A0895B] text-white">
           <Plus className="w-4 h-4 mr-2" />
@@ -26,28 +26,28 @@ const ABTestPage: React.FC = () => {
       {/* Testes Ativos */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-[#432818]">Testes em Execução</CardTitle>
+          <CardTitle className="text-[#1A0F3D]">Testes em ExecuÃ§Ã£o</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div className="flex items-center justify-between p-4 border border-[#D4C4A0] rounded-lg">
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
-                  <h3 className="font-semibold text-[#432818]">Título da Página de Resultado</h3>
+                  <h3 className="font-semibold text-[#1A0F3D]">TÃ­tulo da PÃ¡gina de Resultado</h3>
                   <Badge style={{ backgroundColor: '#E5DDD5' }}>Ativo</Badge>
                 </div>
                 <p className="text-sm text-[#8F7A6A] mb-3">
-                  Testando dois títulos diferentes na página de resultado
+                  Testando dois tÃ­tulos diferentes na pÃ¡gina de resultado
                 </p>
                 <div className="grid grid-cols-2 gap-4">
                   <div style={{ backgroundColor: '#FAF9F7' }}>
                     <div style={{ color: '#6B4F43' }}>Variante A</div>
-                    <div style={{ color: '#6B4F43' }}>43.2% conversão (234 visitantes)</div>
+                    <div style={{ color: '#6B4F43' }}>43.2% conversÃ£o (234 visitantes)</div>
                   </div>
                   <div className="p-3 bg-[#B89B7A]/10 rounded">
-                    <div className="text-sm font-medium text-[#A38A69]">Variante B</div>
+                    <div className="text-sm font-medium text-[#00BFFF]">Variante B</div>
                     <div className="text-xs text-[#B89B7A] mt-1">
-                      47.8% conversão (221 visitantes)
+                      47.8% conversÃ£o (221 visitantes)
                     </div>
                   </div>
                 </div>
@@ -71,3 +71,4 @@ const ABTestPage: React.FC = () => {
 };
 
 export default ABTestPage;
+

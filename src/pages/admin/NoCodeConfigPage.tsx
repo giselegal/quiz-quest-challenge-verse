@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -79,15 +79,15 @@ export const NoCodeConfigPanel: React.FC = () => {
   const { toast } = useToast();
   const { configuration: step20Config, updateConfiguration: updateStep20Config } = useStep20NoCodeIntegration();
 
-  // 🎛️ Estado para configuração de cabeçalho
+  // ðŸŽ›ï¸ Estado para configuraÃ§Ã£o de cabeÃ§alho
   const [headerSettings, setHeaderSettings] = useState<HeaderProperties>(defaultHeaderProperties);
 
   const [seoSettings, setSeoSettings] = useState<SEOSettings>({
     title: 'Descubra Seu Estilo | Quiz Personalizado',
-    description: 'Descubra seu estilo pessoal único com nosso quiz interativo e receba recomendações personalizadas.',
-    keywords: 'estilo pessoal, quiz, moda, personal stylist, Gisele Galvão',
+    description: 'Descubra seu estilo pessoal Ãºnico com nosso quiz interativo e receba recomendaÃ§Ãµes personalizadas.',
+    keywords: 'estilo pessoal, quiz, moda, personal stylist, Gisele GalvÃ£o',
     ogImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
-    siteName: 'QuizFlow - Gisele Galvão'
+    siteName: 'QuizFlow - Gisele GalvÃ£o'
   });
 
   const [domainSettings, setDomainSettings] = useState<DomainSettings>({
@@ -107,7 +107,7 @@ export const NoCodeConfigPanel: React.FC = () => {
   const [funnelSettings, setFunnelSettings] = useState<FunnelSettings>({
     theme: 'elegant-brown',
     primaryColor: '#B89B7A',
-    secondaryColor: '#432818',
+    secondaryColor: '#1A0F3D',
     fontFamily: 'Playfair Display',
     logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'
   });
@@ -132,7 +132,7 @@ export const NoCodeConfigPanel: React.FC = () => {
 
   const [saving, setSaving] = useState(false);
 
-  // 🎛️ Função para salvar configurações de header
+  // ðŸŽ›ï¸ FunÃ§Ã£o para salvar configuraÃ§Ãµes de header
   const handleHeaderConfigChange = (config: Partial<HeaderProperties>) => {
     setHeaderSettings(prev => ({ ...prev, ...config }));
   };
@@ -144,8 +144,8 @@ export const NoCodeConfigPanel: React.FC = () => {
     // await saveHeaderConfig(headerSettings);
 
     toast({
-      title: "Configurações de Header Salvas!",
-      description: "As configurações do cabeçalho foram aplicadas com sucesso.",
+      title: "ConfiguraÃ§Ãµes de Header Salvas!",
+      description: "As configuraÃ§Ãµes do cabeÃ§alho foram aplicadas com sucesso.",
     });
 
     setSaving(false);
@@ -157,14 +157,14 @@ export const NoCodeConfigPanel: React.FC = () => {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    // Se for a seção da Etapa 20, atualizar também o store específico
+    // Se for a seÃ§Ã£o da Etapa 20, atualizar tambÃ©m o store especÃ­fico
     if (section === 'Etapa 20') {
       updateStep20Config(step20Settings);
     }
 
     toast({
-      title: "Configurações salvas!",
-      description: `As configurações de ${section} foram salvas com sucesso.`,
+      title: "ConfiguraÃ§Ãµes salvas!",
+      description: `As configuraÃ§Ãµes de ${section} foram salvas com sucesso.`,
     });
 
     setSaving(false);
@@ -172,15 +172,15 @@ export const NoCodeConfigPanel: React.FC = () => {
 
   const connectVercel = async () => {
     toast({
-      title: "Integração Vercel",
-      description: "Conectando com a API do Vercel para configuração de domínio...",
+      title: "IntegraÃ§Ã£o Vercel",
+      description: "Conectando com a API do Vercel para configuraÃ§Ã£o de domÃ­nio...",
     });
 
     // TODO: Implement Vercel API integration
     setTimeout(() => {
       toast({
         title: "Vercel conectado!",
-        description: "Domínio personalizado será configurado em breve.",
+        description: "DomÃ­nio personalizado serÃ¡ configurado em breve.",
       });
     }, 2000);
   };
@@ -191,13 +191,13 @@ export const NoCodeConfigPanel: React.FC = () => {
       <div className="flex justify-between items-center">
         <div>
           <h1
-            className="text-4xl font-bold text-[#432818]"
+            className="text-4xl font-bold text-[#1A0F3D]"
             style={{ fontFamily: 'Playfair Display, serif' }}
           >
-            Configurações No-Code
+            ConfiguraÃ§Ãµes No-Code
           </h1>
           <p className="text-[#8F7A6A] mt-2 text-lg">
-            Configure seu funil sem precisar de código
+            Configure seu funil sem precisar de cÃ³digo
           </p>
         </div>
       </div>
@@ -218,7 +218,7 @@ export const NoCodeConfigPanel: React.FC = () => {
           </TabsTrigger>
           <TabsTrigger value="domain" className="flex items-center gap-2">
             <Link className="w-4 h-4" />
-            Domínio
+            DomÃ­nio
           </TabsTrigger>
           <TabsTrigger value="tracking" className="flex items-center gap-2">
             <Eye className="w-4 h-4" />
@@ -239,7 +239,7 @@ export const NoCodeConfigPanel: React.FC = () => {
           <ConfigurationStatusPanel />
         </TabsContent>
 
-        {/* 🎛️ Header Configuration */}
+        {/* ðŸŽ›ï¸ Header Configuration */}
         <TabsContent value="header">
           <HeaderConfigurationPanel
             headerConfig={headerSettings}
@@ -253,22 +253,22 @@ export const NoCodeConfigPanel: React.FC = () => {
         <TabsContent value="seo">
           <Card className="border-0" style={{ backgroundColor: '#FFFFFF', boxShadow: '0 4px 20px rgba(184, 155, 122, 0.1)' }}>
             <CardHeader>
-              <CardTitle className="text-[#432818] flex items-center gap-2">
+              <CardTitle className="text-[#1A0F3D] flex items-center gap-2">
                 <Globe className="w-5 h-5" style={{ color: '#B89B7A' }} />
-                Configurações de SEO
+                ConfiguraÃ§Ãµes de SEO
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="seo-title">Título da Página</Label>
+                  <Label htmlFor="seo-title">TÃ­tulo da PÃ¡gina</Label>
                   <Input
                     id="seo-title"
                     value={seoSettings.title}
                     onChange={(e) => setSeoSettings({ ...seoSettings, title: e.target.value })}
-                    placeholder="Título que aparece no Google"
+                    placeholder="TÃ­tulo que aparece no Google"
                   />
-                  <p className="text-xs text-[#8F7A6A]">Máximo 60 caracteres</p>
+                  <p className="text-xs text-[#8F7A6A]">MÃ¡ximo 60 caracteres</p>
                 </div>
 
                 <div className="space-y-2">
@@ -283,15 +283,15 @@ export const NoCodeConfigPanel: React.FC = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="seo-description">Descrição</Label>
+                <Label htmlFor="seo-description">DescriÃ§Ã£o</Label>
                 <Textarea
                   id="seo-description"
                   value={seoSettings.description}
                   onChange={(e) => setSeoSettings({ ...seoSettings, description: e.target.value })}
-                  placeholder="Descrição que aparece no Google"
+                  placeholder="DescriÃ§Ã£o que aparece no Google"
                   rows={3}
                 />
-                <p className="text-xs text-[#8F7A6A]">Máximo 160 caracteres</p>
+                <p className="text-xs text-[#8F7A6A]">MÃ¡ximo 160 caracteres</p>
               </div>
 
               <div className="space-y-2">
@@ -320,7 +320,7 @@ export const NoCodeConfigPanel: React.FC = () => {
                 disabled={saving}
                 className="bg-[#B89B7A] hover:bg-[#A0895B] text-white"
               >
-                {saving ? 'Salvando...' : 'Salvar Configurações SEO'}
+                {saving ? 'Salvando...' : 'Salvar ConfiguraÃ§Ãµes SEO'}
               </Button>
             </CardContent>
           </Card>
@@ -331,14 +331,14 @@ export const NoCodeConfigPanel: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card className="border-0" style={{ backgroundColor: '#FFFFFF', boxShadow: '0 4px 20px rgba(184, 155, 122, 0.1)' }}>
               <CardHeader>
-                <CardTitle className="text-[#432818] flex items-center gap-2">
+                <CardTitle className="text-[#1A0F3D] flex items-center gap-2">
                   <Link className="w-5 h-5" style={{ color: '#B89B7A' }} />
-                  Configuração de Domínio
+                  ConfiguraÃ§Ã£o de DomÃ­nio
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="custom-domain">Domínio Personalizado</Label>
+                  <Label htmlFor="custom-domain">DomÃ­nio Personalizado</Label>
                   <Input
                     id="custom-domain"
                     value={domainSettings.customDomain}
@@ -348,7 +348,7 @@ export const NoCodeConfigPanel: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="subdomain">Subdomínio</Label>
+                  <Label htmlFor="subdomain">SubdomÃ­nio</Label>
                   <Input
                     id="subdomain"
                     value={domainSettings.subdomain}
@@ -363,35 +363,35 @@ export const NoCodeConfigPanel: React.FC = () => {
                     checked={domainSettings.redirectWww}
                     onCheckedChange={(checked) => setDomainSettings({ ...domainSettings, redirectWww: checked })}
                   />
-                  <Label>Redirecionar www para domínio principal</Label>
+                  <Label>Redirecionar www para domÃ­nio principal</Label>
                 </div>
 
                 <Button
-                  onClick={() => handleSave('Domínio')}
+                  onClick={() => handleSave('DomÃ­nio')}
                   disabled={saving}
                   className="bg-[#B89B7A] hover:bg-[#A0895B] text-white w-full"
                 >
-                  Salvar Configurações de Domínio
+                  Salvar ConfiguraÃ§Ãµes de DomÃ­nio
                 </Button>
               </CardContent>
             </Card>
 
             <Card className="border-0" style={{ backgroundColor: '#FFFFFF', boxShadow: '0 4px 20px rgba(184, 155, 122, 0.1)' }}>
               <CardHeader>
-                <CardTitle className="text-[#432818] flex items-center gap-2">
+                <CardTitle className="text-[#1A0F3D] flex items-center gap-2">
                   <Zap className="w-5 h-5" style={{ color: '#B89B7A' }} />
-                  Integração Vercel
+                  IntegraÃ§Ã£o Vercel
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-sm text-[#6B4F43]">
-                  Conecte com o Vercel para configurar automaticamente seu domínio personalizado.
+                  Conecte com o Vercel para configurar automaticamente seu domÃ­nio personalizado.
                 </p>
 
                 <div className="p-4 rounded-lg" style={{ backgroundColor: '#F3E8E6' }}>
                   <div className="flex items-center gap-2 mb-2">
                     <AlertCircle className="w-4 h-4 text-[#B89B7A]" />
-                    <span className="text-sm font-medium text-[#432818]">Status</span>
+                    <span className="text-sm font-medium text-[#1A0F3D]">Status</span>
                   </div>
                   <p className="text-xs text-[#6B4F43]">
                     Pronto para conectar com Vercel API
@@ -415,7 +415,7 @@ export const NoCodeConfigPanel: React.FC = () => {
         <TabsContent value="tracking">
           <Card className="border-0" style={{ backgroundColor: '#FFFFFF', boxShadow: '0 4px 20px rgba(184, 155, 122, 0.1)' }}>
             <CardHeader>
-              <CardTitle className="text-[#432818] flex items-center gap-2">
+              <CardTitle className="text-[#1A0F3D] flex items-center gap-2">
                 <Eye className="w-5 h-5" style={{ color: '#B89B7A' }} />
                 Tracking e Analytics
               </CardTitle>
@@ -471,7 +471,7 @@ export const NoCodeConfigPanel: React.FC = () => {
               </div>
 
               <div className="p-4 rounded-lg" style={{ backgroundColor: '#F3E8E6' }}>
-                <h4 className="font-medium text-[#432818] mb-2">Status dos Pixels</h4>
+                <h4 className="font-medium text-[#1A0F3D] mb-2">Status dos Pixels</h4>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
                     <Check className="w-4 h-4 text-green-500" />
@@ -489,7 +489,7 @@ export const NoCodeConfigPanel: React.FC = () => {
                 disabled={saving}
                 className="bg-[#B89B7A] hover:bg-[#A0895B] text-white"
               >
-                Salvar Configurações de Tracking
+                Salvar ConfiguraÃ§Ãµes de Tracking
               </Button>
             </CardContent>
           </Card>
@@ -498,28 +498,28 @@ export const NoCodeConfigPanel: React.FC = () => {
         {/* Step 20 Configuration */}
         <TabsContent value="step20">
           <div className="space-y-8">
-            {/* Documentação */}
+            {/* DocumentaÃ§Ã£o */}
             <Step20URLDocumentation />
 
-            {/* Guia de Integração */}
+            {/* Guia de IntegraÃ§Ã£o */}
             <Step20IntegrationGuide />
 
-            {/* Configuração */}
+            {/* ConfiguraÃ§Ã£o */}
             <Card className="border-0" style={{ backgroundColor: '#FFFFFF', boxShadow: '0 4px 20px rgba(184, 155, 122, 0.1)' }}>
               <CardHeader>
-                <CardTitle className="text-[#432818] flex items-center gap-2">
+                <CardTitle className="text-[#1A0F3D] flex items-center gap-2">
                   <Trophy className="w-5 h-5" style={{ color: '#B89B7A' }} />
-                  Configuração da Página de Resultado (Etapa 20)
+                  ConfiguraÃ§Ã£o da PÃ¡gina de Resultado (Etapa 20)
                 </CardTitle>
                 <p className="text-sm text-[#6B4F43]">
-                  Configure a experiência especial da página de resultado do quiz (URL: /step20)
+                  Configure a experiÃªncia especial da pÃ¡gina de resultado do quiz (URL: /step20)
                 </p>
               </CardHeader>
               <CardContent className="space-y-6">
-                {/* Conteúdo Principal */}
+                {/* ConteÃºdo Principal */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="page-title">Título da Página</Label>
+                    <Label htmlFor="page-title">TÃ­tulo da PÃ¡gina</Label>
                     <Input
                       id="page-title"
                       value={step20Settings.pageTitle}
@@ -529,7 +529,7 @@ export const NoCodeConfigPanel: React.FC = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="cta-button">Texto do Botão Principal</Label>
+                    <Label htmlFor="cta-button">Texto do BotÃ£o Principal</Label>
                     <Input
                       id="cta-button"
                       value={step20Settings.ctaButtonText}
@@ -545,14 +545,14 @@ export const NoCodeConfigPanel: React.FC = () => {
                     id="result-message"
                     value={step20Settings.resultMessage}
                     onChange={(e) => setStep20Settings({ ...step20Settings, resultMessage: e.target.value })}
-                    placeholder="Parabéns! Com base nas suas respostas..."
+                    placeholder="ParabÃ©ns! Com base nas suas respostas..."
                     rows={3}
                   />
                 </div>
 
                 {/* Background Configuration */}
                 <div className="space-y-4">
-                  <Label className="text-base font-medium text-[#432818]">Configuração de Fundo</Label>
+                  <Label className="text-base font-medium text-[#1A0F3D]">ConfiguraÃ§Ã£o de Fundo</Label>
 
                   <div className="space-y-2">
                     <Label htmlFor="background-type">Tipo de Fundo</Label>
@@ -568,7 +568,7 @@ export const NoCodeConfigPanel: React.FC = () => {
                       <SelectContent>
                         <SelectItem value="gradient">Gradiente</SelectItem>
                         <SelectItem value="image">Imagem</SelectItem>
-                        <SelectItem value="solid">Cor Sólida</SelectItem>
+                        <SelectItem value="solid">Cor SÃ³lida</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -594,7 +594,7 @@ export const NoCodeConfigPanel: React.FC = () => {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="gradient-via">Cor Intermediária</Label>
+                        <Label htmlFor="gradient-via">Cor IntermediÃ¡ria</Label>
                         <div className="flex gap-2">
                           <Input
                             type="color"
@@ -672,12 +672,12 @@ export const NoCodeConfigPanel: React.FC = () => {
                         checked={step20Settings.showResultIcon}
                         onCheckedChange={(checked) => setStep20Settings({ ...step20Settings, showResultIcon: checked })}
                       />
-                      <Label>Mostrar Ícone de Resultado</Label>
+                      <Label>Mostrar Ãcone de Resultado</Label>
                     </div>
 
                     {step20Settings.showResultIcon && (
                       <div className="space-y-2">
-                        <Label htmlFor="result-icon-type">Tipo de Ícone</Label>
+                        <Label htmlFor="result-icon-type">Tipo de Ãcone</Label>
                         <Select
                           value={step20Settings.resultIconType}
                           onValueChange={(value: 'trophy' | 'star' | 'check' | 'heart') =>
@@ -688,10 +688,10 @@ export const NoCodeConfigPanel: React.FC = () => {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="trophy">🏆 Troféu</SelectItem>
-                            <SelectItem value="star">⭐ Estrela</SelectItem>
-                            <SelectItem value="check">✅ Check</SelectItem>
-                            <SelectItem value="heart">💖 Coração</SelectItem>
+                            <SelectItem value="trophy">ðŸ† TrofÃ©u</SelectItem>
+                            <SelectItem value="star">â­ Estrela</SelectItem>
+                            <SelectItem value="check">âœ… Check</SelectItem>
+                            <SelectItem value="heart">ðŸ’– CoraÃ§Ã£o</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -728,17 +728,17 @@ export const NoCodeConfigPanel: React.FC = () => {
                       checked={step20Settings.showNextSteps}
                       onCheckedChange={(checked) => setStep20Settings({ ...step20Settings, showNextSteps: checked })}
                     />
-                    <Label>Mostrar Próximos Passos</Label>
+                    <Label>Mostrar PrÃ³ximos Passos</Label>
                   </div>
 
                   {step20Settings.showNextSteps && (
                     <div className="space-y-2">
-                      <Label htmlFor="next-steps-text">Texto dos Próximos Passos</Label>
+                      <Label htmlFor="next-steps-text">Texto dos PrÃ³ximos Passos</Label>
                       <Textarea
                         id="next-steps-text"
                         value={step20Settings.nextStepsText}
                         onChange={(e) => setStep20Settings({ ...step20Settings, nextStepsText: e.target.value })}
-                        placeholder="Agora você pode acessar sua consultoria personalizada..."
+                        placeholder="Agora vocÃª pode acessar sua consultoria personalizada..."
                         rows={3}
                       />
                     </div>
@@ -747,12 +747,12 @@ export const NoCodeConfigPanel: React.FC = () => {
 
                 {/* Preview Section */}
                 <div className="p-4 rounded-lg border" style={{ backgroundColor: '#F8F6F3', borderColor: '#E6DDD4' }}>
-                  <h4 className="font-medium text-[#432818] mb-2">🎯 URL Configurada</h4>
+                  <h4 className="font-medium text-[#1A0F3D] mb-2">ðŸŽ¯ URL Configurada</h4>
                   <p className="text-sm text-[#6B4F43]">
-                    <strong>Página de Resultado:</strong> <code className="bg-[#E6DDD4] px-2 py-1 rounded">/step20</code>
+                    <strong>PÃ¡gina de Resultado:</strong> <code className="bg-[#E6DDD4] px-2 py-1 rounded">/step20</code>
                   </p>
                   <p className="text-xs text-[#8F7A6A] mt-2">
-                    Esta é a página especial de resultado que difere das etapas regulares (/step/1, /step/2, etc.)
+                    Esta Ã© a pÃ¡gina especial de resultado que difere das etapas regulares (/step/1, /step/2, etc.)
                   </p>
                 </div>
 
@@ -762,7 +762,7 @@ export const NoCodeConfigPanel: React.FC = () => {
                     disabled={saving}
                     className="bg-[#B89B7A] hover:bg-[#A0895B] text-white flex-1"
                   >
-                    {saving ? 'Salvando...' : 'Salvar Configurações da Etapa 20'}
+                    {saving ? 'Salvando...' : 'Salvar ConfiguraÃ§Ãµes da Etapa 20'}
                   </Button>
 
                   <Button
@@ -796,7 +796,7 @@ export const NoCodeConfigPanel: React.FC = () => {
                               .preview-title { 
                                 font-size: 48px; 
                                 font-weight: bold; 
-                                color: #432818; 
+                                color: #1A0F3D; 
                                 margin-bottom: 24px;
                                 line-height: 1.2;
                               }
@@ -837,24 +837,24 @@ export const NoCodeConfigPanel: React.FC = () => {
                           <body>
                             <div class="preview-container">
                               <div class="preview-card">
-                                ${step20Settings.showResultIcon ? `<div class="preview-icon">${step20Settings.resultIconType === 'trophy' ? '🏆' : step20Settings.resultIconType === 'star' ? '⭐' : step20Settings.resultIconType === 'check' ? '✅' : '💖'}</div>` : ''}
+                                ${step20Settings.showResultIcon ? `<div class="preview-icon">${step20Settings.resultIconType === 'trophy' ? 'ðŸ†' : step20Settings.resultIconType === 'star' ? 'â­' : step20Settings.resultIconType === 'check' ? 'âœ…' : 'ðŸ’–'}</div>` : ''}
                                 <h1 class="preview-title">${step20Settings.pageTitle}</h1>
                                 <p class="preview-message">${step20Settings.resultMessage}</p>
                                 
                                 <div class="preview-url">
-                                  <strong>🎯 URL Configurada:</strong> <code>/step20</code><br>
-                                  <small>Página especial de resultado diferenciada das etapas regulares</small>
+                                  <strong>ðŸŽ¯ URL Configurada:</strong> <code>/step20</code><br>
+                                  <small>PÃ¡gina especial de resultado diferenciada das etapas regulares</small>
                                 </div>
                                 
                                 ${step20Settings.showNextSteps ? `
                                   <div class="preview-steps">
-                                    <h3>Próximos Passos</h3>
+                                    <h3>PrÃ³ximos Passos</h3>
                                     <p>${step20Settings.nextStepsText}</p>
                                   </div>
                                 ` : ''}
                                 
                                 <button class="preview-cta">${step20Settings.ctaButtonText}</button>
-                                ${step20Settings.enableSocialSharing ? '<button class="preview-cta" style="background: transparent; color: #B89B7A; border: 2px solid #B89B7A;">📱 Compartilhar</button>' : ''}
+                                ${step20Settings.enableSocialSharing ? '<button class="preview-cta" style="background: transparent; color: #B89B7A; border: 2px solid #B89B7A;">ðŸ“± Compartilhar</button>' : ''}
                               </div>
                             </div>
                           </body>
@@ -866,7 +866,7 @@ export const NoCodeConfigPanel: React.FC = () => {
                     variant="outline"
                     className="border-[#B89B7A] text-[#B89B7A] hover:bg-[#B89B7A] hover:text-white"
                   >
-                    👁️ Preview da Página
+                    ðŸ‘ï¸ Preview da PÃ¡gina
                   </Button>
                 </div>
               </CardContent>
@@ -878,9 +878,9 @@ export const NoCodeConfigPanel: React.FC = () => {
         <TabsContent value="theme">
           <Card className="border-0" style={{ backgroundColor: '#FFFFFF', boxShadow: '0 4px 20px rgba(184, 155, 122, 0.1)' }}>
             <CardHeader>
-              <CardTitle className="text-[#432818] flex items-center gap-2">
+              <CardTitle className="text-[#1A0F3D] flex items-center gap-2">
                 <Palette className="w-5 h-5" style={{ color: '#B89B7A' }} />
-                Personalização do Tema
+                PersonalizaÃ§Ã£o do Tema
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -904,7 +904,7 @@ export const NoCodeConfigPanel: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="font-family">Família da Fonte</Label>
+                  <Label htmlFor="font-family">FamÃ­lia da Fonte</Label>
                   <Select
                     value={funnelSettings.fontFamily}
                     onValueChange={(value) => setFunnelSettings({ ...funnelSettings, fontFamily: value })}
@@ -924,7 +924,7 @@ export const NoCodeConfigPanel: React.FC = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="primary-color">Cor Primária</Label>
+                  <Label htmlFor="primary-color">Cor PrimÃ¡ria</Label>
                   <div className="flex gap-2">
                     <Input
                       id="primary-color"
@@ -943,7 +943,7 @@ export const NoCodeConfigPanel: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="secondary-color">Cor Secundária</Label>
+                  <Label htmlFor="secondary-color">Cor SecundÃ¡ria</Label>
                   <div className="flex gap-2">
                     <Input
                       id="secondary-color"
@@ -955,7 +955,7 @@ export const NoCodeConfigPanel: React.FC = () => {
                     <Input
                       value={funnelSettings.secondaryColor}
                       onChange={(e) => setFunnelSettings({ ...funnelSettings, secondaryColor: e.target.value })}
-                      placeholder="#432818"
+                      placeholder="#1A0F3D"
                       className="flex-1"
                     />
                   </div>
@@ -977,7 +977,7 @@ export const NoCodeConfigPanel: React.FC = () => {
                 disabled={saving}
                 className="bg-[#B89B7A] hover:bg-[#A0895B] text-white"
               >
-                Salvar Configurações de Tema
+                Salvar ConfiguraÃ§Ãµes de Tema
               </Button>
             </CardContent>
           </Card>

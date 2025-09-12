@@ -1,4 +1,4 @@
-import { Badge } from '@/components/ui/badge';
+﻿import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -41,7 +41,7 @@ const OverviewPage: React.FC = () => {
             </Badge>
           </div>
           <p className="text-slate-600 text-lg">
-            Transforme dados em insights • Simplifique • Interaja • Converta
+            Transforme dados em insights â€¢ Simplifique â€¢ Interaja â€¢ Converta
           </p>
         </div>
 
@@ -61,13 +61,13 @@ const OverviewPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Métricas Principais com design sofisticado */}
+      {/* MÃ©tricas Principais com design sofisticado */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Total de Respostas */}
         <Card className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-blue-50 to-indigo-100 hover:from-blue-100 hover:to-indigo-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-semibold text-slate-700">
-              Interações Totais
+              InteraÃ§Ãµes Totais
             </CardTitle>
             <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
               <Users className="h-5 w-5 text-white" />
@@ -78,7 +78,7 @@ const OverviewPage: React.FC = () => {
             <div className="flex items-center text-sm">
               <ArrowUpRight className="h-4 w-4 text-emerald-600 mr-1" />
               <span className="text-emerald-600 font-semibold">+18.2%</span>
-              <span className="text-slate-500 ml-1">vs mês anterior</span>
+              <span className="text-slate-500 ml-1">vs mÃªs anterior</span>
             </div>
             <div className="mt-3">
               <Progress value={78} className="h-2" />
@@ -87,11 +87,11 @@ const OverviewPage: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* Taxa de Conversão */}
+        {/* Taxa de ConversÃ£o */}
         <Card className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-emerald-50 to-green-100 hover:from-emerald-100 hover:to-green-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-semibold text-slate-700">
-              Taxa de Conversão
+              Taxa de ConversÃ£o
             </CardTitle>
             <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-green-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
               <Target className="h-5 w-5 text-white" />
@@ -102,11 +102,11 @@ const OverviewPage: React.FC = () => {
             <div className="flex items-center text-sm">
               <ArrowUpRight className="h-4 w-4 text-emerald-600 mr-1" />
               <span className="text-emerald-600 font-semibold">+5.7%</span>
-              <span className="text-slate-500 ml-1">vs mês anterior</span>
+              <span className="text-slate-500 ml-1">vs mÃªs anterior</span>
             </div>
             <div className="mt-3">
               <Progress value={89} className="h-2" />
-              <p className="text-xs text-slate-500 mt-1">89% acima da média</p>
+              <p className="text-xs text-slate-500 mt-1">89% acima da mÃ©dia</p>
             </div>
           </CardContent>
         </Card>
@@ -124,7 +124,7 @@ const OverviewPage: React.FC = () => {
             <div className="flex items-center text-sm">
               <ArrowUpRight className="h-4 w-4 text-emerald-600 mr-1" />
               <span className="text-emerald-600 font-semibold">+24.5%</span>
-              <span className="text-slate-500 ml-1">vs mês anterior</span>
+              <span className="text-slate-500 ml-1">vs mÃªs anterior</span>
             </div>
             <div className="mt-3">
               <Progress value={92} className="h-2" />
@@ -133,10 +133,10 @@ const OverviewPage: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* ROI Médio */}
+        {/* ROI MÃ©dio */}
         <Card className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-purple-50 to-violet-100 hover:from-purple-100 hover:to-violet-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-semibold text-slate-700">ROI Médio</CardTitle>
+            <CardTitle className="text-sm font-semibold text-slate-700">ROI MÃ©dio</CardTitle>
             <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-violet-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
               <TrendingUp className="h-5 w-5 text-white" />
             </div>
@@ -146,7 +146,7 @@ const OverviewPage: React.FC = () => {
             <div className="flex items-center text-sm">
               <ArrowUpRight className="h-4 w-4 text-emerald-600 mr-1" />
               <span className="text-emerald-600 font-semibold">+31.2%</span>
-              <span className="text-slate-500 ml-1">vs mês anterior</span>
+              <span className="text-slate-500 ml-1">vs mÃªs anterior</span>
             </div>
             <div className="mt-3">
               <Progress value={95} className="h-2" />
@@ -156,7 +156,7 @@ const OverviewPage: React.FC = () => {
         </Card>
       </div>
 
-      {/* Seção de Analytics Avançado */}
+      {/* SeÃ§Ã£o de Analytics AvanÃ§ado */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Performance por Estilo */}
         <Card className="border-0 shadow-lg overflow-hidden">
@@ -174,7 +174,7 @@ const OverviewPage: React.FC = () => {
                 <div className="w-3 h-3 bg-gradient-to-r from-rose-400 to-pink-500 rounded-full"></div>
                 <div>
                   <div className="font-semibold text-slate-800">Estilo Elegante</div>
-                  <div className="text-sm text-slate-500">2,847 interações</div>
+                  <div className="text-sm text-slate-500">2,847 interaÃ§Ãµes</div>
                 </div>
               </div>
               <div className="text-right">
@@ -192,7 +192,7 @@ const OverviewPage: React.FC = () => {
                 <div className="w-3 h-3 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full"></div>
                 <div>
                   <div className="font-semibold text-slate-800">Estilo Casual</div>
-                  <div className="text-sm text-slate-500">1,923 interações</div>
+                  <div className="text-sm text-slate-500">1,923 interaÃ§Ãµes</div>
                 </div>
               </div>
               <div className="text-right">
@@ -210,12 +210,12 @@ const OverviewPage: React.FC = () => {
                 <div className="w-3 h-3 bg-gradient-to-r from-purple-400 to-violet-500 rounded-full"></div>
                 <div>
                   <div className="font-semibold text-slate-800">Estilo Criativo</div>
-                  <div className="text-sm text-slate-500">1,654 interações</div>
+                  <div className="text-sm text-slate-500">1,654 interaÃ§Ãµes</div>
                 </div>
               </div>
               <div className="text-right">
                 <div className="font-bold text-slate-800">19.4%</div>
-                <div style={{ color: '#432818' }}>
+                <div style={{ color: '#1A0F3D' }}>
                   <ArrowDownRight className="h-3 w-3 mr-1" />
                   -1.2%
                 </div>
@@ -228,7 +228,7 @@ const OverviewPage: React.FC = () => {
                 <div className="w-3 h-3 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full"></div>
                 <div>
                   <div className="font-semibold text-slate-800">Outros Estilos</div>
-                  <div className="text-sm text-slate-500">823 interações</div>
+                  <div className="text-sm text-slate-500">823 interaÃ§Ãµes</div>
                 </div>
               </div>
               <div className="text-right">
@@ -262,7 +262,7 @@ const OverviewPage: React.FC = () => {
                 </Badge>
               </div>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-500">847 conversões • 38.2% taxa</span>
+                <span className="text-slate-500">847 conversÃµes â€¢ 38.2% taxa</span>
                 <span className="text-emerald-600 font-semibold">R$ 23.420</span>
               </div>
               <Progress value={87} className="mt-2 h-1.5" />
@@ -278,7 +278,7 @@ const OverviewPage: React.FC = () => {
                 </Badge>
               </div>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-500">623 conversões • 31.4% taxa</span>
+                <span className="text-slate-500">623 conversÃµes â€¢ 31.4% taxa</span>
                 <span className="text-emerald-600 font-semibold">R$ 18.790</span>
               </div>
               <Progress value={74} className="mt-2 h-1.5" />
@@ -294,7 +294,7 @@ const OverviewPage: React.FC = () => {
                 </Badge>
               </div>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-500">435 conversões • 28.7% taxa</span>
+                <span className="text-slate-500">435 conversÃµes â€¢ 28.7% taxa</span>
                 <span className="text-emerald-600 font-semibold">R$ 12.350</span>
               </div>
               <Progress value={61} className="mt-2 h-1.5" />
@@ -310,9 +310,9 @@ const OverviewPage: React.FC = () => {
         </Card>
       </div>
 
-      {/* Insights e Recomendações */}
+      {/* Insights e RecomendaÃ§Ãµes */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Insights Rápidos */}
+        {/* Insights RÃ¡pidos */}
         <Card className="lg:col-span-2 border-0 shadow-lg overflow-hidden">
           <CardHeader className="bg-gradient-to-r from-slate-50 to-emerald-50 border-b border-slate-200">
             <CardTitle className="flex items-center gap-2 text-slate-800">
@@ -331,7 +331,7 @@ const OverviewPage: React.FC = () => {
                   <div>
                     <div className="font-semibold text-slate-800 mb-1">Performance Excepcional</div>
                     <p className="text-sm text-slate-600 leading-relaxed">
-                      Seus quizzes de estilo pessoal estão <strong>38% acima</strong> da média do
+                      Seus quizzes de estilo pessoal estÃ£o <strong>38% acima</strong> da mÃ©dia do
                       setor. Continue investindo nesta categoria para maximizar ROI.
                     </p>
                   </div>
@@ -348,8 +348,8 @@ const OverviewPage: React.FC = () => {
                       Oportunidade de Crescimento
                     </div>
                     <p className="text-sm text-slate-600 leading-relaxed">
-                      Identificamos <strong>2.3k usuários</strong> que não completaram o quiz. Uma
-                      campanha de remarketing pode recuperar até 25% destes leads.
+                      Identificamos <strong>2.3k usuÃ¡rios</strong> que nÃ£o completaram o quiz. Uma
+                      campanha de remarketing pode recuperar atÃ© 25% destes leads.
                     </p>
                   </div>
                 </div>
@@ -361,10 +361,10 @@ const OverviewPage: React.FC = () => {
                     <Target className="h-4 w-4 text-white" />
                   </div>
                   <div>
-                    <div className="font-semibold text-slate-800 mb-1">Otimização Sugerida</div>
+                    <div className="font-semibold text-slate-800 mb-1">OtimizaÃ§Ã£o Sugerida</div>
                     <p className="text-sm text-slate-600 leading-relaxed">
-                      Adicione uma pergunta sobre orçamento no início dos quizzes para
-                      <strong>aumentar qualificação</strong> dos leads em até 15%.
+                      Adicione uma pergunta sobre orÃ§amento no inÃ­cio dos quizzes para
+                      <strong>aumentar qualificaÃ§Ã£o</strong> dos leads em atÃ© 15%.
                     </p>
                   </div>
                 </div>
@@ -373,12 +373,12 @@ const OverviewPage: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* Ações Rápidas */}
+        {/* AÃ§Ãµes RÃ¡pidas */}
         <Card className="border-0 shadow-lg overflow-hidden">
           <CardHeader className="bg-gradient-to-r from-slate-50 to-violet-50 border-b border-slate-200">
             <CardTitle className="flex items-center gap-2 text-slate-800">
               <MousePointer className="h-5 w-5 text-violet-600" />
-              Ações Rápidas
+              AÃ§Ãµes RÃ¡pidas
             </CardTitle>
           </CardHeader>
           <CardContent className="p-6">
@@ -393,7 +393,7 @@ const OverviewPage: React.FC = () => {
                 className="w-full justify-start border-slate-300 hover:border-emerald-300 hover:bg-emerald-50"
               >
                 <BarChart3 className="h-4 w-4 mr-2" />
-                Relatório Detalhado
+                RelatÃ³rio Detalhado
               </Button>
 
               <Button variant="outline" style={{ backgroundColor: '#FAF9F7' }}>
@@ -403,7 +403,7 @@ const OverviewPage: React.FC = () => {
 
               <Button variant="outline" style={{ backgroundColor: '#FAF9F7' }}>
                 <Calendar className="h-4 w-4 mr-2" />
-                Agendar Análise
+                Agendar AnÃ¡lise
               </Button>
             </div>
 
@@ -412,7 +412,7 @@ const OverviewPage: React.FC = () => {
                 <Crown className="h-6 w-6 text-violet-600 mx-auto mb-2" />
                 <div className="font-semibold text-slate-800 text-sm">QuizFlow Pro</div>
                 <div className="text-xs text-slate-600 mt-1">
-                  Desbloqueie analytics avançados, A/B testing e integrações premium
+                  Desbloqueie analytics avanÃ§ados, A/B testing e integraÃ§Ãµes premium
                 </div>
                 <Button
                   size="sm"
@@ -430,3 +430,4 @@ const OverviewPage: React.FC = () => {
 };
 
 export default OverviewPage;
+

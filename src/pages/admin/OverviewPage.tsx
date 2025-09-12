@@ -1,4 +1,4 @@
-import { Badge } from '@/components/ui/badge';
+﻿import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -26,7 +26,7 @@ import {
   Zap,
 } from 'lucide-react';
 
-// Import dos novos ícones temáticos
+// Import dos novos Ã­cones temÃ¡ticos
 import {
   BackgroundPattern,
   DigitalProductIcon,
@@ -43,15 +43,15 @@ const OverviewPage: React.FC = () => {
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
         <div className="space-y-2">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-to-r from-[#B89B7A] to-[#432818] rounded-xl flex items-center justify-center shadow-lg">
+            <div className="w-12 h-12 bg-gradient-to-r from-[#B89B7A] to-[#1A0F3D] rounded-xl flex items-center justify-center shadow-lg">
               <Zap className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-[#432818] to-[#6B4F43] bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-[#1A0F3D] to-[#6B4F43] bg-clip-text text-transparent">
                 Dashboard QuizFlow
               </h1>
               <div className="flex items-center space-x-2 mt-1">
-                <Badge className="bg-gradient-to-r from-[#B89B7A]/20 to-[#432818]/20 text-[#432818] border-0 px-3 py-1">
+                <Badge className="bg-gradient-to-r from-[#B89B7A]/20 to-[#1A0F3D]/20 text-[#1A0F3D] border-0 px-3 py-1">
                   <Crown className="h-3 w-3 mr-1" />
                   Pro Plan
                 </Badge>
@@ -66,33 +66,33 @@ const OverviewPage: React.FC = () => {
             </div>
           </div>
           <p className="text-lg text-[#6B4F43] max-w-2xl">
-            Bem-vindo de volta! Aqui está um resumo da performance dos seus funnels e quizzes.
+            Bem-vindo de volta! Aqui estÃ¡ um resumo da performance dos seus funnels e quizzes.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           <Button
             variant="outline"
-            className="border-[#B89B7A]/40 text-[#432818] hover:bg-[#B89B7A]/10"
+            className="border-[#B89B7A]/40 text-[#1A0F3D] hover:bg-[#B89B7A]/10"
           >
             <Bell className="h-4 w-4 mr-2" />
-            Notificações
+            NotificaÃ§Ãµes
           </Button>
           <Button
             variant="outline"
-            className="border-[#B89B7A]/40 text-[#432818] hover:bg-[#B89B7A]/10"
+            className="border-[#B89B7A]/40 text-[#1A0F3D] hover:bg-[#B89B7A]/10"
           >
             <Filter className="h-4 w-4 mr-2" />
             Filtros
           </Button>
           <Button
             variant="outline"
-            className="border-[#B89B7A]/40 text-[#432818] hover:bg-[#B89B7A]/10"
+            className="border-[#B89B7A]/40 text-[#1A0F3D] hover:bg-[#B89B7A]/10"
           >
             <Download className="h-4 w-4 mr-2" />
             Exportar
           </Button>
-          <Button className="bg-gradient-to-r from-[#B89B7A] to-[#432818] hover:from-[#A08766] hover:to-[#3A1F0F] text-white shadow-lg">
+          <Button className="bg-gradient-to-r from-[#B89B7A] to-[#1A0F3D] hover:from-[#A08766] hover:to-[#3A1F0F] text-white shadow-lg">
             <Plus className="h-4 w-4 mr-2" />
             Novo Quiz
           </Button>
@@ -107,10 +107,10 @@ const OverviewPage: React.FC = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-[#432818]">Editor Visual</p>
+                <p className="text-sm font-medium text-[#1A0F3D]">Editor Visual</p>
                 <p className="text-xs text-[#6B4F43] mt-1">Criar quiz com arrastar e soltar</p>
               </div>
-              <div className="w-10 h-10 bg-gradient-to-r from-[#B89B7A] to-[#432818] rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+              <div className="w-10 h-10 bg-gradient-to-r from-[#B89B7A] to-[#1A0F3D] rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Plus className="h-5 w-5 text-white" />
               </div>
             </div>
@@ -124,8 +124,8 @@ const OverviewPage: React.FC = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-[#432818]">Testar Etapa 21</p>
-                <p className="text-xs text-[#6B4F43] mt-1">Página de oferta</p>
+                <p className="text-sm font-medium text-[#1A0F3D]">Testar Etapa 21</p>
+                <p className="text-xs text-[#6B4F43] mt-1">PÃ¡gina de oferta</p>
               </div>
               <div className="w-10 h-10 bg-gradient-to-r from-[#B89B7A] to-[#A08766] rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                 <PlayCircle className="h-5 w-5 text-white" />
@@ -138,8 +138,8 @@ const OverviewPage: React.FC = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-[#432818]">Analytics</p>
-                <p className="text-xs text-[#6B4F43] mt-1">Ver relatórios</p>
+                <p className="text-sm font-medium text-[#1A0F3D]">Analytics</p>
+                <p className="text-xs text-[#6B4F43] mt-1">Ver relatÃ³rios</p>
               </div>
               <div className="w-10 h-10 bg-gradient-to-r from-[#B89B7A] to-[#A08766] rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                 <BarChart3 className="h-5 w-5 text-white" />
@@ -152,8 +152,8 @@ const OverviewPage: React.FC = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-[#432818]">A/B Tests</p>
-                <p className="text-xs text-[#6B4F43] mt-1">Otimizar conversões</p>
+                <p className="text-sm font-medium text-[#1A0F3D]">A/B Tests</p>
+                <p className="text-xs text-[#6B4F43] mt-1">Otimizar conversÃµes</p>
               </div>
               <div className="w-10 h-10 bg-gradient-to-r from-[#B89B7A] to-[#A08766] rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Target className="h-5 w-5 text-white" />
@@ -166,7 +166,7 @@ const OverviewPage: React.FC = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-[#432818]">Configurações</p>
+                <p className="text-sm font-medium text-[#1A0F3D]">ConfiguraÃ§Ãµes</p>
                 <p className="text-xs text-[#6B4F43] mt-1">Personalizar conta</p>
               </div>
               <div className="w-10 h-10 bg-gradient-to-r from-[#B89B7A] to-[#A08766] rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -176,24 +176,24 @@ const OverviewPage: React.FC = () => {
           </CardContent>
         </Card>
       </div>{' '}
-      {/* Métricas Principais */}
+      {/* MÃ©tricas Principais */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {/* Total de Interações */}
+        {/* Total de InteraÃ§Ãµes */}
         <Card className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white border-[#B89B7A]/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-semibold text-[#432818]">
-              Interações Totais
+            <CardTitle className="text-sm font-semibold text-[#1A0F3D]">
+              InteraÃ§Ãµes Totais
             </CardTitle>
-            <div className="w-10 h-10 bg-gradient-to-r from-[#B89B7A] to-[#432818] rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+            <div className="w-10 h-10 bg-gradient-to-r from-[#B89B7A] to-[#1A0F3D] rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
               <Users className="h-5 w-5 text-white" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-[#432818] mb-1">12,847</div>
+            <div className="text-3xl font-bold text-[#1A0F3D] mb-1">12,847</div>
             <div className="flex items-center text-sm mb-3">
               <ArrowUpRight className="h-4 w-4 text-[#B89B7A] mr-1" />
               <span className="text-[#B89B7A] font-semibold">+18.2%</span>
-              <span className="ml-1 text-[#6B4F43]">vs mês anterior</span>
+              <span className="ml-1 text-[#6B4F43]">vs mÃªs anterior</span>
             </div>
             <div className="space-y-2">
               <Progress value={78} className="h-2 bg-[#FAF9F7]" />
@@ -202,26 +202,26 @@ const OverviewPage: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* Taxa de Conversão */}
+        {/* Taxa de ConversÃ£o */}
         <Card className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white border-[#B89B7A]/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-semibold text-[#432818]">
-              Taxa de Conversão
+            <CardTitle className="text-sm font-semibold text-[#1A0F3D]">
+              Taxa de ConversÃ£o
             </CardTitle>
             <div className="w-10 h-10 bg-gradient-to-r from-[#B89B7A] to-[#A08766] rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
               <Target className="h-5 w-5 text-white" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-[#432818] mb-1">34.8%</div>
+            <div className="text-3xl font-bold text-[#1A0F3D] mb-1">34.8%</div>
             <div className="flex items-center text-sm mb-3">
               <ArrowUpRight className="h-4 w-4 text-[#B89B7A] mr-1" />
               <span className="text-[#B89B7A] font-semibold">+5.7%</span>
-              <span className="ml-1 text-[#6B4F43]">vs mês anterior</span>
+              <span className="ml-1 text-[#6B4F43]">vs mÃªs anterior</span>
             </div>
             <div className="space-y-2">
               <Progress value={89} className="h-2 bg-[#FAF9F7]" />
-              <p className="text-xs text-[#6B4F43]">89% acima da média</p>
+              <p className="text-xs text-[#6B4F43]">89% acima da mÃ©dia</p>
             </div>
           </CardContent>
         </Card>
@@ -229,17 +229,17 @@ const OverviewPage: React.FC = () => {
         {/* Receita Gerada */}
         <Card className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white border-[#B89B7A]/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-semibold text-[#432818]">Receita Gerada</CardTitle>
-            <div className="w-10 h-10 bg-gradient-to-r from-[#B89B7A] to-[#432818] rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+            <CardTitle className="text-sm font-semibold text-[#1A0F3D]">Receita Gerada</CardTitle>
+            <div className="w-10 h-10 bg-gradient-to-r from-[#B89B7A] to-[#1A0F3D] rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
               <DollarSign className="h-5 w-5 text-white" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-[#432818] mb-1">R$ 87.420</div>
+            <div className="text-3xl font-bold text-[#1A0F3D] mb-1">R$ 87.420</div>
             <div className="flex items-center text-sm mb-3">
               <ArrowUpRight className="h-4 w-4 text-[#B89B7A] mr-1" />
               <span className="text-[#B89B7A] font-semibold">+24.5%</span>
-              <span className="ml-1 text-[#6B4F43]">vs mês anterior</span>
+              <span className="ml-1 text-[#6B4F43]">vs mÃªs anterior</span>
             </div>
             <div className="space-y-2">
               <Progress value={92} className="h-2 bg-[#FAF9F7]" />
@@ -248,20 +248,20 @@ const OverviewPage: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* ROI Médio */}
+        {/* ROI MÃ©dio */}
         <Card className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white border-[#B89B7A]/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-semibold text-[#432818]">ROI Médio</CardTitle>
+            <CardTitle className="text-sm font-semibold text-[#1A0F3D]">ROI MÃ©dio</CardTitle>
             <div className="w-10 h-10 bg-gradient-to-r from-[#B89B7A] to-[#A08766] rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
               <TrendingUp className="h-5 w-5 text-white" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-[#432818] mb-1">485%</div>
+            <div className="text-3xl font-bold text-[#1A0F3D] mb-1">485%</div>
             <div className="flex items-center text-sm mb-3">
               <ArrowUpRight className="h-4 w-4 text-[#B89B7A] mr-1" />
               <span className="text-[#B89B7A] font-semibold">+12.3%</span>
-              <span className="ml-1 text-[#6B4F43]">vs mês anterior</span>
+              <span className="ml-1 text-[#6B4F43]">vs mÃªs anterior</span>
             </div>
             <div className="space-y-2">
               <Progress value={95} className="h-2 bg-[#FAF9F7]" />
@@ -270,7 +270,7 @@ const OverviewPage: React.FC = () => {
           </CardContent>
         </Card>
       </div>
-      {/* Seção de Conteúdo Principal */}
+      {/* SeÃ§Ã£o de ConteÃºdo Principal */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Quizzes Recentes */}
         <div className="lg:col-span-2">
@@ -278,7 +278,7 @@ const OverviewPage: React.FC = () => {
             <CardHeader className="pb-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="text-xl font-bold text-[#432818]">
+                  <CardTitle className="text-xl font-bold text-[#1A0F3D]">
                     Quizzes Recentes
                   </CardTitle>
                   <p className="text-sm text-[#6B4F43] mt-1">Seus funnels mais ativos</p>
@@ -286,7 +286,7 @@ const OverviewPage: React.FC = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="border-[#B89B7A]/40 text-[#432818] hover:bg-[#B89B7A]/10"
+                  className="border-[#B89B7A]/40 text-[#1A0F3D] hover:bg-[#B89B7A]/10"
                 >
                   Ver Todos
                   <ChevronRight className="h-4 w-4 ml-1" />
@@ -296,7 +296,7 @@ const OverviewPage: React.FC = () => {
             <CardContent className="space-y-4">
               {/* Quiz Templates Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Template 1: Página de Oferta */}
+                {/* Template 1: PÃ¡gina de Oferta */}
                 <div
                   className="group relative overflow-hidden rounded-xl border border-[#B89B7A]/20 bg-gradient-to-br from-white via-[#FAF9F7] to-[#F5F2E9] p-4 hover:shadow-lg transition-all duration-300 cursor-pointer"
                   onClick={() => navigateToStep21()}
@@ -305,17 +305,17 @@ const OverviewPage: React.FC = () => {
 
                   <div className="relative">
                     <div className="flex items-start justify-between mb-3">
-                      <div className="w-12 h-12 bg-gradient-to-br from-[#B89B7A] to-[#432818] rounded-xl flex items-center justify-center shadow-md">
+                      <div className="w-12 h-12 bg-gradient-to-br from-[#B89B7A] to-[#1A0F3D] rounded-xl flex items-center justify-center shadow-md">
                         <OfferPageIcon className="w-6 h-6" />
                       </div>
-                      <Badge className="bg-[#B89B7A]/20 text-[#432818] border-0 text-xs px-2 py-1">
+                      <Badge className="bg-[#B89B7A]/20 text-[#1A0F3D] border-0 text-xs px-2 py-1">
                         Demo
                       </Badge>
                     </div>
 
-                    <h3 className="font-bold text-[#432818] text-lg mb-1">Página de Oferta</h3>
+                    <h3 className="font-bold text-[#1A0F3D] text-lg mb-1">PÃ¡gina de Oferta</h3>
                     <p className="text-sm text-[#6B4F43] mb-3">
-                      Sistema modular com 21 etapas otimizadas para conversão
+                      Sistema modular com 21 etapas otimizadas para conversÃ£o
                     </p>
 
                     <div className="flex items-center justify-between">
@@ -325,7 +325,7 @@ const OverviewPage: React.FC = () => {
                           JSON
                         </span>
                         <span className="flex items-center">
-                          <Star className="h-3 w-3 mr-1" />7 Módulos
+                          <Star className="h-3 w-3 mr-1" />7 MÃ³dulos
                         </span>
                       </div>
                       <Button
@@ -354,9 +354,9 @@ const OverviewPage: React.FC = () => {
                       </Badge>
                     </div>
 
-                    <h3 className="font-bold text-[#432818] text-lg mb-1">Quiz de Personalidade</h3>
+                    <h3 className="font-bold text-[#1A0F3D] text-lg mb-1">Quiz de Personalidade</h3>
                     <p className="text-sm text-[#6B4F43] mb-3">
-                      Segmentação inteligente para campanhas de marketing
+                      SegmentaÃ§Ã£o inteligente para campanhas de marketing
                     </p>
 
                     <div className="flex items-center justify-between">
@@ -396,7 +396,7 @@ const OverviewPage: React.FC = () => {
                       </Badge>
                     </div>
 
-                    <h3 className="font-bold text-[#432818] text-lg mb-1">Produto Digital</h3>
+                    <h3 className="font-bold text-[#1A0F3D] text-lg mb-1">Produto Digital</h3>
                     <p className="text-sm text-[#6B4F43] mb-3">
                       Funil otimizado para vendas de infoprodutos
                     </p>
@@ -438,11 +438,11 @@ const OverviewPage: React.FC = () => {
                       </Badge>
                     </div>
 
-                    <h3 className="font-bold text-[#432818] text-lg mb-1">
-                      Segmentação E-commerce
+                    <h3 className="font-bold text-[#1A0F3D] text-lg mb-1">
+                      SegmentaÃ§Ã£o E-commerce
                     </h3>
                     <p className="text-sm text-[#6B4F43] mb-3">
-                      Quiz para categorizar preferências de produtos
+                      Quiz para categorizar preferÃªncias de produtos
                     </p>
 
                     <div className="flex items-center justify-between">
@@ -473,7 +473,7 @@ const OverviewPage: React.FC = () => {
               <div className="flex items-center justify-center pt-4 border-t border-[#B89B7A]/10">
                 <Button
                   variant="outline"
-                  className="border-[#B89B7A]/40 text-[#432818] hover:bg-[#B89B7A]/10"
+                  className="border-[#B89B7A]/40 text-[#1A0F3D] hover:bg-[#B89B7A]/10"
                   onClick={() => navigateToEditor()}
                 >
                   <Plus className="h-4 w-4 mr-2" />
@@ -489,28 +489,28 @@ const OverviewPage: React.FC = () => {
           {/* Performance Insights */}
           <Card className="border-0 shadow-lg bg-white border-[#B89B7A]/20">
             <CardHeader>
-              <CardTitle className="text-lg font-bold text-[#432818] flex items-center">
+              <CardTitle className="text-lg font-bold text-[#1A0F3D] flex items-center">
                 <TrendingUp className="h-5 w-5 mr-2 text-[#B89B7A]" />
                 Insights de Performance
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="p-3 bg-[#B89B7A]/10 rounded-lg border border-[#B89B7A]/20">
-                <p className="text-sm font-medium text-[#432818]">🚀 Tendência Positiva</p>
+                <p className="text-sm font-medium text-[#1A0F3D]">ðŸš€ TendÃªncia Positiva</p>
                 <p className="text-xs text-[#6B4F43] mt-1">
-                  Suas conversões aumentaram 23% esta semana
+                  Suas conversÃµes aumentaram 23% esta semana
                 </p>
               </div>
               <div className="p-3 bg-[#B89B7A]/10 rounded-lg border border-[#B89B7A]/20">
-                <p className="text-sm font-medium text-[#432818]">💡 Oportunidade</p>
+                <p className="text-sm font-medium text-[#1A0F3D]">ðŸ’¡ Oportunidade</p>
                 <p className="text-xs text-[#6B4F43] mt-1">
-                  Quiz de Marketing tem potencial para 50% mais conversões
+                  Quiz de Marketing tem potencial para 50% mais conversÃµes
                 </p>
               </div>
               <div className="p-3 bg-[#FAF9F7] rounded-lg border border-[#B89B7A]/30">
-                <p className="text-sm font-medium text-[#B89B7A]">⚠️ Atenção</p>
+                <p className="text-sm font-medium text-[#B89B7A]">âš ï¸ AtenÃ§Ã£o</p>
                 <p className="text-xs text-[#6B4F43] mt-1">
-                  Quiz de E-commerce precisa de otimização
+                  Quiz de E-commerce precisa de otimizaÃ§Ã£o
                 </p>
               </div>
             </CardContent>
@@ -519,7 +519,7 @@ const OverviewPage: React.FC = () => {
           {/* Atividade Recente */}
           <Card className="border-0 shadow-lg bg-white border-[#B89B7A]/20">
             <CardHeader>
-              <CardTitle className="text-lg font-bold text-[#432818] flex items-center">
+              <CardTitle className="text-lg font-bold text-[#1A0F3D] flex items-center">
                 <Clock className="h-5 w-5 mr-2 text-[#B89B7A]" />
                 Atividade Recente
               </CardTitle>
@@ -528,29 +528,29 @@ const OverviewPage: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <div className="w-2 h-2 bg-[#B89B7A] rounded-full mt-2"></div>
                 <div>
-                  <p className="text-sm font-medium text-[#432818]">Novo lead capturado</p>
-                  <p className="text-xs text-[#6B4F43]">Quiz de Marketing • há 5 min</p>
+                  <p className="text-sm font-medium text-[#1A0F3D]">Novo lead capturado</p>
+                  <p className="text-xs text-[#6B4F43]">Quiz de Marketing â€¢ hÃ¡ 5 min</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
                 <div className="w-2 h-2 bg-[#B89B7A] rounded-full mt-2"></div>
                 <div>
-                  <p className="text-sm font-medium text-[#432818]">Conversão realizada</p>
-                  <p className="text-xs text-[#6B4F43]">Funil de Vendas • há 12 min</p>
+                  <p className="text-sm font-medium text-[#1A0F3D]">ConversÃ£o realizada</p>
+                  <p className="text-xs text-[#6B4F43]">Funil de Vendas â€¢ hÃ¡ 12 min</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
                 <div className="w-2 h-2 bg-[#B89B7A] rounded-full mt-2"></div>
                 <div>
-                  <p className="text-sm font-medium text-[#432818]">A/B Test iniciado</p>
-                  <p className="text-xs text-[#6B4F43]">Quiz de Segmentação • há 1h</p>
+                  <p className="text-sm font-medium text-[#1A0F3D]">A/B Test iniciado</p>
+                  <p className="text-xs text-[#6B4F43]">Quiz de SegmentaÃ§Ã£o â€¢ hÃ¡ 1h</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
                 <div className="w-2 h-2 bg-[#B89B7A] rounded-full mt-2"></div>
                 <div>
-                  <p className="text-sm font-medium text-[#432818]">Quiz publicado</p>
-                  <p className="text-xs text-[#6B4F43]">Novo projeto • há 2h</p>
+                  <p className="text-sm font-medium text-[#1A0F3D]">Quiz publicado</p>
+                  <p className="text-xs text-[#6B4F43]">Novo projeto â€¢ hÃ¡ 2h</p>
                 </div>
               </div>
             </CardContent>
@@ -558,11 +558,11 @@ const OverviewPage: React.FC = () => {
         </div>
       </div>
       {/* CTA Bottom */}
-      <Card className="border-0 shadow-lg bg-gradient-to-r from-[#B89B7A] to-[#432818] text-white">
+      <Card className="border-0 shadow-lg bg-gradient-to-r from-[#B89B7A] to-[#1A0F3D] text-white">
         <CardContent className="p-8">
           <div className="flex flex-col lg:flex-row items-center justify-between">
             <div className="text-center lg:text-left mb-6 lg:mb-0">
-              <h3 className="text-2xl font-bold mb-2">Pronto para criar seu próximo quiz?</h3>
+              <h3 className="text-2xl font-bold mb-2">Pronto para criar seu prÃ³ximo quiz?</h3>
               <p className="text-[#FAF9F7] text-lg">
                 Use nossos templates otimizados e comece a converter em minutos
               </p>
@@ -571,7 +571,7 @@ const OverviewPage: React.FC = () => {
               <Button
                 size="lg"
                 variant="secondary"
-                className="bg-white text-[#432818] hover:bg-[#FAF9F7]"
+                className="bg-white text-[#1A0F3D] hover:bg-[#FAF9F7]"
                 onClick={() => navigateToEditor()}
               >
                 <Plus className="h-5 w-5 mr-2" />
@@ -603,3 +603,4 @@ const OverviewPage: React.FC = () => {
 };
 
 export default OverviewPage;
+

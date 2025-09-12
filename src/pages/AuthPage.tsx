@@ -1,4 +1,4 @@
-import { Alert, AlertDescription } from '@/components/ui/alert';
+﻿import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
@@ -31,14 +31,14 @@ const AuthPage: React.FC = () => {
         setLocation('/admin');
       } else {
         if (password !== confirmPassword) {
-          setError('As senhas não coincidem');
+          setError('As senhas nÃ£o coincidem');
           return;
         }
 
         await signup(email, password);
         setError('');
         // Show success message for email verification
-        setError('Conta criada com sucesso! Verifique seu email se necessário.');
+        setError('Conta criada com sucesso! Verifique seu email se necessÃ¡rio.');
       }
     } catch (err: any) {
       setError(err.message || 'Erro inesperado. Tente novamente.');
@@ -60,7 +60,7 @@ const AuthPage: React.FC = () => {
       // TODO: Implement password reset with Supabase
       setResetEmailSent(true);
     } catch (err) {
-      setError('Erro ao enviar email de recuperação');
+      setError('Erro ao enviar email de recuperaÃ§Ã£o');
     } finally {
       setIsLoading(false);
     }
@@ -68,7 +68,7 @@ const AuthPage: React.FC = () => {
 
   const handleGoogleSignIn = async () => {
     // TODO: Implement Google OAuth with Supabase
-    setError('Login com Google será implementado em breve');
+    setError('Login com Google serÃ¡ implementado em breve');
   };
 
   return (
@@ -97,7 +97,7 @@ const AuthPage: React.FC = () => {
               style={{ borderColor: '#B89B7A' }}
             />
           </div>
-          <h1 className="text-2xl font-bold" style={{ color: '#432818' }}>
+          <h1 className="text-2xl font-bold" style={{ color: '#1A0F3D' }}>
             {isLogin ? 'Bem-vindo de volta' : 'Criar conta'}
           </h1>
           <p className="text-sm mt-2" style={{ color: '#6B4F43' }}>
@@ -118,7 +118,7 @@ const AuthPage: React.FC = () => {
           <Alert className="mb-6 border-green-500 bg-green-50">
             <Mail className="h-4 w-4 text-green-500" />
             <AlertDescription className="text-green-700">
-              Email de recuperação enviado! Verifique sua caixa de entrada.
+              Email de recuperaÃ§Ã£o enviado! Verifique sua caixa de entrada.
             </AlertDescription>
           </Alert>
         )}
@@ -251,11 +251,11 @@ const AuthPage: React.FC = () => {
             onClick={() => setIsLogin(!isLogin)}
             className="w-full text-sm mt-4 font-medium text-mediumBlue hover:text-brightPink"
           >
-            {isLogin ? 'Não tem uma conta? Crie uma' : 'Já tem uma conta? Faça login'}
+            {isLogin ? 'NÃ£o tem uma conta? Crie uma' : 'JÃ¡ tem uma conta? FaÃ§a login'}
           </button>
 
           <p className="text-xs pt-4" style={{ color: '#8B7355' }}>
-            © 2025 Gisele Galvão. Todos os direitos reservados.
+            Â© 2025 Gisele GalvÃ£o. Todos os direitos reservados.
           </p>
         </div>
       </div>
@@ -264,3 +264,4 @@ const AuthPage: React.FC = () => {
 };
 
 export default AuthPage;
+

@@ -1,4 +1,4 @@
-import { useLocation } from 'wouter';
+﻿import { useLocation } from 'wouter';
 import { useEffect } from 'react';
 
 const NotFound = () => {
@@ -13,7 +13,7 @@ const NotFound = () => {
       <div className="text-center">
         <h1 className="text-4xl font-bold mb-4">404</h1>
         <p style={{ color: '#6B4F43' }}>Oops! Page not found</p>
-        <a href="/" className="text-[#B89B7A] hover:text-[#A38A69] underline">
+        <a href="/" className="text-[#B89B7A] hover:text-[#00BFFF] underline">
           Return to Home
         </a>
       </div>
@@ -22,3 +22,4 @@ const NotFound = () => {
 };
 
 export default NotFound;
+

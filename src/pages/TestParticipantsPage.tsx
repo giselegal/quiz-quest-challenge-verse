@@ -1,7 +1,7 @@
-/**
- * 🧪 TESTE DA TABELA DE PARTICIPANTES
+﻿/**
+ * ðŸ§ª TESTE DA TABELA DE PARTICIPANTES
  * 
- * Página de teste para verificar o funcionamento da tabela
+ * PÃ¡gina de teste para verificar o funcionamento da tabela
  */
 
 import React from 'react';
@@ -12,11 +12,11 @@ const TestParticipantsPage: React.FC = () => {
         <div className="min-h-screen bg-gray-50 p-6">
             <div className="max-w-7xl mx-auto">
                 <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-[#432818] mb-2">
-                        🧪 Teste - Tabela de Participantes
+                    <h1 className="text-3xl font-bold text-[#1A0F3D] mb-2">
+                        ðŸ§ª Teste - Tabela de Participantes
                     </h1>
                     <p className="text-[#8F7A6A]">
-                        Visualização das respostas e progresso dos participantes do quiz
+                        VisualizaÃ§Ã£o das respostas e progresso dos participantes do quiz
                     </p>
                 </div>
 
@@ -27,3 +27,4 @@ const TestParticipantsPage: React.FC = () => {
 };
 
 export default TestParticipantsPage;
+

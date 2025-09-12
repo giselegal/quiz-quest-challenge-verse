@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { 
@@ -41,9 +41,9 @@ const conversionsData = [
 const funnelData = [
   { name: 'Visitantes', value: 2100, color: '#B89B7A' },
   { name: 'Quiz Iniciado', value: 1680, color: '#A88B6A' },
-  { name: 'Quiz Concluído', value: 1260, color: '#8B7355' },
+  { name: 'Quiz ConcluÃ­do', value: 1260, color: '#8B7355' },
   { name: 'Resultado Visto', value: 945, color: '#6B4F43' },
-  { name: 'Conversões', value: 125, color: '#432818' },
+  { name: 'ConversÃµes', value: 125, color: '#1A0F3D' },
 ];
 
 const MetricsPage: React.FC = () => {
@@ -72,10 +72,10 @@ const MetricsPage: React.FC = () => {
       <div className="flex justify-between items-center">
         <div>
           <h1
-            className="text-4xl font-bold text-[#432818]"
+            className="text-4xl font-bold text-[#1A0F3D]"
             style={{ fontFamily: 'Playfair Display, serif' }}
           >
-            Métricas e Analytics
+            MÃ©tricas e Analytics
           </h1>
           <p className="text-[#8F7A6A] mt-2 text-lg">
             Acompanhe o desempenho dos seus funis em tempo real
@@ -89,10 +89,10 @@ const MetricsPage: React.FC = () => {
             className="px-4 py-2 rounded-lg border"
             style={{ borderColor: '#D4C4A0', backgroundColor: '#FFFFFF' }}
           >
-            <option value="7d">Últimos 7 dias</option>
-            <option value="30d">Últimos 30 dias</option>
-            <option value="90d">Últimos 90 dias</option>
-            <option value="1y">Último ano</option>
+            <option value="7d">Ãšltimos 7 dias</option>
+            <option value="30d">Ãšltimos 30 dias</option>
+            <option value="90d">Ãšltimos 90 dias</option>
+            <option value="1y">Ãšltimo ano</option>
           </select>
           
           <Button
@@ -121,7 +121,7 @@ const MetricsPage: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[#8F7A6A]">Total de Visitas</p>
-                <p className="text-3xl font-bold text-[#432818]">
+                <p className="text-3xl font-bold text-[#1A0F3D]">
                   {metrics.totalVisits.toLocaleString()}
                 </p>
                 <div className="flex items-center mt-2">
@@ -142,8 +142,8 @@ const MetricsPage: React.FC = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-[#8F7A6A]">Conversões</p>
-                <p className="text-3xl font-bold text-[#432818]">
+                <p className="text-sm text-[#8F7A6A]">ConversÃµes</p>
+                <p className="text-3xl font-bold text-[#1A0F3D]">
                   {metrics.totalConversions}
                 </p>
                 <div className="flex items-center mt-2">
@@ -164,8 +164,8 @@ const MetricsPage: React.FC = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-[#8F7A6A]">Taxa de Conversão</p>
-                <p className="text-3xl font-bold text-[#432818]">
+                <p className="text-sm text-[#8F7A6A]">Taxa de ConversÃ£o</p>
+                <p className="text-3xl font-bold text-[#1A0F3D]">
                   {metrics.conversionRate}%
                 </p>
                 <div className="flex items-center mt-2">
@@ -187,7 +187,7 @@ const MetricsPage: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[#8F7A6A]">Receita Total</p>
-                <p className="text-3xl font-bold text-[#432818]">
+                <p className="text-3xl font-bold text-[#1A0F3D]">
                   R$ {metrics.revenue.toLocaleString()}
                 </p>
                 <div className="flex items-center mt-2">
@@ -210,9 +210,9 @@ const MetricsPage: React.FC = () => {
         {/* Conversions Over Time */}
         <Card className="border-0" style={{ backgroundColor: '#FFFFFF', boxShadow: '0 4px 20px rgba(184, 155, 122, 0.1)' }}>
           <CardHeader>
-            <CardTitle className="text-[#432818] flex items-center">
+            <CardTitle className="text-[#1A0F3D] flex items-center">
               <TrendingUp className="w-5 h-5 mr-2" style={{ color: '#B89B7A' }} />
-              Evolução das Conversões
+              EvoluÃ§Ã£o das ConversÃµes
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -243,9 +243,9 @@ const MetricsPage: React.FC = () => {
         {/* Funnel Analysis */}
         <Card className="border-0" style={{ backgroundColor: '#FFFFFF', boxShadow: '0 4px 20px rgba(184, 155, 122, 0.1)' }}>
           <CardHeader>
-            <CardTitle className="text-[#432818] flex items-center">
+            <CardTitle className="text-[#1A0F3D] flex items-center">
               <PieChart className="w-5 h-5 mr-2" style={{ color: '#B89B7A' }} />
-              Análise do Funil
+              AnÃ¡lise do Funil
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -273,7 +273,7 @@ const MetricsPage: React.FC = () => {
       {/* Revenue Chart */}
       <Card className="border-0" style={{ backgroundColor: '#FFFFFF', boxShadow: '0 4px 20px rgba(184, 155, 122, 0.1)' }}>
         <CardHeader>
-          <CardTitle className="text-[#432818] flex items-center">
+          <CardTitle className="text-[#1A0F3D] flex items-center">
             <DollarSign className="w-5 h-5 mr-2" style={{ color: '#B89B7A' }} />
             Receita vs Visitas
           </CardTitle>
@@ -298,7 +298,7 @@ const MetricsPage: React.FC = () => {
                 yAxisId="right" 
                 type="monotone" 
                 dataKey="revenue" 
-                stroke="#432818" 
+                stroke="#1A0F3D" 
                 strokeWidth={3}
                 name="Receita (R$)"
               />
@@ -311,28 +311,28 @@ const MetricsPage: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="border-0" style={{ backgroundColor: '#FFFFFF', boxShadow: '0 4px 20px rgba(184, 155, 122, 0.1)' }}>
           <CardContent className="p-6 text-center">
-            <div className="text-2xl font-bold text-[#432818] mb-2">
+            <div className="text-2xl font-bold text-[#1A0F3D] mb-2">
               R$ {metrics.avgOrderValue.toFixed(2)}
             </div>
-            <p className="text-sm text-[#8F7A6A]">Ticket Médio</p>
+            <p className="text-sm text-[#8F7A6A]">Ticket MÃ©dio</p>
           </CardContent>
         </Card>
 
         <Card className="border-0" style={{ backgroundColor: '#FFFFFF', boxShadow: '0 4px 20px rgba(184, 155, 122, 0.1)' }}>
           <CardContent className="p-6 text-center">
-            <div className="text-2xl font-bold text-[#432818] mb-2">
+            <div className="text-2xl font-bold text-[#1A0F3D] mb-2">
               3.2 min
             </div>
-            <p className="text-sm text-[#8F7A6A]">Tempo Médio no Quiz</p>
+            <p className="text-sm text-[#8F7A6A]">Tempo MÃ©dio no Quiz</p>
           </CardContent>
         </Card>
 
         <Card className="border-0" style={{ backgroundColor: '#FFFFFF', boxShadow: '0 4px 20px rgba(184, 155, 122, 0.1)' }}>
           <CardContent className="p-6 text-center">
-            <div className="text-2xl font-bold text-[#432818] mb-2">
+            <div className="text-2xl font-bold text-[#1A0F3D] mb-2">
               75%
             </div>
-            <p className="text-sm text-[#8F7A6A]">Taxa de Conclusão</p>
+            <p className="text-sm text-[#8F7A6A]">Taxa de ConclusÃ£o</p>
           </CardContent>
         </Card>
       </div>

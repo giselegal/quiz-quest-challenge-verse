@@ -1,7 +1,7 @@
-/**
- * 📋 PÁGINA DE PARTICIPANTES
+﻿/**
+ * ðŸ“‹ PÃGINA DE PARTICIPANTES
  * 
- * Página dedicada para visualizar e gerenciar participantes do quiz
+ * PÃ¡gina dedicada para visualizar e gerenciar participantes do quiz
  */
 
 import React, { useState, useCallback } from 'react';
@@ -20,12 +20,12 @@ const ParticipantsPage: React.FC = () => {
     });
 
     const handleRefresh = useCallback(() => {
-        // Função para forçar refresh dos componentes
+        // FunÃ§Ã£o para forÃ§ar refresh dos componentes
         window.location.reload();
     }, []);
 
     const handleExport = useCallback(() => {
-        // Função para exportar dados (implementar se necessário)
+        // FunÃ§Ã£o para exportar dados (implementar se necessÃ¡rio)
         console.log('Exportar dados...');
     }, []);
 
@@ -33,13 +33,13 @@ const ParticipantsPage: React.FC = () => {
         <div className="p-6 space-y-6">
             <div className="mb-6">
                 <h1
-                    className="text-3xl font-bold text-[#432818]"
+                    className="text-3xl font-bold text-[#1A0F3D]"
                     style={{ fontFamily: 'Playfair Display, serif' }}
                 >
                     Dashboard de Participantes
                 </h1>
                 <p className="text-[#8F7A6A] mt-2">
-                    Análise completa do desempenho do quiz e comportamento dos usuários
+                    AnÃ¡lise completa do desempenho do quiz e comportamento dos usuÃ¡rios
                 </p>
             </div>
 
@@ -56,18 +56,18 @@ const ParticipantsPage: React.FC = () => {
             {/* DASHBOARD DE ANALYTICS */}
             {(currentView === 'analytics' || currentView === 'both') && (
                 <section>
-                    <h2 className="text-xl font-semibold text-[#432818] mb-4">
-                        📊 Analytics e Métricas
+                    <h2 className="text-xl font-semibold text-[#1A0F3D] mb-4">
+                        ðŸ“Š Analytics e MÃ©tricas
                     </h2>
                     <AnalyticsDashboard />
                 </section>
             )}
 
-            {/* ANALYTICS AVANÇADOS */}
+            {/* ANALYTICS AVANÃ‡ADOS */}
             {(currentView === 'analytics' || currentView === 'both') && (
                 <section>
-                    <h2 className="text-xl font-semibold text-[#432818] mb-4">
-                        🎯 Análises Avançadas
+                    <h2 className="text-xl font-semibold text-[#1A0F3D] mb-4">
+                        ðŸŽ¯ AnÃ¡lises AvanÃ§adas
                     </h2>
                     <AdvancedAnalytics filters={analyticsFilters} />
                 </section>
@@ -76,18 +76,18 @@ const ParticipantsPage: React.FC = () => {
             {/* TABELA DE PARTICIPANTES */}
             {(currentView === 'table' || currentView === 'both') && (
                 <section>
-                    <h2 className="text-xl font-semibold text-[#432818] mb-4">
-                        📋 Lista Detalhada de Participantes
+                    <h2 className="text-xl font-semibold text-[#1A0F3D] mb-4">
+                        ðŸ“‹ Lista Detalhada de Participantes
                     </h2>
                     <ParticipantsTable />
                 </section>
             )}
 
-            {/* GERADOR DE RELATÓRIOS */}
+            {/* GERADOR DE RELATÃ“RIOS */}
             {(currentView === 'analytics' || currentView === 'both') && (
                 <section>
-                    <h2 className="text-xl font-semibold text-[#432818] mb-4">
-                        📄 Relatórios e Exportação
+                    <h2 className="text-xl font-semibold text-[#1A0F3D] mb-4">
+                        ðŸ“„ RelatÃ³rios e ExportaÃ§Ã£o
                     </h2>
                     <ReportGenerator />
                 </section>
@@ -97,3 +97,4 @@ const ParticipantsPage: React.FC = () => {
 };
 
 export default ParticipantsPage;
+

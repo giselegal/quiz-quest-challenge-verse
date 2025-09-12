@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+﻿import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -32,7 +32,7 @@ const ABTestManagerPage: React.FC = () => {
   const [editMode, setEditMode] = useState(false);
   const [isCreatingTest, setIsCreatingTest] = useState(false);
 
-  // Variáveis de estado para edição
+  // VariÃ¡veis de estado para ediÃ§Ã£o
   const [editedTest, setEditedTest] = useState<ABTest | null>(null);
 
   useEffect(() => {
@@ -55,7 +55,7 @@ const ABTestManagerPage: React.FC = () => {
       console.error('Erro ao carregar testes:', error);
       toast({
         title: 'Erro ao carregar testes',
-        description: 'Não foi possível carregar os testes A/B salvos.',
+        description: 'NÃ£o foi possÃ­vel carregar os testes A/B salvos.',
         variant: 'destructive',
       });
     }
@@ -73,7 +73,7 @@ const ABTestManagerPage: React.FC = () => {
       console.error('Erro ao salvar testes:', error);
       toast({
         title: 'Erro ao salvar testes',
-        description: 'Não foi possível salvar os testes A/B.',
+        description: 'NÃ£o foi possÃ­vel salvar os testes A/B.',
         variant: 'destructive',
       });
     }
@@ -89,13 +89,13 @@ const ABTestManagerPage: React.FC = () => {
       variations: [
         {
           id: `var_${Date.now()}_a`,
-          name: 'Variação A (Original)',
+          name: 'VariaÃ§Ã£o A (Original)',
           trafficPercentage: 50,
           content: {},
         },
         {
           id: `var_${Date.now()}_b`,
-          name: 'Variação B',
+          name: 'VariaÃ§Ã£o B',
           trafficPercentage: 50,
           content: {},
         },
@@ -112,7 +112,7 @@ const ABTestManagerPage: React.FC = () => {
 
   const handleDeleteTest = (testId: string) => {
     if (
-      window.confirm('Tem certeza que deseja excluir este teste? Esta ação não pode ser desfeita.')
+      window.confirm('Tem certeza que deseja excluir este teste? Esta aÃ§Ã£o nÃ£o pode ser desfeita.')
     ) {
       const updatedTests = tests.filter(test => test.id !== testId);
       handleSaveTests(updatedTests);
@@ -155,7 +155,7 @@ const ABTestManagerPage: React.FC = () => {
     setEditMode(false);
     setIsCreatingTest(false);
 
-    // Se estiver criando um novo teste e cancelar, removê-lo
+    // Se estiver criando um novo teste e cancelar, removÃª-lo
     if (isCreatingTest && editedTest) {
       const updatedTests = tests.filter(test => test.id !== editedTest.id);
       handleSaveTests(updatedTests);
@@ -167,7 +167,7 @@ const ABTestManagerPage: React.FC = () => {
     if (editedTest) {
       const newVariation: ABTestVariation = {
         id: `var_${Date.now()}`,
-        name: `Variação ${String.fromCharCode(65 + editedTest.variations.length)}`,
+        name: `VariaÃ§Ã£o ${String.fromCharCode(65 + editedTest.variations.length)}`,
         trafficPercentage: 0,
         content: {},
       };
@@ -178,7 +178,7 @@ const ABTestManagerPage: React.FC = () => {
       const newPercentage = Math.floor(100 / updatedVariations.length);
       const updatedVariationsWithPercentages = updatedVariations.map((variation, index) => {
         if (index === updatedVariations.length - 1) {
-          // Última variação recebe o que sobrou para garantir soma = 100%
+          // Ãšltima variaÃ§Ã£o recebe o que sobrou para garantir soma = 100%
           const sumOthers = updatedVariations
             .slice(0, -1)
             .reduce((acc, var1) => acc + (var1.trafficPercentage || 0), 0);
@@ -201,8 +201,8 @@ const ABTestManagerPage: React.FC = () => {
     if (editedTest) {
       if (editedTest.variations.length <= 2) {
         toast({
-          title: 'Operação não permitida',
-          description: 'Um teste A/B precisa ter pelo menos duas variações.',
+          title: 'OperaÃ§Ã£o nÃ£o permitida',
+          description: 'Um teste A/B precisa ter pelo menos duas variaÃ§Ãµes.',
           variant: 'destructive',
         });
         return;
@@ -216,7 +216,7 @@ const ABTestManagerPage: React.FC = () => {
       const newPercentage = Math.floor(100 / updatedVariations.length);
       const updatedVariationsWithPercentages = updatedVariations.map((variation, index) => {
         if (index === updatedVariations.length - 1) {
-          // Última variação recebe o que sobrou para garantir soma = 100%
+          // Ãšltima variaÃ§Ã£o recebe o que sobrou para garantir soma = 100%
           const sumOthers = updatedVariations
             .slice(0, -1)
             .reduce((acc, var1) => acc + (var1.trafficPercentage || 0), 0);
@@ -279,7 +279,7 @@ const ABTestManagerPage: React.FC = () => {
       const newVariation: ABTestVariation = {
         ...JSON.parse(JSON.stringify(variationToDuplicate)),
         id: `var_${Date.now()}`,
-        name: `${variationToDuplicate.name} (cópia)`,
+        name: `${variationToDuplicate.name} (cÃ³pia)`,
         trafficPercentage: 0,
       };
 
@@ -289,7 +289,7 @@ const ABTestManagerPage: React.FC = () => {
       const newPercentage = Math.floor(100 / updatedVariations.length);
       const updatedVariationsWithPercentages = updatedVariations.map((variation, index) => {
         if (index === updatedVariations.length - 1) {
-          // Última variação recebe o que sobrou para garantir soma = 100%
+          // Ãšltima variaÃ§Ã£o recebe o que sobrou para garantir soma = 100%
           const sumOthers = updatedVariations
             .slice(0, -1)
             .reduce((acc, var1) => acc + (var1.trafficPercentage || 0), 0);
@@ -315,12 +315,12 @@ const ABTestManagerPage: React.FC = () => {
 
   const getConversionRate = (testId: string, variationId: string) => {
     try {
-      // Obter o número de visitantes
+      // Obter o nÃºmero de visitantes
       const visitorKey = `ab_test_${testId}_visitor_count_${variationId}`;
       const visitors = localStorage.getItem(visitorKey);
       const visitorsCount = visitors ? parseInt(visitors, 10) : 0;
 
-      // Obter o número de conversões
+      // Obter o nÃºmero de conversÃµes
       const conversionKey = `ab_test_${testId}_${variationId}_conversions`;
       const conversions = localStorage.getItem(conversionKey);
       const conversionsCount = conversions ? parseInt(conversions, 10) : 0;
@@ -330,7 +330,7 @@ const ABTestManagerPage: React.FC = () => {
       const rate = (conversionsCount / visitorsCount) * 100;
       return `${rate.toFixed(2)}%`;
     } catch (error) {
-      console.error('Erro ao calcular taxa de conversão:', error);
+      console.error('Erro ao calcular taxa de conversÃ£o:', error);
       return 'N/A';
     }
   };
@@ -390,7 +390,7 @@ const ABTestManagerPage: React.FC = () => {
                     >
                       <div className="font-medium">{test.name}</div>
                       <div className="text-xs text-muted-foreground">
-                        {test.type === 'result' ? 'Página de Resultados' : 'Página de Vendas'}
+                        {test.type === 'result' ? 'PÃ¡gina de Resultados' : 'PÃ¡gina de Vendas'}
                       </div>
                     </li>
                   ))}
@@ -405,7 +405,7 @@ const ABTestManagerPage: React.FC = () => {
             <Card>
               <CardContent className="p-6">
                 {editMode ? (
-                  // Modo de edição
+                  // Modo de ediÃ§Ã£o
                   <div>
                     <div className="flex justify-between items-center mb-6">
                       <div className="space-y-1 flex-1">
@@ -446,13 +446,13 @@ const ABTestManagerPage: React.FC = () => {
                             }
                             className="w-full mt-1 p-2 border rounded-md"
                           >
-                            <option value="result">Página de Resultados</option>
-                            <option value="sales">Página de Vendas</option>
+                            <option value="result">PÃ¡gina de Resultados</option>
+                            <option value="sales">PÃ¡gina de Vendas</option>
                           </select>
                         </div>
 
                         <div>
-                          <Label>Data de Início</Label>
+                          <Label>Data de InÃ­cio</Label>
                           <Input
                             type="date"
                             value={
@@ -492,7 +492,7 @@ const ABTestManagerPage: React.FC = () => {
                         </div>
 
                         <div>
-                          <Label>Data de Término</Label>
+                          <Label>Data de TÃ©rmino</Label>
                           <Input
                             type="date"
                             value={
@@ -521,10 +521,10 @@ const ABTestManagerPage: React.FC = () => {
 
                     <div>
                       <div className="flex justify-between items-center mb-4">
-                        <h3 className="text-lg font-medium">Variações</h3>
+                        <h3 className="text-lg font-medium">VariaÃ§Ãµes</h3>
                         <Button size="sm" variant="outline" onClick={handleAddVariation}>
                           <Plus className="h-4 w-4 mr-1" />
-                          Adicionar Variação
+                          Adicionar VariaÃ§Ã£o
                         </Button>
                       </div>
 
@@ -533,7 +533,7 @@ const ABTestManagerPage: React.FC = () => {
                           <Card key={variation.id} className="p-4 border">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                               <div>
-                                <Label>Nome da Variação</Label>
+                                <Label>Nome da VariaÃ§Ã£o</Label>
                                 <Input
                                   value={variation.name}
                                   onChange={e =>
@@ -544,7 +544,7 @@ const ABTestManagerPage: React.FC = () => {
                               </div>
 
                               <div>
-                                <Label>Domínio (opcional)</Label>
+                                <Label>DomÃ­nio (opcional)</Label>
                                 <div className="flex items-center mt-1">
                                   <Globe className="h-4 w-4 mr-2 text-muted-foreground" />
                                   <Input
@@ -558,7 +558,7 @@ const ABTestManagerPage: React.FC = () => {
                               </div>
 
                               <div>
-                                <Label>Distribuição de Tráfego (%)</Label>
+                                <Label>DistribuiÃ§Ã£o de TrÃ¡fego (%)</Label>
                                 <Input
                                   type="number"
                                   min="0"
@@ -577,7 +577,7 @@ const ABTestManagerPage: React.FC = () => {
                             </div>
 
                             <div className="mt-4">
-                              <Label>URL de Checkout (para variação de teste)</Label>
+                              <Label>URL de Checkout (para variaÃ§Ã£o de teste)</Label>
                               <Input
                                 value={(variation.content?.checkoutUrl as string) || ''}
                                 onChange={e =>
@@ -593,11 +593,11 @@ const ABTestManagerPage: React.FC = () => {
                             </div>
 
                             <div className="mt-4">
-                              <Label>Informações de Preço (para variação de teste)</Label>
+                              <Label>InformaÃ§Ãµes de PreÃ§o (para variaÃ§Ã£o de teste)</Label>
                               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
                                 <div>
                                   <Label className="text-xs text-muted-foreground">
-                                    Preço Regular
+                                    PreÃ§o Regular
                                   </Label>
                                   <Input
                                     value={
@@ -621,7 +621,7 @@ const ABTestManagerPage: React.FC = () => {
 
                                 <div>
                                   <Label className="text-xs text-muted-foreground">
-                                    Preço Atual
+                                    PreÃ§o Atual
                                   </Label>
                                   <Input
                                     value={
@@ -645,7 +645,7 @@ const ABTestManagerPage: React.FC = () => {
 
                                 <div>
                                   <Label className="text-xs text-muted-foreground">
-                                    Informação de Parcelamento
+                                    InformaÃ§Ã£o de Parcelamento
                                   </Label>
                                   <Input
                                     value={
@@ -695,15 +695,15 @@ const ABTestManagerPage: React.FC = () => {
                     </div>
                   </div>
                 ) : (
-                  // Modo de visualização
+                  // Modo de visualizaÃ§Ã£o
                   <div>
                     <div className="flex justify-between items-center mb-6">
                       <div>
                         <h2 className="text-xl font-semibold">{selectedTest.name}</h2>
                         <p className="text-sm text-muted-foreground">
                           {selectedTest.type === 'result'
-                            ? 'Página de Resultados'
-                            : 'Página de Vendas'}
+                            ? 'PÃ¡gina de Resultados'
+                            : 'PÃ¡gina de Vendas'}
                         </p>
                       </div>
 
@@ -736,19 +736,19 @@ const ABTestManagerPage: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                       <div>
                         <h3 className="text-sm font-medium text-muted-foreground">
-                          Data de Início
+                          Data de InÃ­cio
                         </h3>
                         <p>{new Date(selectedTest.startDate).toLocaleDateString()}</p>
                       </div>
 
                       <div>
                         <h3 className="text-sm font-medium text-muted-foreground">
-                          Data de Término
+                          Data de TÃ©rmino
                         </h3>
                         <p>
                           {selectedTest.endDate
                             ? new Date(selectedTest.endDate).toLocaleDateString()
-                            : 'Não definida'}
+                            : 'NÃ£o definida'}
                         </p>
                       </div>
 
@@ -774,7 +774,7 @@ const ABTestManagerPage: React.FC = () => {
                           <div className="flex justify-between items-center">
                             <div>
                               <h4 className="text-sm font-medium text-muted-foreground">
-                                Variações
+                                VariaÃ§Ãµes
                               </h4>
                               <p className="text-2xl font-semibold">
                                 {selectedTest.variations.length}
@@ -806,7 +806,7 @@ const ABTestManagerPage: React.FC = () => {
                           <div className="flex justify-between items-center">
                             <div>
                               <h4 className="text-sm font-medium text-muted-foreground">
-                                Distribuição
+                                DistribuiÃ§Ã£o
                               </h4>
                               <p className="text-2xl font-semibold">
                                 {selectedTest.variations
@@ -822,7 +822,7 @@ const ABTestManagerPage: React.FC = () => {
                     </div>
 
                     <div>
-                      <h3 className="text-lg font-medium mb-4">Variações</h3>
+                      <h3 className="text-lg font-medium mb-4">VariaÃ§Ãµes</h3>
 
                       <div className="space-y-4">
                         {selectedTest.variations.map(variation => (
@@ -833,7 +833,7 @@ const ABTestManagerPage: React.FC = () => {
                                 <div className="flex items-center mt-1 text-sm text-muted-foreground">
                                   <div className="flex items-center mr-4">
                                     <BarChart className="h-4 w-4 mr-1" />
-                                    <span>{variation.trafficPercentage || 0}% do tráfego</span>
+                                    <span>{variation.trafficPercentage || 0}% do trÃ¡fego</span>
                                   </div>
 
                                   {variation.domain && (
@@ -846,7 +846,7 @@ const ABTestManagerPage: React.FC = () => {
                               </div>
 
                               <div className="mt-2 md:mt-0 flex flex-wrap gap-2">
-                                <div className="bg-[#B89B7A]/10 text-[#A38A69] px-2.5 py-0.5 rounded-full text-xs">
+                                <div className="bg-[#B89B7A]/10 text-[#00BFFF] px-2.5 py-0.5 rounded-full text-xs">
                                   CR: {getConversionRate(selectedTest.id, variation.id)}
                                 </div>
 
@@ -878,7 +878,7 @@ const ABTestManagerPage: React.FC = () => {
                   Nenhum teste selecionado
                 </h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Selecione um teste existente ou crie um novo para começar.
+                  Selecione um teste existente ou crie um novo para comeÃ§ar.
                 </p>
                 <Button onClick={handleCreateTest}>
                   <Plus className="h-4 w-4 mr-2" />
@@ -894,3 +894,4 @@ const ABTestManagerPage: React.FC = () => {
 };
 
 export default ABTestManagerPage;
+

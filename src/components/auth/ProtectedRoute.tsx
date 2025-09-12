@@ -50,8 +50,8 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
           return (
             <div className="min-h-screen flex items-center justify-center">
               <div className="text-center">
-                <LoadingSpinner size="lg" color="#B89B7A" className="mx-auto" />
-                <p style={{ color: '#6B4F43' }} className="mt-4">
+                <LoadingSpinner size="lg" color="#00BFFF" className="mx-auto" />
+                <p className="mt-4 text-brand-darkBlue">
                   Verificando autenticação...
                 </p>
               </div>
@@ -66,7 +66,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
           return (
             <div className="min-h-screen flex items-center justify-center">
               <div className="text-center">
-                <p style={{ color: '#6B4F43' }}>Redirecionando para login...</p>
+                <p className="text-brand-darkBlue">Redirecionando para login...</p>
               </div>
             </div>
           );
@@ -74,7 +74,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
         console.log('✅ ProtectedRoute: ACESSO PERMITIDO para', path, '- Carregando componente');
         return (
-          <Suspense fallback={<LoadingSpinner size="lg" color="#B89B7A" />}>
+          <Suspense fallback={<LoadingSpinner size="lg" color="#00BFFF" />}> 
             <Component />
           </Suspense>
         );

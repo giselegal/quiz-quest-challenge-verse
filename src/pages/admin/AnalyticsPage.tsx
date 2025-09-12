@@ -1,16 +1,16 @@
-/**
- * 📊 PÁGINA DE ANALYTICS DO ADMIN AVANÇADO
+﻿/**
+ * ðŸ“Š PÃGINA DE ANALYTICS DO ADMIN AVANÃ‡ADO
  * 
  * Integra o dashboard real-time com dados do Supabase
- * e componentes avançados de analytics
+ * e componentes avanÃ§ados de analytics
  */
 
 import React, { useState, useEffect } from 'react';
-// OTIMIZAÇÕES: Usar componentes avançados ao invés dos básicos
+// OTIMIZAÃ‡Ã•ES: Usar componentes avanÃ§ados ao invÃ©s dos bÃ¡sicos
 import AdvancedAnalytics from '@/components/dashboard/AdvancedAnalytics';
 import { AnalyticsDashboard } from '@/components/admin/analytics/AdvancedAnalytics';
 import ABTestComparison from '@/components/analytics/ABTestComparison';
-// OTIMIZAÇÕES: Usar serviços avançados de analytics
+// OTIMIZAÃ‡Ã•ES: Usar serviÃ§os avanÃ§ados de analytics
 import { QuizAnalyticsService } from '@/services/core/QuizAnalyticsService';
 import * as realTimeAnalytics from '@/services/realTimeAnalytics';
 import { Button } from '@/components/ui/button';
@@ -30,7 +30,7 @@ const AnalyticsPage: React.FC = () => {
   const [selectedQuizId, setSelectedQuizId] = useState('quiz-default');
   const [isAdvancedMode, setIsAdvancedMode] = useState(false);
 
-  // Mock data de quizzes para demonstração
+  // Mock data de quizzes para demonstraÃ§Ã£o
   const availableQuizzes = [
     { id: 'quiz-default', name: 'Quiz Principal', status: 'active' },
     { id: 'quiz-roupa', name: 'Com que roupa eu vou?', status: 'active' },
@@ -42,46 +42,46 @@ const AnalyticsPage: React.FC = () => {
       id: 'dashboard',
       label: 'Dashboard Geral',
       icon: BarChart3,
-      description: 'Visão consolidada de todos os quizzes'
+      description: 'VisÃ£o consolidada de todos os quizzes'
     },
     {
       id: 'advanced',
-      label: 'Analytics Avançado',
+      label: 'Analytics AvanÃ§ado',
       icon: Activity,
-      description: 'Análise detalhada por quiz'
+      description: 'AnÃ¡lise detalhada por quiz'
     },
     {
       id: 'abtest',
       label: 'Testes A/B',
       icon: Target,
-      description: 'Comparação e otimização'
+      description: 'ComparaÃ§Ã£o e otimizaÃ§Ã£o'
     },
   ];
 
   useEffect(() => {
-    // Ativar modo avançado automaticamente ao entrar na página
+    // Ativar modo avanÃ§ado automaticamente ao entrar na pÃ¡gina
     setIsAdvancedMode(true);
   }, []);
 
   return (
     <div className="p-6 space-y-6">
-      {/* Header com status de funcionalidades avançadas */}
+      {/* Header com status de funcionalidades avanÃ§adas */}
       <div className="flex items-start justify-between">
         <div>
           <div className="flex items-center gap-3 mb-2">
             <h1
-              className="text-3xl font-bold text-[#432818]"
+              className="text-3xl font-bold text-[#1A0F3D]"
               style={{ fontFamily: 'Playfair Display, serif' }}
             >
-              Analytics & Métricas
+              Analytics & MÃ©tricas
             </h1>
             <Badge variant="default" className="bg-green-500 hover:bg-green-600">
               <Zap className="w-3 h-3 mr-1" />
-              Funcionalidades Avançadas Ativas
+              Funcionalidades AvanÃ§adas Ativas
             </Badge>
           </div>
           <p className="text-[#8F7A6A]">
-            Dashboard empresarial com analytics em tempo real, testes A/B e análise de conversão
+            Dashboard empresarial com analytics em tempo real, testes A/B e anÃ¡lise de conversÃ£o
           </p>
         </div>
 
@@ -92,7 +92,7 @@ const AnalyticsPage: React.FC = () => {
             className="flex items-center gap-2"
           >
             <Activity className="w-4 h-4" />
-            {isAdvancedMode ? 'Modo Avançado' : 'Ativar Modo Avançado'}
+            {isAdvancedMode ? 'Modo AvanÃ§ado' : 'Ativar Modo AvanÃ§ado'}
           </Button>
           <Button variant="outline">
             <RefreshCw className="w-4 h-4 mr-2" />
@@ -111,7 +111,7 @@ const AnalyticsPage: React.FC = () => {
                 Funcionalidades Empresariais Ativadas
               </h3>
               <p className="text-green-700 text-sm mt-1">
-                Analytics avançado, testes A/B, funil de conversão e dashboards em tempo real
+                Analytics avanÃ§ado, testes A/B, funil de conversÃ£o e dashboards em tempo real
               </p>
             </div>
             <div className="grid grid-cols-4 gap-4 text-center">
@@ -125,7 +125,7 @@ const AnalyticsPage: React.FC = () => {
               </div>
               <div className="flex flex-col items-center">
                 <TrendingUp className="w-5 h-5 text-green-600 mb-1" />
-                <span className="text-xs text-green-700">Conversão</span>
+                <span className="text-xs text-green-700">ConversÃ£o</span>
               </div>
               <div className="flex flex-col items-center">
                 <Users className="w-5 h-5 text-orange-600 mb-1" />
@@ -136,7 +136,7 @@ const AnalyticsPage: React.FC = () => {
         </div>
       )}
 
-      {/* Navegação por tabs */}
+      {/* NavegaÃ§Ã£o por tabs */}
       <div className="border-b border-[#E5DDD5]">
         <nav className="-mb-px flex space-x-8">
           {tabs.map(tab => {
@@ -163,14 +163,14 @@ const AnalyticsPage: React.FC = () => {
         </nav>
       </div>
 
-      {/* Seletor de quiz para analytics avançado */}
+      {/* Seletor de quiz para analytics avanÃ§ado */}
       {(activeTab === 'advanced' || activeTab === 'abtest') && (
         <div className="bg-white border border-[#E5DDD5] rounded-lg p-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-medium text-[#432818] mb-1">Selecionar Quiz para Análise</h3>
+              <h3 className="font-medium text-[#1A0F3D] mb-1">Selecionar Quiz para AnÃ¡lise</h3>
               <p className="text-sm text-[#8F7A6A]">
-                Escolha o quiz para análise detalhada e testes A/B
+                Escolha o quiz para anÃ¡lise detalhada e testes A/B
               </p>
             </div>
             <select
@@ -188,7 +188,7 @@ const AnalyticsPage: React.FC = () => {
         </div>
       )}
 
-      {/* Conteúdo das tabs */}
+      {/* ConteÃºdo das tabs */}
       <div className="min-h-[600px]">
         {activeTab === 'dashboard' && (
           <div>
@@ -211,16 +211,16 @@ const AnalyticsPage: React.FC = () => {
         {(activeTab === 'advanced' || activeTab === 'abtest') && !isAdvancedMode && (
           <div className="bg-white border border-[#E5DDD5] rounded-lg p-12 text-center">
             <Activity className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-[#432818] mb-2">
-              Funcionalidades Avançadas Disponíveis
+            <h3 className="text-xl font-semibold text-[#1A0F3D] mb-2">
+              Funcionalidades AvanÃ§adas DisponÃ­veis
             </h3>
             <p className="text-[#8F7A6A] mb-6 max-w-md mx-auto">
-              Ative o modo avançado para acessar analytics detalhado,
-              testes A/B e análises de conversão empresariais.
+              Ative o modo avanÃ§ado para acessar analytics detalhado,
+              testes A/B e anÃ¡lises de conversÃ£o empresariais.
             </p>
             <Button onClick={() => setIsAdvancedMode(true)} className="bg-[#B89B7A] hover:bg-[#A08968]">
               <Zap className="w-4 h-4 mr-2" />
-              Ativar Funcionalidades Avançadas
+              Ativar Funcionalidades AvanÃ§adas
             </Button>
           </div>
         )}
@@ -230,3 +230,4 @@ const AnalyticsPage: React.FC = () => {
 };
 
 export default AnalyticsPage;
+
