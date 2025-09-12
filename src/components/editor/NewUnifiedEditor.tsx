@@ -15,13 +15,13 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
     quickSave
 }) => {
     const navigate = useNavigate();
-    
+
     // Estados do editor
     const [quiz, setQuiz] = useState(initialQuiz || {
         title: 'Novo Quiz',
         stages: [{
             id: 'step-1',
-            name: 'Etapa 1', 
+            name: 'Etapa 1',
             blocks: []
         }]
     });
@@ -58,11 +58,10 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                     <button
                         key={stepNumber}
                         onClick={() => handleStepSelect(stepNumber)}
-                        className={`w-full mb-1 px-2 py-2 rounded text-xs font-medium transition-colors ${
-                            currentStep === stepNumber
+                        className={`w-full mb-1 px-2 py-2 rounded text-xs font-medium transition-colors ${currentStep === stepNumber
                                 ? 'bg-blue-600 text-white'
                                 : 'text-gray-400 hover:text-white hover:bg-gray-800'
-                        }`}
+                            }`}
                     >
                         {stepNumber}
                     </button>
@@ -101,7 +100,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
 
             {/* Main Layout - 4 colunas exatamente como o editor antigo */}
             <div className="flex h-[calc(100vh-3.5rem)]">
-                
+
                 {/* 1) Etapas - 10% */}
                 <div className="w-[10%] bg-gray-900 border-r border-gray-800/50 overflow-y-auto">
                     <StepsNavigation />
@@ -148,7 +147,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                                 </div>
                             </div>
                         )}
-                        
+
                         <div className="h-full flex items-center justify-center p-8">
                             <div className="max-w-4xl w-full">
                                 {/* Canvas Placeholder - será substituído pelo Canvas real */}
