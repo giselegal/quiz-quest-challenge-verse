@@ -136,7 +136,7 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
     return (
         <div
             ref={editorRef}
-            className="flex h-screen bg-gray-100 overflow-hidden"
+            className="flex h-screen bg-black overflow-hidden"
         >
             {/* Layout de 5 Colunas com Navegação por Etapas */}
 
@@ -185,7 +185,7 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
 
             {/* 1. Painel de Componentes */}
             {showComponentPanel && (
-                <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
+                <div className="w-64 bg-gray-900 border-r border-gray-800/50 flex flex-col">
                     <div className="p-4 border-b border-gray-200">
                         <h2 className="font-bold text-lg text-gray-900">🎨 Componentes</h2>
                         <p className="text-sm text-gray-600">Arraste para adicionar</p>
