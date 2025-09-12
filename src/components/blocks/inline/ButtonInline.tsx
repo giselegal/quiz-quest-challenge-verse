@@ -165,7 +165,7 @@ export function ButtonInline({
   React.useEffect(() => {
     if (!requiresValidSelection) return;
     const handler = (ev: Event) => {
-      const e = ev as CustomEvent<{ isValid?: boolean; valid?: boolean }>; 
+      const e = ev as CustomEvent<{ isValid?: boolean; valid?: boolean }>;
       const ok = typeof e.detail?.isValid === 'boolean' ? e.detail.isValid : !!e.detail?.valid;
       setIsSelectionValid(ok);
     };
@@ -247,7 +247,7 @@ export function ButtonInline({
 
         // States
         disabled && 'opacity-50 cursor-not-allowed',
-  (requiresValidInput || (requiresValidSelection && !isSelectionValid)) && 'opacity-75 cursor-not-allowed',
+        (requiresValidInput || (requiresValidSelection && !isSelectionValid)) && 'opacity-75 cursor-not-allowed',
 
         // Margins
         getMarginClass(marginTop, 'top'),
