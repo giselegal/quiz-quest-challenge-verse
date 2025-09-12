@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔍 Análise Completa - RS SDK Error</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            padding: 20px;
+            background: #0d1117;
+            color: #f0f6fc;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #7c3aed;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #06d6a0;
+            border-bottom: 2px solid #06d6a0;
+            padding-bottom: 5px;
+        }
+
+        .section {
+            background: #161b22;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #06d6a0;
+        }
+
+        .error-section {
+            border-left-color: #f85149;
+            background: #21262d;
+        }
+
+        .warning-section {
+            border-left-color: #d29922;
+            background: #1c1e24;
+        }
+
+        .log {
+            background: #21262d;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin: 8px 0;
+            font-family: 'Courier New', monospace;
+            border-left: 3px solid #30363d;
+            font-size: 13px;
+        }
+
+        .error {
+            border-left-color: #f85149;
+            background: #2d1518;
+        }
+
+        .warning {
+            border-left-color: #d29922;
+            background: #2d2408;
+        }
+
+        .success {
+            border-left-color: #3fb950;
+            background: #0f2419;
+        }
+
+        .info {
+            border-left-color: #1f6feb;
+            background: #0c1929;
+        }
+
+        button {
+            background: #238636;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 8px 8px 8px 0;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: #2ea043;
+            transform: translateY(-1px);
+        }
+
+        button.warning {
+            background: #bf8700;
+        }
+
+        button.warning:hover {
+            background: #d29922;
+        }
+
+        button.danger {
+            background: #da3633;
+        }
+
+        button.danger:hover {
+            background: #f85149;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-ok {
+            background: #3fb950;
+        }
+
+        .status-warning {
+            background: #d29922;
+        }
+
+        .status-error {
+            background: #f85149;
+        }
+
+        pre {
+            background: #0d1117;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            border: 1px solid #30363d;
+        }
+
+        code {
+            background: #21262d;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', monospace;
+        }
+
+        .timestamp {
+            color: #7d8590;
+            font-size: 11px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🔍 Análise Completa - RS SDK & 404 Errors</h1>
+
+        <div class="grid">
+            <div class="section">
+                <h2>📊 Status do Sistema</h2>
+                <div id="system-status"></div>
+                <button onclick="checkSystemStatus()">🔄 Verificar Status</button>
+            </div>
+
+            <div class="section">
+                <h2>🚨 Monitor de Erros</h2>
+                <div id="error-monitor"></div>
+                <button onclick="clearErrorLog()">🗑️ Limpar Logs</button>
+            </div>
+        </div>
+
+        <div class="section error-section">
+            <h2>🎯 Análise Específica - RS SDK</h2>
+            <div id="rs-sdk-analysis"></div>
+            <button onclick="analyzeRSSdk()">🔍 Analisar RS SDK</button>
+            <button class="warning" onclick="simulateRSError()">⚠️ Simular Erro</button>
+        </div>
+
+        <div class="section warning-section">
+            <h2>🌐 Análise de Recursos 404</h2>
+            <div id="resource-404-analysis"></div>
+            <button onclick="analyze404Resources()">📡 Analisar 404s</button>
+        </div>
+
+        <div class="section">
+            <h2>📋 Scripts Externos Detectados</h2>
+            <div id="external-scripts"></div>
+            <button onclick="scanExternalScripts()">🔎 Escanear Scripts</button>
+        </div>
+
+        <div class="section">
+            <h2>🛠️ Soluções e Correções</h2>
+            <div id="solutions"></div>
+            <button onclick="showSolutions()">💡 Ver Soluções</button>
+            <button class="danger" onclick="applyQuickFix()">🚀 Aplicar Correção</button>
+        </div>
+
+        <div class="section">
+            <h2>📝 Log Completo</h2>
+            <div id="complete-log" style="max-height: 400px; overflow-y: auto;"></div>
+            <button onclick="exportLog()">📥 Exportar Log</button>
+        </div>
+    </div>
+
+    <script>
+        const logs = [];
+
+        function addLog(type, message, data = null) {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = {
+                type,
+                message,
+                data,
+                timestamp,
+                id: Date.now() + Math.random()
+            };
+            logs.push(logEntry);
+            updateCompleteLog();
+            return logEntry;
+        }
+
+        function updateCompleteLog() {
+            const container = document.getElementById('complete-log');
+            const recent = logs.slice(-50).reverse();
+
+            container.innerHTML = recent.map(log => `
+                <div class="log ${log.type}">
+                    <span class="timestamp">[${log.timestamp}]</span>
+                    <strong>${log.type.toUpperCase()}:</strong> ${log.message}
+                    ${log.data ? `<br><code>${JSON.stringify(log.data, null, 2)}</code>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function checkSystemStatus() {
+            const statusDiv = document.getElementById('system-status');
+            let status = [];
+
+            // Verificar window properties
+            const hasRudder = window.rudderanalytics || window.rudder || window.RS;
+            const hasGA = window.gtag || window.ga || window.dataLayer;
+            const hasFB = window.fbq || window._fbq;
+
+            status.push(`<div><span class="status-indicator ${hasRudder ? 'status-error' : 'status-ok'}"></span>RudderStack: ${hasRudder ? 'DETECTADO ⚠️' : 'Não encontrado ✅'}</div>`);
+            status.push(`<div><span class="status-indicator ${hasGA ? 'status-warning' : 'status-ok'}"></span>Google Analytics: ${hasGA ? 'DETECTADO' : 'Não encontrado'}</div>`);
+            status.push(`<div><span class="status-indicator ${hasFB ? 'status-warning' : 'status-ok'}"></span>Facebook Pixel: ${hasFB ? 'DETECTADO' : 'Não encontrado'}</div>`);
+
+            // Verificar environment
+            const isLovable = location.hostname.includes('lovable.app');
+            const isDev = location.hostname.includes('localhost') || location.port;
+
+            status.push(`<div><span class="status-indicator ${isLovable ? 'status-warning' : 'status-ok'}"></span>Environment: ${isLovable ? 'Lovable (Prod-like)' : isDev ? 'Development' : 'Unknown'}</div>`);
+
+            statusDiv.innerHTML = status.join('');
+            addLog('info', 'Status do sistema verificado', { hasRudder, hasGA, hasFB, isLovable, isDev });
+        }
+
+        function analyzeRSSdk() {
+            const analysisDiv = document.getElementById('rs-sdk-analysis');
+            const analysis = [];
+
+            // Verificar objetos window relacionados ao RudderStack
+            const rudderObjects = [];
+            for (const key of Object.keys(window)) {
+                if (key.toLowerCase().includes('rudder') ||
+                    key.toLowerCase().includes('rs') ||
+                    key === 'analytics') {
+                    rudderObjects.push(key);
+                }
+            }
+
+            // Verificar scripts carregados
+            const scripts = Array.from(document.querySelectorAll('script[src]'));
+            const suspiciousScripts = scripts.filter(script =>
+                script.src.includes('rudder') ||
+                script.src.includes('analytics') ||
+                script.src.includes('8113-') ||
+                script.src.includes('c0166af3-')
+            );
+
+            analysis.push(`<div class="log info"><strong>Objetos Window Suspeitos:</strong><br>${rudderObjects.length > 0 ? rudderObjects.join(', ') : 'Nenhum encontrado'}</div>`);
+            analysis.push(`<div class="log ${suspiciousScripts.length > 0 ? 'error' : 'success'}"><strong>Scripts Suspeitos:</strong><br>${suspiciousScripts.length > 0 ? suspiciousScripts.map(s => s.src).join('<br>') : 'Nenhum encontrado ✅'}</div>`);
+
+            // Verificar localStorage/sessionStorage
+            const storageKeys = [];
+            try {
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key && (key.includes('rudder') || key.includes('analytics') || key.includes('rs'))) {
+                        storageKeys.push(key);
+                    }
+                }
+            } catch (e) { }
+
+            analysis.push(`<div class="log ${storageKeys.length > 0 ? 'warning' : 'success'}"><strong>Storage Keys Suspeitas:</strong><br>${storageKeys.length > 0 ? storageKeys.join(', ') : 'Nenhuma encontrada ✅'}</div>`);
+
+            analysisDiv.innerHTML = analysis.join('');
+            addLog('info', 'Análise RS SDK completa', { rudderObjects, suspiciousScripts: suspiciousScripts.length, storageKeys });
+        }
+
+        function analyze404Resources() {
+            const analysisDiv = document.getElementById('resource-404-analysis');
+            const analysis = [];
+
+            // Verificar recursos que falharam
+            const failedResources = [];
+
+            // Override fetch para capturar 404s
+            const originalFetch = window.fetch;
+            window.fetch = function (...args) {
+                return originalFetch.apply(this, args)
+                    .then(response => {
+                        if (!response.ok && response.status === 404) {
+                            failedResources.push({
+                                url: args[0],
+                                status: response.status,
+                                timestamp: new Date().toISOString()
+                            });
+                            addLog('error', `404 Resource: ${args[0]}`, { status: response.status });
+                        }
+                        return response;
+                    })
+                    .catch(error => {
+                        failedResources.push({
+                            url: args[0],
+                            error: error.message,
+                            timestamp: new Date().toISOString()
+                        });
+                        addLog('error', `Fetch Error: ${args[0]}`, { error: error.message });
+                        throw error;
+                    });
+            };
+
+            analysis.push(`<div class="log info"><strong>404 Monitor Ativado</strong><br>Capturando recursos que falharam...</div>`);
+            analysis.push(`<div class="log ${failedResources.length > 0 ? 'error' : 'success'}"><strong>Recursos com 404:</strong><br>${failedResources.length > 0 ? failedResources.map(r => `${r.url} (${r.status || r.error})`).join('<br>') : 'Nenhum detectado ainda'}</div>`);
+
+            analysisDiv.innerHTML = analysis.join('');
+            addLog('info', 'Monitor 404 ativado', { failedResourcesCount: failedResources.length });
+        }
+
+        function scanExternalScripts() {
+            const scriptsDiv = document.getElementById('external-scripts');
+            const scripts = Array.from(document.querySelectorAll('script[src]'));
+            const external = scripts.filter(script => {
+                const src = script.src;
+                return src && !src.startsWith(location.origin) && !src.startsWith('blob:');
+            });
+
+            const analysis = external.map(script => {
+                const src = script.src;
+                const isAnalytics = src.includes('analytics') || src.includes('rudder') || src.includes('gtag');
+                const isSocial = src.includes('facebook') || src.includes('twitter');
+                const isCDN = src.includes('cdn') || src.includes('googleapis');
+
+                return `
+                    <div class="log ${isAnalytics ? 'error' : isSocial ? 'warning' : isCDN ? 'info' : 'info'}">
+                        <strong>${isAnalytics ? '🎯 ANALYTICS' : isSocial ? '📱 SOCIAL' : isCDN ? '📦 CDN' : '🔗 EXTERNAL'}:</strong><br>
+                        ${src}<br>
+                        <small>Tipo: ${script.type || 'text/javascript'}, Async: ${script.async}, Defer: ${script.defer}</small>
+                    </div>
+                `;
+            }).join('');
+
+            scriptsDiv.innerHTML = analysis || '<div class="log success">Nenhum script externo suspeito encontrado ✅</div>';
+            addLog('info', 'Scan de scripts externos completo', { externalCount: external.length });
+        }
+
+        function simulateRSError() {
+            try {
+                // Simular erro exato
+                throw new Error('RS SDK - Google Ads  Email, Phone are mandatory fields and either of FirstName, LastName, PostalCode, Country is mandatory for identify call');
+            } catch (error) {
+                addLog('error', 'Erro RS SDK simulado', { message: error.message });
+                console.error(error);
+            }
+        }
+
+        function showSolutions() {
+            const solutionsDiv = document.getElementById('solutions');
+            const solutions = `
+                <div class="log info">
+                    <strong>💡 Soluções Identificadas:</strong><br><br>
+                    <strong>1. Para RS SDK Error:</strong><br>
+                    • Bloquear carregamento do RudderStack via CSP<br>
+                    • Implementar stub/mock para window.rudderanalytics<br>
+                    • Suprimir errors via console.error override (já implementado)<br><br>
+                    
+                    <strong>2. Para 404 Resources:</strong><br>
+                    • Verificar se assets existem no build<br>
+                    • Verificar configuração de roteamento<br>
+                    • Implementar fallbacks para recursos críticos<br><br>
+                    
+                    <strong>3. Correção no main.tsx:</strong><br>
+                    • Sistema de supressão já está ativo<br>
+                    • Verificar se todos os patterns estão cobertos<br>
+                    • Considerar implementar service worker para interceptar requests
+                </div>
+            `;
+
+            solutionsDiv.innerHTML = solutions;
+            addLog('info', 'Soluções exibidas');
+        }
+
+        function applyQuickFix() {
+            // Aplicar correções em runtime
+
+            // 1. Criar stub para RudderStack
+            if (!window.rudderanalytics) {
+                window.rudderanalytics = {
+                    identify: () => addLog('info', 'RudderStack identify() interceptado'),
+                    track: () => addLog('info', 'RudderStack track() interceptado'),
+                    page: () => addLog('info', 'RudderStack page() interceptado'),
+                    ready: (callback) => callback && callback()
+                };
+            }
+
+            // 2. Interceptar todos os console errors
+            const originalError = console.error;
+            console.error = function (...args) {
+                const message = args.join(' ');
+                if (message.includes('RS SDK') ||
+                    message.includes('RudderStack') ||
+                    message.includes('Email, Phone are mandatory') ||
+                    message.includes('identify call')) {
+                    addLog('warning', `Erro RS SDK suprimido: ${message.substring(0, 100)}...`);
+                    return;
+                }
+                return originalError.apply(console, args);
+            };
+
+            // 3. Interceptar network errors
+            const originalFetch = window.fetch;
+            window.fetch = function (...args) {
+                const url = args[0];
+                if (typeof url === 'string' && (
+                    url.includes('rudder') ||
+                    url.includes('analytics') ||
+                    url.includes('8113-') ||
+                    url.includes('c0166af3-')
+                )) {
+                    addLog('warning', `Fetch bloqueado: ${url}`);
+                    return Promise.resolve(new Response('{}', { status: 204 }));
+                }
+                return originalFetch.apply(this, args);
+            };
+
+            addLog('success', 'Quick Fix aplicado com sucesso!');
+            alert('🚀 Correções aplicadas! Verifique o console para confirmar.');
+        }
+
+        function clearErrorLog() {
+            logs.length = 0;
+            updateCompleteLog();
+            addLog('info', 'Log limpo');
+        }
+
+        function exportLog() {
+            const logData = {
+                timestamp: new Date().toISOString(),
+                url: location.href,
+                userAgent: navigator.userAgent,
+                logs: logs
+            };
+
+            const blob = new Blob([JSON.stringify(logData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `debug-log-${Date.now()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            addLog('info', 'Log exportado');
+        }
+
+        // Interceptar erros globais
+        window.addEventListener('error', (event) => {
+            const message = event.message || event.error?.message || 'Unknown error';
+            if (message.includes('RS SDK') ||
+                message.includes('RudderStack') ||
+                message.includes('Email, Phone are mandatory')) {
+                addLog('error', `Global Error (RS SDK): ${message}`, {
+                    filename: event.filename,
+                    lineno: event.lineno,
+                    colno: event.colno
+                });
+                event.preventDefault();
+                return false;
+            }
+            addLog('error', `Global Error: ${message}`, {
+                filename: event.filename,
+                lineno: event.lineno
+            });
+        });
+
+        // Interceptar promise rejections
+        window.addEventListener('unhandledrejection', (event) => {
+            const message = String(event.reason);
+            if (message.includes('RS SDK') || message.includes('RudderStack')) {
+                addLog('error', `Unhandled Promise Rejection (RS SDK): ${message}`);
+                event.preventDefault();
+            } else {
+                addLog('error', `Unhandled Promise Rejection: ${message}`);
+            }
+        });
+
+        // Auto-inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            addLog('info', 'Debug tool inicializado');
+            setTimeout(checkSystemStatus, 500);
+            setTimeout(analyzeRSSdk, 1000);
+            setTimeout(analyze404Resources, 1500);
+            setTimeout(scanExternalScripts, 2000);
+        });
+    </script>
+</body>
+
+</html>
