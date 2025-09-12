@@ -20,7 +20,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
 }) => {
     const navigate = useNavigate();
     const editorRef = useRef<HTMLDivElement>(null);
-    
+
     // Estados do editor
     const [quiz, setQuiz] = useState(initialQuiz);
     const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
@@ -79,7 +79,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
 
             {/* Main Layout - 4 colunas exatamente como o editor antigo */}
             <div className="flex h-[calc(100vh-3.5rem)]">
-                
+
                 {/* 1) Etapas - 10% */}
                 <div className="w-[10%] bg-gray-900 border-r border-gray-800/50 overflow-y-auto">
                     <QuizStepsNavigation
@@ -113,10 +113,10 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                                 </div>
                             </div>
                         )}
-                        
+
                         <div className="h-full flex items-center justify-center p-8">
                             <div className="max-w-4xl w-full">
-                                <Canvas 
+                                <Canvas
                                     quiz={quiz}
                                     selectedBlockId={selectedBlockId}
                                     onBlockSelect={setSelectedBlockId}
