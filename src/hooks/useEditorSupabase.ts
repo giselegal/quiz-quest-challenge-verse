@@ -34,10 +34,10 @@ export const useEditorSupabase = (funnelId?: string, quizId?: string) => {
     setError(null);
 
     try {
+      // ✅ Sintaxe correta v2.x: .from() seguido de .select()
       let query = supabase
         .from('component_instances')
-        .select('*')
-        .order('order_index', { ascending: true });
+        .select('*');
 
       // Use funnel_id or quiz_id depending on what's available
       if (funnelId) {
@@ -46,14 +46,19 @@ export const useEditorSupabase = (funnelId?: string, quizId?: string) => {
         query = query.eq('quiz_id', quizId);
       }
 
-      const { data, error: fetchError } = await query;
+      // ✅ .order() APÓS .eq() (sintaxe v2.x)
+      const { data, error: fetchError } = await query.order('order_index', { ascending: true });
 
       if (fetchError) {
         throw fetchError;
       }
 
+      // ✅ Validação robusta de dados
+      const validatedData = Array.isArray(data) ? data : [];
+      console.log(`[useEditorSupabase] Carregados ${validatedData.length} componentes`);
+
       setComponents(
-        (data || []).map(item => ({
+        validatedData.map(item => ({
           ...item,
           funnel_id: item.funnel_id || null,
           quiz_id: null, // Legacy field for backward compatibility

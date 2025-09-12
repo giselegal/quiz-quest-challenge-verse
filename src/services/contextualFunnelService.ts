@@ -286,6 +286,7 @@ export class ContextualFunnelService implements ContextualService {
             } = await supabase.auth.getUser();
             if (!user) throw new Error('Usuário não autenticado');
 
+            // ✅ Sintaxe correta v2.x: .from() seguido de .select() 
             const { data: funnels, error } = await supabase
                 .from('funnels')
                 .select('*')
@@ -294,8 +295,12 @@ export class ContextualFunnelService implements ContextualService {
 
             if (error) throw error;
 
+            // ✅ Validação robusta de dados
+            const validatedFunnels = Array.isArray(funnels) ? funnels : [];
+            console.log(`[ContextualFunnelService] Encontrados ${validatedFunnels.length} funis para contexto ${this.context}`);
+
             // ✅ Filtrar apenas funis do contexto atual
-            const contextualFunnels = funnels.filter(funnel => {
+            const contextualFunnels = validatedFunnels.filter(funnel => {
                 const settings = (funnel.settings as any) || {};
                 return settings.context === this.context ||
                     (validateContextualId(funnel.id, this.context));
@@ -444,9 +449,12 @@ export class ContextualFunnelService implements ContextualService {
             // ✅ Remover páginas existentes
             await supabase.from('funnel_pages').delete().eq('funnel_id', funnelId);
 
-            // ✅ Inserir novas páginas
+            // ✅ Inserir novas páginas com validação
             if (pages.length > 0) {
-                const pagesData = pages.map((page, index) => ({
+                // ✅ Validação robusta antes de usar .map()
+                const validatedPages = Array.isArray(pages) ? pages : [];
+                
+                const pagesData = validatedPages.map((page, index) => ({
                     id: page.id || generateId(),
                     funnel_id: funnelId,
                     page_type: page.pageType || 'step',

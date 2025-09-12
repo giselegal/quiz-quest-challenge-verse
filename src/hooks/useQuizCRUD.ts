@@ -50,7 +50,7 @@ export const useQuizCRUD = () => {
     setError(null);
 
     try {
-      // Use funnels table from unified schema instead of quizzes table
+      // ✅ Sintaxe correta v2.x: .from() seguido de .select()
       const { data, error } = await supabase
         .from('funnels')
         .select(
@@ -77,12 +77,19 @@ export const useQuizCRUD = () => {
 
       if (error) throw error;
 
+      // ✅ Validação robusta de dados
+      const validatedData = Array.isArray(data) ? data : [];
+      console.log(`[useQuizCRUD] Carregados ${validatedData.length} quizzes do usuário`);
+
       // Convert funnel format to quiz format for backward compatibility
-      const formattedQuizzes: SavedQuiz[] = (data || []).map(funnel => {
+      const formattedQuizzes: SavedQuiz[] = validatedData.map(funnel => {
         // Extract questions from funnel pages
         const questions: QuizQuestion[] = [];
 
-        funnel.funnel_pages?.forEach(page => {
+        // ✅ Validação das páginas do funil
+        const pages = Array.isArray(funnel.funnel_pages) ? funnel.funnel_pages : [];
+        
+        pages.forEach(page => {
           if (page.page_type === 'question' && page.blocks) {
             const blocks = Array.isArray(page.blocks) ? page.blocks : [];
             blocks.forEach((block: any) => {
