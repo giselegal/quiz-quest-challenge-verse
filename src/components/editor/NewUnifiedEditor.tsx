@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Save } from 'lucide-react';
+import { ArrowLeft, Save, History } from 'lucide-react';
 import { CombinedComponentsPanel } from './CombinedComponentsPanel';
+import { useEditorHistory, useHistoryShortcuts } from '@/hooks/useEditorHistory';
+import { HistoryPanel, HistoryToolbar } from './history/HistoryPanel';
+import { createBlockActions, createStepActions, createQuizActions } from '@/utils/editorActions';
 
 interface UnifiedEditorProps {
     quiz?: any;
@@ -16,34 +19,128 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
 }) => {
     const navigate = useNavigate();
 
-    // Estados do editor
-    const [quiz, setQuiz] = useState(initialQuiz || {
+    const initialData = initialQuiz || {
         title: 'Novo Quiz',
         stages: [{
             id: 'step-1',
             name: 'Etapa 1',
             blocks: []
         }]
+    };
+
+    // Sistema de histórico
+    const {
+        currentData: quiz,
+        setCurrentData: setQuiz,
+        addHistoryEntry,
+        undo,
+        redo,
+        goToEntry,
+        clearHistory,
+        historyEntries,
+        currentIndex,
+        canUndo,
+        canRedo,
+        historyStats
+    } = useEditorHistory(initialData, {
+        maxHistorySize: 50,
+        persistToStorage: true,
+        storageKey: 'quiz-editor-history',
+        onUndo: (entry) => {
+            console.log('🔙 Undo:', entry.description);
+        },
+        onRedo: (entry) => {
+            console.log('🔜 Redo:', entry.description);
+        }
     });
+
+    // Atalhos de teclado para histórico
+    useHistoryShortcuts(undo, redo);
+
+    // Ações do editor com histórico
+    const blockActions = createBlockActions(addHistoryEntry);
+    const stepActions = createStepActions(addHistoryEntry);
+    const quizActions = createQuizActions(addHistoryEntry);
+
+    // Estados locais
     const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
     const [error, setError] = useState<Error | null>(null);
     const [currentStep, setCurrentStep] = useState(1);
+    const [showHistoryPanel, setShowHistoryPanel] = useState(false);
 
     // Atualizar quiz quando props mudarem
     useEffect(() => {
-        if (initialQuiz) {
+        if (initialQuiz && JSON.stringify(initialQuiz) !== JSON.stringify(quiz)) {
             setQuiz(initialQuiz);
         }
-    }, [initialQuiz]);
+    }, [initialQuiz, quiz, setQuiz]);
 
-    const handleQuizUpdate = (updatedQuiz: any) => {
-        setQuiz(updatedQuiz);
-        onQuizUpdate?.(updatedQuiz);
-    };
+    // Sincronizar com callback externo
+    useEffect(() => {
+        onQuizUpdate?.(quiz);
+    }, [quiz, onQuizUpdate]);
 
     const handleStepSelect = (stepNumber: number) => {
-        setCurrentStep(stepNumber);
-        console.log(`Selecionada etapa: ${stepNumber}`);
+        if (stepNumber !== currentStep) {
+            const previousStep = currentStep;
+            setCurrentStep(stepNumber);
+            
+            // Adicionar ao histórico se for uma mudança significativa
+            if (Math.abs(stepNumber - previousStep) > 1) {
+                const newData = { ...quiz, currentStep: stepNumber };
+                stepActions.editStep(
+                    `step-${stepNumber}`,
+                    'navigation',
+                    `step-${previousStep}`,
+                    `step-${stepNumber}`,
+                    newData
+                );
+            }
+        }
+    };
+
+    // Exemplo de função para adicionar bloco (demonstração)
+    const handleAddBlock = (blockType: string) => {
+        const newBlock = {
+            id: `block-${Date.now()}`,
+            type: blockType,
+            content: `Novo ${blockType}`,
+            properties: {}
+        };
+
+        const stepId = `step-${currentStep}`;
+        const updatedQuiz = {
+            ...quiz,
+            stages: quiz.stages.map((stage: any) => 
+                stage.id === stepId 
+                    ? { ...stage, blocks: [...stage.blocks, newBlock] }
+                    : stage
+            )
+        };
+
+        setQuiz(updatedQuiz);
+        blockActions.addBlock(stepId, newBlock, updatedQuiz);
+    };
+
+    // Exemplo de função para remover bloco
+    const handleRemoveBlock = (blockId: string) => {
+        const stepId = `step-${currentStep}`;
+        const stage = quiz.stages.find((s: any) => s.id === stepId);
+        const block = stage?.blocks.find((b: any) => b.id === blockId);
+
+        if (block) {
+            const updatedQuiz = {
+                ...quiz,
+                stages: quiz.stages.map((stage: any) => 
+                    stage.id === stepId 
+                        ? { ...stage, blocks: stage.blocks.filter((b: any) => b.id !== blockId) }
+                        : stage
+                )
+            };
+
+            setQuiz(updatedQuiz);
+            blockActions.removeBlock(stepId, blockId, block.type, updatedQuiz);
+        }
     };
 
     // Componente de navegação por etapas
@@ -72,7 +169,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
 
     return (
         <div className="h-screen w-full bg-black overflow-hidden">
-            {/* Top Bar - Idêntico ao editor antigo */}
+            {/* Top Bar com controles de histórico */}
             <div className="h-14 bg-gray-900 border-b border-gray-800/50 flex items-center justify-between px-4">
                 <div className="flex items-center gap-4">
                     <button
@@ -82,10 +179,37 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                         <ArrowLeft className="w-4 h-4" />
                         <span className="text-sm">Dashboard</span>
                     </button>
+
+                    {/* Toolbar de histórico */}
+                    <div className="flex items-center gap-1 px-2 py-1 bg-gray-800 rounded">
+                        <HistoryToolbar 
+                            canUndo={canUndo}
+                            canRedo={canRedo}
+                            onUndo={undo}
+                            onRedo={redo}
+                        />
+                    </div>
                 </div>
+                
                 <h1 className="text-lg font-semibold text-white">Quiz Editor</h1>
+                
                 <div className="flex items-center gap-2">
-                    <span className="text-xs text-gray-400">Auto-save ativo</span>
+                    <span className="text-xs text-gray-400">
+                        {historyEntries.length} ações | Auto-save ativo
+                    </span>
+                    
+                    <button
+                        onClick={() => setShowHistoryPanel(!showHistoryPanel)}
+                        className={`p-1.5 rounded transition-colors ${
+                            showHistoryPanel 
+                                ? 'bg-blue-600 text-white' 
+                                : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                        }`}
+                        title="Painel de Histórico"
+                    >
+                        <History className="w-4 h-4" />
+                    </button>
+                    
                     {quickSave && (
                         <button
                             onClick={quickSave}
@@ -98,7 +222,24 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                 </div>
             </div>
 
-            {/* Main Layout - 4 colunas exatamente como o editor antigo */}
+            {/* Painel de histórico flutuante */}
+            {showHistoryPanel && (
+                <div className="absolute top-16 right-4 w-80 z-50">
+                    <HistoryPanel 
+                        entries={historyEntries}
+                        currentIndex={currentIndex}
+                        canUndo={canUndo}
+                        canRedo={canRedo}
+                        onUndo={undo}
+                        onRedo={redo}
+                        onGoToEntry={goToEntry}
+                        onClearHistory={clearHistory}
+                        historyStats={historyStats}
+                    />
+                </div>
+            )}
+
+            {/* Main Layout - 4 colunas */}
             <div className="flex h-[calc(100vh-3.5rem)]">
 
                 {/* 1) Etapas - 10% */}
@@ -113,6 +254,28 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                         <p className="text-xs text-gray-400">Arraste para adicionar</p>
                     </div>
                     <CombinedComponentsPanel />
+                    
+                    {/* Botões de demonstração de histórico */}
+                    <div className="p-3 border-t border-gray-800/50 space-y-2">
+                        <button
+                            onClick={() => handleAddBlock('text-block')}
+                            className="w-full px-2 py-1 text-xs bg-green-600 hover:bg-green-700 text-white rounded"
+                        >
+                            + Texto (Demo)
+                        </button>
+                        <button
+                            onClick={() => {
+                                const currentStage = quiz.stages.find((s: any) => s.id === `step-${currentStep}`);
+                                const lastBlock = currentStage?.blocks?.[currentStage.blocks.length - 1];
+                                if (lastBlock) {
+                                    handleRemoveBlock(lastBlock.id);
+                                }
+                            }}
+                            className="w-full px-2 py-1 text-xs bg-red-600 hover:bg-red-700 text-white rounded"
+                        >
+                            - Remover (Demo)
+                        </button>
+                    </div>
                 </div>
 
                 {/* 3) Canvas - 55% */}
@@ -124,7 +287,10 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                                 📝 Etapa {currentStep}
                             </h2>
                             <span className="text-xs text-gray-400">
-                                0 blocos
+                                {(() => {
+                                    const currentStage = quiz.stages.find((s: any) => s.id === `step-${currentStep}`);
+                                    return currentStage?.blocks?.length || 0;
+                                })()} blocos
                             </span>
                         </div>
                         <div className="flex items-center gap-2">
@@ -150,16 +316,50 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
 
                         <div className="h-full flex items-center justify-center p-8">
                             <div className="max-w-4xl w-full">
-                                {/* Canvas Placeholder - será substituído pelo Canvas real */}
-                                <div className="bg-white rounded-lg shadow-lg min-h-96 p-6 border-2 border-dashed border-gray-300">
-                                    <div className="text-center text-gray-500">
+                                {/* Canvas com blocos */}
+                                <div className="bg-white rounded-lg shadow-lg min-h-96 p-6">
+                                    <div className="text-center text-gray-500 mb-4">
                                         <h3 className="text-lg font-semibold mb-2">Canvas do Quiz</h3>
-                                        <p className="text-sm">Arraste componentes aqui para construir sua etapa</p>
-                                        <div className="mt-4 p-4 bg-gray-50 rounded">
-                                            <p className="text-xs text-gray-400">
-                                                Etapa atual: {currentStep}/21
-                                            </p>
-                                        </div>
+                                        <p className="text-sm">Etapa {currentStep}/21 - Use os botões de demonstração</p>
+                                    </div>
+                                    
+                                    {/* Renderizar blocos da etapa atual */}
+                                    <div className="space-y-3">
+                                        {(() => {
+                                            const currentStage = quiz.stages.find((s: any) => s.id === `step-${currentStep}`);
+                                            const blocks = currentStage?.blocks || [];
+                                            
+                                            if (blocks.length === 0) {
+                                                return (
+                                                    <div className="p-4 border-2 border-dashed border-gray-300 rounded text-center">
+                                                        <p className="text-xs text-gray-400">
+                                                            Nenhum bloco ainda. Use os botões de demonstração!
+                                                        </p>
+                                                    </div>
+                                                );
+                                            }
+                                            
+                                            return blocks.map((block: any, index: number) => (
+                                                <div key={block.id} className="p-3 bg-gray-50 rounded border">
+                                                    <div className="flex justify-between items-start">
+                                                        <div>
+                                                            <div className="text-sm font-medium text-gray-700">
+                                                                {block.type} #{index + 1}
+                                                            </div>
+                                                            <div className="text-xs text-gray-500 mt-1">
+                                                                {block.content}
+                                                            </div>
+                                                        </div>
+                                                        <button
+                                                            onClick={() => handleRemoveBlock(block.id)}
+                                                            className="text-red-500 hover:text-red-700 text-xs"
+                                                        >
+                                                            ❌
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            ));
+                                        })()}
                                     </div>
                                 </div>
                             </div>
@@ -183,6 +383,23 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                                 Selecione um bloco para<br />configurar suas propriedades
                             </div>
                         )}
+                        
+                        {/* Informações do histórico */}
+                        <div className="mt-6 p-3 bg-gray-800 rounded">
+                            <h4 className="text-xs font-semibold text-white mb-2">💾 Histórico</h4>
+                            <div className="space-y-1 text-xs text-gray-400">
+                                <div>Ações: {historyEntries.length}</div>
+                                <div>Posição: {currentIndex + 1}</div>
+                                <div className="flex gap-1 mt-2">
+                                    <span className={`px-1 py-0.5 rounded ${canUndo ? 'bg-blue-600' : 'bg-gray-700'}`}>
+                                        Ctrl+Z
+                                    </span>
+                                    <span className={`px-1 py-0.5 rounded ${canRedo ? 'bg-green-600' : 'bg-gray-700'}`}>
+                                        Ctrl+Y
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
