@@ -47,7 +47,7 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
 
     // Convert stepBlocks to stages format for display
     const stages = useMemo(() => convertStepBlocksToStages(stepBlocks || {}), [stepBlocks]);
-    
+
     // Mock data for compatibility with existing UI
     const funnel = useMemo(() => ({
         id: 'quiz21-steps-complete',
