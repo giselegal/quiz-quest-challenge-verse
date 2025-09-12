@@ -1,5 +1,5 @@
-import React, { useState, useRef, useCallback } from 'react';
-import { useUnifiedEditor } from '@/hooks/core/useUnifiedEditor';
+import React, { useState, useRef, useCallback, useMemo } from 'react';
+import { useEditor } from '@/components/editor/EditorProvider';
 import { PerformanceMonitor } from './PerformanceMonitor';
 import { UsabilityTester } from './UsabilityTester';
 import { AutoOptimizer } from './AutoOptimizer';
@@ -8,6 +8,18 @@ import { QuickCloneModal } from './QuickCloneModal';
 import { AutoSaveManager } from './AutoSaveManager';
 import { useHistory, HistoryPanel, useHistoryShortcuts } from './HistoryManagerSimple';
 import { useCollaboration, CollaborationPanel, CursorOverlay, useMouseTracking } from './CollaborationManager';
+
+// Adaptador para converter stepBlocks em format de stages
+const convertStepBlocksToStages = (stepBlocks: Record<string, any[]>) => {
+    return Object.entries(stepBlocks).map(([stepKey, blocks]) => {
+        const stepNumber = parseInt(stepKey.replace('step-', ''));
+        return {
+            id: stepKey,
+            name: `Etapa ${stepNumber}`,
+            blocks: blocks || []
+        };
+    });
+};
 
 export const SimpleRevolutionaryEditor: React.FC = () => {
     const [editorMode, setEditorMode] = useState<'visual' | 'preview'>('visual');
@@ -28,16 +40,28 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
 
     const editorRef = useRef<HTMLDivElement>(null);
 
-    const {
-        funnel,
-        activeStageId,
-        selectedBlockId,
-        selectedBlock,
-        isLoading,
-        addBlock,
-        updateBlock,
-        setSelectedBlock
-    } = useUnifiedEditor();
+    // Use the EditorProvider context instead of useUnifiedEditor
+    const { state, actions } = useEditor();
+    const { stepBlocks, currentStep, selectedBlockId } = state;
+    const { addBlock, updateBlock, setCurrentStep, setSelectedBlockId } = actions;
+
+    // Convert stepBlocks to stages format for display
+    const stages = useMemo(() => convertStepBlocksToStages(stepBlocks || {}), [stepBlocks]);
+    
+    // Mock data for compatibility with existing UI
+    const funnel = useMemo(() => ({
+        id: 'quiz21-steps-complete',
+        name: 'Quiz 21 Etapas',
+        stages: stages
+    }), [stages]);
+
+    const isLoading = false;
+    const activeStageId = `step-${currentStep}`;
+    const selectedBlock = selectedBlockId ? stages.flatMap(s => s.blocks).find(b => b.id === selectedBlockId) : null;
+
+    const setSelectedBlock = useCallback((blockId: string) => {
+        setSelectedBlockId(blockId);
+    }, [setSelectedBlockId]);
 
     // Auto-save hook
     const autoSave = useCallback(async () => {
@@ -136,8 +160,15 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                                 onClick={async () => {
                                     if (activeStageId) {
                                         try {
-                                            const newBlockId = await addBlock(activeStageId, component.type);
-                                            setSelectedBlock(newBlockId);
+                                            const newBlock = {
+                                                id: `block-${Date.now()}`,
+                                                type: component.type as any, // Type assertion for now
+                                                order: 0,
+                                                content: {},
+                                                properties: {}
+                                            };
+                                            await addBlock(activeStageId, newBlock);
+                                            setSelectedBlock(newBlock.id);
                                         } catch (error) {
                                             console.error('Erro ao adicionar componente:', error);
                                         }
@@ -395,7 +426,7 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                                     onChange={async (e) => {
                                         try {
                                             const newContent = JSON.parse(e.target.value);
-                                            await updateBlock(selectedBlock.id, { content: newContent } as any);
+                                            await updateBlock(activeStageId, selectedBlock.id, { content: newContent });
                                         } catch (error) {
                                             console.error('JSON inválido:', error);
                                         }
