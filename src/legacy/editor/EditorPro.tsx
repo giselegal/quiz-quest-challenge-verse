@@ -804,7 +804,7 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
         onDelete={() => selectedBlock ? actions.removeBlock(currentStepKey, selectedBlock.id) : undefined}
         onDuplicate={handleDuplicateSelected}
         onReset={handleResetSelected}
-        previewMode={previewDevice}
+        previewMode={previewDevice as 'desktop' | 'tablet' | 'mobile'}
         onPreviewModeChange={setPreviewDevice}
         className="!w-[20%] !min-w-0 !max-w-none"
       />
