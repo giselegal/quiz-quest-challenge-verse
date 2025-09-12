@@ -1,46 +1,6 @@
 // @ts-nocheck
 import type { BlockData } from './funnelService';
-import { getDefaultPageConfig } from '../data/defaultPageConfigs';
-
-export interface PageStyles {
-  backgroundColor?: string;
-  textColor?: string;
-  fontFamily?: string;
-  customCSS?: string;
-}
-
-export interface PageMetadata {
-  title?: string;
-  description?: string;
-  keywords?: string[];
-  ogImage?: string;
-}
-
-export interface ConfigBlock extends BlockData {
-  componentType?: string;
-  props?: Record<string, any>;
-  children?: ConfigBlock[];
-  conditionalRender?: {
-    condition: string;
-    value: any;
-  };
-}
-
-export interface PageConfig {
-  pageId: string;
-  pageName: string;
-  blocks: ConfigBlock[];
-  styles: PageStyles;
-  metadata: PageMetadata;
-  settings: {
-    showProgress?: boolean;
-    progressValue?: number;
-    abTestVariant?: string;
-    customScripts?: string[];
-  };
-  lastModified: string;
-  version: number;
-}
+import { PageConfig, PageStyles, PageMetadata, ConfigBlock } from '../types/pageConfig';
 
 class PageConfigService {
   private baseUrl: string;

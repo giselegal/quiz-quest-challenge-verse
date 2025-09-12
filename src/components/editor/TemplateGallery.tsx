@@ -1,36 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { TemplateMarketplace } from './TemplateMarketplace';
-import { convertTemplateToFunnel, ConvertedFunnel } from '@/utils/templateConverter';
+import { Template } from '@/types/template';
 
-export interface Template {
-    id: string;
-    name: string;
-    description: string;
-    category: 'quiz' | 'landing' | 'lead-gen' | 'survey' | 'product' | 'educational';
-    thumbnail: string;
-    tags: string[];
-    difficulty: 'beginner' | 'intermediate' | 'advanced';
-    estimatedTime: number; // minutes
-    rating: number; // 1-5 stars
-    downloads: number;
-    author: string;
-    premium: boolean;
-    structure: TemplateFunnel;
-    preview?: string;
-}
-
-export interface TemplateFunnel {
-    name: string;
-    description: string;
-    stages: TemplateStage[];
-    settings: TemplateSettings;
-}
-
-export interface TemplateStage {
-    name: string;
-    description: string;
-    blocks: TemplateBlock[];
+// Template Marketplace será carregado dinamicamente para evitar import circular
+const TemplateMarketplace = React.lazy(() => import('./TemplateMarketplace').then(m => ({ default: m.TemplateMarketplace })));
+description: string;
+blocks: TemplateBlock[];
 }
 
 export interface TemplateBlock {

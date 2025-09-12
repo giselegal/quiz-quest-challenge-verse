@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Template } from './TemplateGallery';
+import { Template } from '@/types/template';
 
 interface MarketplaceStats {
     totalTemplates: number;
@@ -143,8 +143,8 @@ export const TemplateMarketplace: React.FC<TemplateMarketplaceProps> = ({
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id as any)}
                                 className={`px-4 py-2 rounded-lg text-sm font-medium transition ${activeTab === tab.id
-                                        ? 'bg-white text-blue-600 shadow-sm'
-                                        : 'text-white hover:bg-white hover:bg-opacity-20'
+                                    ? 'bg-white text-blue-600 shadow-sm'
+                                    : 'text-white hover:bg-white hover:bg-opacity-20'
                                     }`}
                             >
                                 {tab.label}
@@ -217,9 +217,9 @@ export const TemplateMarketplace: React.FC<TemplateMarketplaceProps> = ({
                                                     <div key={category.category} className="flex items-center justify-between">
                                                         <div className="flex items-center gap-3">
                                                             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${index === 0 ? 'bg-gold text-yellow-800' :
-                                                                    index === 1 ? 'bg-gray-200 text-gray-700' :
-                                                                        index === 2 ? 'bg-orange-100 text-orange-700' :
-                                                                            'bg-gray-100 text-gray-600'
+                                                                index === 1 ? 'bg-gray-200 text-gray-700' :
+                                                                    index === 2 ? 'bg-orange-100 text-orange-700' :
+                                                                        'bg-gray-100 text-gray-600'
                                                                 }`}>
                                                                 {index + 1}
                                                             </div>

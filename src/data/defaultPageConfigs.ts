@@ -1,4 +1,4 @@
-import { PageConfig } from '../services/pageConfigService';
+import { PageConfig } from '../types/pageConfig';
 
 export const defaultResultPageConfig: PageConfig = {
   pageId: 'result-page',
