@@ -13,6 +13,7 @@
 
 /* Import mobile responsive fixes */
 @import './styles/mobile-responsive-fixes.css';
+@import './styles/mobile-editor-responsive.css';
 
 /* Utilitário de largura consistente para coluna/canvas/componentes */
 @layer utilities {
