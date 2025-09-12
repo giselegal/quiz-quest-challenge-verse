@@ -1,13 +1,8 @@
 import React, { useState, useRef, useCallback, useMemo } from 'react';
 import { useEditor } from '@/components/editor/EditorProvider';
-import { PerformanceMonitor } from './PerformanceMonitor';
-import { UsabilityTester } from './UsabilityTester';
-import { AutoOptimizer } from './AutoOptimizer';
 import { TemplateGallery, Template } from './TemplateGallery';
 import { QuickCloneModal } from './QuickCloneModal';
 import { AutoSaveManager } from './AutoSaveManager';
-import { useHistory, HistoryPanel, useHistoryShortcuts } from './HistoryManagerSimple';
-import { useCollaboration, CollaborationPanel, CursorOverlay, useMouseTracking } from './CollaborationManager';
 
 // Adaptador para converter stepBlocks em format de stages
 const convertStepBlocksToStages = (stepBlocks: Record<string, any[]>) => {
