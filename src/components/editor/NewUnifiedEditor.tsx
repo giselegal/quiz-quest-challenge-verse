@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'wouter';
 import { ArrowLeft, Save, History, BookTemplate, FileDown } from 'lucide-react';
 import { CombinedComponentsPanel } from './CombinedComponentsPanel';
@@ -13,6 +13,7 @@ import { useCelebrationContext } from '@/components/ui/CelebrationSystem';
 import { convertTemplateToFunnel } from '@/utils/templateConverter';
 import { UniversalBlockRenderer } from '@/components/core/renderers';
 import EnhancedPropertiesPanel from '@/components/editor/properties/PropertiesPanel';
+import { DndContext, DragEndEvent, DragOverEvent, DragStartEvent } from '@dnd-kit/core';
 
 interface UnifiedEditorProps {
     quiz?: any;
@@ -357,6 +358,36 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
         blockActions.editBlock(stepId, blockId, 'properties', {}, updatedBlock, updatedQuiz);
     };
 
+    // Drag & Drop handlers
+    const handleDragStart = useCallback((event: DragStartEvent) => {
+        const { active } = event;
+        console.log('🔀 Drag started:', active.id);
+    }, []);
+
+    const handleDragOver = useCallback((event: DragOverEvent) => {
+        const { active, over } = event;
+        if (over && active.id !== over.id) {
+            console.log('🔀 Dragging over:', over.id);
+        }
+    }, []);
+
+    const handleDragEnd = useCallback((event: DragEndEvent) => {
+        const { active, over } = event;
+
+        if (over && active.data.current) {
+            const componentType = active.data.current.type;
+            console.log('🔀 Component dropped:', componentType);
+
+            // Adiciona o componente ao canvas
+            handleAddBlock(componentType);
+
+            toast.success(
+                'Componente adicionado!',
+                `${componentType} foi adicionado ao canvas`
+            );
+        }
+    }, [handleAddBlock, toast]);
+
     // Componente de navegação por etapas
     const StepsNavigation = () => (
         <div className="flex flex-col h-full">
@@ -382,331 +413,402 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
     );
 
     return (
-        <div className="h-screen w-full bg-black overflow-hidden">
-            {/* Top Bar com controles de histórico */}
-            <div className="h-14 bg-gray-900 border-b border-gray-800/50 flex items-center justify-between px-4">
-                <div className="flex items-center gap-4">
-                    <button
-                        onClick={() => setLocation('/dashboard')}
-                        className="flex items-center gap-2 px-3 py-1.5 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors"
-                    >
-                        <ArrowLeft className="w-4 h-4" />
-                        <span className="text-sm">Dashboard</span>
-                    </button>
+        <DndContext
+            onDragStart={handleDragStart}
+            onDragOver={handleDragOver}
+            onDragEnd={handleDragEnd}
+        >
+            <div className="h-screen w-full bg-black overflow-hidden">
+                {/* Top Bar com controles de histórico */}
+                <div className="h-14 bg-gray-900 border-b border-gray-800/50 flex items-center justify-between px-4">
+                    <div className="flex items-center gap-4">
+                        <button
+                            onClick={() => setLocation('/dashboard')}
+                            className="flex items-center gap-2 px-3 py-1.5 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors"
+                        >
+                            <ArrowLeft className="w-4 h-4" />
+                            <span className="text-sm">Dashboard</span>
+                        </button>
 
-                    {/* Toolbar de histórico */}
-                    <div className="flex items-center gap-1 px-2 py-1 bg-gray-800 rounded">
-                        <HistoryToolbar
+                        {/* Toolbar de histórico */}
+                        <div className="flex items-center gap-1 px-2 py-1 bg-gray-800 rounded">
+                            <HistoryToolbar
+                                canUndo={canUndo}
+                                canRedo={canRedo}
+                                onUndo={undo}
+                                onRedo={redo}
+                            />
+                        </div>
+                    </div>
+
+                    <h1 className="text-lg font-semibold text-white">Quiz Editor</h1>
+
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={() => setShowTemplateGallery(true)}
+                            className="flex items-center gap-2 px-3 py-1.5 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors"
+                            title="Galeria de Templates"
+                        >
+                            <BookTemplate className="w-4 h-4" />
+                            <span className="text-sm">Templates</span>
+                        </button>
+
+                        <button
+                            onClick={() => setShowExportImportModal(true)}
+                            className="flex items-center gap-2 px-3 py-1.5 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors"
+                            title="Exportar/Importar Quiz"
+                        >
+                            <FileDown className="w-4 h-4" />
+                            <span className="text-sm">Exportar/Importar</span>
+                        </button>
+
+                        <span className="text-xs text-gray-400 mr-2">
+                            {historyEntries.length} ações
+                        </span>
+
+                        <InlineLoading
+                            isLoading={isSaving}
+                            message="Salvando..."
+                            size="sm"
+                            color="blue"
+                            className="mr-2"
+                        />                    <button
+                            onClick={() => setShowHistoryPanel(!showHistoryPanel)}
+                            className={`p-1.5 rounded transition-colors ${showHistoryPanel
+                                ? 'bg-blue-600 text-white'
+                                : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                                }`}
+                            title="Painel de Histórico"
+                        >
+                            <History className="w-4 h-4" />
+                        </button>
+
+                        {quickSave && (
+                            <LoadingButton
+                                onClick={handleSave}
+                                isLoading={isSaving}
+                                loadingText="Salvando..."
+                                size="sm"
+                                variant="primary"
+                                className="flex items-center gap-1"
+                            >
+                                <Save className="w-3 h-3" />
+                                Salvar
+                            </LoadingButton>
+                        )}
+                    </div>
+                </div>
+
+                {/* Painel de histórico flutuante */}
+                {showHistoryPanel && (
+                    <div className="absolute top-16 right-4 w-80 z-50">
+                        <HistoryPanel
+                            entries={historyEntries}
+                            currentIndex={currentIndex}
                             canUndo={canUndo}
                             canRedo={canRedo}
                             onUndo={undo}
                             onRedo={redo}
+                            onGoToEntry={goToEntry}
+                            onClearHistory={clearHistory}
+                            historyStats={historyStats}
                         />
                     </div>
-                </div>
+                )}
 
-                <h1 className="text-lg font-semibold text-white">Quiz Editor</h1>
+                {/* Main Layout - 4 colunas */}
+                <div className="flex h-[calc(100vh-3.5rem)]">
 
-                <div className="flex items-center gap-2">
-                    <button
-                        onClick={() => setShowTemplateGallery(true)}
-                        className="flex items-center gap-2 px-3 py-1.5 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors"
-                        title="Galeria de Templates"
-                    >
-                        <BookTemplate className="w-4 h-4" />
-                        <span className="text-sm">Templates</span>
-                    </button>
-
-                    <button
-                        onClick={() => setShowExportImportModal(true)}
-                        className="flex items-center gap-2 px-3 py-1.5 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors"
-                        title="Exportar/Importar Quiz"
-                    >
-                        <FileDown className="w-4 h-4" />
-                        <span className="text-sm">Exportar/Importar</span>
-                    </button>
-
-                    <span className="text-xs text-gray-400 mr-2">
-                        {historyEntries.length} ações
-                    </span>
-
-                    <InlineLoading
-                        isLoading={isSaving}
-                        message="Salvando..."
-                        size="sm"
-                        color="blue"
-                        className="mr-2"
-                    />                    <button
-                        onClick={() => setShowHistoryPanel(!showHistoryPanel)}
-                        className={`p-1.5 rounded transition-colors ${showHistoryPanel
-                            ? 'bg-blue-600 text-white'
-                            : 'text-gray-400 hover:text-white hover:bg-gray-800'
-                            }`}
-                        title="Painel de Histórico"
-                    >
-                        <History className="w-4 h-4" />
-                    </button>
-
-                    {quickSave && (
-                        <LoadingButton
-                            onClick={handleSave}
-                            isLoading={isSaving}
-                            loadingText="Salvando..."
-                            size="sm"
-                            variant="primary"
-                            className="flex items-center gap-1"
-                        >
-                            <Save className="w-3 h-3" />
-                            Salvar
-                        </LoadingButton>
-                    )}
-                </div>
-            </div>
-
-            {/* Painel de histórico flutuante */}
-            {showHistoryPanel && (
-                <div className="absolute top-16 right-4 w-80 z-50">
-                    <HistoryPanel
-                        entries={historyEntries}
-                        currentIndex={currentIndex}
-                        canUndo={canUndo}
-                        canRedo={canRedo}
-                        onUndo={undo}
-                        onRedo={redo}
-                        onGoToEntry={goToEntry}
-                        onClearHistory={clearHistory}
-                        historyStats={historyStats}
-                    />
-                </div>
-            )}
-
-            {/* Main Layout - 4 colunas */}
-            <div className="flex h-[calc(100vh-3.5rem)]">
-
-                {/* 1) Etapas - 10% */}
-                <div className="w-[10%] bg-gray-900 border-r border-gray-800/50 overflow-y-auto">
-                    <StepsNavigation />
-                </div>
-
-                {/* 2) Componentes - 15% */}
-                <div className="w-[15%] bg-gray-900 border-r border-gray-800/50 overflow-y-auto">
-                    <div className="p-3 border-b border-gray-800/50">
-                        <h3 className="text-sm font-semibold text-white">📦 Componentes</h3>
-                        <p className="text-xs text-gray-400">Arraste para adicionar</p>
+                    {/* 1) Etapas - 10% */}
+                    <div className="w-[10%] bg-gray-900 border-r border-gray-800/50 overflow-y-auto">
+                        <StepsNavigation />
                     </div>
-                    <CombinedComponentsPanel />
 
-                    {/* Botões de demonstração de histórico */}
-                    <div className="p-3 border-t border-gray-800/50 space-y-2">
-                        <button
-                            onClick={() => handleAddBlock('text-block')}
-                            className="w-full px-2 py-1 text-xs bg-green-600 hover:bg-green-700 text-white rounded"
-                        >
-                            + Texto (Demo)
-                        </button>
-                        <button
-                            onClick={() => {
-                                const currentStage = quiz.stages.find((s: any) => s.id === `step-${currentStep}`);
-                                const lastBlock = currentStage?.blocks?.[currentStage.blocks.length - 1];
-                                if (lastBlock) {
-                                    handleRemoveBlock(lastBlock.id);
-                                }
-                            }}
-                            className="w-full px-2 py-1 text-xs bg-red-600 hover:bg-red-700 text-white rounded"
-                        >
-                            - Remover (Demo)
-                        </button>
-                    </div>
-                </div>
+                    {/* 2) Componentes - 15% */}
+                    <div className="w-[15%] bg-gray-900 border-r border-gray-800/50 overflow-y-auto">
+                        <div className="p-3 border-b border-gray-800/50">
+                            <h3 className="text-sm font-semibold text-white">📦 Componentes</h3>
+                            <p className="text-xs text-gray-400">Arraste para adicionar</p>
+                        </div>
+                        <CombinedComponentsPanel />
 
-                {/* 3) Canvas - 55% */}
-                <div className="w-[55%] flex flex-col bg-black">
-                    {/* Header do Canvas */}
-                    <div className="bg-gray-900 border-b border-gray-800/50 p-3 flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                            <h2 className="text-sm font-bold text-white">
-                                📝 Etapa {currentStep}
-                            </h2>
-                            <span className="text-xs text-gray-400">
-                                {(() => {
+                        {/* Botões de demonstração de histórico */}
+                        <div className="p-3 border-t border-gray-800/50 space-y-2">
+                            <button
+                                onClick={() => handleAddBlock('text-block')}
+                                className="w-full px-2 py-1 text-xs bg-green-600 hover:bg-green-700 text-white rounded"
+                            >
+                                + Texto (Demo)
+                            </button>
+                            <button
+                                onClick={() => {
                                     const currentStage = quiz.stages.find((s: any) => s.id === `step-${currentStep}`);
-                                    return currentStage?.blocks?.length || 0;
-                                })()} blocos
-                            </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <span className="text-xs text-gray-400">Preview</span>
+                                    const lastBlock = currentStage?.blocks?.[currentStage.blocks.length - 1];
+                                    if (lastBlock) {
+                                        handleRemoveBlock(lastBlock.id);
+                                    }
+                                }}
+                                className="w-full px-2 py-1 text-xs bg-red-600 hover:bg-red-700 text-white rounded"
+                            >
+                                - Remover (Demo)
+                            </button>
                         </div>
                     </div>
 
-                    <div className="flex-1 relative overflow-auto">
-                        {error && (
-                            <div className="absolute inset-0 z-50 bg-red-900/20 backdrop-blur-sm flex items-center justify-center">
-                                <div className="bg-red-900 border border-red-700 rounded-lg p-6 max-w-md">
-                                    <h3 className="text-white font-semibold mb-2">Editor Error</h3>
-                                    <p className="text-red-200 mb-4">{error.message}</p>
-                                    <button
-                                        onClick={() => setError(null)}
-                                        className="px-3 py-1.5 bg-red-800 hover:bg-red-700 text-white rounded text-sm"
-                                    >
-                                        Dismiss
-                                    </button>
-                                </div>
+                    {/* 3) Canvas - 35% */}
+                    <div className="w-[35%] flex flex-col bg-black border-r border-gray-800/50">
+                        {/* Header do Canvas com Navegação */}
+                        <div className="bg-gray-900 border-b border-gray-800/50 p-3 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <h2 className="text-sm font-bold text-white">
+                                    📝 Etapa {currentStep}
+                                </h2>
+                                <span className="text-xs text-gray-400">
+                                    {(() => {
+                                        const currentStage = quiz.stages.find((s: any) => s.id === `step-${currentStep}`);
+                                        return currentStage?.blocks?.length || 0;
+                                    })()} blocos
+                                </span>
                             </div>
-                        )}
 
-                        <div className="h-full flex items-center justify-center p-8">
-                            <div className="max-w-4xl w-full">
-                                {/* Canvas com blocos */}
-                                <div className="bg-white rounded-lg shadow-lg min-h-96 p-6">
-                                    <div className="text-center text-gray-500 mb-4">
-                                        <h3 className="text-lg font-semibold mb-2">Canvas do Quiz</h3>
-                                        <p className="text-sm">Etapa {currentStep}/21 - Use os botões de demonstração</p>
+                            {/* Controles de Navegação entre Etapas */}
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={() => handleStepSelect(Math.max(1, currentStep - 1))}
+                                    disabled={currentStep === 1}
+                                    className={`px-2 py-1 text-xs rounded transition-colors ${currentStep === 1
+                                            ? 'bg-gray-800 text-gray-500 cursor-not-allowed'
+                                            : 'bg-blue-600 hover:bg-blue-700 text-white'
+                                        }`}
+                                    title="Etapa Anterior"
+                                >
+                                    ← Anterior
+                                </button>
+                                <span className="text-xs text-gray-400 px-2">
+                                    {currentStep} / 21
+                                </span>
+                                <button
+                                    onClick={() => handleStepSelect(Math.min(21, currentStep + 1))}
+                                    disabled={currentStep === 21}
+                                    className={`px-2 py-1 text-xs rounded transition-colors ${currentStep === 21
+                                            ? 'bg-gray-800 text-gray-500 cursor-not-allowed'
+                                            : 'bg-blue-600 hover:bg-blue-700 text-white'
+                                        }`}
+                                    title="Próxima Etapa"
+                                >
+                                    Próxima →
+                                </button>
+                                <span className="text-xs text-gray-400 ml-2">Preview</span>
+                            </div>
+                        </div>
+
+                        <div className="flex-1 relative overflow-auto">
+                            {error && (
+                                <div className="absolute inset-0 z-50 bg-red-900/20 backdrop-blur-sm flex items-center justify-center">
+                                    <div className="bg-red-900 border border-red-700 rounded-lg p-6 max-w-md">
+                                        <h3 className="text-white font-semibold mb-2">Editor Error</h3>
+                                        <p className="text-red-200 mb-4">{error.message}</p>
+                                        <button
+                                            onClick={() => setError(null)}
+                                            className="px-3 py-1.5 bg-red-800 hover:bg-red-700 text-white rounded text-sm"
+                                        >
+                                            Dismiss
+                                        </button>
                                     </div>
+                                </div>
+                            )}
 
-                                    {/* Renderizar blocos da etapa atual com UniversalBlockRenderer */}
-                                    <div className="space-y-3">
-                                        {(() => {
-                                            const currentStage = quiz.stages.find((s: any) => s.id === `step-${currentStep}`);
-                                            const blocks = currentStage?.blocks || [];
+                            <div className="h-full flex items-center justify-center p-8">
+                                <div className="max-w-4xl w-full">
+                                    {/* Canvas com blocos */}
+                                    <div className="bg-white rounded-lg shadow-lg min-h-96 p-6">
+                                        <div className="text-center text-gray-500 mb-4">
+                                            <h3 className="text-lg font-semibold mb-2">Canvas do Quiz</h3>
+                                            <p className="text-sm">Etapa {currentStep}/21 - Use os botões de demonstração</p>
+                                        </div>
 
-                                            if (blocks.length === 0) {
-                                                return (
-                                                    <div className="p-4 border-2 border-dashed border-gray-300 rounded text-center">
-                                                        <p className="text-xs text-gray-400">
-                                                            Nenhum bloco ainda. Use os botões de demonstração!
-                                                        </p>
-                                                    </div>
-                                                );
-                                            }
+                                        {/* Renderizar blocos da etapa atual com UniversalBlockRenderer */}
+                                        <div className="space-y-3">
+                                            {(() => {
+                                                const currentStage = quiz.stages.find((s: any) => s.id === `step-${currentStep}`);
+                                                const blocks = currentStage?.blocks || [];
 
-                                            return blocks.map((block: any, index: number) => (
-                                                <div
-                                                    key={block.id}
-                                                    className={`relative group transition-all duration-200 ${selectedBlockId === block.id
+                                                if (blocks.length === 0) {
+                                                    return (
+                                                        <div className="p-4 border-2 border-dashed border-gray-300 rounded text-center">
+                                                            <p className="text-xs text-gray-400">
+                                                                Nenhum bloco ainda. Use os botões de demonstração!
+                                                            </p>
+                                                        </div>
+                                                    );
+                                                }
+
+                                                return blocks.map((block: any, index: number) => (
+                                                    <div
+                                                        key={block.id}
+                                                        className={`relative group transition-all duration-200 ${selectedBlockId === block.id
                                                             ? 'ring-2 ring-blue-500 ring-opacity-50 shadow-md'
                                                             : 'hover:shadow-sm'
-                                                        }`}
-                                                    onClick={() => setSelectedBlockId(block.id)}
-                                                >
-                                                    {/* Visual selection indicator */}
-                                                    {selectedBlockId === block.id && (
-                                                        <div className="absolute -top-1 -left-1 w-full h-full border-2 border-blue-500 rounded pointer-events-none opacity-20 bg-blue-500/10" />
-                                                    )}
-
-                                                    {/* Block controls overlay */}
-                                                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex gap-1">
-                                                        <button
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                handleRemoveBlock(block.id);
-                                                            }}
-                                                            className="bg-red-500 text-white p-1 rounded text-xs hover:bg-red-600"
-                                                        >
-                                                            ❌
-                                                        </button>
-                                                    </div>
-
-                                                    {/* Universal Block Renderer */}
-                                                    <UniversalBlockRenderer
-                                                        block={{
-                                                            ...block,
-                                                            // Ensure block has required properties
-                                                            id: block.id || `block-${index}`,
-                                                            type: block.type || 'text-block',
-                                                            content: block.content || {},
-                                                            properties: block.properties || {}
-                                                        }}
-                                                        isSelected={selectedBlockId === block.id}
+                                                            }`}
                                                         onClick={() => setSelectedBlockId(block.id)}
-                                                        onPropertyChange={(key: string, value: any) => {
-                                                            const updatedBlock = {
+                                                    >
+                                                        {/* Visual selection indicator */}
+                                                        {selectedBlockId === block.id && (
+                                                            <div className="absolute -top-1 -left-1 w-full h-full border-2 border-blue-500 rounded pointer-events-none opacity-20 bg-blue-500/10" />
+                                                        )}
+
+                                                        {/* Block controls overlay */}
+                                                        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex gap-1">
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    handleRemoveBlock(block.id);
+                                                                }}
+                                                                className="bg-red-500 text-white p-1 rounded text-xs hover:bg-red-600"
+                                                            >
+                                                                ❌
+                                                            </button>
+                                                        </div>
+
+                                                        {/* Universal Block Renderer */}
+                                                        <UniversalBlockRenderer
+                                                            block={{
                                                                 ...block,
-                                                                properties: {
-                                                                    ...block.properties,
-                                                                    [key]: value
-                                                                }
-                                                            };
-                                                            handleBlockUpdate(block.id, updatedBlock);
-                                                        }}
-                                                        mode="editor"
-                                                        isPreviewMode={false}
-                                                    />
-                                                </div>
-                                            ));
-                                        })()}
+                                                                // Ensure block has required properties
+                                                                id: block.id || `block-${index}`,
+                                                                type: block.type || 'text-block',
+                                                                content: block.content || {},
+                                                                properties: block.properties || {}
+                                                            }}
+                                                            isSelected={selectedBlockId === block.id}
+                                                            onClick={() => setSelectedBlockId(block.id)}
+                                                            onPropertyChange={(key: string, value: any) => {
+                                                                const updatedBlock = {
+                                                                    ...block,
+                                                                    properties: {
+                                                                        ...block.properties,
+                                                                        [key]: value
+                                                                    }
+                                                                };
+                                                                handleBlockUpdate(block.id, updatedBlock);
+                                                            }}
+                                                            mode="editor"
+                                                            isPreviewMode={false}
+                                                        />
+                                                    </div>
+                                                ));
+                                            })()}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    {/* 4) Preview em Tempo Real - 20% */}
+                    <div className="w-[20%] bg-gray-800 border-r border-gray-800/50 overflow-y-auto">
+                        <div className="p-3 border-b border-gray-700/50">
+                            <h3 className="text-sm font-semibold text-white">👁️ Preview</h3>
+                            <p className="text-xs text-gray-400">
+                                {selectedBlockId ? 'Visualização do bloco selecionado' : 'Selecione um bloco'}
+                            </p>
+                        </div>
+                        <div className="p-4">
+                            {selectedBlockId ? (
+                                <div className="bg-white rounded-lg p-4 shadow-lg">
+                                    <div className="text-xs text-gray-500 mb-2">Preview Live:</div>
+                                    <UniversalBlockRenderer
+                                        block={(() => {
+                                            const currentStage = quiz.stages[activeStepIndex];
+                                            const block = currentStage?.blocks?.find((b: any) => b.id === selectedBlockId);
+                                            return block ? {
+                                                ...block,
+                                                id: block.id || `preview-${selectedBlockId}`,
+                                                type: block.type || 'text-block',
+                                                content: block.content || {},
+                                                properties: block.properties || {}
+                                            } : null;
+                                        })()}
+                                        isSelected={false}
+                                        onClick={() => { }}
+                                        onPropertyChange={() => { }}
+                                        mode="preview"
+                                        isPreviewMode={true}
+                                    />
+                                </div>
+                            ) : (
+                                <div className="text-center text-gray-400 text-xs py-8">
+                                    <div className="w-12 h-12 mx-auto mb-3 bg-gray-700 rounded-full flex items-center justify-center">
+                                        👁️
+                                    </div>
+                                    <p>Selecione um bloco no canvas para ver o preview ao vivo</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* 5) Propriedades - 20% */}
+                    <div className="w-[20%] bg-gray-900 border-l border-gray-800/50 overflow-y-auto">
+                        <div className="p-3 border-b border-gray-800/50">
+                            <h3 className="text-sm font-semibold text-white">⚙️ Propriedades</h3>
+                            <p className="text-xs text-gray-400">Configure o bloco selecionado</p>
+                        </div>
+                        <div className="h-full">
+                            <EnhancedPropertiesPanel
+                                selectedBlock={selectedBlockId ? quiz.stages[activeStepIndex]?.blocks?.find((block: any) => block.id === selectedBlockId) : null}
+                                onUpdate={(updates: Record<string, any>) => {
+                                    if (selectedBlockId) {
+                                        const currentStage = quiz.stages[activeStepIndex];
+                                        const block = currentStage?.blocks?.find((b: any) => b.id === selectedBlockId);
+                                        if (block) {
+                                            const updatedBlock = {
+                                                ...block,
+                                                properties: {
+                                                    ...block.properties,
+                                                    ...updates
+                                                }
+                                            };
+                                            handleBlockUpdate(selectedBlockId, updatedBlock);
+                                        }
+                                    }
+                                }}
+                                onDelete={() => {
+                                    if (selectedBlockId) {
+                                        handleRemoveBlock(selectedBlockId);
+                                        setSelectedBlockId(null);
+                                    }
+                                }}
+                                onDuplicate={() => {
+                                    if (selectedBlockId) {
+                                        const currentStage = quiz.stages[activeStepIndex];
+                                        const block = currentStage?.blocks?.find((b: any) => b.id === selectedBlockId);
+                                        if (block) {
+                                            handleAddBlock(block.type);
+                                        }
+                                    }
+                                }}
+                            />
+                        </div>
+                    </div>
+
                 </div>
 
-                {/* 4) Propriedades - 20% */}
-                <div className="w-[20%] bg-gray-900 border-l border-gray-800/50 overflow-y-auto">
-                    <div className="p-3 border-b border-gray-800/50">
-                        <h3 className="text-sm font-semibold text-white">⚙️ Propriedades</h3>
-                        <p className="text-xs text-gray-400">Configure o bloco selecionado</p>
-                    </div>
-                    <div className="h-full">
-                        <EnhancedPropertiesPanel
-                            selectedBlock={selectedBlockId ? quiz.stages[activeStepIndex]?.blocks?.find((block: any) => block.id === selectedBlockId) : null}
-                            onUpdate={(updates: Record<string, any>) => {
-                                if (selectedBlockId) {
-                                    const currentStage = quiz.stages[activeStepIndex];
-                                    const block = currentStage?.blocks?.find((b: any) => b.id === selectedBlockId);
-                                    if (block) {
-                                        const updatedBlock = {
-                                            ...block,
-                                            properties: {
-                                                ...block.properties,
-                                                ...updates
-                                            }
-                                        };
-                                        handleBlockUpdate(selectedBlockId, updatedBlock);
-                                    }
-                                }
-                            }}
-                            onDelete={() => {
-                                if (selectedBlockId) {
-                                    handleRemoveBlock(selectedBlockId);
-                                    setSelectedBlockId(null);
-                                }
-                            }}
-                            onDuplicate={() => {
-                                if (selectedBlockId) {
-                                    const currentStage = quiz.stages[activeStepIndex];
-                                    const block = currentStage?.blocks?.find((b: any) => b.id === selectedBlockId);
-                                    if (block) {
-                                        const duplicatedBlock = {
-                                            ...block,
-                                            id: `${block.id}-copy-${Date.now()}`,
-                                        };
-                                        handleAddBlock(duplicatedBlock.type, duplicatedBlock.properties);
-                                    }
-                                }
-                            }}
-                        />
-                    </div>
-                </div>
+                {/* Template Gallery */}
+                <TemplateGallery
+                    isVisible={showTemplateGallery}
+                    onTemplateSelect={handleTemplateSelect}
+                    onClose={() => setShowTemplateGallery(false)}
+                />
 
+                {/* Export/Import Modal */}
+                <ExportImportModal
+                    isVisible={showExportImportModal}
+                    currentQuiz={quiz}
+                    onImport={handleQuizImport}
+                    onClose={() => setShowExportImportModal(false)}
+                />
             </div>
-
-            {/* Template Gallery */}
-            <TemplateGallery
-                isVisible={showTemplateGallery}
-                onTemplateSelect={handleTemplateSelect}
-                onClose={() => setShowTemplateGallery(false)}
-            />
-
-            {/* Export/Import Modal */}
-            <ExportImportModal
-                isVisible={showExportImportModal}
-                currentQuiz={quiz}
-                onImport={handleQuizImport}
-                onClose={() => setShowExportImportModal(false)}
-            />
-        </div>
+        </DndContext>
     );
 };
 
