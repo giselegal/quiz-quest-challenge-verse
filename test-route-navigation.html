@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Navegação - Admin/Funis → Editor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-4xl mx-auto space-y-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-8">
+            🧪 Teste de Navegação: /admin/funis → /editor
+        </h1>
+
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-semibold mb-4">1. Teste de Template quiz21StepsComplete</h2>
+            <div class="space-y-4">
+                <p class="text-gray-700">Verificar se o template principal está disponível e funciona corretamente:</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <a href="http://localhost:8080/admin/funis" 
+                       target="_blank"
+                       class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-center">
+                        🔗 Abrir /admin/funis
+                    </a>
+                    
+                    <a href="http://localhost:8080/editor?template=quiz21StepsComplete" 
+                       target="_blank"
+                       class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 text-center">
+                        🎯 Abrir Editor com template
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-semibold mb-4">2. Testes de IDs e Rotas</h2>
+            <div class="space-y-4">
+                <p class="text-gray-700">Testar diferentes variações de IDs e parâmetros:</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <a href="http://localhost:8080/editor/quiz21StepsComplete" 
+                       target="_blank"
+                       class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 text-center text-sm">
+                        /editor/:id
+                    </a>
+                    
+                    <a href="http://localhost:8080/editor?funnel=quiz21StepsComplete" 
+                       target="_blank"
+                       class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 text-center text-sm">
+                        ?funnel=id
+                    </a>
+                    
+                    <a href="http://localhost:8080/editor/test123?template=quiz21StepsComplete" 
+                       target="_blank"
+                       class="bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-600 text-center text-sm">
+                        Combinado
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-semibold mb-4">3. Verificar Console</h2>
+            <div class="bg-gray-100 p-4 rounded">
+                <p class="text-sm text-gray-600 mb-2">Abra o DevTools (F12) e verifique:</p>
+                <ul class="text-sm space-y-1 text-gray-700">
+                    <li>• Logs de carregamento do template</li>
+                    <li>• Navegação entre rotas</li>
+                    <li>• Erros de imports ou providers</li>
+                    <li>• Estado do editor e contextos</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="bg-yellow-50 border border-yellow-200 p-4 rounded">
+            <h3 class="font-semibold text-yellow-800 mb-2">⚠️ Pontos de Verificação</h3>
+            <ul class="text-sm space-y-1 text-yellow-700">
+                <li>✅ Template quiz21StepsComplete aparece na lista de /admin/funis</li>
+                <li>✅ Botão "Usar Template" navega corretamente para /editor</li>
+                <li>✅ Editor carrega com dados do template</li>
+                <li>✅ 21 etapas são exibidas corretamente</li>
+                <li>✅ Propriedades e configurações estão funcionais</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Monitor de navegação
+        console.log('🧪 [TESTE] Página de teste carregada');
+        console.log('🧪 [TESTE] URL atual:', window.location.href);
+        
+        // Verificar se está rodando no localhost correto
+        if (window.location.hostname !== 'localhost') {
+            console.warn('⚠️ [TESTE] Execute este teste em localhost:8080');
+        }
+    </script>
+</body>
+</html>
