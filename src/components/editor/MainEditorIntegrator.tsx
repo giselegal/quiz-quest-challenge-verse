@@ -1,19 +1,27 @@
 import React from 'react';
-import { SimpleRevolutionaryEditor } from '@/components/editor/SimpleRevolutionaryEditor';
+import { NewUnifiedEditor } from '@/components/editor/NewUnifiedEditor';
+import { EditorProvider } from '@/components/editor/EditorProvider';
 
 interface MainEditorIntegratorProps {
+    className?: string;
     funnelId?: string;
     initialConfig?: any;
 }
 
 /**
- * MainEditorIntegrator - Conecta o novo editor revolucionário
+ * MainEditorIntegrator - Conecta o novo editor unificado
  * com toda a infraestrutura existente de contextos e providers
  */
-export const MainEditorIntegrator: React.FC<MainEditorIntegratorProps> = () => {
+const MainEditorIntegrator: React.FC<MainEditorIntegratorProps> = ({
+    className = '',
+    funnelId,
+    initialConfig
+}) => {
     return (
-        <div className="h-screen bg-gray-50">
-            <SimpleRevolutionaryEditor />
+        <div className={`main-editor-integrator ${className}`}>
+            <EditorProvider>
+                <NewUnifiedEditor />
+            </EditorProvider>
         </div>
     );
 };
