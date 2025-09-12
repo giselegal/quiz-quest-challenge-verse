@@ -15,7 +15,7 @@ const EditorTemplatesPage: React.FC = () => {
   // Carregar templates unificados
   const templates = getUnifiedTemplates();
 
-  const handleSelectTemplate = (templateId: string) => {
+  const handleSelectTemplate = async (templateId: string) => {
     try {
       console.log('🎯 Selecionando template:', templateId);
 
@@ -64,11 +64,11 @@ const EditorTemplatesPage: React.FC = () => {
         updatedAt: clonedInstance.createdAt
       };
 
-      console.log('💾 Salvando funil no localStorage:', newFunnel);
-      funnelLocalStore.upsert(newFunnel);
+      console.log('💾 Salvando funil no storage avançado:', newFunnel);
+      await funnelLocalStore.upsertAsync(newFunnel);
 
       // Verificar se foi salvo
-      const savedFunnel = funnelLocalStore.get(clonedInstance.id);
+      const savedFunnel = await funnelLocalStore.getAsync(clonedInstance.id);
       console.log('🔍 Funil salvo verificado:', savedFunnel);
 
       console.log('🔄 Navegando para editor com ID:', clonedInstance.id);
@@ -157,9 +157,9 @@ const EditorTemplatesPage: React.FC = () => {
               <div className="flex gap-2">
                 <Button
                   size="sm"
-                  onClick={(e) => {
+                  onClick={async (e) => {
                     e.stopPropagation();
-                    handleSelectTemplate(template.id);
+                    await handleSelectTemplate(template.id);
                   }}
                   className="flex-1 bg-[#B89B7A] hover:bg-[#A08966] text-white"
                 >

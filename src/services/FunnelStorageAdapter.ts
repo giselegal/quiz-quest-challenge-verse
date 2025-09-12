@@ -49,6 +49,10 @@ class StorageInitializer {
     private static isInitialized = false;
     private static initPromise: Promise<void> | null = null;
 
+    static get initialized() {
+        return this.isInitialized;
+    }
+
     static async ensureInitialized(): Promise<void> {
         if (this.isInitialized) return;
         if (this.initPromise) return this.initPromise;
@@ -89,6 +93,13 @@ export const funnelLocalStore = {
     // ============================================================================
 
     list(): FunnelItem[] {
+        // AUTO-INITIALIZE if not done yet (fire-and-forget)
+        if (!StorageInitializer.initialized) {
+            StorageInitializer.ensureInitialized().catch(err => {
+                console.warn('[StorageAdapter] Background initialization failed, using localStorage fallback', err);
+            });
+        }
+
         // SYNCHRONOUS FALLBACK - tries to use localStorage if available
         try {
             const raw = localStorage.getItem('qqcv_funnels');
@@ -179,6 +190,13 @@ export const funnelLocalStore = {
     },
 
     upsert(item: FunnelItem) {
+        // AUTO-INITIALIZE if not done yet (fire-and-forget)
+        if (!StorageInitializer.initialized) {
+            StorageInitializer.ensureInitialized().catch(err => {
+                console.warn('[StorageAdapter] Background initialization failed during upsert', err);
+            });
+        }
+
         const list = this.list();
         const idx = list.findIndex(f => f.id === item.id);
         if (idx >= 0) list[idx] = item;
