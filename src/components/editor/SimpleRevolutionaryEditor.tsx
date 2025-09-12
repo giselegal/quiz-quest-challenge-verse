@@ -152,13 +152,13 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                 <div className="p-2 border-b border-gray-700">
                     <h2 className="text-xs font-bold text-white text-center">Etapas</h2>
                 </div>
-                
+
                 <div className="flex-1 overflow-y-auto py-2">
                     {Array.from({ length: 21 }, (_, i) => i + 1).map(stepNumber => {
                         const stepId = `step-${stepNumber}`;
                         const isActive = activeStageId === stepId;
                         const hasBlocks = stages.some(s => s.id === stepId && s.blocks.length > 0);
-                        
+
                         return (
                             <button
                                 key={stepNumber}
@@ -166,13 +166,12 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                                     // Simular navegação - implementação futura
                                     console.log(`Navegar para etapa ${stepNumber}`);
                                 }}
-                                className={`w-12 h-12 m-1 rounded-lg text-xs font-bold transition-all duration-200 flex flex-col items-center justify-center ${
-                                    isActive
+                                className={`w-12 h-12 m-1 rounded-lg text-xs font-bold transition-all duration-200 flex flex-col items-center justify-center ${isActive
                                         ? 'bg-blue-600 text-white ring-2 ring-blue-300'
                                         : hasBlocks
                                             ? 'bg-green-600 text-white hover:bg-green-700'
                                             : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                                }`}
+                                    }`}
                                 title={`Etapa ${stepNumber}${hasBlocks ? ' (com conteúdo)' : ' (vazia)'}`}
                             >
                                 <span>{stepNumber}</span>
@@ -183,7 +182,7 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                         );
                     })}
                 </div>
-                
+
                 <div className="p-2 border-t border-gray-700 text-center">
                     <span className="text-xs text-gray-400">
                         {stages.filter(s => s.blocks.length > 0).length}/21
@@ -270,9 +269,9 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                                     await Promise.resolve();
                                 }
                             }}
-                            config={{ 
+                            config={{
                                 interval: 5000,
-                                enabled: autoSaveEnabled 
+                                enabled: autoSaveEnabled
                             }}
                         />
                     </div>
@@ -304,8 +303,8 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                                     key={view.mode}
                                     onClick={() => setViewMode(view.mode as any)}
                                     className={`px-3 py-2 text-sm font-medium transition-colors ${viewMode === view.mode
-                                            ? 'bg-blue-100 text-blue-700'
-                                            : 'text-gray-600 hover:text-gray-900'
+                                        ? 'bg-blue-100 text-blue-700'
+                                        : 'text-gray-600 hover:text-gray-900'
                                         }`}
                                     title={view.label}
                                 >
@@ -319,18 +318,18 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                 {/* Área de Canvas */}
                 <div className="flex-1 overflow-auto p-8">
                     <div className={`mx-auto transition-all duration-300 ${viewMode === 'desktop' ? 'max-w-full' :
-                            viewMode === 'tablet' ? 'max-w-2xl' : 'max-w-sm'
+                        viewMode === 'tablet' ? 'max-w-2xl' : 'max-w-sm'
                         }`}>
                         <div className="bg-white rounded-lg shadow-sm border border-gray-200 min-h-96">
                             {activeStage.blocks.length > 0 ? (
                                 <div className="p-6 space-y-4">
-                                    {activeStage.blocks.map((block, index) => (
+                                    {activeStage.blocks.map((block: any, index: number) => (
                                         <div
                                             key={block.id}
                                             onClick={() => setSelectedBlockId?.(block.id)}
                                             className={`p-4 rounded-lg border-2 transition-all cursor-pointer ${selectedBlockId === block.id
-                                                    ? 'border-blue-500 bg-blue-50'
-                                                    : 'border-gray-200 hover:border-gray-300'
+                                                ? 'border-blue-500 bg-blue-50'
+                                                : 'border-gray-200 hover:border-gray-300'
                                                 }`}
                                         >
                                             <div className="flex items-center justify-between mb-2">
@@ -387,7 +386,7 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
 
                                 {activeStage.blocks.length > 0 ? (
                                     <div className="space-y-3">
-                                        {activeStage.blocks.map((block, index) => (
+                                        {activeStage.blocks.map((block: any) => (
                                             <div key={block.id} className="text-sm">
                                                 <div className="font-medium text-gray-700 mb-1">
                                                     {block.type.replace('-', ' ')}
