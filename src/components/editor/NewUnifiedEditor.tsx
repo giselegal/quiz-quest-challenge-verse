@@ -11,6 +11,8 @@ import { LoadingButton, InlineLoading } from '@/components/ui/LoadingComponents'
 import { useToast } from '@/components/ui/ToastSystem';
 import { useCelebrationContext } from '@/components/ui/CelebrationSystem';
 import { convertTemplateToFunnel } from '@/utils/templateConverter';
+import { UniversalBlockRenderer } from '@/components/core/renderers';
+import EnhancedPropertiesPanel from '@/components/editor/properties/PropertiesPanel';
 
 interface UnifiedEditorProps {
     quiz?: any;
@@ -330,6 +332,28 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
         }
     };
 
+    // Função para atualizar propriedades do bloco
+    const handleBlockUpdate = (blockId: string, updatedBlock: any) => {
+        const stepId = `step-${currentStep}`;
+
+        const updatedQuiz = {
+            ...quiz,
+            stages: quiz.stages.map((stage: any) =>
+                stage.id === stepId
+                    ? {
+                        ...stage,
+                        blocks: stage.blocks.map((b: any) =>
+                            b.id === blockId ? { ...b, ...updatedBlock } : b
+                        )
+                    }
+                    : stage
+            )
+        };
+
+        setQuiz(updatedQuiz);
+        blockActions.editBlock(stepId, blockId, 'properties', {}, updatedBlock, updatedQuiz);
+    };
+
     // Componente de navegação por etapas
     const StepsNavigation = () => (
         <div className="flex flex-col h-full">
@@ -537,7 +561,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                                         <p className="text-sm">Etapa {currentStep}/21 - Use os botões de demonstração</p>
                                     </div>
 
-                                    {/* Renderizar blocos da etapa atual */}
+                                    {/* Renderizar blocos da etapa atual com UniversalBlockRenderer */}
                                     <div className="space-y-3">
                                         {(() => {
                                             const currentStage = quiz.stages.find((s: any) => s.id === `step-${currentStep}`);
@@ -554,23 +578,57 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                                             }
 
                                             return blocks.map((block: any, index: number) => (
-                                                <div key={block.id} className="p-3 bg-gray-50 rounded border">
-                                                    <div className="flex justify-between items-start">
-                                                        <div>
-                                                            <div className="text-sm font-medium text-gray-700">
-                                                                {block.type} #{index + 1}
-                                                            </div>
-                                                            <div className="text-xs text-gray-500 mt-1">
-                                                                {block.content}
-                                                            </div>
-                                                        </div>
+                                                <div
+                                                    key={block.id}
+                                                    className={`relative group transition-all duration-200 ${selectedBlockId === block.id
+                                                            ? 'ring-2 ring-blue-500 ring-opacity-50 shadow-md'
+                                                            : 'hover:shadow-sm'
+                                                        }`}
+                                                    onClick={() => setSelectedBlockId(block.id)}
+                                                >
+                                                    {/* Visual selection indicator */}
+                                                    {selectedBlockId === block.id && (
+                                                        <div className="absolute -top-1 -left-1 w-full h-full border-2 border-blue-500 rounded pointer-events-none opacity-20 bg-blue-500/10" />
+                                                    )}
+
+                                                    {/* Block controls overlay */}
+                                                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex gap-1">
                                                         <button
-                                                            onClick={() => handleRemoveBlock(block.id)}
-                                                            className="text-red-500 hover:text-red-700 text-xs"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleRemoveBlock(block.id);
+                                                            }}
+                                                            className="bg-red-500 text-white p-1 rounded text-xs hover:bg-red-600"
                                                         >
                                                             ❌
                                                         </button>
                                                     </div>
+
+                                                    {/* Universal Block Renderer */}
+                                                    <UniversalBlockRenderer
+                                                        block={{
+                                                            ...block,
+                                                            // Ensure block has required properties
+                                                            id: block.id || `block-${index}`,
+                                                            type: block.type || 'text-block',
+                                                            content: block.content || {},
+                                                            properties: block.properties || {}
+                                                        }}
+                                                        isSelected={selectedBlockId === block.id}
+                                                        onClick={() => setSelectedBlockId(block.id)}
+                                                        onPropertyChange={(key: string, value: any) => {
+                                                            const updatedBlock = {
+                                                                ...block,
+                                                                properties: {
+                                                                    ...block.properties,
+                                                                    [key]: value
+                                                                }
+                                                            };
+                                                            handleBlockUpdate(block.id, updatedBlock);
+                                                        }}
+                                                        mode="editor"
+                                                        isPreviewMode={false}
+                                                    />
                                                 </div>
                                             ));
                                         })()}
@@ -587,33 +645,32 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                         <h3 className="text-sm font-semibold text-white">⚙️ Propriedades</h3>
                         <p className="text-xs text-gray-400">Configure o bloco selecionado</p>
                     </div>
-                    <div className="p-4">
-                        {selectedBlockId ? (
-                            <div className="text-white text-sm">
-                                Configurações do bloco: {selectedBlockId}
-                            </div>
-                        ) : (
-                            <div className="text-gray-400 text-xs text-center py-8">
-                                Selecione um bloco para<br />configurar suas propriedades
-                            </div>
-                        )}
-
-                        {/* Informações do histórico */}
-                        <div className="mt-6 p-3 bg-gray-800 rounded">
-                            <h4 className="text-xs font-semibold text-white mb-2">💾 Histórico</h4>
-                            <div className="space-y-1 text-xs text-gray-400">
-                                <div>Ações: {historyEntries.length}</div>
-                                <div>Posição: {currentIndex + 1}</div>
-                                <div className="flex gap-1 mt-2">
-                                    <span className={`px-1 py-0.5 rounded ${canUndo ? 'bg-blue-600' : 'bg-gray-700'}`}>
-                                        Ctrl+Z
-                                    </span>
-                                    <span className={`px-1 py-0.5 rounded ${canRedo ? 'bg-green-600' : 'bg-gray-700'}`}>
-                                        Ctrl+Y
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
+                    <div className="h-full">
+                        <EnhancedPropertiesPanel
+                            selectedBlock={selectedBlockId ? quiz.stages[activeStepIndex]?.blocks?.find((block: any) => block.id === selectedBlockId) : null}
+                            onPropertyChange={(property: string, value: any) => {
+                                if (selectedBlockId) {
+                                    const currentStage = quiz.stages[activeStepIndex];
+                                    const block = currentStage?.blocks?.find((b: any) => b.id === selectedBlockId);
+                                    if (block) {
+                                        const updatedBlock = {
+                                            ...block,
+                                            properties: {
+                                                ...block.properties,
+                                                [property]: value
+                                            }
+                                        };
+                                        handleBlockUpdate(selectedBlockId, updatedBlock);
+                                    }
+                                }
+                            }}
+                            historyInfo={{
+                                totalActions: historyEntries.length,
+                                currentPosition: currentIndex + 1,
+                                canUndo,
+                                canRedo
+                            }}
+                        />
                     </div>
                 </div>
 
