@@ -107,7 +107,7 @@ const HeadingBlock: React.FC<BlockComponentProps> = ({
       onBlur={e => handlePropertyUpdate('text', e.target.textContent || '')}
       onClick={onClick}
     >
-      {text}
+      {typeof text === 'string' ? text : typeof text === 'object' && text && 'text' in text ? (text as any).text : 'Título'}
     </HeadingTag>
   );
 };

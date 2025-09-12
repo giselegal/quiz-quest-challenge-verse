@@ -299,7 +299,7 @@ export function ButtonInline({
               : undefined
       }
     >
-      {text}
+      {typeof text === 'string' ? text : typeof text === 'object' && text && 'text' in text ? (text as any).text : 'Botão'}
       {isEditable && isSelected && <span className="ml-2 text-xs opacity-60">✎</span>}
     </button>
   );
