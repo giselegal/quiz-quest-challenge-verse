@@ -1,5 +1,4 @@
 import ConnectedTemplateWrapper from '@/components/quiz/ConnectedTemplateWrapper';
-import { getEnhancedBlockComponent } from '@/components/editor/blocks/enhancedBlockRegistry';
 import type { BlockData } from '@/types/blocks';
 import { cn } from '@/lib/utils';
 import React from 'react';
@@ -83,8 +82,8 @@ const ConnectedTemplateWrapperBlock: React.FC<ConnectedTemplateWrapperBlockProps
           {/* Renderizar filhos declarados via template (properties.children) */}
           {Array.isArray(childrenList) && childrenList.length > 0
             ? childrenList.map((child: any, index: number) => {
-              const Component = getEnhancedBlockComponent(child.type);
-              if (!Component) return null;
+              // Renderização simples sem dependência circular
+              if (!child || !child.type) return null;
 
               const childBlock: BlockData = {
                 id: child.id || `${block?.id}-child-${index}`,
@@ -95,12 +94,9 @@ const ConnectedTemplateWrapperBlock: React.FC<ConnectedTemplateWrapperBlockProps
               };
 
               return (
-                <Component
-                  key={childBlock.id}
-                  block={childBlock}
-                  properties={childBlock.properties as any}
-                  {...childBlock.properties}
-                />
+                <div key={childBlock.id} className="template-child">
+                  {child.content || child.properties?.content || `[${child.type}]`}
+                </div>
               );
             })
             : // Ou, se nenhum filho foi declarado nas propriedades, renderiza os filhos React passados
@@ -111,8 +107,8 @@ const ConnectedTemplateWrapperBlock: React.FC<ConnectedTemplateWrapperBlockProps
         <div className="template-wrapper-fallback">
           {Array.isArray(childrenList) && childrenList.length > 0
             ? childrenList.map((child: any, index: number) => {
-              const Component = getEnhancedBlockComponent(child.type);
-              if (!Component) return null;
+              // Renderização simples sem dependência circular
+              if (!child || !child.type) return null;
 
               const childBlock: BlockData = {
                 id: child.id || `${block?.id}-child-${index}`,
@@ -123,12 +119,9 @@ const ConnectedTemplateWrapperBlock: React.FC<ConnectedTemplateWrapperBlockProps
               };
 
               return (
-                <Component
-                  key={childBlock.id}
-                  block={childBlock}
-                  properties={childBlock.properties as any}
-                  {...childBlock.properties}
-                />
+                <div key={childBlock.id} className="template-child">
+                  {child.content || child.properties?.content || `[${child.type}]`}
+                </div>
               );
             })
             : children}

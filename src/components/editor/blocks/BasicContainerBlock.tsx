@@ -1,4 +1,3 @@
-import { getEnhancedBlockComponent } from '@/components/editor/blocks/EnhancedBlockRegistry';
 import type { BlockComponentProps, BlockData } from '@/types/blocks';
 import React from 'react';
 
@@ -43,8 +42,8 @@ const BasicContainerBlock: React.FC<BlockComponentProps> = ({ block }) => {
         <div id={elementId} className={combinedClassName} style={containerStyle}>
             {Array.isArray(childrenList) &&
                 childrenList.map((child: any, index: number) => {
-                    const Component = getEnhancedBlockComponent(child.type);
-                    if (!Component) return null;
+                    // Renderização simples sem dependência circular
+                    if (!child || !child.type) return null;
 
                     const childBlock: BlockData = {
                         id: child.id || `${block.id}-child-${index}`,
@@ -54,13 +53,11 @@ const BasicContainerBlock: React.FC<BlockComponentProps> = ({ block }) => {
                         order: index,
                     };
 
+                    // Renderizar conteúdo básico sem componente específico
                     return (
-                        <Component
-                            key={childBlock.id}
-                            block={childBlock}
-                            properties={childBlock.properties as any}
-                            {...(childBlock.properties as any)}
-                        />
+                        <div key={childBlock.id} className="child-block">
+                            {child.content || child.properties?.content || `[${child.type}]`}
+                        </div>
                     );
                 })}
         </div>

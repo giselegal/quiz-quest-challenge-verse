@@ -1,4 +1,3 @@
-import { getEnhancedBlockComponent } from '@/components/editor/blocks/EnhancedBlockRegistry';
 import type { BlockComponentProps, BlockData } from '@/types/blocks';
 import React, { useEffect } from 'react';
 
@@ -130,8 +129,8 @@ const FormContainerBlock: React.FC<BlockComponentProps> = ({ block }) => {
     <div id={elementId} className={combinedClassName} style={containerStyle}>
       {Array.isArray(childrenList) &&
         childrenList.map((child: any, index: number) => {
-          const Component = getEnhancedBlockComponent(child.type);
-          if (!Component) return null;
+          // Renderização simples sem dependência circular
+          if (!child || !child.type) return null;
 
           const childBlock: BlockData = {
             id: child.id || `${block.id}-child-${index}`,
@@ -141,14 +140,11 @@ const FormContainerBlock: React.FC<BlockComponentProps> = ({ block }) => {
             order: index,
           };
 
-          // Renderizamos o componente filho passando o bloco completo e props avulsas para compatibilidade
+          // Renderizamos o conteúdo básico
           return (
-            <Component
-              key={childBlock.id}
-              block={childBlock}
-              properties={childBlock.properties as any}
-              {...childBlock.properties}
-            />
+            <div key={childBlock.id} className="form-child">
+              {child.content || child.properties?.content || `[${child.type}]`}
+            </div>
           );
         })}
     </div>

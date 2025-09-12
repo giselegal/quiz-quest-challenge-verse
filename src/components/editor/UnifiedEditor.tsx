@@ -3,6 +3,7 @@
  * 
  * Editor consolidado que unifica EditorPro legacy com estrutura moderna
  * Integrado com sistema de lazy loading inteligente, memoização avançada e profiling
+ * ⚡ TESTE HOT RELOAD - Versão atualizada
  */
 
 import React, { Suspense } from 'react';

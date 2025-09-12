@@ -18,6 +18,9 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
     const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
     const [showCloneModal, setShowCloneModal] = useState(false);
 
+    // 🚨 TESTE HOT RELOAD - FUNCIONA! Editor carregado em: ${new Date().toLocaleTimeString()}
+    console.log('🔥 HOT RELOAD FUNCIONANDO PERFEITAMENTE! - Editor carregado em:', new Date().toLocaleTimeString());
+
     // Productivity features states
     const [showHistoryPanel, setShowHistoryPanel] = useState(false);
     const [showCollaborationPanel, setShowCollaborationPanel] = useState(false);

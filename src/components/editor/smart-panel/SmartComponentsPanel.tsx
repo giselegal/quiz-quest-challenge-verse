@@ -6,7 +6,7 @@ import { Search, Layout } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { AVAILABLE_COMPONENTS } from '@/components/editor/blocks/enhancedBlockRegistry';
+import { AVAILABLE_COMPONENTS } from '@/components/editor/blocks/EnhancedBlockRegistry';
 
 interface SmartComponentsPanelProps {
   onAddComponent?: (type: string) => void;

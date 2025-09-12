@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ENHANCED_BLOCK_REGISTRY } from '@/components/editor/blocks/enhancedBlockRegistry';
+import { ENHANCED_BLOCK_REGISTRY } from '@/components/editor/blocks/EnhancedBlockRegistry';
 import { useEditor } from '../context/EditorContext';
 import { BlockType } from '@/types/editor';
 
