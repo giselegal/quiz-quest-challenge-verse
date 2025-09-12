@@ -73,21 +73,21 @@ const DraggableBlock: React.FC<DraggableBlockProps> = ({ block, isSelected, onSe
             case 'text':
                 return (
                     <div className="bg-white rounded-lg p-3 border">
-                        <p className="text-xs text-gray-600 line-clamp-2">{props.content || 'Texto...'}</p>
+                        <p className="text-xs text-gray-600 line-clamp-2">{typeof props.content === 'string' ? props.content : typeof props.content === 'object' && props.content && 'content' in props.content ? (props.content as any).content : 'Texto...'}</p>
                     </div>
                 );
             case 'button':
                 return (
                     <div className="bg-white rounded-lg p-3 border text-center">
                         <button className="bg-blue-500 text-white px-3 py-1 rounded text-xs">
-                            {props.text || 'Botão'}
+                            {typeof props.text === 'string' ? props.text : typeof props.text === 'object' && props.text && 'text' in props.text ? (props.text as any).text : 'Botão'}
                         </button>
                     </div>
                 );
             case 'quiz-question':
                 return (
                     <div className="bg-white rounded-lg p-3 border">
-                        <div className="text-xs font-medium text-gray-900 mb-2">{props.question || 'Pergunta?'}</div>
+                        <div className="text-xs font-medium text-gray-900 mb-2">{typeof props.question === 'string' ? props.question : typeof props.question === 'object' && props.question && 'question' in props.question ? (props.question as any).question : 'Pergunta?'}</div>
                         <div className="space-y-1">
                             <div className="bg-gray-100 rounded px-2 py-1 text-xs">Opção A</div>
                             <div className="bg-gray-100 rounded px-2 py-1 text-xs">Opção B</div>
@@ -132,8 +132,8 @@ const DraggableBlock: React.FC<DraggableBlockProps> = ({ block, isSelected, onSe
             <motion.div
                 whileHover={{ scale: 1.02, y: -2 }}
                 className={`bg-gray-50 rounded-xl p-3 border-2 transition-all duration-200 ${isSelected
-                        ? 'border-blue-400 bg-blue-50'
-                        : 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
+                    ? 'border-blue-400 bg-blue-50'
+                    : 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
                     }`}
             >
                 {/* Block Header */}
@@ -197,10 +197,10 @@ const DroppableStage: React.FC<DroppableStageProps> = ({ stage, isActive, onStag
             <motion.div
                 whileHover={{ scale: 1.01 }}
                 className={`bg-white rounded-2xl shadow-sm border-2 transition-all duration-200 ${isActive
-                        ? 'border-blue-400 bg-blue-50/30'
-                        : isOver
-                            ? 'border-green-400 bg-green-50/30'
-                            : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-blue-400 bg-blue-50/30'
+                    : isOver
+                        ? 'border-green-400 bg-green-50/30'
+                        : 'border-gray-200 hover:border-gray-300'
                     }`}
                 onClick={() => onStageSelect(stage.id)}
             >

@@ -67,7 +67,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         >
           {imageUrl && (
             <div className="relative aspect-video w-full">
-              <img src={imageUrl} alt={text} className="w-full h-full object-cover" />
+              <img src={imageUrl} alt={typeof text === 'string' ? text : typeof text === 'object' && text && 'text' in text ? (text as any).text : 'Opção'} className="w-full h-full object-cover" />
 
               {/* Overlay para seleção */}
               {isSelected && (
@@ -95,7 +95,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           )}
 
           <div className={sizeClasses[size]}>
-            <p className="font-medium">{text}</p>
+            <p className="font-medium">{typeof text === 'string' ? text : typeof text === 'object' && text && 'text' in text ? (text as any).text : 'Opção'}</p>
           </div>
 
           {/* Indicador de seleção para multi-select */}
@@ -172,7 +172,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 
             {/* Conteúdo da opção */}
             <div className="flex-grow">
-              <p className="font-medium">{text}</p>
+              <p className="font-medium">{typeof text === 'string' ? text : typeof text === 'object' && text && 'text' in text ? (text as any).text : 'Opção'}</p>
             </div>
 
             {/* Imagem opcional */}
@@ -198,7 +198,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           onClick={handleClick}
           data-value={value}
         >
-          <p className="font-medium">{text}</p>
+          <p className="font-medium">{typeof text === 'string' ? text : typeof text === 'object' && text && 'text' in text ? (text as any).text : 'Opção'}</p>
         </div>
       );
 
@@ -233,7 +233,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
                 isSelected ? 'bg-[#B89B7A] bg-opacity-10' : ''
               )}
             >
-              <p className="font-medium">{text}</p>
+              <p className="font-medium">{typeof text === 'string' ? text : typeof text === 'object' && text && 'text' in text ? (text as any).text : 'Opção'}</p>
             </div>
 
             {/* Checkbox para multi-select */}

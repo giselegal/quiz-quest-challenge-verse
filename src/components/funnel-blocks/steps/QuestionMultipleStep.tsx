@@ -25,16 +25,15 @@ const QuizOption: React.FC<QuizOptionProps> = ({
     <button
       onClick={onSelect}
       disabled={disabled}
-      className={`p-4 border-2 rounded-lg transition-all ${
-        isSelected
+      className={`p-4 border-2 rounded-lg transition-all ${isSelected
           ? 'border-[#B89B7A] bg-[#B89B7A]/10'
           : 'border-gray-200 hover:border-[#B89B7A]/50'
-      } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+        } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
     >
       {imageUrl && (
-        <img src={imageUrl} alt={text} className="w-full h-32 object-cover rounded mb-2" />
+        <img src={imageUrl} alt={typeof text === 'string' ? text : typeof text === 'object' && text && 'text' in text ? (text as any).text : 'Opção'} className="w-full h-32 object-cover rounded mb-2" />
       )}
-      <span className="text-sm font-medium">{text}</span>
+      <span className="text-sm font-medium">{typeof text === 'string' ? text : typeof text === 'object' && text && 'text' in text ? (text as any).text : 'Opção'}</span>
     </button>
   );
 };
