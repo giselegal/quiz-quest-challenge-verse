@@ -21,6 +21,29 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { UnifiedBlock, UnifiedStage, UnifiedFunnel } from '../../types/master-schema';
 
 // =============================================================================
+// UTILITY FUNCTIONS
+// =============================================================================
+
+const getDefaultPropertiesForBlockType = (blockType: string): Record<string, any> => {
+  switch (blockType) {
+    case 'text':
+      return { content: '', fontSize: '16px', color: '#000000' };
+    case 'heading':
+      return { content: '', level: 1, fontSize: '24px', color: '#000000' };
+    case 'button':
+      return { text: 'Botão', action: 'next', style: 'primary' };
+    case 'image':
+      return { src: '', alt: '', width: '100%' };
+    case 'quiz-question':
+      return { question: '', options: [], correctAnswer: null };
+    case 'lead-form':
+      return { fields: [], submitText: 'Enviar' };
+    default:
+      return {};
+  }
+};
+
+// =============================================================================
 // TYPES AND INTERFACES
 // =============================================================================
 
@@ -534,24 +557,303 @@ export const useUnifiedEditor = (): UnifiedEditorReturn => {
     loadFunnel,
     saveFunnel,
     createFunnel,
-    deleteFunnel: async () => false, // TODO: Implement
+    deleteFunnel: async (id: string) => {
+      try {
+        // Clear from localStorage
+        localStorage.removeItem(`funnel-${id}`);
+        localStorage.removeItem(`funnel-backup-${id}`);
+
+        // If Supabase is enabled, delete from server
+        // Note: Supabase integration would go here
+
+        // Clear current funnel if it's the one being deleted
+        if (state.funnel?.id === id) {
+          setState(prev => ({
+            ...prev,
+            funnel: null,
+            activeStageId: null,
+            selectedBlockId: null,
+            selectedBlock: null,
+            isDirty: false
+          }));
+        }
+
+        return true;
+      } catch (error) {
+        console.error('Error deleting funnel:', error);
+        return false;
+      }
+    },
 
     addStage,
-    updateStage: async () => {}, // TODO: Implement
-    deleteStage: async () => {}, // TODO: Implement
-    reorderStages: async () => {}, // TODO: Implement
+    updateStage: async (id: string, updates: Partial<UnifiedStage>) => {
+      if (!state.funnel) return;
+
+      const updatedStages = state.funnel.stages.map(stage =>
+        stage.id === id ? { ...stage, ...updates } : stage
+      );
+
+      const updatedFunnel = {
+        ...state.funnel,
+        stages: updatedStages
+      };
+
+      setState(prev => ({
+        ...prev,
+        funnel: updatedFunnel,
+        isDirty: true
+      }));
+
+      addToHistory(updatedFunnel);
+    },
+    deleteStage: async (id: string) => {
+      if (!state.funnel) return;
+
+      const updatedStages = state.funnel.stages.filter(stage => stage.id !== id);
+      const updatedFunnel = {
+        ...state.funnel,
+        stages: updatedStages
+      };
+
+      setState(prev => ({
+        ...prev,
+        funnel: updatedFunnel,
+        activeStageId: prev.activeStageId === id ? (updatedStages[0]?.id || null) : prev.activeStageId,
+        isDirty: true
+      }));
+
+      addToHistory(updatedFunnel);
+    },
+    reorderStages: async (fromIndex: number, toIndex: number) => {
+      if (!state.funnel) return;
+
+      const stages = [...state.funnel.stages];
+      const [movedStage] = stages.splice(fromIndex, 1);
+      stages.splice(toIndex, 0, movedStage);
+
+      const updatedFunnel = {
+        ...state.funnel,
+        stages
+      };
+
+      setState(prev => ({
+        ...prev,
+        funnel: updatedFunnel,
+        isDirty: true
+      }));
+
+      addToHistory(updatedFunnel);
+    },
     setActiveStage,
 
     addBlock,
     updateBlock,
-    deleteBlock: async () => {}, // TODO: Implement
-    duplicateBlock: async () => '', // TODO: Implement
-    reorderBlocks: async () => {}, // TODO: Implement
+    deleteBlock: async (blockId: string) => {
+      if (!state.funnel || !state.activeStageId) return;
+
+      const updatedStages = state.funnel.stages.map(stage => {
+        if (stage.id === state.activeStageId) {
+          return {
+            ...stage,
+            blocks: stage.blocks.filter(block => block.id !== blockId)
+          };
+        }
+        return stage;
+      });
+
+      const updatedFunnel = {
+        ...state.funnel,
+        stages: updatedStages
+      };
+
+      setState(prev => ({
+        ...prev,
+        funnel: updatedFunnel,
+        selectedBlockId: prev.selectedBlockId === blockId ? null : prev.selectedBlockId,
+        selectedBlock: prev.selectedBlockId === blockId ? null : prev.selectedBlock,
+        isDirty: true
+      }));
+
+      addToHistory(updatedFunnel);
+    },
+    duplicateBlock: async (blockId: string) => {
+      if (!state.funnel || !state.activeStageId) return '';
+
+      const activeStage = state.funnel.stages.find(s => s.id === state.activeStageId);
+      if (!activeStage) return '';
+
+      const originalBlock = activeStage.blocks.find(b => b.id === blockId);
+      if (!originalBlock) return '';
+
+      const newBlockId = `${originalBlock.type}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      const duplicatedBlock = {
+        ...originalBlock,
+        id: newBlockId,
+        properties: {
+          ...originalBlock.properties,
+          // Add copy indicator to title/content if exists
+          ...(originalBlock.properties.title && {
+            title: `${originalBlock.properties.title} (Cópia)`
+          })
+        }
+      };
+
+      const blockIndex = activeStage.blocks.findIndex(b => b.id === blockId);
+      const updatedBlocks = [
+        ...activeStage.blocks.slice(0, blockIndex + 1),
+        duplicatedBlock,
+        ...activeStage.blocks.slice(blockIndex + 1)
+      ];
+
+      const updatedStages = state.funnel.stages.map(stage =>
+        stage.id === state.activeStageId ? { ...stage, blocks: updatedBlocks } : stage
+      );
+
+      const updatedFunnel = {
+        ...state.funnel,
+        stages: updatedStages
+      };
+
+      setState(prev => ({
+        ...prev,
+        funnel: updatedFunnel,
+        isDirty: true
+      }));
+
+      addToHistory(updatedFunnel);
+      return newBlockId;
+    },
+    reorderBlocks: async (stageId: string, fromIndex: number, toIndex: number) => {
+      if (!state.funnel) return;
+
+      const stage = state.funnel.stages.find(s => s.id === stageId);
+      if (!stage) return;
+
+      const blocks = [...stage.blocks];
+      const [movedBlock] = blocks.splice(fromIndex, 1);
+      blocks.splice(toIndex, 0, movedBlock);
+
+      const updatedStages = state.funnel.stages.map(s =>
+        s.id === stageId ? { ...s, blocks } : s
+      );
+
+      const updatedFunnel = {
+        ...state.funnel,
+        stages: updatedStages
+      };
+
+      setState(prev => ({
+        ...prev,
+        funnel: updatedFunnel,
+        isDirty: true
+      }));
+
+      addToHistory(updatedFunnel);
+    },
     setSelectedBlock,
 
-    updateBlockProperty: async () => {}, // TODO: Implement
-    updateBlockProperties: async () => {}, // TODO: Implement
-    resetBlockProperties: async () => {}, // TODO: Implement
+    updateBlockProperty: async (blockId: string, property: string, value: any) => {
+      if (!state.funnel) return;
+
+      const updatedStages = state.funnel.stages.map(stage => ({
+        ...stage,
+        blocks: stage.blocks.map(block =>
+          block.id === blockId
+            ? {
+              ...block,
+              properties: {
+                ...block.properties,
+                [property]: value
+              }
+            }
+            : block
+        )
+      }));
+
+      const updatedFunnel = {
+        ...state.funnel,
+        stages: updatedStages
+      };
+
+      setState(prev => ({
+        ...prev,
+        funnel: updatedFunnel,
+        selectedBlock: prev.selectedBlockId === blockId
+          ? { ...prev.selectedBlock!, properties: { ...prev.selectedBlock!.properties, [property]: value } }
+          : prev.selectedBlock,
+        isDirty: true
+      }));
+
+      addToHistory(updatedFunnel);
+    },
+    updateBlockProperties: async (blockId: string, properties: Record<string, any>) => {
+      if (!state.funnel) return;
+
+      const updatedStages = state.funnel.stages.map(stage => ({
+        ...stage,
+        blocks: stage.blocks.map(block =>
+          block.id === blockId
+            ? {
+              ...block,
+              properties: {
+                ...block.properties,
+                ...properties
+              }
+            }
+            : block
+        )
+      }));
+
+      const updatedFunnel = {
+        ...state.funnel,
+        stages: updatedStages
+      };
+
+      setState(prev => ({
+        ...prev,
+        funnel: updatedFunnel,
+        selectedBlock: prev.selectedBlockId === blockId
+          ? { ...prev.selectedBlock!, properties: { ...prev.selectedBlock!.properties, ...properties } }
+          : prev.selectedBlock,
+        isDirty: true
+      }));
+
+      addToHistory(updatedFunnel);
+    },
+    resetBlockProperties: async (blockId: string) => {
+      if (!state.funnel) return;
+
+      const updatedStages = state.funnel.stages.map(stage => ({
+        ...stage,
+        blocks: stage.blocks.map(block => {
+          if (block.id === blockId) {
+            // Reset to default properties based on block type
+            const defaultProperties = getDefaultPropertiesForBlockType(block.type);
+            return {
+              ...block,
+              properties: defaultProperties
+            };
+          }
+          return block;
+        })
+      }));
+
+      const updatedFunnel = {
+        ...state.funnel,
+        stages: updatedStages
+      };
+
+      setState(prev => ({
+        ...prev,
+        funnel: updatedFunnel,
+        selectedBlock: prev.selectedBlockId === blockId
+          ? { ...prev.selectedBlock!, properties: getDefaultPropertiesForBlockType(prev.selectedBlock!.type) }
+          : prev.selectedBlock,
+        isDirty: true
+      }));
+
+      addToHistory(updatedFunnel);
+    },
 
     setIsPreviewing: (value: boolean) => setState(prev => ({ ...prev, isPreviewing: value })),
     setError: (error: string | null) => setState(prev => ({ ...prev, error })),

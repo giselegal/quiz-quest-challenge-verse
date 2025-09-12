@@ -345,6 +345,12 @@ export const LazyWrapper = <P extends object>({
 
 // Presets para componentes específicos do editor
 export const EditorLazyComponents = {
+    // Editor revolucionário - novo editor completo com todas as funcionalidades
+    SimpleRevolutionaryEditor: lazyLoadingManager.createLazyComponent(
+        '@/components/editor/SimpleRevolutionaryEditor',
+        { preload: true, criticalPath: true, timeout: 10000 }
+    ),
+
     // Componentes críticos - preload imediato
     EnhancedComponentsSidebar: lazyLoadingManager.createLazyComponent(
         '@/components/editor/EnhancedComponentsSidebar',
@@ -373,6 +379,7 @@ export const EditorLazyComponents = {
         { timeout: 15000, retryAttempts: 5 }
     ),
 
+    // Editor legacy - fallback
     EditorPro: lazyLoadingManager.createLazyComponent(
         '@/legacy/editor/EditorPro',
         { timeout: 20000, retryAttempts: 3 }

@@ -68,8 +68,25 @@ export const UnifiedEditor: React.FC<UnifiedEditorProps> = ({ className = '' }) 
   const DynamicEditor = React.useMemo(() => {
     return React.lazy(async () => {
       try {
-        // Primeiro, tentar carregar EditorPro (preferência do usuário) com lazy loading otimizado
-        logger.info('🚀 UnifiedEditor: Iniciando carregamento do EditorPro com lazy loading...');
+        // Primeiro, tentar carregar SimpleRevolutionaryEditor (nosso novo editor completo)
+        logger.info('🚀 UnifiedEditor: Iniciando carregamento do SimpleRevolutionaryEditor...');
+
+        // Importar diretamente o SimpleRevolutionaryEditor
+        const revolutionaryMod = await import('./SimpleRevolutionaryEditor');
+        const RevolutionaryEditor = revolutionaryMod.default || revolutionaryMod.SimpleRevolutionaryEditor;
+
+        if (RevolutionaryEditor) {
+          // Wrapper com performance profiling
+          const ProfiledEditor = withPerformanceProfiler(RevolutionaryEditor, 'SimpleRevolutionaryEditor-Unified');
+
+          logger.info('✅ UnifiedEditor: Carregado SimpleRevolutionaryEditor com otimizações (novo editor)');
+          try { (window as any).__ACTIVE_EDITOR__ = 'SimpleRevolutionaryEditor-Optimized'; } catch { }
+
+          return { default: ProfiledEditor };
+        }
+
+        // Fallback para EditorPro legacy se SimpleRevolutionaryEditor falhar
+        logger.warn('⚠️ UnifiedEditor: SimpleRevolutionaryEditor não disponível, fallback para EditorPro');
 
         // Usar sistema de lazy loading inteligente para EditorPro
         const LegacyEditor = EditorLazyComponents.EditorPro;
@@ -77,19 +94,19 @@ export const UnifiedEditor: React.FC<UnifiedEditorProps> = ({ className = '' }) 
         // Wrapper com performance profiling
         const ProfiledEditor = withPerformanceProfiler(LegacyEditor, 'EditorPro-Unified');
 
-        logger.info('✅ UnifiedEditor: Carregado EditorPro com otimizações (padrão)');
+        logger.info('✅ UnifiedEditor: Carregado EditorPro com otimizações (fallback)');
         try { (window as any).__ACTIVE_EDITOR__ = 'EditorPro-Optimized'; } catch { }
 
         return { default: ProfiledEditor };
       } catch (legacyError) {
-        logger.warn('⚠️ UnifiedEditor: EditorPro não disponível, fallback para SchemaDrivenEditorResponsive');
+        logger.warn('⚠️ UnifiedEditor: Todos os editores falharam, fallback para SchemaDrivenEditorResponsive');
         try {
           // Fallback para arquitetura moderna baseada em schema (carregamento manual)
           const modernMod = await import('@/components/editor/SchemaDrivenEditorResponsive');
           const ModernEditor = modernMod.default;
           const ProfiledModernEditor = withPerformanceProfiler(ModernEditor, 'SchemaDriven-Unified');
 
-          logger.info('✅ UnifiedEditor: Carregado SchemaDrivenEditorResponsive com otimizações (fallback)');
+          logger.info('✅ UnifiedEditor: Carregado SchemaDrivenEditorResponsive com otimizações (fallback final)');
           try { (window as any).__ACTIVE_EDITOR__ = 'SchemaDriven-Optimized'; } catch { }
 
           return { default: ProfiledModernEditor };
