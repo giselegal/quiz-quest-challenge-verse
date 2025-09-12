@@ -457,15 +457,22 @@ export class ContextualFunnelService implements ContextualService {
                 const pagesData = validatedPages.map((page, index) => ({
                     id: page.id || generateId(),
                     funnel_id: funnelId,
-                    page_type: page.pageType || 'step',
-                    page_order: page.pageOrder || index + 1,
-                    title: page.title || 'Untitled',
+                    page_type: page.type || page.pageType || 'step',
+                    page_order: page.order ?? page.pageOrder ?? index + 1,
+                    title: page.title || page.name || 'Untitled',
                     blocks: page.blocks || [],
-                    metadata: page.metadata || {},
+                    metadata: {
+                        ...page.metadata,
+                        originalType: page.type,
+                        originalOrder: page.order,
+                        context: this.context // ✅ Adicionar contexto aos metadados
+                    },
                 }));
 
                 const { error } = await supabase.from('funnel_pages').insert(pagesData);
                 if (error) throw error;
+
+                console.log(`✅ Salvas ${pagesData.length} páginas para funil ${funnelId} no contexto ${this.context}`);
             }
         } catch (error) {
             console.error('❌ Erro ao salvar páginas:', error);
