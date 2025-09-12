@@ -218,13 +218,19 @@ const FunnelValidatedEditor: React.FC<{
         // Sucesso - funil validado, carregar editor
         if (funnelContext.isReady) {
             return (
-                <EditorInitializerUnified
-                    templateId={templateId}
-                    funnelId={funnelId}
-                    debugMode={debugMode}
-                    validatedFunnel={funnelContext.funnel}
-                    canEdit={funnelContext.canEdit}
-                />
+                <EditorProvider
+                    enableSupabase={false}
+                    funnelId={funnelId || undefined}
+                    storageKey={`editor-state-${funnelId || 'default'}`}
+                >
+                    <EditorInitializerUnified
+                        templateId={templateId}
+                        funnelId={funnelId}
+                        debugMode={debugMode}
+                        validatedFunnel={funnelContext.funnel}
+                        canEdit={funnelContext.canEdit}
+                    />
+                </EditorProvider>
             );
         }
 
