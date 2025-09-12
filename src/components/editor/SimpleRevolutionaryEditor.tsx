@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { useEditor } from '@/components/editor/EditorProvider';
 import { TemplateGallery, Template } from './TemplateGallery';
 import { QuickCloneModal } from './QuickCloneModal';
