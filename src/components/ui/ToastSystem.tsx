@@ -44,9 +44,9 @@ export const useToast = () => {
 };
 
 // Toast Component
-const ToastComponent: React.FC<{ toast: Toast; onRemove: (id: string) => void }> = ({ 
-    toast, 
-    onRemove 
+const ToastComponent: React.FC<{ toast: Toast; onRemove: (id: string) => void }> = ({
+    toast,
+    onRemove
 }) => {
     const { id, type, title, message, actions } = toast;
 
@@ -57,11 +57,11 @@ const ToastComponent: React.FC<{ toast: Toast; onRemove: (id: string) => void }>
         info: <Info className="w-5 h-5 text-blue-400" />,
         celebration: (
             <motion.div
-                animate={{ 
+                animate={{
                     rotate: [0, 10, -10, 0],
                     scale: [1, 1.1, 1]
                 }}
-                transition={{ 
+                transition={{
                     duration: 0.6,
                     repeat: Infinity,
                     repeatDelay: 2
@@ -82,25 +82,25 @@ const ToastComponent: React.FC<{ toast: Toast; onRemove: (id: string) => void }>
 
     return (
         <motion.div
-            initial={{ 
-                opacity: 0, 
-                y: -50, 
-                scale: 0.9 
+            initial={{
+                opacity: 0,
+                y: -50,
+                scale: 0.9
             }}
-            animate={{ 
-                opacity: 1, 
-                y: 0, 
-                scale: 1 
+            animate={{
+                opacity: 1,
+                y: 0,
+                scale: 1
             }}
-            exit={{ 
-                opacity: 0, 
-                x: 300, 
-                scale: 0.8 
+            exit={{
+                opacity: 0,
+                x: 300,
+                scale: 0.8
             }}
-            transition={{ 
-                type: "spring", 
-                damping: 25, 
-                stiffness: 300 
+            transition={{
+                type: "spring",
+                damping: 25,
+                stiffness: 300
             }}
             className={`
                 relative max-w-md w-full p-4 rounded-lg border shadow-lg backdrop-blur-sm
@@ -120,12 +120,12 @@ const ToastComponent: React.FC<{ toast: Toast; onRemove: (id: string) => void }>
                 <div className="flex-shrink-0 mt-0.5">
                     {icons[type]}
                 </div>
-                
+
                 <div className="flex-1 min-w-0">
                     <h4 className="text-sm font-semibold mb-1">
                         {title}
                     </h4>
-                    
+
                     {message && (
                         <p className="text-xs opacity-90 mb-3">
                             {message}
@@ -141,8 +141,8 @@ const ToastComponent: React.FC<{ toast: Toast; onRemove: (id: string) => void }>
                                     onClick={action.onClick}
                                     className={`
                                         px-3 py-1 text-xs rounded-md font-medium transition-colors
-                                        ${action.variant === 'primary' 
-                                            ? 'bg-white/20 hover:bg-white/30 text-white' 
+                                        ${action.variant === 'primary'
+                                            ? 'bg-white/20 hover:bg-white/30 text-white'
                                             : 'bg-white/10 hover:bg-white/20 text-white/80'
                                         }
                                     `}
@@ -160,7 +160,7 @@ const ToastComponent: React.FC<{ toast: Toast; onRemove: (id: string) => void }>
                 <motion.div
                     initial={{ scaleX: 1 }}
                     animate={{ scaleX: 0 }}
-                    transition={{ 
+                    transition={{
                         duration: toast.duration / 1000,
                         ease: "linear"
                     }}
@@ -174,21 +174,21 @@ const ToastComponent: React.FC<{ toast: Toast; onRemove: (id: string) => void }>
                     {Array.from({ length: 6 }).map((_, i) => (
                         <motion.div
                             key={i}
-                            initial={{ 
+                            initial={{
                                 opacity: 1,
                                 scale: 0,
-                                x: "50%", 
-                                y: "50%" 
+                                x: "50%",
+                                y: "50%"
                             }}
                             animate={{
                                 opacity: [1, 1, 0],
                                 scale: [0, 1, 1.2],
                                 x: [
-                                    "50%", 
+                                    "50%",
                                     `${50 + (Math.random() - 0.5) * 200}%`
                                 ],
                                 y: [
-                                    "50%", 
+                                    "50%",
                                     `${50 + (Math.random() - 0.5) * 200}%`
                                 ]
                             }}
@@ -206,9 +206,9 @@ const ToastComponent: React.FC<{ toast: Toast; onRemove: (id: string) => void }>
 };
 
 // Toast Container
-const ToastContainer: React.FC<{ toasts: Toast[]; onRemove: (id: string) => void }> = ({ 
-    toasts, 
-    onRemove 
+const ToastContainer: React.FC<{ toasts: Toast[]; onRemove: (id: string) => void }> = ({
+    toasts,
+    onRemove
 }) => {
     return (
         <div className="fixed top-4 right-4 z-50 space-y-2">

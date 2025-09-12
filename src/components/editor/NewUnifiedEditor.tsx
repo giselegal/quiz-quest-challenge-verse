@@ -123,7 +123,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
             quizActions.importTemplate(template.id, template.name, quiz, newQuiz);
             setQuiz(newQuiz);
             setShowTemplateGallery(false);
-            
+
             // Success feedback with celebration
             celebrate('template-applied', {
                 title: `🎨 ${template.name} Aplicado!`,
@@ -132,7 +132,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
             });
 
             toast.success(
-                'Template aplicado!', 
+                'Template aplicado!',
                 `"${template.name}" foi aplicado com sucesso`,
                 {
                     actions: [
@@ -146,7 +146,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                     ]
                 }
             );
-            
+
             console.log('✅ Template aplicado:', template.name);
         } catch (error) {
             console.error('❌ Erro ao aplicar template:', error);
@@ -165,7 +165,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
             quizActions.importTemplate('imported', quizData.title || 'Quiz Importado', quiz, quizData);
             setQuiz(quizData);
             setShowExportImportModal(false);
-            
+
             // Success feedback with celebration
             const isFirstQuiz = !localStorage.getItem('has_created_quiz');
             if (isFirstQuiz) {
@@ -197,7 +197,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                     ]
                 }
             );
-            
+
             console.log('✅ Quiz importado:', quizData.title || 'Sem título');
         } catch (error) {
             console.error('❌ Erro ao importar quiz:', error);
@@ -212,25 +212,25 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
     // Handle save with loading feedback
     const handleSave = async () => {
         setIsSaving(true);
-        
+
         try {
             toast.info('Salvando...', 'Aguarde um momento');
-            
+
             // Simulate save operation
             await new Promise(resolve => setTimeout(resolve, 1500));
-            
+
             // Call external save if available
             if (quickSave) {
                 quickSave();
             }
-            
+
             // Success celebration
             celebrate('quiz-saved', {
                 title: '💾 Quiz Salvo!',
                 subtitle: 'Todas as alterações foram salvas',
                 intensity: 'medium'
             });
-            
+
             toast.success('Salvo!', 'Quiz salvo com sucesso');
         } catch (error) {
             toast.error('Erro ao salvar', error instanceof Error ? error.message : 'Erro desconhecido');
@@ -370,7 +370,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                         <FileDown className="w-4 h-4" />
                         <span className="text-sm">Exportar/Importar</span>
                     </button>
-                    
+
                     <span className="text-xs text-gray-400 mr-2">
                         {historyEntries.length} ações
                     </span>

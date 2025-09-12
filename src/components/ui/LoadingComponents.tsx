@@ -31,8 +31,8 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
 
     if (variant === 'default') {
         return (
-            <Loader2 
-                className={`animate-spin ${sizeClasses[size]} ${colorClasses[color]} ${className}`} 
+            <Loader2
+                className={`animate-spin ${sizeClasses[size]} ${colorClasses[color]} ${className}`}
             />
         );
     }
@@ -43,11 +43,10 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
                 {[0, 1, 2].map((i) => (
                     <motion.div
                         key={i}
-                        className={`rounded-full bg-current ${
-                            size === 'sm' ? 'w-1 h-1' : 
-                            size === 'md' ? 'w-2 h-2' : 
-                            'w-3 h-3'
-                        } ${colorClasses[color]}`}
+                        className={`rounded-full bg-current ${size === 'sm' ? 'w-1 h-1' :
+                                size === 'md' ? 'w-2 h-2' :
+                                    'w-3 h-3'
+                            } ${colorClasses[color]}`}
                         animate={{
                             scale: [1, 1.5, 1],
                             opacity: [0.5, 1, 0.5]
@@ -86,11 +85,10 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
                 {[0, 1, 2, 3].map((i) => (
                     <motion.div
                         key={i}
-                        className={`bg-current ${
-                            size === 'sm' ? 'w-0.5 h-3' : 
-                            size === 'md' ? 'w-1 h-4' : 
-                            'w-1.5 h-6'
-                        } ${colorClasses[color]}`}
+                        className={`bg-current ${size === 'sm' ? 'w-0.5 h-3' :
+                                size === 'md' ? 'w-1 h-4' :
+                                    'w-1.5 h-6'
+                            } ${colorClasses[color]}`}
                         animate={{
                             scaleY: [1, 2, 1]
                         }}
@@ -163,13 +161,12 @@ export const InlineLoading: React.FC<InlineLoadingProps> = ({
         <div className={`flex items-center gap-2 ${className}`}>
             <LoadingSpinner size={size} variant={variant} color={color} />
             {message && (
-                <span className={`text-sm ${
-                    color === 'white' ? 'text-white' :
-                    color === 'gray' ? 'text-gray-400' :
-                    color === 'green' ? 'text-green-500' :
-                    color === 'orange' ? 'text-orange-500' :
-                    'text-blue-500'
-                }`}>
+                <span className={`text-sm ${color === 'white' ? 'text-white' :
+                        color === 'gray' ? 'text-gray-400' :
+                            color === 'green' ? 'text-green-500' :
+                                color === 'orange' ? 'text-orange-500' :
+                                    'text-blue-500'
+                    }`}>
                     {message}
                 </span>
             )}
