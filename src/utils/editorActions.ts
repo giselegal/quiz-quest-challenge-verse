@@ -214,6 +214,18 @@ export const createQuizActions = (
           actionType: 'remove'
         }
       );
+    },
+
+    // Importar template
+    importTemplate: (_templateId: string, templateName: string, _oldQuizData: any, newQuizData: any) => {
+      addHistoryEntry(
+        'import-template',
+        `Aplicado template "${templateName}"`,
+        newQuizData,
+        {
+          actionType: 'edit'
+        }
+      );
     }
   };
 };

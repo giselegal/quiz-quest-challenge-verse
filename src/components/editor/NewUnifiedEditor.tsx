@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Save, History } from 'lucide-react';
+import { ArrowLeft, Save, History, BookTemplate, FileDown } from 'lucide-react';
 import { CombinedComponentsPanel } from './CombinedComponentsPanel';
 import { useEditorHistory, useHistoryShortcuts } from '@/hooks/useEditorHistory';
 import { HistoryPanel, HistoryToolbar } from './history/HistoryPanel';
 import { createBlockActions, createStepActions, createQuizActions } from '@/utils/editorActions';
+import { TemplateGallery, Template } from './TemplateGallery';
+import { ExportImportModal } from './ExportImportModal';
 
 interface UnifiedEditorProps {
     quiz?: any;
@@ -67,6 +69,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
     const [error, setError] = useState<Error | null>(null);
     const [currentStep, setCurrentStep] = useState(1);
     const [showHistoryPanel, setShowHistoryPanel] = useState(false);
+    const [showTemplateGallery, setShowTemplateGallery] = useState(false);
 
     // Atualizar quiz quando props mudarem
     useEffect(() => {
@@ -79,6 +82,42 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
     useEffect(() => {
         onQuizUpdate?.(quiz);
     }, [quiz, onQuizUpdate]);
+
+    // Handle template selection
+    const handleTemplateSelect = (template: Template) => {
+        try {
+            // Convert template structure to quiz format
+            const newQuiz = {
+                title: template.name,
+                description: template.description,
+                stages: template.structure.stages.map((stage, index) => ({
+                    id: `step-${index + 1}`,
+                    name: stage.name,
+                    description: stage.description,
+                    blocks: stage.blocks.map((block, blockIndex) => ({
+                        id: `block-${index}-${blockIndex}`,
+                        type: block.type,
+                        content: block.content,
+                        style: block.style,
+                        config: block.config
+                    }))
+                })),
+                settings: template.structure.settings,
+                templateId: template.id,
+                templateName: template.name
+            };
+
+            // Add to history and update state
+            quizActions.importTemplate(template.id, template.name, quiz, newQuiz);
+            setQuiz(newQuiz);
+            setShowTemplateGallery(false);
+            
+            console.log('✅ Template aplicado:', template.name);
+        } catch (error) {
+            console.error('❌ Erro ao aplicar template:', error);
+            setError(error instanceof Error ? error : new Error('Erro desconhecido'));
+        }
+    };
 
     const handleStepSelect = (stepNumber: number) => {
         if (stepNumber !== currentStep) {
@@ -194,6 +233,15 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                 <h1 className="text-lg font-semibold text-white">Quiz Editor</h1>
                 
                 <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => setShowTemplateGallery(true)}
+                        className="flex items-center gap-2 px-3 py-1.5 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors"
+                        title="Galeria de Templates"
+                    >
+                        <BookTemplate className="w-4 h-4" />
+                        <span className="text-sm">Templates</span>
+                    </button>
+                    
                     <span className="text-xs text-gray-400">
                         {historyEntries.length} ações | Auto-save ativo
                     </span>
@@ -404,6 +452,13 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                 </div>
 
             </div>
+
+            {/* Template Gallery */}
+            <TemplateGallery
+                isVisible={showTemplateGallery}
+                onTemplateSelect={handleTemplateSelect}
+                onClose={() => setShowTemplateGallery(false)}
+            />
         </div>
     );
 };
