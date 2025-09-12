@@ -2,6 +2,65 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 import ClientLayout from './components/ClientLayout';
 import './index.css';
+
+// 🛡️ SUPRESSÃO DE ERROS DE TERCEIROS CONHECIDOS
+function suppressThirdPartyErrors() {
+  try {
+    // Suprimir erros conhecidos do RudderStack/Google Ads
+    const originalConsoleError = console.error;
+    console.error = function(...args: any[]) {
+      const message = args.join(' ');
+      
+      // Suprimir erros específicos do RS SDK
+      if (message.includes('RS SDK - Google Ads') && 
+          message.includes('Email, Phone are mandatory fields')) {
+        console.warn('🟡 Erro suprimido (RS SDK):', message);
+        return;
+      }
+      
+      // Suprimir erros de identificação incompletos
+      if (message.includes('identify call') && 
+          message.includes('mandatory fields')) {
+        console.warn('🟡 Erro suprimido (Analytics):', message);
+        return;
+      }
+      
+      return originalConsoleError.apply(console, args);
+    };
+
+    // Capturar erros JavaScript não tratados
+    window.addEventListener('error', (event) => {
+      const message = event.message || '';
+      if (message.includes('RS SDK') || 
+          message.includes('identify call') ||
+          message.includes('mandatory fields')) {
+        console.warn('🟡 Erro JavaScript suprimido:', message);
+        event.preventDefault();
+        return false;
+      }
+    });
+
+    // Capturar promises rejeitadas não tratadas
+    window.addEventListener('unhandledrejection', (event) => {
+      const message = event.reason?.toString() || '';
+      if (message.includes('RS SDK') || 
+          message.includes('identify call') ||
+          message.includes('mandatory fields')) {
+        console.warn('🟡 Promise rejeitada suprimida:', message);
+        event.preventDefault();
+      }
+    });
+    
+  } catch (error) {
+    console.warn('Erro ao configurar supressão de erros:', error);
+  }
+}
+
+// Aplicar supressão antes de qualquer outro código
+if (typeof window !== 'undefined') {
+  suppressThirdPartyErrors();
+}
+
 // 🚀 SUPABASE: Inicialização do serviço de dados
 // 🧹 DEVELOPMENT: Sistema de limpeza de avisos do console
 import { initBrowserCleanup } from './utils/browserCleanup';
