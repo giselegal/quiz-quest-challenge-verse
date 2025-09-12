@@ -15,15 +15,15 @@ const convertStepBlocksToStages = (stepBlocks: Record<string, any[]>) => {
         console.warn('⚠️ stepBlocks é null/undefined ou não é um objeto:', stepBlocks);
         return [];
     }
-    
+
     return Object.entries(stepBlocks).map(([stepKey, blocks]) => {
         const stepNumber = parseInt(stepKey.replace('step-', ''));
-        
+
         // Garantir que blocks é um array e filtrar valores null/undefined
-        const safeBlocks = Array.isArray(blocks) 
+        const safeBlocks = Array.isArray(blocks)
             ? blocks.filter(block => block !== null && block !== undefined)
             : [];
-            
+
         return {
             id: stepKey,
             name: `Etapa ${stepNumber}`,
@@ -53,7 +53,7 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
 
     // Use the EditorProvider context instead of useUnifiedEditor
     const editorContext = useEditor();
-    
+
     // Garantir que temos um contexto válido
     if (!editorContext || !editorContext.state) {
         return (
@@ -71,7 +71,7 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
             </div>
         );
     }
-    
+
     const { state, actions } = editorContext;
     const { stepBlocks, currentStep, selectedBlockId } = state || {};
     const { addBlock, updateBlock, setSelectedBlockId } = actions || {};
