@@ -250,8 +250,8 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                                     key={view.mode}
                                     onClick={() => setViewMode(view.mode as any)}
                                     className={`px-3 py-2 text-sm font-medium transition-colors ${viewMode === view.mode
-                                            ? 'bg-blue-100 text-blue-700'
-                                            : 'text-gray-600 hover:text-gray-900'
+                                        ? 'bg-blue-100 text-blue-700'
+                                        : 'text-gray-600 hover:text-gray-900'
                                         }`}
                                     title={view.label}
                                 >
@@ -265,7 +265,7 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                 {/* Área de Canvas */}
                 <div className="flex-1 overflow-auto p-8">
                     <div className={`mx-auto transition-all duration-300 ${viewMode === 'desktop' ? 'max-w-full' :
-                            viewMode === 'tablet' ? 'max-w-2xl' : 'max-w-sm'
+                        viewMode === 'tablet' ? 'max-w-2xl' : 'max-w-sm'
                         }`}>
                         <div className="bg-white rounded-lg shadow-sm border border-gray-200 min-h-96">
                             {activeStage.blocks.length > 0 ? (
@@ -275,8 +275,8 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                                             key={block.id}
                                             onClick={() => setSelectedBlockId?.(block.id)}
                                             className={`p-4 rounded-lg border-2 transition-all cursor-pointer ${selectedBlockId === block.id
-                                                    ? 'border-blue-500 bg-blue-50'
-                                                    : 'border-gray-200 hover:border-gray-300'
+                                                ? 'border-blue-500 bg-blue-50'
+                                                : 'border-gray-200 hover:border-gray-300'
                                                 }`}
                                         >
                                             <div className="flex items-center justify-between mb-2">
