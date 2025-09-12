@@ -6,12 +6,12 @@
  */
 
 import { supabase } from '../config/supabaseConfig';
-import { 
-    validateSupabaseArray, 
+import {
+    validateSupabaseArray,
     validateSupabaseResponse,
     ensureArray,
     logValidationError,
-    debugDataStructure 
+    debugDataStructure
 } from './dataValidation';
 
 /**
@@ -22,23 +22,23 @@ export async function fetchFunis(userId?: string) {
         let query = supabase
             .from('funis')
             .select('*');
-            
+
         if (userId) {
             query = query.eq('user_id', userId);
         }
-        
+
         // ✅ Sintaxe v2.x: .order() APÓS .eq()
         const response = await query.order('created_at', { ascending: false });
-        
+
         const validation = validateSupabaseArray(response);
-        
+
         if (!validation.isValid) {
             logValidationError('fetchFunis', 'Array de funis', response.data);
             return [];
         }
-        
+
         return validation.data;
-        
+
     } catch (error) {
         console.error('[fetchFunis] Erro:', error);
         return [];
@@ -56,16 +56,16 @@ export async function createFunil(funnelData: any) {
             .insert([funnelData])
             .select()
             .single();
-            
+
         const validation = validateSupabaseResponse(response);
-        
+
         if (!validation.isValid) {
             console.error('[createFunil] Erro ao criar funil:', validation.error);
             return null;
         }
-        
+
         return validation.data;
-        
+
     } catch (error) {
         console.error('[createFunil] Erro:', error);
         return null;
@@ -81,22 +81,22 @@ export async function fetchQuizById(quizId: string) {
             console.warn('[fetchQuizById] ID inválido:', quizId);
             return null;
         }
-        
+
         const response = await supabase
             .from('quizzes')
             .select('*')
             .eq('id', quizId)
             .single();
-            
+
         const validation = validateSupabaseResponse(response);
-        
+
         if (!validation.isValid) {
             console.warn('[fetchQuizById] Quiz não encontrado:', validation.error);
             return null;
         }
-        
+
         return validation.data;
-        
+
     } catch (error) {
         console.error('[fetchQuizById] Erro:', error);
         return null;
@@ -112,23 +112,23 @@ export async function fetchQuestions(quizId: string) {
             console.warn('[fetchQuestions] Quiz ID inválido:', quizId);
             return [];
         }
-        
+
         const response = await supabase
             .from('questions')
             .select('*')
             .eq('quiz_id', quizId)
             .order('order_index', { ascending: true });
-            
+
         const validation = validateSupabaseArray(response);
-        
+
         if (!validation.isValid) {
             logValidationError('fetchQuestions', 'Array de perguntas', response.data);
             return [];
         }
-        
+
         // ✅ Dados já validados como array
         return validation.data;
-        
+
     } catch (error) {
         console.error('[fetchQuestions] Erro:', error);
         return [];
@@ -144,23 +144,23 @@ export async function updateFunil(funnelId: string, updates: any) {
             console.error('[updateFunil] ID do funil inválido:', funnelId);
             return null;
         }
-        
+
         const response = await supabase
             .from('funis')
             .update(updates)
             .eq('id', funnelId)
             .select()
             .single();
-            
+
         const validation = validateSupabaseResponse(response);
-        
+
         if (!validation.isValid) {
             console.error('[updateFunil] Erro ao atualizar:', validation.error);
             return null;
         }
-        
+
         return validation.data;
-        
+
     } catch (error) {
         console.error('[updateFunil] Erro:', error);
         return null;
@@ -176,19 +176,19 @@ export async function deleteFunil(funnelId: string) {
             console.error('[deleteFunil] ID do funil inválido:', funnelId);
             return false;
         }
-        
+
         const response = await supabase
             .from('funis')
             .delete()
             .eq('id', funnelId);
-            
+
         if (response.error) {
             console.error('[deleteFunil] Erro ao deletar:', response.error);
             return false;
         }
-        
+
         return true;
-        
+
     } catch (error) {
         console.error('[deleteFunil] Erro:', error);
         return false;
@@ -199,7 +199,7 @@ export async function deleteFunil(funnelId: string) {
  * ✅ BUSCAR COM PAGINAÇÃO
  */
 export async function fetchFunisWithPagination(
-    page: number = 0, 
+    page: number = 0,
     limit: number = 10,
     userId?: string
 ) {
@@ -207,25 +207,25 @@ export async function fetchFunisWithPagination(
         let query = supabase
             .from('funis')
             .select('*', { count: 'exact' });
-            
+
         if (userId) {
             query = query.eq('user_id', userId);
         }
-        
+
         const response = await query
             .order('created_at', { ascending: false })
             .range(page * limit, (page + 1) * limit - 1);
-            
+
         // Validar dados
         const validation = validateSupabaseArray(response);
-        
+
         return {
             data: validation.data,
             count: response.count || 0,
             error: validation.error,
             hasMore: validation.data.length === limit
         };
-        
+
     } catch (error) {
         console.error('[fetchFunisWithPagination] Erro:', error);
         return {
@@ -261,15 +261,15 @@ export async function fetchFunisWithPagination(
  * 🛠️ FUNÇÃO DE MIGRAÇÃO PARA REFATORAR CÓDIGO EXISTENTE
  */
 export function migrateSupabaseCall(
-    oldCall: string, 
-    tableName: string, 
+    oldCall: string,
+    tableName: string,
     operation: 'select' | 'insert' | 'update' | 'delete'
 ) {
     console.group('🔄 Migração Supabase');
     console.log('Código antigo:', oldCall);
-    
+
     let suggestion = '';
-    
+
     switch (operation) {
         case 'select':
             suggestion = `
@@ -278,7 +278,7 @@ const data = await fetch${tableName.charAt(0).toUpperCase() + tableName.slice(1)
 // Dados já validados como array, pode usar .map() com segurança
 `;
             break;
-            
+
         case 'insert':
             suggestion = `
 // ✅ Nova versão:
@@ -287,9 +287,9 @@ const result = await create${tableName.charAt(0).toUpperCase() + tableName.slice
 `;
             break;
     }
-    
+
     console.log('Sugestão:', suggestion);
     console.groupEnd();
-    
+
     return suggestion;
 }

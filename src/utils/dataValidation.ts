@@ -12,7 +12,7 @@ export function ensureArray<T>(value: unknown): T[] {
     if (Array.isArray(value)) {
         return value as T[];
     }
-    
+
     // Se é null, undefined ou qualquer outro tipo, retorna array vazio
     return [];
 }
@@ -22,14 +22,14 @@ export function ensureArray<T>(value: unknown): T[] {
  * Mais seguro que (data || []).map
  */
 export function safeMap<T, R>(
-    data: unknown, 
+    data: unknown,
     mapFn: (item: T, index: number, array: T[]) => R
 ): R[] {
     if (!Array.isArray(data)) {
         console.warn('[safeMap] Dados não são array:', typeof data, data);
         return [];
     }
-    
+
     return data.map(mapFn);
 }
 
@@ -37,10 +37,10 @@ export function safeMap<T, R>(
  * Valida se data existe e é um objeto válido
  */
 export function isValidObject(data: unknown): data is Record<string, any> {
-    return data !== null && 
-           data !== undefined && 
-           typeof data === 'object' && 
-           !Array.isArray(data);
+    return data !== null &&
+        data !== undefined &&
+        typeof data === 'object' &&
+        !Array.isArray(data);
 }
 
 /**
@@ -62,7 +62,7 @@ export function validateSupabaseResponse<T>(
             error: response.error.message || 'Erro desconhecido do Supabase'
         };
     }
-    
+
     // Verifica se data existe
     if (response.data === null || response.data === undefined) {
         return {
@@ -71,7 +71,7 @@ export function validateSupabaseResponse<T>(
             error: 'Dados não encontrados'
         };
     }
-    
+
     return {
         isValid: true,
         data: response.data,
@@ -86,7 +86,7 @@ export function validateSupabaseArray<T>(
     response: SupabaseResponse<T[]>
 ): { isValid: boolean; data: T[]; error: string | null } {
     const validation = validateSupabaseResponse(response);
-    
+
     if (!validation.isValid) {
         return {
             isValid: false,
@@ -94,10 +94,10 @@ export function validateSupabaseArray<T>(
             error: validation.error
         };
     }
-    
+
     // Garantir que é array
     const arrayData = ensureArray<T>(validation.data);
-    
+
     return {
         isValid: true,
         data: arrayData,
@@ -109,8 +109,8 @@ export function validateSupabaseArray<T>(
  * Helper para log de erros de validação
  */
 export function logValidationError(
-    context: string, 
-    expectedType: string, 
+    context: string,
+    expectedType: string,
     actualValue: unknown
 ): void {
     console.error(`[Validation Error] ${context}:`, {
@@ -127,7 +127,7 @@ export function extractId(obj: unknown): string | null {
     if (!isValidObject(obj)) {
         return null;
     }
-    
+
     const record = obj as Record<string, any>;
     return typeof record.id === 'string' ? record.id : null;
 }
@@ -146,14 +146,14 @@ export function sanitizeForLog(data: unknown): any {
     if (typeof data !== 'object' || data === null) {
         return data;
     }
-    
+
     if (Array.isArray(data)) {
         return data.map(item => sanitizeForLog(item));
     }
-    
+
     const sanitized: Record<string, any> = {};
     const sensitiveKeys = ['password', 'token', 'secret', 'key', 'auth'];
-    
+
     for (const [key, value] of Object.entries(data as Record<string, any>)) {
         if (sensitiveKeys.some(sensitive => key.toLowerCase().includes(sensitive))) {
             sanitized[key] = '[REDACTED]';
@@ -161,7 +161,7 @@ export function sanitizeForLog(data: unknown): any {
             sanitized[key] = typeof value === 'object' ? sanitizeForLog(value) : value;
         }
     }
-    
+
     return sanitized;
 }
 
@@ -174,14 +174,14 @@ export function debugDataStructure(data: unknown, label = 'Data'): void {
     console.log('Is Array:', Array.isArray(data));
     console.log('Is null:', data === null);
     console.log('Is undefined:', data === undefined);
-    
+
     if (Array.isArray(data)) {
         console.log('Array length:', data.length);
         console.log('First item type:', data.length > 0 ? typeof data[0] : 'N/A');
     } else if (typeof data === 'object' && data !== null) {
         console.log('Object keys:', Object.keys(data));
     }
-    
+
     console.log('Sanitized value:', sanitizeForLog(data));
     console.groupEnd();
 }

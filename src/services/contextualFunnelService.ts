@@ -453,7 +453,7 @@ export class ContextualFunnelService implements ContextualService {
             if (pages.length > 0) {
                 // ✅ Validação robusta antes de usar .map()
                 const validatedPages = Array.isArray(pages) ? pages : [];
-                
+
                 const pagesData = validatedPages.map((page, index) => ({
                     id: page.id || generateId(),
                     funnel_id: funnelId,

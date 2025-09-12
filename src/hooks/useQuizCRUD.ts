@@ -88,7 +88,7 @@ export const useQuizCRUD = () => {
 
         // ✅ Validação das páginas do funil
         const pages = Array.isArray(funnel.funnel_pages) ? funnel.funnel_pages : [];
-        
+
         pages.forEach(page => {
           if (page.page_type === 'question' && page.blocks) {
             const blocks = Array.isArray(page.blocks) ? page.blocks : [];
