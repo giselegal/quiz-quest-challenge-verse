@@ -162,7 +162,7 @@ const FunnelValidatedEditor: React.FC<{
             funnelContext = useFunnelContext(funnelId);
         } catch (error) {
             console.error('❌ FunnelValidatedEditor: Erro no useFunnelContext:', error);
-            
+
             // Fallback para quando o contexto não está disponível
             return (
                 <div className="flex items-center justify-center min-h-screen bg-gray-50">
