@@ -98,12 +98,12 @@ export const withFullPerformanceOptimization = <P extends {}>(
  */
 export const OptimizedEditorComponents = {
     /**
-     * UnifiedEditor com lazy loading + profiling + memoização
+     * NewUnifiedEditor com lazy loading + profiling + memoização
      */
-    UnifiedEditor: React.lazy(async () => {
-        const { UnifiedEditor } = await import('@/components/editor/UnifiedEditor');
-        const OptimizedEditor = withFullPerformanceOptimization(UnifiedEditor, {
-            profileId: 'UnifiedEditor-Optimized',
+    NewUnifiedEditor: React.lazy(async () => {
+        const { NewUnifiedEditor } = await import('@/components/editor/NewUnifiedEditor');
+        const OptimizedEditor = withFullPerformanceOptimization(NewUnifiedEditor, {
+            profileId: 'NewUnifiedEditor-Optimized',
             memoOptions: { strategy: 'shallow', ttl: 120000 }
         });
         return { default: OptimizedEditor };

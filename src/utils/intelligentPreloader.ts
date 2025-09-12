@@ -36,7 +36,7 @@ class IntelligentPreloader {
     preloadCriticalComponents() {
         const criticalComponents = [
             // Editor components (high priority)
-            () => import('@/components/editor/UnifiedEditor'),
+            () => import('@/components/editor/NewUnifiedEditor'),
             () => import('@/components/editor/blocks/UniversalBlockRenderer'),
 
             // Core pages (medium priority) 
