@@ -23,8 +23,9 @@ class OptimizedFunnelService {
     /**
      * Create a funnel from quiz21StepsComplete template optimized for performance
      */
-    async createFunnelFromQuiz21Template(funnelId: string): Promise<boolean> {
+    async createFunnelFromQuiz21Template(requestedId?: string): Promise<string | null> {
         try {
+            const funnelId = requestedId || `quiz21StepsComplete-${Date.now()}`;
             console.log('🚀 [OPTIMIZED_FUNNEL] Creating funnel from quiz21StepsComplete:', funnelId);
 
             // Load template with optimization settings
@@ -55,18 +56,19 @@ class OptimizedFunnelService {
                 }
             };
 
-            // Save to unified service
-            const success = await funnelUnifiedService.createFunnel(funnelData);
+            // Save to unified service and get the actual created funnel object
+            const createdFunnel = await funnelUnifiedService.createFunnel(funnelData);
             
-            if (success) {
+            if (createdFunnel && createdFunnel.id) {
                 this.activeTemplate = 'quiz21StepsComplete';
-                console.log('✅ [OPTIMIZED_FUNNEL] Funnel created successfully:', funnelId);
+                console.log('✅ [OPTIMIZED_FUNNEL] Funnel created successfully. Requested:', funnelId, 'Actual:', createdFunnel.id);
+                return createdFunnel.id; // Return the actual ID from the service
             }
 
-            return success;
+            return null;
         } catch (error) {
             console.error('❌ [OPTIMIZED_FUNNEL] Failed to create funnel:', error);
-            return false;
+            return null;
         }
     }
 
@@ -143,21 +145,18 @@ class OptimizedFunnelService {
     async openInEditor(templateId = 'quiz21StepsComplete'): Promise<string> {
         console.log('🎨 [OPTIMIZED_FUNNEL] Opening template in editor:', templateId);
 
-        // Generate unique funnel ID
-        const funnelId = `${templateId}-${Date.now()}`;
-
-        // Create optimized funnel
-        const success = await this.createFunnelFromQuiz21Template(funnelId);
+        // Create optimized funnel and get the actual returned ID
+        const actualFunnelId = await this.createFunnelFromQuiz21Template();
         
-        if (!success) {
+        if (!actualFunnelId) {
             throw new Error('Failed to create funnel for editor');
         }
 
         // Preload first few steps for immediate editing
-        await this.preloadSteps(funnelId, ['1', '2', '3']);
+        await this.preloadSteps(actualFunnelId, ['1', '2', '3']);
 
-        // Return editor URL
-        const editorUrl = `/editor?funnel=${funnelId}`;
+        // Return editor URL with the actual funnel ID
+        const editorUrl = `/editor?funnel=${actualFunnelId}`;
         console.log('✅ [OPTIMIZED_FUNNEL] Editor URL generated:', editorUrl);
         
         return editorUrl;

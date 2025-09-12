@@ -86,7 +86,18 @@ export const MainEditorUnified: React.FC = () => {
     const [isInitializing, setIsInitializing] = useState(true);
 
     // Parse query parameters para templates e outras configurações
-    const params = React.useMemo(() => new URLSearchParams(location.split('?')[1] || ''), [location]);
+    const params = React.useMemo(() => {
+        // wouter's useLocation doesn't include query params, so we use window.location.search
+        const searchString = window.location.search;
+        const searchParams = new URLSearchParams(searchString);
+        console.log('🔍 URL Params Debug:', {
+            location,
+            windowLocationSearch: searchString,
+            windowLocationHref: window.location.href,
+            allParams: Array.from(searchParams.entries())
+        });
+        return searchParams;
+    }, [location]);
     const templateId = params.get('template');
     const debugMode = params.get('debug') === 'true';
 
@@ -95,7 +106,8 @@ export const MainEditorUnified: React.FC = () => {
             funnelId,
             templateId,
             debugMode,
-            location
+            location,
+            fullURL: window.location.href
         });
 
         // Simular tempo de inicialização
