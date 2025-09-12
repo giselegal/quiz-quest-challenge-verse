@@ -12,7 +12,7 @@ export interface UITemplate {
 }
 
 // Mock básico para compatibilidade
-export const supabaseTemplateService = {
+export const templateService = {
     async getTemplates(): Promise<UITemplate[]> {
         return [];
     },
@@ -22,5 +22,7 @@ export const supabaseTemplateService = {
     }
 };
 
+export const supabaseTemplateService = templateService;
+
 // Re-export para compatibilidade
-export default supabaseTemplateService;
+export default templateService;

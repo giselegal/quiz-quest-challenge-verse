@@ -21,7 +21,8 @@
  */
 
 import React, { useCallback, useEffect, useState, Suspense } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'wouter';
+import { useLocation } from 'wouter';
 import { EditorUnifiedProvider } from '@/context/EditorUnifiedProvider';
 import { EditorProUnified } from '@/legacy/editor/EditorProUnified';
 import { logger } from '@/utils/debugLogger';
@@ -80,7 +81,7 @@ const EditorErrorFallback = ({ error, resetErrorBoundary }: { error: Error, rese
  */
 export const MainEditorUnified: React.FC = () => {
     const { funnelId } = useParams<{ funnelId: string }>();
-    const navigate = useNavigate();
+    const [, setLocation] = useLocation();
     const [isInitializing, setIsInitializing] = useState(true);
 
     useEffect(() => {
@@ -96,8 +97,8 @@ export const MainEditorUnified: React.FC = () => {
 
     const handleNavigateBack = useCallback(() => {
         logger.info('🔙 MainEditorUnified: Navigating back to funnels');
-        navigate('/meus-funis');
-    }, [navigate]);
+        setLocation('/admin/meus-funis');
+    }, [setLocation]);
 
     if (isInitializing) {
         return <LoadingSpinner />;

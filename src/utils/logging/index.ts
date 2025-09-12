@@ -3,6 +3,7 @@
 
 // Core classes - usando o serviço simplificado
 export { SimpleLoggerService, logger } from './SimpleLoggerService';
+import { logger } from './SimpleLoggerService';
 
 // Core interfaces from shared interfaces
 export type {
@@ -18,3 +19,6 @@ import { SimpleLoggerService } from './SimpleLoggerService';
 
 // Utility type for external usage
 export type LoggerInstance = SimpleLoggerService;
+
+// Função factory para compatibilidade
+export const getLogger = () => logger;
