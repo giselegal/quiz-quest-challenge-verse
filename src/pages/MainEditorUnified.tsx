@@ -1,5 +1,6 @@
 import { QuizFlowProvider } from '@/context/QuizFlowProvider';
 import { templateLibraryService } from '@/services/templateLibraryService';
+import { convertTemplateToFunnel } from '@/utils/templateConverter';
 import React from 'react';
 import { useLocation, useParams } from 'wouter';
 import { ErrorBoundary } from '../components/editor/ErrorBoundary';
@@ -329,7 +330,7 @@ const EditorInitializerUnified: React.FC<{
             return { templateId: sanitizedTemplateId, funnelId: sanitizedFunnelId };
         }, [templateId, funnelId, debugMode]);
 
-        // 🔄 Template loading consolidado com timeout
+        // 🔄 Template loading consolidado com timeout e conversão
         const loadTemplateFromId = React.useCallback(async () => {
             const { templateId: validTemplateId } = validateParameters();
 
@@ -343,6 +344,27 @@ const EditorInitializerUnified: React.FC<{
                 setError(null);
 
                 console.log('🔄 [TEMPLATE] Carregando template:', validTemplateId);
+
+                // 🎯 CONVERSÃO ESPECÍFICA para quiz21StepsComplete
+                if (validTemplateId === 'quiz21StepsComplete' || validTemplateId.includes('quiz21Steps')) {
+                    console.log('🔄 [TEMPLATE] Aplicando conversão para template:', validTemplateId);
+
+                    try {
+                        const convertedFunnel = convertTemplateToFunnel(validTemplateId);
+                        console.log('✅ [TEMPLATE] Template convertido com sucesso:', {
+                            id: convertedFunnel.id,
+                            stages: convertedFunnel.stages.length,
+                            totalBlocks: convertedFunnel.stages.reduce((sum, stage) => sum + stage.blocks.length, 0)
+                        });
+
+                        // Guardar dados convertidos para uso posterior
+                        (window as any).__CONVERTED_TEMPLATE__ = convertedFunnel;
+
+                    } catch (conversionError) {
+                        console.error('❌ [TEMPLATE] Erro na conversão:', conversionError);
+                        // Continuar com o carregamento padrão se a conversão falhar
+                    }
+                }
 
                 // Timeout para template loading
                 const templatePromise = new Promise(async (resolve, reject) => {

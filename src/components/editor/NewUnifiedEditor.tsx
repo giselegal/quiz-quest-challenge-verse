@@ -10,6 +10,7 @@ import { ExportImportModal } from './ExportImportModal';
 import { LoadingButton, InlineLoading } from '@/components/ui/LoadingComponents';
 import { useToast } from '@/components/ui/ToastSystem';
 import { useCelebrationContext } from '@/components/ui/CelebrationSystem';
+import { convertTemplateToFunnel } from '@/utils/templateConverter';
 
 interface UnifiedEditorProps {
     quiz?: any;
@@ -98,26 +99,53 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
             // Show loading toast
             toast.info('Aplicando template...', 'Por favor aguarde');
 
-            // Convert template structure to quiz format
-            const newQuiz = {
-                title: template.name,
-                description: template.description,
-                stages: template.structure.stages.map((stage, index) => ({
-                    id: `step-${index + 1}`,
-                    name: stage.name,
-                    description: stage.description,
-                    blocks: stage.blocks.map((block, blockIndex) => ({
-                        id: `block-${index}-${blockIndex}`,
-                        type: block.type,
-                        content: block.content,
-                        style: block.style,
-                        config: block.config
-                    }))
-                })),
-                settings: template.structure.settings,
-                templateId: template.id,
-                templateName: template.name
-            };
+            let newQuiz;
+
+            // Use conversion for specific templates like quiz21StepsComplete
+            if (template.id === 'quiz21StepsComplete' || template.id.includes('quiz21Steps')) {
+                console.log('🔄 Usando conversão específica para template:', template.id);
+                const convertedFunnel = convertTemplateToFunnel(template.id);
+
+                newQuiz = {
+                    id: convertedFunnel.id,
+                    title: convertedFunnel.title,
+                    description: convertedFunnel.description,
+                    stages: convertedFunnel.stages.map(stage => ({
+                        id: stage.id,
+                        name: stage.name,
+                        blocks: stage.blocks
+                    })),
+                    templateId: template.id,
+                    templateName: template.name
+                };
+
+                console.log('✅ Template convertido:', {
+                    stages: newQuiz.stages.length,
+                    totalBlocks: newQuiz.stages.reduce((sum, stage) => sum + stage.blocks.length, 0)
+                });
+            } else {
+                // Fallback for generic templates
+                console.log('🔄 Usando conversão genérica para template:', template.id);
+                newQuiz = {
+                    title: template.name,
+                    description: template.description,
+                    stages: template.structure.stages.map((stage, index) => ({
+                        id: `step-${index + 1}`,
+                        name: stage.name,
+                        description: stage.description,
+                        blocks: stage.blocks.map((block, blockIndex) => ({
+                            id: `block-${index}-${blockIndex}`,
+                            type: block.type,
+                            content: block.content,
+                            style: block.style,
+                            config: block.config
+                        }))
+                    })),
+                    settings: template.structure.settings,
+                    templateId: template.id,
+                    templateName: template.name
+                };
+            }
 
             // Add to history and update state
             quizActions.importTemplate(template.id, template.name, quiz, newQuiz);

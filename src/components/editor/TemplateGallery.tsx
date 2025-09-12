@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TemplateMarketplace } from './TemplateMarketplace';
+import { convertTemplateToFunnel, ConvertedFunnel } from '@/utils/templateConverter';
 
 export interface Template {
     id: string;

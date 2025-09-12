@@ -19,6 +19,7 @@ import { useLocation } from 'wouter';
 import { AdminBreadcrumbs } from '@/components/admin/AdminBreadcrumbs';
 import { useFunnelTemplates } from '@/core/funnel/hooks/useFunnelTemplates';
 import { getUnifiedTemplates, TemplateRegistry, type UnifiedTemplate } from '@/config/unifiedTemplatesRegistry';
+import { CLEAN_TEMPLATE_REGISTRY, getFunctionalTemplates, getPrimaryTemplate } from '@/config/cleanTemplatesRegistry';
 import { FunnelContext } from '@/core/contexts/FunnelContext';
 
 const FunnelPanelPage: React.FC = () => {
@@ -468,36 +469,43 @@ const FunnelPanelPage: React.FC = () => {
   };
 
   const finalTemplates: UnifiedTemplate[] = React.useMemo(() => {
-    // ⚠️ MODO DESENVOLVIMENTO: Mostrando apenas quiz21StepsComplete
-    // Para desenvolvimento e validação das configurações JSON
-    const developmentMode = true;
+    console.log('🧹 [CLEAN] Carregando templates limpos');
 
-    if (developmentMode) {
-      // Filtra para mostrar apenas o quiz21StepsComplete
-      const unifiedTemplates = getUnifiedTemplates({ sortBy: sort === 'name' ? 'name' : 'usageCount' });
-      const filteredTemplates = unifiedTemplates.filter(template =>
-        template.id === 'quiz-estilo-21-steps' ||
-        template.name.toLowerCase().includes('quiz')
+    // ✅ USAR REGISTRY LIMPO: Apenas templates funcionais
+    const functionalTemplates = getFunctionalTemplates();
+
+    // Aplicar filtros
+    let filteredTemplates = functionalTemplates;
+
+    if (search.trim()) {
+      filteredTemplates = filteredTemplates.filter(template =>
+        template.name.toLowerCase().includes(search.toLowerCase()) ||
+        template.description.toLowerCase().includes(search.toLowerCase()) ||
+        template.tags.some(tag => tag.toLowerCase().includes(search.toLowerCase()))
       );
-      return filteredTemplates.map(normalizeTemplate);
     }
 
-    if (funnelTemplates && funnelTemplates.length) {
-      let list = [...funnelTemplates];
-      if (sort === 'name') {
-        list.sort((a, b) => a.name.localeCompare(b.name));
-      } else if (sort === 'createdAt') {
-        list.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-      } else if (sort === 'updatedAt') {
-        list.sort((a, b) => new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime());
-      }
-      return list.map(convertToUnifiedTemplate).map(normalizeTemplate);
+    if (category !== 'all') {
+      filteredTemplates = filteredTemplates.filter(template => template.category === category);
     }
 
-    // ✅ USAR: Registry unificado como fallback
-    const unifiedTemplates = getUnifiedTemplates({ sortBy: sort === 'name' ? 'name' : 'usageCount' });
-    return unifiedTemplates.map(normalizeTemplate);
-  }, [funnelTemplates, sort]);
+    // Aplicar ordenação
+    if (sort === 'name') {
+      filteredTemplates.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sort === 'usageCount') {
+      filteredTemplates.sort((a, b) => b.usageCount - a.usageCount);
+    } else if (sort === 'conversionRate') {
+      filteredTemplates.sort((a, b) => parseFloat(b.conversionRate) - parseFloat(a.conversionRate));
+    }
+
+    console.log('✅ [CLEAN] Templates carregados:', {
+      total: functionalTemplates.length,
+      filtered: filteredTemplates.length,
+      withConverter: filteredTemplates.filter(t => (t as any).hasConverter).length
+    });
+
+    return filteredTemplates.map(normalizeTemplate);
+  }, [search, category, sort]);
 
   const handleCreateCustom = async () => {
     console.log('🎨 Criando funil personalizado...');
@@ -715,10 +723,23 @@ const FunnelPanelPage: React.FC = () => {
                       console.warn(`Failed to load template image: ${template.image}`);
                     }}
                   />
-                  <div className="absolute top-2 right-2">
-                    <Badge variant="secondary" className="bg-[#B89B7A] text-white">
+                  <div className="absolute top-2 right-2 space-y-1">
+                    <Badge variant="secondary" className="bg-[#B89B7A] text-white block">
                       {template.category}
                     </Badge>
+                    {/* Indicator para templates funcionais */}
+                    {(template as any).isFunctional && (
+                      <Badge variant="default" className="bg-green-500 text-white text-xs block">
+                        <CheckCircle className="w-3 h-3 mr-1" />
+                        Funcional
+                      </Badge>
+                    )}
+                    {/* Indicator para templates com conversor */}
+                    {(template as any).hasConverter && (
+                      <Badge variant="default" className="bg-blue-500 text-white text-xs block">
+                        🔄 Editor OK
+                      </Badge>
+                    )}
                   </div>
                   {template.isOfficial && (
                     <div className="absolute top-2 left-2">
