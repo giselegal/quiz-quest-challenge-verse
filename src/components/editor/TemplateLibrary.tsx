@@ -3,7 +3,10 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { supabaseTemplateService, UITemplate } from '@/services/templateService';
+import { UnifiedTemplateService } from '@/services/UnifiedTemplateService';
+
+// Usar serviço unificado
+const templateService = new UnifiedTemplateService();
 import { Crown, Download, Eye, Search, Sparkles, Star } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
@@ -112,9 +115,9 @@ export const TemplateLibrary: React.FC = () => {
 
   if (loading) {
     return (
-    <div className="h-full flex items-center justify-center">
+      <div className="h-full flex items-center justify-center">
         <div className="text-center">
-      <div className="rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Carregando templates...</p>
         </div>
       </div>
@@ -275,7 +278,7 @@ export const TemplateLibrary: React.FC = () => {
                         variant="outline"
                         size="sm"
                         className="flex-1"
-                        // onClick={() => handlePreviewTemplate(template)}
+                      // onClick={() => handlePreviewTemplate(template)}
                       >
                         <Eye className="h-3 w-3 mr-1" />
                         Visualizar
