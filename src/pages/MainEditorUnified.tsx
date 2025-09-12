@@ -28,11 +28,16 @@ import { EditorRuntimeProviders } from '@/context/EditorRuntimeProviders';
  * - Context unificado via UnifiedContextProvider + LegacyCompatibilityWrapper
  * - Configuração Supabase robusta do MainEditor legacy
  * - Template loading integrado com fallback robusto
- * - Import dinâmico com fallback para EditorPro
+ * - Import dinâmico com fallback para NewUnifiedEditor
  * - Estado persistente e contextual
  * - Performance otimizada
  * - Debug mode avançado via URL params
  * - Máxima compatibilidade com componentes legacy
+ * 
+ * ✅ MUDANÇA IMPORTANTE:
+ * - Agora usa EditorPro como editor principal (funcional e testado)
+ * - NewUnifiedEditor como fallback (funcionalidade limitada)
+ * - Garante estrutura de 4 colunas funcionais: etapas, componentes, canvas, propriedades
  */
 const MainEditorUnified: React.FC = () => {
     const [location] = useLocation();
@@ -430,35 +435,35 @@ const EditorInitializerUnified: React.FC<{
                     setIsLoading(true);
                     setError(null);
 
-                    console.log('🔄 [EDITOR] Carregando NewUnifiedEditor...');
+                    console.log('🔄 [EDITOR] Carregando EditorPro (editor funcional)...');
 
-                    // Primeiro tenta carregar NewUnifiedEditor
-                    const mod = await import('../components/editor/NewUnifiedEditor');
-                    const Comp = mod.default || mod.NewUnifiedEditor;
+                    // Usar EditorPro que já tem estrutura completa e funcional
+                    const mod = await import('../components/editor/EditorPro');
+                    const Comp = mod.default || mod.EditorPro;
 
                     if (!cancelled && Comp) {
                         clearTimeout(timeoutId);
                         setUnifiedEditorComp(() => Comp);
-                        console.log('✅ [EDITOR] NewUnifiedEditor carregado com sucesso');
+                        console.log('✅ [EDITOR] EditorPro carregado com sucesso');
                     }
                 } catch (error) {
-                    console.error('❌ [EDITOR] Falha ao carregar NewUnifiedEditor:', error);
+                    console.error('❌ [EDITOR] Falha ao carregar EditorPro:', error);
 
                     if (!cancelled) {
                         try {
-                            console.log('🔄 [EDITOR] Tentando fallback para EditorPro...');
+                            console.log('🔄 [EDITOR] Tentando fallback para NewUnifiedEditor...');
 
-                            const legacyMod = await import('../components/editor/EditorPro');
-                            const LegacyComp = legacyMod.default || legacyMod.EditorPro;
+                            const fallbackMod = await import('../components/editor/NewUnifiedEditor');
+                            const FallbackComp = fallbackMod.default || fallbackMod.NewUnifiedEditor;
 
-                            if (LegacyComp) {
+                            if (FallbackComp) {
                                 clearTimeout(timeoutId);
-                                setUnifiedEditorComp(() => LegacyComp);
+                                setUnifiedEditorComp(() => FallbackComp);
                                 setFallbackMode(true);
-                                console.warn('⚠️ [EDITOR] Usando fallback EditorPro legacy');
+                                console.warn('⚠️ [EDITOR] Usando fallback NewUnifiedEditor (funcionalidade limitada)');
                             }
-                        } catch (legacyError) {
-                            console.error('❌ [EDITOR] Falha ao carregar fallback EditorPro:', legacyError);
+                        } catch (fallbackError) {
+                            console.error('❌ [EDITOR] Falha ao carregar fallback NewUnifiedEditor:', fallbackError);
                             clearTimeout(timeoutId);
                             setError('Falha ao carregar editor. Tente recarregar a página.');
                         }
@@ -638,7 +643,7 @@ const EditorInitializerUnified: React.FC<{
                     {fallbackMode && (
                         <div className="bg-yellow-50 border-b border-yellow-200 px-4 py-2">
                             <p className="text-sm text-yellow-800 text-center">
-                                ⚠️ Executando em modo de compatibilidade
+                                ⚠️ Usando editor com funcionalidade limitada
                             </p>
                         </div>
                     )}
