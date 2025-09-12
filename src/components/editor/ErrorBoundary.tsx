@@ -87,8 +87,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
               Ocorreu um erro inesperado ao renderizar este componente.
             </p>
 
-            {process.env.NODE_ENV === 'development' && this.state.error && (
-              <details className="bg-muted p-3 rounded-md text-xs">
+            {this.state.error && (
+              <details className="bg-muted p-3 rounded-md text-xs" open>
                 <summary className="cursor-pointer font-mono font-medium mb-2 flex items-center gap-2">
                   <Bug size={14} />
                   Detalhes do erro (desenvolvimento)

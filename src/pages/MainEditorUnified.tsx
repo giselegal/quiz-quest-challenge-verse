@@ -157,7 +157,30 @@ const FunnelValidatedEditor: React.FC<{
     funnelId,
     debugMode = false,
 }) => {
-        const funnelContext = useFunnelContext(funnelId);
+        let funnelContext;
+        try {
+            funnelContext = useFunnelContext(funnelId);
+        } catch (error) {
+            console.error('❌ FunnelValidatedEditor: Erro no useFunnelContext:', error);
+            
+            // Fallback para quando o contexto não está disponível
+            return (
+                <div className="flex items-center justify-center min-h-screen bg-gray-50">
+                    <div className="max-w-md mx-auto text-center">
+                        <h2 className="text-xl font-bold text-red-600 mb-4">Erro de Contexto</h2>
+                        <p className="text-gray-600 mb-4">
+                            O hook useFunnelContext falhou: {String(error)}
+                        </p>
+                        <button
+                            onClick={() => window.location.reload()}
+                            className="bg-blue-600 text-white px-4 py-2 rounded"
+                        >
+                            Recarregar Página
+                        </button>
+                    </div>
+                </div>
+            );
+        }
 
         if (debugMode) {
             console.log('🔐 FunnelValidatedEditor:', {
