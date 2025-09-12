@@ -11,12 +11,23 @@ import { useCollaboration, CollaborationPanel, CursorOverlay, useMouseTracking }
 
 // Adaptador para converter stepBlocks em format de stages
 const convertStepBlocksToStages = (stepBlocks: Record<string, any[]>) => {
+    if (!stepBlocks || typeof stepBlocks !== 'object') {
+        console.warn('⚠️ stepBlocks é null/undefined ou não é um objeto:', stepBlocks);
+        return [];
+    }
+    
     return Object.entries(stepBlocks).map(([stepKey, blocks]) => {
         const stepNumber = parseInt(stepKey.replace('step-', ''));
+        
+        // Garantir que blocks é um array e filtrar valores null/undefined
+        const safeBlocks = Array.isArray(blocks) 
+            ? blocks.filter(block => block !== null && block !== undefined)
+            : [];
+            
         return {
             id: stepKey,
             name: `Etapa ${stepNumber}`,
-            blocks: blocks || []
+            blocks: safeBlocks
         };
     });
 };
@@ -41,12 +52,38 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
     const editorRef = useRef<HTMLDivElement>(null);
 
     // Use the EditorProvider context instead of useUnifiedEditor
-    const { state, actions } = useEditor();
-    const { stepBlocks, currentStep, selectedBlockId } = state;
-    const { addBlock, updateBlock, setCurrentStep, setSelectedBlockId } = actions;
+    const editorContext = useEditor();
+    
+    // Garantir que temos um contexto válido
+    if (!editorContext || !editorContext.state) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-50">
+                <div className="text-center">
+                    <h2 className="text-xl font-bold text-red-600 mb-4">Contexto do Editor Inválido</h2>
+                    <p className="text-gray-600 mb-4">O contexto do EditorProvider não está disponível.</p>
+                    <button
+                        onClick={() => window.location.reload()}
+                        className="bg-blue-600 text-white px-4 py-2 rounded"
+                    >
+                        Recarregar Página
+                    </button>
+                </div>
+            </div>
+        );
+    }
+    
+    const { state, actions } = editorContext;
+    const { stepBlocks, currentStep, selectedBlockId } = state || {};
+    const { addBlock, updateBlock, setSelectedBlockId } = actions || {};
 
     // Convert stepBlocks to stages format for display
-    const stages = useMemo(() => convertStepBlocksToStages(stepBlocks || {}), [stepBlocks]);
+    const stages = useMemo(() => {
+        if (!stepBlocks || typeof stepBlocks !== 'object') {
+            console.warn('⚠️ stepBlocks não está disponível ou é inválido:', stepBlocks);
+            return [];
+        }
+        return convertStepBlocksToStages(stepBlocks);
+    }, [stepBlocks]);
 
     // Mock data for compatibility with existing UI
     const funnel = useMemo(() => ({
@@ -57,7 +94,7 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
 
     const isLoading = false;
     const activeStageId = `step-${currentStep}`;
-    const selectedBlock = selectedBlockId ? stages.flatMap(s => s.blocks).find(b => b.id === selectedBlockId) : null;
+    const selectedBlock = selectedBlockId ? stages.flatMap(s => s.blocks).find(b => b && b.id === selectedBlockId) : null;
 
     const setSelectedBlock = useCallback((blockId: string) => {
         setSelectedBlockId(blockId);
