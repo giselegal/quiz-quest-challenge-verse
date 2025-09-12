@@ -116,16 +116,6 @@ export const MainEditorUnified: React.FC = () => {
         const newFunnelId = `novo-funil-${Date.now()}`;
         setLocation(`/editor/${newFunnelId}${templateId ? `?template=${templateId}` : ''}`);
     }, [setLocation, templateId]);
-<<<<<<< Updated upstream
-
-    const handleCreateNewFunnel = useCallback(() => {
-        logger.info('✨ MainEditorUnified: Creating new funnel');
-        // Gerar um ID temporário para novo funil
-        const newFunnelId = `novo-funil-${Date.now()}`;
-        setLocation(`/editor/${newFunnelId}${templateId ? `?template=${templateId}` : ''}`);
-    }, [setLocation, templateId]);
-=======
->>>>>>> Stashed changes
 
     if (isInitializing) {
         return <LoadingSpinner />;
