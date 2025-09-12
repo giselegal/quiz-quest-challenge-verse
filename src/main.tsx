@@ -6,8 +6,8 @@ import './index.css';
 // 🧹 DEVELOPMENT: Sistema de limpeza de avisos do console
 import { initBrowserCleanup } from './utils/browserCleanup';
 import { cleanupConsoleWarnings } from './utils/development';
-// 🛡️ DEVELOPMENT: Bloquear conexões Lovable em desenvolvimento
-import './utils/blockLovableInDev';
+// 🛡️ DEVELOPMENT: Bloquear conexões Lovable em desenvolvimento (DESABILITADO)
+// import './utils/blockLovableInDev';
 // import "./utils/hotmartWebhookSimulator"; // Carregar simulador de webhook - temporariamente desabilitado
 
 // 🧹 DEVELOPMENT: Ativa limpeza de avisos apenas em desenvolvimento
@@ -29,20 +29,22 @@ if ((import.meta.env.DEV || typeof window !== 'undefined') && typeof window !== 
       (window as any).__USE_CLOUDINARY__ = ((import.meta as any)?.env?.VITE_ENABLE_CLOUDINARY === 'true');
     } catch { }
     const isPreviewHost = typeof location !== 'undefined' && /lovable\.app|stackblitz\.io|codesandbox\.io/.test(location.hostname);
-    // Bloqueia logs externos em dev
-    if (url.includes('cloudfunctions.net/pushLogsToGrafana')) {
+    const isLovableEnv = typeof location !== 'undefined' && /lovable\.app/.test(location.hostname);
+    
+    // Bloqueia logs externos em dev MAS NÃO no Lovable
+    if (url.includes('cloudfunctions.net/pushLogsToGrafana') && !isLovableEnv) {
       // Simula sucesso e evita 500 no console
       return Promise.resolve(new Response(null, { status: 204 }));
     }
-    // Silencia Sentry em dev para evitar 404/429 e ruído excessivo
-    if (/sentry\.io|ingest\.sentry\.io/.test(url) && (import.meta.env.DEV || isPreviewHost)) {
+    // Silencia Sentry em dev para evitar 404/429 e ruído excessivo MAS NÃO no Lovable
+    if (/sentry\.io|ingest\.sentry\.io/.test(url) && (import.meta.env.DEV || isPreviewHost) && !isLovableEnv) {
       try {
         console.warn('🛑 Interceptado (Sentry desabilitado em dev):', url);
       } catch { }
       return Promise.resolve(new Response(null, { status: 204 }));
     }
-    // Silencia chamadas REST do Supabase quando desabilitado (evita erros 400/403 durante QA)
-    if (DISABLE_SUPABASE && url.includes('.supabase.co/rest/v1/')) {
+    // Silencia chamadas REST do Supabase quando desabilitado (evita erros 400/403 durante QA) MAS NÃO no Lovable
+    if (DISABLE_SUPABASE && url.includes('.supabase.co/rest/v1/') && !isLovableEnv) {
       try {
         console.warn('🛑 Interceptado (Supabase REST desabilitado em dev):', url);
       } catch { }
@@ -67,7 +69,8 @@ if ((import.meta.env.DEV || typeof window !== 'undefined') && typeof window !== 
   // Também intercepta sendBeacon (Sentry usa esse transporte em prod)
   try {
     const isPreviewHost = typeof location !== 'undefined' && /lovable\.app|stackblitz\.io|codesandbox\.io/.test(location.hostname);
-    if (navigator?.sendBeacon && (import.meta.env.DEV || isPreviewHost)) {
+    const isLovableEnv = typeof location !== 'undefined' && /lovable\.app/.test(location.hostname);
+    if (navigator?.sendBeacon && (import.meta.env.DEV || isPreviewHost) && !isLovableEnv) {
       const originalBeacon = navigator.sendBeacon.bind(navigator);
       (navigator as any).sendBeacon = (url: any, data?: any) => {
         try {
@@ -85,7 +88,8 @@ if ((import.meta.env.DEV || typeof window !== 'undefined') && typeof window !== 
   // Intercepta XHR para evitar ruído em libs que não usam fetch
   try {
     const isPreviewHost = typeof location !== 'undefined' && /lovable\.app|stackblitz\.io|codesandbox\.io/.test(location.hostname);
-    if ((import.meta.env.DEV || isPreviewHost) && typeof XMLHttpRequest !== 'undefined') {
+    const isLovableEnv = typeof location !== 'undefined' && /lovable\.app/.test(location.hostname);
+    if ((import.meta.env.DEV || isPreviewHost) && !isLovableEnv && typeof XMLHttpRequest !== 'undefined') {
       const OriginalXHR = XMLHttpRequest;
       // @ts-ignore - extend constructor
       function PatchedXHR(this: XMLHttpRequest) {
