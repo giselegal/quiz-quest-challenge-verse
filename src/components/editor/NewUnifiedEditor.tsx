@@ -79,6 +79,9 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
     const [showExportImportModal, setShowExportImportModal] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
+    // Helper para obter índice da etapa ativa
+    const activeStepIndex = currentStep - 1;
+
     // Toast system
     const toast = useToast();
     const { celebrate } = useCelebrationContext();
@@ -648,7 +651,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                     <div className="h-full">
                         <EnhancedPropertiesPanel
                             selectedBlock={selectedBlockId ? quiz.stages[activeStepIndex]?.blocks?.find((block: any) => block.id === selectedBlockId) : null}
-                            onPropertyChange={(property: string, value: any) => {
+                            onUpdate={(updates: Record<string, any>) => {
                                 if (selectedBlockId) {
                                     const currentStage = quiz.stages[activeStepIndex];
                                     const block = currentStage?.blocks?.find((b: any) => b.id === selectedBlockId);
@@ -657,18 +660,31 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                                             ...block,
                                             properties: {
                                                 ...block.properties,
-                                                [property]: value
+                                                ...updates
                                             }
                                         };
                                         handleBlockUpdate(selectedBlockId, updatedBlock);
                                     }
                                 }
                             }}
-                            historyInfo={{
-                                totalActions: historyEntries.length,
-                                currentPosition: currentIndex + 1,
-                                canUndo,
-                                canRedo
+                            onDelete={() => {
+                                if (selectedBlockId) {
+                                    handleRemoveBlock(selectedBlockId);
+                                    setSelectedBlockId(null);
+                                }
+                            }}
+                            onDuplicate={() => {
+                                if (selectedBlockId) {
+                                    const currentStage = quiz.stages[activeStepIndex];
+                                    const block = currentStage?.blocks?.find((b: any) => b.id === selectedBlockId);
+                                    if (block) {
+                                        const duplicatedBlock = {
+                                            ...block,
+                                            id: `${block.id}-copy-${Date.now()}`,
+                                        };
+                                        handleAddBlock(duplicatedBlock.type, duplicatedBlock.properties);
+                                    }
+                                }
                             }}
                         />
                     </div>
