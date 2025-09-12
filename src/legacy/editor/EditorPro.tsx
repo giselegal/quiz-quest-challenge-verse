@@ -518,7 +518,8 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
         actions.addBlockAtIndex(currentStepKey, newBlock, currentStepData.length);
         actions.setSelectedBlockId(newBlock.id);
         if (notification?.success) {
-          notification.success(`Componente ${blockType} adicionado (duplo clique).`);
+          const safeBlockType = typeof blockType === 'string' ? blockType : 'desconhecido';
+          notification.success(`Componente ${safeBlockType} adicionado (duplo clique).`);
         }
         if (process.env.NODE_ENV === 'development') {
           logger.debug('🧩 Fallback add via evento:', { blockType, step: safeCurrentStep });
@@ -938,7 +939,7 @@ export const EditorPro: React.FC<EditorProProps> = ({ className = '' }) => {
                 />
               </Suspense>
             </div>
-            
+
             {/* Painel de Componentes */}
             <div className="flex-1 overflow-y-auto">
               <Suspense fallback={<div className="p-4">Loading library…</div>}>
