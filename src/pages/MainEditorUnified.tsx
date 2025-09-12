@@ -430,19 +430,19 @@ const EditorInitializerUnified: React.FC<{
                     setIsLoading(true);
                     setError(null);
 
-                    console.log('🔄 [EDITOR] Carregando UnifiedEditor...');
+                    console.log('🔄 [EDITOR] Carregando NewUnifiedEditor...');
 
-                    // Primeiro tenta carregar UnifiedEditor
-                    const mod = await import('../components/editor/UnifiedEditor');
-                    const Comp = mod.default || mod.UnifiedEditor;
+                    // Primeiro tenta carregar NewUnifiedEditor
+                    const mod = await import('../components/editor/NewUnifiedEditor');
+                    const Comp = mod.default || mod.NewUnifiedEditor;
 
                     if (!cancelled && Comp) {
                         clearTimeout(timeoutId);
                         setUnifiedEditorComp(() => Comp);
-                        console.log('✅ [EDITOR] UnifiedEditor carregado com sucesso');
+                        console.log('✅ [EDITOR] NewUnifiedEditor carregado com sucesso');
                     }
                 } catch (error) {
-                    console.error('❌ [EDITOR] Falha ao carregar UnifiedEditor:', error);
+                    console.error('❌ [EDITOR] Falha ao carregar NewUnifiedEditor:', error);
 
                     if (!cancelled) {
                         try {

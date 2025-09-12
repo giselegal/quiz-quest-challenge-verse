@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'wouter';
 import { ArrowLeft, Save, History, BookTemplate, FileDown } from 'lucide-react';
 import { CombinedComponentsPanel } from './CombinedComponentsPanel';
 import { useEditorHistory, useHistoryShortcuts } from '@/hooks/useEditorHistory';
@@ -23,7 +23,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
     onQuizUpdate,
     quickSave
 }) => {
-    const navigate = useNavigate();
+    const [, setLocation] = useLocation();
 
     const initialData = initialQuiz || {
         title: 'Novo Quiz',
@@ -360,7 +360,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
             <div className="h-14 bg-gray-900 border-b border-gray-800/50 flex items-center justify-between px-4">
                 <div className="flex items-center gap-4">
                     <button
-                        onClick={() => navigate('/dashboard')}
+                        onClick={() => setLocation('/dashboard')}
                         className="flex items-center gap-2 px-3 py-1.5 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors"
                     >
                         <ArrowLeft className="w-4 h-4" />
