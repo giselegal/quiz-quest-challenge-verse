@@ -7,6 +7,9 @@ import { HistoryPanel, HistoryToolbar } from './history/HistoryPanel';
 import { createBlockActions, createStepActions, createQuizActions } from '@/utils/editorActions';
 import { TemplateGallery, Template } from './TemplateGallery';
 import { ExportImportModal } from './ExportImportModal';
+import { LoadingButton, InlineLoading } from '@/components/ui/LoadingComponents';
+import { useToast } from '@/components/ui/ToastSystem';
+import { useCelebrationContext } from '@/components/ui/CelebrationSystem';
 
 interface UnifiedEditorProps {
     quiz?: any;
@@ -71,6 +74,11 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
     const [showHistoryPanel, setShowHistoryPanel] = useState(false);
     const [showTemplateGallery, setShowTemplateGallery] = useState(false);
     const [showExportImportModal, setShowExportImportModal] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+
+    // Toast system
+    const toast = useToast();
+    const { celebrate } = useCelebrationContext();
 
     // Atualizar quiz quando props mudarem
     useEffect(() => {
@@ -87,6 +95,9 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
     // Handle template selection
     const handleTemplateSelect = (template: Template) => {
         try {
+            // Show loading toast
+            toast.info('Aplicando template...', 'Por favor aguarde');
+
             // Convert template structure to quiz format
             const newQuiz = {
                 title: template.name,
@@ -112,11 +123,119 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
             quizActions.importTemplate(template.id, template.name, quiz, newQuiz);
             setQuiz(newQuiz);
             setShowTemplateGallery(false);
+            
+            // Success feedback with celebration
+            celebrate('template-applied', {
+                title: `🎨 ${template.name} Aplicado!`,
+                subtitle: 'Seu quiz está ficando incrível!',
+                intensity: template.premium ? 'high' : 'medium'
+            });
 
+            toast.success(
+                'Template aplicado!', 
+                `"${template.name}" foi aplicado com sucesso`,
+                {
+                    actions: [
+                        {
+                            label: 'Desfazer',
+                            onClick: () => {
+                                undo();
+                                toast.info('Template desfeito', 'Voltou ao estado anterior');
+                            }
+                        }
+                    ]
+                }
+            );
+            
             console.log('✅ Template aplicado:', template.name);
         } catch (error) {
             console.error('❌ Erro ao aplicar template:', error);
             setError(error instanceof Error ? error : new Error('Erro desconhecido'));
+            toast.error(
+                'Erro ao aplicar template',
+                error instanceof Error ? error.message : 'Erro desconhecido'
+            );
+        }
+    };    // Handle import
+    const handleQuizImport = (quizData: any) => {
+        try {
+            toast.info('Importando quiz...', 'Processando dados');
+
+            // Add to history and update state
+            quizActions.importTemplate('imported', quizData.title || 'Quiz Importado', quiz, quizData);
+            setQuiz(quizData);
+            setShowExportImportModal(false);
+            
+            // Success feedback with celebration
+            const isFirstQuiz = !localStorage.getItem('has_created_quiz');
+            if (isFirstQuiz) {
+                localStorage.setItem('has_created_quiz', 'true');
+                celebrate('first-quiz', {
+                    title: '🎉 Primeiro Quiz Importado!',
+                    subtitle: 'Bem-vindo à família Quiz Quest!',
+                    intensity: 'epic'
+                });
+            } else {
+                celebrate('quiz-completed', {
+                    title: '📥 Quiz Importado!',
+                    subtitle: `"${quizData.title || 'Quiz'}" está pronto para usar`
+                });
+            }
+
+            toast.success(
+                'Quiz importado!',
+                `"${quizData.title || 'Quiz'}" foi importado com sucesso`,
+                {
+                    actions: [
+                        {
+                            label: 'Desfazer',
+                            onClick: () => {
+                                undo();
+                                toast.info('Importação desfeita', 'Voltou ao estado anterior');
+                            }
+                        }
+                    ]
+                }
+            );
+            
+            console.log('✅ Quiz importado:', quizData.title || 'Sem título');
+        } catch (error) {
+            console.error('❌ Erro ao importar quiz:', error);
+            setError(error instanceof Error ? error : new Error('Erro desconhecido'));
+            toast.error(
+                'Erro ao importar quiz',
+                error instanceof Error ? error.message : 'Erro desconhecido'
+            );
+        }
+    };
+
+    // Handle save with loading feedback
+    const handleSave = async () => {
+        setIsSaving(true);
+        
+        try {
+            toast.info('Salvando...', 'Aguarde um momento');
+            
+            // Simulate save operation
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Call external save if available
+            if (quickSave) {
+                quickSave();
+            }
+            
+            // Success celebration
+            celebrate('quiz-saved', {
+                title: '💾 Quiz Salvo!',
+                subtitle: 'Todas as alterações foram salvas',
+                intensity: 'medium'
+            });
+            
+            toast.success('Salvo!', 'Quiz salvo com sucesso');
+        } catch (error) {
+            toast.error('Erro ao salvar', error instanceof Error ? error.message : 'Erro desconhecido');
+        } finally {
+            setIsSaving(false);
         }
     };
 
@@ -243,15 +362,30 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                         <span className="text-sm">Templates</span>
                     </button>
 
-                    <span className="text-xs text-gray-400">
-                        {historyEntries.length} ações | Auto-save ativo
+                    <button
+                        onClick={() => setShowExportImportModal(true)}
+                        className="flex items-center gap-2 px-3 py-1.5 text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors"
+                        title="Exportar/Importar Quiz"
+                    >
+                        <FileDown className="w-4 h-4" />
+                        <span className="text-sm">Exportar/Importar</span>
+                    </button>
+                    
+                    <span className="text-xs text-gray-400 mr-2">
+                        {historyEntries.length} ações
                     </span>
 
-                    <button
+                    <InlineLoading
+                        isLoading={isSaving}
+                        message="Salvando..."
+                        size="sm"
+                        color="blue"
+                        className="mr-2"
+                    />                    <button
                         onClick={() => setShowHistoryPanel(!showHistoryPanel)}
                         className={`p-1.5 rounded transition-colors ${showHistoryPanel
-                                ? 'bg-blue-600 text-white'
-                                : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                            ? 'bg-blue-600 text-white'
+                            : 'text-gray-400 hover:text-white hover:bg-gray-800'
                             }`}
                         title="Painel de Histórico"
                     >
@@ -259,13 +393,17 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                     </button>
 
                     {quickSave && (
-                        <button
-                            onClick={quickSave}
-                            className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors text-sm"
+                        <LoadingButton
+                            onClick={handleSave}
+                            isLoading={isSaving}
+                            loadingText="Salvando..."
+                            size="sm"
+                            variant="primary"
+                            className="flex items-center gap-1"
                         >
                             <Save className="w-3 h-3" />
-                            Save
-                        </button>
+                            Salvar
+                        </LoadingButton>
                     )}
                 </div>
             </div>
@@ -458,6 +596,14 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                 isVisible={showTemplateGallery}
                 onTemplateSelect={handleTemplateSelect}
                 onClose={() => setShowTemplateGallery(false)}
+            />
+
+            {/* Export/Import Modal */}
+            <ExportImportModal
+                isVisible={showExportImportModal}
+                currentQuiz={quiz}
+                onImport={handleQuizImport}
+                onClose={() => setShowExportImportModal(false)}
             />
         </div>
     );

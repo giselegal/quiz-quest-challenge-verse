@@ -4,6 +4,8 @@ import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { ThemeProvider } from './components/theme-provider';
 import { LoadingFallback } from './components/ui/loading-fallback';
 import { Toaster } from './components/ui/toaster';
+import { ToastProvider } from './components/ui/ToastSystem';
+import { CelebrationProvider } from './components/ui/CelebrationSystem';
 import { AuthProvider } from './context/AuthContext';
 import { performanceManager } from './utils/performanceManager';
 
@@ -68,9 +70,11 @@ function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <AuthProvider>
-        <Router>
-          <Suspense fallback={<PageLoading />}>
-            <Switch>
+        <ToastProvider>
+          <CelebrationProvider>
+            <Router>
+              <Suspense fallback={<PageLoading />}>
+                <Switch>
               {/* Rota principal - Home */}
               <Route path="/" component={() =>
                 <Suspense fallback={<LoadingFallback />}>
@@ -233,6 +237,8 @@ function App() {
           </Suspense>
         </Router>
         <Toaster />
+        </CelebrationProvider>
+        </ToastProvider>
       </AuthProvider>
     </ThemeProvider>
   );
