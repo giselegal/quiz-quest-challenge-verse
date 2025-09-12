@@ -90,7 +90,7 @@ export const ExportImportModal: React.FC<ExportImportModalProps> = ({
 
         try {
             const importData = JSON.parse(importText);
-            
+
             // Validate structure
             if (!importData.quiz) {
                 throw new Error('Formato inválido: propriedade "quiz" não encontrada');
@@ -119,7 +119,7 @@ export const ExportImportModal: React.FC<ExportImportModalProps> = ({
             const content = e.target?.result as string;
             try {
                 const importData = JSON.parse(content);
-                
+
                 if (!importData.quiz) {
                     throw new Error('Formato inválido: propriedade "quiz" não encontrada');
                 }
@@ -132,7 +132,7 @@ export const ExportImportModal: React.FC<ExportImportModalProps> = ({
             }
         };
         reader.readAsText(file);
-        
+
         // Reset input
         if (fileInputRef.current) {
             fileInputRef.current.value = '';
@@ -176,22 +176,20 @@ export const ExportImportModal: React.FC<ExportImportModalProps> = ({
                 <div className="flex border-b border-gray-700">
                     <button
                         onClick={() => setActiveTab('export')}
-                        className={`px-6 py-3 text-sm font-medium transition-colors ${
-                            activeTab === 'export'
+                        className={`px-6 py-3 text-sm font-medium transition-colors ${activeTab === 'export'
                                 ? 'text-blue-400 border-b-2 border-blue-400 bg-gray-800'
                                 : 'text-gray-400 hover:text-white'
-                        }`}
+                            }`}
                     >
                         <Download className="w-4 h-4 inline mr-2" />
                         Exportar
                     </button>
                     <button
                         onClick={() => setActiveTab('import')}
-                        className={`px-6 py-3 text-sm font-medium transition-colors ${
-                            activeTab === 'import'
+                        className={`px-6 py-3 text-sm font-medium transition-colors ${activeTab === 'import'
                                 ? 'text-blue-400 border-b-2 border-blue-400 bg-gray-800'
                                 : 'text-gray-400 hover:text-white'
-                        }`}
+                            }`}
                     >
                         <Upload className="w-4 h-4 inline mr-2" />
                         Importar
@@ -339,11 +337,10 @@ export const ExportImportModal: React.FC<ExportImportModalProps> = ({
 
                 {/* Status Message */}
                 {status.type && (
-                    <div className={`mx-6 mb-6 p-3 rounded-lg flex items-center gap-2 ${
-                        status.type === 'success' 
+                    <div className={`mx-6 mb-6 p-3 rounded-lg flex items-center gap-2 ${status.type === 'success'
                             ? 'bg-green-900 border border-green-700 text-green-300'
                             : 'bg-red-900 border border-red-700 text-red-300'
-                    }`}>
+                        }`}>
                         {status.type === 'success' ? (
                             <CheckCircle className="w-4 h-4" />
                         ) : (

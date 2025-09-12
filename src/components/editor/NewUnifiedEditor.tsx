@@ -70,6 +70,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
     const [currentStep, setCurrentStep] = useState(1);
     const [showHistoryPanel, setShowHistoryPanel] = useState(false);
     const [showTemplateGallery, setShowTemplateGallery] = useState(false);
+    const [showExportImportModal, setShowExportImportModal] = useState(false);
 
     // Atualizar quiz quando props mudarem
     useEffect(() => {
@@ -111,7 +112,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
             quizActions.importTemplate(template.id, template.name, quiz, newQuiz);
             setQuiz(newQuiz);
             setShowTemplateGallery(false);
-            
+
             console.log('✅ Template aplicado:', template.name);
         } catch (error) {
             console.error('❌ Erro ao aplicar template:', error);
@@ -123,7 +124,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
         if (stepNumber !== currentStep) {
             const previousStep = currentStep;
             setCurrentStep(stepNumber);
-            
+
             // Adicionar ao histórico se for uma mudança significativa
             if (Math.abs(stepNumber - previousStep) > 1) {
                 const newData = { ...quiz, currentStep: stepNumber };
@@ -150,8 +151,8 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
         const stepId = `step-${currentStep}`;
         const updatedQuiz = {
             ...quiz,
-            stages: quiz.stages.map((stage: any) => 
-                stage.id === stepId 
+            stages: quiz.stages.map((stage: any) =>
+                stage.id === stepId
                     ? { ...stage, blocks: [...stage.blocks, newBlock] }
                     : stage
             )
@@ -170,8 +171,8 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
         if (block) {
             const updatedQuiz = {
                 ...quiz,
-                stages: quiz.stages.map((stage: any) => 
-                    stage.id === stepId 
+                stages: quiz.stages.map((stage: any) =>
+                    stage.id === stepId
                         ? { ...stage, blocks: stage.blocks.filter((b: any) => b.id !== blockId) }
                         : stage
                 )
@@ -195,8 +196,8 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                         key={stepNumber}
                         onClick={() => handleStepSelect(stepNumber)}
                         className={`w-full mb-1 px-2 py-2 rounded text-xs font-medium transition-colors ${currentStep === stepNumber
-                                ? 'bg-blue-600 text-white'
-                                : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                            ? 'bg-blue-600 text-white'
+                            : 'text-gray-400 hover:text-white hover:bg-gray-800'
                             }`}
                     >
                         {stepNumber}
@@ -221,7 +222,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
 
                     {/* Toolbar de histórico */}
                     <div className="flex items-center gap-1 px-2 py-1 bg-gray-800 rounded">
-                        <HistoryToolbar 
+                        <HistoryToolbar
                             canUndo={canUndo}
                             canRedo={canRedo}
                             onUndo={undo}
@@ -229,9 +230,9 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                         />
                     </div>
                 </div>
-                
+
                 <h1 className="text-lg font-semibold text-white">Quiz Editor</h1>
-                
+
                 <div className="flex items-center gap-2">
                     <button
                         onClick={() => setShowTemplateGallery(true)}
@@ -241,23 +242,22 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                         <BookTemplate className="w-4 h-4" />
                         <span className="text-sm">Templates</span>
                     </button>
-                    
+
                     <span className="text-xs text-gray-400">
                         {historyEntries.length} ações | Auto-save ativo
                     </span>
-                    
+
                     <button
                         onClick={() => setShowHistoryPanel(!showHistoryPanel)}
-                        className={`p-1.5 rounded transition-colors ${
-                            showHistoryPanel 
-                                ? 'bg-blue-600 text-white' 
+                        className={`p-1.5 rounded transition-colors ${showHistoryPanel
+                                ? 'bg-blue-600 text-white'
                                 : 'text-gray-400 hover:text-white hover:bg-gray-800'
-                        }`}
+                            }`}
                         title="Painel de Histórico"
                     >
                         <History className="w-4 h-4" />
                     </button>
-                    
+
                     {quickSave && (
                         <button
                             onClick={quickSave}
@@ -273,7 +273,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
             {/* Painel de histórico flutuante */}
             {showHistoryPanel && (
                 <div className="absolute top-16 right-4 w-80 z-50">
-                    <HistoryPanel 
+                    <HistoryPanel
                         entries={historyEntries}
                         currentIndex={currentIndex}
                         canUndo={canUndo}
@@ -302,7 +302,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                         <p className="text-xs text-gray-400">Arraste para adicionar</p>
                     </div>
                     <CombinedComponentsPanel />
-                    
+
                     {/* Botões de demonstração de histórico */}
                     <div className="p-3 border-t border-gray-800/50 space-y-2">
                         <button
@@ -370,13 +370,13 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                                         <h3 className="text-lg font-semibold mb-2">Canvas do Quiz</h3>
                                         <p className="text-sm">Etapa {currentStep}/21 - Use os botões de demonstração</p>
                                     </div>
-                                    
+
                                     {/* Renderizar blocos da etapa atual */}
                                     <div className="space-y-3">
                                         {(() => {
                                             const currentStage = quiz.stages.find((s: any) => s.id === `step-${currentStep}`);
                                             const blocks = currentStage?.blocks || [];
-                                            
+
                                             if (blocks.length === 0) {
                                                 return (
                                                     <div className="p-4 border-2 border-dashed border-gray-300 rounded text-center">
@@ -386,7 +386,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                                                     </div>
                                                 );
                                             }
-                                            
+
                                             return blocks.map((block: any, index: number) => (
                                                 <div key={block.id} className="p-3 bg-gray-50 rounded border">
                                                     <div className="flex justify-between items-start">
@@ -431,7 +431,7 @@ export const NewUnifiedEditor: React.FC<UnifiedEditorProps> = ({
                                 Selecione um bloco para<br />configurar suas propriedades
                             </div>
                         )}
-                        
+
                         {/* Informações do histórico */}
                         <div className="mt-6 p-3 bg-gray-800 rounded">
                             <h4 className="text-xs font-semibold text-white mb-2">💾 Histórico</h4>
