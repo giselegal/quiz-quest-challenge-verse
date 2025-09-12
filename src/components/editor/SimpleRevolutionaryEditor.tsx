@@ -102,13 +102,6 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
     const activeStageId = currentStep || (stages.length > 0 ? stages[0].id : null);
     const activeStage = stages.find(s => s.id === activeStageId);
 
-    // Auto-save callback
-    const handleAutoSave = useCallback(() => {
-        if (editorContext?.state?.stepBlocks && autoSaveEnabled) {
-            console.log('Auto-saving editor state');
-        }
-    }, [editorContext?.state?.stepBlocks, autoSaveEnabled]);
-
     // Handle template selection
     const handleTemplateSelect = (template: Template) => {
         setSelectedTemplate(template);
@@ -167,10 +160,10 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                                     console.log(`Navegar para etapa ${stepNumber}`);
                                 }}
                                 className={`w-12 h-12 m-1 rounded-lg text-xs font-bold transition-all duration-200 flex flex-col items-center justify-center ${isActive
-                                        ? 'bg-blue-600 text-white ring-2 ring-blue-300'
-                                        : hasBlocks
-                                            ? 'bg-green-600 text-white hover:bg-green-700'
-                                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                                    ? 'bg-blue-600 text-white ring-2 ring-blue-300'
+                                    : hasBlocks
+                                        ? 'bg-green-600 text-white hover:bg-green-700'
+                                        : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                                     }`}
                                 title={`Etapa ${stepNumber}${hasBlocks ? ' (com conteúdo)' : ' (vazia)'}`}
                             >
