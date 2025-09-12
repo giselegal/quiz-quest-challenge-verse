@@ -145,7 +145,51 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
             ref={editorRef}
             className="flex h-screen bg-gray-100 overflow-hidden"
         >
-            {/* Layout de 4 Colunas */}
+            {/* Layout de 5 Colunas com Navegação por Etapas */}
+
+            {/* 0. Sidebar de Navegação por Etapas */}
+            <div className="w-16 bg-gray-900 border-r border-gray-700 flex flex-col">
+                <div className="p-2 border-b border-gray-700">
+                    <h2 className="text-xs font-bold text-white text-center">Etapas</h2>
+                </div>
+                
+                <div className="flex-1 overflow-y-auto py-2">
+                    {Array.from({ length: 21 }, (_, i) => i + 1).map(stepNumber => {
+                        const stepId = `step-${stepNumber}`;
+                        const isActive = activeStageId === stepId;
+                        const hasBlocks = stages.some(s => s.id === stepId && s.blocks.length > 0);
+                        
+                        return (
+                            <button
+                                key={stepNumber}
+                                onClick={() => {
+                                    // Simular navegação - implementação futura
+                                    console.log(`Navegar para etapa ${stepNumber}`);
+                                }}
+                                className={`w-12 h-12 m-1 rounded-lg text-xs font-bold transition-all duration-200 flex flex-col items-center justify-center ${
+                                    isActive
+                                        ? 'bg-blue-600 text-white ring-2 ring-blue-300'
+                                        : hasBlocks
+                                            ? 'bg-green-600 text-white hover:bg-green-700'
+                                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                                }`}
+                                title={`Etapa ${stepNumber}${hasBlocks ? ' (com conteúdo)' : ' (vazia)'}`}
+                            >
+                                <span>{stepNumber}</span>
+                                {hasBlocks && (
+                                    <div className="w-1 h-1 bg-current rounded-full mt-0.5" />
+                                )}
+                            </button>
+                        );
+                    })}
+                </div>
+                
+                <div className="p-2 border-t border-gray-700 text-center">
+                    <span className="text-xs text-gray-400">
+                        {stages.filter(s => s.blocks.length > 0).length}/21
+                    </span>
+                </div>
+            </div>
 
             {/* 1. Painel de Componentes */}
             {showComponentPanel && (
@@ -171,11 +215,13 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                                         if (activeStageId && addBlock) {
                                             const newBlock = {
                                                 id: `${component.type}_${Date.now()}`,
-                                                type: component.type,
+                                                type: component.type as any,
                                                 content: {
                                                     text: `Novo ${component.label}`,
                                                     placeholder: true
                                                 },
+                                                properties: {},
+                                                order: Date.now(),
                                                 position: { x: 0, y: 0 }
                                             };
 
@@ -217,9 +263,17 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                         </button>
 
                         <AutoSaveManager
-                            isEnabled={autoSaveEnabled}
-                            onSave={handleAutoSave}
-                            interval={5000}
+                            data={editorContext?.state?.stepBlocks}
+                            onSave={async (data) => {
+                                if (data && autoSaveEnabled) {
+                                    console.log('Auto-saving editor state:', data);
+                                    await Promise.resolve();
+                                }
+                            }}
+                            config={{ 
+                                interval: 5000,
+                                enabled: autoSaveEnabled 
+                            }}
                         />
                     </div>
                 </div>
@@ -250,8 +304,8 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                                     key={view.mode}
                                     onClick={() => setViewMode(view.mode as any)}
                                     className={`px-3 py-2 text-sm font-medium transition-colors ${viewMode === view.mode
-                                        ? 'bg-blue-100 text-blue-700'
-                                        : 'text-gray-600 hover:text-gray-900'
+                                            ? 'bg-blue-100 text-blue-700'
+                                            : 'text-gray-600 hover:text-gray-900'
                                         }`}
                                     title={view.label}
                                 >
@@ -265,7 +319,7 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                 {/* Área de Canvas */}
                 <div className="flex-1 overflow-auto p-8">
                     <div className={`mx-auto transition-all duration-300 ${viewMode === 'desktop' ? 'max-w-full' :
-                        viewMode === 'tablet' ? 'max-w-2xl' : 'max-w-sm'
+                            viewMode === 'tablet' ? 'max-w-2xl' : 'max-w-sm'
                         }`}>
                         <div className="bg-white rounded-lg shadow-sm border border-gray-200 min-h-96">
                             {activeStage.blocks.length > 0 ? (
@@ -275,8 +329,8 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                                             key={block.id}
                                             onClick={() => setSelectedBlockId?.(block.id)}
                                             className={`p-4 rounded-lg border-2 transition-all cursor-pointer ${selectedBlockId === block.id
-                                                ? 'border-blue-500 bg-blue-50'
-                                                : 'border-gray-200 hover:border-gray-300'
+                                                    ? 'border-blue-500 bg-blue-50'
+                                                    : 'border-gray-200 hover:border-gray-300'
                                                 }`}
                                         >
                                             <div className="flex items-center justify-between mb-2">
