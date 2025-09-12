@@ -30,7 +30,7 @@ if ((import.meta.env.DEV || typeof window !== 'undefined') && typeof window !== 
     } catch { }
     const isPreviewHost = typeof location !== 'undefined' && /lovable\.app|stackblitz\.io|codesandbox\.io/.test(location.hostname);
     const isLovableEnv = typeof location !== 'undefined' && /lovable\.app/.test(location.hostname);
-    
+
     // Bloqueia logs externos em dev MAS NÃO no Lovable
     if (url.includes('cloudfunctions.net/pushLogsToGrafana') && !isLovableEnv) {
       // Simula sucesso e evita 500 no console
