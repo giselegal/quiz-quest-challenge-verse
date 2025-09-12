@@ -12,10 +12,10 @@ const convertStepBlocksToStages = (stepBlocks: any) => {
     }
 
     return Object.entries(stepBlocks).map(([stepKey, blocks]) => {
-        const stageBlocks = Array.isArray(blocks) ? blocks : 
-                           (blocks && typeof blocks === 'object' && blocks.blocks) ? blocks.blocks : 
-                           [];
-        
+        const stageBlocks = Array.isArray(blocks) ? blocks :
+            (blocks && typeof blocks === 'object' && blocks.blocks) ? blocks.blocks :
+                [];
+
         return {
             id: stepKey,
             name: stepKey.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase()),
@@ -94,7 +94,7 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
             console.warn('SimpleRevolutionaryEditor: No valid stepBlocks found');
             return [];
         }
-        
+
         const converted = convertStepBlocksToStages(stepBlocks);
         return safeNormalizeStages(converted);
     }, [stepBlocks]);
@@ -146,7 +146,7 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
             className="flex h-screen bg-gray-100 overflow-hidden"
         >
             {/* Layout de 4 Colunas */}
-            
+
             {/* 1. Painel de Componentes */}
             {showComponentPanel && (
                 <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
@@ -154,7 +154,7 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                         <h2 className="font-bold text-lg text-gray-900">🎨 Componentes</h2>
                         <p className="text-sm text-gray-600">Arraste para adicionar</p>
                     </div>
-                    
+
                     <div className="flex-1 overflow-y-auto p-4">
                         <div className="space-y-2">
                             {[
@@ -178,7 +178,7 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                                                 },
                                                 position: { x: 0, y: 0 }
                                             };
-                                            
+
                                             try {
                                                 await addBlock(activeStageId, newBlock);
                                                 console.log('✅ Bloco adicionado com sucesso:', component.type);
@@ -215,7 +215,7 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                         >
                             📚 Galeria de Templates
                         </button>
-                        
+
                         <AutoSaveManager
                             isEnabled={autoSaveEnabled}
                             onSave={handleAutoSave}
@@ -249,11 +249,10 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                                 <button
                                     key={view.mode}
                                     onClick={() => setViewMode(view.mode as any)}
-                                    className={`px-3 py-2 text-sm font-medium transition-colors ${
-                                        viewMode === view.mode
+                                    className={`px-3 py-2 text-sm font-medium transition-colors ${viewMode === view.mode
                                             ? 'bg-blue-100 text-blue-700'
                                             : 'text-gray-600 hover:text-gray-900'
-                                    }`}
+                                        }`}
                                     title={view.label}
                                 >
                                     {view.icon}
@@ -265,10 +264,9 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
 
                 {/* Área de Canvas */}
                 <div className="flex-1 overflow-auto p-8">
-                    <div className={`mx-auto transition-all duration-300 ${
-                        viewMode === 'desktop' ? 'max-w-full' :
-                        viewMode === 'tablet' ? 'max-w-2xl' : 'max-w-sm'
-                    }`}>
+                    <div className={`mx-auto transition-all duration-300 ${viewMode === 'desktop' ? 'max-w-full' :
+                            viewMode === 'tablet' ? 'max-w-2xl' : 'max-w-sm'
+                        }`}>
                         <div className="bg-white rounded-lg shadow-sm border border-gray-200 min-h-96">
                             {activeStage.blocks.length > 0 ? (
                                 <div className="p-6 space-y-4">
@@ -276,11 +274,10 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                                         <div
                                             key={block.id}
                                             onClick={() => setSelectedBlockId?.(block.id)}
-                                            className={`p-4 rounded-lg border-2 transition-all cursor-pointer ${
-                                                selectedBlockId === block.id
+                                            className={`p-4 rounded-lg border-2 transition-all cursor-pointer ${selectedBlockId === block.id
                                                     ? 'border-blue-500 bg-blue-50'
                                                     : 'border-gray-200 hover:border-gray-300'
-                                            }`}
+                                                }`}
                                         >
                                             <div className="flex items-center justify-between mb-2">
                                                 <span className="text-sm font-medium text-gray-600">
@@ -290,7 +287,7 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                                                     #{index + 1}
                                                 </span>
                                             </div>
-                                            
+
                                             <div className="text-gray-900">
                                                 {typeof block.content === 'object' ? (
                                                     <pre className="text-sm bg-gray-50 p-2 rounded border">
@@ -326,14 +323,14 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                         <h2 className="font-bold text-lg text-gray-900">👁️ Preview</h2>
                         <p className="text-sm text-gray-600">Visualização em tempo real</p>
                     </div>
-                    
+
                     <div className="flex-1 overflow-auto p-4">
                         <div className="bg-white rounded-lg shadow-sm border border-gray-200 min-h-96">
                             <div className="p-4">
                                 <h3 className="font-medium text-gray-900 mb-4">
                                     Preview: {activeStage.name}
                                 </h3>
-                                
+
                                 {activeStage.blocks.length > 0 ? (
                                     <div className="space-y-3">
                                         {activeStage.blocks.map((block, index) => (
@@ -366,7 +363,7 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                         <h2 className="font-bold text-lg text-gray-900">⚙️ Propriedades</h2>
                         <p className="text-sm text-gray-600">Configurar elemento selecionado</p>
                     </div>
-                    
+
                     <div className="flex-1 overflow-auto p-4">
                         {selectedBlockId ? (
                             <div className="space-y-4">
@@ -381,7 +378,7 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                                         className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-gray-50"
                                     />
                                 </div>
-                                
+
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
                                         Configurações
@@ -391,7 +388,7 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                                             selectedBlock: selectedBlockId,
                                             editable: true
                                         }, null, 2)}
-                                        onChange={() => {}}
+                                        onChange={() => { }}
                                         className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm font-mono h-40 resize-none"
                                         placeholder="{ }"
                                     />
