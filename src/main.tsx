@@ -9,29 +9,29 @@ function suppressThirdPartyErrors() {
     // Interceptar console.error IMEDIATAMENTE
     const originalConsoleError = console.error;
     const originalConsoleWarn = console.warn;
-    
+
     // Override mais agressivo para console.error
-    console.error = function(...args: any[]) {
+    console.error = function (...args: any[]) {
       const message = args.join(' ');
-      
+
       // Suprimir TODOS os erros relacionados ao RS SDK
-      if (message.includes('RS SDK') || 
-          message.includes('RudderStack') ||
-          message.includes('rudderstack') ||
-          (message.includes('Email, Phone are mandatory') && message.includes('mandatory fields')) ||
-          (message.includes('identify call') && message.includes('mandatory')) ||
-          message.includes('rrweb-plugin') ||
-          message.includes('browser.js') ||
-          message.includes('logger.js')) {
+      if (message.includes('RS SDK') ||
+        message.includes('RudderStack') ||
+        message.includes('rudderstack') ||
+        (message.includes('Email, Phone are mandatory') && message.includes('mandatory fields')) ||
+        (message.includes('identify call') && message.includes('mandatory')) ||
+        message.includes('rrweb-plugin') ||
+        message.includes('browser.js') ||
+        message.includes('logger.js')) {
         console.warn('🟡 [SUPRIMIDO] RS SDK/Analytics:', message.substring(0, 100) + '...');
         return;
       }
-      
+
       return originalConsoleError.apply(console, args);
     };
 
     // Override para console.warn também
-    console.warn = function(...args: any[]) {
+    console.warn = function (...args: any[]) {
       const message = args.join(' ');
       if (message.includes('RS SDK') || message.includes('RudderStack')) {
         return; // Suprimir completamente
@@ -41,22 +41,22 @@ function suppressThirdPartyErrors() {
 
     // Interceptar window.onerror de forma mais agressiva
     const originalWindowError = window.onerror;
-    window.onerror = function(message, source, lineno, colno, error) {
+    window.onerror = function (message, source, lineno, colno, error) {
       const msg = String(message || '');
       const src = String(source || '');
-      
-      if (msg.includes('RS SDK') || 
-          msg.includes('RudderStack') ||
-          msg.includes('Email, Phone are mandatory') ||
-          msg.includes('identify call') ||
-          src.includes('rudderstack') ||
-          src.includes('8113-d1a36f24b574faad.js') ||
-          src.includes('c0166af3-b1eb4cd85304c1c2.js') ||
-          src.includes('rrweb-plugin')) {
+
+      if (msg.includes('RS SDK') ||
+        msg.includes('RudderStack') ||
+        msg.includes('Email, Phone are mandatory') ||
+        msg.includes('identify call') ||
+        src.includes('rudderstack') ||
+        src.includes('8113-d1a36f24b574faad.js') ||
+        src.includes('c0166af3-b1eb4cd85304c1c2.js') ||
+        src.includes('rrweb-plugin')) {
         console.warn('🟡 [SUPRIMIDO] Erro de script externo:', msg.substring(0, 80));
         return true; // Prevenir bubble up
       }
-      
+
       if (originalWindowError) {
         return originalWindowError.call(window, message, source, lineno, colno, error);
       }
@@ -65,15 +65,15 @@ function suppressThirdPartyErrors() {
 
     // Interceptar addEventListener de forma mais agressiva
     const originalAddEventListener = window.addEventListener;
-    window.addEventListener = function(type: string, listener: any, options: any) {
+    window.addEventListener = function (type: string, listener: any, options: any) {
       if (type === 'error' && typeof listener === 'function') {
-        const wrappedListener = function(event: ErrorEvent) {
+        const wrappedListener = function (event: ErrorEvent) {
           const message = event.message || '';
-          if (message.includes('RS SDK') || 
-              message.includes('RudderStack') ||
-              message.includes('Email, Phone are mandatory') ||
-              event.filename?.includes('rudderstack') ||
-              event.filename?.includes('8113-d1a36f24b574faad.js')) {
+          if (message.includes('RS SDK') ||
+            message.includes('RudderStack') ||
+            message.includes('Email, Phone are mandatory') ||
+            event.filename?.includes('rudderstack') ||
+            event.filename?.includes('8113-d1a36f24b574faad.js')) {
             console.warn('🟡 [SUPRIMIDO] Erro addEventListener:', message.substring(0, 80));
             event.preventDefault();
             event.stopPropagation();
@@ -89,16 +89,16 @@ function suppressThirdPartyErrors() {
     // Suprimir unhandledrejection também
     window.addEventListener('unhandledrejection', (event) => {
       const message = String(event.reason || '');
-      if (message.includes('RS SDK') || 
-          message.includes('RudderStack') ||
-          message.includes('Email, Phone are mandatory')) {
+      if (message.includes('RS SDK') ||
+        message.includes('RudderStack') ||
+        message.includes('Email, Phone are mandatory')) {
         console.warn('🟡 [SUPRIMIDO] Promise rejeitada:', message.substring(0, 80));
         event.preventDefault();
       }
     });
 
     console.log('🛡️ Sistema de supressão de erros ativo');
-    
+
   } catch (error) {
     console.warn('❌ Erro ao configurar supressão:', error);
   }
