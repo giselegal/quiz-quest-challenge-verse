@@ -21,15 +21,44 @@ const convertStepBlocksToStages = (stepBlocks: Record<string, any[]>) => {
 
         // Garantir que blocks é um array e filtrar valores null/undefined
         const safeBlocks = Array.isArray(blocks)
-            ? blocks.filter(block => block !== null && block !== undefined)
+            ? blocks.filter(block => block && typeof block === 'object')
             : [];
+
+        // Normalizar cada block para ter estrutura mínima
+        const normalizedBlocks = safeBlocks.map((block: any, idx: number) => ({
+            id: block.id || `auto-${stepKey}-${idx}-${Date.now()}`,
+            type: block.type || 'unknown-block',
+            content: block.content && typeof block.content === 'object' ? block.content : {},
+            properties: block.properties && typeof block.properties === 'object' ? block.properties : {},
+            order: typeof block.order === 'number' ? block.order : idx
+        }));
 
         return {
             id: stepKey,
             name: `Etapa ${stepNumber}`,
-            blocks: safeBlocks
+            blocks: normalizedBlocks
         };
     });
+};
+
+// Util extra de normalização final antes do render
+const safeNormalizeStages = (stages: any[]) => {
+    if (!Array.isArray(stages)) return [];
+    return stages.map((stage: any) => ({
+        id: stage?.id || `stage-${Date.now()}`,
+        name: stage?.name || 'Etapa Sem Nome',
+        blocks: Array.isArray(stage?.blocks)
+            ? stage.blocks
+                .filter((b: any) => b && typeof b === 'object')
+                .map((b: any, i: number) => ({
+                    id: b.id || `blk-${i}-${Date.now()}`,
+                    type: b.type || 'generic-block',
+                    content: b.content && typeof b.content === 'object' ? b.content : {},
+                    properties: b.properties && typeof b.properties === 'object' ? b.properties : {},
+                    order: typeof b.order === 'number' ? b.order : i
+                }))
+            : []
+    }));
 };
 
 export const SimpleRevolutionaryEditor: React.FC = () => {
@@ -82,7 +111,8 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
             console.warn('⚠️ stepBlocks não está disponível ou é inválido:', stepBlocks);
             return [];
         }
-        return convertStepBlocksToStages(stepBlocks);
+        const converted = convertStepBlocksToStages(stepBlocks);
+        return safeNormalizeStages(converted);
     }, [stepBlocks]);
 
     // Mock data for compatibility with existing UI
@@ -365,35 +395,48 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                                         </h4>
 
                                         <div className="space-y-2">
-                                            {stage.blocks?.map((block: any, blockIndex: number) => (
-                                                <div
-                                                    key={block.id}
-                                                    onClick={() => setSelectedBlock(block.id)}
-                                                    className={`p-3 border rounded-lg cursor-pointer transition-all ${block.id === selectedBlockId
-                                                        ? 'border-blue-400 bg-blue-50'
-                                                        : 'border-gray-200 hover:border-gray-300'
-                                                        }`}
-                                                >
-                                                    <div className="flex items-center justify-between">
-                                                        <span className="text-sm font-medium text-gray-700">
-                                                            {blockIndex + 1}. {block.type.replace('-', ' ')}
-                                                        </span>
-                                                        <span className="text-xs text-gray-500">
-                                                            {block.id.slice(0, 8)}...
-                                                        </span>
-                                                    </div>
-
-                                                    {(selectedBlock as any).content && (
-                                                        <p className="text-xs text-gray-600 mt-1 truncate">
-                                                            {JSON.stringify((selectedBlock as any).content).slice(0, 100)}...
-                                                        </p>
-                                                    )}
-                                                </div>
-                                            )) || (
-                                                    <p className="text-gray-500 text-sm italic">
-                                                        Nenhum bloco nesta etapa. Adicione componentes da sidebar.
-                                                    </p>
-                                                )}
+                                            {(stage.blocks || [])
+                                                .filter((block: any) => block && typeof block === 'object')
+                                                .map((block: any, blockIndex: number) => {
+                                                    const previewContent = (() => {
+                                                        try {
+                                                            if (!block.content) return '';
+                                                            const str = JSON.stringify(block.content);
+                                                            return str.length > 100 ? str.slice(0, 100) + '...' : str;
+                                                        } catch {
+                                                            return '';
+                                                        }
+                                                    })();
+                                                    return (
+                                                        <div
+                                                            key={block.id}
+                                                            onClick={() => setSelectedBlock(block.id)}
+                                                            className={`p-3 border rounded-lg cursor-pointer transition-all ${block.id === selectedBlockId
+                                                                ? 'border-blue-400 bg-blue-50'
+                                                                : 'border-gray-200 hover:border-gray-300'
+                                                                }`}
+                                                        >
+                                                            <div className="flex items-center justify-between">
+                                                                <span className="text-sm font-medium text-gray-700">
+                                                                    {blockIndex + 1}. {String(block.type || 'bloco').replace('-', ' ')}
+                                                                </span>
+                                                                <span className="text-xs text-gray-500">
+                                                                    {String(block.id).slice(0, 8)}...
+                                                                </span>
+                                                            </div>
+                                                            {previewContent && (
+                                                                <p className="text-xs text-gray-600 mt-1 truncate">
+                                                                    {previewContent}
+                                                                </p>
+                                                            )}
+                                                        </div>
+                                                    );
+                                                })}
+                                            {(!stage.blocks || stage.blocks.length === 0) && (
+                                                <p className="text-gray-500 text-sm italic">
+                                                    Nenhum bloco nesta etapa. Adicione componentes da sidebar.
+                                                </p>
+                                            )}
                                         </div>
                                     </div>
                                 )) || (
@@ -459,11 +502,13 @@ export const SimpleRevolutionaryEditor: React.FC = () => {
                                     Conteúdo (JSON)
                                 </label>
                                 <textarea
-                                    value={JSON.stringify((selectedBlock as any).content || {}, null, 2)}
+                                    value={JSON.stringify(((selectedBlock as any)?.content && typeof (selectedBlock as any)?.content === 'object') ? (selectedBlock as any).content : {}, null, 2)}
                                     onChange={async (e) => {
                                         try {
                                             const newContent = JSON.parse(e.target.value);
-                                            await updateBlock(activeStageId, selectedBlock.id, { content: newContent });
+                                            if (selectedBlock && updateBlock) {
+                                                await updateBlock(activeStageId, selectedBlock.id, { content: newContent });
+                                            }
                                         } catch (error) {
                                             console.error('JSON inválido:', error);
                                         }
