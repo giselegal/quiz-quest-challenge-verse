@@ -32,6 +32,7 @@ export interface CreateQuestionData {
 
 export class QuizService {
   static async createQuiz(quizData: QuizData) {
+    // ✅ Sintaxe correta v2.x: .insert() seguido de .select()
     const { data, error } = await supabase
       .from('quizzes')
       .insert([
@@ -68,7 +69,8 @@ export class QuizService {
       throw new Error(`Erro ao buscar quizzes: ${error.message}`);
     }
 
-    return data || [];
+    // ✅ Garantir que sempre retorne um array válido
+    return Array.isArray(data) ? data : [];
   }
 
   static async getQuiz(id: string) {
@@ -150,7 +152,8 @@ export class QuizService {
       throw new Error(`Erro ao buscar perguntas: ${error.message}`);
     }
 
-    return data || [];
+    // ✅ Garantir que sempre retorne um array válido
+    return Array.isArray(data) ? data : [];
   }
 
   static async updateQuestion(id: string, updates: Partial<CreateQuestionData>) {

@@ -72,7 +72,11 @@ export const schemaDrivenFunnelService = {
         },
       };
 
-      const { data, error } = await supabase.from('funnels').insert([funnelData]).select().single();
+      // ✅ Sintaxe correta v2.x: .insert() seguido de .select()
+      const { data, error } = await supabase.from('funnels')
+        .insert([funnelData])
+        .select()
+        .single();
 
       if (error) throw error;
 
@@ -144,6 +148,7 @@ export const schemaDrivenFunnelService = {
         };
       }
 
+      // ✅ Sintaxe v2.x correta: .update() seguido de .eq()
       const { data, error } = await supabase
         .from('funnels')
         .update(updateData)
@@ -155,12 +160,15 @@ export const schemaDrivenFunnelService = {
       if (error) throw error;
       if (!data) return null;
 
-      // Buscar páginas do funil
+      // ✅ Buscar páginas do funil - validação robusta
       const { data: pages } = await supabase
         .from('funnel_pages')
         .select('*')
         .eq('funnel_id', id)
         .order('page_order');
+
+      // ✅ Garantir que pages é sempre um array
+      const validatedPages = Array.isArray(pages) ? pages : [];
 
       const settings = (data.settings as any) || {};
 
@@ -168,7 +176,7 @@ export const schemaDrivenFunnelService = {
         id: data.id,
         name: data.name,
         description: data.description || '',
-        pages: pages || [],
+        pages: validatedPages,
         theme: settings.theme,
         isPublished: data.is_published || false,
         version: data.version || 1,
@@ -202,12 +210,15 @@ export const schemaDrivenFunnelService = {
       if (error) throw error;
       if (!funnel) return null;
 
-      // Buscar páginas do funil
+      // ✅ Buscar páginas do funil - validação robusta
       const { data: pages } = await supabase
         .from('funnel_pages')
         .select('*')
         .eq('funnel_id', id)
         .order('page_order');
+
+      // ✅ Garantir que pages é sempre um array  
+      const validatedPages = Array.isArray(pages) ? pages : [];
 
       const settings = (funnel.settings as any) || {};
 
@@ -215,7 +226,7 @@ export const schemaDrivenFunnelService = {
         id: funnel.id,
         name: funnel.name,
         description: funnel.description || '',
-        pages: pages || [],
+        pages: validatedPages,
         theme: settings.theme,
         isPublished: funnel.is_published || false,
         version: funnel.version || 1,

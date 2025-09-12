@@ -84,7 +84,7 @@ class SimpleAnalytics {
                 timestamp: event.timestamp
             }]);
 
-            // Atualizar sessão atual
+            // ✅ Usar .eq() ANTES de .update() (sintaxe v2.x)
             if (eventType === 'quiz_completed') {
                 await supabase.from('quiz_sessions')
                     .update({
@@ -137,16 +137,28 @@ class SimpleAnalytics {
 export class DashboardService {
     static async getDashboardData(): Promise<DashboardData> {
         try {
-            // Buscar dados das tabelas existentes
+            // ✅ Buscar dados com sintaxe correta Supabase v2.x
             const [sessionsResult, analyticsResult, resultsResult] = await Promise.all([
-                supabase.from('quiz_sessions').select('*').order('started_at', { ascending: false }),
-                supabase.from('quiz_analytics').select('*').order('timestamp', { ascending: false }),
-                supabase.from('quiz_results').select('*').order('created_at', { ascending: false })
+                supabase.from('quiz_sessions')
+                    .select('*')
+                    .order('started_at', { ascending: false }),
+                supabase.from('quiz_analytics')
+                    .select('*')
+                    .order('timestamp', { ascending: false }),
+                supabase.from('quiz_results')
+                    .select('*')
+                    .order('created_at', { ascending: false })
             ]);
 
-            const sessions = sessionsResult.data || [];
-            const analytics = analyticsResult.data || [];
-            const results = resultsResult.data || [];
+            // ✅ Validação robusta de dados (evita .map em null/undefined)
+            const sessions = Array.isArray(sessionsResult.data) ? sessionsResult.data : [];
+            const analytics = Array.isArray(analyticsResult.data) ? analyticsResult.data : [];
+            const results = Array.isArray(resultsResult.data) ? resultsResult.data : [];
+
+            // Log de debug em caso de erro nas consultas
+            if (sessionsResult.error) console.warn('Sessions query error:', sessionsResult.error);
+            if (analyticsResult.error) console.warn('Analytics query error:', analyticsResult.error);
+            if (resultsResult.error) console.warn('Results query error:', resultsResult.error);
 
             // Calcular métricas básicas
             const totalSessions = sessions.length;

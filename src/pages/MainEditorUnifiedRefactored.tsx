@@ -21,7 +21,7 @@
  */
 
 import React, { useCallback, useEffect, useState, Suspense } from 'react';
-import { useLocation } from 'wouter';
+import { useParams, useLocation } from 'wouter';
 import { EditorUnifiedProvider } from '@/context/EditorUnifiedProvider';
 import { EditorProUnified } from '@/legacy/editor/EditorProUnified';
 import { logger } from '@/utils/debugLogger';
@@ -81,10 +81,7 @@ const EditorErrorFallback = ({ error, resetErrorBoundary }: { error: Error, rese
  */
 export const MainEditorUnified: React.FC = () => {
     const [location, setLocation] = useLocation();
-    
-    // Extract funnelId from URL path - mais inteligente
-    const pathParts = location.split('/').filter(Boolean);
-    const funnelId = pathParts.length > 1 && pathParts[1] !== 'editor' ? pathParts[1] : null;
+    const { funnelId } = useParams<{ funnelId: string }>();
     const [isInitializing, setIsInitializing] = useState(true);
 
     // Parse query parameters para templates e outras configurações
@@ -112,6 +109,13 @@ export const MainEditorUnified: React.FC = () => {
         logger.info('🔙 MainEditorUnified: Navigating back to funnels');
         setLocation('/meus-funis');
     }, [setLocation]);
+
+    const handleCreateNewFunnel = useCallback(() => {
+        logger.info('✨ MainEditorUnified: Creating new funnel');
+        // Gerar um ID temporário para novo funil
+        const newFunnelId = `novo-funil-${Date.now()}`;
+        setLocation(`/editor/${newFunnelId}${templateId ? `?template=${templateId}` : ''}`);
+    }, [setLocation, templateId]);
 <<<<<<< Updated upstream
 
     const handleCreateNewFunnel = useCallback(() => {
@@ -129,7 +133,6 @@ export const MainEditorUnified: React.FC = () => {
 
     // Se não há funnelId, mas há template ou queremos criar novo funil
     if (!funnelId) {
-<<<<<<< Updated upstream
         logger.info('⚠️ MainEditorUnified: No funnel ID, checking for template or creating new funnel', { templateId });
 
         if (templateId) {
@@ -164,44 +167,6 @@ export const MainEditorUnified: React.FC = () => {
                             📁 Voltar aos Funis
                         </button>
                     </div>
-=======
-        logger.info('ℹ️ MainEditorUnified: No funnel ID provided, showing funnel selector');
-        return (
-            <div className="h-screen flex items-center justify-center bg-gray-50">
-                <div className="text-center max-w-md mx-auto p-6">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-4">Selecione um Funil</h2>
-                    <p className="text-gray-600 mb-6">Para usar o editor, você precisa selecionar ou criar um funil.</p>
-                    
-                    <div className="space-y-3">
-                        <button
-                            onClick={() => setLocation('/meus-funis')}
-                            className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-                        >
-                            Ver Meus Funis
-                        </button>
-                        
-                        <button
-                            onClick={() => setLocation('/admin/funis')}
-                            className="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
-                        >
-                            Criar Novo Funil
-                        </button>
-                        
-                        <button
-                            onClick={() => setLocation('/')}
-                            className="w-full px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium"
-                        >
-                            Voltar ao Início
-                        </button>
-                    </div>
-                    
-                    <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-                        <p className="text-sm text-blue-800">
-                            <strong>Dica:</strong> Para editar um funil específico, use a URL: <br/>
-                            <code className="text-xs bg-blue-100 px-2 py-1 rounded">/editor/[ID-DO-FUNIL]</code>
-                        </p>
-                    </div>
->>>>>>> Stashed changes
                 </div>
             </div>
         );
