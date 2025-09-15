@@ -20,7 +20,6 @@ const UniversalStepEditorProDemo: React.FC = () => {
         <EditorProvider>
             <div className="w-full h-screen overflow-hidden bg-gray-900">
                 <UniversalStepEditorPro
-                    stepNumber={1}
                     onStepChange={handleStepChange}
                     showNavigation={true}
                 />
