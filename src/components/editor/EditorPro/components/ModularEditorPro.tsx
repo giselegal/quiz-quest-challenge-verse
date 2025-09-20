@@ -4,6 +4,9 @@ import { useOptimizedScheduler } from '@/hooks/useOptimizedScheduler';
 import { useNotification } from '@/components/ui/Notification';
 import { Block } from '@/types/editor';
 import { DndContext, DragEndEvent, DragStartEvent, closestCenter, useSensor, useSensors, PointerSensor } from '@dnd-kit/core';
+import { useLocation } from 'wouter';
+// import { useFunnelLoader } from '@/hooks/useFunnelLoader';
+import { useFunnelLoaderMock as useFunnelLoader } from '@/hooks/useFunnelLoaderMock';
 
 // Componentes modulares
 import EditorToolbar from './EditorToolbar';
@@ -166,6 +169,25 @@ const ResizeHandle: React.FC<{
  */
 
 const ModularEditorPro: React.FC = () => {
+  const [location] = useLocation();
+  
+  // ✅ CAPTURAR funnelId da URL
+  const funnelId = useMemo(() => {
+    const match = location.match(/\/editor\/([^/?]+)/);
+    const extractedId = match?.[1] || 'quiz-style-21-steps';
+    console.log('🎯 ModularEditorPro: funnelId capturado da URL:', extractedId, { location });
+    return extractedId;
+  }, [location]);
+
+  // ✅ NOVO: Hook de carregamento dinâmico de funil
+  const { funnel: funnelData, isLoading: funnelLoading, isError: funnelError } = useFunnelLoader(
+    funnelId !== 'quiz-style-21-steps' ? funnelId : undefined, // Só carregar se não for o padrão
+    { 
+      autoLoad: true,
+      enableEvents: false // Desabilitar eventos para evitar conflitos no editor
+    }
+  );
+
   const { state, actions } = useEditor();
   const { schedule } = useOptimizedScheduler();
   const { addNotification } = useNotification();
@@ -187,20 +209,53 @@ const ModularEditorPro: React.FC = () => {
   // Blocos da etapa atual com memoização e debug melhorado
   const currentStepBlocks = useMemo(() => {
     const stepKey = `step-${state.currentStep}`;
-    const blocks = state.stepBlocks[stepKey] || [];
+    
+    // 🎯 PRIORIDADE: Dados do funil dinâmico > EditorProvider
+    let blocks = [];
+    let dataSource = '';
+    
+    if (funnelLoading) {
+      // Enquanto carregando, usar dados do EditorProvider
+      blocks = state.stepBlocks[stepKey] || [];
+      dataSource = 'EditorProvider (loading)';
+    } else if (funnelData && funnelData.pages && funnelData.pages.length > 0) {
+      // Se temos dados dinâmicos, tentar usar primeiro
+      const pageIndex = state.currentStep - 1; // Pages são indexadas de 0
+      const currentPage = funnelData.pages[pageIndex];
+      
+      if (currentPage && Array.isArray(currentPage.blocks) && currentPage.blocks.length > 0) {
+        blocks = currentPage.blocks;
+        dataSource = `Dynamic funnel data (${funnelId}, page ${pageIndex})`;
+      } else {
+        // Fallback para EditorProvider se não há blocos na página dinâmica
+        blocks = state.stepBlocks[stepKey] || [];
+        dataSource = 'EditorProvider (dynamic fallback)';
+      }
+    } else {
+      // Fallback para EditorProvider (template padrão)
+      blocks = state.stepBlocks[stepKey] || [];
+      dataSource = funnelError ? 'EditorProvider (error fallback)' : 'EditorProvider (default)';
+    }
 
     // 🔍 DEBUG: Log detalhado do carregamento de blocos
     console.log('🔍 ModularEditorPro - currentStepBlocks calculado:', {
       currentStep: state.currentStep,
       stepKey,
+      pageIndex: state.currentStep - 1,
       blocksFound: blocks.length,
-      blockTypes: blocks.map(b => b.type),
-      allStepKeys: Object.keys(state.stepBlocks),
+      dataSource,
+      funnelId,
+      funnelLoading,
+      funnelError,
+      hasDynamicData: !!funnelData,
+      dynamicPagesCount: funnelData?.pages?.length || 0,
+      currentPageHasBlocks: !!(funnelData?.pages?.[state.currentStep - 1]?.blocks?.length),
+      editorProviderSteps: Object.keys(state.stepBlocks),
       totalBlocks: Object.values(state.stepBlocks).reduce((acc, arr) => acc + arr.length, 0)
     });
 
     return blocks;
-  }, [state.stepBlocks, state.currentStep]);
+  }, [state.stepBlocks, state.currentStep, funnelData, funnelLoading, funnelError, funnelId]);
 
   // Bloco selecionado
   const selectedBlock = useMemo(() => {
