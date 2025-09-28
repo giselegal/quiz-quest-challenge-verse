@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔍 Debug - Teste de Seleção Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        .option-card {
+            padding: 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .option-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+
+        .option-card.selected {
+            border-color: #3b82f6;
+            background: #eff6ff;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        .debug-info {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px auto;
+            max-width: 600px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        .status {
+            margin: 10px 0;
+        }
+
+        .title {
+            text-align: center;
+            color: #1f2937;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="title">
+        <h1>🔍 Debug - Teste de Seleção Quiz</h1>
+        <p>Clique nas opções abaixo para testar se os eventos funcionam</p>
+    </div>
+
+    <div class="test-grid" id="optionsGrid">
+        <div class="option-card" data-option="natural" onclick="handleSelection('natural')">
+            <h3>🌿 Natural</h3>
+            <p>Estilo despojado e confortável</p>
+        </div>
+        <div class="option-card" data-option="classico" onclick="handleSelection('classico')">
+            <h3>👗 Clássico</h3>
+            <p>Elegância atemporal</p>
+        </div>
+        <div class="option-card" data-option="dramatico" onclick="handleSelection('dramatico')">
+            <h3>🎭 Dramático</h3>
+            <p>Looks marcantes e impactantes</p>
+        </div>
+        <div class="option-card" data-option="romantico" onclick="handleSelection('romantico')">
+            <h3>💕 Romântico</h3>
+            <p>Feminilidade e delicadeza</p>
+        </div>
+    </div>
+
+    <div class="debug-info" id="debugInfo">
+        <div class="status"><strong>🎯 Status:</strong> Aguardando seleção...</div>
+        <div class="status"><strong>📊 Seleções:</strong> <span id="selections">[]</span></div>
+        <div class="status"><strong>⏰ Último evento:</strong> <span id="lastEvent">-</span></div>
+        <div class="status"><strong>🖱️ Cursor detectado:</strong> <span id="cursorType">-</span></div>
+    </div>
+
+    <script>
+        let selectedOptions = [];
+        let eventCount = 0;
+
+        function handleSelection(optionId) {
+            eventCount++;
+            console.log('🖱️ Seleção detectada:', optionId, 'Evento:', eventCount);
+
+            // Toggle seleção
+            const index = selectedOptions.indexOf(optionId);
+            if (index > -1) {
+                selectedOptions.splice(index, 1);
+            } else {
+                selectedOptions.push(optionId);
+            }
+
+            updateVisualState();
+            updateDebugInfo(`Selecionou: ${optionId}`);
+        }
+
+        function updateVisualState() {
+            const cards = document.querySelectorAll('.option-card');
+            cards.forEach(card => {
+                const optionId = card.getAttribute('data-option');
+                if (selectedOptions.includes(optionId)) {
+                    card.classList.add('selected');
+                } else {
+                    card.classList.remove('selected');
+                }
+            });
+        }
+
+        function updateDebugInfo(lastEvent) {
+            document.getElementById('selections').textContent = JSON.stringify(selectedOptions);
+            document.getElementById('lastEvent').textContent = lastEvent + ' (Evento #' + eventCount + ')';
+
+            // Detectar tipo de cursor
+            const gridElement = document.getElementById('optionsGrid');
+            const computedStyle = window.getComputedStyle(gridElement);
+            document.getElementById('cursorType').textContent = computedStyle.cursor || 'default';
+        }
+
+        // Monitorar eventos de clique globalmente
+        document.addEventListener('click', function (e) {
+            console.log('🖱️ Click global detectado:', e.target, e);
+        });
+
+        // Detectar problemas de cursor
+        document.addEventListener('mouseover', function (e) {
+            if (e.target.classList.contains('option-card')) {
+                const computedStyle = window.getComputedStyle(e.target);
+                console.log('🔍 Cursor sobre opção:', computedStyle.cursor);
+            }
+        });
+
+        // Inicializar
+        updateDebugInfo('Página carregada');
+
+        console.log('🚀 Debug de seleção iniciado');
+        console.log('✅ Event handlers registrados');
+    </script>
+</body>
+
+</html>

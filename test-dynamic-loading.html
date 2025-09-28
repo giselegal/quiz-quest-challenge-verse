@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Carregamento Dinâmico</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            background: #f0f0f0;
+        }
+        .test-box {
+            background: white;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+        }
+        .success { border-color: #4CAF50; }
+        .error { border-color: #f44336; }
+        .loading { border-color: #ff9800; }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover { background: #0056b3; }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔬 Teste de Carregamento Dinâmico de Templates</h1>
+    
+    <div class="test-box loading" id="test1">
+        <h3>Teste 1: Carregamento DynamicTemplateLoader</h3>
+        <button onclick="testDynamicLoader()">Testar Carregamento</button>
+        <div id="result1">Aguardando teste...</div>
+    </div>
+
+    <div class="test-box loading" id="test2">
+        <h3>Teste 2: Editor URL /editor/quiz21StepsComplete</h3>
+        <button onclick="testEditorUrl()">Abrir Editor</button>
+        <div id="result2">Aguardando teste...</div>
+    </div>
+
+    <div class="test-box loading" id="test3">
+        <h3>Teste 3: Editor URL /editor/blank</h3>
+        <button onclick="testBlankEditor()">Abrir Editor Vazio</button>
+        <div id="result3">Aguardando teste...</div>
+    </div>
+
+    <script>
+        async function testDynamicLoader() {
+            const result1 = document.getElementById('result1');
+            const test1 = document.getElementById('test1');
+            
+            try {
+                result1.innerHTML = '🔄 Testando carregamento...';
+                
+                // Simular carregamento do DynamicTemplateLoader
+                const response = await fetch('/src/services/templates/DynamicTemplateLoader.ts');
+                if (response.ok) {
+                    const content = await response.text();
+                    const hasRegistry = content.includes('TEMPLATE_LOADERS');
+                    const hasLoadById = content.includes('loadTemplateById');
+                    
+                    if (hasRegistry && hasLoadById) {
+                        result1.innerHTML = `
+                            <p>✅ DynamicTemplateLoader encontrado!</p>
+                            <p>✅ Registry TEMPLATE_LOADERS: ${hasRegistry}</p>
+                            <p>✅ Função loadTemplateById: ${hasLoadById}</p>
+                        `;
+                        test1.className = 'test-box success';
+                    } else {
+                        result1.innerHTML = '❌ Arquivo encontrado mas sem funções esperadas';
+                        test1.className = 'test-box error';
+                    }
+                } else {
+                    result1.innerHTML = '❌ Arquivo DynamicTemplateLoader.ts não encontrado';
+                    test1.className = 'test-box error';
+                }
+            } catch (error) {
+                result1.innerHTML = `❌ Erro: ${error.message}`;
+                test1.className = 'test-box error';
+            }
+        }
+
+        function testEditorUrl() {
+            const result2 = document.getElementById('result2');
+            const test2 = document.getElementById('test2');
+            
+            result2.innerHTML = '🔄 Abrindo editor...';
+            window.open('/editor/quiz21StepsComplete', '_blank');
+            
+            setTimeout(() => {
+                result2.innerHTML = '✅ Editor aberto em nova aba. Verifique o console para logs de carregamento.';
+                test2.className = 'test-box success';
+            }, 1000);
+        }
+
+        function testBlankEditor() {
+            const result3 = document.getElementById('result3');
+            const test3 = document.getElementById('test3');
+            
+            result3.innerHTML = '🔄 Abrindo editor vazio...';
+            window.open('/editor/blank', '_blank');
+            
+            setTimeout(() => {
+                result3.innerHTML = '✅ Editor vazio aberto em nova aba. Verifique se carrega sem erros.';
+                test3.className = 'test-box success';
+            }, 1000);
+        }
+
+        // Executar alguns testes automaticamente
+        setTimeout(() => {
+            testDynamicLoader();
+        }, 500);
+    </script>
+</body>
+</html>

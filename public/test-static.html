@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Estático - Sistema Quiz Quest</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 1rem 0;
+        }
+
+        .success {
+            color: #4CAF50;
+        }
+
+        .error {
+            color: #f44336;
+        }
+
+        .warning {
+            color: #ff9800;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 0 10px;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .logs {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            text-align: left;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 style="font-size: 3rem; margin-bottom: 1rem;">🎯 Sistema Quiz Quest</h1>
+        <h2>Diagnóstico Completo do Sistema</h2>
+
+        <div class="card">
+            <h3>📊 Status dos Componentes</h3>
+            <div id="status">
+                <p id="html-status">⏳ Verificando HTML...</p>
+                <p id="js-status">⏳ Verificando JavaScript...</p>
+                <p id="css-status">⏳ Verificando CSS...</p>
+                <p id="server-status">⏳ Verificando servidor...</p>
+                <p id="react-status">⏳ Verificando React...</p>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h3>🔧 Ferramentas</h3>
+                <button onclick="testarJavaScript()">Testar JS</button>
+                <button onclick="testarReact()">Testar React</button>
+                <button onclick="limparCache()">Limpar Cache</button>
+            </div>
+
+            <div class="card">
+                <h3>🌐 Navegação</h3>
+                <button onclick="irParaEditor()">Editor</button>
+                <button onclick="irParaQuiz()">Quiz</button>
+                <button onclick="recarregarPagina()">Recarregar</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>📝 Logs de Debug</h3>
+            <div class="logs" id="logs">
+                <div>[INFO] Página HTML estática carregada com sucesso</div>
+            </div>
+        </div>
+
+        <div class="card" id="diagnostic-info">
+            <h3>🔍 Informações de Diagnóstico</h3>
+            <p><strong>URL:</strong> <span id="current-url">...</span></p>
+            <p><strong>User Agent:</strong> <span id="user-agent">...</span></p>
+            <p><strong>Timestamp:</strong> <span id="timestamp">...</span></p>
+            <p><strong>Viewport:</strong> <span id="viewport">...</span></p>
+        </div>
+    </div>
+
+    <script>
+        // Função para adicionar logs
+        function addLog(message, type = 'INFO') {
+            const logs = document.getElementById('logs');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.innerHTML = `[${type}] ${timestamp}: ${message}`;
+            logs.appendChild(logEntry);
+            logs.scrollTop = logs.scrollHeight;
+        }
+
+        // Função para atualizar status
+        function updateStatus(element, text, isSuccess = true) {
+            const el = document.getElementById(element);
+            el.innerHTML = isSuccess ? `<span class="success">✅ ${text}</span>` : `<span class="error">❌ ${text}</span>`;
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function () {
+            addLog('DOM carregado completamente');
+
+            // Verificar HTML
+            updateStatus('html-status', 'HTML carregado corretamente');
+
+            // Verificar CSS
+            const computedStyle = window.getComputedStyle(document.body);
+            updateStatus('css-status', 'CSS aplicado corretamente');
+
+            // Verificar JavaScript
+            updateStatus('js-status', 'JavaScript executando corretamente');
+
+            // Preencher informações de diagnóstico
+            document.getElementById('current-url').textContent = window.location.href;
+            document.getElementById('user-agent').textContent = navigator.userAgent.substring(0, 100) + '...';
+            document.getElementById('timestamp').textContent = new Date().toLocaleString();
+            document.getElementById('viewport').textContent = `${window.innerWidth}x${window.innerHeight}`;
+
+            // Testar servidor
+            testarServidor();
+
+            addLog('Inicialização completada com sucesso');
+        });
+
+        // Funções de teste
+        function testarJavaScript() {
+            addLog('Testando JavaScript...');
+            try {
+                const test = { foo: 'bar' };
+                const json = JSON.stringify(test);
+                const parsed = JSON.parse(json);
+                addLog(`JavaScript funcionando: ${parsed.foo}`, 'SUCCESS');
+            } catch (error) {
+                addLog(`Erro no JavaScript: ${error.message}`, 'ERROR');
+            }
+        }
+
+        function testarReact() {
+            addLog('Verificando disponibilidade do React...');
+
+            // Tentar carregar React via CDN para teste
+            const script = document.createElement('script');
+            script.src = 'https://unpkg.com/react@18/umd/react.development.js';
+            script.onload = () => {
+                addLog('React carregado via CDN - sistema compatível', 'SUCCESS');
+                updateStatus('react-status', 'Sistema compatível com React');
+            };
+            script.onerror = () => {
+                addLog('Erro ao carregar React via CDN', 'ERROR');
+                updateStatus('react-status', 'Problema de compatibilidade com React', false);
+            };
+            document.head.appendChild(script);
+        }
+
+        function testarServidor() {
+            addLog('Testando servidor local...');
+
+            fetch(window.location.origin)
+                .then(response => {
+                    if (response.ok) {
+                        addLog('Servidor respondendo corretamente', 'SUCCESS');
+                        updateStatus('server-status', 'Servidor funcionando');
+                        return response.text();
+                    } else {
+                        throw new Error(`Status: ${response.status}`);
+                    }
+                })
+                .then(html => {
+                    const hasVite = html.includes('vite');
+                    const hasRoot = html.includes('id="root"');
+                    addLog(`Análise do HTML: Vite=${hasVite}, Root=${hasRoot}`, 'INFO');
+                })
+                .catch(error => {
+                    addLog(`Erro no servidor: ${error.message}`, 'ERROR');
+                    updateStatus('server-status', 'Problema no servidor', false);
+                });
+        }
+
+        function limparCache() {
+            addLog('Limpando cache do navegador...');
+            if ('caches' in window) {
+                caches.keys().then(keys => {
+                    keys.forEach(key => caches.delete(key));
+                    addLog('Cache limpo com sucesso', 'SUCCESS');
+                });
+            }
+            // Recarregar forçando bypass do cache
+            setTimeout(() => {
+                window.location.reload(true);
+            }, 1000);
+        }
+
+        // Funções de navegação
+        function irParaEditor() {
+            addLog('Navegando para o editor...');
+            window.location.href = '/editor';
+        }
+
+        function irParaQuiz() {
+            addLog('Navegando para o quiz...');
+            window.location.href = '/quiz';
+        }
+
+        function recarregarPagina() {
+            addLog('Recarregando página...');
+            window.location.reload();
+        }
+    </script>
+</body>
+
+</html>

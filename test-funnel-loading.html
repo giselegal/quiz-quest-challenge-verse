@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Carregamento do Funil</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .warning { background-color: #fff3cd; color: #856404; }
+        #logs { background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-top: 20px; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Teste de Carregamento do Funil Quiz21StepsComplete</h1>
+    
+    <div id="test-results"></div>
+    
+    <h2>Console Logs:</h2>
+    <div id="logs">
+        <pre id="console-output"></pre>
+    </div>
+    
+    <button onclick="testFunnelLoading()">🧪 Executar Teste Completo</button>
+    <button onclick="clearLogs()">🗑️ Limpar Logs</button>
+    
+    <script>
+        // Capturar logs do console
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        let logs = [];
+        
+        function addLog(type, message) {
+            const timestamp = new Date().toLocaleTimeString();
+            logs.push(`[${timestamp}] ${type}: ${message}`);
+            updateConsoleOutput();
+        }
+        
+        console.log = function(...args) {
+            addLog('LOG', args.join(' '));
+            originalLog.apply(console, args);
+        };
+        
+        console.error = function(...args) {
+            addLog('ERROR', args.join(' '));
+            originalError.apply(console, args);
+        };
+        
+        console.warn = function(...args) {
+            addLog('WARN', args.join(' '));
+            originalWarn.apply(console, args);
+        };
+        
+        function updateConsoleOutput() {
+            document.getElementById('console-output').textContent = logs.join('\n');
+        }
+        
+        function clearLogs() {
+            logs = [];
+            updateConsoleOutput();
+        }
+        
+        function addTestResult(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.textContent = message;
+            document.getElementById('test-results').appendChild(div);
+        }
+        
+        async function testFunnelLoading() {
+            document.getElementById('test-results').innerHTML = '';
+            addTestResult('🚀 Iniciando testes...', 'warning');
+            
+            // Teste 1: Verificar se a URL está correta
+            const currentUrl = window.location.href;
+            addTestResult(`📍 URL atual: ${currentUrl}`, 'info');
+            
+            // Teste 2: Verificar parâmetros da URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const template = urlParams.get('template');
+            
+            if (template === 'quiz21StepsComplete') {
+                addTestResult('✅ Parâmetro template=quiz21StepsComplete detectado', 'success');
+            } else {
+                addTestResult(`❌ Parâmetro template incorreto: ${template}`, 'error');
+            }
+            
+            // Teste 3: Tentar acessar a aplicação React
+            try {
+                const iframe = document.createElement('iframe');
+                iframe.src = 'http://localhost:8080/editor?template=quiz21StepsComplete';
+                iframe.style.width = '100%';
+                iframe.style.height = '600px';
+                iframe.style.border = '1px solid #ccc';
+                iframe.style.marginTop = '20px';
+                
+                iframe.onload = function() {
+                    addTestResult('✅ Iframe carregado com sucesso', 'success');
+                    
+                    // Tentar acessar o conteúdo do iframe (se mesmo domínio)
+                    try {
+                        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                        const bodyContent = iframeDoc.body.innerHTML;
+                        
+                        if (bodyContent.includes('error') || bodyContent.includes('Error')) {
+                            addTestResult('❌ Possível erro detectado no conteúdo da página', 'error');
+                        } else if (bodyContent.length > 1000) {
+                            addTestResult('✅ Conteúdo da página parece estar carregado', 'success');
+                        } else {
+                            addTestResult('⚠️ Conteúdo da página parece muito pequeno', 'warning');
+                        }
+                        
+                        // Verificar se existem elementos React
+                        const reactElements = iframeDoc.querySelectorAll('[data-reactroot], #root');
+                        if (reactElements.length > 0) {
+                            addTestResult('✅ Elementos React detectados', 'success');
+                        } else {
+                            addTestResult('❌ Nenhum elemento React detectado', 'error');
+                        }
+                        
+                    } catch (crossOriginError) {
+                        addTestResult('⚠️ Não foi possível acessar conteúdo do iframe (cross-origin)', 'warning');
+                    }
+                };
+                
+                iframe.onerror = function() {
+                    addTestResult('❌ Erro ao carregar iframe', 'error');
+                };
+                
+                document.body.appendChild(iframe);
+                addTestResult('📄 Iframe criado e inserido na página', 'info');
+                
+            } catch (error) {
+                addTestResult(`❌ Erro ao criar iframe: ${error.message}`, 'error');
+            }
+            
+            // Teste 4: Verificar conectividade do servidor
+            try {
+                const response = await fetch('http://localhost:8080/editor?template=quiz21StepsComplete');
+                if (response.ok) {
+                    addTestResult(`✅ Servidor responde OK (${response.status})`, 'success');
+                    const text = await response.text();
+                    
+                    if (text.includes('quiz21StepsComplete')) {
+                        addTestResult('✅ Template quiz21StepsComplete presente no HTML', 'success');
+                    } else {
+                        addTestResult('⚠️ Template quiz21StepsComplete não encontrado no HTML', 'warning');
+                    }
+                    
+                } else {
+                    addTestResult(`❌ Servidor retornou erro: ${response.status}`, 'error');
+                }
+            } catch (fetchError) {
+                addTestResult(`❌ Erro de conectividade: ${fetchError.message}`, 'error');
+            }
+            
+            addTestResult('🏁 Testes concluídos! Verifique os logs abaixo.', 'warning');
+        }
+        
+        // Executar teste automaticamente após 1 segundo
+        setTimeout(() => {
+            testFunnelLoading();
+        }, 1000);
+    </script>
+</body>
+</html>

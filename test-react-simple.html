@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Teste React Simples</title>
+</head>
+
+<body>
+    <div id="test-root">Carregando...</div>
+    <script>
+        console.log('🔍 TESTE: JavaScript está executando');
+        document.getElementById('test-root').innerHTML = 'JavaScript funcionou!';
+
+        // Testar se pode acessar React
+        fetch('/src/main.tsx')
+            .then(response => {
+                console.log('🔍 TESTE: main.tsx status:', response.status);
+                return response.text();
+            })
+            .then(content => {
+                console.log('🔍 TESTE: main.tsx carregou, tamanho:', content.length);
+
+                // Verificar se há erros obvios
+                if (content.includes('Error') || content.includes('TypeError')) {
+                    console.error('❌ ERRO encontrado no main.tsx');
+                } else {
+                    console.log('✅ main.tsx parece ok');
+                }
+            })
+            .catch(err => {
+                console.error('❌ Erro ao carregar main.tsx:', err);
+            });
+    </script>
+</body>
+
+</html>

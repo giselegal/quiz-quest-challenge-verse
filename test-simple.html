@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+    <script type="module">import { injectIntoGlobalHook } from "/@react-refresh";
+        injectIntoGlobalHook(window);
+        window.$RefreshReg$ = () => { };
+        window.$RefreshSig$ = () => (type) => type;</script>
+
+    <script type="module" src="/@vite/client"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TESTE SIMPLES - React</title>
+</head>
+
+<body>
+    <div id="root">
+        <div class="loading-fallback">Carregando teste...</div>
+    </div>
+
+    <script type="module" src="/src/main-simple.tsx"></script>
+</body>
+
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔍 Teste de Camadas do Canvas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .iframe-container {
+            width: 100%;
+            height: 800px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .debug-overlay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 9999;
+        }
+
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-container">
+        <h1>🔍 Análise de Camadas do Canvas - Quiz21StepsComplete</h1>
+
+        <div id="test-results"></div>
+
+        <div class="iframe-container">
+            <div class="debug-overlay">
+                🔧 Debug Mode: Analisando camadas CSS
+            </div>
+            <iframe id="funnel-iframe" src="http://localhost:8080/editor?template=quiz21StepsComplete" width="100%"
+                height="100%" frameborder="0">
+            </iframe>
+        </div>
+    </div>
+
+    <script>
+        function addTestResult(message, type) {
+            const resultsDiv = document.getElementById('test-results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result ${type}`;
+            resultDiv.innerHTML = message;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        // Testes de camadas CSS
+        async function runLayerTests() {
+            addTestResult('🚀 Iniciando análise de camadas...', 'success');
+
+            // Teste 1: Verificar carregamento
+            const iframe = document.getElementById('funnel-iframe');
+            iframe.onload = () => {
+                addTestResult('✅ Iframe carregado com sucesso', 'success');
+
+                setTimeout(() => {
+                    try {
+                        // Tentar acessar o documento do iframe (pode falhar devido CORS)
+                        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                        if (iframeDoc) {
+                            addTestResult('✅ Documento do iframe acessível', 'success');
+
+                            // Verificar elementos com problemas de camadas
+                            const elementsWithZIndex = iframeDoc.querySelectorAll('[style*="z-index"]');
+                            addTestResult(`📊 Elementos com z-index: ${elementsWithZIndex.length}`, 'warning');
+
+                            const overlayElements = iframeDoc.querySelectorAll('.fixed, .absolute, .sticky');
+                            addTestResult(`📊 Elementos posicionados: ${overlayElements.length}`, 'warning');
+
+                            // Verificar overflow
+                            const overflowElements = iframeDoc.querySelectorAll('[style*="overflow"]');
+                            addTestResult(`📊 Elementos com overflow: ${overflowElements.length}`, 'warning');
+
+                        } else {
+                            addTestResult('⚠️ Não foi possível acessar conteúdo do iframe (CORS)', 'warning');
+                        }
+                    } catch (error) {
+                        addTestResult(`⚠️ Erro ao analisar iframe: ${error.message}`, 'warning');
+                    }
+                }, 2000);
+            };
+
+            iframe.onerror = (error) => {
+                addTestResult('❌ Erro ao carregar iframe', 'error');
+            };
+
+            // Teste 2: Verificar responsividade da API
+            try {
+                const response = await fetch('http://localhost:8080/editor?template=quiz21StepsComplete');
+                if (response.ok) {
+                    addTestResult(`✅ API respondendo: ${response.status}`, 'success');
+                } else {
+                    addTestResult(`⚠️ API com problemas: ${response.status}`, 'warning');
+                }
+            } catch (error) {
+                addTestResult(`❌ Erro na API: ${error.message}`, 'error');
+            }
+
+            // Teste 3: Analisar Console Logs
+            addTestResult('🔍 Verifique o console do navegador para logs detalhados', 'warning');
+        }
+
+        // Executar testes
+        window.addEventListener('load', runLayerTests);
+
+        // Monitor de performance
+        let startTime = Date.now();
+        window.addEventListener('load', () => {
+            const loadTime = Date.now() - startTime;
+            addTestResult(`⚡ Tempo de carregamento: ${loadTime}ms`, loadTime > 3000 ? 'warning' : 'success');
+        });
+    </script>
+</body>
+
+</html>

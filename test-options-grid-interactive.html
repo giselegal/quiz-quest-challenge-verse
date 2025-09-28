@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 Teste Interativo Options-Grid</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .teste-card {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .options-grid {
+            transition: all 0.3s ease;
+        }
+
+        .option-item {
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .option-item.selected {
+            box-shadow: 0 0 0 3px var(--selected-border, #3B82F6);
+            background: var(--selected-bg, rgba(59, 130, 246, 0.1));
+        }
+
+        .validation-message {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .scale-in {
+            animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">
+                <i class="fas fa-th text-blue-600 mr-3"></i>
+                Teste Interativo Options-Grid
+            </h1>
+            <p class="text-gray-600">Auditoria sistemática - 17 propriedades JSON • Score atual: 61%</p>
+        </header>
+
+        <!-- Status Dashboard -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white rounded-xl p-4 teste-card text-center">
+                <div class="text-2xl font-bold text-blue-600">61%</div>
+                <div class="text-sm text-gray-600">Compatibilidade</div>
+            </div>
+            <div class="bg-white rounded-xl p-4 teste-card text-center">
+                <div class="text-2xl font-bold text-green-600">71%</div>
+                <div class="text-sm text-gray-600">React Component</div>
+            </div>
+            <div class="bg-white rounded-xl p-4 teste-card text-center">
+                <div class="text-2xl font-bold text-orange-600">50%</div>
+                <div class="text-sm text-gray-600">Property Editor</div>
+            </div>
+            <div class="bg-white rounded-xl p-4 teste-card text-center">
+                <div class="text-2xl font-bold text-emerald-600">17</div>
+                <div class="text-sm text-gray-600">Propriedades</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Painel de Controle -->
+            <div class="bg-white rounded-xl p-6 teste-card">
+                <h2 class="text-xl font-bold mb-4 text-gray-800">
+                    <i class="fas fa-sliders-h text-blue-600 mr-2"></i>
+                    Controles de Propriedades
+                </h2>
+
+                <!-- Grid Layout -->
+                <div class="mb-6">
+                    <h3 class="font-semibold mb-3 text-gray-700">Layout da Grade</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Colunas:</label>
+                            <select id="columns" class="w-full p-2 border rounded-lg">
+                                <option value="1">1 coluna</option>
+                                <option value="2" selected>2 colunas</option>
+                                <option value="3">3 colunas</option>
+                                <option value="4">4 colunas</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Largura Container:</label>
+                            <input type="range" id="containerWidth" min="300" max="1200" value="800" class="w-full">
+                            <span id="containerWidthValue" class="text-xs text-gray-500">800px</span>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Espaçamento:</label>
+                            <input type="range" id="spacing" min="4" max="32" value="16" class="w-full">
+                            <span id="spacingValue" class="text-xs text-gray-500">16px</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selection Settings -->
+                <div class="mb-6">
+                    <h3 class="font-semibold mb-3 text-gray-700">Configurações de Seleção</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="flex items-center">
+                                <input type="checkbox" id="multipleSelection" checked class="mr-2">
+                                <span class="text-sm">Seleção múltipla</span>
+                            </label>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-1">
+                                <label class="block text-sm font-medium mb-1">Min. Seleções:</label>
+                                <input type="number" id="minSelections" min="0" max="10" value="1"
+                                    class="w-full p-2 border rounded">
+                            </div>
+                            <div class="flex-1">
+                                <label class="block text-sm font-medium mb-1">Max. Seleções:</label>
+                                <input type="number" id="maxSelections" min="1" max="10" value="3"
+                                    class="w-full p-2 border rounded">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Styles -->
+                <div class="mb-6">
+                    <h3 class="font-semibold mb-3 text-gray-700">Estilos Visuais</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Cor da Borda:</label>
+                            <input type="color" id="borderColor" value="#E5E7EB" class="w-full h-10 border rounded">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Cor Selecionado:</label>
+                            <input type="color" id="selectedBorderColor" value="#3B82F6"
+                                class="w-full h-10 border rounded">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Cor Hover:</label>
+                            <input type="color" id="hoverColor" value="#F3F4F6" class="w-full h-10 border rounded">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Animation -->
+                <div class="mb-6">
+                    <h3 class="font-semibold mb-3 text-gray-700">Animação</h3>
+                    <select id="animationType" class="w-full p-2 border rounded-lg">
+                        <option value="fade">Fade</option>
+                        <option value="scale" selected>Scale</option>
+                        <option value="slide">Slide</option>
+                        <option value="pulse">Pulse</option>
+                    </select>
+                </div>
+
+                <!-- Images -->
+                <div class="mb-6">
+                    <h3 class="font-semibold mb-3 text-gray-700">Imagens</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="flex items-center">
+                                <input type="checkbox" id="showImages" checked class="mr-2">
+                                <span class="text-sm">Mostrar imagens</span>
+                            </label>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Tamanho da Imagem:</label>
+                            <select id="imageSize" class="w-full p-2 border rounded-lg">
+                                <option value="small">Pequena</option>
+                                <option value="medium" selected>Média</option>
+                                <option value="large">Grande</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Apply Button -->
+                <button onclick="aplicarConfiguracao()"
+                    class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                    <i class="fas fa-sync-alt mr-2"></i>
+                    Aplicar Configuração
+                </button>
+            </div>
+
+            <!-- Preview Area -->
+            <div class="bg-white rounded-xl p-6 teste-card">
+                <h2 class="text-xl font-bold mb-4 text-gray-800">
+                    <i class="fas fa-eye text-green-600 mr-2"></i>
+                    Preview Options Grid
+                </h2>
+
+                <!-- Validation Message -->
+                <div id="validationMessage"
+                    class="mb-4 p-3 rounded-lg bg-blue-50 border border-blue-200 validation-message"
+                    style="display: none;">
+                    <i class="fas fa-info-circle text-blue-600 mr-2"></i>
+                    <span id="validationText"></span>
+                </div>
+
+                <!-- Options Grid Container -->
+                <div id="optionsContainer" class="options-grid fade-in">
+                    <!-- Grid será renderizada aqui -->
+                </div>
+
+                <!-- Selection Info -->
+                <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                    <h4 class="font-semibold mb-2">Informações da Seleção:</h4>
+                    <div class="text-sm text-gray-600">
+                        <div>Selecionados: <span id="selectedCount" class="font-medium">0</span></div>
+                        <div>Pontuação: <span id="scoreDisplay" class="font-medium">0</span> pontos</div>
+                        <div>Status: <span id="validationStatus" class="font-medium">Aguardando seleção</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Properties Analysis -->
+        <div class="mt-8 bg-white rounded-xl p-6 teste-card">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">
+                <i class="fas fa-chart-bar text-purple-600 mr-2"></i>
+                Análise de Propriedades (17 total)
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Implementadas -->
+                <div>
+                    <h3 class="font-semibold text-green-600 mb-2">✅ Implementadas (12)</h3>
+                    <ul class="text-sm space-y-1">
+                        <li>options, columns, imageSize</li>
+                        <li>showImages, multipleSelection</li>
+                        <li>minSelections, maxSelections</li>
+                        <li>borderColor, hoverColor</li>
+                        <li>selectionStyle</li>
+                        <li>selectedBorderColor (mapeado)</li>
+                        <li>animationType (sistema)</li>
+                        <li>scoring (via pontos)</li>
+                    </ul>
+                </div>
+                <!-- Faltando -->
+                <div>
+                    <h3 class="font-semibold text-red-600 mb-2">❌ Não Implementadas (5)</h3>
+                    <ul class="text-sm space-y-1">
+                        <li>containerWidth</li>
+                        <li>spacing</li>
+                        <li>marginBottom</li>
+                        <li>validationMessage</li>
+                        <li>Editor: multipleSelection, borderColor</li>
+                    </ul>
+                </div>
+                <!-- Editor Issues -->
+                <div>
+                    <h3 class="font-semibold text-orange-600 mb-2">🔄 Editor (50% cobertura)</h3>
+                    <ul class="text-sm space-y-1">
+                        <li>✅ Básicas: options, columns, imageSize</li>
+                        <li>❌ Layout: containerWidth, spacing</li>
+                        <li>❌ Validação: validationMessage</li>
+                        <li>❌ Animações: animationType</li>
+                        <li>❌ Pontuação: scoring</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados das opções de exemplo
+        const optionsData = [
+            { id: 1, text: "React.js", image: "⚛️", pontos: 3, correct: true },
+            { id: 2, text: "Vue.js", image: "💚", pontos: 3, correct: true },
+            { id: 3, text: "Angular", image: "🅰️", pontos: 2, correct: false },
+            { id: 4, text: "Svelte", image: "🧡", pontos: 2, correct: false },
+            { id: 5, text: "jQuery", image: "💙", pontos: 1, correct: false },
+            { id: 6, text: "Vanilla JS", image: "🍦", pontos: 1, correct: false }
+        ];
+
+        let selectedOptions = [];
+        let currentConfig = {
+            columns: 2,
+            multipleSelection: true,
+            minSelections: 1,
+            maxSelections: 3,
+            showImages: true,
+            imageSize: 'medium',
+            borderColor: '#E5E7EB',
+            selectedBorderColor: '#3B82F6',
+            hoverColor: '#F3F4F6',
+            animationType: 'scale',
+            containerWidth: 800,
+            spacing: 16
+        };
+
+        function aplicarConfiguracao() {
+            // Atualizar configuração
+            currentConfig = {
+                columns: parseInt(document.getElementById('columns').value),
+                multipleSelection: document.getElementById('multipleSelection').checked,
+                minSelections: parseInt(document.getElementById('minSelections').value),
+                maxSelections: parseInt(document.getElementById('maxSelections').value),
+                showImages: document.getElementById('showImages').checked,
+                imageSize: document.getElementById('imageSize').value,
+                borderColor: document.getElementById('borderColor').value,
+                selectedBorderColor: document.getElementById('selectedBorderColor').value,
+                hoverColor: document.getElementById('hoverColor').value,
+                animationType: document.getElementById('animationType').value,
+                containerWidth: parseInt(document.getElementById('containerWidth').value),
+                spacing: parseInt(document.getElementById('spacing').value)
+            };
+
+            renderOptionsGrid();
+            validateSelection();
+        }
+
+        function renderOptionsGrid() {
+            const container = document.getElementById('optionsContainer');
+            const gridClasses = `grid gap-${Math.floor(currentConfig.spacing / 4)} grid-cols-${currentConfig.columns}`;
+
+            container.innerHTML = `
+                <div class="${gridClasses}" style="max-width: ${currentConfig.containerWidth}px;">
+                    ${optionsData.map(option => `
+                        <div class="option-item p-4 border-2 rounded-lg cursor-pointer transition-all duration-300 ${currentConfig.animationType === 'scale' ? 'hover:scale-105' : ''}"
+                             style="border-color: ${currentConfig.borderColor}; background: ${selectedOptions.includes(option.id) ? 'rgba(59, 130, 246, 0.1)' : 'white'};"
+                             onclick="toggleSelection(${option.id})"
+                             data-option-id="${option.id}">
+                            ${currentConfig.showImages ? `
+                                <div class="text-center mb-2">
+                                    <span class="text-${currentConfig.imageSize === 'small' ? '2xl' : currentConfig.imageSize === 'medium' ? '3xl' : '4xl'}">${option.image}</span>
+                                </div>
+                            ` : ''}
+                            <div class="text-center font-medium">${option.text}</div>
+                            <div class="text-center text-xs text-gray-500 mt-1">${option.pontos} pontos</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            // Aplicar estilos CSS customizados
+            const style = document.createElement('style');
+            style.textContent = `
+                .option-item:hover {
+                    background-color: ${currentConfig.hoverColor} !important;
+                }
+                .option-item.selected {
+                    border-color: ${currentConfig.selectedBorderColor} !important;
+                    box-shadow: 0 0 0 3px ${currentConfig.selectedBorderColor}33 !important;
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Aplicar seleções existentes
+            updateSelectionDisplay();
+        }
+
+        function toggleSelection(optionId) {
+            const isSelected = selectedOptions.includes(optionId);
+
+            if (isSelected) {
+                selectedOptions = selectedOptions.filter(id => id !== optionId);
+            } else {
+                if (!currentConfig.multipleSelection) {
+                    selectedOptions = [optionId];
+                } else if (selectedOptions.length < currentConfig.maxSelections) {
+                    selectedOptions.push(optionId);
+                } else {
+                    showValidationMessage(`Máximo ${currentConfig.maxSelections} seleções permitidas`);
+                    return;
+                }
+            }
+
+            updateSelectionDisplay();
+            validateSelection();
+
+            // Animação
+            const element = document.querySelector(`[data-option-id="${optionId}"]`);
+            if (currentConfig.animationType === 'pulse') {
+                element.classList.add('pulse-animation');
+                setTimeout(() => element.classList.remove('pulse-animation'), 1000);
+            }
+        }
+
+        function updateSelectionDisplay() {
+            // Atualizar visual das opções
+            document.querySelectorAll('.option-item').forEach(item => {
+                const optionId = parseInt(item.dataset.optionId);
+                const isSelected = selectedOptions.includes(optionId);
+
+                if (isSelected) {
+                    item.classList.add('selected');
+                    item.style.borderColor = currentConfig.selectedBorderColor;
+                    item.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+                } else {
+                    item.classList.remove('selected');
+                    item.style.borderColor = currentConfig.borderColor;
+                    item.style.backgroundColor = 'white';
+                }
+            });
+
+            // Atualizar contadores
+            const score = selectedOptions.reduce((total, id) => {
+                const option = optionsData.find(opt => opt.id === id);
+                return total + (option ? option.pontos : 0);
+            }, 0);
+
+            document.getElementById('selectedCount').textContent = selectedOptions.length;
+            document.getElementById('scoreDisplay').textContent = score;
+        }
+
+        function validateSelection() {
+            const count = selectedOptions.length;
+            let status = 'Aguardando seleção';
+            let isValid = false;
+
+            if (count === 0) {
+                status = 'Nenhuma opção selecionada';
+            } else if (count < currentConfig.minSelections) {
+                status = `Mínimo ${currentConfig.minSelections} seleções necessárias`;
+            } else if (count > currentConfig.maxSelections) {
+                status = `Máximo ${currentConfig.maxSelections} seleções permitidas`;
+            } else {
+                status = '✅ Seleção válida';
+                isValid = true;
+            }
+
+            document.getElementById('validationStatus').textContent = status;
+            document.getElementById('validationStatus').className = `font-medium ${isValid ? 'text-green-600' : 'text-red-600'}`;
+        }
+
+        function showValidationMessage(message) {
+            const messageDiv = document.getElementById('validationMessage');
+            const textSpan = document.getElementById('validationText');
+
+            textSpan.textContent = message;
+            messageDiv.style.display = 'block';
+
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Event listeners para controles
+        document.getElementById('containerWidth').addEventListener('input', function (e) {
+            document.getElementById('containerWidthValue').textContent = e.target.value + 'px';
+        });
+
+        document.getElementById('spacing').addEventListener('input', function (e) {
+            document.getElementById('spacingValue').textContent = e.target.value + 'px';
+        });
+
+        // Inicializar
+        aplicarConfiguracao();
+    </script>
+</body>
+
+</html>

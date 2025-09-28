@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 TESTE DO BOTÃO ETAPA 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6 text-gray-800">🧪 TESTE AUTOMATIZADO - BOTÃO ETAPA 1</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- STATUS DO TESTE -->
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4 text-gray-700">📊 Status do Teste</h2>
+                <div id="status-container" class="space-y-2">
+                    <div class="status-check text-gray-600">⏳ Aguardando início do teste...</div>
+                </div>
+            </div>
+
+            <!-- CONTROLES DE TESTE -->
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4 text-gray-700">🎮 Controles de Teste</h2>
+                <div class="space-y-4">
+                    <button id="btn-test-manual"
+                        class="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600">
+                        🖱️ Teste Manual (Abrir /quiz-estilo)
+                    </button>
+                    <button id="btn-test-simulation"
+                        class="w-full py-2 px-4 bg-green-500 text-white rounded hover:bg-green-600">
+                        🤖 Simular Preenchimento
+                    </button>
+                    <button id="btn-check-console"
+                        class="w-full py-2 px-4 bg-purple-500 text-white rounded hover:bg-purple-600">
+                        📋 Verificar Console
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- INSTRUÇÕES DE TESTE -->
+        <div class="mt-8 bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">📝 Instruções de Teste</h2>
+            <ol class="list-decimal list-inside space-y-2 text-gray-600">
+                <li><strong>Clique em "Teste Manual"</strong> para abrir a página /quiz-estilo</li>
+                <li><strong>Digite um nome</strong> no campo "Como posso te chamar?"</li>
+                <li><strong>Clique no botão</strong> "Quero Descobrir meu Estilo Agora!"</li>
+                <li><strong>Observe:</strong> Botão deve mostrar "Processando..." por 0.5s</li>
+                <li><strong>Deve aparecer:</strong> Alert com mensagem de sucesso</li>
+                <li><strong>Console:</strong> Logs de teste devem aparecer no DevTools</li>
+            </ol>
+        </div>
+
+        <!-- RESULTADOS ESPERADOS -->
+        <div class="mt-6 bg-green-50 p-6 rounded-lg">
+            <h3 class="text-lg font-semibold text-green-800 mb-2">✅ Resultados Esperados:</h3>
+            <ul class="list-disc list-inside space-y-1 text-green-700 text-sm">
+                <li>🔍 Console log: "TESTE: handleSubmit chamado"</li>
+                <li>✅ Console log: "Nome válido, enviando..."</li>
+                <li>🔄 Botão muda para "Processando..." com spinner</li>
+                <li>✅ Console log: "onNameSubmit executado com sucesso"</li>
+                <li>🎉 Alert: "FLUXO TESTADO COM SUCESSO!"</li>
+                <li>💚 Notificação verde: "Nome coletado!"</li>
+            </ul>
+        </div>
+
+        <!-- LOGS EM TEMPO REAL -->
+        <div class="mt-6 bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+            <h3 class="text-white mb-2">📋 Logs do Teste:</h3>
+            <div id="logs-container" class="h-40 overflow-y-auto">
+                <div>Aguardando logs de teste...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Função para adicionar logs
+        function addLog(message, type = 'info') {
+            const logsContainer = document.getElementById('logs-container');
+            const timestamp = new Date().toLocaleTimeString();
+            const colors = {
+                info: 'text-blue-400',
+                success: 'text-green-400',
+                error: 'text-red-400',
+                warning: 'text-yellow-400'
+            };
+
+            const logDiv = document.createElement('div');
+            logDiv.className = colors[type] || colors.info;
+            logDiv.innerHTML = `[${timestamp}] ${message}`;
+
+            logsContainer.appendChild(logDiv);
+            logsContainer.scrollTop = logsContainer.scrollHeight;
+        }
+
+        // Controles de teste
+        document.getElementById('btn-test-manual').addEventListener('click', () => {
+            addLog('🖱️ Abrindo /quiz-estilo para teste manual...', 'info');
+            window.open('/quiz-estilo', '_blank');
+        });
+
+        document.getElementById('btn-test-simulation').addEventListener('click', () => {
+            addLog('🤖 Simulação não implementada - use teste manual', 'warning');
+        });
+
+        document.getElementById('btn-check-console').addEventListener('click', () => {
+            addLog('📋 Abra DevTools (F12) para ver logs detalhados', 'info');
+            console.log('🧪 TESTE: Verificação do console solicitada');
+        });
+
+        // Log inicial
+        addLog('🚀 Sistema de testes inicializado', 'success');
+        addLog('📍 Pronto para testar o botão da Etapa 1', 'info');
+
+        // Interceptar console logs (opcional)
+        const originalLog = console.log;
+        console.log = function (...args) {
+            originalLog.apply(console, args);
+            if (args[0] && args[0].toString().includes('TESTE')) {
+                addLog(args.join(' '), 'success');
+            }
+        };
+    </script>
+</body>
+
+</html>

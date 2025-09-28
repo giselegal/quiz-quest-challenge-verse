@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Carregamento de Imagens</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .image-test {
+            margin: 20px 0;
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+
+        img {
+            max-width: 300px;
+            height: auto;
+        }
+
+        .fallback {
+            background: #f1f5f9;
+            color: #64748b;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Teste de Carregamento de Imagens</h1>
+
+    <div class="image-test">
+        <h3>Clássico Personal</h3>
+        <img src="/estilos/classico-personal.svg" alt="Clássico Personal"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div class="fallback" style="display:none;">❌ Erro ao carregar imagem</div>
+    </div>
+
+    <div class="image-test">
+        <h3>Romântico Personal</h3>
+        <img src="/estilos/romantico-personal.svg" alt="Romântico Personal"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div class="fallback" style="display:none;">❌ Erro ao carregar imagem</div>
+    </div>
+
+    <div class="image-test">
+        <h3>Contemporâneo Personal</h3>
+        <img src="/estilos/contemporaneo-personal.svg" alt="Contemporâneo Personal"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div class="fallback" style="display:none;">❌ Erro ao carregar imagem</div>
+    </div>
+
+    <div class="image-test">
+        <h3>Dramático Personal</h3>
+        <img src="/estilos/dramatico-personal.svg" alt="Dramático Personal"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div class="fallback" style="display:none;">❌ Erro ao carregar imagem</div>
+    </div>
+
+    <script>
+        // Testar carregamento programático
+        function testImageLoad(src) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(true);
+                img.onerror = () => reject(false);
+                img.src = src;
+            });
+        }
+
+        // Testar todas as imagens
+        const images = [
+            '/estilos/classico-personal.svg',
+            '/estilos/romantico-personal.svg',
+            '/estilos/contemporaneo-personal.svg',
+            '/estilos/dramatico-personal.svg'
+        ];
+
+        console.log('🧪 Testando carregamento de imagens...');
+
+        Promise.allSettled(images.map(src => testImageLoad(src)))
+            .then(results => {
+                results.forEach((result, index) => {
+                    const src = images[index];
+                    if (result.status === 'fulfilled') {
+                        console.log(`✅ ${src} - Carregou com sucesso`);
+                    } else {
+                        console.log(`❌ ${src} - Falha no carregamento`);
+                    }
+                });
+            });
+    </script>
+</body>
+
+</html>

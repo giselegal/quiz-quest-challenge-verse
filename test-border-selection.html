@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Bordas Douradas - Quiz Quest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Replicando os estilos dourados do OptionsGridBlock */
+        .golden-border {
+            @apply border-2 border-amber-500 bg-gradient-to-br from-amber-50 via-amber-100 to-amber-200;
+            box-shadow:
+                0 0 0 1px rgb(245, 158, 11),
+                0 4px 6px -1px rgba(245, 158, 11, 0.3),
+                0 2px 4px -1px rgba(245, 158, 11, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .golden-glow {
+            @apply border-2 border-amber-400 bg-gradient-to-br from-amber-100 via-amber-200 to-amber-300;
+            box-shadow:
+                0 0 0 3px rgba(245, 158, 11, 0.5),
+                0 0 20px rgba(245, 158, 11, 0.4),
+                0 8px 16px -4px rgba(245, 158, 11, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .option-card {
+            @apply p-4 rounded-lg border-2 border-gray-200 bg-white transition-all duration-300 cursor-pointer hover:border-gray-300;
+        }
+
+        .option-card.selected-border {
+            @apply border-2 border-amber-500 bg-gradient-to-br from-amber-50 via-amber-100 to-amber-200;
+            box-shadow:
+                0 0 0 1px rgb(245, 158, 11),
+                0 4px 6px -1px rgba(245, 158, 11, 0.3),
+                0 2px 4px -1px rgba(245, 158, 11, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .option-card.selected-glow {
+            @apply border-2 border-amber-400 bg-gradient-to-br from-amber-100 via-amber-200 to-amber-300;
+            box-shadow:
+                0 0 0 3px rgba(245, 158, 11, 0.5),
+                0 0 20px rgba(245, 158, 11, 0.4),
+                0 8px 16px -4px rgba(245, 158, 11, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto space-y-8">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h1 class="text-2xl font-bold text-amber-800 mb-6">🎯 Teste de Bordas Douradas - Quiz Quest</h1>
+
+            <!-- Teste 1: Opções apenas com texto (1 coluna) -->
+            <div class="mb-8">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">📝 Opções apenas com texto (1 coluna)</h2>
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="option-card" onclick="toggleSelection(this, 'border')">
+                        <h3 class="font-medium text-gray-800">Opção A - Apenas Texto</h3>
+                        <p class="text-sm text-gray-600">Clique para testar borda dourada simples</p>
+                    </div>
+                    <div class="option-card" onclick="toggleSelection(this, 'border')">
+                        <h3 class="font-medium text-gray-800">Opção B - Apenas Texto</h3>
+                        <p class="text-sm text-gray-600">Clique para testar borda dourada simples</p>
+                    </div>
+                    <div class="option-card" onclick="toggleSelection(this, 'border')">
+                        <h3 class="font-medium text-gray-800">Opção C - Apenas Texto</h3>
+                        <p class="text-sm text-gray-600">Clique para testar borda dourada simples</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Teste 2: Opções com imagem + texto (2 colunas) -->
+            <div class="mb-8">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">🖼️ Opções com imagem + texto (2 colunas)</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="option-card" onclick="toggleSelection(this, 'glow')">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-amber-500 rounded-lg flex items-center justify-center">
+                                <span class="text-white text-xl">🎨</span>
+                            </div>
+                            <div>
+                                <h3 class="font-medium text-gray-800">Estilo Clássico</h3>
+                                <p class="text-sm text-gray-600">Com imagem e texto</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="option-card" onclick="toggleSelection(this, 'glow')">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-amber-600 rounded-lg flex items-center justify-center">
+                                <span class="text-white text-xl">✨</span>
+                            </div>
+                            <div>
+                                <h3 class="font-medium text-gray-800">Estilo Moderno</h3>
+                                <p class="text-sm text-gray-600">Com imagem e texto</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="option-card" onclick="toggleSelection(this, 'glow')">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-amber-700 rounded-lg flex items-center justify-center">
+                                <span class="text-white text-xl">🌟</span>
+                            </div>
+                            <div>
+                                <h3 class="font-medium text-gray-800">Estilo Elegante</h3>
+                                <p class="text-sm text-gray-600">Com imagem e texto</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="option-card" onclick="toggleSelection(this, 'glow')">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-amber-800 rounded-lg flex items-center justify-center">
+                                <span class="text-white text-xl">💫</span>
+                            </div>
+                            <div>
+                                <h3 class="font-medium text-gray-800">Estilo Premium</h3>
+                                <p class="text-sm text-gray-600">Com imagem e texto</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Teste 3: Diferentes estilos de seleção -->
+            <div class="mb-8">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">🎯 Diferentes estilos de seleção</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="option-card selected-border">
+                        <h3 class="font-medium text-gray-800">Borda Simples</h3>
+                        <p class="text-sm text-gray-600">Estilo selecionado com borda</p>
+                    </div>
+                    <div class="option-card selected-glow">
+                        <h3 class="font-medium text-gray-800">Borda com Glow</h3>
+                        <p class="text-sm text-gray-600">Estilo selecionado com brilho</p>
+                    </div>
+                    <div class="option-card">
+                        <h3 class="font-medium text-gray-800">Não Selecionado</h3>
+                        <p class="text-sm text-gray-600">Estado padrão</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-amber-50 border border-amber-200 rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-amber-800 mb-3">🔍 Status do Teste</h3>
+            <div id="status" class="space-y-2">
+                <p class="text-sm text-amber-700">✅ Paleta dourada: Amber-500, Amber-600, Amber-700, Amber-800</p>
+                <p class="text-sm text-amber-700">✅ Regra de colunas: 1 coluna (texto) / 2 colunas (imagem + texto)</p>
+                <p class="text-sm text-amber-700">✅ Bordas fininhas com sombra implementadas</p>
+                <p class="text-sm text-amber-700">🎯 Clique nas opções para testar a interatividade</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSelection(element, style) {
+            // Remover seleção anterior
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected-border', 'selected-glow');
+            });
+
+            // Adicionar nova seleção
+            if (style === 'border') {
+                element.classList.add('selected-border');
+            } else if (style === 'glow') {
+                element.classList.add('selected-glow');
+            }
+
+            // Atualizar status
+            updateStatus(element.querySelector('h3').textContent, style);
+        }
+
+        function updateStatus(optionName, style) {
+            const statusElement = document.getElementById('status');
+            const newStatus = document.createElement('p');
+            newStatus.className = 'text-sm text-green-600 font-medium';
+            newStatus.textContent = `🎯 Selecionado: "${optionName}" com estilo "${style}"`;
+            statusElement.appendChild(newStatus);
+
+            // Limpar status antigos após 3 segundos
+            setTimeout(() => {
+                if (newStatus.parentNode) {
+                    newStatus.remove();
+                }
+            }, 3000);
+        }
+
+        // Inicializar com primeira opção selecionada em cada grupo
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🎯 Teste de bordas douradas carregado');
+            console.log('✅ Sistema V1 Modular + Paleta Dourada + Regras de Layout');
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Barras de Progresso dos Estilos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 p-8">
+    <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8">
+        <h1 class="text-2xl font-bold text-[#5b4135] mb-6">Teste das Barras de Progresso</h1>
+
+        <!-- Container das barras de progresso -->
+        <div class="mb-6 p-4 bg-[#deac6d]/10 rounded-lg border border-[#deac6d]/20">
+            <h4 class="font-semibold text-[#5b4135] mb-4">Seu Perfil de Estilos:</h4>
+            <div class="space-y-3">
+
+                <!-- Estilo Principal - 45% -->
+                <div class="relative">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-sm font-medium text-[#5b4135]">
+                            👑 Clássico
+                        </span>
+                        <span class="text-sm text-[#deac6d] font-medium">
+                            45.0%
+                        </span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                        <div class="h-full rounded-full bg-gradient-to-r from-[#deac6d] to-[#c19952] transition-all duration-1000 ease-out"
+                            style="width: 45%; animation-delay: 0s"></div>
+                    </div>
+                </div>
+
+                <!-- 2º Estilo - 23% -->
+                <div class="relative">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-sm font-medium text-gray-600">
+                            Natural
+                        </span>
+                        <span class="text-sm text-[#deac6d] font-medium">
+                            23.0%
+                        </span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                        <div class="h-full rounded-full bg-gradient-to-r from-[#deac6d]/80 to-[#c19952]/80 transition-all duration-1000 ease-out"
+                            style="width: 23%; animation-delay: 0.2s"></div>
+                    </div>
+                </div>
+
+                <!-- 3º Estilo - 15% -->
+                <div class="relative">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-sm font-medium text-gray-600">
+                            Elegante
+                        </span>
+                        <span class="text-sm text-[#deac6d] font-medium">
+                            15.0%
+                        </span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                        <div class="h-full rounded-full bg-gradient-to-r from-[#deac6d]/60 to-[#c19952]/60 transition-all duration-1000 ease-out"
+                            style="width: 15%; animation-delay: 0.4s"></div>
+                    </div>
+                </div>
+
+                <!-- 4º Estilo - 10% -->
+                <div class="relative">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-sm font-medium text-gray-600">
+                            Romântico
+                        </span>
+                        <span class="text-sm text-[#deac6d] font-medium">
+                            10.0%
+                        </span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                        <div class="h-full rounded-full bg-gradient-to-r from-[#deac6d]/60 to-[#c19952]/60 transition-all duration-1000 ease-out"
+                            style="width: 10%; animation-delay: 0.6s"></div>
+                    </div>
+                </div>
+
+                <!-- 5º Estilo - 7% -->
+                <div class="relative">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-sm font-medium text-gray-600">
+                            Sexy
+                        </span>
+                        <span class="text-sm text-[#deac6d] font-medium">
+                            7.0%
+                        </span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                        <div class="h-full rounded-full bg-gradient-to-r from-[#deac6d]/60 to-[#c19952]/60 transition-all duration-1000 ease-out"
+                            style="width: 7%; animation-delay: 0.8s"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <p class="text-sm text-gray-600 mt-4">
+            💡 <strong>Design das barras:</strong> O estilo principal (👑) tem destaque com cor mais forte,
+            os demais têm opacidades gradativas. As barras são finas (h-2), elegantes e com animação suave.
+        </p>
+
+        <p class="text-sm text-gray-600 mt-2">
+            🎨 <strong>Cores:</strong> Gradiente dourado (#deac6d → #c19952) com diferentes opacidades (100%, 80%, 60%).
+        </p>
+
+    </div>
+
+    <script>
+        // Adicionar animação de carregamento progressivo
+        window.addEventListener('load', () => {
+            const bars = document.querySelectorAll('.transition-all');
+            bars.forEach((bar, index) => {
+                setTimeout(() => {
+                    bar.style.transform = 'scaleX(1)';
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+
+</html>

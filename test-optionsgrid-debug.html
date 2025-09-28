@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔧 Debug - OptionsGridBlock Real</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .debug-panel {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px auto;
+            max-width: 800px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .title {
+            text-align: center;
+            color: #1f2937;
+            margin-bottom: 30px;
+        }
+
+        #app {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="title">
+        <h1>🔧 Debug - OptionsGridBlock Real</h1>
+        <p>Teste do componente React real no navegador</p>
+    </div>
+
+    <div class="debug-panel">
+        <div><strong>🚀 Status:</strong> Carregando React...</div>
+        <div><strong>📊 Console:</strong> Abra DevTools (F12) para ver logs detalhados</div>
+        <div><strong>🔍 Objetivo:</strong> Verificar se OptionsGridBlock recebe e processa cliques</div>
+    </div>
+
+    <div id="app">Carregando componente...</div>
+
+    <script>
+        // Debug básico
+        console.log('🚀 Página de debug carregada');
+
+        // Verificar se React está disponível
+        if (typeof window.React === 'undefined') {
+            console.log('⚠️ React não encontrado, carregando aplicação principal...');
+            window.location.href = '/public/sistema-implementado.html';
+        } else {
+            console.log('✅ React disponível');
+        }
+
+        // Monitorar todos os cliques
+        document.addEventListener('click', function (e) {
+            console.log('🖱️ Click detectado em:', e.target);
+            console.log('🔍 Classes:', e.target.className);
+            console.log('🎯 Data attributes:', Object.keys(e.target.dataset));
+        }, true);
+
+        // Monitorar eventos customizados do quiz
+        window.addEventListener('quiz-selection-change', function (e) {
+            console.log('📊 Quiz selection change:', e.detail);
+        });
+
+        // Verificar se há elementos com problemas de cursor
+        setInterval(() => {
+            const elementsWithTextCursor = document.querySelectorAll('[style*="cursor: text"], .cursor-text');
+            if (elementsWithTextCursor.length > 0) {
+                console.warn('⚠️ Elementos com cursor-text encontrados:', elementsWithTextCursor);
+            }
+        }, 2000);
+    </script>
+
+    <!-- Carregar a aplicação React -->
+    <script src="/dist/assets/index-BurgwyQ_.js" defer></script>
+    <script>
+        // Aguardar carregamento e navegar para quiz
+        setTimeout(() => {
+            console.log('🔄 Redirecionando para aplicação principal...');
+            window.location.href = '/public/sistema-implementado.html?step=2';
+        }, 3000);
+    </script>
+</body>
+
+</html>
