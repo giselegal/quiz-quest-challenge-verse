@@ -10,6 +10,10 @@
 import { QUIZ_STEPS, STEP_ORDER, type QuizStep } from '@/data/quizSteps';
 import { supabase } from '@/integrations/supabase/client';
 import { autoFillNextSteps } from '@/utils/autoFillNextSteps';
+// ✅ SPRINT 1: Imports do sistema canonical
+import { toCanonicalAny } from '@/services/core/adapters';
+import { validateSelection } from '@/services/core/CanonicalScorer';
+import type { CanonicalQuiz } from '@/types/quizCanonical';
 // @TEMP: Helper para forçar reconhecimento de tabelas recém adicionadas nos tipos gerados
 type AnySupabase = typeof supabase & { from: (table: string) => any };
 const supabaseAny = supabase as AnySupabase;
@@ -453,27 +457,57 @@ class QuizEditorBridge {
     }
 
     /**
+     * 🔄 Converter steps para canonical
+     * ✅ SPRINT 1: Novo método usando sistema canonical
+     */
+    private toCanonical(steps: EditorQuizStep[]): CanonicalQuiz {
+        return toCanonicalAny({ steps });
+    }
+
+    /**
      * 📊 Validar integridade do funil
-     * ✅ FASE 6.5: Usa validações testadas (22 testes, 100% confiáveis)
+     * ✅ SPRINT 1: Usa sistema canonical + validações legacy
      */
     validateFunnel(funnel: QuizFunnelData): { valid: boolean; errors: string[]; warnings: string[] } {
-        console.log('🔍 Validando funil com utils testados...');
+        console.log('🔍 Validando funil com sistema canonical...');
 
-        // ✅ FASE 5: Usar validateCompleteFunnel (testado com 22 testes)
+        // ✅ SPRINT 1: Normalizar para canonical
+        const canonical = this.toCanonical(funnel.steps);
+
+        // ✅ Validar constraints de seleção usando canonical
+        const canonicalErrors: string[] = [];
+        canonical.questions.forEach(q => {
+            // Validar com seleção vazia (verifica se constraints são válidas)
+            if (!validateSelection(q, [])) {
+                if (q.requiredSelections) {
+                    canonicalErrors.push(`${q.id}: requer exatamente ${q.requiredSelections} seleções`);
+                } else if (q.minSelections || q.maxSelections) {
+                    const min = q.minSelections || 0;
+                    const max = q.maxSelections || q.options.length;
+                    canonicalErrors.push(`${q.id}: requer entre ${min} e ${max} seleções`);
+                }
+            }
+        });
+
+        // ✅ Validações legacy (mantidas para compatibilidade)
         const validation = validateCompleteFunnel(funnel.steps as any);
 
-        const errors = validation.errors.map(e => e.message);
+        const allErrors = [
+            ...validation.errors.map(e => e.message),
+            ...canonicalErrors
+        ];
         const warnings = validation.warnings.map(w => w.message);
 
-        console.log('✅ Validação completa:', {
-            valid: validation.isValid,
-            errors: errors.length,
+        console.log('✅ Validação completa (canonical + legacy):', {
+            valid: allErrors.length === 0,
+            canonicalErrors: canonicalErrors.length,
+            legacyErrors: validation.errors.length,
             warnings: warnings.length
         });
 
         return {
-            valid: validation.isValid,
-            errors,
+            valid: allErrors.length === 0,
+            errors: allErrors,
             warnings
         };
     }

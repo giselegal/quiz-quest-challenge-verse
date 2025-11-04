@@ -28,7 +28,7 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0',
-    port: 5173,
+    port: 8080,
     open: false,
     cors: true,
     strictPort: true,
@@ -52,8 +52,8 @@ export default defineConfig({
     },
     hmr: {
       overlay: false,
-      clientPort: 5173,
-      port: 5173,
+      clientPort: 8080,
+      port: 8080,
     },
   },
   preview: {

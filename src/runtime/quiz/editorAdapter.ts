@@ -1,11 +1,34 @@
-// Usar tipo leve para evitar acoplamento com editores específicos
+// ✅ SPRINT 1: Integração com sistema canonical
 import type { EditableQuizStepLite } from '@/types/editor-lite';
 import type { RuntimeStepOverride } from './QuizRuntimeRegistry';
+import { toCanonicalAny } from '@/services/core/adapters';
+import { validateSelection } from '@/services/core/CanonicalScorer';
 
 /**
  * Converte a lista de steps editáveis do editor para o formato consumido pelo runtime (override).
+ * ✅ SPRINT 1: Normaliza para canonical antes de mapear
  */
 export function editorStepsToRuntimeMap(steps: EditableQuizStepLite[]): Record<string, RuntimeStepOverride> {
+    // ✅ SPRINT 1: Normalizar para canonical primeiro
+    try {
+        const canonical = toCanonicalAny({ steps });
+        
+        // ✅ Validar constraints (log warnings)
+        canonical.questions.forEach(q => {
+            if (!validateSelection(q, [])) {
+                console.warn(`[editorAdapter] Step ${q.id} tem constraints inválidas:`, {
+                    requiredSelections: q.requiredSelections,
+                    minSelections: q.minSelections,
+                    maxSelections: q.maxSelections,
+                    optionsCount: q.options.length
+                });
+            }
+        });
+
+        console.log(`✅ [editorAdapter] ${canonical.questions.length} steps normalizados para canonical`);
+    } catch (error) {
+        console.warn('[editorAdapter] Erro ao normalizar para canonical:', error);
+    }
     const map: Record<string, RuntimeStepOverride> = {};
     for (const s of steps) {
         if (!s.id) continue;
