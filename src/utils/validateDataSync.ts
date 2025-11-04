@@ -45,7 +45,8 @@ export function validateDataSync(): ValidationResult {
 
   // Verificar se os nomes estão sincronizados
   for (let i = 1; i <= 21; i++) {
-    const quizName = QUIZ_QUESTIONS_COMPLETE[i];
+    const quizData = QUIZ_QUESTIONS_COMPLETE[i];
+    const quizName = Array.isArray(quizData) ? quizData[0] : String(quizData || '');
     const mappingTemplate = STEP_TEMPLATES_MAPPING[i];
 
     if (quizName && mappingTemplate) {
