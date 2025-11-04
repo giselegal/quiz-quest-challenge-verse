@@ -17,9 +17,6 @@ import './utils/blockLovableInDev';
 import './utils/canvasPerformanceControl';
 // ✨ MODULAR STEPS: Sistema modular de steps - auto-registro dos componentes
 import './components/steps';
-// 🤖 AI: IA do funil auto-ativada via utils
-// import { activateFunnelAI } from './utils/funnelAIActivator'; // Removido - não utilizado
-// import "./utils/hotmartWebhookSimulator"; // Carregar simulador de webhook - temporariamente desabilitado
 
 // 🧹 DEVELOPMENT: Ativa limpeza de avisos apenas em desenvolvimento
 if (import.meta.env.DEV) {
@@ -33,13 +30,16 @@ if (import.meta.env.DEV) {
   initializeRudderStackOptimization();
 }
 
-// � Interceptor simples para bloquear logs externos em dev (Grafana/gpt-engineer)
-// Ativado somente com flag explícita para evitar efeitos colaterais em preview/prod
+// Interceptar chamadas de rede para desabilitar Supabase e Sentry em dev
+// Isso acelera o desenvolvimento e previne side effects indesejados
+// VITE_ENABLE_NETWORK_INTERCEPTORS=true para ativar
+// VITE_DISABLE_SUPABASE=true para desabilitar Supabase
+// VITE_ENABLE_CLOUDINARY=true para ativar Cloudinary
+
 if (typeof window !== 'undefined') {
   const ENABLE_NETWORK_INTERCEPTORS = (import.meta as any)?.env?.VITE_ENABLE_NETWORK_INTERCEPTORS === 'true';
   const isDevOrPreview = import.meta.env.DEV || (typeof location !== 'undefined' && /lovable\.app|stackblitz\.io|codesandbox\.io/.test(location.hostname));
 
-  // Guard: só ativa interceptores quando flag estiver ligada
   if (ENABLE_NETWORK_INTERCEPTORS && isDevOrPreview) {
     const originalFetch = window.fetch.bind(window);
     window.fetch = (input: RequestInfo | URL, init?: RequestInit) => {
@@ -49,24 +49,19 @@ if (typeof window !== 'undefined') {
         (window as any).__USE_CLOUDINARY__ = ((import.meta as any)?.env?.VITE_ENABLE_CLOUDINARY === 'true');
       } catch { }
       const isPreviewHost = typeof location !== 'undefined' && /lovable\.app|stackblitz\.io|codesandbox\.io/.test(location.hostname);
-      // Bloqueia logs externos em dev
       if (url.includes('cloudfunctions.net/pushLogsToGrafana')) {
-        // Simula sucesso e evita 500 no console
         return Promise.resolve(new Response(null, { status: 204 }));
       }
-      // Silencia Sentry em dev para evitar 404/429 e ruído excessivo
       if (/sentry\.io|ingest\.sentry\.io/.test(url) && (import.meta.env.DEV || isPreviewHost)) {
         try {
           console.warn('🛑 Interceptado (Sentry desabilitado em dev):', url);
         } catch { }
         return Promise.resolve(new Response(null, { status: 204 }));
       }
-      // Silencia chamadas REST do Supabase quando desabilitado (evita erros 400/403 durante QA)
       if (DISABLE_SUPABASE && url.includes('.supabase.co/rest/v1/')) {
         try {
           console.warn('🛑 Interceptado (Supabase REST desabilitado em dev):', url);
         } catch { }
-        // Responder com lista vazia ou sucesso sem corpo
         const wantsJson =
           (init?.headers &&
             typeof (init.headers as any).get === 'function' &&
@@ -84,7 +79,9 @@ if (typeof window !== 'undefined') {
       return originalFetch(input as any, init);
     };
 
-    // Também intercepta sendBeacon (Sentry usa esse transporte em prod)
+    // Interceptar navigator.sendBeacon para evitar logs no Sentry em dev
+    // Interceptar XMLHttpRequest para evitar logs no Sentry em dev
+
     try {
       const isPreviewHost = typeof location !== 'undefined' && /lovable\.app|stackblitz\.io|codesandbox\.io/.test(location.hostname);
       if (navigator?.sendBeacon && (import.meta.env.DEV || isPreviewHost)) {
@@ -94,7 +91,7 @@ if (typeof window !== 'undefined') {
             const str = typeof url === 'string' ? url : String(url);
             if (/sentry\.io|ingest\.sentry\.io/.test(str)) {
               console.warn('🛑 Interceptado (sendBeacon -> Sentry bloqueado):', str);
-              return true; // finge sucesso
+              return true;
             }
           } catch { }
           return originalBeacon(url, data);
@@ -102,12 +99,10 @@ if (typeof window !== 'undefined') {
       }
     } catch { }
 
-    // Intercepta XHR para evitar ruído em libs que não usam fetch
     try {
       const isPreviewHost = typeof location !== 'undefined' && /lovable\.app|stackblitz\.io|codesandbox\.io/.test(location.hostname);
       if ((import.meta.env.DEV || isPreviewHost) && typeof XMLHttpRequest !== 'undefined') {
         const OriginalXHR = XMLHttpRequest;
-        // Properly typed XHR constructor patch
         function PatchedXHR(this: XMLHttpRequest) {
           const xhr = new OriginalXHR();
           const originalOpen = xhr.open;
@@ -115,7 +110,6 @@ if (typeof window !== 'undefined') {
             try {
               const u = typeof url === 'string' ? url : url.toString();
               if (/sentry\.io|ingest\.sentry\.io/.test(u)) {
-                // Reescreve para um data: vazio e ignora
                 console.warn('🛑 Interceptado (XHR -> Sentry bloqueado):', u);
                 return originalOpen.apply(xhr, ['GET', 'data:ignored', true]);
               }
@@ -124,36 +118,26 @@ if (typeof window !== 'undefined') {
           } as any;
           return xhr as any;
         }
-        // Replace global XMLHttpRequest with patched version
         (window as any).XMLHttpRequest = PatchedXHR as any;
       }
     } catch { }
 
-    // Cleanup: restaurar interceptores no unload para evitar vazamento entre HMR/navegações
     window.addEventListener('beforeunload', () => {
       try { (window as any).fetch = originalFetch; } catch { }
     });
   }
 }
 
-// �🚀 SUPABASE: Configuração inicial do serviço
+// 🚀 SUPABASE: Configuração inicial do serviço
 console.log('🚀 Inicializando serviços Supabase...');
 console.log('🔧 DEBUG: main.tsx carregado');
 
 // 🔧 DIAGNOSTIC: Testar template
 import runTemplateDiagnostic from './utils/templateDiagnostic';
-import { getTemplateStatus } from './utils/hybridIntegration';
 import { startPeriodicVersionCheck } from './utils/checkBuildVersion';
 
 const diagnosticResult = runTemplateDiagnostic();
 console.log('🔬 [MAIN] Template diagnostic:', diagnosticResult);
-
-// Testar integração híbrida
-getTemplateStatus().then(status => {
-  console.log('🔬 [MAIN] Hybrid integration status:', status);
-}).catch(error => {
-  console.error('❌ [MAIN] Hybrid integration error:', error);
-});
 
 // 🔄 Versão / prevenção de 404 de chunks desatualizados
 if (typeof window !== 'undefined') {
@@ -163,8 +147,6 @@ if (typeof window !== 'undefined') {
     console.warn('[VersionCheck] Falha ao iniciar verificação de versão:', e);
   }
 }
-
-// O serviço é inicializado automaticamente na importação
 
 console.log('🔧 DEBUG: Criando root do React...');
 createRoot(document.getElementById('root')!).render(
