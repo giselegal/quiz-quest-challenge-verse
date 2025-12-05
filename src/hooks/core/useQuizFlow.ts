@@ -203,7 +203,8 @@ export const useQuizFlow = ({
 
   // Buscar dados da etapa atual
   const getStepData = useCallback(() => {
-    const stepKey = `step-${currentStep}`;
+    // Template keys are padded: step-01, step-02, etc.
+    const stepKey = `step-${String(currentStep).padStart(2, '0')}`;
     return QUIZ_STYLE_21_STEPS_TEMPLATE[stepKey] || [];
   }, [currentStep]);
 
