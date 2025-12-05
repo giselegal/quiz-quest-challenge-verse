@@ -19,7 +19,7 @@ export type Database = {
           created_at: string | null
           expires_at: string
           id: string
-          ip_address: unknown | null
+          ip_address: unknown
           is_active: boolean | null
           last_activity: string | null
           location_data: Json | null
@@ -31,7 +31,7 @@ export type Database = {
           created_at?: string | null
           expires_at: string
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           is_active?: boolean | null
           last_activity?: string | null
           location_data?: Json | null
@@ -43,13 +43,55 @@ export type Database = {
           created_at?: string | null
           expires_at?: string
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           is_active?: boolean | null
           last_activity?: string | null
           location_data?: Json | null
           session_token?: string
           user_agent?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      active_user_sessions: {
+        Row: {
+          current_page: string | null
+          funnel_id: string | null
+          id: string
+          ip_address: string | null
+          is_active: boolean | null
+          last_activity: string | null
+          metadata: Json | null
+          session_token: string
+          started_at: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          current_page?: string | null
+          funnel_id?: string | null
+          id?: string
+          ip_address?: string | null
+          is_active?: boolean | null
+          last_activity?: string | null
+          metadata?: Json | null
+          session_token: string
+          started_at?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          current_page?: string | null
+          funnel_id?: string | null
+          id?: string
+          ip_address?: string | null
+          is_active?: boolean | null
+          last_activity?: string | null
+          metadata?: Json | null
+          session_token?: string
+          started_at?: string | null
+          user_agent?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -764,7 +806,7 @@ export type Database = {
           created_at: string
           email: string | null
           id: string
-          ip_address: unknown | null
+          ip_address: unknown
           name: string | null
           session_id: string
           user_agent: string | null
@@ -776,7 +818,7 @@ export type Database = {
           created_at?: string
           email?: string | null
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           name?: string | null
           session_id: string
           user_agent?: string | null
@@ -788,7 +830,7 @@ export type Database = {
           created_at?: string
           email?: string | null
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           name?: string | null
           session_id?: string
           user_agent?: string | null
@@ -906,7 +948,7 @@ export type Database = {
           event_data: Json | null
           event_type: string
           id: string
-          ip_address: unknown | null
+          ip_address: unknown
           severity: string | null
           user_agent: string | null
           user_id: string | null
@@ -916,7 +958,7 @@ export type Database = {
           event_data?: Json | null
           event_type: string
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           severity?: string | null
           user_agent?: string | null
           user_id?: string | null
@@ -926,10 +968,61 @@ export type Database = {
           event_data?: Json | null
           event_type?: string
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           severity?: string | null
           user_agent?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      session_analytics: {
+        Row: {
+          abandoned_sessions: number | null
+          average_duration_seconds: number | null
+          bounce_rate: number | null
+          completed_sessions: number | null
+          conversion_rate: number | null
+          created_at: string | null
+          date: string
+          funnel_id: string | null
+          id: string
+          metadata: Json | null
+          total_revenue: number | null
+          total_sessions: number | null
+          unique_users: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          abandoned_sessions?: number | null
+          average_duration_seconds?: number | null
+          bounce_rate?: number | null
+          completed_sessions?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          date: string
+          funnel_id?: string | null
+          id?: string
+          metadata?: Json | null
+          total_revenue?: number | null
+          total_sessions?: number | null
+          unique_users?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          abandoned_sessions?: number | null
+          average_duration_seconds?: number | null
+          bounce_rate?: number | null
+          completed_sessions?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          date?: string
+          funnel_id?: string | null
+          id?: string
+          metadata?: Json | null
+          total_revenue?: number | null
+          total_sessions?: number | null
+          unique_users?: number | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -1014,6 +1107,45 @@ export type Database = {
         }
         Relationships: []
       }
+      user_activities: {
+        Row: {
+          activity_description: string
+          activity_type: string
+          created_at: string | null
+          entity_id: string | null
+          entity_type: string | null
+          id: string
+          ip_address: string | null
+          metadata: Json | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          activity_description: string
+          activity_type: string
+          created_at?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          activity_description?: string
+          activity_type?: string
+          created_at?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       user_behavior_patterns: {
         Row: {
           action: string
@@ -1062,6 +1194,27 @@ export type Database = {
           success_rate?: number | null
           updated_at?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
         }
         Relationships: []
       }
@@ -1118,29 +1271,58 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      index_usage_stats: {
+        Row: {
+          idx_scan: number | null
+          idx_tup_fetch: number | null
+          idx_tup_read: number | null
+          index_size: string | null
+          indexname: unknown
+          schemaname: unknown
+          tablename: unknown
+        }
+        Relationships: []
+      }
+      table_size_stats: {
+        Row: {
+          indexes_size: string | null
+          schemaname: unknown
+          table_size: string | null
+          tablename: unknown
+          total_size: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      cleanup_expired_rate_limits: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
+      archive_old_sessions: { Args: never; Returns: undefined }
+      batch_update_components: { Args: { updates: Json }; Returns: Json }
+      check_rate_limit: {
+        Args: {
+          endpoint_param: string
+          identifier_param: string
+          limit_param: number
+          window_seconds: number
+        }
+        Returns: boolean
       }
-      cleanup_expired_sessions: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
-      cleanup_old_analytics_data: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
-      cleanup_old_metrics: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
+      cleanup_expired_rate_limits: { Args: never; Returns: undefined }
+      cleanup_expired_sessions: { Args: never; Returns: undefined }
+      cleanup_old_analytics_data: { Args: never; Returns: undefined }
+      cleanup_old_metrics: { Args: never; Returns: undefined }
       handle_failed_login_attempt: {
         Args: { p_user_id: string }
         Returns: undefined
       }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_funnel_owner: { Args: { funnel_id_param: string }; Returns: boolean }
+      is_quiz_owner: { Args: { quiz_id_param: string }; Returns: boolean }
       log_security_event: {
         Args: { p_event_data?: Json; p_event_type: string; p_severity?: string }
         Returns: string
@@ -1156,13 +1338,10 @@ export type Database = {
         }
         Returns: string
       }
-      reset_login_attempts: {
-        Args: { p_user_id: string }
-        Returns: undefined
-      }
+      reset_login_attempts: { Args: { p_user_id: string }; Returns: undefined }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1289,6 +1468,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+    },
   },
 } as const
